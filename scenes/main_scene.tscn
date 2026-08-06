@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://b8awtp3vw87yq"]
+
+[ext_resource type="Script" uid="uid://nthjajr4o682" path="res://scripts/main_scene.gd" id="1_q0f23"]
+[ext_resource type="Script" uid="uid://kc76tu4jlnus" path="res://scripts/level_manager.gd" id="2_5srec"]
+[ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
+[ext_resource type="Script" uid="uid://dnbvdfthy6i28" path="res://scripts/obstacle_marker.gd" id="4_obs"]
+
+[node name="MainScene" type="Node3D" unique_id=1040827005]
+script = ExtResource("1_q0f23")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
+transform = Transform3D(1, 0, 0, 0, 0.37460664, 0.92718387, 0, -0.92718387, 0.37460664, 0, 17.604126, 6.5785093)
+projection = 1
+current = true
+fov = 43.1
+size = 15.334
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
+transform = Transform3D(0.7431448, -0.56745493, 0.3545852, 0, 0.52991927, 0.8480481, -0.6691306, -0.63022256, 0.39380676, 0, 0, 0)
+light_energy = 2.2
+shadow_enabled = true
+
+[node name="LevelManager" type="Node3D" parent="." unique_id=1305581177]
+script = ExtResource("2_5srec")
+
+[node name="BoardVisuals" type="Node3D" parent="LevelManager" unique_id=1755716270]
+
+[node name="TileVisuals" type="Node3D" parent="LevelManager" unique_id=97076465]
+
+[node name="ObstacleVisuals" type="Node3D" parent="LevelManager" unique_id=1279314469]
+
+[node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
+
+[node name="CatTopLeft" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1842352935]
+transform = Transform3D(20, 0, 0, 0, -8.742278e-07, 20, 0, -20, -8.742278e-07, -2, 0.78, 0.55349207)
+script = ExtResource("3_cat")
+grid_pos = Vector2i(2, 1)
+tint_color = Color(1, 0.95, 0.68, 1)
+
+[node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
+
+[node name="Obstacle_2_4" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=1430695689]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.15, 0)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(2, 4)
+
+[node name="Obstacle_3_4" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=65712348]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(3, 4)
+
+[node name="Obstacle_4_4" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=877352690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.15, 0)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(4, 4)
+
+[node name="Obstacle_2_5" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=929017231]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.15, 2)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(2, 5)
+
+[node name="Obstacle_3_5" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=627036155]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 2)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(3, 5)
+
+[node name="Obstacle_4_5" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=2051384528]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.15, 2)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(4, 5)
+
+[node name="Obstacle_2_6" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=2131577772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.15, 4)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(2, 6)
+
+[node name="Obstacle_3_6" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=1347035617]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 4)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(3, 6)
+
+[node name="Obstacle_4_6" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=689686541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.15, 4)
+script = ExtResource("4_obs")
+grid_pos = Vector2i(4, 6)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=411557567]
+
+[node name="ClearLabel" type="Label" parent="CanvasLayer" unique_id=1116493100]
+visible = false
+offset_right = 1152.0
+offset_bottom = 648.0
