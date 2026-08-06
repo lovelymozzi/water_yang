@@ -4,12 +4,14 @@ extends Area3D
 
 const MODEL_SCENE_PATH := "res://water_yang/ca1.fbx"
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
+const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const MODEL_SCALE := Vector3(0.45, 0.45, 0.45)
 const BUMP_DISTANCE := 0.35
 const BUMP_TIME := 0.12
 const ESCAPE_MIN_TIME := 0.28
 const ESCAPE_MAX_TIME := 0.8
 
+@export_group("Layout")
 @export var grid_pos: Vector2i = Vector2i.ZERO:
 	set(value):
 		grid_pos = value
@@ -21,10 +23,26 @@ const ESCAPE_MAX_TIME := 0.8
 		facing_dir = _direction_from_name(facing_name)
 		_request_editor_refresh()
 
+@export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 1.0, 1.0, 1.0):
 	set(value):
 		tint_color = value
-		_update_material_tint()
+		_update_material()
+
+@export_range(2, 5, 1) var toon_steps: int = 3:
+	set(value):
+		toon_steps = value
+		_update_material()
+
+@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.58:
+	set(value):
+		shadow_darkness = value
+		_update_material()
+
+@export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.24:
+	set(value):
+		rim_strength = value
+		_update_material()
 
 var facing_dir: Vector2i = Vector2i.UP
 var level_manager: LevelManager
@@ -73,7 +91,7 @@ func refresh_editor_preview() -> void:
 	facing_dir = _direction_from_name(facing_name)
 	_ensure_collision_shape()
 	_ensure_visual_root()
-	_update_material_tint()
+	_update_material()
 	_sync_to_grid_position()
 
 
@@ -117,9 +135,8 @@ func _ensure_visual_root() -> void:
 
 
 func _load_model_with_texture() -> Node3D:
-	# FBX를 인스턴스화하고 텍스처를 Albedo에 적용한 재질을 모든 메시에게 입힌다.
+	# FBX를 인스턴스화하고 툰 셰이더 재질을 모든 메시에게 입힌다.
 	var packed_scene: PackedScene = load(MODEL_SCENE_PATH) as PackedScene
-	var texture: Texture2D = load(MODEL_TEXTURE_PATH) as Texture2D
 	var model_root: Node3D
 
 	if packed_scene != null:
@@ -132,12 +149,7 @@ func _load_model_with_texture() -> Node3D:
 	else:
 		model_root = _create_fallback_mesh()
 
-	var material: StandardMaterial3D = StandardMaterial3D.new()
-	material.albedo_texture = texture
-	material.albedo_color = tint_color
-	material.roughness = 0.88
-	material.metallic = 0.02
-
+	var material: Material = _build_cat_material()
 	_apply_material_recursive(model_root, material)
 	return model_root
 
@@ -163,16 +175,34 @@ func _apply_material_recursive(node: Node, material: Material) -> void:
 		_apply_material_recursive(child, material)
 
 
-func _update_material_tint() -> void:
+func _update_material() -> void:
 	if _visual_root == null:
 		return
 
-	var material: StandardMaterial3D = StandardMaterial3D.new()
-	material.albedo_texture = load(MODEL_TEXTURE_PATH) as Texture2D
-	material.albedo_color = tint_color
-	material.roughness = 0.88
-	material.metallic = 0.02
+	var material: Material = _build_cat_material()
 	_apply_material_recursive(_visual_root, material)
+
+
+func _build_cat_material() -> Material:
+	var shader: Shader = load(TOON_SHADER_PATH) as Shader
+	var texture: Texture2D = load(MODEL_TEXTURE_PATH) as Texture2D
+
+	if shader == null:
+		var fallback_material: StandardMaterial3D = StandardMaterial3D.new()
+		fallback_material.albedo_texture = texture
+		fallback_material.albedo_color = tint_color
+		fallback_material.roughness = 0.75
+		fallback_material.metallic = 0.0
+		return fallback_material
+
+	var toon_material: ShaderMaterial = ShaderMaterial.new()
+	toon_material.shader = shader
+	toon_material.set_shader_parameter("albedo_tex", texture)
+	toon_material.set_shader_parameter("tint_color", tint_color)
+	toon_material.set_shader_parameter("shadow_steps", toon_steps)
+	toon_material.set_shader_parameter("shadow_darkness", shadow_darkness)
+	toon_material.set_shader_parameter("rim_strength", rim_strength)
+	return toon_material
 
 
 func _sync_to_grid_position() -> void:
