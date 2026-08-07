@@ -5,6 +5,7 @@ extends Area3D
 const MODEL_SCENE_PATH := "res://water_yang/ca1.fbx"
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
+const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const MODEL_SCALE := Vector3(0.45, 0.45, 0.45)
 const BUMP_DISTANCE := 0.35
 const BUMP_TIME := 0.12
@@ -42,6 +43,17 @@ const ESCAPE_MAX_TIME := 0.8
 @export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.24:
 	set(value):
 		rim_strength = value
+		_update_material()
+
+@export_group("Outline")
+@export var outline_color: Color = Color(0.18, 0.09, 0.06, 1.0):
+	set(value):
+		outline_color = value
+		_update_material()
+
+@export_range(0.001, 0.04, 0.001) var outline_width: float = 0.008:
+	set(value):
+		outline_width = value
 		_update_material()
 
 var facing_dir: Vector2i = Vector2i.UP
@@ -169,7 +181,11 @@ func _create_fallback_mesh() -> Node3D:
 
 func _apply_material_recursive(node: Node, material: Material) -> void:
 	if node is MeshInstance3D:
-		(node as MeshInstance3D).material_override = material
+		var mesh_instance := node as MeshInstance3D
+		mesh_instance.material_override = material
+		# Imported FBX meshes can have shadow casting disabled in their import data.
+		# Force every cat mesh to contribute to the DirectionalLight3D shadow map.
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
 
 	for child in node.get_children():
 		_apply_material_recursive(child, material)
@@ -202,7 +218,17 @@ func _build_cat_material() -> Material:
 	toon_material.set_shader_parameter("shadow_steps", toon_steps)
 	toon_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 	toon_material.set_shader_parameter("rim_strength", rim_strength)
+	toon_material.next_pass = _build_outline_material()
 	return toon_material
+
+
+func _build_outline_material() -> ShaderMaterial:
+	var outline_shader: Shader = load(OUTLINE_SHADER_PATH) as Shader
+	var outline_material := ShaderMaterial.new()
+	outline_material.shader = outline_shader
+	outline_material.set_shader_parameter("outline_color", outline_color)
+	outline_material.set_shader_parameter("outline_width", outline_width)
+	return outline_material
 
 
 func _sync_to_grid_position() -> void:

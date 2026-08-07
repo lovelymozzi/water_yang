@@ -21,11 +21,20 @@ func refresh_editor_preview() -> void:
 		return
 
 	_ensure_marker_mesh()
+	_marker_mesh.visible = true
 	var manager := _find_level_manager()
 	if manager == null:
 		return
 
 	position = manager.grid_to_world(grid_pos, 0.15)
+
+
+func set_preview_visible(value: bool) -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	_ensure_marker_mesh()
+	_marker_mesh.visible = value
 
 
 func _ensure_marker_mesh() -> void:

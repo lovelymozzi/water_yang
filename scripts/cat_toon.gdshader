@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_enable;
 uniform vec4 tint_color : source_color = vec4(1.0);
@@ -10,7 +10,6 @@ uniform float rim_strength : hint_range(0.0, 1.0) = 0.24;
 void fragment() {
 	vec4 tex = texture(albedo_tex, UV);
 	ALBEDO = tex.rgb * tint_color.rgb;
-	ALPHA = tex.a * tint_color.a;
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;
 }

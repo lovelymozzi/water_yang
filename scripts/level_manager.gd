@@ -8,6 +8,9 @@ const CAT_ENTITY_SCRIPT = preload("res://scripts/cat_entity.gd")
 const OBSTACLE_MARKER_SCRIPT = preload("res://scripts/obstacle_marker.gd")
 const TILE_HEIGHT := 0.12
 const OBSTACLE_HEIGHT := 1.3
+const TILE_CORNER_RADIUS := 0.14
+const BOARD_CORNER_RADIUS := 0.42
+const ROUND_CORNER_SEGMENTS := 6
 
 enum CellState {
 	EMPTY,
@@ -25,10 +28,33 @@ enum CellState {
 		tile_size = value
 		request_preview_refresh()
 
+@export_range(0.0, 0.6, 0.01) var tile_gap: float = 0.12:
+	set(value):
+		tile_gap = value
+		request_preview_refresh()
+
+@export_range(0.0, 4.0, 0.1) var board_side_margin: float = 0.7:
+	set(value):
+		board_side_margin = value
+		request_preview_refresh()
+
+@export_range(0.0, 6.0, 0.1) var board_vertical_margin: float = 2.0:
+	set(value):
+		board_vertical_margin = value
+		request_preview_refresh()
+
 @export var cat_world_y: float = 0.78:
 	set(value):
 		cat_world_y = value
 		request_preview_refresh()
+
+@export var obstacles_enabled: bool = false:
+	set(value):
+		obstacles_enabled = value
+		request_preview_refresh()
+
+# 이미 열린 씬에서도 Inspector 버튼으로 에디터용 보드를 즉시 다시 만든다.
+@export_tool_button("Refresh Board Preview", "Reload") var refresh_board_preview_action = refresh_board_preview
 
 var _grid_state: Array = []
 var _grid_refs: Array = []
@@ -72,6 +98,11 @@ func request_preview_refresh() -> void:
 
 	_preview_refresh_queued = true
 	call_deferred("_refresh_preview_deferred")
+
+
+func refresh_board_preview() -> void:
+	if Engine.is_editor_hint():
+		request_preview_refresh()
 
 
 func _refresh_preview_deferred() -> void:
@@ -200,37 +231,81 @@ func _initialize_grid_arrays() -> void:
 
 func _build_board_base() -> void:
 	# 세로 화면에서 보드가 또렷하게 보이도록 바닥 베이스를 먼저 깐다.
-	var board_mesh_instance: MeshInstance3D = MeshInstance3D.new()
-	var board_mesh: BoxMesh = BoxMesh.new()
-	board_mesh.size = Vector3(
-		grid_size.x * tile_size + tile_size * 0.7,
+	var board_size := Vector3(
+		grid_size.x * tile_size + board_side_margin * 2.0,
 		0.36,
-		grid_size.y * tile_size + tile_size * 0.7
+		grid_size.y * tile_size + board_vertical_margin * 2.0
 	)
-	board_mesh_instance.mesh = board_mesh
-	board_mesh_instance.position = Vector3(0.0, -0.18, 0.0)
-	board_mesh_instance.material_override = _make_material(Color(0.83, 0.62, 0.42, 1.0))
-	_board_root.add_child(board_mesh_instance)
+	var board := _create_rounded_prism(
+		"BoardBase", board_size, BOARD_CORNER_RADIUS,
+		_make_material(Color(0.83, 0.62, 0.42, 1.0))
+	)
+	board.position = Vector3(0.0, -0.18, 0.0)
+	_board_root.add_child(board)
 
 
 func _build_grid_tiles() -> void:
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var cell: Vector2i = Vector2i(x, y)
-			var tile: MeshInstance3D = MeshInstance3D.new()
-			var tile_mesh: BoxMesh = BoxMesh.new()
-			tile_mesh.size = Vector3(tile_size * 0.94, TILE_HEIGHT, tile_size * 0.94)
-			tile.mesh = tile_mesh
+			var tile_side := maxf(tile_size - tile_gap, 0.01)
+			var tile := _create_rounded_prism(
+				"Tile_%d_%d" % [x, y],
+				Vector3(tile_side, TILE_HEIGHT, tile_side),
+				TILE_CORNER_RADIUS,
+				_make_material(_tile_color_for(cell))
+			)
 			tile.position = grid_to_world(cell, TILE_HEIGHT * 0.5)
-			tile.material_override = _make_material(_tile_color_for(cell))
 			_tiles_root.add_child(tile)
 
 
+func _create_rounded_prism(
+	shape_name: String,
+	size: Vector3,
+	corner_radius: float,
+	material: Material
+) -> CSGPolygon3D:
+	var half_width := size.x * 0.5
+	var half_depth := size.z * 0.5
+	var radius := minf(corner_radius, minf(half_width, half_depth) * 0.45)
+	var centers := [
+		Vector2(half_width - radius, half_depth - radius),
+		Vector2(-half_width + radius, half_depth - radius),
+		Vector2(-half_width + radius, -half_depth + radius),
+		Vector2(half_width - radius, -half_depth + radius),
+	]
+	var outline := PackedVector2Array()
+
+	for corner_index in range(centers.size()):
+		var start_angle := float(corner_index) * PI * 0.5
+		for segment in range(ROUND_CORNER_SEGMENTS + 1):
+			var angle := start_angle + PI * 0.5 * float(segment) / float(ROUND_CORNER_SEGMENTS)
+			outline.append(centers[corner_index] + Vector2(cos(angle), sin(angle)) * radius)
+
+	var prism := CSGPolygon3D.new()
+	prism.name = shape_name
+	prism.polygon = outline
+	prism.mode = CSGPolygon3D.MODE_DEPTH
+	prism.depth = size.y
+	prism.material = material
+	# 기본 폴리곤의 깊이 축(Z)을 월드의 높이 축(Y)으로 바꾼다.
+	prism.rotation.x = -PI * 0.5
+	prism.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	return prism
+
+
 func _sync_obstacle_layout() -> void:
+	if not obstacles_enabled:
+		for child in _layout_obstacles_root.get_children():
+			if child.get_script() == OBSTACLE_MARKER_SCRIPT:
+				child.call("set_preview_visible", false)
+		return
+
 	for child in _layout_obstacles_root.get_children():
 		if child.get_script() != OBSTACLE_MARKER_SCRIPT:
 			continue
 
+		child.call("set_preview_visible", true)
 		child.call("refresh_editor_preview")
 		var marker_grid_pos: Vector2i = child.get("grid_pos")
 
