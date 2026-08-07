@@ -18,7 +18,7 @@ size = 25.321
 near = 10.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
-transform = Transform3D(0.9704945, 0.02464868, 0.23986007, -0.2394112, -0.019828105, 0.9707158, 0.028682832, -0.9994996, -0.013341897, 0, 10.844116, 0)
+transform = Transform3D(0.9704945, 0.024648678, 0.23986012, -0.2410272, 0.07109235, 0.96791106, 0.006805498, -0.99716514, 0.07493576, 0, 10.844116, 0)
 light_indirect_energy = 1.716
 light_volumetric_fog_energy = 2.791
 light_angular_distance = 0.05
@@ -44,10 +44,9 @@ script = ExtResource("2_5srec")
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
 [node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
-transform = Transform3D(16.999998, 0, 0, 0, -7.430935e-07, 16.999996, 0, -16.999998, -7.4309344e-07, -2, 0.78, -1.1898642)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.78, -6.5806274)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 1)
-tint_color = Color(1, 0.97, 0.97, 1)
 shadow_darkness = 0.41
 rim_strength = 0.4
 outline_color = Color(0.6159854, 0.44952333, 0.48422414, 1)

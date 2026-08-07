@@ -66,6 +66,8 @@ var _tiles_root: Node3D
 var _obstacles_root: Node3D
 var _layout_cats_root: Node3D
 var _layout_obstacles_root: Node3D
+var _drag_cat: CatEntity
+var _drag_endpoint: StringName = &""
 
 
 func _ready() -> void:
@@ -83,10 +85,22 @@ func _notification(what: int) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	# 마우스 클릭과 모바일 터치를 모두 같은 선택 흐름으로 처리한다.
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		_handle_pointer_select(event.position)
-	elif event is InputEventScreenTouch and event.pressed:
-		_handle_pointer_select(event.position)
+	if Engine.is_editor_hint():
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_begin_endpoint_drag(event.position)
+		else:
+			_end_endpoint_drag()
+	elif event is InputEventMouseMotion and _drag_cat != null and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
+		_update_endpoint_drag(event.position)
+	elif event is InputEventScreenTouch:
+		if event.pressed:
+			_begin_endpoint_drag(event.position)
+		else:
+			_end_endpoint_drag()
+	elif event is InputEventScreenDrag and _drag_cat != null:
+		_update_endpoint_drag(event.position)
 
 
 func request_preview_refresh() -> void:
@@ -129,19 +143,30 @@ func grid_dir_to_world(dir: Vector2i) -> Vector3:
 
 
 func occupy_cat_cell(cat: CatEntity) -> void:
-	_set_cell_state(cat.grid_pos, CellState.CAT)
-	_set_cell_ref(cat.grid_pos, cat)
+	update_cat_occupancy(cat)
 
 
 func release_cat_cell(cat: CatEntity) -> void:
-	if not is_inside_grid(cat.grid_pos):
-		return
+	for y in range(grid_size.y):
+		for x in range(grid_size.x):
+			var cell := Vector2i(x, y)
+			if _get_cell_ref(cell) == cat:
+				_set_cell_state(cell, CellState.EMPTY)
+				_set_cell_ref(cell, null)
 
-	if _get_cell_ref(cat.grid_pos) != cat:
-		return
 
-	_set_cell_state(cat.grid_pos, CellState.EMPTY)
-	_set_cell_ref(cat.grid_pos, null)
+func update_cat_occupancy(cat: CatEntity) -> void:
+	release_cat_cell(cat)
+	for cell in cat.body_cells:
+		if is_inside_grid(cell):
+			_set_cell_state(cell, CellState.CAT)
+			_set_cell_ref(cell, cat)
+
+
+func can_extend_cat_to(cat: CatEntity, cell: Vector2i) -> bool:
+	if not is_inside_grid(cell):
+		return false
+	return _get_cell_state(cell) == CellState.EMPTY
 
 
 func get_escape_result(cat: CatEntity) -> Dictionary:
@@ -322,13 +347,16 @@ func _sync_cat_layout() -> void:
 			continue
 
 		var cat := child as CatEntity
-		cat.level_manager = self
-		cat.refresh_editor_preview()
+		if Engine.is_editor_hint():
+			cat.level_manager = self
+			cat.refresh_editor_preview()
+		else:
+			cat.initialize_runtime(self)
 
 		if not is_inside_grid(cat.grid_pos):
 			continue
 
-		occupy_cat_cell(cat)
+		update_cat_occupancy(cat)
 		_cats.append(cat)
 
 
@@ -355,7 +383,7 @@ func _tile_color_for(cell: Vector2i) -> Color:
 	return Color(0.93, 0.72, 0.56, 1.0)
 
 
-func _handle_pointer_select(screen_pos: Vector2) -> void:
+func _begin_endpoint_drag(screen_pos: Vector2) -> void:
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	if camera == null:
 		return
@@ -372,8 +400,43 @@ func _handle_pointer_select(screen_pos: Vector2) -> void:
 		return
 
 	var collider: Variant = result.get("collider")
-	if collider is CatEntity:
-		(collider as CatEntity).try_escape()
+	if collider is Area3D and (collider as Area3D).has_meta("cat_endpoint"):
+		var handle := collider as Area3D
+		var cat := handle.get_parent().get_parent() as CatEntity
+		if cat != null:
+			_drag_cat = cat
+			_drag_endpoint = handle.get_meta("cat_endpoint") as StringName
+
+
+func _update_endpoint_drag(screen_pos: Vector2) -> void:
+	if _drag_cat == null:
+		return
+	var target_cell: Variant = _screen_to_grid_cell(screen_pos)
+	if target_cell != null:
+		_drag_cat.drag_endpoint_to(_drag_endpoint, target_cell as Vector2i)
+
+
+func _end_endpoint_drag() -> void:
+	_drag_cat = null
+	_drag_endpoint = &""
+
+
+func _screen_to_grid_cell(screen_pos: Vector2) -> Variant:
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	if camera == null:
+		return null
+	var origin := camera.project_ray_origin(screen_pos)
+	var direction := camera.project_ray_normal(screen_pos)
+	var plane := Plane(Vector3.UP, cat_world_y)
+	var hit: Variant = plane.intersects_ray(origin, direction)
+	if hit == null:
+		return null
+	var world_pos := hit as Vector3
+	var grid_origin := grid_to_world(Vector2i.ZERO)
+	return Vector2i(
+		roundi((world_pos.x - grid_origin.x) / tile_size),
+		roundi((world_pos.z - grid_origin.z) / tile_size)
+	)
 
 
 func _get_cell_state(cell: Vector2i) -> int:

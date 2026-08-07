@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cdtosiyk75ysd"
-path="res://.godot/imported/ca1.fbx-21297e8b0f6dd684d47d58ff171b2f14.scn"
+uid="uid://l7ohxdl65s8d"
+path="res://.godot/imported/cat1.fbx-610ef00cd1e0cca47450bb377280b6b4.scn"
 
 [deps]
 
-source_file="res://water_yang/ca1.fbx"
-dest_files=["res://.godot/imported/ca1.fbx-21297e8b0f6dd684d47d58ff171b2f14.scn"]
+source_file="res://water_yang/cat1.fbx"
+dest_files=["res://.godot/imported/cat1.fbx-610ef00cd1e0cca47450bb377280b6b4.scn"]
 
 [params]
 
