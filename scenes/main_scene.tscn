@@ -9,26 +9,28 @@
 script = ExtResource("1_q0f23")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
+process_mode = 4
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 24, 0)
 projection = 1
 current = true
 fov = 43.1
-size = 28.0
+size = 25.321
+near = 10.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
-transform = Transform3D(0.76081944, 0.58767617, -0.27530125, 0.20602414, 0.18354762, 0.9611786, 0.6153926, -0.788002, 0.018571079, 0, 10.844116, 0)
+transform = Transform3D(0.9704945, 0.02464868, 0.23986007, -0.2394112, -0.019828105, 0.9707158, 0.028682832, -0.9994996, -0.013341897, 0, 10.844116, 0)
 light_indirect_energy = 1.716
 light_volumetric_fog_energy = 2.791
-light_angular_distance = 0.25
+light_angular_distance = 0.05
 light_specular = 0.0
 shadow_enabled = true
-shadow_bias = 0.12
-shadow_normal_bias = 0.2
-shadow_opacity = 0.59
-shadow_blur = 0.15
-directional_shadow_mode = 0
-directional_shadow_max_distance = 50.0
-directional_shadow_pancake_size = 50.0
+shadow_bias = 1.083
+shadow_normal_bias = 1.347
+shadow_transmittance_bias = -3.376
+shadow_opacity = 0.86
+shadow_blur = 0.058
+directional_shadow_max_distance = 1.1
+directional_shadow_pancake_size = 0.1
 
 [node name="LevelManager" type="Node3D" parent="." unique_id=1305581177]
 script = ExtResource("2_5srec")
@@ -41,22 +43,12 @@ script = ExtResource("2_5srec")
 
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
-[node name="Cat" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1842352935]
-transform = Transform3D(-17, 1.4861872e-06, 6.496331e-14, 0, -7.430936e-07, 17, 1.4861872e-06, 17, 7.430936e-07, -0.058889866, 0.702443, -8.830196)
-script = ExtResource("3_cat")
-grid_pos = Vector2i(2, 1)
-tint_color = Color(1, 0.97, 0.97, 1)
-shadow_darkness = 0.56
-rim_strength = 0.4
-outline_color = Color(0.6159854, 0.44952333, 0.48422414, 1)
-outline_width = 0.00999999999999999
-
 [node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
-transform = Transform3D(16.999998, 0, 0, 0, -7.430935e-07, 16.999996, 0, -16.999998, -7.4309344e-07, -2, 0.702443, -1.2217379)
+transform = Transform3D(16.999998, 0, 0, 0, -7.430935e-07, 16.999996, 0, -16.999998, -7.4309344e-07, -2, 0.78, -1.1898642)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 1)
 tint_color = Color(1, 0.97, 0.97, 1)
-shadow_darkness = 0.56
+shadow_darkness = 0.41
 rim_strength = 0.4
 outline_color = Color(0.6159854, 0.44952333, 0.48422414, 1)
 outline_width = 0.00999999999999999
