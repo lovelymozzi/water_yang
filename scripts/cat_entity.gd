@@ -52,15 +52,33 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
 	set(value):
 		tint_color = value
-		_rebuild_body_visuals(false)
+		_refresh_shader_material()
 
-@export_range(2, 5, 1) var toon_steps: int = 3
-@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.58
-@export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.24
+@export_range(2, 5, 1) var toon_steps: int = 3:
+	set(value):
+		toon_steps = value
+		_refresh_shader_material()
+
+@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.58:
+	set(value):
+		shadow_darkness = value
+		_refresh_shader_material()
+
+@export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.24:
+	set(value):
+		rim_strength = value
+		_refresh_shader_material()
 
 @export_group("Outline")
-@export var outline_color: Color = Color(0.18, 0.09, 0.06, 1.0)
-@export_range(0.001, 0.04, 0.001) var outline_width: float = 0.008
+@export var outline_color: Color = Color(0.18, 0.09, 0.06, 1.0):
+	set(value):
+		outline_color = value
+		_refresh_shader_material()
+
+@export_range(0.001, 0.04, 0.001) var outline_width: float = 0.008:
+	set(value):
+		outline_width = value
+		_refresh_shader_material()
 
 # 몸통은 항상 머리(0)에서 꼬리(마지막)까지 인접한 셀 경로로 저장한다.
 var body_cells: Array[Vector2i] = []
@@ -75,6 +93,8 @@ var _tail_handle: Area3D
 var _cat_model: Node3D
 var _skeleton: Skeleton3D
 var _bone_rests: Array[Transform3D] = []
+var _cat_material: ShaderMaterial
+var _outline_material: ShaderMaterial
 
 
 func _ready() -> void:
@@ -638,20 +658,54 @@ func _apply_material_recursive(node: Node, material: Material) -> void:
 
 func _build_cat_material() -> Material:
 	var shader := load(TOON_SHADER_PATH) as Shader
+	var outline_shader := load(OUTLINE_SHADER_PATH) as Shader
 	var texture := load(MODEL_TEXTURE_PATH) as Texture2D
 	if shader == null:
+		_cat_material = null
+		_outline_material = null
 		var fallback := StandardMaterial3D.new()
 		fallback.albedo_texture = texture
 		fallback.albedo_color = tint_color
 		return fallback
-	var material := ShaderMaterial.new()
-	material.shader = shader
-	material.set_shader_parameter("albedo_tex", texture)
-	material.set_shader_parameter("tint_color", tint_color)
-	material.set_shader_parameter("shadow_steps", toon_steps)
-	material.set_shader_parameter("shadow_darkness", shadow_darkness)
-	material.set_shader_parameter("rim_strength", rim_strength)
-	return material
+	_cat_material = ShaderMaterial.new()
+	_outline_material = null
+	_cat_material.shader = shader
+
+	# Render the expanded, front-face-culled outline as a next pass. This keeps
+	# it on the same skinned mesh, so the outline always follows the cat pose.
+	if outline_shader != null:
+		_outline_material = ShaderMaterial.new()
+		_outline_material.shader = outline_shader
+		_cat_material.next_pass = _outline_material
+
+	_apply_shader_parameters(texture)
+	return _cat_material
+
+
+func _refresh_shader_material() -> void:
+	# Export setters also run while the node is deserializing, before its visual
+	# model exists. Defer once so inspector edits update a live material safely.
+	call_deferred("_apply_current_shader_parameters")
+
+
+func _apply_current_shader_parameters() -> void:
+	if _cat_material == null:
+		if Engine.is_editor_hint():
+			_request_editor_refresh()
+		return
+	_apply_shader_parameters(load(MODEL_TEXTURE_PATH) as Texture2D)
+
+
+func _apply_shader_parameters(texture: Texture2D) -> void:
+	if _cat_material != null:
+		_cat_material.set_shader_parameter("albedo_tex", texture)
+		_cat_material.set_shader_parameter("tint_color", tint_color)
+		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
+		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
+		_cat_material.set_shader_parameter("rim_strength", rim_strength)
+	if _outline_material != null:
+		_outline_material.set_shader_parameter("outline_color", outline_color)
+		_outline_material.set_shader_parameter("outline_width", outline_width)
 
 
 func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
