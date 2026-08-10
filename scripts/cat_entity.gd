@@ -31,7 +31,7 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		_request_editor_refresh()
 
 @export_group("Body")
-@export_range(2, 16, 1) var initial_length: int = 7:
+@export_range(2, 16, 1) var initial_length: int = 4:
 	set(value):
 		initial_length = value
 		_reset_straight_body()
