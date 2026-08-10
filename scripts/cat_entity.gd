@@ -21,6 +21,8 @@ const CORNER_ARC_SHORTENING := 0.4292
 const SLIDE_AXIS_HYSTERESIS := 0.2
 # 다른 축으로 바꾸려면 마우스가 그 방향 셀 경계를 실제로 넘어야 한다. 타일 반폭이다.
 const SLIDE_AXIS_SWITCH := 0.5
+# 이 값보다 많이 미끄러져 있으면 축을 바꾸지 않는다. 코너는 셀 중심에서만 돈다.
+const SLIDE_SWITCH_EPSILON := 0.02
 # 이 거리(타일 비율) 안에서는 축을 고르지 않는다. 0에 가까운 입력에서 축이 무작위로
 # 잡히는 것만 막는 용도이므로 아주 작게 둔다. 크게 잡으면 드래그 시작에 팝이 생긴다.
 const SLIDE_DEAD_ZONE := 0.02
@@ -148,6 +150,8 @@ var _smooth_weight: float = 0.0
 # 그대로 쓰면 코가 한 프레임에 한 칸 가까이 순간이동한다. 시간축으로 따라가게 한다.
 var _forward: Vector3 = Vector3.ZERO
 var _track_head_index: int = 0
+# 머리가 지금 어느 쪽 이웃 칸을 향해 미끄러지는지. -1 = 레일 앞쪽, +1 = 뒤쪽, 0 = 정지.
+var _head_step_offset: int = 0
 var _round_weight: float = 0.0
 var _is_dragging: bool = false
 var _motion_active: bool = false
@@ -559,11 +563,14 @@ func update_drag(endpoint: StringName, world_point: Vector3) -> void:
 		var direction: Vector2i = _slide_cell - lead_cell
 		if direction != _slide_axis:
 			# 축을 막 바꿨다. 그 시점의 진행량을 기준점으로 삼아 0에서 다시 센다.
-			# 이 보정이 없으면 전환 지점에서 머리가 그만큼(최대 반 칸) 순간이동한다.
-			_axis_entry = clampf(raw, 0.0, 0.95)
+			# 이 보정이 없으면 전환 지점에서 머리가 그만큼 순간이동한다. 축이 잠긴 동안
+			# 반대축 오프셋은 한 칸 이상 쌓일 수 있으므로 상한을 두지 않는다.
+			_axis_entry = maxf(raw, 0.0)
 		_slide_axis = direction
 
-		var travel := (raw - _axis_entry) / maxf(1.0 - _axis_entry, 0.05)
+		# 기준점부터 1:1 로 센다. (1 - entry) 로 나누면 남은 거리를 몰아서 달리게 되어
+		# 대각 드래그처럼 오프셋이 크게 쌓인 경우 한 칸을 한 프레임에 순간이동한다.
+		var travel := clampf(raw - _axis_entry, 0.0, 1.0)
 		if travel < 1.0:
 			# 셀 중심에 아직 못 미쳤다. 중간 지점에 그대로 머문다.
 			_slide_t = clampf(travel, 0.0, 1.0)
@@ -574,7 +581,9 @@ func update_drag(endpoint: StringName, world_point: Vector3) -> void:
 			_slide_t = 1.0
 			return
 		_slide_t = 0.0
-		_axis_entry = 0.0
+		# 기준점도 한 칸만큼 당겨 둔다. 0으로 되돌리면 손가락이 이미 지나온 만큼이
+		# 곧바로 travel 로 잡혀서 확정 시점에 머리가 그만큼 앞으로 순간이동한다.
+		_axis_entry = maxf(raw - 1.0, 0.0)
 
 	_slide_valid = false
 	_slide_t = 0.0
@@ -615,14 +624,18 @@ func _best_step_cell(endpoint: StringName, lead_cell: Vector2i, to_pointer: Vect
 	var score_x := absf(along_x)
 	var score_z := absf(along_z)
 	if _slide_axis != Vector2i.ZERO:
+		# 셀 사이에 걸쳐 있는 동안에는 축을 바꾸지 않는다. 몸통은 레일 위에만 있을 수 있어서
+		# 축을 바꾸려면 머리가 셀 중심으로 되돌아와야 하는데, 그 되돌림이 곧 "뒤로 튐"이다.
+		# 대신 그대로 진행해 셀 중심에 도착한 뒤(확정 직후 slide_t=0) 그 자리에서 돈다.
+		var mid_cell := _slide_t > SLIDE_SWITCH_EPSILON
 		if _slide_axis.x != 0:
 			score_x += SLIDE_AXIS_HYSTERESIS
 			# 측면 축은 마우스가 그 셀로 실제로 넘어갔을 때만 후보가 된다.
-			if score_z <= SLIDE_AXIS_SWITCH:
+			if mid_cell or score_z <= SLIDE_AXIS_SWITCH:
 				score_z = -1.0
 		else:
 			score_z += SLIDE_AXIS_HYSTERESIS
-			if score_x <= SLIDE_AXIS_SWITCH:
+			if mid_cell or score_x <= SLIDE_AXIS_SWITCH:
 				score_x = -1.0
 
 	# signi() 는 int 를 받는다. 소수 성분을 그대로 넘기면 잘려서 0이 되므로 직접 부호를 낸다.
@@ -716,6 +729,7 @@ func _track_cells() -> Array[Vector2i]:
 	# 기억한 길 전체를 넣으면 꼬리 끝이 점유하지 않은 칸으로 삐져나간다.
 	var cells: Array[Vector2i] = body_cells.duplicate()
 	_track_head_index = 0
+	_head_step_offset = 0
 	if not _slide_valid or _slide_t <= 0.0:
 		return cells
 
@@ -723,17 +737,21 @@ func _track_cells() -> Array[Vector2i]:
 		if _slide_cell == body_cells[1]:
 			# 머리 후진 중. 반대쪽 끝은 확정될 때와 같은 규칙으로 다음 칸을 향한다.
 			cells.append(_next_rear_cell(_back_trail, body_cells[-1], body_cells[-2]))
+			_head_step_offset = 1
 		else:
 			# 머리 전진 중. 아직 레일에 없는 새 칸을 앞에 이어 붙인다.
 			cells.push_front(_slide_cell)
 			_track_head_index = 1
+			_head_step_offset = -1
 	else:
 		if _slide_cell == body_cells[-2]:
 			# 꼬리 후진 중. 머리 쪽이 다음 칸으로 밀려 나간다.
 			cells.push_front(_next_rear_cell(_front_trail, body_cells[0], body_cells[1]))
 			_track_head_index = 1
+			_head_step_offset = -1
 		else:
 			cells.append(_slide_cell)
+			_head_step_offset = 1
 	return cells
 
 
@@ -747,19 +765,6 @@ func _next_rear_cell(
 	if remembered == null:
 		return rear + (rear - rear_prev)
 	return remembered as Vector2i
-
-
-func _slide_arc() -> float:
-	# 레일의 시작(머리 앞쪽)으로 향하는 이동은 음수, 끝(꼬리 뒤쪽)으로 향하면 양수다.
-	if not _slide_valid or _slide_t <= 0.0:
-		return 0.0
-	var toward_start: bool
-	if _drag_endpoint == &"head":
-		toward_start = _slide_cell != body_cells[1]
-	else:
-		toward_start = _slide_cell == body_cells[-2]
-	var distance := _slide_t * level_manager.tile_size
-	return -distance if toward_start else distance
 
 
 func _build_track() -> Dictionary:
@@ -815,7 +820,16 @@ func _build_track() -> Dictionary:
 	vertex_index.append(points.size() - 1)
 
 	var lengths := _polyline_lengths(points)
-	var head_arc: float = lengths[vertex_index[head_vertex]] + _slide_arc()
+
+	# 머리 위치는 레일의 호/점으로 잡지 않는다. 머리 셀에 코너가 생기는 순간 그 셀의
+	# 대표 지점이 셀 중심에서 필렛 중간점으로 바뀌면서 머리가 뒤로 튀기 때문이다.
+	# 셀 중심 사이를 slide_t 로 직접 보간하면 손가락과도 정확히 맞고 확정 시점에도 이어진다.
+	var step_vertex: int = clampi(head_vertex + _head_step_offset, 0, vertex_index.size() - 1)
+	var head_position: Vector3 = base[head_vertex].lerp(base[step_vertex], _slide_t)
+	# 본 방향을 뽑을 기준 호는 정점 호 사이를 같은 비율로 보간한다.
+	var head_arc: float = lerpf(
+		lengths[vertex_index[head_vertex]], lengths[vertex_index[step_vertex]], _slide_t
+	)
 
 	# 돌출분은 라운딩 전 격자 길이가 아니라 지금 렌더되는 레일 길이로 계산한다.
 	# 필렛이 경로를 줄인 만큼을 머리와 꼬리에 절반씩 나눠야 한쪽으로만 밀려나지 않는다.
@@ -827,6 +841,7 @@ func _build_track() -> Dictionary:
 		"lengths": lengths,
 		"nose_arc": head_arc - overhang,
 		"overhang": overhang,
+		"head_position": head_position,
 	}
 
 
@@ -946,7 +961,7 @@ func _place_model_on(track: Dictionary) -> void:
 	# 코 끝만 그 지점에서 _forward 방향으로 돌출분만큼 내민다. _forward 는 시간축으로
 	# 따라오므로 슬라이드가 시작될 때 코가 순간이동하지 않고 부드럽게 돌아간다.
 	var overhang: float = track["overhang"]
-	var head := _polyline_point_at(track["points"], track["lengths"], track["nose_arc"] + overhang)
+	var head: Vector3 = track["head_position"]
 	if _forward.length_squared() < 0.000001:
 		_forward = _target_forward(track)
 	_cat_model.basis = _fbx_basis_for_direction(_forward)
