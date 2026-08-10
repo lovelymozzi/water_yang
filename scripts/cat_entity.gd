@@ -48,8 +48,6 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		fbx_scale_per_tile = value
 		_rebuild_body_visuals(false)
 
-@export_range(1, 5, 2) var turn_smoothing_bones: int = 3
-
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
 	set(value):
@@ -375,11 +373,10 @@ func _apply_body_pose_rotation_only() -> void:
 	# 이 축은 얼굴의 위아래 방향과 같아서, 몸통이 뒤집히거나 비틀리지 않는다.
 	var target_points := _sample_body_path_for_bones(_bone_rests.size())
 	var turn_by_path_index := {}
-	var half_smoothing := turn_smoothing_bones / 2
 
-	# 90°를 하나의 본에 모두 주면 메시가 접히고 바깥쪽으로 밀려난다.
-	# 실제 head-to-tail 본 순서(PATH_BONE_INDICES)를 따라 연속된 본에 나누어
-	# 회전만 적용하므로, 메시의 길이·폭·높이 비율은 바뀌지 않는다.
+	# 90° 회전은 하나의 그리드 관절에서 끝난다. 실제 head-to-tail 본 순서
+	# (PATH_BONE_INDICES)를 사용하므로, 몸통은
+	# 대각선 곡선이 아니라 셀 중심을 잇는 수평/수직 경로를 따라간다.
 	for path_index in range(1, PATH_BONE_INDICES.size() - 1):
 		var before := target_points[path_index] - target_points[path_index - 1]
 		var after := target_points[path_index + 1] - target_points[path_index]
@@ -393,11 +390,9 @@ func _apply_body_pose_rotation_only() -> void:
 		# FBX의 local Z 회전 방향은 보드 좌표계와 반대이므로 부호를 반전한다.
 		var turn_angle := -atan2(before.cross(after).z, before.dot(after))
 		var affected_path_indices: Array[int] = []
-		for offset in range(-half_smoothing, half_smoothing + 1):
-			var affected_index := path_index + offset
-			# 머리와 꼬리 끝 본은 꺾임 분배 대상에서 제외한다.
-			if affected_index >= 2 and affected_index < PATH_BONE_INDICES.size() - 1:
-				affected_path_indices.append(affected_index)
+		# 머리와 꼬리 끝 본은 꺾임 대상에서 제외한다.
+		if path_index >= 2 and path_index < PATH_BONE_INDICES.size() - 1:
+			affected_path_indices.append(path_index)
 		if affected_path_indices.is_empty():
 			continue
 		var distributed_turn := turn_angle / float(affected_path_indices.size())
