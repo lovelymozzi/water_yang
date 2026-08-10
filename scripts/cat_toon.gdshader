@@ -6,9 +6,11 @@ uniform vec4 tint_color : source_color = vec4(1.0);
 uniform int shadow_steps = 3;
 uniform float shadow_darkness : hint_range(0.0, 1.0) = 0.58;
 uniform float rim_strength : hint_range(0.0, 1.0) = 0.24;
+uniform vec2 uv_tiling = vec2(1.0);
+uniform vec2 uv_offset = vec2(0.0);
 
 void fragment() {
-	vec4 tex = texture(albedo_tex, UV);
+	vec4 tex = texture(albedo_tex, UV * uv_tiling + uv_offset);
 	ALBEDO = tex.rgb * tint_color.rgb;
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;

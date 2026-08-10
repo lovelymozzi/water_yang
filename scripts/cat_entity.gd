@@ -11,6 +11,12 @@ const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
 const BLINK_CLOSED_DURATION := 0.11
+const MATERIAL_ID_2_SURFACE_INDEX := 1
+# The source FBX is authored at four cells.  Length 3 is the game minimum,
+# so it must shrink the middle section relative to this reference.
+const BODY_TEXTURE_REFERENCE_LENGTH := 4
+const STRETCH_BONE_FIRST := 4
+const STRETCH_BONE_LAST := 14
 # 드래그 중 코너를 깎을 때 원호를 몇 조각으로 나눌지.
 const CORNER_ARC_SEGMENTS := 6
 # 입력 이벤트 하나가 확정할 수 있는 최대 셀 이동 수. 빠른 스와이프용 안전장치다.
@@ -45,6 +51,14 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 	set(value):
 		initial_length = value
 		_reset_straight_body()
+		_refresh_shader_material()
+		if is_inside_tree() and not Engine.is_editor_hint() and level_manager != null:
+			# Remote Inspector changes during Play do not use the editor preview
+			# refresh path, so update the live skeleton and endpoint handles here.
+			_sync_to_grid_position()
+			snap_pose_to_grid()
+			_update_endpoint_handles()
+			level_manager.update_cat_occupancy(self)
 		_request_editor_refresh()
 
 @export_range(2, 16, 1) var min_length: int = 2:
@@ -70,6 +84,12 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 	set(value):
 		fbx_scale_per_tile = value
 		_rebuild_body_visuals(false)
+
+@export_range(-1.0, 1.0, 0.01) var visual_forward_offset_tiles: float = 0.25:
+	set(value):
+		visual_forward_offset_tiles = value
+		if is_inside_tree() and level_manager != null:
+			snap_pose_to_grid()
 
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
@@ -121,7 +141,9 @@ var _cat_model: Node3D
 var _skeleton: Skeleton3D
 var _bone_rests: Array[Transform3D] = []
 var _cat_material: ShaderMaterial
+var _material_id_2: ShaderMaterial
 var _outline_material: ShaderMaterial
+var _material_id_2_outline: ShaderMaterial
 var _open_eyes_texture: Texture2D
 var _closed_eyes_texture: Texture2D
 var _blink_time_remaining := -1.0
@@ -772,7 +794,7 @@ func _build_track() -> Dictionary:
 		base.append(_cell_to_local(cell))
 
 	# 양 끝을 직선으로 연장해 본 체인이 레일 밖으로 빠져나가지 않게 한다.
-	var reach := _rest_chain_length * _grid_fitted_model_scale() + level_manager.tile_size * 2.0
+	var reach := _stretched_chain_length() * _grid_fitted_model_scale() + level_manager.tile_size * 2.0
 	base.insert(0, base[0] + (base[0] - base[1]).normalized() * reach)
 	base.append(base[-1] + (base[-1] - base[-2]).normalized() * reach)
 	var head_vertex := _track_head_index + 1
@@ -821,7 +843,7 @@ func _build_track() -> Dictionary:
 	# 필렛이 경로를 줄인 만큼을 머리와 꼬리에 절반씩 나눠야 한쪽으로만 밀려나지 않는다.
 	var tail_vertex: int = mini(head_vertex + body_cells.size() - 1, vertex_index.size() - 1)
 	var rail_span: float = lengths[vertex_index[tail_vertex]] - lengths[vertex_index[head_vertex]]
-	var overhang := maxf((_rest_chain_length * _grid_fitted_model_scale() - rail_span) * 0.5, 0.0)
+	var overhang := maxf((_stretched_chain_length() * _grid_fitted_model_scale() - rail_span) * 0.5, 0.0)
 	return {
 		"points": points,
 		"lengths": lengths,
@@ -893,7 +915,7 @@ func _polyline_tangent_at(
 
 
 func _bone_arc(chain_index: int, nose_arc: float, model_scale: float) -> float:
-	return nose_arc + _bone_chain_distances[chain_index] * model_scale
+	return nose_arc + _stretched_chain_distance(chain_index) * model_scale
 
 
 func _bone_span_direction(track: Dictionary, chain_index: int, model_scale: float) -> Vector3:
@@ -952,7 +974,8 @@ func _place_model_on(track: Dictionary) -> void:
 	_cat_model.basis = _fbx_basis_for_direction(_forward)
 	# 상체 비율을 보존하기 위해 모델 루트는 반드시 균일 스케일만 사용한다.
 	_cat_model.scale = Vector3.ONE * _grid_fitted_model_scale()
-	_cat_model.position = head + _forward * overhang - _cat_model.basis * _bone_rests[0].origin
+	var visual_offset := level_manager.tile_size * visual_forward_offset_tiles
+	_cat_model.position = head + _forward * (overhang + visual_offset) - _cat_model.basis * _bone_rests[0].origin
 
 
 func _grid_path_length() -> float:
@@ -960,7 +983,7 @@ func _grid_path_length() -> float:
 
 
 func _body_overhang() -> float:
-	return maxf((_rest_chain_length * _grid_fitted_model_scale() - _grid_path_length()) * 0.5, 0.0)
+	return maxf((_stretched_chain_length() * _grid_fitted_model_scale() - _grid_path_length()) * 0.5, 0.0)
 
 
 func _apply_body_pose_along(track: Dictionary) -> void:
@@ -1003,6 +1026,7 @@ func _apply_body_pose_along(track: Dictionary) -> void:
 		previous_direction = direction
 
 	_enforce_locked_bone_scales()
+	_apply_stretchable_bone_offsets()
 
 
 func _enforce_locked_bone_scales() -> void:
@@ -1068,6 +1092,67 @@ func _grid_fitted_model_scale() -> float:
 	return fbx_scale_per_tile * level_manager.tile_size / REFERENCE_TILE_SIZE
 
 
+func _body_length_scale() -> float:
+	# Use intervals rather than cells so mesh scaling and texture tiling stay
+	# in sync with the four-cell authored FBX.
+	return float(maxi(initial_length - 1, 1)) / float(BODY_TEXTURE_REFERENCE_LENGTH - 1)
+
+
+func _is_stretchable_chain_bone(chain_index: int) -> bool:
+	if _skeleton == null or chain_index < 0 or chain_index >= _bone_chain.size():
+		return false
+	var bone_name := _skeleton.get_bone_name(_bone_chain[chain_index])
+	var bone_number := bone_name.trim_prefix("Bone").to_int()
+	return bone_number >= STRETCH_BONE_FIRST and bone_number <= STRETCH_BONE_LAST
+
+
+func _stretchable_rest_length() -> float:
+	var total := 0.0
+	for chain_index in range(1, _bone_chain_distances.size()):
+		if _is_stretchable_chain_bone(chain_index - 1):
+			total += _bone_chain_distances[chain_index] - _bone_chain_distances[chain_index - 1]
+	return total
+
+
+func _stretchable_bone_scale() -> float:
+	# Only the middle Bone004..Bone014 section absorbs added Initial Length.
+	var stretchable_length := _stretchable_rest_length()
+	if stretchable_length <= 0.000001:
+		return 1.0
+	var added_length := _rest_chain_length * (_body_length_scale() - 1.0)
+	# Keep a small positive lower bound for the inspector's minimum length of 2.
+	return maxf(0.05, 1.0 + added_length / stretchable_length)
+
+
+func _stretched_chain_distance(chain_index: int) -> float:
+	var distance := 0.0
+	for index in range(1, mini(chain_index + 1, _bone_chain_distances.size())):
+		var segment := _bone_chain_distances[index] - _bone_chain_distances[index - 1]
+		if _is_stretchable_chain_bone(index - 1):
+			segment *= _stretchable_bone_scale()
+		distance += segment
+	return distance
+
+
+func _stretched_chain_length() -> float:
+	return _stretched_chain_distance(_bone_chain_distances.size() - 1)
+
+
+func _apply_stretchable_bone_offsets() -> void:
+	if _skeleton == null:
+		return
+	var stretch_scale := _stretchable_bone_scale()
+	# Scaling a parent bone is inherited by every child, causing the length to
+	# multiply down the chain.  Instead, extend only the rest-position of each
+	# segment after Bone004..Bone014.  The positions are on local X in this FBX.
+	for chain_index in range(1, _bone_chain.size()):
+		if _is_stretchable_chain_bone(chain_index - 1):
+			var bone_index := _bone_chain[chain_index]
+			_skeleton.set_bone_pose_position(
+				bone_index, _bone_rests[bone_index].origin * stretch_scale
+			)
+
+
 func _fbx_basis_for_direction(direction: Vector3) -> Basis:
 	# FBX local Y is the body length and local +Z is the face side.
 	# Keep the face side toward world up while only the body length follows the grid path.
@@ -1085,8 +1170,8 @@ func _cell_to_local(cell: Vector2i) -> Vector3:
 func load_model_with_texture() -> Node3D:
 	var packed_scene := load(MODEL_SCENE_PATH) as PackedScene
 	var model_root := packed_scene.instantiate() as Node3D if packed_scene != null else Node3D.new()
-	var material := _build_cat_material()
-	_apply_material_recursive(model_root, material)
+	_build_cat_material()
+	_apply_material_recursive(model_root)
 	return model_root
 
 
@@ -1100,39 +1185,52 @@ func _find_skeleton_in(node: Node) -> Skeleton3D:
 	return null
 
 
-func _apply_material_recursive(node: Node, material: Material) -> void:
+func _apply_material_recursive(node: Node) -> void:
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
-		mesh_instance.material_override = material
+		# Keep the FBX surface split: surface 1 is 3ds Max Material ID 2
+		# (Material #26).  A material override would flatten both surfaces into
+		# one, preventing the body-only UV tiling correction below.
+		mesh_instance.material_override = null
+		if mesh_instance.mesh != null:
+			for surface_index in mesh_instance.mesh.get_surface_count():
+				var material: Material = _cat_material
+				if surface_index == MATERIAL_ID_2_SURFACE_INDEX and _material_id_2 != null:
+					material = _material_id_2
+				mesh_instance.set_surface_override_material(surface_index, material)
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
 	for child in node.get_children():
-		_apply_material_recursive(child, material)
+		_apply_material_recursive(child)
 
 
-func _build_cat_material() -> Material:
+func _build_cat_material() -> void:
 	var shader := load(TOON_SHADER_PATH) as Shader
 	var outline_shader := load(OUTLINE_SHADER_PATH) as Shader
 	var texture := _get_open_eyes_texture()
 	if shader == null:
 		_cat_material = null
+		_material_id_2 = null
 		_outline_material = null
-		var fallback := StandardMaterial3D.new()
-		fallback.albedo_texture = texture
-		fallback.albedo_color = tint_color
-		return fallback
+		_material_id_2_outline = null
+		return
 	_cat_material = ShaderMaterial.new()
+	_material_id_2 = ShaderMaterial.new()
 	_outline_material = null
+	_material_id_2_outline = null
 	_cat_material.shader = shader
+	_material_id_2.shader = shader
 
 	# Render the expanded, front-face-culled outline as a next pass. This keeps
 	# it on the same skinned mesh, so the outline always follows the cat pose.
 	if outline_shader != null:
 		_outline_material = ShaderMaterial.new()
 		_outline_material.shader = outline_shader
+		_material_id_2_outline = ShaderMaterial.new()
+		_material_id_2_outline.shader = outline_shader
 		_cat_material.next_pass = _outline_material
+		_material_id_2.next_pass = _material_id_2_outline
 
 	_apply_shader_parameters(texture)
-	return _cat_material
 
 
 func _refresh_shader_material() -> void:
@@ -1156,9 +1254,24 @@ func _apply_shader_parameters(texture: Texture2D) -> void:
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
+	if _material_id_2 != null:
+		# The exported FBX uses V (UV.y) along the body's local Y axis.  More
+		# cells need proportionally more repeats; centering the offset keeps the
+		# texture locked at the middle while either end grows or shrinks.
+		var tile_scale := _body_length_scale()
+		_material_id_2.set_shader_parameter("albedo_tex", texture)
+		_material_id_2.set_shader_parameter("tint_color", tint_color)
+		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
+		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
+		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
+		_material_id_2.set_shader_parameter("uv_tiling", Vector2(1.0, tile_scale))
+		_material_id_2.set_shader_parameter("uv_offset", Vector2(0.0, (1.0 - tile_scale) * 0.5))
 	if _outline_material != null:
 		_outline_material.set_shader_parameter("outline_color", outline_color)
 		_outline_material.set_shader_parameter("outline_width", outline_width)
+	if _material_id_2_outline != null:
+		_material_id_2_outline.set_shader_parameter("outline_color", outline_color)
+		_material_id_2_outline.set_shader_parameter("outline_width", outline_width)
 
 
 func _get_open_eyes_texture() -> Texture2D:
