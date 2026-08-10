@@ -868,16 +868,13 @@ func _build_track() -> Dictionary:
 		lengths[vertex_index[head_vertex]], lengths[vertex_index[step_vertex]], _slide_t
 	)
 
-	# 돌출분은 라운딩 전 격자 길이가 아니라 지금 렌더되는 레일 길이로 계산한다.
-	# 필렛이 경로를 줄인 만큼을 머리와 꼬리에 절반씩 나눠야 한쪽으로만 밀려나지 않는다.
-	var tail_vertex: int = mini(head_vertex + body_cells.size() - 1, vertex_index.size() - 1)
-	var rail_span: float = lengths[vertex_index[tail_vertex]] - lengths[vertex_index[head_vertex]]
-	var overhang := maxf((_stretched_chain_length() * _grid_fitted_model_scale() - rail_span) * 0.5, 0.0)
+	# Initial Length is anchored at the head cell; any added length extends
+	# tailward instead of being split across the head and tail.
 	return {
 		"points": points,
 		"lengths": lengths,
-		"nose_arc": head_arc - overhang,
-		"overhang": overhang,
+		"nose_arc": head_arc,
+		"overhang": 0.0,
 		"head_position": head_position,
 	}
 
