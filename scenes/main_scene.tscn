@@ -44,12 +44,12 @@ script = ExtResource("2_5srec")
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
 [node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.78, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.399788, 0.78, -6.5607185)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 1)
-initial_length = 7
-min_length = 4
-fbx_scale_per_tile = 6.699999999999999
+initial_length = 3
+min_length = 3
+fbx_scale_per_tile = 8.0
 tint_color = Color(1, 1, 1, 1)
 shadow_darkness = 0.41
 rim_strength = 0.4
@@ -104,26 +104,8 @@ script = ExtResource("4_obs")
 grid_pos = Vector2i(4, 6)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=411557567]
-layer = 10
 
 [node name="ClearLabel" type="Label" parent="CanvasLayer" unique_id=1116493100]
 visible = false
 offset_right = 1152.0
 offset_bottom = 648.0
-
-[node name="VertexInfoLabel" type="Label" parent="CanvasLayer" unique_id=970135836]
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 520.0
-offset_bottom = 112.0
-theme_override_colors/font_color = Color(1, 0.96, 0.72, 1)
-theme_override_colors/font_outline_color = Color(0.08, 0.05, 0.02, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 22
-
-[node name="VertexPickRing" type="ColorRect" parent="CanvasLayer"]
-custom_minimum_size = Vector2(30, 30)
-offset_right = 30.0
-offset_bottom = 30.0
-mouse_filter = 2
-color = Color(1, 0.9, 0.05, 0.95)
