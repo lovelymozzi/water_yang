@@ -17,6 +17,11 @@ const CORNER_ARC_SEGMENTS := 6
 const MAX_COMMITS_PER_UPDATE := 8
 # 90° 필렛이 경로를 줄이는 길이 / 반지름. 2 - PI/2 다.
 const CORNER_ARC_SHORTENING := 0.4292
+# 이미 미끄러지고 있는 축에 주는 가산점. 손가락이 축을 살짝 벗어나도 방향이 튀지 않게 한다.
+const SLIDE_AXIS_HYSTERESIS := 0.35
+# 이 거리(타일 비율) 안에서는 축을 고르지 않는다. 0에 가까운 입력에서 축이 무작위로
+# 잡히는 것만 막는 용도이므로 아주 작게 둔다. 크게 잡으면 드래그 시작에 팝이 생긴다.
+const SLIDE_DEAD_ZONE := 0.02
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 
 @export_group("Layout")
@@ -128,7 +133,16 @@ var _rest_chain_length: float = 0.0
 var _slide_cell: Vector2i = Vector2i.ZERO
 var _slide_t: float = 0.0
 var _slide_valid: bool = false
+var _slide_axis: Vector2i = Vector2i.ZERO
 var _drag_endpoint: StringName = &"head"
+# 잡은 순간 손가락이 셀 중심에서 얼마나 빗겨 있었는지. 이후 좌표에서 계속 빼 준다.
+# 이 보정이 없으면 빗겨 잡은 만큼이 영구 편향으로 남아 옆칸으로 튀어나간다.
+var _grab_offset: Vector3 = Vector3.ZERO
+# 이동 중 1, 정지 시 0. 방향 샘플링을 연속(현) / 예각(접선) 중 무엇으로 할지 결정한다.
+var _smooth_weight: float = 0.0
+# 머리가 향한 방향(로컬). 레일은 슬라이드가 시작되는 순간 머리 셀에서 꺾이므로,
+# 그대로 쓰면 코가 한 프레임에 한 칸 가까이 순간이동한다. 시간축으로 따라가게 한다.
+var _forward: Vector3 = Vector3.ZERO
 var _track_head_index: int = 0
 var _round_weight: float = 0.0
 var _is_dragging: bool = false
@@ -480,10 +494,20 @@ func _rebuild_body_visuals(_animate: bool) -> void:
 	snap_pose_to_grid()
 
 
-func begin_drag(endpoint: StringName) -> void:
+func begin_drag(endpoint: StringName, world_point: Variant = null) -> void:
 	_is_dragging = true
 	_drag_endpoint = endpoint
+	_slide_axis = Vector2i.ZERO
 	_motion_active = true
+
+	_grab_offset = Vector3.ZERO
+	if world_point == null or level_manager == null or body_cells.is_empty():
+		return
+	# 손가락의 "이동량"이 머리를 끌게 한다. 잡은 지점 자체는 기준점이 될 뿐이다.
+	var lead_cell: Vector2i = get_head_cell() if endpoint == &"head" else get_tail_cell()
+	var offset: Vector3 = (world_point as Vector3) - position - _cell_to_local(lead_cell)
+	offset.y = 0.0
+	_grab_offset = offset
 
 
 func update_drag(endpoint: StringName, world_point: Vector3) -> void:
@@ -495,7 +519,7 @@ func update_drag(endpoint: StringName, world_point: Vector3) -> void:
 	_drag_endpoint = endpoint
 	_motion_active = true
 
-	var local_point := world_point - position
+	var local_point := world_point - position - _grab_offset
 	for _commit in range(MAX_COMMITS_PER_UPDATE):
 		var lead_cell: Vector2i = get_head_cell() if endpoint == &"head" else get_tail_cell()
 		var lead_position := _cell_to_local(lead_cell)
@@ -518,6 +542,7 @@ func update_drag(endpoint: StringName, world_point: Vector3) -> void:
 		var travel := to_pointer.dot(axis / span) / span
 		_slide_cell = step_cell as Vector2i
 		_slide_valid = true
+		_slide_axis = _slide_cell - lead_cell
 		if travel < 1.0:
 			# 셀 중심에 아직 못 미쳤다. 중간 지점에 그대로 머문다.
 			_slide_t = clampf(travel, 0.0, 1.0)
@@ -548,22 +573,25 @@ func end_drag() -> void:
 
 
 func _best_step_cell(endpoint: StringName, lead_cell: Vector2i, to_pointer: Vector3) -> Variant:
-	# 손가락이 가리키는 쪽에 가장 가까운 이웃 셀을 고른다. 갈 수 없는 칸은 후보에서 뺀다.
-	if to_pointer.length_squared() < 0.000001:
+	# 손가락이 가리키는 쪽 이웃 셀을 고른다. 갈 수 없는 칸은 후보에서 뺀다.
+	if to_pointer.length() < level_manager.tile_size * SLIDE_DEAD_ZONE:
 		return null
 	var best: Variant = null
 	var best_score := 0.0
+	var pointer_direction := to_pointer.normalized()
 	var directions: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
 	for direction in directions:
-		var neighbour: Vector2i = lead_cell + direction
 		var axis := Vector3(direction.x, 0.0, direction.y)
-		var score := to_pointer.normalized().dot(axis)
+		var score := pointer_direction.dot(axis)
+		# 이미 그 축으로 미끄러지고 있었다면 계속 그 축을 유지하려 한다.
+		if direction == _slide_axis:
+			score += SLIDE_AXIS_HYSTERESIS
 		if score <= best_score:
 			continue
-		if not can_move_endpoint(endpoint, neighbour):
+		if not can_move_endpoint(endpoint, lead_cell + direction):
 			continue
 		best_score = score
-		best = neighbour
+		best = lead_cell + direction
 	return best
 
 
@@ -571,7 +599,10 @@ func snap_pose_to_grid() -> void:
 	# 보간 없이 그리드 정위치로 즉시 확정한다. 에디터 미리보기와 스폰 시점에 쓴다.
 	_slide_valid = false
 	_slide_t = 0.0
+	_slide_axis = Vector2i.ZERO
 	_round_weight = 0.0
+	_smooth_weight = 0.0
+	_forward = Vector3.ZERO
 	_motion_active = false
 	_refresh_pose()
 
@@ -592,10 +623,18 @@ func _process_motion(delta: float) -> void:
 			_slide_t = 0.0
 			_slide_valid = false
 
+	var chase := _smoothing_factor(delta, move_smooth_time if _is_dragging else settle_time)
 	var round_target := corner_round if _is_dragging else 0.0
-	var round_chase := _smoothing_factor(delta, move_smooth_time if _is_dragging else settle_time)
-	_round_weight = lerpf(_round_weight, round_target, round_chase)
+	_round_weight = lerpf(_round_weight, round_target, chase)
 	if absf(_round_weight - round_target) > 0.002:
+		settled = false
+
+	var smooth_target := 1.0 if _is_dragging else 0.0
+	_smooth_weight = lerpf(_smooth_weight, smooth_target, chase)
+	if absf(_smooth_weight - smooth_target) > 0.002:
+		settled = false
+
+	if not _advance_forward(delta):
 		settled = false
 
 	_refresh_pose()
@@ -734,6 +773,7 @@ func _build_track() -> Dictionary:
 		"points": points,
 		"lengths": lengths,
 		"nose_arc": head_arc - overhang,
+		"overhang": overhang,
 	}
 
 
@@ -804,24 +844,62 @@ func _bone_arc(chain_index: int, nose_arc: float, model_scale: float) -> float:
 
 
 func _bone_span_direction(track: Dictionary, chain_index: int, model_scale: float) -> Vector3:
-	# 관절 위치가 아니라 그 관절이 담당하는 구간의 중간에서 접선을 읽는다.
-	# 이렇게 해야 코너가 "코너 다음 관절"이 아니라 "코너에 가장 가까운 관절"에 실린다.
+	var points: PackedVector3Array = track["points"]
+	var lengths: PackedFloat32Array = track["lengths"]
 	var nose_arc: float = track["nose_arc"]
 	var start := _bone_arc(chain_index, nose_arc, model_scale)
 	var next_index: int = mini(chain_index + 1, _bone_chain_distances.size() - 1)
 	var end := _bone_arc(next_index, nose_arc, model_scale)
+
+	# 정지 상태: 관절이 담당하는 구간의 중간에서 접선을 읽는다. 이렇게 해야 코너가
+	# "코너 다음 관절"이 아니라 "코너에 가장 가까운 관절" 하나에 그대로 실린다.
 	var sample: float = start if is_equal_approx(start, end) else (start + end) * 0.5
-	return _polyline_tangent_at(track["points"], track["lengths"], sample)
+	var sharp := _polyline_tangent_at(points, lengths, sample)
+	if _smooth_weight <= 0.001 or is_equal_approx(start, end):
+		return sharp
+
+	# 이동 중: 구간 양 끝을 잇는 현을 쓴다. 접선은 세그먼트 단위로 계단식이라
+	# 몸이 미끄러질 때 관절 방향이 5도씩 툭툭 튀며 떨린다. 현은 호 길이에 대해 연속이다.
+	var chord := (
+		_polyline_point_at(points, lengths, end) - _polyline_point_at(points, lengths, start)
+	)
+	if chord.length_squared() < 0.000001:
+		return sharp
+	return sharp.lerp(chord.normalized(), clampf(_smooth_weight, 0.0, 1.0)).normalized()
+
+
+func _target_forward(track: Dictionary) -> Vector3:
+	# 레일은 머리 -> 꼬리 방향으로 진행한다. 머리가 향한 방향은 그 반대다.
+	return -_bone_span_direction(track, 0, _grid_fitted_model_scale())
+
+
+func _advance_forward(delta: float) -> bool:
+	var track := _build_track()
+	if track.is_empty():
+		return true
+	var target := _target_forward(track)
+	if _forward.length_squared() < 0.000001:
+		_forward = target
+		return true
+	var chased := _forward.slerp(target, _smoothing_factor(delta, move_smooth_time))
+	if chased.length_squared() < 0.000001:
+		chased = target
+	_forward = chased.normalized()
+	return _forward.dot(target) > 0.99995
 
 
 func _place_model_on(track: Dictionary) -> void:
-	# nose_arc 가 코 끝이고 레일의 진행 방향은 머리 -> 꼬리다. 모델의 local +Y 는 그 반대다.
-	var nose := _polyline_point_at(track["points"], track["lengths"], track["nose_arc"])
-	var forward := -_bone_span_direction(track, 0, _grid_fitted_model_scale())
-	_cat_model.basis = _fbx_basis_for_direction(forward)
+	# 머리 셀 지점은 레일 위에 정확히 둔다. 손가락을 그대로 따라가야 하기 때문이다.
+	# 코 끝만 그 지점에서 _forward 방향으로 돌출분만큼 내민다. _forward 는 시간축으로
+	# 따라오므로 슬라이드가 시작될 때 코가 순간이동하지 않고 부드럽게 돌아간다.
+	var overhang: float = track["overhang"]
+	var head := _polyline_point_at(track["points"], track["lengths"], track["nose_arc"] + overhang)
+	if _forward.length_squared() < 0.000001:
+		_forward = _target_forward(track)
+	_cat_model.basis = _fbx_basis_for_direction(_forward)
 	# 상체 비율을 보존하기 위해 모델 루트는 반드시 균일 스케일만 사용한다.
 	_cat_model.scale = Vector3.ONE * _grid_fitted_model_scale()
-	_cat_model.position = nose - _cat_model.basis * _bone_rests[0].origin
+	_cat_model.position = head + _forward * overhang - _cat_model.basis * _bone_rests[0].origin
 
 
 func _grid_path_length() -> float:
@@ -848,7 +926,8 @@ func _apply_body_pose_along(track: Dictionary) -> void:
 		return
 
 	var to_local := _cat_model.basis.inverse()
-	var previous_direction := (to_local * _bone_span_direction(track, 0, model_scale)).normalized()
+	# 첫 관절의 기준은 스무딩된 머리 방향이다. 그래서 코가 도는 동작이 목 관절에 실린다.
+	var previous_direction := (to_local * -_forward).normalized()
 
 	for chain_index in range(1, _bone_chain.size()):
 		# 각 관절은 레일 위 자기 호 길이 지점의 접선을 따른다.

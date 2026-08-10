@@ -424,7 +424,8 @@ func _begin_endpoint_drag(screen_pos: Vector2) -> void:
 		if cat != null:
 			_drag_cat = cat
 			_drag_endpoint = handle.get_meta("cat_endpoint") as StringName
-			_drag_cat.begin_drag(_drag_endpoint)
+			# 잡은 지점을 함께 넘긴다. 정중앙이 아닌 곳을 잡아도 편향이 남지 않는다.
+			_drag_cat.begin_drag(_drag_endpoint, _screen_to_board_point(screen_pos))
 
 
 func _update_endpoint_drag(screen_pos: Vector2) -> void:
