@@ -12,7 +12,11 @@ const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
 const BLINK_CLOSED_DURATION := 0.11
 # 드래그 중 코너를 깎을 때 원호를 몇 조각으로 나눌지.
-const CORNER_ARC_SEGMENTS := 5
+const CORNER_ARC_SEGMENTS := 6
+# 입력 이벤트 하나가 확정할 수 있는 최대 셀 이동 수. 빠른 스와이프용 안전장치다.
+const MAX_COMMITS_PER_UPDATE := 8
+# 90° 필렛이 경로를 줄이는 길이 / 반지름. 2 - PI/2 다.
+const CORNER_ARC_SHORTENING := 0.4292
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 
 @export_group("Layout")
@@ -47,7 +51,7 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 @export_enum("follow", "stretch") var endpoint_drag_mode: String = "follow"
 
 @export_group("Motion")
-# 렌더용 중심선이 그리드 목표를 따라잡는 시간. 0이면 예전처럼 칸 단위로 순간이동한다.
+# 드래그를 시작할 때 코너 라운딩이 켜지는 시간.
 @export_range(0.0, 0.4, 0.005) var move_smooth_time: float = 0.075
 # 손을 놓은 뒤 코너가 다시 각지게 굳는 시간.
 @export_range(0.0, 0.6, 0.005) var settle_time: float = 0.14
@@ -120,8 +124,12 @@ var _blink_random := RandomNumberGenerator.new()
 var _bone_chain: Array[int] = []
 var _bone_chain_distances: Array[float] = []
 var _rest_chain_length: float = 0.0
-# 렌더용 연속 중심선. body_cells 와 같은 길이이며, 각 점이 셀 중심을 향해 수렴한다.
-var _spine: PackedVector3Array = PackedVector3Array()
+# 머리가 셀 사이 어디쯤 있는지. _slide_cell 로 향해 _slide_t(0..1) 만큼 나아간 상태다.
+var _slide_cell: Vector2i = Vector2i.ZERO
+var _slide_t: float = 0.0
+var _slide_valid: bool = false
+var _drag_endpoint: StringName = &"head"
+var _track_head_index: int = 0
 var _round_weight: float = 0.0
 var _is_dragging: bool = false
 var _motion_active: bool = false
@@ -245,20 +253,32 @@ func _move_tail_to(target_cell: Vector2i) -> bool:
 	return _move_endpoint(target_cell, true)
 
 
+func can_move_endpoint(endpoint: StringName, target_cell: Vector2i) -> bool:
+	# 실제로 옮기지 않고 가능한지만 본다. 머리가 그 칸으로 미끄러져도 되는지 판단할 때 쓴다.
+	if level_manager == null or body_cells.size() < 2:
+		return false
+	return _plan_endpoint_move(target_cell, endpoint == &"tail") != null
+
+
 func _move_endpoint(target_cell: Vector2i, from_tail: bool) -> bool:
+	var plan: Variant = _plan_endpoint_move(target_cell, from_tail)
+	if plan == null:
+		return false
+	_commit_endpoint_move(plan as Dictionary, from_tail)
+	return true
+
+
+func _plan_endpoint_move(target_cell: Vector2i, from_tail: bool) -> Variant:
 	# 게코아웃에서는 "잡아끄는 쪽"이 곧 머리다. 두 끝의 규칙이 완전히 대칭이므로
 	# 꼬리를 잡은 경우에는 몸통을 뒤집어 같은 로직을 그대로 태운다.
 	var path: Array[Vector2i] = body_cells.duplicate()
-	var lead_trail: Array[Vector2i] = _front_trail
-	var rear_trail: Array[Vector2i] = _back_trail
+	var rear_trail: Array[Vector2i] = _front_trail if from_tail else _back_trail
 	if from_tail:
 		path.reverse()
-		lead_trail = _back_trail
-		rear_trail = _front_trail
 
 	var lead: Vector2i = path[0]
 	if not _is_adjacent(lead, target_cell):
-		return false
+		return null
 
 	var candidate: Array[Vector2i] = path.duplicate()
 	var is_retreat: bool = target_cell == candidate[1]
@@ -285,7 +305,7 @@ func _move_endpoint(target_cell: Vector2i, from_tail: bool) -> bool:
 			candidate.append(next_rear)
 			rear_moved = true
 		elif candidate.size() <= min_length:
-			return false
+			return null
 		else:
 			candidate.pop_front()
 	else:
@@ -296,32 +316,47 @@ func _move_endpoint(target_cell: Vector2i, from_tail: bool) -> bool:
 			candidate.pop_back()
 			rear_moved = true
 		elif candidate.size() > max_length:
-			return false
+			return null
 
 	var final_body: Array[Vector2i] = candidate.duplicate()
 	if from_tail:
 		final_body.reverse()
 	if not level_manager.can_place_cat_body(self, final_body):
-		return false
+		return null
+
+	return {
+		"final_body": final_body,
+		"lead": lead,
+		"target": target_cell,
+		"is_retreat": is_retreat,
+		"rear_moved": rear_moved,
+		"rear_from_memory": rear_from_memory,
+		"vacated_rear": vacated_rear,
+	}
+
+
+func _commit_endpoint_move(plan: Dictionary, from_tail: bool) -> void:
+	var lead_trail: Array[Vector2i] = _back_trail if from_tail else _front_trail
+	var rear_trail: Array[Vector2i] = _front_trail if from_tail else _back_trail
+	var final_body: Array[Vector2i] = plan["final_body"]
+	body_cells = final_body
 
 	# 이동이 확정된 뒤에만 통과한 길 기록을 갱신한다.
-	body_cells = final_body
-	if is_retreat:
-		_remember(lead_trail, lead)
-		if rear_moved:
-			if rear_from_memory:
+	if plan["is_retreat"]:
+		_remember(lead_trail, plan["lead"])
+		if plan["rear_moved"]:
+			if plan["rear_from_memory"]:
 				rear_trail.pop_front()
 			else:
 				rear_trail.clear()
 	else:
 		# 잡은 쪽이 기억한 길을 되짚어 가면 그만큼 소비하고, 새 방향으로 틀면 기억을 버린다.
-		if not lead_trail.is_empty() and lead_trail[0] == target_cell:
+		if not lead_trail.is_empty() and lead_trail[0] == plan["target"]:
 			lead_trail.pop_front()
 		else:
 			lead_trail.clear()
-		if rear_moved:
-			_remember(rear_trail, vacated_rear)
-	return true
+		if plan["rear_moved"]:
+			_remember(rear_trail, plan["vacated_rear"])
 
 
 func _remembered_rear_cell(
@@ -445,40 +480,100 @@ func _rebuild_body_visuals(_animate: bool) -> void:
 	snap_pose_to_grid()
 
 
-func begin_drag() -> void:
-	# 드래그 중에는 코너를 깎아 최단거리로 흐르게 한다.
+func begin_drag(endpoint: StringName) -> void:
 	_is_dragging = true
+	_drag_endpoint = endpoint
 	_motion_active = true
+
+
+func update_drag(endpoint: StringName, world_point: Vector3) -> void:
+	# 손가락 위치를 그대로 받아 머리를 셀 사이 어디에나 놓는다.
+	# 논리 확정(body_cells)은 머리가 이웃 셀 중심에 닿는 순간에만 일어난다.
+	if level_manager == null or body_cells.size() < 2:
+		return
+	_is_dragging = true
+	_drag_endpoint = endpoint
+	_motion_active = true
+
+	var local_point := world_point - position
+	for _commit in range(MAX_COMMITS_PER_UPDATE):
+		var lead_cell: Vector2i = get_head_cell() if endpoint == &"head" else get_tail_cell()
+		var lead_position := _cell_to_local(lead_cell)
+		var to_pointer := local_point - lead_position
+		to_pointer.y = 0.0
+
+		var step_cell: Variant = _best_step_cell(endpoint, lead_cell, to_pointer)
+		if step_cell == null:
+			_slide_valid = false
+			_slide_t = 0.0
+			return
+
+		var axis := _cell_to_local(step_cell as Vector2i) - lead_position
+		axis.y = 0.0
+		var span := axis.length()
+		if span < 0.0001:
+			_slide_valid = false
+			return
+
+		var travel := to_pointer.dot(axis / span) / span
+		_slide_cell = step_cell as Vector2i
+		_slide_valid = true
+		if travel < 1.0:
+			# 셀 중심에 아직 못 미쳤다. 중간 지점에 그대로 머문다.
+			_slide_t = clampf(travel, 0.0, 1.0)
+			return
+
+		# 이웃 셀 중심을 넘어섰으니 한 칸 확정하고, 남은 거리로 다시 판단한다.
+		if not drag_endpoint_to(endpoint, _slide_cell):
+			_slide_t = 1.0
+			return
+		_slide_t = 0.0
+
+	_slide_valid = false
+	_slide_t = 0.0
 
 
 func end_drag() -> void:
-	# 손을 놓으면 스파인이 셀 중심으로 수렴하고 코너가 다시 각지게 굳는다.
+	# 손을 놓으면 가장 가까운 그리드 정위치로 붙는다. 절반을 넘었으면 그 칸으로 확정하고,
+	# 아니면 원래 칸으로 되돌아간다. 어느 쪽이든 남은 거리는 애니메이션으로 흡수한다.
 	_is_dragging = false
+	if _slide_valid and _slide_t >= 0.5:
+		var target := _slide_cell
+		var travelled := _slide_t
+		if drag_endpoint_to(_drag_endpoint, target):
+			# 같은 화면 위치를 유지하려면 새 머리 기준의 반대 방향 슬라이드로 바꿔 놓는다.
+			_slide_cell = body_cells[1] if _drag_endpoint == &"head" else body_cells[-2]
+			_slide_t = 1.0 - travelled
 	_motion_active = true
+
+
+func _best_step_cell(endpoint: StringName, lead_cell: Vector2i, to_pointer: Vector3) -> Variant:
+	# 손가락이 가리키는 쪽에 가장 가까운 이웃 셀을 고른다. 갈 수 없는 칸은 후보에서 뺀다.
+	if to_pointer.length_squared() < 0.000001:
+		return null
+	var best: Variant = null
+	var best_score := 0.0
+	var directions: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+	for direction in directions:
+		var neighbour: Vector2i = lead_cell + direction
+		var axis := Vector3(direction.x, 0.0, direction.y)
+		var score := to_pointer.normalized().dot(axis)
+		if score <= best_score:
+			continue
+		if not can_move_endpoint(endpoint, neighbour):
+			continue
+		best_score = score
+		best = neighbour
+	return best
 
 
 func snap_pose_to_grid() -> void:
 	# 보간 없이 그리드 정위치로 즉시 확정한다. 에디터 미리보기와 스폰 시점에 쓴다.
-	_resize_spine()
-	for index in _spine.size():
-		_spine[index] = _spine_target(index)
+	_slide_valid = false
+	_slide_t = 0.0
 	_round_weight = 0.0
 	_motion_active = false
 	_refresh_pose()
-
-
-func _resize_spine() -> void:
-	if _spine.size() == body_cells.size():
-		return
-	# 길이가 바뀌면 새로 생긴 점만 목표 위치에서 시작시킨다.
-	var previous := _spine.duplicate()
-	_spine.resize(body_cells.size())
-	for index in _spine.size():
-		_spine[index] = previous[index] if index < previous.size() else _spine_target(index)
-
-
-func _spine_target(index: int) -> Vector3:
-	return _cell_to_local(body_cells[index])
 
 
 func _process_motion(delta: float) -> void:
@@ -486,36 +581,26 @@ func _process_motion(delta: float) -> void:
 	if not _motion_active or level_manager == null or _cat_model == null:
 		return
 
-	var moving := _advance_spine(delta)
-	_refresh_pose()
-	# 다 따라잡고 각지게 굳었으면 다음 입력까지 쉰다.
-	if not moving and not _is_dragging:
-		_motion_active = false
-
-
-func _advance_spine(delta: float) -> bool:
-	_resize_spine()
-
-	# 프레임레이트와 무관한 지수 수렴. smooth_time 이 0이면 즉시 스냅이다.
-	var chase := _smoothing_factor(delta, move_smooth_time)
 	var settled := true
-	var epsilon := level_manager.tile_size * 0.002
-
-	for index in _spine.size():
-		var target := _spine_target(index)
-		var next: Vector3 = _spine[index].lerp(target, chase)
-		if next.distance_to(target) > epsilon:
+	if not _is_dragging:
+		# 손을 놓은 뒤: 남은 거리와 코너 라운딩을 함께 0으로 되돌린다.
+		var settle := _smoothing_factor(delta, settle_time)
+		_slide_t = lerpf(_slide_t, 0.0, settle)
+		if _slide_t > 0.002:
 			settled = false
-		_spine[index] = next
+		else:
+			_slide_t = 0.0
+			_slide_valid = false
 
-	# 드래그 중에는 라운딩을 올리고, 손을 놓으면 각진 그리드 형태로 되돌린다.
 	var round_target := corner_round if _is_dragging else 0.0
 	var round_chase := _smoothing_factor(delta, move_smooth_time if _is_dragging else settle_time)
 	_round_weight = lerpf(_round_weight, round_target, round_chase)
 	if absf(_round_weight - round_target) > 0.002:
 		settled = false
 
-	return not settled
+	_refresh_pose()
+	if settled and not _is_dragging:
+		_motion_active = false
 
 
 func _smoothing_factor(delta: float, smooth_time: float) -> float:
@@ -525,53 +610,149 @@ func _smoothing_factor(delta: float, smooth_time: float) -> float:
 
 
 func _refresh_pose() -> void:
-	if _cat_model == null or _bone_rests.is_empty() or _spine.size() < 2:
+	if _cat_model == null or _bone_rests.is_empty() or body_cells.size() < 2:
 		return
-	var polyline := _build_pose_polyline()
-	if polyline.size() < 2:
+	var track := _build_track()
+	if track.is_empty():
 		return
-	_place_model_on(polyline)
-	_apply_body_pose_along(polyline)
+	_place_model_on(track)
+	_apply_body_pose_along(track)
 
 
-func _build_pose_polyline() -> PackedVector3Array:
-	# 렌더용 중심선. 코 끝(머리 돌출) -> 스파인 -> 꼬리 끝(꼬리 돌출) 순서다.
-	# _round_weight 가 0이면 셀 중심을 잇는 각진 경로 그대로이고,
-	# 1에 가까울수록 코너가 원호로 깎여 대각선 최단거리처럼 흐른다.
+func _track_cells() -> Array[Vector2i]:
+	# 레일은 현재 몸통이 점유한 칸과, 지금 미끄러져 들어가는 중인 한 칸까지만 쓴다.
+	# 기억한 길 전체를 넣으면 꼬리 끝이 점유하지 않은 칸으로 삐져나간다.
+	var cells: Array[Vector2i] = body_cells.duplicate()
+	_track_head_index = 0
+	if not _slide_valid or _slide_t <= 0.0:
+		return cells
+
+	if _drag_endpoint == &"head":
+		if _slide_cell == body_cells[1]:
+			# 머리 후진 중. 반대쪽 끝은 확정될 때와 같은 규칙으로 다음 칸을 향한다.
+			cells.append(_next_rear_cell(_back_trail, body_cells[-1], body_cells[-2]))
+		else:
+			# 머리 전진 중. 아직 레일에 없는 새 칸을 앞에 이어 붙인다.
+			cells.push_front(_slide_cell)
+			_track_head_index = 1
+	else:
+		if _slide_cell == body_cells[-2]:
+			# 꼬리 후진 중. 머리 쪽이 다음 칸으로 밀려 나간다.
+			cells.push_front(_next_rear_cell(_front_trail, body_cells[0], body_cells[1]))
+			_track_head_index = 1
+		else:
+			cells.append(_slide_cell)
+	return cells
+
+
+func _next_rear_cell(
+	trail: Array[Vector2i],
+	rear: Vector2i,
+	rear_prev: Vector2i
+) -> Vector2i:
+	# 확정 이동과 완전히 같은 규칙이다. 그래서 미끄러지는 방향과 확정 결과가 어긋나지 않는다.
+	var remembered: Variant = _remembered_rear_cell(trail, rear, rear_prev)
+	if remembered == null:
+		return rear + (rear - rear_prev)
+	return remembered as Vector2i
+
+
+func _slide_arc() -> float:
+	# 레일의 시작(머리 앞쪽)으로 향하는 이동은 음수, 끝(꼬리 뒤쪽)으로 향하면 양수다.
+	if not _slide_valid or _slide_t <= 0.0:
+		return 0.0
+	var toward_start: bool
+	if _drag_endpoint == &"head":
+		toward_start = _slide_cell != body_cells[1]
+	else:
+		toward_start = _slide_cell == body_cells[-2]
+	var distance := _slide_t * level_manager.tile_size
+	return -distance if toward_start else distance
+
+
+func _build_track() -> Dictionary:
+	var cells := _track_cells()
+	if cells.size() < 2:
+		return {}
+
+	var base := PackedVector3Array()
+	for cell in cells:
+		base.append(_cell_to_local(cell))
+
+	# 양 끝을 직선으로 연장해 본 체인이 레일 밖으로 빠져나가지 않게 한다.
+	var reach := _rest_chain_length * _grid_fitted_model_scale() + level_manager.tile_size * 2.0
+	base.insert(0, base[0] + (base[0] - base[1]).normalized() * reach)
+	base.append(base[-1] + (base[-1] - base[-2]).normalized() * reach)
+	var head_vertex := _track_head_index + 1
+
+	# 코너 라운딩. _round_weight 가 0이면 셀 중심을 잇는 각진 레일 그대로다.
 	var radius := level_manager.tile_size * 0.5 * clampf(_round_weight, 0.0, 1.0)
-	var overhang := _body_overhang()
+	radius = minf(radius, _max_corner_radius(base))
 	var points := PackedVector3Array()
+	var vertex_index := PackedInt32Array()
+	points.append(base[0])
+	vertex_index.append(0)
 
-	var head_direction := (_spine[0] - _spine[1]).normalized()
-	points.append(_spine[0] + head_direction * overhang)
-	points.append(_spine[0])
-
-	for index in range(1, _spine.size() - 1):
-		var previous: Vector3 = _spine[index - 1]
-		var current: Vector3 = _spine[index]
-		var following: Vector3 = _spine[index + 1]
-		var incoming := (current - previous)
-		var outgoing := (following - current)
-		if radius <= 0.0001 or incoming.length_squared() < 0.000001 or outgoing.length_squared() < 0.000001:
-			points.append(current)
-			continue
-		if incoming.normalized().is_equal_approx(outgoing.normalized()):
-			points.append(current)
+	for index in range(1, base.size() - 1):
+		var incoming := base[index] - base[index - 1]
+		var outgoing := base[index + 1] - base[index]
+		var straight := (
+			radius <= 0.0001
+			or incoming.length_squared() < 0.000001
+			or outgoing.length_squared() < 0.000001
+			or incoming.normalized().is_equal_approx(outgoing.normalized())
+		)
+		if straight:
+			points.append(base[index])
+			vertex_index.append(points.size() - 1)
 			continue
 
 		# 코너를 2차 베지어 원호로 대체한다. 반지름은 인접 구간의 절반을 넘지 않게 막아
 		# 곡선이 이웃 셀로 삐져나가지 않도록 한다.
 		var arc_radius := minf(radius, minf(incoming.length(), outgoing.length()) * 0.5)
-		var entry := current - incoming.normalized() * arc_radius
-		var exit_point := current + outgoing.normalized() * arc_radius
+		var entry := base[index] - incoming.normalized() * arc_radius
+		var exit_point := base[index] + outgoing.normalized() * arc_radius
+		var middle := points.size() + CORNER_ARC_SEGMENTS / 2
 		for step in range(CORNER_ARC_SEGMENTS + 1):
 			var t := float(step) / float(CORNER_ARC_SEGMENTS)
-			points.append(entry.lerp(current, t).lerp(current.lerp(exit_point, t), t))
+			points.append(entry.lerp(base[index], t).lerp(base[index].lerp(exit_point, t), t))
+		# 라운딩된 코너에서는 원호 한가운데를 그 셀의 대표 지점으로 삼는다.
+		vertex_index.append(middle)
 
-	points.append(_spine[-1])
-	var tail_direction := (_spine[-1] - _spine[-2]).normalized()
-	points.append(_spine[-1] + tail_direction * overhang)
-	return points
+	points.append(base[-1])
+	vertex_index.append(points.size() - 1)
+
+	var lengths := _polyline_lengths(points)
+	var head_arc: float = lengths[vertex_index[head_vertex]] + _slide_arc()
+
+	# 돌출분은 라운딩 전 격자 길이가 아니라 지금 렌더되는 레일 길이로 계산한다.
+	# 필렛이 경로를 줄인 만큼을 머리와 꼬리에 절반씩 나눠야 한쪽으로만 밀려나지 않는다.
+	var tail_vertex: int = mini(head_vertex + body_cells.size() - 1, vertex_index.size() - 1)
+	var rail_span: float = lengths[vertex_index[tail_vertex]] - lengths[vertex_index[head_vertex]]
+	var overhang := maxf((_rest_chain_length * _grid_fitted_model_scale() - rail_span) * 0.5, 0.0)
+	return {
+		"points": points,
+		"lengths": lengths,
+		"nose_arc": head_arc - overhang,
+	}
+
+
+func _max_corner_radius(base: PackedVector3Array) -> float:
+	# 필렛은 경로를 짧게 만들지만 본 체인 길이는 고정이다. 그 차이만큼 몸통이
+	# 양 끝으로 더 밀려 나가므로, 돌출분이 타일 반폭을 넘지 않는 선에서 반지름을 제한한다.
+	var corners := 0
+	for index in range(1, base.size() - 1):
+		var incoming := base[index] - base[index - 1]
+		var outgoing := base[index + 1] - base[index]
+		if incoming.length_squared() < 0.000001 or outgoing.length_squared() < 0.000001:
+			continue
+		if not incoming.normalized().is_equal_approx(outgoing.normalized()):
+			corners += 1
+	if corners == 0:
+		return level_manager.tile_size * 0.5
+
+	var allowance := maxf(level_manager.tile_size * 0.5 - _body_overhang(), 0.0)
+	return maxf(allowance * 2.0 * 0.9 / (CORNER_ARC_SHORTENING * float(corners)), 0.0)
 
 
 func _polyline_lengths(points: PackedVector3Array) -> PackedFloat32Array:
@@ -584,45 +765,63 @@ func _polyline_lengths(points: PackedVector3Array) -> PackedFloat32Array:
 	return lengths
 
 
+func _polyline_segment_at(lengths: PackedFloat32Array, distance: float) -> int:
+	for index in range(1, lengths.size()):
+		if distance <= lengths[index]:
+			return index
+	return lengths.size() - 1
+
+
+func _polyline_point_at(
+	points: PackedVector3Array,
+	lengths: PackedFloat32Array,
+	distance: float
+) -> Vector3:
+	var index := _polyline_segment_at(lengths, distance)
+	var span := lengths[index] - lengths[index - 1]
+	if span < 0.000001:
+		return points[index]
+	var weight := clampf((distance - lengths[index - 1]) / span, 0.0, 1.0)
+	return points[index - 1].lerp(points[index], weight)
+
+
 func _polyline_tangent_at(
 	points: PackedVector3Array,
 	lengths: PackedFloat32Array,
 	distance: float
 ) -> Vector3:
-	# 이웃 본을 잇는 현(chord)이 아니라 그 지점의 접선을 쓴다. 각진 경로에서는
+	# 이웃 본을 잇는 현(chord)이 아니라 그 지점의 접선을 쓴다. 각진 레일에서는
 	# 코너 하나가 관절 하나에 그대로 실리고, 곡선에서는 접선이 매끄럽게 변한다.
-	for index in range(1, points.size()):
-		if distance <= lengths[index] or index == points.size() - 1:
-			var segment := points[index] - points[index - 1]
-			if segment.length_squared() < 0.000001:
-				continue
-			return segment.normalized()
-	return Vector3.RIGHT
+	var index := _polyline_segment_at(lengths, distance)
+	var segment := points[index] - points[index - 1]
+	if segment.length_squared() < 0.000001:
+		return Vector3.RIGHT
+	return segment.normalized()
 
 
-func _bone_span_direction(
-	polyline: PackedVector3Array,
-	lengths: PackedFloat32Array,
-	chain_index: int,
-	model_scale: float
-) -> Vector3:
+func _bone_arc(chain_index: int, nose_arc: float, model_scale: float) -> float:
+	return nose_arc + _bone_chain_distances[chain_index] * model_scale
+
+
+func _bone_span_direction(track: Dictionary, chain_index: int, model_scale: float) -> Vector3:
 	# 관절 위치가 아니라 그 관절이 담당하는 구간의 중간에서 접선을 읽는다.
 	# 이렇게 해야 코너가 "코너 다음 관절"이 아니라 "코너에 가장 가까운 관절"에 실린다.
-	var start: float = _bone_chain_distances[chain_index] * model_scale
+	var nose_arc: float = track["nose_arc"]
+	var start := _bone_arc(chain_index, nose_arc, model_scale)
 	var next_index: int = mini(chain_index + 1, _bone_chain_distances.size() - 1)
-	var end: float = _bone_chain_distances[next_index] * model_scale
+	var end := _bone_arc(next_index, nose_arc, model_scale)
 	var sample: float = start if is_equal_approx(start, end) else (start + end) * 0.5
-	return _polyline_tangent_at(polyline, lengths, sample)
+	return _polyline_tangent_at(track["points"], track["lengths"], sample)
 
 
-func _place_model_on(polyline: PackedVector3Array) -> void:
-	# polyline[0] 이 코 끝이고 진행 방향은 머리 -> 꼬리다. 모델의 local +Y 는 그 반대다.
-	var lengths := _polyline_lengths(polyline)
-	var forward := -_bone_span_direction(polyline, lengths, 0, _grid_fitted_model_scale())
+func _place_model_on(track: Dictionary) -> void:
+	# nose_arc 가 코 끝이고 레일의 진행 방향은 머리 -> 꼬리다. 모델의 local +Y 는 그 반대다.
+	var nose := _polyline_point_at(track["points"], track["lengths"], track["nose_arc"])
+	var forward := -_bone_span_direction(track, 0, _grid_fitted_model_scale())
 	_cat_model.basis = _fbx_basis_for_direction(forward)
 	# 상체 비율을 보존하기 위해 모델 루트는 반드시 균일 스케일만 사용한다.
 	_cat_model.scale = Vector3.ONE * _grid_fitted_model_scale()
-	_cat_model.position = polyline[0] - _cat_model.basis * _bone_rests[0].origin
+	_cat_model.position = nose - _cat_model.basis * _bone_rests[0].origin
 
 
 func _grid_path_length() -> float:
@@ -633,7 +832,7 @@ func _body_overhang() -> float:
 	return maxf((_rest_chain_length * _grid_fitted_model_scale() - _grid_path_length()) * 0.5, 0.0)
 
 
-func _apply_body_pose_along(polyline: PackedVector3Array) -> void:
+func _apply_body_pose_along(track: Dictionary) -> void:
 	if _skeleton == null:
 		return
 
@@ -648,16 +847,14 @@ func _apply_body_pose_along(polyline: PackedVector3Array) -> void:
 	if model_scale <= 0.0:
 		return
 
-	var lengths := _polyline_lengths(polyline)
 	var to_local := _cat_model.basis.inverse()
-	var previous_direction := (
-		to_local * _bone_span_direction(polyline, lengths, 0, model_scale)
-	).normalized()
+	var previous_direction := (to_local * _bone_span_direction(track, 0, model_scale)).normalized()
 
 	for chain_index in range(1, _bone_chain.size()):
-		# 몸통이 모델보다 길면 뒤쪽 경로에는 본이 닿지 않는다. 남는 본은 마지막 접선을 따른다.
+		# 각 관절은 레일 위 자기 호 길이 지점의 접선을 따른다.
+		# 그래서 몸통과 다리가 머리가 지나간 궤적을 그대로 훑고 지나간다.
 		var direction := (
-			to_local * _bone_span_direction(polyline, lengths, chain_index, model_scale)
+			to_local * _bone_span_direction(track, chain_index, model_scale)
 		).normalized()
 		if direction.is_equal_approx(previous_direction):
 			continue
