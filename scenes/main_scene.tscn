@@ -104,26 +104,8 @@ script = ExtResource("4_obs")
 grid_pos = Vector2i(4, 6)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=411557567]
-layer = 10
 
 [node name="ClearLabel" type="Label" parent="CanvasLayer" unique_id=1116493100]
 visible = false
 offset_right = 1152.0
 offset_bottom = 648.0
-
-[node name="VertexInfoLabel" type="Label" parent="CanvasLayer" unique_id=970135836]
-offset_left = 16.0
-offset_top = 16.0
-offset_right = 520.0
-offset_bottom = 112.0
-theme_override_colors/font_color = Color(1, 0.96, 0.72, 1)
-theme_override_colors/font_outline_color = Color(0.08, 0.05, 0.02, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 22
-
-[node name="VertexPickRing" type="ColorRect" parent="CanvasLayer"]
-custom_minimum_size = Vector2(30, 30)
-offset_right = 30.0
-offset_bottom = 30.0
-mouse_filter = 2
-color = Color(1, 0.9, 0.05, 0.95)

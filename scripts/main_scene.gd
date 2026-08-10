@@ -22,8 +22,6 @@ func _ready() -> void:
 	clear_label.modulate = Color(1.0, 1.0, 1.0, 0.0)
 
 	level_manager.level_cleared.connect(_on_level_cleared)
-
-
 func _on_level_cleared() -> void:
 	clear_label.text = "LEVEL CLEAR!"
 	clear_label.visible = true
