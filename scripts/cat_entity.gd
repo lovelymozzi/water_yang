@@ -7,9 +7,9 @@ const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const REFERENCE_TILE_SIZE := 2.0
-const FOUR_CELL_CENTER_OFFSET := 0.35
-# FBX bone IDs are not stored in physical head-to-tail order. This order comes from the skin weights.
-const PATH_BONE_INDICES := [0, 2, 11, 12, 9, 10, 3, 4, 6, 5, 7, 8, 13, 14, 15, 16, 1]
+# 코너 회전을 나눠 받을 관절의 탐색 반경(타일 비율). 0이면 코너에 가장 가까운
+# 관절 하나가 90°를 전부 받는다. 값을 키우면 꺾임이 부드러워지는 대신 코너가 잘린다.
+const CORNER_SMOOTH_TILES := 0.0
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 
 @export_group("Layout")
@@ -95,6 +95,10 @@ var _skeleton: Skeleton3D
 var _bone_rests: Array[Transform3D] = []
 var _cat_material: ShaderMaterial
 var _outline_material: ShaderMaterial
+# 머리에서 꼬리까지의 실제 본 인덱스 순서와, 머리 본 기준 rest 누적 거리(모델 로컬 단위).
+var _bone_chain: Array[int] = []
+var _bone_chain_distances: Array[float] = []
+var _rest_chain_length: float = 0.0
 
 
 func _ready() -> void:
@@ -339,254 +343,100 @@ func _place_model_at_head() -> void:
 	_cat_model.basis = _fbx_basis_for_direction(tail_to_head)
 	# 상체 비율을 보존하기 위해 모델 루트도 반드시 균일 스케일만 사용한다.
 	_cat_model.scale = Vector3.ONE * base_scale
-	# Bone001의 rest 위치가 머리 중심과 일치하도록 모델 루트를 보정한다.
-	# FBX 메시 중심이 Bone001보다 꼬리 쪽으로 치우쳐 있어, 4칸 묶음의 중앙으로 올려 보정한다.
-	var center_offset := tail_to_head * level_manager.tile_size * FOUR_CELL_CENTER_OFFSET
+	# 본 체인은 셀 중심을 잇는 경로보다 길다. 남는 길이를 머리와 꼬리에 절반씩 내밀어
+	# 몸통이 차지한 셀 묶음의 정중앙에 놓이게 한다. 길이가 몇 칸이든 같은 규칙이 적용된다.
+	var center_offset := tail_to_head * _body_overhang()
 	_cat_model.position = head_position + center_offset - _cat_model.basis * _bone_rests[0].origin
+
+
+func _grid_path_length() -> float:
+	return float(maxi(body_cells.size() - 1, 0)) * level_manager.tile_size
+
+
+func _body_overhang() -> float:
+	return maxf((_rest_chain_length * _grid_fitted_model_scale() - _grid_path_length()) * 0.5, 0.0)
 
 
 func _apply_body_pose() -> void:
 	if _skeleton == null:
 		return
+
+	# 본의 rest 길이를 그대로 두고 관절 회전만 준다. 이렇게 해야 몸 비율이 변하지 않는다.
 	_skeleton.clear_bones_global_pose_override()
-	_apply_body_pose_rotation_only()
-
-
-func _apply_body_pose_grid_override() -> void:
-	if _skeleton == null or _bone_rests.size() < 2 or body_cells.size() < 2:
-		return
-
-	# 모델 스케일은 고정하고, 각 본의 위치와 회전만 4칸 체인 경로에 맞춘다.
-	_skeleton.reset_bone_poses()
-	var target_points := _sample_body_path_for_bones(_bone_rests.size())
-	var root_anchor := _bone_rests[0].origin
-
-	for index in _bone_rests.size():
-		var next_index := mini(index + 1, target_points.size() - 1)
-		var direction := target_points[next_index] - target_points[index]
-		if direction.length_squared() < 0.000001:
-			direction = target_points[index] - target_points[maxi(index - 1, 0)]
-		if direction.length_squared() < 0.000001:
-			direction = Vector3.RIGHT
-		else:
-			direction = direction.normalized()
-
-		# 이 FBX의 얼굴 메시 법선은 본의 local -Z 쪽에 있으므로, 얼굴 면을 위로 반전한다.
-		var face_axis := Vector3.BACK
-		var side_axis := face_axis.cross(direction).normalized()
-		var target_transform := Transform3D(Basis(direction, side_axis, face_axis), root_anchor + target_points[index])
-		_skeleton.set_bone_global_pose_override(index, target_transform, 1.0, true)
-
-	_enforce_locked_bone_scales()
-
-
-func _apply_body_pose_rotation_only() -> void:
-	if _skeleton == null or _bone_rests.size() < 2 or body_cells.size() < 2:
-		return
-
 	_skeleton.reset_bone_poses()
 	_enforce_locked_bone_scales()
-	if not _body_path_has_turn():
+	if _bone_chain.size() < 2 or body_cells.size() < 3 or _cat_model == null:
 		return
 
-	# 뱀형 체인은 각 관절을 local Z축으로만 회전한다.
-	# 이 축은 얼굴의 위아래 방향과 같아서, 몸통이 뒤집히거나 비틀리지 않는다.
-	var target_points := _sample_body_path_for_bones(_bone_rests.size())
-	var turn_by_path_index := {}
+	var model_scale := _grid_fitted_model_scale()
+	if model_scale <= 0.0:
+		return
 
-	# 90° 회전은 하나의 그리드 관절에서 끝난다. 실제 head-to-tail 본 순서
-	# (PATH_BONE_INDICES)를 사용하므로, 몸통은
-	# 대각선 곡선이 아니라 셀 중심을 잇는 수평/수직 경로를 따라간다.
-	for path_index in range(1, PATH_BONE_INDICES.size() - 1):
-		var before := target_points[path_index] - target_points[path_index - 1]
-		var after := target_points[path_index + 1] - target_points[path_index]
-		if before.length_squared() < 0.000001 or after.length_squared() < 0.000001:
-			continue
-		before = before.normalized()
-		after = after.normalized()
-		if after.is_equal_approx(before):
+	# 코너는 body_cells의 꺾이는 셀에서만 생긴다. 머리에서 그 셀까지의 거리는
+	# 머리 돌출분 + (셀 개수 x 타일 크기)로 정확히 결정된다.
+	var head_offset := _body_overhang()
+	var turn_by_bone := {}
+
+	for corner_index in range(1, body_cells.size() - 1):
+		var before := _local_grid_direction(body_cells[corner_index] - body_cells[corner_index - 1])
+		var after := _local_grid_direction(body_cells[corner_index + 1] - body_cells[corner_index])
+		if before.is_equal_approx(after):
 			continue
 
 		# FBX의 local Z 회전 방향은 보드 좌표계와 반대이므로 부호를 반전한다.
 		var turn_angle := -atan2(before.cross(after).z, before.dot(after))
-		var affected_path_indices: Array[int] = []
-		# 머리와 꼬리 끝 본은 꺾임 대상에서 제외한다.
-		if path_index >= 2 and path_index < PATH_BONE_INDICES.size() - 1:
-			affected_path_indices.append(path_index)
-		if affected_path_indices.is_empty():
-			continue
-		var distributed_turn := turn_angle / float(affected_path_indices.size())
-		for affected_index in affected_path_indices:
-			turn_by_path_index[affected_index] = float(turn_by_path_index.get(affected_index, 0.0)) + distributed_turn
+		var corner_distance := head_offset + float(corner_index) * level_manager.tile_size
+		_accumulate_corner_turn(corner_distance, turn_angle, model_scale, turn_by_bone)
 
-	for path_index in range(2, PATH_BONE_INDICES.size() - 1):
-		if not turn_by_path_index.has(path_index):
-			continue
-		var bone_index: int = PATH_BONE_INDICES[path_index]
+	for bone_index in turn_by_bone:
+		# rest 회전 위에 꺾임을 얹는다. rest 회전을 덮어쓰면 몸통 앞면이 뒤집힌다.
+		var rest_rotation := _bone_rests[bone_index].basis.get_rotation_quaternion()
 		_skeleton.set_bone_pose_rotation(
 			bone_index,
-			Quaternion(Vector3.FORWARD, turn_by_path_index[path_index] as float)
+			rest_rotation * Quaternion(Vector3.FORWARD, turn_by_bone[bone_index] as float)
 		)
 
-
-func _apply_body_pose_rotation_only_absolute() -> void:
-	if _skeleton == null or _bone_rests.size() < 2 or body_cells.size() < 2:
-		return
-
-	# 본의 길이와 위치는 FBX rest pose를 유지한다. 타일 경로의 방향 변화만 관절 회전으로 전달한다.
-	_skeleton.reset_bone_poses()
 	_enforce_locked_bone_scales()
-	# 직선 상태에서는 FBX의 개별 rest 회전을 그대로 유지해야 몸통 앞면이 뒤집히지 않는다.
-	if not _body_path_has_turn():
-		return
-	var target_points := _sample_body_path_for_bones(_bone_rests.size())
-	var final_global_bases: Array[Basis] = []
-
-	for index in _bone_rests.size():
-		if index < 2 or index >= 16:
-			var rest_global_basis := _skeleton.get_bone_global_rest(index).basis
-			final_global_bases.append(rest_global_basis)
-			continue
-
-		var next_index := mini(index + 1, target_points.size() - 1)
-		var direction := target_points[next_index] - target_points[index]
-		if direction.length_squared() < 0.000001:
-			direction = target_points[index] - target_points[maxi(index - 1, 0)]
-		if direction.length_squared() < 0.000001:
-			direction = Vector3.RIGHT
-		else:
-			direction = direction.normalized()
-
-		# 모델의 얼굴 면은 local +Z이며, 모델 루트가 이를 월드 위쪽으로 향하게 한다.
-		var face_axis := Vector3.FORWARD
-		var side_axis := face_axis.cross(direction).normalized()
-		var desired_global_basis := Basis(direction, side_axis, face_axis)
-		var parent_index := _skeleton.get_bone_parent(index)
-		var parent_basis := final_global_bases[parent_index] if parent_index >= 0 else Basis.IDENTITY
-		var desired_local_basis := parent_basis.inverse() * desired_global_basis
-		var pose_basis := _bone_rests[index].basis.inverse() * desired_local_basis
-		_skeleton.set_bone_pose_rotation(index, pose_basis.get_rotation_quaternion())
-		final_global_bases.append(desired_global_basis)
 
 
-func _body_path_has_turn() -> bool:
-	if body_cells.size() < 3:
-		return false
-	var previous_direction := body_cells[1] - body_cells[0]
-	for index in range(1, body_cells.size() - 1):
-		var current_direction := body_cells[index + 1] - body_cells[index]
-		if current_direction != previous_direction:
-			return true
-		previous_direction = current_direction
-	return false
+func _local_grid_direction(grid_delta: Vector2i) -> Vector3:
+	# 모델 루트는 이미 머리 쪽 진행 방향으로 회전해 있으므로, 그리드 방향도 같은 좌표계로 옮긴다.
+	var world_direction := Vector3(grid_delta.x, 0.0, grid_delta.y).normalized()
+	return (_cat_model.basis.inverse() * world_direction).normalized()
 
 
-func _apply_body_pose_deformed() -> void:
-	if _skeleton == null or _bone_rests.size() < 2 or body_cells.size() < 2:
-		return
+func _accumulate_corner_turn(
+	corner_distance: float,
+	turn_angle: float,
+	model_scale: float,
+	out_turns: Dictionary
+) -> void:
+	# 코너에 실제로 걸쳐 있는 관절만 회전을 나눠 받는다. 이 범위를 넘겨 회전을 퍼뜨리면
+	# 몸통이 코너를 대각선으로 가로질러 옆 칸을 침범한다.
+	# 머리 본(체인 0번)은 몸 전체를 돌려버리므로 항상 제외한다.
+	var window := level_manager.tile_size * CORNER_SMOOTH_TILES
+	var affected: Array[int] = []
+	var nearest_bone := -1
+	var nearest_gap := INF
 
-	# 본을 부모 로컬 좌표에서 누적 계산하지 않고, Skeleton3D 기준 전역 포즈로 직접 배치한다.
-	# 따라서 각 관절은 언제나 body_cells가 만든 타일 경로 위에 놓인다.
-	var target_points := _sample_body_path_for_bones(PATH_BONE_INDICES.size())
-	var root_anchor := _bone_rests[0].origin
-	for path_index in PATH_BONE_INDICES.size():
-		var bone_index: int = PATH_BONE_INDICES[path_index]
-		var next_index := mini(path_index + 1, target_points.size() - 1)
-		var direction := target_points[next_index] - target_points[path_index]
-		if direction.length_squared() < 0.000001:
-			direction = target_points[path_index] - target_points[maxi(path_index - 1, 0)]
-		if direction.length_squared() < 0.000001:
-			direction = Vector3.RIGHT
-		else:
-			direction = direction.normalized()
+	for chain_index in range(1, _bone_chain.size()):
+		var bone_distance: float = _bone_chain_distances[chain_index] * model_scale
+		var gap := absf(bone_distance - corner_distance)
+		if gap <= window:
+			affected.append(_bone_chain[chain_index])
+		if gap < nearest_gap:
+			nearest_gap = gap
+			nearest_bone = _bone_chain[chain_index]
 
-		# FBX 스킨의 얼굴 면은 Skeleton local -Z를 향하므로, 월드 위쪽으로 반전한다.
-		var face_axis := Vector3.BACK
-		var side_axis := face_axis.cross(direction).normalized()
-		var target_transform := Transform3D(Basis(direction, side_axis, face_axis), root_anchor + target_points[path_index])
-		_skeleton.set_bone_global_pose_override(bone_index, target_transform, 1.0, true)
+	if affected.is_empty():
+		# 창 안에 관절이 없으면 코너에 가장 가까운 관절 하나가 90°를 전부 받는다.
+		if nearest_bone < 0:
+			return
+		affected.append(nearest_bone)
 
-
-func _apply_body_pose_local() -> void:
-	if _skeleton == null or _bone_rests.size() < 2 or body_cells.size() < 2:
-		return
-
-	# 부모 본의 스케일은 체인을 따라 누적되므로, 관절의 로컬 위치와 회전만 사용한다.
-	_skeleton.reset_bone_poses()
-	var target_points := _sample_body_path_for_bones(_bone_rests.size())
-	var final_global_bases: Array[Basis] = []
-
-	for index in _bone_rests.size():
-		var next_index := mini(index + 1, target_points.size() - 1)
-		var direction := target_points[next_index] - target_points[index]
-		if direction.length_squared() < 0.000001:
-			direction = Vector3.RIGHT
-		else:
-			direction = direction.normalized()
-
-		# FBX 본 체인은 local X 방향으로 진행하며, local Z는 얼굴이 향하는 위쪽으로 유지한다.
-		var face_axis := Vector3.FORWARD
-		var side_axis := face_axis.cross(direction).normalized()
-		var desired_global_basis := Basis(direction, side_axis, face_axis)
-		var parent_index := _skeleton.get_bone_parent(index)
-		var parent_basis := final_global_bases[parent_index] if parent_index >= 0 else Basis.IDENTITY
-		var desired_local_basis := parent_basis.inverse() * desired_global_basis
-		var pose_basis := _bone_rests[index].basis.inverse() * desired_local_basis
-		_skeleton.set_bone_pose_rotation(index, pose_basis.get_rotation_quaternion())
-
-		if index > 0:
-			# Pose position은 FBX에서 가져온 rest transform을 기준으로 한 추가 이동값이다.
-			var desired_local_origin := parent_basis.inverse() * (target_points[index] - target_points[index - 1])
-			var pose_position := _bone_rests[index].basis.inverse() * (desired_local_origin - _bone_rests[index].origin)
-			_skeleton.set_bone_pose_position(index, pose_position)
-
-		final_global_bases.append(desired_global_basis)
-
-
-func _sample_body_path_for_bones(sample_count: int) -> Array[Vector3]:
-	var path_points: Array[Vector3] = []
-	var path_lengths: Array[float] = []
-	var total_length := 0.0
-	var head_position := _cell_to_local(get_head_cell())
-	for cell in body_cells:
-		path_points.append(_cat_model.basis.inverse() * (_cell_to_local(cell) - head_position))
-	for index in range(path_points.size() - 1):
-		total_length += path_points[index].distance_to(path_points[index + 1])
-		path_lengths.append(total_length)
-
-	var samples: Array[Vector3] = []
-	for sample_index in sample_count:
-		var ratio := float(sample_index) / float(maxi(sample_count - 1, 1))
-		samples.append(_point_on_path(path_points, path_lengths, total_length * ratio))
-	return samples
-
-
-func _rest_distance_to_bone(bone_index: int) -> float:
-	var distance := 0.0
-	for index in range(1, bone_index + 1):
-		distance += _bone_rests[index].origin.length()
-	return distance
-
-
-func _point_on_path(path_points: Array[Vector3], path_lengths: Array[float], distance: float) -> Vector3:
-	if distance <= 0.0 or path_points.size() == 1:
-		return path_points[0]
-	for index in path_lengths.size():
-		if distance <= path_lengths[index]:
-			var start_distance := path_lengths[index - 1] if index > 0 else 0.0
-			var segment_length := path_lengths[index] - start_distance
-			var weight := (distance - start_distance) / segment_length
-			return path_points[index].lerp(path_points[index + 1], weight)
-	return path_points.back()
-
-
-func _reset_bone_pose() -> void:
-	if _skeleton == null:
-		return
-	# 스킨은 FBX의 rest pose를 그대로 사용한다. 본 체인의 실제 로컬 축과
-	# 가중치를 확정하기 전의 임의 회전/스케일은 메시를 찌그러뜨릴 수 있다.
-	_skeleton.reset_bone_poses()
-	_enforce_locked_bone_scales()
+	var share := turn_angle / float(affected.size())
+	for bone_index in affected:
+		out_turns[bone_index] = float(out_turns.get(bone_index, 0.0)) + share
 
 
 func _enforce_locked_bone_scales() -> void:
@@ -601,10 +451,47 @@ func _enforce_locked_bone_scales() -> void:
 
 func _cache_bone_rests() -> void:
 	_bone_rests.clear()
+	_bone_chain.clear()
+	_bone_chain_distances.clear()
+	_rest_chain_length = 0.0
 	if _skeleton == null:
 		return
 	for index in _skeleton.get_bone_count():
 		_bone_rests.append(_skeleton.get_bone_rest(index))
+	_build_bone_chain()
+
+
+func _build_bone_chain() -> void:
+	# 본 순서를 상수로 적어두지 않고 부모-자식 링크를 따라 머리에서 꼬리까지 실제로 걷는다.
+	# 리그가 바뀌어도 경로 순서와 관절 간격이 자동으로 따라온다.
+	var root_index := -1
+	for index in _skeleton.get_bone_count():
+		if _skeleton.get_bone_parent(index) == -1:
+			root_index = index
+			break
+	if root_index < 0:
+		return
+
+	var current := root_index
+	var distance := 0.0
+	_bone_chain.append(current)
+	_bone_chain_distances.append(0.0)
+
+	while true:
+		var children: PackedInt32Array = _skeleton.get_bone_children(current)
+		if children.is_empty():
+			break
+		# 뱀형 리그는 단일 체인이다. 갈래가 생기면 가장 긴 뼈를 몸통 진행 방향으로 본다.
+		var next_bone: int = children[0]
+		for child in children:
+			if _bone_rests[child].origin.length() > _bone_rests[next_bone].origin.length():
+				next_bone = child
+		distance += _bone_rests[next_bone].origin.length()
+		_bone_chain.append(next_bone)
+		_bone_chain_distances.append(distance)
+		current = next_bone
+
+	_rest_chain_length = distance
 
 
 func _grid_fitted_model_scale() -> float:
