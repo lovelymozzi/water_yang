@@ -48,12 +48,7 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		fbx_scale_per_tile = value
 		_rebuild_body_visuals(false)
 
-# FBX의 local X는 몸통의 가로 폭이다. 길이(Y)와 높이(Z)는 유지하면서
-# 폭만 타일 안쪽으로 줄여 꺾임에서도 인접 블록을 넘지 않게 한다.
-@export_range(0.5, 1.0, 0.01) var body_width_ratio: float = 0.78:
-	set(value):
-		body_width_ratio = value
-		_rebuild_body_visuals(false)
+@export_range(1, 5, 2) var turn_smoothing_bones: int = 3
 
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
@@ -379,23 +374,44 @@ func _apply_body_pose_rotation_only() -> void:
 	# 뱀형 체인은 각 관절을 local Z축으로만 회전한다.
 	# 이 축은 얼굴의 위아래 방향과 같아서, 몸통이 뒤집히거나 비틀리지 않는다.
 	var target_points := _sample_body_path_for_bones(_bone_rests.size())
-	var previous_direction := target_points[1] - target_points[0]
-	if previous_direction.length_squared() < 0.000001:
-		return
-	previous_direction = previous_direction.normalized()
+	var turn_by_path_index := {}
+	var half_smoothing := turn_smoothing_bones / 2
 
-	for bone_index in range(2, 16):
-		var next_index := mini(bone_index + 1, target_points.size() - 1)
-		var current_direction := target_points[next_index] - target_points[bone_index]
-		if current_direction.length_squared() < 0.000001:
+	# 90°를 하나의 본에 모두 주면 메시가 접히고 바깥쪽으로 밀려난다.
+	# 실제 head-to-tail 본 순서(PATH_BONE_INDICES)를 따라 연속된 본에 나누어
+	# 회전만 적용하므로, 메시의 길이·폭·높이 비율은 바뀌지 않는다.
+	for path_index in range(1, PATH_BONE_INDICES.size() - 1):
+		var before := target_points[path_index] - target_points[path_index - 1]
+		var after := target_points[path_index + 1] - target_points[path_index]
+		if before.length_squared() < 0.000001 or after.length_squared() < 0.000001:
 			continue
-		current_direction = current_direction.normalized()
+		before = before.normalized()
+		after = after.normalized()
+		if after.is_equal_approx(before):
+			continue
 
-		if not current_direction.is_equal_approx(previous_direction):
-			# FBX의 local Z 회전 방향은 보드 좌표계와 반대이므로 부호를 반전한다.
-			var turn_angle := -atan2(previous_direction.cross(current_direction).z, previous_direction.dot(current_direction))
-			_skeleton.set_bone_pose_rotation(bone_index, Quaternion(Vector3.FORWARD, turn_angle))
-		previous_direction = current_direction
+		# FBX의 local Z 회전 방향은 보드 좌표계와 반대이므로 부호를 반전한다.
+		var turn_angle := -atan2(before.cross(after).z, before.dot(after))
+		var affected_path_indices: Array[int] = []
+		for offset in range(-half_smoothing, half_smoothing + 1):
+			var affected_index := path_index + offset
+			# 머리와 꼬리 끝 본은 꺾임 분배 대상에서 제외한다.
+			if affected_index >= 2 and affected_index < PATH_BONE_INDICES.size() - 1:
+				affected_path_indices.append(affected_index)
+		if affected_path_indices.is_empty():
+			continue
+		var distributed_turn := turn_angle / float(affected_path_indices.size())
+		for affected_index in affected_path_indices:
+			turn_by_path_index[affected_index] = float(turn_by_path_index.get(affected_index, 0.0)) + distributed_turn
+
+	for path_index in range(2, PATH_BONE_INDICES.size() - 1):
+		if not turn_by_path_index.has(path_index):
+			continue
+		var bone_index: int = PATH_BONE_INDICES[path_index]
+		_skeleton.set_bone_pose_rotation(
+			bone_index,
+			Quaternion(Vector3.FORWARD, turn_by_path_index[path_index] as float)
+		)
 
 
 func _apply_body_pose_rotation_only_absolute() -> void:
@@ -620,9 +636,6 @@ func _apply_material_recursive(node: Node, material: Material) -> void:
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
 		mesh_instance.material_override = material
-		# Skeleton3D 아래의 메시만 가로 폭을 줄인다. FBX root의 균일 스케일과
-		# 본 포즈의 길이에는 영향을 주지 않는다.
-		mesh_instance.scale = Vector3(body_width_ratio, 1.0, 1.0)
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
 	for child in node.get_children():
 		_apply_material_recursive(child, material)
