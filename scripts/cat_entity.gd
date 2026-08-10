@@ -155,6 +155,7 @@ var _head_step_offset: int = 0
 var _round_weight: float = 0.0
 var _is_dragging: bool = false
 var _motion_active: bool = false
+var _saturation_reports: int = 0
 
 
 func _ready() -> void:
@@ -585,6 +586,12 @@ func update_drag(endpoint: StringName, world_point: Vector3) -> void:
 		# 곧바로 travel 로 잡혀서 확정 시점에 머리가 그만큼 앞으로 순간이동한다.
 		_axis_entry = maxf(raw - 1.0, 0.0)
 
+	# 여기까지 왔다면 한 이벤트에서 확정 상한까지 소진했다는 뜻이다. 정상 입력에서는
+	# 일어나지 않으므로, 반복되면 프리즈 원인 추적의 단서가 된다.
+	if _saturation_reports < 20:
+		_saturation_reports += 1
+		push_warning("[drag] 한 이벤트에서 %d칸을 확정했다. %s" % [
+			MAX_COMMITS_PER_UPDATE, describe_state()])
 	_slide_valid = false
 	_slide_t = 0.0
 
@@ -601,6 +608,14 @@ func end_drag() -> void:
 			_slide_cell = body_cells[1] if _drag_endpoint == &"head" else body_cells[-2]
 			_slide_t = 1.0 - travelled
 	_motion_active = true
+
+
+func describe_state() -> String:
+	# 프리즈 진단용 스냅샷.
+	return "%s len=%d body=%s slide=%s/%.2f axis=%s entry=%.2f trail=%d/%d motion=%s" % [
+		name, body_cells.size(), str(body_cells), str(_slide_cell), _slide_t,
+		str(_slide_axis), _axis_entry, _front_trail.size(), _back_trail.size(),
+		str(_motion_active)]
 
 
 func _unit_sign(value: float) -> int:

@@ -215,6 +215,17 @@ func on_cat_escaped(cat: CatEntity) -> void:
 		level_cleared.emit()
 
 
+func describe_state() -> String:
+	# 프리즈 진단용 스냅샷. 로그 한 줄로 어느 상황에서 멈췄는지 좁힐 수 있게 한다.
+	var parts: Array[String] = []
+	parts.append("cats=%d" % _cats.size())
+	parts.append("drag=%s/%s" % [
+		"none" if _drag_cat == null else _drag_cat.name, str(_drag_endpoint)])
+	for cat in _cats:
+		parts.append(cat.describe_state())
+	return " | ".join(parts)
+
+
 func _setup_roots() -> void:
 	_board_root = _ensure_named_child(self, "BoardVisuals")
 	_tiles_root = _ensure_named_child(self, "TileVisuals")
