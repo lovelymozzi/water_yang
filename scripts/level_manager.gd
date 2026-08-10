@@ -11,8 +11,6 @@ const OBSTACLE_HEIGHT := 1.3
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
 const ROUND_CORNER_SEGMENTS := 6
-# 빠른 스와이프 한 번이 만들어낼 수 있는 최대 셀 이동 수.
-const MAX_DRAG_STEPS_PER_EVENT := 8
 
 enum CellState {
 	EMPTY,
@@ -426,59 +424,41 @@ func _begin_endpoint_drag(screen_pos: Vector2) -> void:
 		if cat != null:
 			_drag_cat = cat
 			_drag_endpoint = handle.get_meta("cat_endpoint") as StringName
+			# 잡은 지점을 함께 넘긴다. 정중앙이 아닌 곳을 잡아도 편향이 남지 않는다.
+			_drag_cat.begin_drag(_drag_endpoint, _screen_to_board_point(screen_pos))
 
 
 func _update_endpoint_drag(screen_pos: Vector2) -> void:
 	if _drag_cat == null:
 		return
-	var target_cell: Variant = _screen_to_grid_cell(screen_pos)
-	if target_cell == null:
+	# 셀 번호가 아니라 보드 평면 위의 연속 좌표를 그대로 넘긴다.
+	# 고양이는 이 좌표를 따라 셀 사이 중간 지점까지 미끄러진다.
+	var board_point: Variant = _screen_to_board_point(screen_pos)
+	if board_point == null:
 		return
-	_step_drag_towards(target_cell as Vector2i)
-
-
-func _step_drag_towards(target_cell: Vector2i) -> void:
-	# 한 번의 입력 이벤트에서 손가락이 여러 칸을 지나가도 그 입력을 버리지 않는다.
-	# 다만 실제 이동은 언제나 인접 한 칸씩이므로 몸통은 그리드를 벗어나지 않는다.
-	for _step in range(MAX_DRAG_STEPS_PER_EVENT):
-		var endpoint_cell: Vector2i = (
-			_drag_cat.get_head_cell() if _drag_endpoint == &"head" else _drag_cat.get_tail_cell()
-		)
-		var delta: Vector2i = target_cell - endpoint_cell
-		if delta == Vector2i.ZERO:
-			return
-
-		# 남은 거리가 큰 축을 먼저 시도하고, 막히면 나머지 축으로 우회한다.
-		var prefer_x: bool = absi(delta.x) >= absi(delta.y)
-		var primary: Vector2i = _axis_step(delta, prefer_x)
-		var secondary: Vector2i = _axis_step(delta, not prefer_x)
-
-		if primary != Vector2i.ZERO and _drag_cat.drag_endpoint_to(_drag_endpoint, endpoint_cell + primary):
-			continue
-		if secondary != Vector2i.ZERO and _drag_cat.drag_endpoint_to(_drag_endpoint, endpoint_cell + secondary):
-			continue
-		return
-
-
-func _axis_step(delta: Vector2i, use_x: bool) -> Vector2i:
-	if use_x:
-		return Vector2i(signi(delta.x), 0)
-	return Vector2i(0, signi(delta.y))
+	_drag_cat.update_drag(_drag_endpoint, board_point as Vector3)
 
 
 func _end_endpoint_drag() -> void:
+	if _drag_cat != null:
+		# 손을 놓으면 가장 가까운 그리드 정위치로 각지게 수렴한다.
+		_drag_cat.end_drag()
 	_drag_cat = null
 	_drag_endpoint = &""
 
 
-func _screen_to_grid_cell(screen_pos: Vector2) -> Variant:
+func _screen_to_board_point(screen_pos: Vector2) -> Variant:
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	if camera == null:
 		return null
 	var origin := camera.project_ray_origin(screen_pos)
 	var direction := camera.project_ray_normal(screen_pos)
 	var plane := Plane(Vector3.UP, cat_world_y)
-	var hit: Variant = plane.intersects_ray(origin, direction)
+	return plane.intersects_ray(origin, direction)
+
+
+func screen_to_grid_cell(screen_pos: Vector2) -> Variant:
+	var hit: Variant = _screen_to_board_point(screen_pos)
 	if hit == null:
 		return null
 	var world_pos := hit as Vector3
