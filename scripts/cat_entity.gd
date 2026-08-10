@@ -4,9 +4,13 @@ extends Node3D
 
 const MODEL_SCENE_PATH := "res://water_yang/cat1.fbx"
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
+const CLOSED_EYES_TEXTURE_PATH := "res://water_yang/cat1_1.jpeg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const REFERENCE_TILE_SIZE := 2.0
+const BLINK_INTERVAL_MIN := 2.4
+const BLINK_INTERVAL_MAX := 5.2
+const BLINK_CLOSED_DURATION := 0.11
 # 코너 회전을 나눠 받을 관절의 탐색 반경(타일 비율). 0이면 코너에 가장 가까운
 # 관절 하나가 90°를 전부 받는다. 값을 키우면 꺾임이 부드러워지는 대신 코너가 잘린다.
 const CORNER_SMOOTH_TILES := 0.0
@@ -95,6 +99,11 @@ var _skeleton: Skeleton3D
 var _bone_rests: Array[Transform3D] = []
 var _cat_material: ShaderMaterial
 var _outline_material: ShaderMaterial
+var _open_eyes_texture: Texture2D
+var _closed_eyes_texture: Texture2D
+var _blink_time_remaining := -1.0
+var _eyes_are_closed := false
+var _blink_random := RandomNumberGenerator.new()
 # 머리에서 꼬리까지의 실제 본 인덱스 순서와, 머리 본 기준 rest 누적 거리(모델 로컬 단위).
 var _bone_chain: Array[int] = []
 var _bone_chain_distances: Array[float] = []
@@ -102,6 +111,7 @@ var _rest_chain_length: float = 0.0
 
 
 func _ready() -> void:
+	_blink_random.seed = get_instance_id()
 	facing_dir = _direction_from_name(facing_name)
 	if body_cells.is_empty():
 		_reset_straight_body()
@@ -110,6 +120,33 @@ func _ready() -> void:
 
 	if Engine.is_editor_hint():
 		refresh_editor_preview()
+
+
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint() or _cat_material == null:
+		return
+	if _closed_eyes_texture == null:
+		_closed_eyes_texture = load(CLOSED_EYES_TEXTURE_PATH) as Texture2D
+		if _closed_eyes_texture == null:
+			return
+
+	if _blink_time_remaining < 0.0:
+		_schedule_next_blink()
+		return
+
+	_blink_time_remaining -= delta
+	if _blink_time_remaining > 0.0:
+		return
+
+	_eyes_are_closed = not _eyes_are_closed
+	_cat_material.set_shader_parameter(
+		"albedo_tex",
+		_closed_eyes_texture if _eyes_are_closed else _get_open_eyes_texture()
+	)
+	if _eyes_are_closed:
+		_blink_time_remaining = BLINK_CLOSED_DURATION
+	else:
+		_schedule_next_blink()
 
 
 func refresh_editor_preview() -> void:
@@ -546,7 +583,7 @@ func _apply_material_recursive(node: Node, material: Material) -> void:
 func _build_cat_material() -> Material:
 	var shader := load(TOON_SHADER_PATH) as Shader
 	var outline_shader := load(OUTLINE_SHADER_PATH) as Shader
-	var texture := load(MODEL_TEXTURE_PATH) as Texture2D
+	var texture := _get_open_eyes_texture()
 	if shader == null:
 		_cat_material = null
 		_outline_material = null
@@ -580,7 +617,7 @@ func _apply_current_shader_parameters() -> void:
 		if Engine.is_editor_hint():
 			_request_editor_refresh()
 		return
-	_apply_shader_parameters(load(MODEL_TEXTURE_PATH) as Texture2D)
+	_apply_shader_parameters(_get_open_eyes_texture())
 
 
 func _apply_shader_parameters(texture: Texture2D) -> void:
@@ -593,6 +630,17 @@ func _apply_shader_parameters(texture: Texture2D) -> void:
 	if _outline_material != null:
 		_outline_material.set_shader_parameter("outline_color", outline_color)
 		_outline_material.set_shader_parameter("outline_width", outline_width)
+
+
+func _get_open_eyes_texture() -> Texture2D:
+	if _open_eyes_texture == null:
+		_open_eyes_texture = load(MODEL_TEXTURE_PATH) as Texture2D
+	return _open_eyes_texture
+
+
+func _schedule_next_blink() -> void:
+	_eyes_are_closed = false
+	_blink_time_remaining = _blink_random.randf_range(BLINK_INTERVAL_MIN, BLINK_INTERVAL_MAX)
 
 
 func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
