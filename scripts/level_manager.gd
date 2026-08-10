@@ -157,7 +157,7 @@ func release_cat_cell(cat: CatEntity) -> void:
 
 func update_cat_occupancy(cat: CatEntity) -> void:
 	release_cat_cell(cat)
-	for cell in cat.get_occupied_cells():
+	for cell in cat.body_cells:
 		if is_inside_grid(cell):
 			_set_cell_state(cell, CellState.CAT)
 			_set_cell_ref(cell, cat)
@@ -177,15 +177,7 @@ func can_place_cat_body(cat: CatEntity, candidate: Array[Vector2i]) -> bool:
 			return false
 		body_cells[cell] = true
 
-	var occupied: Array[Vector2i] = candidate.duplicate()
-	for clearance_cell in cat.get_turn_clearance_cells_for_body(candidate):
-		# 꺾임의 대각 여유 공간을 몸통이 밟는 경로도 허용하지 않는다.
-		if body_cells.has(clearance_cell):
-			return false
-		if not occupied.has(clearance_cell):
-			occupied.append(clearance_cell)
-
-	for cell in occupied:
+	for cell in candidate:
 		if not is_inside_grid(cell):
 			return false
 		var occupant: Variant = _get_cell_ref(cell)

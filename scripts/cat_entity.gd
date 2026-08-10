@@ -48,6 +48,13 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		fbx_scale_per_tile = value
 		_rebuild_body_visuals(false)
 
+# FBX의 local X는 몸통의 가로 폭이다. 길이(Y)와 높이(Z)는 유지하면서
+# 폭만 타일 안쪽으로 줄여 꺾임에서도 인접 블록을 넘지 않게 한다.
+@export_range(0.5, 1.0, 0.01) var body_width_ratio: float = 0.78:
+	set(value):
+		body_width_ratio = value
+		_rebuild_body_visuals(false)
+
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
 	set(value):
@@ -126,32 +133,7 @@ func get_tail_cell() -> Vector2i:
 
 
 func occupies_cell(cell: Vector2i) -> bool:
-	return get_occupied_cells().has(cell)
-
-
-# 꺾이는 관절은 실제 메시 폭 때문에 경로 셀 밖의 대각 영역까지 닿는다.
-# 두 대각 셀을 함께 예약해, 시각적으로 겹치지만 논리적으로는 비어 있던 상태를 막는다.
-func get_turn_clearance_cells_for_body(cells: Array[Vector2i]) -> Array[Vector2i]:
-	var clearance: Array[Vector2i] = []
-	for index in range(1, cells.size() - 1):
-		var turn := cells[index]
-		var toward_head := cells[index - 1] - turn
-		var toward_tail := cells[index + 1] - turn
-		if toward_head == -toward_tail:
-			continue
-		# 몸통의 안쪽/바깥쪽 대각 모두를 보호한다. 어느 쪽으로 메시가 넓어져도
-		# 다른 블록을 침범하지 않게 하기 위한 보수적인 여유 공간이다.
-		clearance.append(turn + toward_head + toward_tail)
-		clearance.append(turn - toward_head - toward_tail)
-	return clearance
-
-
-func get_occupied_cells() -> Array[Vector2i]:
-	var occupied: Array[Vector2i] = body_cells.duplicate()
-	for cell in get_turn_clearance_cells_for_body(body_cells):
-		if not occupied.has(cell):
-			occupied.append(cell)
-	return occupied
+	return body_cells.has(cell)
 
 
 func drag_endpoint_to(endpoint: StringName, target_cell: Vector2i) -> bool:
@@ -638,6 +620,9 @@ func _apply_material_recursive(node: Node, material: Material) -> void:
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
 		mesh_instance.material_override = material
+		# Skeleton3D 아래의 메시만 가로 폭을 줄인다. FBX root의 균일 스케일과
+		# 본 포즈의 길이에는 영향을 주지 않는다.
+		mesh_instance.scale = Vector3(body_width_ratio, 1.0, 1.0)
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
 	for child in node.get_children():
 		_apply_material_recursive(child, material)
