@@ -11,9 +11,8 @@ const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
 const BLINK_CLOSED_DURATION := 0.11
-# 코너 회전을 나눠 받을 관절의 탐색 반경(타일 비율). 0이면 코너에 가장 가까운
-# 관절 하나가 90°를 전부 받는다. 값을 키우면 꺾임이 부드러워지는 대신 코너가 잘린다.
-const CORNER_SMOOTH_TILES := 0.0
+# 드래그 중 코너를 깎을 때 원호를 몇 조각으로 나눌지.
+const CORNER_ARC_SEGMENTS := 5
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 
 @export_group("Layout")
@@ -47,6 +46,15 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 
 @export_enum("follow", "stretch") var endpoint_drag_mode: String = "follow"
 
+@export_group("Motion")
+# 렌더용 중심선이 그리드 목표를 따라잡는 시간. 0이면 예전처럼 칸 단위로 순간이동한다.
+@export_range(0.0, 0.4, 0.005) var move_smooth_time: float = 0.075
+# 손을 놓은 뒤 코너가 다시 각지게 굳는 시간.
+@export_range(0.0, 0.6, 0.005) var settle_time: float = 0.14
+# 드래그 중 코너를 깎는 정도. 1이면 타일 반폭만큼의 원호로 최단거리처럼 흐른다.
+@export_range(0.0, 1.0, 0.05) var corner_round: float = 1.0
+
+@export_group("Body")
 @export_range(0.1, 16.0, 0.01) var fbx_scale_per_tile: float = 7.65:
 	set(value):
 		fbx_scale_per_tile = value
@@ -112,6 +120,11 @@ var _blink_random := RandomNumberGenerator.new()
 var _bone_chain: Array[int] = []
 var _bone_chain_distances: Array[float] = []
 var _rest_chain_length: float = 0.0
+# 렌더용 연속 중심선. body_cells 와 같은 길이이며, 각 점이 셀 중심을 향해 수렴한다.
+var _spine: PackedVector3Array = PackedVector3Array()
+var _round_weight: float = 0.0
+var _is_dragging: bool = false
+var _motion_active: bool = false
 
 
 func _ready() -> void:
@@ -127,7 +140,14 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if Engine.is_editor_hint() or _cat_material == null:
+	if Engine.is_editor_hint():
+		return
+	_process_blink(delta)
+	_process_motion(delta)
+
+
+func _process_blink(delta: float) -> void:
+	if _cat_material == null:
 		return
 	if _closed_eyes_texture == null:
 		_closed_eyes_texture = load(CLOSED_EYES_TEXTURE_PATH) as Texture2D
@@ -208,7 +228,11 @@ func drag_endpoint_to(endpoint: StringName, target_cell: Vector2i) -> bool:
 		level_manager.update_cat_occupancy(self)
 		# grid_pos는 에디터에서 배치하는 최초 머리 위치다.
 		# 이동 중 다시 대입하면 setter가 body_cells를 초기 직선 형태로 되돌린다.
-		_rebuild_body_visuals(true)
+		# 모델을 다시 만들지 않고, 중심선이 새 목표를 향해 흐르도록 두기만 한다.
+		if Engine.is_editor_hint():
+			snap_pose_to_grid()
+		else:
+			_motion_active = true
 		_update_endpoint_handles()
 	return changed
 
@@ -404,41 +428,201 @@ func _update_endpoint_handles() -> void:
 	_tail_handle.position = _cell_to_local(get_tail_cell())
 
 
-func _rebuild_body_visuals(animate: bool) -> void:
+func _rebuild_body_visuals(_animate: bool) -> void:
+	# FBX 인스턴스는 한 번만 만든다. 매 이동마다 다시 로드하면 스켈레톤 포즈가
+	# 프레임마다 리셋되어 보간이 불가능해진다.
 	if _visual_root == null or level_manager == null:
 		return
 
 	for child in _visual_root.get_children():
 		child.free()
 
-	# 스키닝된 cat1.fbx 인스턴스 하나만 사용한다. 길이와 꺾임은 아래의 본 포즈가 담당한다.
 	_cat_model = load_model_with_texture()
 	_cat_model.name = "SkinnedCat"
 	_visual_root.add_child(_cat_model)
 	_skeleton = _find_skeleton_in(_cat_model)
 	_cache_bone_rests()
-	_place_model_at_head()
-	_apply_body_pose()
+	snap_pose_to_grid()
 
 
-func _place_model_at_head() -> void:
-	if _cat_model == null or _bone_rests.is_empty() or body_cells.size() < 2:
+func begin_drag() -> void:
+	# 드래그 중에는 코너를 깎아 최단거리로 흐르게 한다.
+	_is_dragging = true
+	_motion_active = true
+
+
+func end_drag() -> void:
+	# 손을 놓으면 스파인이 셀 중심으로 수렴하고 코너가 다시 각지게 굳는다.
+	_is_dragging = false
+	_motion_active = true
+
+
+func snap_pose_to_grid() -> void:
+	# 보간 없이 그리드 정위치로 즉시 확정한다. 에디터 미리보기와 스폰 시점에 쓴다.
+	_resize_spine()
+	for index in _spine.size():
+		_spine[index] = _spine_target(index)
+	_round_weight = 0.0
+	_motion_active = false
+	_refresh_pose()
+
+
+func _resize_spine() -> void:
+	if _spine.size() == body_cells.size():
+		return
+	# 길이가 바뀌면 새로 생긴 점만 목표 위치에서 시작시킨다.
+	var previous := _spine.duplicate()
+	_spine.resize(body_cells.size())
+	for index in _spine.size():
+		_spine[index] = previous[index] if index < previous.size() else _spine_target(index)
+
+
+func _spine_target(index: int) -> Vector3:
+	return _cell_to_local(body_cells[index])
+
+
+func _process_motion(delta: float) -> void:
+	# 눈 깜빡임은 계속 돌아야 하므로 _process 자체를 끄지 않고 플래그로만 쉰다.
+	if not _motion_active or level_manager == null or _cat_model == null:
 		return
 
-	var head_position := _cell_to_local(get_head_cell())
-	var head_to_tail := _cell_to_local(body_cells[1]) - head_position
-	# FBX의 실제 본 체인은 local -Y 방향으로 머리에서 꼬리로 진행한다.
-	# 따라서 모델의 local +Y는 첫 구간의 반대(꼬리 -> 머리)로 배치한다.
-	var tail_to_head := -head_to_tail.normalized()
-	var base_scale := _grid_fitted_model_scale()
-	# 이동 전후에 모델 루트 스케일은 항상 같은 값으로 고정한다.
-	_cat_model.basis = _fbx_basis_for_direction(tail_to_head)
-	# 상체 비율을 보존하기 위해 모델 루트도 반드시 균일 스케일만 사용한다.
-	_cat_model.scale = Vector3.ONE * base_scale
-	# 본 체인은 셀 중심을 잇는 경로보다 길다. 남는 길이를 머리와 꼬리에 절반씩 내밀어
-	# 몸통이 차지한 셀 묶음의 정중앙에 놓이게 한다. 길이가 몇 칸이든 같은 규칙이 적용된다.
-	var center_offset := tail_to_head * _body_overhang()
-	_cat_model.position = head_position + center_offset - _cat_model.basis * _bone_rests[0].origin
+	var moving := _advance_spine(delta)
+	_refresh_pose()
+	# 다 따라잡고 각지게 굳었으면 다음 입력까지 쉰다.
+	if not moving and not _is_dragging:
+		_motion_active = false
+
+
+func _advance_spine(delta: float) -> bool:
+	_resize_spine()
+
+	# 프레임레이트와 무관한 지수 수렴. smooth_time 이 0이면 즉시 스냅이다.
+	var chase := _smoothing_factor(delta, move_smooth_time)
+	var settled := true
+	var epsilon := level_manager.tile_size * 0.002
+
+	for index in _spine.size():
+		var target := _spine_target(index)
+		var next: Vector3 = _spine[index].lerp(target, chase)
+		if next.distance_to(target) > epsilon:
+			settled = false
+		_spine[index] = next
+
+	# 드래그 중에는 라운딩을 올리고, 손을 놓으면 각진 그리드 형태로 되돌린다.
+	var round_target := corner_round if _is_dragging else 0.0
+	var round_chase := _smoothing_factor(delta, move_smooth_time if _is_dragging else settle_time)
+	_round_weight = lerpf(_round_weight, round_target, round_chase)
+	if absf(_round_weight - round_target) > 0.002:
+		settled = false
+
+	return not settled
+
+
+func _smoothing_factor(delta: float, smooth_time: float) -> float:
+	if smooth_time <= 0.0001:
+		return 1.0
+	return 1.0 - exp(-delta / smooth_time)
+
+
+func _refresh_pose() -> void:
+	if _cat_model == null or _bone_rests.is_empty() or _spine.size() < 2:
+		return
+	var polyline := _build_pose_polyline()
+	if polyline.size() < 2:
+		return
+	_place_model_on(polyline)
+	_apply_body_pose_along(polyline)
+
+
+func _build_pose_polyline() -> PackedVector3Array:
+	# 렌더용 중심선. 코 끝(머리 돌출) -> 스파인 -> 꼬리 끝(꼬리 돌출) 순서다.
+	# _round_weight 가 0이면 셀 중심을 잇는 각진 경로 그대로이고,
+	# 1에 가까울수록 코너가 원호로 깎여 대각선 최단거리처럼 흐른다.
+	var radius := level_manager.tile_size * 0.5 * clampf(_round_weight, 0.0, 1.0)
+	var overhang := _body_overhang()
+	var points := PackedVector3Array()
+
+	var head_direction := (_spine[0] - _spine[1]).normalized()
+	points.append(_spine[0] + head_direction * overhang)
+	points.append(_spine[0])
+
+	for index in range(1, _spine.size() - 1):
+		var previous: Vector3 = _spine[index - 1]
+		var current: Vector3 = _spine[index]
+		var following: Vector3 = _spine[index + 1]
+		var incoming := (current - previous)
+		var outgoing := (following - current)
+		if radius <= 0.0001 or incoming.length_squared() < 0.000001 or outgoing.length_squared() < 0.000001:
+			points.append(current)
+			continue
+		if incoming.normalized().is_equal_approx(outgoing.normalized()):
+			points.append(current)
+			continue
+
+		# 코너를 2차 베지어 원호로 대체한다. 반지름은 인접 구간의 절반을 넘지 않게 막아
+		# 곡선이 이웃 셀로 삐져나가지 않도록 한다.
+		var arc_radius := minf(radius, minf(incoming.length(), outgoing.length()) * 0.5)
+		var entry := current - incoming.normalized() * arc_radius
+		var exit_point := current + outgoing.normalized() * arc_radius
+		for step in range(CORNER_ARC_SEGMENTS + 1):
+			var t := float(step) / float(CORNER_ARC_SEGMENTS)
+			points.append(entry.lerp(current, t).lerp(current.lerp(exit_point, t), t))
+
+	points.append(_spine[-1])
+	var tail_direction := (_spine[-1] - _spine[-2]).normalized()
+	points.append(_spine[-1] + tail_direction * overhang)
+	return points
+
+
+func _polyline_lengths(points: PackedVector3Array) -> PackedFloat32Array:
+	var lengths := PackedFloat32Array()
+	var total := 0.0
+	lengths.append(0.0)
+	for index in range(1, points.size()):
+		total += points[index].distance_to(points[index - 1])
+		lengths.append(total)
+	return lengths
+
+
+func _polyline_tangent_at(
+	points: PackedVector3Array,
+	lengths: PackedFloat32Array,
+	distance: float
+) -> Vector3:
+	# 이웃 본을 잇는 현(chord)이 아니라 그 지점의 접선을 쓴다. 각진 경로에서는
+	# 코너 하나가 관절 하나에 그대로 실리고, 곡선에서는 접선이 매끄럽게 변한다.
+	for index in range(1, points.size()):
+		if distance <= lengths[index] or index == points.size() - 1:
+			var segment := points[index] - points[index - 1]
+			if segment.length_squared() < 0.000001:
+				continue
+			return segment.normalized()
+	return Vector3.RIGHT
+
+
+func _bone_span_direction(
+	polyline: PackedVector3Array,
+	lengths: PackedFloat32Array,
+	chain_index: int,
+	model_scale: float
+) -> Vector3:
+	# 관절 위치가 아니라 그 관절이 담당하는 구간의 중간에서 접선을 읽는다.
+	# 이렇게 해야 코너가 "코너 다음 관절"이 아니라 "코너에 가장 가까운 관절"에 실린다.
+	var start: float = _bone_chain_distances[chain_index] * model_scale
+	var next_index: int = mini(chain_index + 1, _bone_chain_distances.size() - 1)
+	var end: float = _bone_chain_distances[next_index] * model_scale
+	var sample: float = start if is_equal_approx(start, end) else (start + end) * 0.5
+	return _polyline_tangent_at(polyline, lengths, sample)
+
+
+func _place_model_on(polyline: PackedVector3Array) -> void:
+	# polyline[0] 이 코 끝이고 진행 방향은 머리 -> 꼬리다. 모델의 local +Y 는 그 반대다.
+	var lengths := _polyline_lengths(polyline)
+	var forward := -_bone_span_direction(polyline, lengths, 0, _grid_fitted_model_scale())
+	_cat_model.basis = _fbx_basis_for_direction(forward)
+	# 상체 비율을 보존하기 위해 모델 루트는 반드시 균일 스케일만 사용한다.
+	_cat_model.scale = Vector3.ONE * _grid_fitted_model_scale()
+	_cat_model.position = polyline[0] - _cat_model.basis * _bone_rests[0].origin
 
 
 func _grid_path_length() -> float:
@@ -449,7 +633,7 @@ func _body_overhang() -> float:
 	return maxf((_rest_chain_length * _grid_fitted_model_scale() - _grid_path_length()) * 0.5, 0.0)
 
 
-func _apply_body_pose() -> void:
+func _apply_body_pose_along(polyline: PackedVector3Array) -> void:
 	if _skeleton == null:
 		return
 
@@ -457,82 +641,39 @@ func _apply_body_pose() -> void:
 	_skeleton.clear_bones_global_pose_override()
 	_skeleton.reset_bone_poses()
 	_enforce_locked_bone_scales()
-	if _bone_chain.size() < 2 or body_cells.size() < 3 or _cat_model == null:
+	if _bone_chain.size() < 2 or _cat_model == null:
 		return
 
 	var model_scale := _grid_fitted_model_scale()
 	if model_scale <= 0.0:
 		return
 
-	# 코너는 body_cells의 꺾이는 셀에서만 생긴다. 머리에서 그 셀까지의 거리는
-	# 머리 돌출분 + (셀 개수 x 타일 크기)로 정확히 결정된다.
-	var head_offset := _body_overhang()
-	var turn_by_bone := {}
+	var lengths := _polyline_lengths(polyline)
+	var to_local := _cat_model.basis.inverse()
+	var previous_direction := (
+		to_local * _bone_span_direction(polyline, lengths, 0, model_scale)
+	).normalized()
 
-	for corner_index in range(1, body_cells.size() - 1):
-		var before := _local_grid_direction(body_cells[corner_index] - body_cells[corner_index - 1])
-		var after := _local_grid_direction(body_cells[corner_index + 1] - body_cells[corner_index])
-		if before.is_equal_approx(after):
+	for chain_index in range(1, _bone_chain.size()):
+		# 몸통이 모델보다 길면 뒤쪽 경로에는 본이 닿지 않는다. 남는 본은 마지막 접선을 따른다.
+		var direction := (
+			to_local * _bone_span_direction(polyline, lengths, chain_index, model_scale)
+		).normalized()
+		if direction.is_equal_approx(previous_direction):
 			continue
 
 		# FBX의 local Z 회전 방향은 보드 좌표계와 반대이므로 부호를 반전한다.
-		var turn_angle := -atan2(before.cross(after).z, before.dot(after))
-		var corner_distance := head_offset + float(corner_index) * level_manager.tile_size
-		# 몸통이 모델보다 길면 뒤쪽 코너에는 본이 닿지 않는다. 그 코너를 마지막 관절에
-		# 몰아주면 꼬리가 접히므로, 체인이 미치는 범위까지만 꺾는다.
-		if corner_distance > _rest_chain_length * model_scale:
-			continue
-		_accumulate_corner_turn(corner_distance, turn_angle, model_scale, turn_by_bone)
-
-	for bone_index in turn_by_bone:
+		var turn := -atan2(previous_direction.cross(direction).z, previous_direction.dot(direction))
+		var bone_index: int = _bone_chain[chain_index]
 		# rest 회전 위에 꺾임을 얹는다. rest 회전을 덮어쓰면 몸통 앞면이 뒤집힌다.
 		var rest_rotation := _bone_rests[bone_index].basis.get_rotation_quaternion()
 		_skeleton.set_bone_pose_rotation(
 			bone_index,
-			rest_rotation * Quaternion(Vector3.FORWARD, turn_by_bone[bone_index] as float)
+			rest_rotation * Quaternion(Vector3.FORWARD, turn)
 		)
+		previous_direction = direction
 
 	_enforce_locked_bone_scales()
-
-
-func _local_grid_direction(grid_delta: Vector2i) -> Vector3:
-	# 모델 루트는 이미 머리 쪽 진행 방향으로 회전해 있으므로, 그리드 방향도 같은 좌표계로 옮긴다.
-	var world_direction := Vector3(grid_delta.x, 0.0, grid_delta.y).normalized()
-	return (_cat_model.basis.inverse() * world_direction).normalized()
-
-
-func _accumulate_corner_turn(
-	corner_distance: float,
-	turn_angle: float,
-	model_scale: float,
-	out_turns: Dictionary
-) -> void:
-	# 코너에 실제로 걸쳐 있는 관절만 회전을 나눠 받는다. 이 범위를 넘겨 회전을 퍼뜨리면
-	# 몸통이 코너를 대각선으로 가로질러 옆 칸을 침범한다.
-	# 머리 본(체인 0번)은 몸 전체를 돌려버리므로 항상 제외한다.
-	var window := level_manager.tile_size * CORNER_SMOOTH_TILES
-	var affected: Array[int] = []
-	var nearest_bone := -1
-	var nearest_gap := INF
-
-	for chain_index in range(1, _bone_chain.size()):
-		var bone_distance: float = _bone_chain_distances[chain_index] * model_scale
-		var gap := absf(bone_distance - corner_distance)
-		if gap <= window:
-			affected.append(_bone_chain[chain_index])
-		if gap < nearest_gap:
-			nearest_gap = gap
-			nearest_bone = _bone_chain[chain_index]
-
-	if affected.is_empty():
-		# 창 안에 관절이 없으면 코너에 가장 가까운 관절 하나가 90°를 전부 받는다.
-		if nearest_bone < 0:
-			return
-		affected.append(nearest_bone)
-
-	var share := turn_angle / float(affected.size())
-	for bone_index in affected:
-		out_turns[bone_index] = float(out_turns.get(bone_index, 0.0)) + share
 
 
 func _enforce_locked_bone_scales() -> void:

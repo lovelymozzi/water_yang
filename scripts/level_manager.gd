@@ -426,6 +426,7 @@ func _begin_endpoint_drag(screen_pos: Vector2) -> void:
 		if cat != null:
 			_drag_cat = cat
 			_drag_endpoint = handle.get_meta("cat_endpoint") as StringName
+			_drag_cat.begin_drag()
 
 
 func _update_endpoint_drag(screen_pos: Vector2) -> void:
@@ -467,6 +468,9 @@ func _axis_step(delta: Vector2i, use_x: bool) -> Vector2i:
 
 
 func _end_endpoint_drag() -> void:
+	if _drag_cat != null:
+		# 손을 놓으면 가장 가까운 그리드 정위치로 각지게 수렴한다.
+		_drag_cat.end_drag()
 	_drag_cat = null
 	_drag_endpoint = &""
 
