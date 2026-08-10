@@ -44,13 +44,13 @@ script = ExtResource("2_5srec")
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
 [node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.78, -6.5806274)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.78, -6)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 1)
 shadow_darkness = 0.41
 rim_strength = 0.4
 outline_color = Color(0.6159854, 0.44952333, 0.48422414, 1)
-outline_width = 0.00999999999999999
+outline_width = 0.026000000000000002
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 
