@@ -63,7 +63,7 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 			level_manager.update_cat_occupancy(self)
 		_request_editor_refresh()
 
-@export_range(2, 16, 1) var min_length: int = 2:
+@export_range(3, 16, 1) var min_length: int = 3:
 	set(value):
 		min_length = value
 
@@ -87,7 +87,7 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		fbx_scale_per_tile = value
 		_rebuild_body_visuals(false)
 
-@export_range(-1.0, 1.0, 0.01) var visual_forward_offset_tiles: float = 0.25:
+@export_range(-1.0, 1.0, 0.01) var visual_forward_offset_tiles: float = 0.0:
 	set(value):
 		visual_forward_offset_tiles = value
 		if is_inside_tree() and level_manager != null:
