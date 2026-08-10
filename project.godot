@@ -16,12 +16,10 @@ config/features=PackedStringArray("4.7")
 
 [debug]
 
-# 프리즈/크래시 원인을 남기기 위해 파일 로깅을 켠다.
-# macOS: ~/Library/Application Support/Godot/app_userdata/LeonOutPrototype/logs/
+settings/stdout/verbose_stdout=true
 file_logging/enable_file_logging=true
 file_logging/enable_file_logging.pc=true
 file_logging/max_log_files=10
-settings/stdout/verbose_stdout=true
 
 [display]
 
