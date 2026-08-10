@@ -1,7 +1,12 @@
 extends Node3D
 
+# 이 시간을 넘긴 프레임은 로그에 상태와 함께 남긴다. 프리즈 원인을 좁히기 위한 계측이다.
+const FRAME_STALL_WARNING_SECONDS := 0.25
+
 @onready var level_manager: LevelManager = $LevelManager
 @onready var clear_label: Label = $CanvasLayer/ClearLabel
+
+var _stall_reports := 0
 
 
 func _ready() -> void:
@@ -22,6 +27,17 @@ func _ready() -> void:
 	clear_label.modulate = Color(1.0, 1.0, 1.0, 0.0)
 
 	level_manager.level_cleared.connect(_on_level_cleared)
+	print("[boot] 로그 파일 위치: ", ProjectSettings.globalize_path("user://logs/"))
+
+
+func _process(delta: float) -> void:
+	# 멈춘 프레임을 그 시점의 상태와 함께 기록한다. 로그가 없으면 원인을 좁힐 수 없다.
+	if delta < FRAME_STALL_WARNING_SECONDS or _stall_reports >= 40:
+		return
+	_stall_reports += 1
+	push_warning("[stall] 프레임 %.0fms  %s" % [delta * 1000.0, level_manager.describe_state()])
+
+
 func _on_level_cleared() -> void:
 	clear_label.text = "LEVEL CLEAR!"
 	clear_label.visible = true
