@@ -86,6 +86,10 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 
 # 몸통은 항상 머리(0)에서 꼬리(마지막)까지 인접한 셀 경로로 저장한다.
 var body_cells: Array[Vector2i] = []
+# 양 끝이 지나온 길. 최신 칸이 앞에 온다. 후진할 때 이 기록을 되짚어 간다.
+# _front_trail은 body_cells[0] 바깥쪽, _back_trail은 body_cells[-1] 바깥쪽이다.
+var _front_trail: Array[Vector2i] = []
+var _back_trail: Array[Vector2i] = []
 var facing_dir: Vector2i = Vector2i.UP
 var level_manager: LevelManager
 var is_animating := false
@@ -210,70 +214,121 @@ func drag_endpoint_to(endpoint: StringName, target_cell: Vector2i) -> bool:
 
 
 func _move_head_to(target_cell: Vector2i) -> bool:
-	var head := get_head_cell()
-	if not _is_adjacent(head, target_cell):
-		return false
-	var candidate: Array[Vector2i] = body_cells.duplicate()
-
-	# 머리를 바로 다음 몸통 칸으로 끌면 머리 쪽 한 칸이 줄어든다.
-	if target_cell == candidate[1]:
-		if endpoint_drag_mode == "follow":
-			# 몸통 쪽으로 머리를 당기면 길이를 줄이지 않고, 반대쪽 다리까지 함께 전진시킨다.
-			var tail_direction := candidate[-1] - candidate[-2]
-			candidate.pop_front()
-			candidate.append(candidate[-1] + tail_direction)
-		elif candidate.size() <= min_length:
-			return false
-		else:
-			candidate.pop_front()
-	else:
-		candidate.push_front(target_cell)
-		if endpoint_drag_mode == "follow":
-			# 머리가 전진한 만큼 꼬리도 한 칸 따라와 현재 몸통 길이를 유지한다.
-			candidate.pop_back()
-		elif candidate.size() > max_length:
-			return false
-
-	if not level_manager.can_place_cat_body(self, candidate):
-		return false
-	body_cells = candidate
-	return true
+	return _move_endpoint(target_cell, false)
 
 
 func _move_tail_to(target_cell: Vector2i) -> bool:
-	var tail := get_tail_cell()
-	if not _is_adjacent(tail, target_cell):
-		return false
-	var candidate: Array[Vector2i] = body_cells.duplicate()
+	return _move_endpoint(target_cell, true)
 
-	# 꼬리를 바로 앞 몸통 칸으로 끌면 꼬리 쪽 한 칸이 줄어든다.
-	if target_cell == candidate[-2]:
+
+func _move_endpoint(target_cell: Vector2i, from_tail: bool) -> bool:
+	# 게코아웃에서는 "잡아끄는 쪽"이 곧 머리다. 두 끝의 규칙이 완전히 대칭이므로
+	# 꼬리를 잡은 경우에는 몸통을 뒤집어 같은 로직을 그대로 태운다.
+	var path: Array[Vector2i] = body_cells.duplicate()
+	var lead_trail: Array[Vector2i] = _front_trail
+	var rear_trail: Array[Vector2i] = _back_trail
+	if from_tail:
+		path.reverse()
+		lead_trail = _back_trail
+		rear_trail = _front_trail
+
+	var lead: Vector2i = path[0]
+	if not _is_adjacent(lead, target_cell):
+		return false
+
+	var candidate: Array[Vector2i] = path.duplicate()
+	var is_retreat: bool = target_cell == candidate[1]
+	var rear_from_memory := false
+	var vacated_rear := Vector2i.ZERO
+	var rear_moved := false
+
+	if is_retreat:
+		# 후진: 잡은 끝을 몸통 안쪽으로 민다.
 		if endpoint_drag_mode == "follow":
-			# 꼬리를 몸통 쪽으로 당기면 머리도 반대 방향으로 한 칸 함께 전진시킨다.
-			var head_direction := candidate[0] - candidate[1]
-			candidate.pop_back()
-			candidate.push_front(candidate[0] + head_direction)
+			var rear: Vector2i = candidate[-1]
+			var rear_prev: Vector2i = candidate[-2]
+			var remembered: Variant = _remembered_rear_cell(rear_trail, rear, rear_prev)
+			var next_rear: Vector2i
+			if remembered == null:
+				# 기억이 없으면(= 반대쪽 끝이 지나온 적 없는 칸으로 나가면)
+				# 미는 힘 그대로 직진하는 자연 후진이 된다.
+				next_rear = rear + (rear - rear_prev)
+			else:
+				# 왔던 길이 남아 있으면 그 칸으로 되돌아간다.
+				next_rear = remembered as Vector2i
+				rear_from_memory = true
+			candidate.pop_front()
+			candidate.append(next_rear)
+			rear_moved = true
 		elif candidate.size() <= min_length:
 			return false
 		else:
-			candidate.pop_back()
-	else:
-		candidate.append(target_cell)
-		if endpoint_drag_mode == "follow":
-			# 꼬리가 전진한 만큼 머리도 한 칸 따라와 현재 몸통 길이를 유지한다.
 			candidate.pop_front()
+	else:
+		# 전진: 새 칸으로 나아가고 반대쪽 끝이 한 칸 따라온다.
+		candidate.push_front(target_cell)
+		if endpoint_drag_mode == "follow":
+			vacated_rear = candidate[-1]
+			candidate.pop_back()
+			rear_moved = true
 		elif candidate.size() > max_length:
 			return false
 
-	if not level_manager.can_place_cat_body(self, candidate):
+	var final_body: Array[Vector2i] = candidate.duplicate()
+	if from_tail:
+		final_body.reverse()
+	if not level_manager.can_place_cat_body(self, final_body):
 		return false
-	body_cells = candidate
+
+	# 이동이 확정된 뒤에만 통과한 길 기록을 갱신한다.
+	body_cells = final_body
+	if is_retreat:
+		_remember(lead_trail, lead)
+		if rear_moved:
+			if rear_from_memory:
+				rear_trail.pop_front()
+			else:
+				rear_trail.clear()
+	else:
+		# 잡은 쪽이 기억한 길을 되짚어 가면 그만큼 소비하고, 새 방향으로 틀면 기억을 버린다.
+		if not lead_trail.is_empty() and lead_trail[0] == target_cell:
+			lead_trail.pop_front()
+		else:
+			lead_trail.clear()
+		if rear_moved:
+			_remember(rear_trail, vacated_rear)
 	return true
+
+
+func _remembered_rear_cell(
+	rear_trail: Array[Vector2i],
+	rear: Vector2i,
+	rear_prev: Vector2i
+) -> Variant:
+	if rear_trail.is_empty():
+		return null
+	var remembered: Vector2i = rear_trail[0]
+	if not _is_adjacent(remembered, rear) or remembered == rear_prev:
+		return null
+	return remembered
+
+
+func _remember(trail: Array[Vector2i], cell: Vector2i) -> void:
+	trail.push_front(cell)
+	# 기록은 보드를 한 번 가득 채울 만큼만 남긴다. 그 밖은 어차피 되돌아갈 수 없다.
+	var limit: int = 64
+	if level_manager != null:
+		limit = maxi(level_manager.grid_size.x * level_manager.grid_size.y, 8)
+	while trail.size() > limit:
+		trail.pop_back()
 
 
 func _reset_straight_body() -> void:
 	facing_dir = _direction_from_name(facing_name)
 	body_cells.clear()
+	# 새로 배치하면 지나온 길 기록도 함께 비운다.
+	_front_trail.clear()
+	_back_trail.clear()
 	var length := clampi(initial_length, min_length, max_length)
 	# 머리는 grid_pos에 두고 몸통은 바라보는 방향의 반대쪽으로 놓는다.
 	for index in range(length):
@@ -423,6 +478,10 @@ func _apply_body_pose() -> void:
 		# FBX의 local Z 회전 방향은 보드 좌표계와 반대이므로 부호를 반전한다.
 		var turn_angle := -atan2(before.cross(after).z, before.dot(after))
 		var corner_distance := head_offset + float(corner_index) * level_manager.tile_size
+		# 몸통이 모델보다 길면 뒤쪽 코너에는 본이 닿지 않는다. 그 코너를 마지막 관절에
+		# 몰아주면 꼬리가 접히므로, 체인이 미치는 범위까지만 꺾는다.
+		if corner_distance > _rest_chain_length * model_scale:
+			continue
 		_accumulate_corner_turn(corner_distance, turn_angle, model_scale, turn_by_bone)
 
 	for bone_index in turn_by_bone:
