@@ -17,8 +17,10 @@ const CORNER_ARC_SEGMENTS := 6
 const MAX_COMMITS_PER_UPDATE := 8
 # 90° 필렛이 경로를 줄이는 길이 / 반지름. 2 - PI/2 다.
 const CORNER_ARC_SHORTENING := 0.4292
-# 이미 미끄러지고 있는 축에 주는 가산점. 손가락이 축을 살짝 벗어나도 방향이 튀지 않게 한다.
-const SLIDE_AXIS_HYSTERESIS := 0.35
+# 이미 미끄러지고 있는 축에 주는 가산점(타일 단위).
+const SLIDE_AXIS_HYSTERESIS := 0.2
+# 다른 축으로 바꾸려면 마우스가 그 방향 셀 경계를 실제로 넘어야 한다. 타일 반폭이다.
+const SLIDE_AXIS_SWITCH := 0.5
 # 이 거리(타일 비율) 안에서는 축을 고르지 않는다. 0에 가까운 입력에서 축이 무작위로
 # 잡히는 것만 막는 용도이므로 아주 작게 둔다. 크게 잡으면 드래그 시작에 팝이 생긴다.
 const SLIDE_DEAD_ZONE := 0.02
@@ -134,6 +136,8 @@ var _slide_cell: Vector2i = Vector2i.ZERO
 var _slide_t: float = 0.0
 var _slide_valid: bool = false
 var _slide_axis: Vector2i = Vector2i.ZERO
+# 축이 바뀐 순간의 진행량. 여기서부터 0으로 다시 세어야 전환 지점에서 머리가 튀지 않는다.
+var _axis_entry: float = 0.0
 var _drag_endpoint: StringName = &"head"
 # 잡은 순간 손가락이 셀 중심에서 얼마나 빗겨 있었는지. 이후 좌표에서 계속 빼 준다.
 # 이 보정이 없으면 빗겨 잡은 만큼이 영구 편향으로 남아 옆칸으로 튀어나간다.
@@ -497,8 +501,17 @@ func _rebuild_body_visuals(_animate: bool) -> void:
 func begin_drag(endpoint: StringName, world_point: Variant = null) -> void:
 	_is_dragging = true
 	_drag_endpoint = endpoint
-	_slide_axis = Vector2i.ZERO
 	_motion_active = true
+
+	# 시작 축은 몸통이 지금 향한 선이다. 축이 비어 있으면 첫 프레임의 진행 성분이 0이라
+	# 조준용 미세한 좌우 움직임이 축을 가로채고, 마우스가 같은 열 안에 있는데도 머리가 꺾인다.
+	_axis_entry = 0.0
+	_slide_axis = Vector2i.ZERO
+	if body_cells.size() >= 2:
+		_slide_axis = (
+			body_cells[0] - body_cells[1] if endpoint == &"head"
+			else body_cells[-1] - body_cells[-2]
+		)
 
 	_grab_offset = Vector3.ZERO
 	if world_point == null or level_manager == null or body_cells.is_empty():
@@ -539,10 +552,18 @@ func update_drag(endpoint: StringName, world_point: Vector3) -> void:
 			_slide_valid = false
 			return
 
-		var travel := to_pointer.dot(axis / span) / span
+		var raw := to_pointer.dot(axis / span) / span
 		_slide_cell = step_cell as Vector2i
 		_slide_valid = true
-		_slide_axis = _slide_cell - lead_cell
+
+		var direction: Vector2i = _slide_cell - lead_cell
+		if direction != _slide_axis:
+			# 축을 막 바꿨다. 그 시점의 진행량을 기준점으로 삼아 0에서 다시 센다.
+			# 이 보정이 없으면 전환 지점에서 머리가 그만큼(최대 반 칸) 순간이동한다.
+			_axis_entry = clampf(raw, 0.0, 0.95)
+		_slide_axis = direction
+
+		var travel := (raw - _axis_entry) / maxf(1.0 - _axis_entry, 0.05)
 		if travel < 1.0:
 			# 셀 중심에 아직 못 미쳤다. 중간 지점에 그대로 머문다.
 			_slide_t = clampf(travel, 0.0, 1.0)
@@ -553,6 +574,7 @@ func update_drag(endpoint: StringName, world_point: Vector3) -> void:
 			_slide_t = 1.0
 			return
 		_slide_t = 0.0
+		_axis_entry = 0.0
 
 	_slide_valid = false
 	_slide_t = 0.0
@@ -572,27 +594,57 @@ func end_drag() -> void:
 	_motion_active = true
 
 
+func _unit_sign(value: float) -> int:
+	if value > 0.0:
+		return 1
+	if value < 0.0:
+		return -1
+	return 0
+
+
 func _best_step_cell(endpoint: StringName, lead_cell: Vector2i, to_pointer: Vector3) -> Variant:
-	# 손가락이 가리키는 쪽 이웃 셀을 고른다. 갈 수 없는 칸은 후보에서 뺀다.
-	if to_pointer.length() < level_manager.tile_size * SLIDE_DEAD_ZONE:
+	# 방향(각도)이 아니라 그리드 좌표로 판단한다. 각도로 고르면 칸을 확정한 직후
+	# 진행축 성분이 0이 되는 순간마다 측면 성분이 이겨서, 마우스가 같은 열 안에 있어도
+	# 머리가 옆 열로 꺾인다.
+	var tile := level_manager.tile_size
+	var along_x := to_pointer.x / tile
+	var along_z := to_pointer.z / tile
+	if maxf(absf(along_x), absf(along_z)) < SLIDE_DEAD_ZONE:
 		return null
-	var best: Variant = null
-	var best_score := 0.0
-	var pointer_direction := to_pointer.normalized()
-	var directions: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
-	for direction in directions:
-		var axis := Vector3(direction.x, 0.0, direction.y)
-		var score := pointer_direction.dot(axis)
-		# 이미 그 축으로 미끄러지고 있었다면 계속 그 축을 유지하려 한다.
-		if direction == _slide_axis:
-			score += SLIDE_AXIS_HYSTERESIS
-		if score <= best_score:
+
+	var score_x := absf(along_x)
+	var score_z := absf(along_z)
+	if _slide_axis != Vector2i.ZERO:
+		if _slide_axis.x != 0:
+			score_x += SLIDE_AXIS_HYSTERESIS
+			# 측면 축은 마우스가 그 셀로 실제로 넘어갔을 때만 후보가 된다.
+			if score_z <= SLIDE_AXIS_SWITCH:
+				score_z = -1.0
+		else:
+			score_z += SLIDE_AXIS_HYSTERESIS
+			if score_x <= SLIDE_AXIS_SWITCH:
+				score_x = -1.0
+
+	# signi() 는 int 를 받는다. 소수 성분을 그대로 넘기면 잘려서 0이 되므로 직접 부호를 낸다.
+	var step_x := Vector2i(_unit_sign(along_x), 0)
+	var step_z := Vector2i(0, _unit_sign(along_z))
+	var order: Array[Vector2i] = []
+	if score_x >= score_z:
+		order.append(step_x)
+		if score_z > -1.0:
+			order.append(step_z)
+	else:
+		order.append(step_z)
+		if score_x > -1.0:
+			order.append(step_x)
+
+	# 우선 축이 막혀 있으면 남은 축으로 우회한다.
+	for direction in order:
+		if direction == Vector2i.ZERO:
 			continue
-		if not can_move_endpoint(endpoint, lead_cell + direction):
-			continue
-		best_score = score
-		best = lead_cell + direction
-	return best
+		if can_move_endpoint(endpoint, lead_cell + direction):
+			return lead_cell + direction
+	return null
 
 
 func snap_pose_to_grid() -> void:
@@ -600,6 +652,7 @@ func snap_pose_to_grid() -> void:
 	_slide_valid = false
 	_slide_t = 0.0
 	_slide_axis = Vector2i.ZERO
+	_axis_entry = 0.0
 	_round_weight = 0.0
 	_smooth_weight = 0.0
 	_forward = Vector3.ZERO
