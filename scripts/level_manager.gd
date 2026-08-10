@@ -157,7 +157,7 @@ func release_cat_cell(cat: CatEntity) -> void:
 
 func update_cat_occupancy(cat: CatEntity) -> void:
 	release_cat_cell(cat)
-	for cell in cat.body_cells:
+	for cell in cat.get_occupied_cells():
 		if is_inside_grid(cell):
 			_set_cell_state(cell, CellState.CAT)
 			_set_cell_ref(cell, cat)
@@ -167,6 +167,32 @@ func can_extend_cat_to(cat: CatEntity, cell: Vector2i) -> bool:
 	if not is_inside_grid(cell):
 		return false
 	return _get_cell_state(cell) == CellState.EMPTY
+
+
+func can_place_cat_body(cat: CatEntity, candidate: Array[Vector2i]) -> bool:
+	var body_cells := {}
+	for cell in candidate:
+		# 같은 셀을 다시 지나가면 몸통끼리도 겹친다.
+		if body_cells.has(cell):
+			return false
+		body_cells[cell] = true
+
+	var occupied: Array[Vector2i] = candidate.duplicate()
+	for clearance_cell in cat.get_turn_clearance_cells_for_body(candidate):
+		# 꺾임의 대각 여유 공간을 몸통이 밟는 경로도 허용하지 않는다.
+		if body_cells.has(clearance_cell):
+			return false
+		if not occupied.has(clearance_cell):
+			occupied.append(clearance_cell)
+
+	for cell in occupied:
+		if not is_inside_grid(cell):
+			return false
+		var occupant: Variant = _get_cell_ref(cell)
+		# 현재 이 고양이가 차지하던 셀은 후보 경로를 검사하는 동안만 통과를 허용한다.
+		if occupant != null and occupant != cat:
+			return false
+	return true
 
 
 func get_escape_result(cat: CatEntity) -> Dictionary:

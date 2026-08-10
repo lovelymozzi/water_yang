@@ -126,7 +126,32 @@ func get_tail_cell() -> Vector2i:
 
 
 func occupies_cell(cell: Vector2i) -> bool:
-	return body_cells.has(cell)
+	return get_occupied_cells().has(cell)
+
+
+# 꺾이는 관절은 실제 메시 폭 때문에 경로 셀 밖의 대각 영역까지 닿는다.
+# 두 대각 셀을 함께 예약해, 시각적으로 겹치지만 논리적으로는 비어 있던 상태를 막는다.
+func get_turn_clearance_cells_for_body(cells: Array[Vector2i]) -> Array[Vector2i]:
+	var clearance: Array[Vector2i] = []
+	for index in range(1, cells.size() - 1):
+		var turn := cells[index]
+		var toward_head := cells[index - 1] - turn
+		var toward_tail := cells[index + 1] - turn
+		if toward_head == -toward_tail:
+			continue
+		# 몸통의 안쪽/바깥쪽 대각 모두를 보호한다. 어느 쪽으로 메시가 넓어져도
+		# 다른 블록을 침범하지 않게 하기 위한 보수적인 여유 공간이다.
+		clearance.append(turn + toward_head + toward_tail)
+		clearance.append(turn - toward_head - toward_tail)
+	return clearance
+
+
+func get_occupied_cells() -> Array[Vector2i]:
+	var occupied: Array[Vector2i] = body_cells.duplicate()
+	for cell in get_turn_clearance_cells_for_body(body_cells):
+		if not occupied.has(cell):
+			occupied.append(cell)
+	return occupied
 
 
 func drag_endpoint_to(endpoint: StringName, target_cell: Vector2i) -> bool:
@@ -152,32 +177,30 @@ func _move_head_to(target_cell: Vector2i) -> bool:
 	var head := get_head_cell()
 	if not _is_adjacent(head, target_cell):
 		return false
+	var candidate: Array[Vector2i] = body_cells.duplicate()
 
 	# 머리를 바로 다음 몸통 칸으로 끌면 머리 쪽 한 칸이 줄어든다.
-	if target_cell == body_cells[1]:
+	if target_cell == candidate[1]:
 		if endpoint_drag_mode == "follow":
 			# 몸통 쪽으로 머리를 당기면 길이를 줄이지 않고, 반대쪽 다리까지 함께 전진시킨다.
-			var tail_direction := get_tail_cell() - body_cells[-2]
-			var new_tail := get_tail_cell() + tail_direction
-			if not level_manager.can_extend_cat_to(self, new_tail):
-				return false
-			body_cells.pop_front()
-			body_cells.append(new_tail)
-			return true
-		if body_cells.size() <= min_length:
+			var tail_direction := candidate[-1] - candidate[-2]
+			candidate.pop_front()
+			candidate.append(candidate[-1] + tail_direction)
+		elif candidate.size() <= min_length:
 			return false
-		body_cells.pop_front()
-		return true
+		else:
+			candidate.pop_front()
+	else:
+		candidate.push_front(target_cell)
+		if endpoint_drag_mode == "follow":
+			# 머리가 전진한 만큼 꼬리도 한 칸 따라와 현재 몸통 길이를 유지한다.
+			candidate.pop_back()
+		elif candidate.size() > max_length:
+			return false
 
-	if not level_manager.can_extend_cat_to(self, target_cell):
+	if not level_manager.can_place_cat_body(self, candidate):
 		return false
-	body_cells.push_front(target_cell)
-	if endpoint_drag_mode == "follow":
-		# 머리가 전진한 만큼 꼬리도 한 칸 따라와 현재 몸통 길이를 유지한다.
-		body_cells.pop_back()
-	elif body_cells.size() > max_length:
-		body_cells.pop_front()
-		return false
+	body_cells = candidate
 	return true
 
 
@@ -185,32 +208,30 @@ func _move_tail_to(target_cell: Vector2i) -> bool:
 	var tail := get_tail_cell()
 	if not _is_adjacent(tail, target_cell):
 		return false
+	var candidate: Array[Vector2i] = body_cells.duplicate()
 
 	# 꼬리를 바로 앞 몸통 칸으로 끌면 꼬리 쪽 한 칸이 줄어든다.
-	if target_cell == body_cells[-2]:
+	if target_cell == candidate[-2]:
 		if endpoint_drag_mode == "follow":
 			# 꼬리를 몸통 쪽으로 당기면 머리도 반대 방향으로 한 칸 함께 전진시킨다.
-			var head_direction := get_head_cell() - body_cells[1]
-			var new_head := get_head_cell() + head_direction
-			if not level_manager.can_extend_cat_to(self, new_head):
-				return false
-			body_cells.pop_back()
-			body_cells.push_front(new_head)
-			return true
-		if body_cells.size() <= min_length:
+			var head_direction := candidate[0] - candidate[1]
+			candidate.pop_back()
+			candidate.push_front(candidate[0] + head_direction)
+		elif candidate.size() <= min_length:
 			return false
-		body_cells.pop_back()
-		return true
+		else:
+			candidate.pop_back()
+	else:
+		candidate.append(target_cell)
+		if endpoint_drag_mode == "follow":
+			# 꼬리가 전진한 만큼 머리도 한 칸 따라와 현재 몸통 길이를 유지한다.
+			candidate.pop_front()
+		elif candidate.size() > max_length:
+			return false
 
-	if not level_manager.can_extend_cat_to(self, target_cell):
+	if not level_manager.can_place_cat_body(self, candidate):
 		return false
-	body_cells.append(target_cell)
-	if endpoint_drag_mode == "follow":
-		# 꼬리가 전진한 만큼 머리도 한 칸 따라와 현재 몸통 길이를 유지한다.
-		body_cells.pop_front()
-	elif body_cells.size() > max_length:
-		body_cells.pop_back()
-		return false
+	body_cells = candidate
 	return true
 
 
