@@ -6,12 +6,16 @@ const MODEL_SCENE_PATH := "res://water_yang/cat1.fbx"
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
 const TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat1_mask.jpg"
 const CLOSED_EYES_TEXTURE_PATH := "res://water_yang/cat1_1.jpeg"
+const OPEN_MOUTH_TEXTURE_PATH := "res://water_yang/cat1_2.jpeg"
+const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
 const BLINK_CLOSED_DURATION := 0.11
+const OPEN_MOUTH_CHANCE := 0.22
+const OPEN_MOUTH_DURATION := 0.40
 const EAR_BONE_PAIRS := [["Bone031", "Bone032"], ["Bone033", "Bone034"]]
 const EAR_TWITCH_INTERVAL_MIN := 3.8
 const EAR_TWITCH_INTERVAL_MAX := 7.6
@@ -165,8 +169,11 @@ var _material_id_2_outline: ShaderMaterial
 var _open_eyes_texture: Texture2D
 var _tint_exclusion_mask: Texture2D
 var _closed_eyes_texture: Texture2D
+var _open_mouth_texture: Texture2D
+var _open_mouth_tint_exclusion_mask: Texture2D
 var _blink_time_remaining := -1.0
 var _eyes_are_closed := false
+var _mouth_is_open := false
 var _blink_random := RandomNumberGenerator.new()
 var _ear_twitch_time_remaining := -1.0
 var _ear_twitch_elapsed := 0.0
@@ -214,16 +221,26 @@ func _process_blink(delta: float) -> void:
 	if _blink_time_remaining > 0.0:
 		return
 
+	if not _eyes_are_closed:
+		_mouth_is_open = _blink_random.randf() < OPEN_MOUTH_CHANCE
+		if _mouth_is_open:
+			_open_mouth_texture = _get_open_mouth_texture()
+			_open_mouth_tint_exclusion_mask = _get_open_mouth_tint_exclusion_mask()
+			if _open_mouth_texture == null or _open_mouth_tint_exclusion_mask == null:
+				_mouth_is_open = false
 	_eyes_are_closed = not _eyes_are_closed
+	if not _eyes_are_closed:
+		_mouth_is_open = false
 	# Rebind every shader input on an eye-texture swap.  Updating only the
 	# albedo left the live material dependent on its previous mask binding.
 	_apply_shader_parameters(
-		_closed_eyes_texture if _eyes_are_closed else _get_open_eyes_texture(),
-		not _eyes_are_closed,
-		_eyes_are_closed
+		_get_active_face_texture(),
+		not _eyes_are_closed or _mouth_is_open,
+		_eyes_are_closed,
+		_get_active_tint_exclusion_mask()
 	)
 	if _eyes_are_closed:
-		_blink_time_remaining = BLINK_CLOSED_DURATION
+		_blink_time_remaining = OPEN_MOUTH_DURATION if _mouth_is_open else BLINK_CLOSED_DURATION
 	else:
 		_schedule_next_blink()
 
@@ -608,7 +625,12 @@ func _apply_current_shader_parameters() -> void:
 		if Engine.is_editor_hint():
 			_request_editor_refresh()
 		return
-	_apply_shader_parameters(_get_open_eyes_texture())
+	_apply_shader_parameters(
+		_get_active_face_texture(),
+		not _eyes_are_closed or _mouth_is_open,
+		_eyes_are_closed,
+		_get_active_tint_exclusion_mask()
+	)
 
 
 func _get_tint_gradient_axis() -> Vector2:
@@ -626,14 +648,14 @@ func _get_tint_gradient_axis() -> Vector2:
 func _apply_shader_parameters(
 	texture: Texture2D,
 	use_tint_exclusion_mask := true,
-	hide_line_art_eyes := false
+	hide_line_art_eyes := false,
+	custom_tint_exclusion_mask: Texture2D = null
 ) -> void:
+	var tint_exclusion_mask: Texture2D = custom_tint_exclusion_mask if custom_tint_exclusion_mask != null else _get_tint_exclusion_mask()
 	var gradient_axis := _get_tint_gradient_axis()
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
-		_cat_material.set_shader_parameter(
-			"tint_exclusion_mask", _get_tint_exclusion_mask() if use_tint_exclusion_mask else null
-		)
+		_cat_material.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_cat_material.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_cat_material.set_shader_parameter("tint_color", tint_color)
 		_cat_material.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
@@ -656,9 +678,7 @@ func _apply_shader_parameters(
 		# actual pose extension rather than the total grid-length ratio.
 		var tile_scale := _baseline_stretch_scale()
 		_material_id_2.set_shader_parameter("albedo_tex", texture)
-		_material_id_2.set_shader_parameter(
-			"tint_exclusion_mask", _get_tint_exclusion_mask() if use_tint_exclusion_mask else null
-		)
+		_material_id_2.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_material_id_2.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_material_id_2.set_shader_parameter("tint_color", tint_color)
 		_material_id_2.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
@@ -698,10 +718,38 @@ func _get_open_eyes_texture() -> Texture2D:
 	return _open_eyes_texture
 
 
+func _get_open_mouth_texture() -> Texture2D:
+	if _open_mouth_texture == null:
+		_open_mouth_texture = load(OPEN_MOUTH_TEXTURE_PATH) as Texture2D
+	return _open_mouth_texture
+
+
 func _get_tint_exclusion_mask() -> Texture2D:
 	if _tint_exclusion_mask == null:
 		_tint_exclusion_mask = load(TINT_EXCLUSION_MASK_PATH) as Texture2D
 	return _tint_exclusion_mask
+
+
+func _get_open_mouth_tint_exclusion_mask() -> Texture2D:
+	if _open_mouth_tint_exclusion_mask == null:
+		_open_mouth_tint_exclusion_mask = load(OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH) as Texture2D
+	return _open_mouth_tint_exclusion_mask
+
+
+func _get_active_face_texture() -> Texture2D:
+	if _mouth_is_open:
+		return _get_open_mouth_texture()
+	if _eyes_are_closed:
+		return _closed_eyes_texture
+	return _get_open_eyes_texture()
+
+
+func _get_active_tint_exclusion_mask() -> Texture2D:
+	if _mouth_is_open:
+		return _get_open_mouth_tint_exclusion_mask()
+	if _eyes_are_closed:
+		return null
+	return _get_tint_exclusion_mask()
 
 
 func _schedule_next_blink() -> void:
