@@ -236,7 +236,7 @@ func _process_blink(delta: float) -> void:
 	_apply_shader_parameters(
 		_get_active_face_texture(),
 		not _eyes_are_closed or _mouth_is_open,
-		_eyes_are_closed,
+		_eyes_are_closed and not _mouth_is_open,
 		_get_active_tint_exclusion_mask()
 	)
 	if _eyes_are_closed:
@@ -628,7 +628,7 @@ func _apply_current_shader_parameters() -> void:
 	_apply_shader_parameters(
 		_get_active_face_texture(),
 		not _eyes_are_closed or _mouth_is_open,
-		_eyes_are_closed,
+		_eyes_are_closed and not _mouth_is_open,
 		_get_active_tint_exclusion_mask()
 	)
 
@@ -668,7 +668,7 @@ func _apply_shader_parameters(
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
 		_cat_material.set_shader_parameter("line_art_tex", line_art_texture)
 		_cat_material.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
-		_cat_material.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null and (not _eyes_are_closed or _mouth_is_open) else 0.0)
+		_cat_material.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
 		_cat_material.set_shader_parameter("line_art_eyes_hidden", 1.0 if hide_line_art_eyes else 0.0)
 		_cat_material.set_shader_parameter("line_art_color", line_art_color)
 		_cat_material.set_shader_parameter("line_art_strength", line_art_strength)
@@ -691,7 +691,7 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
 		_material_id_2.set_shader_parameter("line_art_tex", line_art_texture)
 		_material_id_2.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
-		_material_id_2.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null and (not _eyes_are_closed or _mouth_is_open) else 0.0)
+		_material_id_2.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
 		_material_id_2.set_shader_parameter("line_art_eyes_hidden", 1.0 if hide_line_art_eyes else 0.0)
 		_material_id_2.set_shader_parameter("line_art_color", line_art_color)
 		_material_id_2.set_shader_parameter("line_art_strength", line_art_strength)
