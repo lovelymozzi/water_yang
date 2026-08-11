@@ -66,6 +66,8 @@ var _tiles_root: Node3D
 var _obstacles_root: Node3D
 var _layout_cats_root: Node3D
 var _layout_obstacles_root: Node3D
+var _highlight_root: Node3D
+var _highlight_tiles: Array[MeshInstance3D] = []
 
 
 func _ready() -> void:
@@ -135,10 +137,55 @@ func release_cat_cell(cat: CatEntity) -> void:
 
 func update_cat_occupancy(cat: CatEntity) -> void:
 	release_cat_cell(cat)
-	for cell in cat.body_cells:
+	# 걸침을 포함한 점유다. 표시용과 판정용이 같은 집합이어야 한다.
+	for cell in cat.get_occupied_cells():
 		if is_inside_grid(cell):
 			_set_cell_state(cell, CellState.CAT)
 			_set_cell_ref(cell, cat)
+	_refresh_occupancy_highlight()
+
+
+# 자기 자신을 뺀 차단 여부. 자기 몸 판정은 시간 전개가 필요해 CatEntity 가 따로 본다.
+func is_cell_blocked_for(cat: CatEntity, cell: Vector2i) -> bool:
+	if not is_inside_grid(cell):
+		return true
+	var state: int = _get_cell_state(cell)
+	if state == CellState.OBSTACLE:
+		return true
+	return state == CellState.CAT and _get_cell_ref(cell) != cat
+
+
+func _refresh_occupancy_highlight() -> void:
+	if _highlight_tiles.is_empty():
+		return
+	for y in range(grid_size.y):
+		for x in range(grid_size.x):
+			var index: int = y * grid_size.x + x
+			if index >= _highlight_tiles.size():
+				continue
+			var tile: MeshInstance3D = _highlight_tiles[index]
+			tile.visible = _get_cell_state(Vector2i(x, y)) == CellState.CAT
+
+
+func _build_occupancy_highlight() -> void:
+	_highlight_tiles.clear()
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(1.0, 1.0, 1.0, 0.34)
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	var mesh := PlaneMesh.new()
+	mesh.size = Vector2(tile_size - tile_gap, tile_size - tile_gap)
+	for y in range(grid_size.y):
+		for x in range(grid_size.x):
+			var tile := MeshInstance3D.new()
+			tile.name = "Highlight_%d_%d" % [x, y]
+			tile.mesh = mesh
+			tile.material_override = material
+			tile.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			tile.position = grid_to_world(Vector2i(x, y), TILE_HEIGHT + 0.01)
+			tile.visible = false
+			_highlight_root.add_child(tile)
+			_highlight_tiles.append(tile)
 
 
 func get_escape_result(cat: CatEntity) -> Dictionary:
@@ -173,6 +220,7 @@ func _setup_roots() -> void:
 	_board_root = _ensure_named_child(self, "BoardVisuals")
 	_tiles_root = _ensure_named_child(self, "TileVisuals")
 	_obstacles_root = _ensure_named_child(self, "ObstacleVisuals")
+	_highlight_root = _ensure_named_child(self, "OccupancyHighlights")
 	_layout_cats_root = _ensure_named_child(self, "LayoutCats")
 	_layout_obstacles_root = _ensure_named_child(self, "LayoutObstacles")
 
@@ -195,6 +243,7 @@ func _rebuild_from_scene_layout() -> void:
 	_initialize_grid_arrays()
 	_build_board_base()
 	_build_grid_tiles()
+	_build_occupancy_highlight()
 	_sync_obstacle_layout()
 	_sync_cat_layout()
 
@@ -209,6 +258,10 @@ func _clear_generated_nodes() -> void:
 	for child in _obstacles_root.get_children():
 		child.queue_free()
 
+	for child in _highlight_root.get_children():
+		child.queue_free()
+
+	_highlight_tiles.clear()
 	_cats.clear()
 
 
@@ -355,6 +408,22 @@ func _tile_color_for(cell: Vector2i) -> Color:
 	return Color(0.93, 0.72, 0.56, 1.0)
 
 
+func get_cats() -> Array[CatEntity]:
+	return _cats
+
+
+func board_point_to_grid_cell(board_point: Vector3) -> Variant:
+	var grid_origin := grid_to_world(Vector2i.ZERO)
+	return Vector2i(
+		roundi((board_point.x - grid_origin.x) / tile_size),
+		roundi((board_point.z - grid_origin.z) / tile_size)
+	)
+
+
+func screen_to_board_point(screen_pos: Vector2) -> Variant:
+	return _screen_to_board_point(screen_pos)
+
+
 func _screen_to_board_point(screen_pos: Vector2) -> Variant:
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	if camera == null:
@@ -369,12 +438,7 @@ func screen_to_grid_cell(screen_pos: Vector2) -> Variant:
 	var hit: Variant = _screen_to_board_point(screen_pos)
 	if hit == null:
 		return null
-	var world_pos := hit as Vector3
-	var grid_origin := grid_to_world(Vector2i.ZERO)
-	return Vector2i(
-		roundi((world_pos.x - grid_origin.x) / tile_size),
-		roundi((world_pos.z - grid_origin.z) / tile_size)
-	)
+	return board_point_to_grid_cell(hit as Vector3)
 
 
 func _get_cell_state(cell: Vector2i) -> int:

@@ -2,6 +2,7 @@ extends Node3D
 
 # 이 시간을 넘긴 프레임은 로그에 상태와 함께 남긴다. 프리즈 원인을 좁히기 위한 계측이다.
 const FRAME_STALL_WARNING_SECONDS := 0.25
+const DRAG_CONTROLLER_SCRIPT = preload("res://scripts/drag_controller.gd")
 
 @onready var level_manager: LevelManager = $LevelManager
 @onready var clear_label: Label = $CanvasLayer/ClearLabel
@@ -27,6 +28,13 @@ func _ready() -> void:
 	clear_label.modulate = Color(1.0, 1.0, 1.0, 0.0)
 
 	level_manager.level_cleared.connect(_on_level_cleared)
+
+	# 드래그 입력은 별도 노드가 전담한다. 헤드리스 검증에서 이벤트를 직접 주입하기 쉽다.
+	var drag_controller: Node = DRAG_CONTROLLER_SCRIPT.new()
+	drag_controller.name = "DragController"
+	drag_controller.level_manager = level_manager
+	add_child(drag_controller)
+
 	print("[boot] 로그 파일 위치: ", ProjectSettings.globalize_path("user://logs/"))
 
 

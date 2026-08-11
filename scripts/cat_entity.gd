@@ -28,6 +28,8 @@ const TAIL_BONE_NAME := "Bone022"
 const STRETCH_BONE_FIRST := 7
 const STRETCH_BONE_LAST := 14
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
+# 코너에 정확히 놓인 본이 어느 선분의 방향을 쓸지 확정하기 위한 미세 편향.
+const SEGMENT_PICK_EPSILON := 0.0001
 
 @export_group("Layout")
 @export var grid_pos: Vector2i = Vector2i.ZERO:
@@ -71,6 +73,11 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		fbx_scale_per_tile = value
 		_rebuild_body_visuals()
 
+
+@export_group("Movement")
+# 1_움직임고찰.md 1절. 큐 상한은 항상 `속도 × 0.5초`로 맞춘다.
+@export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 8.0
+@export_range(1, 12, 1) var path_queue_max: int = 4
 
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
@@ -147,10 +154,23 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		_refresh_shader_material()
 
 
-# 몸통이 점유한 칸. 머리(0)에서 꼬리(마지막)까지 인접한 경로다.
+# 몸통이 점유한 칸. 리드(0)에서 반대쪽 끝(마지막)까지 인접한 경로다.
+# 리드는 드래그로 끌고 있는 쪽이며, 모델의 얼굴 방향과는 무관하다.
 var body_cells: Array[Vector2i] = []
 var facing_dir: Vector2i = Vector2i.UP
 var level_manager: LevelManager
+
+# 앞으로 리드가 들어갈 셀. 손가락 입력이 여기에 쌓이고 이동은 여기서만 나온다.
+var path_queue: Array[Vector2i] = []
+# 전이 중 점유 칸. body_cells 앞에 목표 셀을 붙인 것이라 길이가 1칸 많다.
+var _rail: Array[Vector2i] = []
+var _transition_t := 0.0
+var _is_moving := false
+# 모델의 머리 본(Bone002)이 body_cells 의 뒤끝에 있는 상태. 리드를 반대쪽으로 잡으면 참이 된다.
+var _lead_is_tail := false
+var _pending_lead_flip := false
+# 마지막 경로 요청이 브릿지를 찾지 못한 상태. 강제 릴리즈 판정에 쓴다.
+var _is_blocked := false
 
 var _visual_root: Node3D
 var _cat_model: Node3D
@@ -177,6 +197,8 @@ var _next_ear := 0
 var _bone_chain: Array[int] = []
 var _bone_chain_distances: Array[float] = []
 var _rest_chain_length: float = 0.0
+# 부모가 항상 자식보다 앞에 오는 본 순서. 로컬 포즈 환산은 이 순서로만 해야 한다.
+var _bone_tree_order: Array[int] = []
 
 
 func _ready() -> void:
@@ -196,6 +218,7 @@ func _process(delta: float) -> void:
 		return
 	_process_blink(delta)
 	_process_ear_twitch(delta)
+	advance(delta)
 
 
 func _process_blink(delta: float) -> void:
@@ -303,16 +326,242 @@ func get_tail_cell() -> Vector2i:
 
 
 func occupies_cell(cell: Vector2i) -> bool:
-	return body_cells.has(cell)
+	return get_occupied_cells().has(cell)
+
+
+# ---------------------------------------------------------------- 이동 (1_움직임고찰.md)
+
+# 걸침을 포함한 점유 칸. 전이 중에는 몸 길이보다 1칸 많다.
+# 표시용과 판정용이 같은 집합이어야 하므로 양쪽 모두 이 함수만 쓴다.
+func get_occupied_cells() -> Array[Vector2i]:
+	return _rail if _is_moving else body_cells
+
+
+func get_lead_cell() -> Vector2i:
+	if _is_moving and not _rail.is_empty():
+		return _rail[0]
+	return body_cells.front() if not body_cells.is_empty() else grid_pos
+
+
+func get_end_cells() -> Array[Vector2i]:
+	if body_cells.size() < 2:
+		return [get_lead_cell()]
+	return [body_cells.front(), body_cells.back()]
+
+
+func is_blocked() -> bool:
+	return _is_blocked
+
+
+# 새 터치. 잔여 큐를 버리고, 잡은 쪽이 뒤끝이면 리드를 그쪽으로 넘긴다.
+# 전이 중에는 레일을 뒤집지 않고 전이가 끝난 시점으로 미룬다.
+func begin_drag(end_cell: Vector2i) -> void:
+	path_queue.clear()
+	_is_blocked = false
+	if body_cells.size() < 2 or end_cell != body_cells.back():
+		return
+	if _is_moving:
+		_pending_lead_flip = true
+	else:
+		_flip_lead()
+
+
+func _flip_lead() -> void:
+	body_cells.reverse()
+	_rail = body_cells.duplicate()
+	_lead_is_tail = not _lead_is_tail
+	_update_facing()
+
+
+func _update_facing() -> void:
+	if body_cells.size() >= 2:
+		facing_dir = body_cells[0] - body_cells[1]
+
+
+# 손가락이 가리키는 셀까지 큐를 잇는다. 인접하면 한 칸, 끊겼으면 브릿지로 잇는다.
+func request_path_to(target: Vector2i) -> void:
+	if _pending_lead_flip or level_manager == null:
+		return
+	if not level_manager.is_inside_grid(target):
+		# 보드 밖을 가리키는 것도 닿을 수 없는 상태다. 강제 릴리즈 판정에 들어가야 한다.
+		_is_blocked = true
+		return
+	var future: Array[Vector2i] = _future_body()
+	if future.is_empty() or target == future[0]:
+		return
+	if future.has(target):
+		return
+	var bridge: Array[Vector2i] = _plan_bridge(future, target)
+	if bridge.is_empty():
+		_is_blocked = true
+		return
+	_is_blocked = false
+	path_queue.append_array(bridge)
+
+
+# 큐를 모두 소비한 뒤의 몸 상태. 브릿지 탐색의 출발점이다.
+func _future_body() -> Array[Vector2i]:
+	var future: Array[Vector2i] = (_rail.slice(0, _rail.size() - 1) if _is_moving else body_cells).duplicate()
+	for cell in path_queue:
+		future.push_front(cell)
+		future.resize(future.size() - 1)
+	return future
+
+
+# (셀, 스텝) BFS. 스텝 k 에서는 몸의 뒤쪽 k 칸이 이미 비켜난 것으로 본다.
+func _plan_bridge(future: Array[Vector2i], target: Vector2i) -> Array[Vector2i]:
+	var budget: int = path_queue_max - path_queue.size()
+	if budget <= 0:
+		return []
+
+	var start: Vector2i = future[0]
+	var start_dir: Vector2i = (start - future[1]) if future.size() >= 2 else facing_dir
+	var came := {}
+	var frontier: Array = [[start, 0, start_dir]]
+	came[Vector3i(start.x, start.y, 0)] = null
+
+	while not frontier.is_empty():
+		var node: Array = frontier.pop_front()
+		var cell: Vector2i = node[0]
+		var step: int = node[1]
+		if step >= budget:
+			continue
+		for dir in _neighbor_order(node[2]):
+			var next: Vector2i = cell + dir
+			var next_step: int = step + 1
+			var key := Vector3i(next.x, next.y, next_step)
+			if came.has(key):
+				continue
+			if not _is_cell_free_at_step(future, next, next_step):
+				continue
+			if _path_contains(came, Vector3i(cell.x, cell.y, step), next):
+				continue
+			came[key] = Vector3i(cell.x, cell.y, step)
+			if next == target:
+				return _rebuild_path(came, key)
+			frontier.append([next, next_step, dir])
+	return []
+
+
+# 직전 진행 방향을 먼저 펼쳐 동일 코스트 경로에서 결정성을 확보한다.
+func _neighbor_order(previous_dir: Vector2i) -> Array[Vector2i]:
+	var base: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+	if not base.has(previous_dir):
+		return base
+	var ordered: Array[Vector2i] = [previous_dir]
+	for dir in base:
+		if dir != previous_dir and dir != -previous_dir:
+			ordered.append(dir)
+	ordered.append(-previous_dir)
+	return ordered
+
+
+func _is_cell_free_at_step(future: Array[Vector2i], cell: Vector2i, step: int) -> bool:
+	if level_manager == null or not level_manager.is_inside_grid(cell):
+		return false
+	if level_manager.is_cell_blocked_for(self, cell):
+		return false
+	var index: int = future.find(cell)
+	# 뒤에서 step 칸은 그때쯤 이미 비켜났다.
+	return index < 0 or index + step > future.size() - 1
+
+
+func _path_contains(came: Dictionary, key: Vector3i, cell: Vector2i) -> bool:
+	var current: Variant = key
+	while current != null:
+		var node: Vector3i = current
+		if node.x == cell.x and node.y == cell.y:
+			return true
+		current = came.get(node)
+	return false
+
+
+func _rebuild_path(came: Dictionary, key: Vector3i) -> Array[Vector2i]:
+	var path: Array[Vector2i] = []
+	var current: Variant = key
+	while current != null:
+		var node: Vector3i = current
+		var parent: Variant = came.get(node)
+		if parent == null:
+			break
+		path.push_front(Vector2i(node.x, node.y))
+		current = parent
+	return path
+
+
+func advance(delta: float) -> void:
+	if level_manager == null or body_cells.is_empty():
+		return
+	var remaining: float = delta * move_speed_cells
+	while remaining > 0.0:
+		if not _is_moving and not _begin_step():
+			break
+		var step: float = minf(remaining, 1.0 - _transition_t)
+		_transition_t += step
+		remaining -= step
+		if _transition_t >= 1.0 - 0.000001:
+			_finish_step()
+	_update_visual_pose()
+
+
+func _begin_step() -> bool:
+	if _pending_lead_flip:
+		_pending_lead_flip = false
+		_flip_lead()
+	if path_queue.is_empty():
+		return false
+	var next: Vector2i = path_queue[0]
+	# 판정은 셀 중앙에서 커밋하는 이 순간뿐이다. 시작한 전이는 반드시 끝까지 간다.
+	if not can_enter(next):
+		path_queue.clear()
+		_is_blocked = true
+		return false
+	path_queue.remove_at(0)
+	_rail = body_cells.duplicate()
+	_rail.push_front(next)
+	_transition_t = 0.0
+	_is_moving = true
+	level_manager.update_cat_occupancy(self)
+	return true
+
+
+func _finish_step() -> void:
+	body_cells = _rail.slice(0, _rail.size() - 1)
+	_rail = body_cells.duplicate()
+	_transition_t = 0.0
+	_is_moving = false
+	_update_facing()
+	level_manager.update_cat_occupancy(self)
+	if _pending_lead_flip:
+		_pending_lead_flip = false
+		_flip_lead()
+	# grid_pos 세터는 몸을 직선으로 되돌리는 레이아웃용이다. 이동 중에는 건드리지 않고
+	# 실제 위치는 언제나 body_cells 로만 읽는다.
+
+
+func can_enter(cell: Vector2i) -> bool:
+	if level_manager == null or not level_manager.is_inside_grid(cell):
+		return false
+	if level_manager.is_cell_blocked_for(self, cell):
+		return false
+	# 뒤끝 칸도 막힌다. 전이 중 뒤끝은 아직 0.5칸을 점유한다.
+	return not body_cells.has(cell)
 
 
 func _reset_straight_body() -> void:
 	facing_dir = _direction_from_name(facing_name)
+	path_queue.clear()
+	_transition_t = 0.0
+	_is_moving = false
+	_lead_is_tail = false
+	_pending_lead_flip = false
+	_is_blocked = false
 	body_cells.clear()
 	var length := clampi(initial_length, min_length, max_length)
 	# 머리는 grid_pos에 두고 몸통은 바라보는 방향의 반대쪽으로 놓는다.
 	for index in range(length):
 		body_cells.append(grid_pos - facing_dir * index)
+	_rail = body_cells.duplicate()
 
 
 func _sync_to_grid_position() -> void:
@@ -365,37 +614,208 @@ func _rebuild_body_visuals() -> void:
 	apply_rest_pose()
 
 
+# 정지 자세는 폴리라인이 직선인 이동 자세일 뿐이다. 두 경로를 따로 두지 않는다.
 func apply_rest_pose() -> void:
-	# 이동 로직이 없는 정지 자세. 몸통을 grid_pos 에서 바라보는 방향의 반대쪽으로
-	# 곧게 눕히고, initial_length 칸을 채우도록 중간 구간만 늘린다.
+	_update_visual_pose()
+
+
+# 몸을 셀 중심 폴리라인 위에 올린다. 본 위치는 호 길이로 직접 구하며
+# 회전을 누적해 포즈를 재구성하지 않는다. 그것이 이 프로젝트의 단골 실패 모드다.
+func _update_visual_pose() -> void:
 	if _cat_model == null or _skeleton == null or level_manager == null:
 		return
+	if _bone_chain.is_empty() or body_cells.is_empty():
+		return
 
-	_skeleton.clear_bones_global_pose_override()
-	_skeleton.reset_bone_poses()
-	_enforce_locked_bone_scales()
-	_apply_rest_length()
+	var polyline: PackedVector3Array = _body_polyline()
+	if polyline.size() < 2:
+		return
+	var cumulative: PackedFloat32Array = _cumulative_lengths(polyline)
+	var total_length: float = cumulative[cumulative.size() - 1]
+	if total_length <= 0.000001:
+		return
 
-	# FBX 로컬 +Y 는 머리가 바라보는 방향이다. 몸통은 그 반대쪽으로 뻗는다.
-	var forward := level_manager.grid_dir_to_world(facing_dir)
-	if forward.length_squared() < 0.000001:
-		forward = Vector3.FORWARD
-	_cat_model.basis = _fbx_basis_for_direction(forward)
-	# 상체 비율을 보존하기 위해 모델 루트는 반드시 균일 스케일만 사용한다.
-	_cat_model.scale = Vector3.ONE * _grid_fitted_model_scale()
-	# 노드 원점이 머리 칸이므로, 머리 본이 원점에 오도록 모델을 밀어 준다.
+	var model_scale := _grid_fitted_model_scale()
+	var chain_distances: PackedFloat32Array = _stretched_chain_distances()
+	# 리드를 반대쪽 끝으로 잡으면 모델의 머리 본은 폴리라인 반대편 끝에 놓인다.
+	var head_arc: float = total_length if _lead_is_tail else 0.0
+	var head_dir: Vector3 = _model_head_direction(polyline, cumulative, head_arc)
+
+	position = _sample_polyline(polyline, cumulative, head_arc)
+	rotation = Vector3.ZERO
+	scale = Vector3.ONE
+	# FBX 로컬 +Y 는 머리가 바라보는 방향이다. 상체 비율 보존을 위해 균일 스케일만 쓴다.
+	_cat_model.basis = _fbx_basis_for_direction(head_dir)
+	_cat_model.scale = Vector3.ONE * model_scale
+	# 노드 원점이 머리 본 위치이므로, 머리 본이 원점에 오도록 모델을 밀어 준다.
 	_cat_model.position = _cat_model.basis * (-_head_bone_rest_global.origin)
 
+	var cat_to_skeleton: Transform3D = global_transform.affine_inverse() * _skeleton.global_transform
+	var skeleton_rotation: Basis = cat_to_skeleton.basis.orthonormalized()
+	var skeleton_rotation_inverse: Basis = skeleton_rotation.inverse()
+	var reference_inverse: Basis = _fbx_basis_for_direction(head_dir).inverse()
+	var to_skeleton: Transform3D = cat_to_skeleton.affine_inverse()
 
-func _apply_rest_length() -> void:
-	# 늘어나는 구간(Bone006~014)의 rest 위치만 늘려 전체 길이를 맞춘다.
-	# 부모 본을 스케일하면 자식에게 상속되어 길이가 체인을 따라 곱해진다.
-	var stretch := _baseline_stretch_scale()
-	for chain_index in range(1, _bone_chain.size()):
-		if not _is_stretchable_chain_bone(chain_index):
-			continue
+	var desired := {}
+	for chain_index in _bone_chain.size():
+		var arc: float = chain_distances[chain_index] * model_scale
+		var arc_from_lead: float = (total_length - arc) if _lead_is_tail else arc
+		var point: Vector3 = _sample_polyline(polyline, cumulative, arc_from_lead)
+		var direction: Vector3 = _model_head_direction(polyline, cumulative, arc_from_lead)
 		var bone_index: int = _bone_chain[chain_index]
-		_skeleton.set_bone_pose_position(bone_index, _bone_rests[bone_index].origin * stretch)
+		var rest_basis: Basis = _skeleton.get_bone_global_rest(bone_index).basis
+		# 기준 자세(머리 방향)에서 이 본의 접선 방향으로 돌리는 회전만 얹는다.
+		var posed_basis: Basis = (
+			skeleton_rotation_inverse
+			* _fbx_basis_for_direction(direction)
+			* reference_inverse
+			* skeleton_rotation
+			* rest_basis
+		)
+		desired[bone_index] = Transform3D(posed_basis.orthonormalized(), to_skeleton * (point - position))
+
+	_apply_bone_globals(desired)
+
+
+# 계산한 글로벌 포즈를 부모부터 순서대로 로컬 포즈로 환산해 넣는다.
+# 글로벌 오버라이드를 쓰지 않으므로 "계산한 자리 vs 실제 본 위치"가 어긋날 여지가 없다.
+func _apply_bone_globals(desired: Dictionary) -> void:
+	var computed := {}
+	for bone_index in _bones_in_tree_order():
+		var parent_index: int = _skeleton.get_bone_parent(bone_index)
+		var parent_global: Transform3D = computed.get(parent_index, Transform3D.IDENTITY)
+		var local: Transform3D
+		if desired.has(bone_index):
+			local = parent_global.affine_inverse() * (desired[bone_index] as Transform3D)
+			# 비균일 스케일은 회전과 교환되지 않아 자식 간격을 표류시킨다. 항상 균일하게 둔다.
+			local.basis = local.basis.orthonormalized()
+			_skeleton.set_bone_pose_position(bone_index, local.origin)
+			_skeleton.set_bone_pose_rotation(bone_index, local.basis.get_rotation_quaternion())
+			_skeleton.set_bone_pose_scale(bone_index, local.basis.get_scale())
+		else:
+			# 체인 밖 본은 손대지 않는다. 여기서 rest 로 덮으면 귀 모션 같은 다른
+			# 포즈가 매 프레임 지워진다. 현재 포즈를 그대로 읽어 부모 누적에만 쓴다.
+			local = _skeleton.get_bone_pose(bone_index)
+		computed[bone_index] = parent_global * local
+	_enforce_locked_bone_scales()
+
+
+func _bones_in_tree_order() -> Array[int]:
+	if not _bone_tree_order.is_empty():
+		return _bone_tree_order
+	var placed := {}
+	while _bone_tree_order.size() < _skeleton.get_bone_count():
+		var added := false
+		for bone_index in _skeleton.get_bone_count():
+			if placed.has(bone_index):
+				continue
+			var parent_index: int = _skeleton.get_bone_parent(bone_index)
+			if parent_index >= 0 and not placed.has(parent_index):
+				continue
+			placed[bone_index] = true
+			_bone_tree_order.append(bone_index)
+			added = true
+		if not added:
+			break
+	return _bone_tree_order
+
+
+# 리드 → 반대쪽 끝 순서의 셀 중심 폴리라인. 전이 중에는 양 끝만 셀 사이에 놓인다.
+func _body_polyline() -> PackedVector3Array:
+	var points := PackedVector3Array()
+	var height := level_manager.cat_world_y
+	if not _is_moving or _rail.size() < 3:
+		for cell in body_cells:
+			points.append(level_manager.grid_to_world(cell, height))
+		return points
+
+	var last := _rail.size() - 1
+	points.append(
+		level_manager.grid_to_world(_rail[1], height).lerp(
+			level_manager.grid_to_world(_rail[0], height), _transition_t
+		)
+	)
+	for index in range(1, last):
+		points.append(level_manager.grid_to_world(_rail[index], height))
+	points.append(
+		level_manager.grid_to_world(_rail[last], height).lerp(
+			level_manager.grid_to_world(_rail[last - 1], height), _transition_t
+		)
+	)
+	return points
+
+
+func _cumulative_lengths(polyline: PackedVector3Array) -> PackedFloat32Array:
+	var lengths := PackedFloat32Array()
+	lengths.append(0.0)
+	var total := 0.0
+	for index in range(1, polyline.size()):
+		total += polyline[index - 1].distance_to(polyline[index])
+		lengths.append(total)
+	return lengths
+
+
+func _sample_polyline(
+	polyline: PackedVector3Array, cumulative: PackedFloat32Array, arc: float
+) -> Vector3:
+	var target := clampf(arc, 0.0, cumulative[cumulative.size() - 1])
+	var segment := _segment_index_at(cumulative, target)
+	var span: float = cumulative[segment + 1] - cumulative[segment]
+	if span <= 0.000001:
+		return polyline[segment]
+	return polyline[segment].lerp(polyline[segment + 1], (target - cumulative[segment]) / span)
+
+
+# 이 위치에서 모델의 머리가 향하는 방향. 폴리라인 선분 방향을 그대로 쓰므로
+# 코너 회전이 여러 관절에 나눠지지 않고 코너를 낀 두 본 사이에서만 일어난다.
+func _model_head_direction(
+	polyline: PackedVector3Array, cumulative: PackedFloat32Array, arc: float
+) -> Vector3:
+	var total: float = cumulative[cumulative.size() - 1]
+	# 경계에서는 머리 쪽 선분을 택한다. 그래야 코너 본의 방향이 한쪽으로 확정된다.
+	var bias := SEGMENT_PICK_EPSILON if _lead_is_tail else -SEGMENT_PICK_EPSILON
+	var segment := _segment_index_at(cumulative, clampf(arc + bias, 0.0, total))
+	var direction := _segment_direction(polyline, segment)
+	if direction.length_squared() < 0.000001:
+		direction = level_manager.grid_dir_to_world(facing_dir)
+		return direction if direction.length_squared() > 0.000001 else Vector3.FORWARD
+	return direction if _lead_is_tail else -direction
+
+
+# 길이가 0인 선분(전이 시작 순간의 끝 조각)은 건너뛰고 가장 가까운 유효 선분을 쓴다.
+func _segment_direction(polyline: PackedVector3Array, segment: int) -> Vector3:
+	var count := polyline.size() - 1
+	for offset in count:
+		for candidate in [segment - offset, segment + offset]:
+			if candidate < 0 or candidate >= count:
+				continue
+			var delta: Vector3 = polyline[candidate + 1] - polyline[candidate]
+			if delta.length_squared() > 0.000001:
+				return delta.normalized()
+	return Vector3.ZERO
+
+
+func _segment_index_at(cumulative: PackedFloat32Array, arc: float) -> int:
+	var last := cumulative.size() - 2
+	for index in range(last, -1, -1):
+		if arc >= cumulative[index]:
+			return index
+	return 0
+
+
+# 늘어나는 구간(Bone007~014)에만 배율을 준 누적 거리. 총합은 셀 중심 경로 길이와 같아진다.
+func _stretched_chain_distances() -> PackedFloat32Array:
+	var distances := PackedFloat32Array()
+	distances.append(0.0)
+	var stretch := _baseline_stretch_scale()
+	var total := 0.0
+	for chain_index in range(1, _bone_chain.size()):
+		var segment: float = _bone_chain_distances[chain_index] - _bone_chain_distances[chain_index - 1]
+		if _is_stretchable_chain_bone(chain_index):
+			segment *= stretch
+		total += segment
+		distances.append(total)
+	return distances
 
 
 func _enforce_locked_bone_scales() -> void:
@@ -412,6 +832,7 @@ func _cache_bone_rests() -> void:
 	_bone_rests.clear()
 	_bone_chain.clear()
 	_bone_chain_distances.clear()
+	_bone_tree_order.clear()
 	_rest_chain_length = 0.0
 	_head_bone_index = -1
 	_head_bone_rest_global = Transform3D.IDENTITY
@@ -434,25 +855,29 @@ func _build_bone_chain() -> void:
 		return
 	var head_to_root: Array[int] = _bone_path_to_root(head_index)
 	var tail_to_root: Array[int] = _bone_path_to_root(tail_index)
-	if head_to_root.is_empty() or tail_to_root.is_empty() or head_to_root.back() != tail_to_root.back():
+	if head_to_root.is_empty() or tail_to_root.is_empty():
 		return
 
-	_bone_chain = head_to_root
 	tail_to_root.reverse()
-	for index in range(1, tail_to_root.size()):
-		_bone_chain.append(tail_to_root[index])
+	if head_to_root.back() == tail_to_root.front():
+		# 공통 조상이 있는 일반적인 경우. 머리에서 조상까지 올라갔다가 꼬리로 내려간다.
+		_bone_chain = head_to_root
+		for index in range(1, tail_to_root.size()):
+			_bone_chain.append(tail_to_root[index])
+	else:
+		# cat1.fbx 의 Bone002 는 스키닝 체인과 부모 링크가 없는 별도 루트 본이다.
+		# 부모를 따라가면 몸통 체인에 닿지 못하므로 머리 끝 본으로 앞에 붙인다.
+		_bone_chain = [head_index]
+		_bone_chain.append_array(tail_to_root)
 
+	# 관절 간격은 부모 링크의 로컬 오프셋이 아니라 rest 글로벌 위치의 실제 거리로 잰다.
+	# 분기 리그와 링크가 끊긴 루트 본을 함께 다루려면 이 방식이어야 한다.
 	var distance := 0.0
 	_bone_chain_distances.append(0.0)
-
 	for chain_index in range(1, _bone_chain.size()):
-		var previous_bone: int = _bone_chain[chain_index - 1]
-		var next_bone: int = _bone_chain[chain_index]
-		# 뱀형 리그는 단일 체인이다. 갈래가 생기면 가장 긴 뼈를 몸통 진행 방향으로 본다.
-		if _skeleton.get_bone_parent(previous_bone) == next_bone:
-			distance += _bone_rests[previous_bone].origin.length()
-		else:
-			distance += _bone_rests[next_bone].origin.length()
+		var previous_origin: Vector3 = _skeleton.get_bone_global_rest(_bone_chain[chain_index - 1]).origin
+		var current_origin: Vector3 = _skeleton.get_bone_global_rest(_bone_chain[chain_index]).origin
+		distance += previous_origin.distance_to(current_origin)
 		_bone_chain_distances.append(distance)
 
 	_rest_chain_length = distance
