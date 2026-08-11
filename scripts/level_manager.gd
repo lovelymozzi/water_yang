@@ -280,7 +280,10 @@ func _clear_generated_nodes() -> void:
 		child.queue_free()
 
 	for child in _tiles_root.get_children():
-		child.queue_free()
+		# TileVisuals also holds manually placed scene decorations. Keep those
+		# marked as persistent when the generated board tiles are rebuilt.
+		if not child.is_in_group("persistent_tile_visuals"):
+			child.queue_free()
 
 	for child in _obstacles_root.get_children():
 		child.queue_free()

@@ -5,6 +5,9 @@
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_gubc5"]
 [ext_resource type="Script" uid="uid://dnbvdfthy6i28" path="res://scripts/obstacle_marker.gd" id="4_obs"]
+[ext_resource type="PackedScene" uid="uid://csrvtbl5x6tvt" path="res://water_yang/cat_hole1.fbx" id="5_cat_hole"]
+[ext_resource type="Material" path="res://resources/cat_hole_flower.tres" id="6_cat_hole_flower"]
+[ext_resource type="Script" path="res://scripts/cat_hole_visual.gd" id="7_cat_hole_visual"]
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
 script = ExtResource("1_q0f23")
@@ -19,7 +22,7 @@ size = 25.321
 near = 10.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
-transform = Transform3D(0.98636144, -0.0023564454, 0.16457686, -0.16205181, 0.16114591, 0.9735354, -0.02881497, -0.9869278, 0.15856627, 0, 10.844116, 0)
+transform = Transform3D(0.91226107, -0.02858288, 0.4086112, -0.40934533, -0.09945094, 0.90694326, 0.014713723, -0.99463207, -0.10242548, 0, 10.844116, 0)
 light_energy = 1.293
 light_indirect_energy = 3.033
 light_volumetric_fog_energy = 2.791
@@ -49,6 +52,11 @@ obstacle_secondary_color = Color(0.52156866, 0.6039216, 0.3647059, 1)
 
 [node name="TileVisuals" type="Node3D" parent="LevelManager" unique_id=97076465]
 
+[node name="CatHole1" parent="LevelManager/TileVisuals" unique_id=1598683596 groups=["persistent_tile_visuals"] instance=ExtResource("5_cat_hole")]
+transform = Transform3D(10.077361, 0, 0, 0, 10.077361, 0, 0, 0, 10.077361, 0, 0.11698222, -1.9531717)
+script = ExtResource("7_cat_hole_visual")
+flower_material = ExtResource("6_cat_hole_flower")
+
 [node name="ObstacleVisuals" type="Node3D" parent="LevelManager" unique_id=1279314469]
 
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
@@ -63,10 +71,11 @@ tint_color = Color(0.95577335, 0.8633, 0.97, 1)
 tint_gradient_enabled = true
 tint_gradient_top_color = Color(0.9757487, 0.8231327, 0.5771711, 1)
 tint_gradient_bottom_color = Color(0.9125077, 0.62743706, 0.40319848, 1)
-shadow_darkness = 0.4
-rim_strength = 0.0
+shadow_darkness = 0.0
+rim_strength = 0.39
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
+bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 line_art_strength = 1.0

@@ -1,0 +1,36 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3]
+
+[ext_resource type="Shader" path="res://scripts/cat_toon.gdshader" id="1_toon_shader"]
+[ext_resource type="Texture2D" path="res://water_yang/cat1.jpeg" id="2_cat_texture"]
+[ext_resource type="Texture2D" path="res://water_yang/cat1_mask.jpg" id="3_eye_mask"]
+[ext_resource type="Texture2D" path="res://water_yang/Cat_Line.png" id="4_line_art"]
+[ext_resource type="Shader" path="res://scripts/cat_outline.gdshader" id="5_outline_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
+shader = ExtResource("5_outline_shader")
+shader_parameter/outline_color = Color(0.69, 0.565225, 0.4761, 0.662745)
+shader_parameter/outline_width = 0.006
+shader_parameter/top_outline_scale = 0.78
+shader_parameter/bottom_outline_scale = 0.84
+
+[resource]
+resource_name = "CatHoleFlower"
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_outline")
+shader = ExtResource("1_toon_shader")
+shader_parameter/albedo_tex = ExtResource("2_cat_texture")
+shader_parameter/line_art_tex = ExtResource("4_line_art")
+shader_parameter/line_art_enabled = 1.0
+shader_parameter/line_art_eye_mask = ExtResource("3_eye_mask")
+shader_parameter/line_art_eyes_hidden = 0.0
+shader_parameter/line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
+shader_parameter/line_art_strength = 1.0
+shader_parameter/tint_exclusion_mask = ExtResource("3_eye_mask")
+shader_parameter/tint_exclusion_enabled = 1.0
+shader_parameter/tint_color = Color(0.95577335, 0.8633, 0.97, 1)
+shader_parameter/tint_gradient_enabled = 1.0
+shader_parameter/tint_gradient_top_color = Color(0.9757487, 0.8231327, 0.5771711, 1)
+shader_parameter/tint_gradient_bottom_color = Color(0.9125077, 0.62743706, 0.40319848, 1)
+shader_parameter/shadow_steps = 3
+shader_parameter/shadow_darkness = 0.0
+shader_parameter/rim_strength = 0.39
