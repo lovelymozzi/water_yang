@@ -15,6 +15,10 @@ uniform float line_art_enabled : hint_range(0.0, 1.0) = 0.0;
 // cat1_mask.jpg: black is unaffected, white is the eye region.
 uniform sampler2D line_art_eye_mask : filter_linear_mipmap, repeat_enable;
 uniform float line_art_eyes_hidden : hint_range(0.0, 1.0) = 0.0;
+// The base line texture contains a closed-mouth drawing. Hide only that
+// lower-face region while the separate open-mouth texture is active.
+uniform sampler2D line_art_mouth_mask : filter_linear_mipmap, repeat_enable;
+uniform float line_art_mouth_hidden : hint_range(0.0, 1.0) = 0.0;
 uniform vec4 line_art_color : source_color = vec4(0.32, 0.24, 0.20, 1.0);
 uniform float line_art_strength : hint_range(0.0, 1.0) = 0.82;
 // White pixels preserve the original texture color; black pixels receive tint.
@@ -107,6 +111,9 @@ void fragment() {
 		texture(line_art_eye_mask, mapped_uv + vec2(0.0, -eye_mask_radius)).r
 	);
 	line_alpha *= 1.0 - (line_art_eyes_hidden * line_art_eye_mask_value);
+	float line_art_mouth_mask_value = texture(line_art_mouth_mask, mapped_uv).r;
+	line_art_mouth_mask_value *= step(0.19, mapped_uv.y);
+	line_alpha *= 1.0 - (line_art_mouth_hidden * line_art_mouth_mask_value);
 	ALBEDO = mix(base_color, line_art_color.rgb, line_alpha);
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;
