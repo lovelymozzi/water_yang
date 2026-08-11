@@ -35,6 +35,7 @@ const STRETCH_BONE_LAST := 14
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 # 코너에 정확히 놓인 본이 어느 선분의 방향을 쓸지 확정하기 위한 미세 편향.
 const SEGMENT_PICK_EPSILON := 0.0001
+const INVALID_CELL := Vector2i(-9999, -9999)
 # 오버행 고정점 반복 횟수. 3회면 0.001칸 아래로 수렴한다.
 # 양끝 여백을 맞추는 완화 반복. 머리쪽 극점(앞다리 Bone027/028)은 체인이 줄면 2배로
 # 밀려나오기 때문에, 감쇠 없는 단순 대입은 이득이 2가 되어 반드시 발산한다.
@@ -192,6 +193,10 @@ var _lead_is_tail := false
 var _pending_lead_flip := false
 # 마지막 경로 요청이 브릿지를 찾지 못한 상태. 강제 릴리즈 판정에 쓴다.
 var _is_blocked := false
+# 남은 후진 스텝 수. 전진 큐와 동시에 차 있지 않다(방향이 바뀌면 반대쪽을 비운다).
+var _pending_reverse := 0
+var _is_reversing := false
+var _slide_random := RandomNumberGenerator.new()
 
 var _visual_root: Node3D
 var _cat_model: Node3D
@@ -231,6 +236,7 @@ var _tail_mesh_overhang := 0.0
 
 func _ready() -> void:
 	_blink_random.seed = get_instance_id()
+	_slide_random.seed = get_instance_id() + 104729
 	_ear_random.seed = get_instance_id() + 7919
 	facing_dir = _direction_from_name(facing_name)
 	if body_cells.is_empty():
@@ -395,6 +401,7 @@ func is_blocked() -> bool:
 # 전이 중에는 레일을 뒤집지 않고 전이가 끝난 시점으로 미룬다.
 func begin_drag(end_cell: Vector2i) -> void:
 	path_queue.clear()
+	_pending_reverse = 0
 	_is_blocked = false
 	if body_cells.size() < 2 or end_cell != body_cells.back():
 		return
@@ -424,10 +431,20 @@ func request_path_to(target: Vector2i) -> void:
 		# 보드 밖을 가리키는 것도 닿을 수 없는 상태다. 강제 릴리즈 판정에 들어가야 한다.
 		_is_blocked = true
 		return
+	# 손가락이 자기 몸을 가리키면 후진이다. 몇 번째 칸인지가 곧 밀어 넣을 스텝 수다.
+	var settled: Array[Vector2i] = _settled_body()
+	var back_index: int = settled.find(target)
+	if back_index == 0:
+		return
+	if back_index > 0:
+		path_queue.clear()
+		_pending_reverse = mini(back_index, path_queue_max)
+		_is_blocked = false
+		return
+
+	_pending_reverse = 0
 	var future: Array[Vector2i] = _future_body()
 	if future.is_empty() or target == future[0]:
-		return
-	if future.has(target):
 		return
 	var bridge: Array[Vector2i] = _plan_bridge(future, target)
 	if bridge.is_empty():
@@ -438,8 +455,15 @@ func request_path_to(target: Vector2i) -> void:
 
 
 # 큐를 모두 소비한 뒤의 몸 상태. 브릿지 탐색의 출발점이다.
+# 진행 중인 전이가 끝난 뒤의 몸.
+func _settled_body() -> Array[Vector2i]:
+	if not _is_moving:
+		return body_cells
+	return _rail.slice(1) if _is_reversing else _rail.slice(0, _rail.size() - 1)
+
+
 func _future_body() -> Array[Vector2i]:
-	var future: Array[Vector2i] = (_rail.slice(0, _rail.size() - 1) if _is_moving else body_cells).duplicate()
+	var future: Array[Vector2i] = _settled_body().duplicate()
 	for cell in path_queue:
 		future.push_front(cell)
 		future.resize(future.size() - 1)
@@ -546,28 +570,75 @@ func _begin_step() -> bool:
 	if _pending_lead_flip:
 		_pending_lead_flip = false
 		_flip_lead()
-	if path_queue.is_empty():
-		return false
-	var next: Vector2i = path_queue[0]
 	# 판정은 셀 중앙에서 커밋하는 이 순간뿐이다. 시작한 전이는 반드시 끝까지 간다.
-	if not can_enter(next):
-		path_queue.clear()
-		_is_blocked = true
-		return false
-	path_queue.remove_at(0)
-	_rail = body_cells.duplicate()
-	_rail.push_front(next)
+	if _pending_reverse > 0:
+		var behind: Vector2i = _reverse_target()
+		if behind == INVALID_CELL:
+			_pending_reverse = 0
+			_is_blocked = true
+			return false
+		_pending_reverse -= 1
+		_is_reversing = true
+		_rail = body_cells.duplicate()
+		_rail.push_back(behind)
+	else:
+		if path_queue.is_empty():
+			return false
+		var next: Vector2i = path_queue[0]
+		if not can_enter(next):
+			path_queue.clear()
+			_is_blocked = true
+			return false
+		path_queue.remove_at(0)
+		_is_reversing = false
+		_rail = body_cells.duplicate()
+		_rail.push_front(next)
 	_transition_t = 0.0
 	_is_moving = true
 	level_manager.update_cat_occupancy(self)
 	return true
 
 
+# 후진에서 새로 점유하는 칸은 후미 앞 한 칸뿐이다. 리드가 자기 몸 칸으로 들어가는 것은
+# 강체 슬라이드라 충돌이 아니므로 can_enter() 를 쓰지 않는다.
+# 기본은 후미 방향으로 직진이고, 막히면 벽을 타고 옆으로 흐른다.
+func _reverse_target() -> Vector2i:
+	if body_cells.size() < 2:
+		return INVALID_CELL
+	var rear: Vector2i = body_cells[body_cells.size() - 1]
+	var direction: Vector2i = rear - body_cells[body_cells.size() - 2]
+	if _can_slide_into(rear + direction):
+		return rear + direction
+
+	# 한 번 옆으로 꺾이면 그쪽이 새 후미 방향이 되므로, 다음 스텝부터는 직진이 곧
+	# 벽을 타고 흐르는 것이 된다. 그래서 좌우 선택은 슬라이드가 시작될 때만 고른다.
+	var left := Vector2i(direction.y, -direction.x)
+	var right := Vector2i(-direction.y, direction.x)
+	var left_open := _can_slide_into(rear + left)
+	var right_open := _can_slide_into(rear + right)
+	if left_open and right_open:
+		return rear + (left if _slide_random.randi() % 2 == 0 else right)
+	if left_open:
+		return rear + left
+	if right_open:
+		return rear + right
+	return INVALID_CELL
+
+
+func _can_slide_into(cell: Vector2i) -> bool:
+	if level_manager == null or not level_manager.is_inside_grid(cell):
+		return false
+	if level_manager.is_cell_blocked_for(self, cell):
+		return false
+	return not body_cells.has(cell)
+
+
 func _finish_step() -> void:
-	body_cells = _rail.slice(0, _rail.size() - 1)
+	body_cells = _rail.slice(1) if _is_reversing else _rail.slice(0, _rail.size() - 1)
 	_rail = body_cells.duplicate()
 	_transition_t = 0.0
 	_is_moving = false
+	_is_reversing = false
 	_update_facing()
 	level_manager.update_cat_occupancy(self)
 	if _pending_lead_flip:
@@ -589,6 +660,8 @@ func can_enter(cell: Vector2i) -> bool:
 func _reset_straight_body() -> void:
 	facing_dir = _direction_from_name(facing_name)
 	path_queue.clear()
+	_pending_reverse = 0
+	_is_reversing = false
 	_transition_t = 0.0
 	_is_moving = false
 	_lead_is_tail = false
@@ -792,17 +865,22 @@ func _cell_center_polyline() -> PackedVector3Array:
 			points.append(level_manager.grid_to_world(cell, height))
 		return points
 
+	# 전이 중 양끝만 셀 사이에 놓인다. 후진에서는 들어가는 끝과 빠지는 끝이 뒤바뀐다.
 	var last := _rail.size() - 1
+	var lead_from: int = 0 if _is_reversing else 1
+	var lead_to: int = 1 if _is_reversing else 0
+	var far_from: int = last - 1 if _is_reversing else last
+	var far_to: int = last if _is_reversing else last - 1
 	points.append(
-		level_manager.grid_to_world(_rail[1], height).lerp(
-			level_manager.grid_to_world(_rail[0], height), _transition_t
+		level_manager.grid_to_world(_rail[lead_from], height).lerp(
+			level_manager.grid_to_world(_rail[lead_to], height), _transition_t
 		)
 	)
 	for index in range(1, last):
 		points.append(level_manager.grid_to_world(_rail[index], height))
 	points.append(
-		level_manager.grid_to_world(_rail[last], height).lerp(
-			level_manager.grid_to_world(_rail[last - 1], height), _transition_t
+		level_manager.grid_to_world(_rail[far_from], height).lerp(
+			level_manager.grid_to_world(_rail[far_to], height), _transition_t
 		)
 	)
 	return points

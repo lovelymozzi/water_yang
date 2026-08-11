@@ -31,6 +31,9 @@ func _process(_delta: float) -> bool:
 	_check_detour(manager, cat)
 	_check_ear_pose_survives(cat)
 	_check_footprint_fill(manager, cat)
+	_check_reverse(manager, cat)
+	_check_reverse_bend(manager, cat)
+	_check_reverse_wall_slide(manager, cat)
 	_report()
 	return true
 
@@ -365,6 +368,98 @@ func _check_footprint_fill(manager: LevelManager, cat: CatEntity) -> void:
 	print("[발자국] %d칸=%.2f, 체인=%.3f, 여백 %.2f칸씩, 양끝 셀 이탈 없음" % [
 		cat.body_cells.size(), float(cat.body_cells.size()) * tile, total, cat.footprint_margin_cells
 	])
+
+
+# 스펙 7절. 손가락이 자기 몸을 가리키면 후진이고, 후미는 직진으로 밀려난다.
+func _check_reverse(manager: LevelManager, cat: CatEntity) -> void:
+	cat.grid_pos = Vector2i(3, 3)
+	manager.update_cat_occupancy(cat)
+	var before: Array[Vector2i] = cat.body_cells.duplicate()
+	var rear: Vector2i = before[before.size() - 1]
+	var rear_dir: Vector2i = rear - before[before.size() - 2]
+
+	cat.request_path_to(before[1])
+	_expect(cat._pending_reverse == 1, "몸 위 한 칸이 후진 1스텝이 아니다: %d" % cat._pending_reverse)
+	_expect(cat.path_queue.is_empty(), "후진인데 전진 큐가 남았다: %s" % [cat.path_queue])
+
+	cat.advance(0.5 / cat.move_speed_cells)
+	_expect(cat._is_reversing, "후진 전이가 시작되지 않았다")
+	_expect(
+		cat.get_occupied_cells().size() == before.size() + 1,
+		"후진 전이 중 점유가 %d 칸이다" % cat.get_occupied_cells().size()
+	)
+	_check_bone_placement(cat, "후진전이중")
+
+	cat.advance(0.6 / cat.move_speed_cells)
+	# 몸 전체가 자기 모양을 따라 한 칸 밀린다. 새로 먹는 칸은 후미 앞 한 칸뿐이다.
+	var expected: Array[Vector2i] = before.slice(1)
+	expected.append(rear + rear_dir)
+	_expect(cat.body_cells == expected, "후진 결과가 다르다: %s (기대 %s)" % [cat.body_cells, expected])
+	_expect(cat.body_cells.size() == before.size(), "후진에서 몸 길이가 변했다")
+	_check_bone_placement(cat, "후진후")
+
+	# 손가락을 그대로 두면 스텝이 소진되어 멈춘다.
+	_expect(cat._pending_reverse == 0, "후진 스텝이 남았다: %d" % cat._pending_reverse)
+
+
+# 스펙 7절. 몸에 남은 굽이는 후진에서도 그대로 따라간다.
+func _check_reverse_bend(manager: LevelManager, cat: CatEntity) -> void:
+	# 앞선 검사들이 왼쪽 열에 장애물을 남기므로 비어 있는 열에서 한다.
+	cat.grid_pos = Vector2i(5, 3)
+	manager.update_cat_occupancy(cat)
+	# 먼저 코너를 돌아 몸을 꺾어 둔다.
+	var turn := Vector2i(cat.facing_dir.y, cat.facing_dir.x)
+	cat.request_path_to(cat.body_cells[0] + turn)
+	cat.advance(1.2 / cat.move_speed_cells)
+	var bent: Array[Vector2i] = cat.body_cells.duplicate()
+	_expect(
+		(bent[0] - bent[1]) != (bent[1] - bent[2]),
+		"굽이를 만들지 못했다: %s" % [bent]
+	)
+
+	cat.request_path_to(bent[1])
+	cat.advance(1.2 / cat.move_speed_cells)
+	# 굽이가 그대로 뒤로 밀린다. 앞 칸들은 원래 몸을 그대로 따라간다.
+	_expect(
+		cat.body_cells.slice(0, bent.size() - 1) == bent.slice(1),
+		"후진이 몸의 굽이를 따라가지 않았다: %s (몸 %s)" % [cat.body_cells, bent]
+	)
+	_check_bone_placement(cat, "굽이후진")
+
+
+# 스펙 7절. 후미 정면이 막히면 벽을 타고 옆으로 흐른다.
+func _check_reverse_wall_slide(manager: LevelManager, cat: CatEntity) -> void:
+	cat.grid_pos = Vector2i(3, 3)
+	manager.update_cat_occupancy(cat)
+	var before: Array[Vector2i] = cat.body_cells.duplicate()
+	var rear: Vector2i = before[before.size() - 1]
+	var rear_dir: Vector2i = rear - before[before.size() - 2]
+	var wall: Vector2i = rear + rear_dir
+	manager._set_cell_state(wall, LevelManager.CellState.OBSTACLE)
+
+	cat.request_path_to(before[1])
+	cat.advance(1.2 / cat.move_speed_cells)
+	var new_rear: Vector2i = cat.body_cells[cat.body_cells.size() - 1]
+	_expect(new_rear != wall, "후진이 벽을 통과했다: %s" % [new_rear])
+	var side: Vector2i = new_rear - rear
+	_expect(
+		side == Vector2i(rear_dir.y, -rear_dir.x) or side == Vector2i(-rear_dir.y, rear_dir.x),
+		"벽 앞에서 옆으로 흐르지 않았다: %s -> %s" % [rear, new_rear]
+	)
+	print("[후진] 벽 %s 앞에서 %s 방향으로 흘렀다" % [wall, side])
+
+	# 이후 스텝은 그 방향이 새 후미 방향이라 직진만으로 벽을 계속 탄다.
+	cat.request_path_to(cat.body_cells[1])
+	cat.advance(1.2 / cat.move_speed_cells)
+	_expect(
+		cat.body_cells[cat.body_cells.size() - 1] == new_rear + side,
+		"벽을 계속 타지 않았다: %s" % [cat.body_cells]
+	)
+
+	# 사방이 막히면 정지하고 막힘 표시가 선다.
+	for cell in [Vector2i(2, 2), Vector2i(4, 2), Vector2i(2, 3), Vector2i(4, 3), Vector2i(3, 2)]:
+		manager._set_cell_state(cell, LevelManager.CellState.OBSTACLE)
+	_check_bone_placement(cat, "벽슬라이드후")
 
 
 func _distance_to_polyline(point: Vector3, polyline: PackedVector3Array) -> float:

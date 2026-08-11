@@ -8,7 +8,7 @@ const OUTPUT_DIR := "user://shots"
 var _scene: Node
 var _frames := 0
 var _shot := 0
-var _route: Array[Vector2i] = []
+var _reverse := false
 
 
 func _initialize() -> void:
@@ -24,21 +24,12 @@ func _process(_delta: float) -> bool:
 		_save("00_rest")
 		return false
 	if _frames == 22:
-		var cat: CatEntity = (_scene.get_node("LevelManager") as LevelManager).get_cats()[0]
-		var lead: Vector2i = cat.get_lead_cell()
-		# 직선 → 90도 코너 → 직선 → 반대 코너. 코너가 몸을 타고 내려가는 모습을 담는다.
-		for step in [
-			Vector2i(0, -1), Vector2i(0, -1), Vector2i(1, 0), Vector2i(1, 0),
-			Vector2i(0, 1), Vector2i(0, 1), Vector2i(1, 0),
-		]:
-			lead += step
-			_route.append(lead)
+		# 후미가 이미 보드 끝에 닿아 있다. 계속 뒤로 밀어 가장자리를 타고 흐르게 한다.
+		_reverse = true
 		return false
-	if not _route.is_empty():
+	if _reverse:
 		var cat: CatEntity = (_scene.get_node("LevelManager") as LevelManager).get_cats()[0]
-		# 손가락이 앞서가듯 큐에 여유가 생길 때마다 다음 셀을 흘려 넣는다.
-		if cat.path_queue.size() < cat.path_queue_max:
-			cat.request_path_to(_route.pop_front())
+		cat.request_path_to(cat.body_cells[1])
 	if _frames > 22 and _frames % 5 == 0 and _shot < 12:
 		_shot += 1
 		_save("%02d_move" % _shot)
