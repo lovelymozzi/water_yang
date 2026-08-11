@@ -6,8 +6,8 @@ uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_enable
 // texture; opaque pixels become ink after tinting and toon lighting.
 uniform sampler2D line_art_tex : source_color, filter_linear_mipmap, repeat_enable, hint_default_white;
 uniform float line_art_enabled : hint_range(0.0, 1.0) = 0.0;
-// The eye outlines occupy only this UV island. Keep the remaining hand-drawn
-// face and body lines visible while the closed-eye texture is active.
+// cat1_mask.jpg: black is unaffected, white is the eye region.
+uniform sampler2D line_art_eye_mask : filter_linear_mipmap, repeat_enable;
 uniform float line_art_eyes_hidden : hint_range(0.0, 1.0) = 0.0;
 uniform vec4 line_art_color : source_color = vec4(0.32, 0.24, 0.20, 1.0);
 uniform float line_art_strength : hint_range(0.0, 1.0) = 0.82;
@@ -69,11 +69,8 @@ void fragment() {
 	vec3 base_color = tex.rgb * mix(tint_multiplier, vec3(1.0), eye_mask);
 	vec4 line_art = texture(line_art_tex, mapped_uv);
 	float line_alpha = line_art.a * line_art_enabled * line_art_strength;
-	bool is_eye_uv = mapped_uv.x >= 0.06 && mapped_uv.x <= 0.31
-		&& mapped_uv.y >= 0.12 && mapped_uv.y <= 0.18;
-	if (line_art_eyes_hidden > 0.0 && is_eye_uv) {
-		line_alpha = 0.0;
-	}
+	float line_art_eye_mask_value = texture(line_art_eye_mask, mapped_uv).r;
+	line_alpha *= 1.0 - (line_art_eyes_hidden * line_art_eye_mask_value);
 	ALBEDO = mix(base_color, line_art_color.rgb, line_alpha);
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;
