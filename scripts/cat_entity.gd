@@ -675,8 +675,6 @@ func _apply_shader_parameters(
 		_cat_material.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
 		_cat_material.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
 		_cat_material.set_shader_parameter("line_art_eyes_hidden", 1.0 if hide_line_art_eyes else 0.0)
-		_cat_material.set_shader_parameter("line_art_mouth_mask", _get_open_mouth_tint_exclusion_mask())
-		_cat_material.set_shader_parameter("line_art_mouth_hidden", 1.0 if _mouth_is_open else 0.0)
 		_cat_material.set_shader_parameter("line_art_color", line_art_color)
 		_cat_material.set_shader_parameter("line_art_strength", line_art_strength)
 	if _material_id_2 != null:
@@ -705,8 +703,6 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
 		_material_id_2.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
 		_material_id_2.set_shader_parameter("line_art_eyes_hidden", 1.0 if hide_line_art_eyes else 0.0)
-		_material_id_2.set_shader_parameter("line_art_mouth_mask", _get_open_mouth_tint_exclusion_mask())
-		_material_id_2.set_shader_parameter("line_art_mouth_hidden", 1.0 if _mouth_is_open else 0.0)
 		_material_id_2.set_shader_parameter("line_art_color", line_art_color)
 		_material_id_2.set_shader_parameter("line_art_strength", line_art_strength)
 		_material_id_2.set_shader_parameter("tile_uv_min_u", TILE_UV_REGION_MIN_U)
