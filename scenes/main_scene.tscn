@@ -39,6 +39,11 @@ directional_shadow_pancake_size = 0.1
 
 [node name="LevelManager" type="Node3D" parent="." unique_id=1305581177]
 script = ExtResource("2_5srec")
+board_visuals_color = Color(0.57254905, 0.67058825, 0.34509805, 1)
+tile_primary_color = Color(0.43130937, 0.57282066, 0.2760929, 1)
+tile_secondary_color = Color(0.4151132, 0.55480856, 0.31393868, 1)
+obstacle_primary_color = Color(0.43137255, 0.5686275, 0.3019608, 1)
+obstacle_secondary_color = Color(0.52156866, 0.6039216, 0.3647059, 1)
 
 [node name="BoardVisuals" type="Node3D" parent="LevelManager" unique_id=1755716270]
 
@@ -52,13 +57,14 @@ script = ExtResource("2_5srec")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.78, 0)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(1, 4)
+initial_length = 5
 fbx_scale_per_tile = 7.5
 tint_color = Color(0.8915918, 0.8765357, 0.9848594, 1)
 tint_gradient_enabled = true
-tint_gradient_top_color = Color(0.96862745, 0.8235294, 0.5921569, 1)
-tint_gradient_bottom_color = Color(0.8666667, 0.8117647, 0.4117647, 1)
-shadow_darkness = 0.71
-rim_strength = 0.28
+tint_gradient_top_color = Color(0.97720987, 0.8392037, 0.6164269, 1)
+tint_gradient_bottom_color = Color(0.7347303, 0.67608875, 0.24089283, 1)
+shadow_darkness = 0.4
+rim_strength = 0.0
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
 line_art_texture = ExtResource("4_gubc5")
