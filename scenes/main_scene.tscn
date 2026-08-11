@@ -51,7 +51,6 @@ script = ExtResource("2_5srec")
 [node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.78, -8)
 script = ExtResource("3_cat")
-initial_length = 5
 fbx_scale_per_tile = 7.5
 tint_color = Color(0.8915918, 0.8765357, 0.9848594, 1)
 tint_gradient_enabled = true
@@ -62,7 +61,8 @@ rim_strength = 0.28
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
 line_art_texture = ExtResource("4_gubc5")
-line_art_color = Color(0.45108408, 0.34333265, 0.29329747, 1)
+line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
+line_art_strength = 1.0
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 

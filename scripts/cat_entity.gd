@@ -12,6 +12,12 @@ const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
 const BLINK_CLOSED_DURATION := 0.11
+const EAR_BONE_PAIRS := [["Bone031", "Bone032"], ["Bone033", "Bone034"]]
+const EAR_TWITCH_INTERVAL_MIN := 3.8
+const EAR_TWITCH_INTERVAL_MAX := 7.6
+const EAR_TWITCH_DURATION := 0.30
+const EAR_BASE_TWITCH_ANGLE := deg_to_rad(5.0)
+const EAR_TIP_TWITCH_ANGLE := deg_to_rad(9.0)
 const TILE_MATERIAL_NAMES := ["Material_cat_tile", "Material cat_tile"]
 const TILE_MATERIAL_FALLBACK_SURFACE_INDEX := 1
 const TILE_UV_REGION_MIN_U := 0.625
@@ -203,6 +209,11 @@ var _closed_eyes_texture: Texture2D
 var _blink_time_remaining := -1.0
 var _eyes_are_closed := false
 var _blink_random := RandomNumberGenerator.new()
+var _ear_twitch_time_remaining := -1.0
+var _ear_twitch_elapsed := 0.0
+var _ear_random := RandomNumberGenerator.new()
+var _active_ear := 0
+var _next_ear := 0
 # 머리에서 꼬리까지의 실제 본 인덱스 순서와, 머리 본 기준 rest 누적 거리(모델 로컬 단위).
 var _bone_chain: Array[int] = []
 var _bone_chain_distances: Array[float] = []
@@ -234,6 +245,7 @@ var _saturation_reports: int = 0
 
 func _ready() -> void:
 	_blink_random.seed = get_instance_id()
+	_ear_random.seed = get_instance_id() + 7919
 	facing_dir = _direction_from_name(facing_name)
 	if body_cells.is_empty():
 		_reset_straight_body()
@@ -249,6 +261,7 @@ func _process(delta: float) -> void:
 		return
 	_process_blink(delta)
 	_process_motion(delta)
+	_process_ear_twitch(delta)
 
 
 func _process_blink(delta: float) -> void:
@@ -278,6 +291,53 @@ func _process_blink(delta: float) -> void:
 		_blink_time_remaining = BLINK_CLOSED_DURATION
 	else:
 		_schedule_next_blink()
+
+
+func _process_ear_twitch(delta: float) -> void:
+	if _skeleton == null:
+		return
+
+	if _ear_twitch_elapsed > 0.0:
+		_ear_twitch_elapsed += delta
+		var progress := minf(_ear_twitch_elapsed / EAR_TWITCH_DURATION, 1.0)
+		# A short, tapered double pulse reads as an ear twitch rather than a turn.
+		var twitch := sin(progress * TAU * 1.5) * sin(progress * PI)
+		_apply_ear_twitch_pose(twitch, _active_ear)
+		if progress >= 1.0:
+			_apply_ear_twitch_pose(0.0, _active_ear)
+			_schedule_next_ear_twitch()
+		return
+
+	if _ear_twitch_time_remaining < 0.0:
+		_schedule_next_ear_twitch()
+		return
+
+	_ear_twitch_time_remaining -= delta
+	if _ear_twitch_time_remaining > 0.0:
+		return
+
+	_active_ear = _next_ear
+	_next_ear = 1 - _next_ear
+	_ear_twitch_elapsed = 0.000001
+
+
+func _apply_ear_twitch_pose(twitch: float, ear_number: int) -> void:
+	if _skeleton == null:
+		return
+	if ear_number < 0 or ear_number >= EAR_BONE_PAIRS.size():
+		return
+	var direction := 1.0 if ear_number == 0 else -1.0
+	var bone_pair: Array = EAR_BONE_PAIRS[ear_number]
+	for bone_part in range(bone_pair.size()):
+		var bone_index := _skeleton.find_bone(bone_pair[bone_part])
+		if bone_index < 0 or bone_index >= _bone_rests.size():
+			continue
+		var angle := EAR_BASE_TWITCH_ANGLE if bone_part == 0 else EAR_TIP_TWITCH_ANGLE
+		var rest_rotation := _bone_rests[bone_index].basis.get_rotation_quaternion()
+		_skeleton.set_bone_pose_rotation(
+			bone_index,
+			rest_rotation * Quaternion(Vector3.FORWARD, twitch * angle * direction)
+		)
 
 
 func refresh_editor_preview() -> void:
@@ -1441,6 +1501,13 @@ func _get_tint_exclusion_mask() -> Texture2D:
 func _schedule_next_blink() -> void:
 	_eyes_are_closed = false
 	_blink_time_remaining = _blink_random.randf_range(BLINK_INTERVAL_MIN, BLINK_INTERVAL_MAX)
+
+
+func _schedule_next_ear_twitch() -> void:
+	_ear_twitch_elapsed = 0.0
+	_ear_twitch_time_remaining = _ear_random.randf_range(
+		EAR_TWITCH_INTERVAL_MIN, EAR_TWITCH_INTERVAL_MAX
+	)
 
 
 func _is_adjacent(a: Vector2i, b: Vector2i) -> bool:
