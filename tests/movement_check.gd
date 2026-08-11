@@ -30,6 +30,7 @@ func _process(_delta: float) -> bool:
 	_check_drag(manager, cat)
 	_check_detour(manager, cat)
 	_check_ear_pose_survives(cat)
+	_check_footprint_fill(manager, cat)
 	_report()
 	return true
 
@@ -311,6 +312,59 @@ func _check_ear_pose_survives(cat: CatEntity) -> void:
 	)
 	cat._apply_ear_twitch_pose(0.0, 0)
 	print("[귀] 이동 포즈 적용 후에도 귀 포즈 유지됨")
+
+
+# 스킨된 메시가 발자국을 정확히 채우는지. 정점 실측은 tests/measure_extent.gd 가 하고,
+# 여기서는 그 근거인 오버행 보정값과 양끝 본이 자기 셀 안에 남는지를 지킨다.
+func _check_footprint_fill(manager: LevelManager, cat: CatEntity) -> void:
+	cat.grid_pos = Vector2i(1, 4)
+	manager.update_cat_occupancy(cat)
+	cat.advance(0.0)
+
+	var tile: float = manager.tile_size
+	var half: float = tile * 0.5
+	_expect(cat._head_mesh_overhang > 0.0, "머리쪽 메시 오버행을 재지 못했다")
+	_expect(cat._tail_mesh_overhang > 0.0, "꼬리쪽 메시 오버행을 재지 못했다")
+
+	# 체인 길이 = 발자국 - 앞뒤 오버행. 이래야 메시 양끝이 발자국 양끝에 맞는다.
+	var polyline: PackedVector3Array = cat._body_polyline()
+	var total := 0.0
+	for index in range(1, polyline.size()):
+		total += polyline[index - 1].distance_to(polyline[index])
+	_expect(
+		absf(total - cat._target_chain_world_length()) < 0.001,
+		"폴리라인 길이 %.4f 가 목표 체인 길이 %.4f 와 다르다" % [total, cat._target_chain_world_length()]
+	)
+	# 메시 끝이 발자국 안쪽으로 얼마나 들어오는지. 요청한 여백 근처여야 한다.
+	var model_scale: float = cat._grid_fitted_model_scale()
+	var wanted: float = cat.footprint_margin_cells * tile
+	for side in [
+		[cat._head_mesh_overhang, "머리"], [cat._tail_mesh_overhang, "꼬리"]
+	]:
+		var gap: float = half - (cat._end_extension(side[0]) + side[0] * model_scale)
+		_expect(gap > 0.0, "%s쪽 여백이 없다: %.4f" % [side[1], gap])
+		_expect(
+			absf(gap - wanted) < 0.03 * tile,
+			"%s쪽 여백 %.3f칸이 목표 %.2f칸과 다르다" % [side[1], gap / tile, cat.footprint_margin_cells]
+		)
+
+	# 양끝 본은 자기 끝 셀을 벗어나지 않는다. 정지 중에 옆 칸을 침범하면 점유가 거짓이 된다.
+	var lead_center: Vector3 = manager.grid_to_world(cat.body_cells[0], manager.cat_world_y)
+	var far_center: Vector3 = manager.grid_to_world(
+		cat.body_cells[cat.body_cells.size() - 1], manager.cat_world_y
+	)
+	_expect(
+		polyline[0].distance_to(lead_center) < half,
+		"리드쪽 끝점이 자기 셀을 벗어났다: %.4f >= %.4f" % [polyline[0].distance_to(lead_center), half]
+	)
+	var far_point: Vector3 = polyline[polyline.size() - 1]
+	_expect(
+		far_point.distance_to(far_center) < half,
+		"반대쪽 끝점이 자기 셀을 벗어났다: %.4f >= %.4f" % [far_point.distance_to(far_center), half]
+	)
+	print("[발자국] %d칸=%.2f, 체인=%.3f, 여백 %.2f칸씩, 양끝 셀 이탈 없음" % [
+		cat.body_cells.size(), float(cat.body_cells.size()) * tile, total, cat.footprint_margin_cells
+	])
 
 
 func _distance_to_polyline(point: Vector3, polyline: PackedVector3Array) -> float:

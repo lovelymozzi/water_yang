@@ -34,6 +34,12 @@ const STRETCH_BONE_LAST := 14
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 # 코너에 정확히 놓인 본이 어느 선분의 방향을 쓸지 확정하기 위한 미세 편향.
 const SEGMENT_PICK_EPSILON := 0.0001
+# 오버행 고정점 반복 횟수. 3회면 0.001칸 아래로 수렴한다.
+# 양끝 여백을 맞추는 완화 반복. 머리쪽 극점(앞다리 Bone027/028)은 체인이 줄면 2배로
+# 밀려나오기 때문에, 감쇠 없는 단순 대입은 이득이 2가 되어 반드시 발산한다.
+const OVERHANG_CALIBRATION_STEPS := 8
+const OVERHANG_RELAXATION := 0.3
+const OVERHANG_DEBUG := true
 
 @export_group("Layout")
 @export var grid_pos: Vector2i = Vector2i.ZERO:
@@ -82,6 +88,16 @@ const SEGMENT_PICK_EPSILON := 0.0001
 # 1_움직임고찰.md 1절. 큐 상한은 항상 `속도 × 0.5초`로 맞춘다.
 @export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 8.0
 @export_range(1, 12, 1) var path_queue_max: int = 4
+
+# 발자국 양끝에 남기는 여백(칸 단위). 몸 길이와 무관하게 항상 한 칸의 이 비율만큼이다.
+# 0 이면 메시가 발자국을 꽉 채워 이동이 뻑뻑해 보인다.
+@export_range(0.0, 0.4, 0.01) var footprint_margin_cells: float = 0.1:
+	set(value):
+		footprint_margin_cells = value
+		_refresh_shader_material()
+		if is_inside_tree() and not Engine.is_editor_hint() and level_manager != null:
+			_update_visual_pose()
+		_request_editor_refresh()
 
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
@@ -206,6 +222,10 @@ var _bone_chain_distances: Array[float] = []
 var _rest_chain_length: float = 0.0
 # 부모가 항상 자식보다 앞에 오는 본 순서. 로컬 포즈 환산은 이 순서로만 해야 한다.
 var _bone_tree_order: Array[int] = []
+# 메시가 양끝 본보다 더 내미는 양(모델 단위). 머리는 코, 꼬리는 뒷다리가 만든다.
+# 앞뒤가 4배 차이나므로 이걸 무시하면 꼬리쪽 셀이 0.4칸 비어 보인다.
+var _head_mesh_overhang := 0.0
+var _tail_mesh_overhang := 0.0
 
 
 func _ready() -> void:
@@ -739,6 +759,11 @@ func _bones_in_tree_order() -> Array[int]:
 
 # 리드 → 반대쪽 끝 순서의 셀 중심 폴리라인. 전이 중에는 양 끝만 셀 사이에 놓인다.
 func _body_polyline() -> PackedVector3Array:
+	return _extend_ends(_cell_center_polyline())
+
+
+# 셀 중심을 잇는 순수 경로. 코너는 언제나 셀 중앙을 관통한다.
+func _cell_center_polyline() -> PackedVector3Array:
 	var points := PackedVector3Array()
 	var height := level_manager.cat_world_y
 	if not _is_moving or _rail.size() < 3:
@@ -760,6 +785,34 @@ func _body_polyline() -> PackedVector3Array:
 		)
 	)
 	return points
+
+
+# 양끝을 메시 오버행만큼 밖으로 내민다. 이래야 스킨된 메시가 발자국을 정확히 채운다.
+# 내미는 방향은 끝 선분의 연장선이므로 셀 중심 경로의 모양은 변하지 않는다.
+func _extend_ends(points: PackedVector3Array) -> PackedVector3Array:
+	if points.size() < 2:
+		return points
+	var lead_overhang: float = _tail_mesh_overhang if _lead_is_tail else _head_mesh_overhang
+	var far_overhang: float = _head_mesh_overhang if _lead_is_tail else _tail_mesh_overhang
+	var extended := PackedVector3Array()
+	extended.append(points[0] + _outward_direction(points, true) * _end_extension(lead_overhang))
+	extended.append_array(points)
+	extended.append(
+		points[points.size() - 1] + _outward_direction(points, false) * _end_extension(far_overhang)
+	)
+	return extended
+
+
+# 끝에서 바깥을 향하는 단위 방향. 길이가 0인 선분(전이 시작 순간)은 건너뛴다.
+func _outward_direction(points: PackedVector3Array, from_start: bool) -> Vector3:
+	var count := points.size() - 1
+	for offset in count:
+		var index: int = offset if from_start else count - 1 - offset
+		var delta: Vector3 = points[index] - points[index + 1]
+		if delta.length_squared() > 0.000001:
+			return (delta if from_start else -delta).normalized()
+	var fallback := level_manager.grid_dir_to_world(facing_dir)
+	return fallback if fallback.length_squared() > 0.000001 else Vector3.FORWARD
 
 
 func _cumulative_lengths(polyline: PackedVector3Array) -> PackedFloat32Array:
@@ -861,6 +914,62 @@ func _cache_bone_rests() -> void:
 	if _head_bone_index >= 0:
 		_head_bone_rest_global = _skeleton.get_bone_global_rest(_head_bone_index)
 	_build_bone_chain()
+	_cache_mesh_overhang()
+
+
+# 오버행은 신축 배율에 따라 조금씩 달라진다. 머리 끝 정점 일부가 신축 구간 본에 물려
+# 있어서, rest AABB 로 잰 상수를 쓰면 양끝 여백이 0.08/0.12 처럼 어긋난다.
+# 포즈 -> 실측 -> 재계산을 몇 번 돌려 고정점으로 수렴시킨다. 1300 정점이라 비용은 무시할 만하다.
+# 스킨된 메시가 양끝 본보다 얼마나 더 나가는지 rest 자세의 AABB 로 잰다.
+# 머리는 귀·코, 꼬리는 뒷다리가 만들며 앞뒤가 4배 차이난다.
+func _cache_mesh_overhang() -> void:
+	_head_mesh_overhang = 0.0
+	_tail_mesh_overhang = 0.0
+	if _skeleton == null or _cat_model == null or _bone_chain.size() < 2:
+		return
+	var head_origin: Vector3 = _skeleton.get_bone_global_rest(_bone_chain[0]).origin
+	var tail_origin: Vector3 = _skeleton.get_bone_global_rest(_bone_chain[_bone_chain.size() - 1]).origin
+	var axis: Vector3 = head_origin - tail_origin
+	if axis.length_squared() < 0.000001:
+		return
+	var chain_length: float = axis.length()
+	axis = axis.normalized()
+
+	var lowest := INF
+	var highest := -INF
+	for mesh_instance in _skinned_meshes(_cat_model):
+		# 메시 정점은 본 rest 공간이 아니라 Skin 의 바인드 공간에 있고, 이 리그의 공통
+		# 바인드 행렬에는 회전이 들어 있다. rest 역행렬을 역바인드로 쓰면 값이 엉뚱해진다.
+		var bind: Transform3D = _rest_bind_transform(mesh_instance)
+		var bounds: AABB = mesh_instance.mesh.get_aabb()
+		for corner in 8:
+			var along: float = ((bind * bounds.get_endpoint(corner)) - tail_origin).dot(axis)
+			lowest = minf(lowest, along)
+			highest = maxf(highest, along)
+	if lowest == INF:
+		return
+	_head_mesh_overhang = maxf(highest - chain_length, 0.0)
+	_tail_mesh_overhang = maxf(-lowest, 0.0)
+
+
+func _rest_bind_transform(mesh_instance: MeshInstance3D) -> Transform3D:
+	var skin: Skin = mesh_instance.skin
+	if skin == null or skin.get_bind_count() == 0:
+		return Transform3D.IDENTITY
+	var bone_name: String = skin.get_bind_name(0)
+	var bone: int = _skeleton.find_bone(bone_name) if bone_name != "" else skin.get_bind_bone(0)
+	if bone < 0:
+		return Transform3D.IDENTITY
+	return _skeleton.get_bone_global_rest(bone) * skin.get_bind_pose(0)
+
+
+func _skinned_meshes(node: Node) -> Array[MeshInstance3D]:
+	var found: Array[MeshInstance3D] = []
+	if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+		found.append(node as MeshInstance3D)
+	for child in node.get_children():
+		found.append_array(_skinned_meshes(child))
+	return found
 
 
 func _build_bone_chain() -> void:
@@ -947,12 +1056,26 @@ func _fitted_stretch_scale(target_world_length: float) -> float:
 
 
 func _baseline_stretch_scale() -> float:
-	# 정지 직선 상태에서 머리 셀 중심 ~ 꼬리 셀 중심 거리에 맞춘 배율.
+	# 스킨된 메시가 발자국을 정확히 채우는 배율.
 	# 텍스처 반복은 이 고정값으로 계산해 이동 중 패턴이 기어가지 않게 한다.
 	if level_manager == null:
 		return 1.0
-	var cells := maxi(body_cells.size() - 1, 1)
-	return _fitted_stretch_scale(float(cells) * level_manager.tile_size)
+	return _fitted_stretch_scale(_target_chain_world_length())
+
+
+# 본 체인이 가져야 할 길이. 셀 중심 경로에 양끝 내밀기를 더한 값이다.
+func _target_chain_world_length() -> float:
+	if level_manager == null:
+		return 1.0
+	var path := float(maxi(body_cells.size() - 1, 1)) * level_manager.tile_size
+	return path + _end_extension(_head_mesh_overhang) + _end_extension(_tail_mesh_overhang)
+
+
+# 폴리라인 양끝을 끝 셀 중심에서 밖으로 내미는 양. 메시가 그만큼 더 나가므로
+# 오버행이 큰 머리쪽은 거의 내밀지 않는다. 음수면 경로가 접히므로 0으로 묶는다.
+func _end_extension(overhang_model: float) -> float:
+	var to_edge := level_manager.tile_size * (0.5 - footprint_margin_cells)
+	return maxf(to_edge - overhang_model * _grid_fitted_model_scale(), 0.0)
 
 func _fbx_basis_for_direction(direction: Vector3) -> Basis:
 	# FBX local Y is the body length and local +Z is the face side.
