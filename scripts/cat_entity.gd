@@ -20,7 +20,9 @@ const TILE_UV_REGION_MIN_U := 0.625
 const BODY_TEXTURE_REFERENCE_LENGTH := 4
 const HEAD_BONE_NAME := "Bone002"
 const TAIL_BONE_NAME := "Bone022"
-const STRETCH_BONE_FIRST := 6
+# Bone006 carries the front-paw/chest transition. Keep it rigid so its baked
+# shading cannot be pulled down when the cat body gets longer.
+const STRETCH_BONE_FIRST := 7
 const STRETCH_BONE_LAST := 14
 # 드래그 중 코너를 깎을 때 원호를 몇 조각으로 나눌지.
 const CORNER_ARC_SEGMENTS := 6

@@ -46,7 +46,7 @@ script = ExtResource("2_5srec")
 [node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.78, -8)
 script = ExtResource("3_cat")
-initial_length = 9
+initial_length = 10
 fbx_scale_per_tile = 7.5
 tint_color = Color(0.96862745, 0.8901961, 0.60784316, 1)
 shadow_darkness = 0.41
