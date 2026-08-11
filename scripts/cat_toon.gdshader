@@ -3,7 +3,8 @@ render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specula
 
 uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_enable;
 // The open-mouth expression is composited over the base face. Its mask also
-// contains the eyes, so subtracting the base eye mask isolates the mouth.
+// contains the eyes, which occupy the upper UV region; the mouth begins below
+// V = 0.19 on this fixed cat texture layout.
 uniform sampler2D expression_tex : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D expression_exclusion_mask : filter_linear_mipmap, repeat_enable;
 uniform float expression_enabled : hint_range(0.0, 1.0) = 0.0;
@@ -54,11 +55,8 @@ void fragment() {
 	vec4 tex = texture(albedo_tex, mapped_uv);
 	float expression_mask = 0.0;
 	if (expression_enabled > 0.0) {
-		float base_eye_mask = texture(tint_exclusion_mask, mapped_uv).r;
-		expression_mask = max(
-			texture(expression_exclusion_mask, mapped_uv).r - base_eye_mask,
-			0.0
-		);
+		expression_mask = texture(expression_exclusion_mask, mapped_uv).r;
+		expression_mask *= step(0.19, mapped_uv.y);
 		tex = mix(tex, texture(expression_tex, mapped_uv), expression_mask);
 	}
 	// cat1_mask.jpg supports a grayscale tint exclusion amount:
