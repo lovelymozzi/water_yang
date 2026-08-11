@@ -2,6 +2,11 @@ shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_enable;
+// The open-mouth expression is composited over the base face. Its mask also
+// contains the eyes, so subtracting the base eye mask isolates the mouth.
+uniform sampler2D expression_tex : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D expression_exclusion_mask : filter_linear_mipmap, repeat_enable;
+uniform float expression_enabled : hint_range(0.0, 1.0) = 0.0;
 // Optional hand-painted line layer. Transparent pixels preserve the base
 // texture; opaque pixels become ink after tinting and toon lighting.
 uniform sampler2D line_art_tex : source_color, filter_linear_mipmap, repeat_enable, hint_default_white;
@@ -47,11 +52,24 @@ void fragment() {
 		mapped_uv = UV * uv_tiling + uv_offset;
 	}
 	vec4 tex = texture(albedo_tex, mapped_uv);
+	float expression_mask = 0.0;
+	if (expression_enabled > 0.0) {
+		float base_eye_mask = texture(tint_exclusion_mask, mapped_uv).r;
+		expression_mask = max(
+			texture(expression_exclusion_mask, mapped_uv).r - base_eye_mask,
+			0.0
+		);
+		tex = mix(tex, texture(expression_tex, mapped_uv), expression_mask);
+	}
 	// cat1_mask.jpg supports a grayscale tint exclusion amount:
 	// black = full tint, white = no tint, gray = partial tint.
 	float eye_mask = 0.0;
 	if (tint_exclusion_enabled > 0.0) {
 		eye_mask = texture(tint_exclusion_mask, mapped_uv).r;
+		if (expression_enabled > 0.0) {
+			// The open-mouth mask protects the mouth as well as the shared eye area.
+			eye_mask = max(eye_mask, texture(expression_exclusion_mask, mapped_uv).r);
+		}
 	}
 	// The denominator intentionally supports either bone-chain direction.
 	// This also keeps feet and chest on their real position in the mesh even
@@ -104,7 +122,10 @@ void light() {
 	float view_term = 1.0 - max(dot(NORMAL, VIEW), 0.0);
 	float rim = pow(view_term, 2.5) * rim_strength;
 
-	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * ATTENUATION;
-	vec3 toon_rim = LIGHT_COLOR.rgb * rim * ATTENUATION;
+	// Preserve the toon lighting bands while preventing colored scene lights
+	// from tinting the cat. Use only the light's perceived brightness.
+	float light_brightness = dot(LIGHT_COLOR.rgb, vec3(0.2126, 0.7152, 0.0722));
+	vec3 toon_diffuse = ALBEDO * light_brightness * light_band * ATTENUATION;
+	vec3 toon_rim = vec3(light_brightness) * rim * ATTENUATION;
 	DIFFUSE_LIGHT += toon_diffuse + toon_rim;
 }

@@ -655,6 +655,11 @@ func _apply_shader_parameters(
 	var gradient_axis := _get_tint_gradient_axis()
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
+		_cat_material.set_shader_parameter("expression_tex", _get_open_mouth_texture() if _mouth_is_open else null)
+		_cat_material.set_shader_parameter(
+			"expression_exclusion_mask", _get_open_mouth_tint_exclusion_mask() if _mouth_is_open else null
+		)
+		_cat_material.set_shader_parameter("expression_enabled", 1.0 if _mouth_is_open else 0.0)
 		_cat_material.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_cat_material.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_cat_material.set_shader_parameter("tint_color", tint_color)
@@ -678,6 +683,11 @@ func _apply_shader_parameters(
 		# actual pose extension rather than the total grid-length ratio.
 		var tile_scale := _baseline_stretch_scale()
 		_material_id_2.set_shader_parameter("albedo_tex", texture)
+		_material_id_2.set_shader_parameter("expression_tex", _get_open_mouth_texture() if _mouth_is_open else null)
+		_material_id_2.set_shader_parameter(
+			"expression_exclusion_mask", _get_open_mouth_tint_exclusion_mask() if _mouth_is_open else null
+		)
+		_material_id_2.set_shader_parameter("expression_enabled", 1.0 if _mouth_is_open else 0.0)
 		_material_id_2.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_material_id_2.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_material_id_2.set_shader_parameter("tint_color", tint_color)
@@ -737,17 +747,13 @@ func _get_open_mouth_tint_exclusion_mask() -> Texture2D:
 
 
 func _get_active_face_texture() -> Texture2D:
-	if _mouth_is_open:
-		return _get_open_mouth_texture()
-	if _eyes_are_closed:
+	if _eyes_are_closed and not _mouth_is_open:
 		return _closed_eyes_texture
 	return _get_open_eyes_texture()
 
 
 func _get_active_tint_exclusion_mask() -> Texture2D:
-	if _mouth_is_open:
-		return _get_open_mouth_tint_exclusion_mask()
-	if _eyes_are_closed:
+	if _eyes_are_closed and not _mouth_is_open:
 		return null
 	return _get_tint_exclusion_mask()
 
