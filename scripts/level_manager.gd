@@ -54,6 +54,32 @@ enum CellState {
 		request_preview_refresh()
 
 # 이미 열린 씬에서도 Inspector 버튼으로 에디터용 보드를 즉시 다시 만든다.
+@export_group("Visual Colors")
+@export_color_no_alpha var board_visuals_color: Color = Color(0.83, 0.62, 0.42, 1.0):
+	set(value):
+		board_visuals_color = value
+		request_preview_refresh()
+
+@export_color_no_alpha var tile_primary_color: Color = Color(0.95, 0.77, 0.62, 1.0):
+	set(value):
+		tile_primary_color = value
+		request_preview_refresh()
+
+@export_color_no_alpha var tile_secondary_color: Color = Color(0.93, 0.72, 0.56, 1.0):
+	set(value):
+		tile_secondary_color = value
+		request_preview_refresh()
+
+@export_color_no_alpha var obstacle_primary_color: Color = Color(0.95, 0.86, 0.70, 1.0):
+	set(value):
+		obstacle_primary_color = value
+		request_preview_refresh()
+
+@export_color_no_alpha var obstacle_secondary_color: Color = Color(0.86, 0.72, 0.55, 1.0):
+	set(value):
+		obstacle_secondary_color = value
+		request_preview_refresh()
+
 @export_tool_button("Refresh Board Preview", "Reload") var refresh_board_preview_action = refresh_board_preview
 
 var _grid_state: Array = []
@@ -164,7 +190,8 @@ func _refresh_occupancy_highlight() -> void:
 			if index >= _highlight_tiles.size():
 				continue
 			var tile: MeshInstance3D = _highlight_tiles[index]
-			tile.visible = _get_cell_state(Vector2i(x, y)) == CellState.CAT
+			# Keep occupancy data for gameplay, but do not tint tiles beneath cats.
+			tile.visible = false
 
 
 func _build_occupancy_highlight() -> void:
@@ -288,7 +315,7 @@ func _build_board_base() -> void:
 	)
 	var board := _create_rounded_prism(
 		"BoardBase", board_size, BOARD_CORNER_RADIUS,
-		_make_material(Color(0.83, 0.62, 0.42, 1.0))
+		_make_material(board_visuals_color)
 	)
 	board.position = Vector3(0.0, -0.18, 0.0)
 	_board_root.add_child(board)
@@ -345,18 +372,18 @@ func _create_rounded_prism(
 
 
 func _sync_obstacle_layout() -> void:
-	if not obstacles_enabled:
-		for child in _layout_obstacles_root.get_children():
-			if child.get_script() == OBSTACLE_MARKER_SCRIPT:
-				child.call("set_preview_visible", false)
-		return
-
 	for child in _layout_obstacles_root.get_children():
 		if child.get_script() != OBSTACLE_MARKER_SCRIPT:
 			continue
 
-		child.call("set_preview_visible", true)
+		# Keep editor markers visible for layout and color editing even when
+		# obstacles are disabled for gameplay.
+		child.call("set_preview_visible", Engine.is_editor_hint())
 		child.call("refresh_editor_preview")
+
+		if not obstacles_enabled:
+			continue
+
 		var marker_grid_pos: Vector2i = child.get("grid_pos")
 
 		if not is_inside_grid(marker_grid_pos):
@@ -391,7 +418,7 @@ func _build_obstacle_visual(cell: Vector2i) -> void:
 	obstacle_mesh.size = Vector3(tile_size * 0.94, OBSTACLE_HEIGHT * 0.38, tile_size * 0.94)
 	obstacle.mesh = obstacle_mesh
 	obstacle.position = grid_to_world(cell, OBSTACLE_HEIGHT * 0.19)
-	obstacle.material_override = _make_material(Color(0.95, 0.86, 0.70, 1.0))
+	obstacle.material_override = _make_material(get_obstacle_color(cell))
 	_obstacles_root.add_child(obstacle)
 
 
@@ -404,8 +431,14 @@ func _make_material(color: Color) -> StandardMaterial3D:
 
 func _tile_color_for(cell: Vector2i) -> Color:
 	if (cell.x + cell.y) % 2 == 0:
-		return Color(0.95, 0.77, 0.62, 1.0)
-	return Color(0.93, 0.72, 0.56, 1.0)
+		return tile_primary_color
+	return tile_secondary_color
+
+
+func get_obstacle_color(cell: Vector2i) -> Color:
+	if (cell.x + cell.y) % 2 == 0:
+		return obstacle_primary_color
+	return obstacle_secondary_color
 
 
 func get_cats() -> Array[CatEntity]:

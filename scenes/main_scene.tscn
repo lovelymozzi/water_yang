@@ -59,10 +59,10 @@ script = ExtResource("3_cat")
 grid_pos = Vector2i(1, 4)
 initial_length = 5
 fbx_scale_per_tile = 7.5
-tint_color = Color(0.8915918, 0.8765357, 0.9848594, 1)
+tint_color = Color(0.95577335, 0.8633, 0.97, 1)
 tint_gradient_enabled = true
-tint_gradient_top_color = Color(0.97720987, 0.8392037, 0.6164269, 1)
-tint_gradient_bottom_color = Color(0.7347303, 0.67608875, 0.24089283, 1)
+tint_gradient_top_color = Color(0.9757487, 0.8231327, 0.5771711, 1)
+tint_gradient_bottom_color = Color(0.9125077, 0.62743706, 0.40319848, 1)
 shadow_darkness = 0.4
 rim_strength = 0.0
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
@@ -117,6 +117,8 @@ grid_pos = Vector2i(3, 6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.15, 4)
 script = ExtResource("4_obs")
 grid_pos = Vector2i(4, 6)
+
+[node name="OccupancyHighlights" type="Node3D" parent="LevelManager" unique_id=1126319405]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=411557567]
 

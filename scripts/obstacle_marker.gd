@@ -27,6 +27,7 @@ func refresh_editor_preview() -> void:
 		return
 
 	position = manager.grid_to_world(grid_pos, 0.15)
+	set_preview_color(manager.get_obstacle_color(grid_pos))
 
 
 func set_preview_visible(value: bool) -> void:
@@ -35,6 +36,13 @@ func set_preview_visible(value: bool) -> void:
 
 	_ensure_marker_mesh()
 	_marker_mesh.visible = value
+
+
+func set_preview_color(color: Color) -> void:
+	_ensure_marker_mesh()
+	var material := _marker_mesh.material_override as StandardMaterial3D
+	if material != null:
+		material.albedo_color = Color(color.r, color.g, color.b, 0.65)
 
 
 func _ensure_marker_mesh() -> void:
