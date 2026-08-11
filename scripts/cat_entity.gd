@@ -130,6 +130,32 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		outline_width = value
 		_refresh_shader_material()
 
+@export_range(0.4, 1.2, 0.01) var top_outline_scale: float = 0.78:
+	set(value):
+		top_outline_scale = value
+		_refresh_shader_material()
+
+@export_range(0.8, 1.6, 0.01) var bottom_outline_scale: float = 1.12:
+	set(value):
+		bottom_outline_scale = value
+		_refresh_shader_material()
+
+@export_group("Internal Line Art")
+@export var line_art_texture: Texture2D:
+	set(value):
+		line_art_texture = value
+		_refresh_shader_material()
+
+@export var line_art_color: Color = Color(0.32, 0.24, 0.20, 1.0):
+	set(value):
+		line_art_color = value
+		_refresh_shader_material()
+
+@export_range(0.0, 1.0, 0.01) var line_art_strength: float = 0.82:
+	set(value):
+		line_art_strength = value
+		_refresh_shader_material()
+
 # 몸통은 항상 머리(0)에서 꼬리(마지막)까지 인접한 셀 경로로 저장한다.
 var body_cells: Array[Vector2i] = []
 # 양 끝이 지나온 길. 최신 칸이 앞에 온다. 후진할 때 이 기록을 되짚어 간다.
@@ -1320,6 +1346,10 @@ func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := tru
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
+		_cat_material.set_shader_parameter("line_art_tex", line_art_texture)
+		_cat_material.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
+		_cat_material.set_shader_parameter("line_art_color", line_art_color)
+		_cat_material.set_shader_parameter("line_art_strength", line_art_strength)
 	if _material_id_2 != null:
 		# Material cat_tile covers the Bone006..Bone014 section. Only this section
 		# is moved to change the cat's length, so its UV repeats must follow the
@@ -1334,6 +1364,10 @@ func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := tru
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
+		_material_id_2.set_shader_parameter("line_art_tex", line_art_texture)
+		_material_id_2.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
+		_material_id_2.set_shader_parameter("line_art_color", line_art_color)
+		_material_id_2.set_shader_parameter("line_art_strength", line_art_strength)
 		_material_id_2.set_shader_parameter("tile_uv_min_u", TILE_UV_REGION_MIN_U)
 		# Material cat_tile already uses the right-side tile region in its UV map.
 		# Keep U unchanged; repeat only along its vertical V direction.
@@ -1342,9 +1376,13 @@ func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := tru
 	if _outline_material != null:
 		_outline_material.set_shader_parameter("outline_color", outline_color)
 		_outline_material.set_shader_parameter("outline_width", outline_width)
+		_outline_material.set_shader_parameter("top_outline_scale", top_outline_scale)
+		_outline_material.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 	if _material_id_2_outline != null:
 		_material_id_2_outline.set_shader_parameter("outline_color", outline_color)
 		_material_id_2_outline.set_shader_parameter("outline_width", outline_width)
+		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
+		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 
 
 func _get_open_eyes_texture() -> Texture2D:

@@ -48,11 +48,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.78, -8)
 script = ExtResource("3_cat")
 initial_length = 9
 fbx_scale_per_tile = 7.5
-tint_color = Color(0.89665955, 0.50652695, 0.8564587, 1)
+tint_color = Color(0.96862745, 0.8901961, 0.60784316, 1)
 shadow_darkness = 0.41
 rim_strength = 0.4
 outline_color = Color(0.43043092, 0.37527847, 0.36495557, 1)
 outline_width = 0.006
+top_outline_scale = null
+bottom_outline_scale = null
+line_art_color = null
+line_art_strength = null
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 
