@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://nthjajr4o682" path="res://scripts/main_scene.gd" id="1_q0f23"]
 [ext_resource type="Script" uid="uid://kc76tu4jlnus" path="res://scripts/level_manager.gd" id="2_5srec"]
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
+[ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_gubc5"]
 [ext_resource type="Script" uid="uid://dnbvdfthy6i28" path="res://scripts/obstacle_marker.gd" id="4_obs"]
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
@@ -18,8 +19,9 @@ size = 25.321
 near = 10.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
-transform = Transform3D(0.9704945, 0.024648678, 0.23986012, -0.2410272, 0.07109235, 0.96791106, 0.006805498, -0.99716514, 0.07493576, 0, 10.844116, 0)
-light_indirect_energy = 1.716
+transform = Transform3D(0.98636144, -0.0023564454, 0.16457686, -0.16205181, 0.16114591, 0.9735354, -0.02881497, -0.9869278, 0.15856627, 0, 10.844116, 0)
+light_energy = 1.293
+light_indirect_energy = 3.033
 light_volumetric_fog_energy = 2.791
 light_angular_distance = 0.05
 light_specular = 0.0
@@ -29,7 +31,10 @@ shadow_normal_bias = 1.347
 shadow_transmittance_bias = -3.376
 shadow_opacity = 0.86
 shadow_blur = 0.058
-directional_shadow_max_distance = 1.1
+directional_shadow_split_1 = 0.17
+directional_shadow_split_2 = 0.404
+directional_shadow_split_3 = 0.765
+directional_shadow_max_distance = 1.4
 directional_shadow_pancake_size = 0.1
 
 [node name="LevelManager" type="Node3D" parent="." unique_id=1305581177]
@@ -46,13 +51,18 @@ script = ExtResource("2_5srec")
 [node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.78, -8)
 script = ExtResource("3_cat")
-initial_length = 9
+initial_length = 5
 fbx_scale_per_tile = 7.5
-tint_color = Color(0.96862745, 0.8901961, 0.60784316, 1)
-shadow_darkness = 0.41
-rim_strength = 0.4
-outline_color = Color(0.43043092, 0.37527847, 0.36495557, 1)
+tint_color = Color(0.8915918, 0.8765357, 0.9848594, 1)
+tint_gradient_enabled = true
+tint_gradient_top_color = Color(0.96862745, 0.8235294, 0.5921569, 1)
+tint_gradient_bottom_color = Color(0.8666667, 0.8117647, 0.4117647, 1)
+shadow_darkness = 0.71
+rim_strength = 0.28
+outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
+line_art_texture = ExtResource("4_gubc5")
+line_art_color = Color(0.45108408, 0.34333265, 0.29329747, 1)
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 

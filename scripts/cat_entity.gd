@@ -106,6 +106,22 @@ const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
 		tint_color = value
 		_refresh_shader_material()
 
+@export_group("Tint Gradient")
+@export var tint_gradient_enabled := false:
+	set(value):
+		tint_gradient_enabled = value
+		_refresh_shader_material()
+
+@export var tint_gradient_top_color: Color = Color(1.0, 1.0, 1.0, 1.0):
+	set(value):
+		tint_gradient_top_color = value
+		_refresh_shader_material()
+
+@export var tint_gradient_bottom_color: Color = Color(0.94, 0.90, 0.86, 1.0):
+	set(value):
+		tint_gradient_bottom_color = value
+		_refresh_shader_material()
+
 @export_range(2, 5, 1) var toon_steps: int = 3:
 	set(value):
 		toon_steps = value
@@ -1337,7 +1353,20 @@ func _apply_current_shader_parameters() -> void:
 	_apply_shader_parameters(_get_open_eyes_texture())
 
 
+func _get_tint_gradient_axis() -> Vector2:
+	# The FBX's local Y axis runs from head to tail. Bone rest positions provide
+	# a stable range shared by every material slot, unlike disconnected UV islands.
+	if _skeleton == null or _bone_chain.is_empty():
+		return Vector2(1.0, -1.0)
+	var head_y := _skeleton.get_bone_global_rest(_bone_chain[0]).origin.y
+	var tail_y := _skeleton.get_bone_global_rest(_bone_chain[-1]).origin.y
+	if is_equal_approx(head_y, tail_y):
+		return Vector2(head_y + 0.5, head_y - 0.5)
+	return Vector2(head_y, tail_y)
+
+
 func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := true) -> void:
+	var gradient_axis := _get_tint_gradient_axis()
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
 		_cat_material.set_shader_parameter(
@@ -1345,6 +1374,11 @@ func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := tru
 		)
 		_cat_material.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_cat_material.set_shader_parameter("tint_color", tint_color)
+		_cat_material.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
+		_cat_material.set_shader_parameter("tint_gradient_top_color", tint_gradient_top_color)
+		_cat_material.set_shader_parameter("tint_gradient_bottom_color", tint_gradient_bottom_color)
+		_cat_material.set_shader_parameter("tint_gradient_head_y", gradient_axis.x)
+		_cat_material.set_shader_parameter("tint_gradient_tail_y", gradient_axis.y)
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
@@ -1363,6 +1397,11 @@ func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := tru
 		)
 		_material_id_2.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_material_id_2.set_shader_parameter("tint_color", tint_color)
+		_material_id_2.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
+		_material_id_2.set_shader_parameter("tint_gradient_top_color", tint_gradient_top_color)
+		_material_id_2.set_shader_parameter("tint_gradient_bottom_color", tint_gradient_bottom_color)
+		_material_id_2.set_shader_parameter("tint_gradient_head_y", gradient_axis.x)
+		_material_id_2.set_shader_parameter("tint_gradient_tail_y", gradient_axis.y)
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
