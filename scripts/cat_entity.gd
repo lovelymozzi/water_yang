@@ -25,6 +25,7 @@ const EAR_TIP_TWITCH_ANGLE := deg_to_rad(9.0)
 const TILE_MATERIAL_NAMES := ["Material_cat_tile", "Material cat_tile"]
 const TILE_MATERIAL_FALLBACK_SURFACE_INDEX := 1
 const TILE_UV_REGION_MIN_U := 0.625
+const TINT_GRADIENT_MAX_POINTS := 20
 const HEAD_BONE_NAME := "Bone002"
 const TAIL_BONE_NAME := "Bone022"
 # Bone006 carries the front-paw/chest transition. Keep it rigid so its baked
@@ -712,6 +713,26 @@ func _update_visual_pose() -> void:
 		desired[bone_index] = Transform3D(posed_basis.orthonormalized(), to_skeleton * (point - position))
 
 	_apply_bone_globals(desired)
+	_update_tint_gradient_path(polyline, total_length)
+
+
+func _update_tint_gradient_path(polyline: PackedVector3Array, total_length: float) -> void:
+	# The shader projects skinned vertices onto this world-space path.  This
+	# keeps the tint continuous when a body section turns away from FBX local Y.
+	if polyline.size() < 2:
+		return
+	var point_count := mini(polyline.size(), TINT_GRADIENT_MAX_POINTS)
+	var points := PackedVector3Array()
+	for index in point_count:
+		points.append(polyline[index])
+	if _cat_material != null:
+		_cat_material.set_shader_parameter("tint_gradient_points", points)
+		_cat_material.set_shader_parameter("tint_gradient_point_count", point_count)
+		_cat_material.set_shader_parameter("tint_gradient_path_length", total_length)
+	if _material_id_2 != null:
+		_material_id_2.set_shader_parameter("tint_gradient_points", points)
+		_material_id_2.set_shader_parameter("tint_gradient_point_count", point_count)
+		_material_id_2.set_shader_parameter("tint_gradient_path_length", total_length)
 
 
 # 계산한 글로벌 포즈를 부모부터 순서대로 로컬 포즈로 환산해 넣는다.
@@ -1181,18 +1202,6 @@ func _apply_current_shader_parameters() -> void:
 	)
 
 
-func _get_tint_gradient_axis() -> Vector2:
-	# The FBX's local Y axis runs from head to tail. Bone rest positions provide
-	# a stable range shared by every material slot, unlike disconnected UV islands.
-	if _skeleton == null or _bone_chain.is_empty():
-		return Vector2(1.0, -1.0)
-	var head_y := _skeleton.get_bone_global_rest(_bone_chain[0]).origin.y
-	var tail_y := _skeleton.get_bone_global_rest(_bone_chain[-1]).origin.y
-	if is_equal_approx(head_y, tail_y):
-		return Vector2(head_y + 0.5, head_y - 0.5)
-	return Vector2(head_y, tail_y)
-
-
 func _apply_shader_parameters(
 	texture: Texture2D,
 	use_tint_exclusion_mask := true,
@@ -1200,7 +1209,6 @@ func _apply_shader_parameters(
 	custom_tint_exclusion_mask: Texture2D = null
 ) -> void:
 	var tint_exclusion_mask: Texture2D = custom_tint_exclusion_mask if custom_tint_exclusion_mask != null else _get_tint_exclusion_mask()
-	var gradient_axis := _get_tint_gradient_axis()
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
 		_cat_material.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
@@ -1209,8 +1217,6 @@ func _apply_shader_parameters(
 		_cat_material.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
 		_cat_material.set_shader_parameter("tint_gradient_top_color", tint_gradient_top_color)
 		_cat_material.set_shader_parameter("tint_gradient_bottom_color", tint_gradient_bottom_color)
-		_cat_material.set_shader_parameter("tint_gradient_head_y", gradient_axis.x)
-		_cat_material.set_shader_parameter("tint_gradient_tail_y", gradient_axis.y)
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
@@ -1232,8 +1238,6 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
 		_material_id_2.set_shader_parameter("tint_gradient_top_color", tint_gradient_top_color)
 		_material_id_2.set_shader_parameter("tint_gradient_bottom_color", tint_gradient_bottom_color)
-		_material_id_2.set_shader_parameter("tint_gradient_head_y", gradient_axis.x)
-		_material_id_2.set_shader_parameter("tint_gradient_tail_y", gradient_axis.y)
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)

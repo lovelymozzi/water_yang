@@ -16,13 +16,16 @@ uniform float line_art_strength : hint_range(0.0, 1.0) = 0.82;
 uniform sampler2D tint_exclusion_mask : filter_linear_mipmap, repeat_enable;
 uniform float tint_exclusion_enabled : hint_range(0.0, 1.0) = 1.0;
 uniform vec4 tint_color : source_color = vec4(1.0);
-// Optional head-to-tail gradient applied to the tint. This is driven by the
-// skinned vertex's local Y position, never by UV islands.
+// Optional head-to-tail gradient applied to the tint.  It is evaluated from
+// the live body polyline, rather than a skinned local axis or UVs.  A local
+// axis collapses for the portion of the body that turns 90 degrees.
 uniform float tint_gradient_enabled : hint_range(0.0, 1.0) = 0.0;
 uniform vec4 tint_gradient_top_color : source_color = vec4(1.0);
 uniform vec4 tint_gradient_bottom_color : source_color = vec4(1.0);
-uniform float tint_gradient_head_y = 1.0;
-uniform float tint_gradient_tail_y = -1.0;
+const int TINT_GRADIENT_MAX_POINTS = 20;
+uniform vec3 tint_gradient_points[TINT_GRADIENT_MAX_POINTS];
+uniform int tint_gradient_point_count = 0;
+uniform float tint_gradient_path_length = 1.0;
 uniform int shadow_steps = 3;
 uniform float shadow_darkness : hint_range(0.0, 1.0) = 0.58;
 uniform float rim_strength : hint_range(0.0, 1.0) = 0.24;
@@ -33,12 +36,35 @@ uniform vec2 uv_offset = vec2(0.0);
 // cat UV area; keeping that cap untransformed prevents a repeated leg seam.
 uniform float tile_uv_min_u : hint_range(0.0, 1.0) = 0.0;
 
-varying float tint_gradient_vertex_y;
+varying float tint_gradient_path_t;
 
 void vertex() {
-	// VERTEX is evaluated after skinning, so the color field follows the
-	// stretched body rather than repeating with each texture tile.
-	tint_gradient_vertex_y = VERTEX.y;
+	// VERTEX is evaluated after skinning.  Project it on the same world-space
+	// polyline used to pose the bones, so the field remains continuous through
+	// turns as well as through a stretched middle section.
+	vec3 world_vertex = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+	float nearest_distance_squared = 1e20;
+	float nearest_arc = 0.0;
+	float arc_start = 0.0;
+	for (int index = 0; index < TINT_GRADIENT_MAX_POINTS - 1; index++) {
+		if (index >= tint_gradient_point_count - 1) {
+			break;
+		}
+		vec3 a = tint_gradient_points[index];
+		vec3 segment = tint_gradient_points[index + 1] - a;
+		float segment_length = length(segment);
+		if (segment_length > 0.0001) {
+			float segment_t = clamp(dot(world_vertex - a, segment) / (segment_length * segment_length), 0.0, 1.0);
+			vec3 closest = a + segment * segment_t;
+			float distance_squared = dot(world_vertex - closest, world_vertex - closest);
+			if (distance_squared < nearest_distance_squared) {
+				nearest_distance_squared = distance_squared;
+				nearest_arc = arc_start + segment_length * segment_t;
+			}
+			arc_start += segment_length;
+		}
+	}
+	tint_gradient_path_t = nearest_arc / max(tint_gradient_path_length, 0.0001);
 }
 
 void fragment() {
@@ -53,16 +79,7 @@ void fragment() {
 	if (tint_exclusion_enabled > 0.0) {
 		eye_mask = texture(tint_exclusion_mask, mapped_uv).r;
 	}
-	// The denominator intentionally supports either bone-chain direction.
-	// This also keeps feet and chest on their real position in the mesh even
-	// when their UV islands occupy the same region of the texture.
-	float axis_length = tint_gradient_tail_y - tint_gradient_head_y;
-	float gradient_t = clamp(
-		(tint_gradient_vertex_y - tint_gradient_head_y) / max(abs(axis_length), 0.0001)
-		* sign(axis_length),
-		0.0,
-		1.0
-	);
+	float gradient_t = clamp(tint_gradient_path_t, 0.0, 1.0);
 	gradient_t = gradient_t * gradient_t * (3.0 - 2.0 * gradient_t);
 	vec3 gradient_tint = mix(tint_gradient_top_color.rgb, tint_gradient_bottom_color.rgb, gradient_t);
 	vec3 tint_multiplier = tint_color.rgb * mix(vec3(1.0), gradient_tint, tint_gradient_enabled);
