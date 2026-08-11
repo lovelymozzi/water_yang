@@ -18,7 +18,6 @@ config/features=PackedStringArray("4.7")
 
 settings/stdout/verbose_stdout=true
 file_logging/enable_file_logging=true
-file_logging/enable_file_logging.pc=true
 file_logging/max_log_files=10
 
 [display]

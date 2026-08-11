@@ -4,6 +4,7 @@ extends Node3D
 
 const MODEL_SCENE_PATH := "res://water_yang/cat1.fbx"
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
+const TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat1_mask.jpg"
 const CLOSED_EYES_TEXTURE_PATH := "res://water_yang/cat1_1.jpeg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
@@ -11,11 +12,15 @@ const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
 const BLINK_CLOSED_DURATION := 0.11
-const MATERIAL_ID_2_SURFACE_INDEX := 1
+const TILE_MATERIAL_NAMES := ["Material_cat_tile", "Material cat_tile"]
+const TILE_MATERIAL_FALLBACK_SURFACE_INDEX := 1
+const TILE_UV_REGION_MIN_U := 0.625
 # The source FBX is authored at four cells.  Length 3 is the game minimum,
 # so it must shrink the middle section relative to this reference.
 const BODY_TEXTURE_REFERENCE_LENGTH := 4
-const STRETCH_BONE_FIRST := 4
+const HEAD_BONE_NAME := "Bone002"
+const TAIL_BONE_NAME := "Bone022"
+const STRETCH_BONE_FIRST := 6
 const STRETCH_BONE_LAST := 14
 # 드래그 중 코너를 깎을 때 원호를 몇 조각으로 나눌지.
 const CORNER_ARC_SEGMENTS := 6
@@ -142,11 +147,14 @@ var _tail_handle: Area3D
 var _cat_model: Node3D
 var _skeleton: Skeleton3D
 var _bone_rests: Array[Transform3D] = []
+var _head_bone_index := -1
+var _head_bone_rest_global := Transform3D.IDENTITY
 var _cat_material: ShaderMaterial
 var _material_id_2: ShaderMaterial
 var _outline_material: ShaderMaterial
 var _material_id_2_outline: ShaderMaterial
 var _open_eyes_texture: Texture2D
+var _tint_exclusion_mask: Texture2D
 var _closed_eyes_texture: Texture2D
 var _blink_time_remaining := -1.0
 var _eyes_are_closed := false
@@ -216,9 +224,11 @@ func _process_blink(delta: float) -> void:
 		return
 
 	_eyes_are_closed = not _eyes_are_closed
-	_cat_material.set_shader_parameter(
-		"albedo_tex",
-		_closed_eyes_texture if _eyes_are_closed else _get_open_eyes_texture()
+	# Rebind every shader input on an eye-texture swap.  Updating only the
+	# albedo left the live material dependent on its previous mask binding.
+	_apply_shader_parameters(
+		_closed_eyes_texture if _eyes_are_closed else _get_open_eyes_texture(),
+		not _eyes_are_closed
 	)
 	if _eyes_are_closed:
 		_blink_time_remaining = BLINK_CLOSED_DURATION
@@ -522,6 +532,8 @@ func _rebuild_body_visuals(_animate: bool) -> void:
 	_visual_root.add_child(_cat_model)
 	_skeleton = _find_skeleton_in(_cat_model)
 	_cache_bone_rests()
+	# The tile material's repeat count depends on cached rest lengths.
+	_apply_current_shader_parameters()
 	snap_pose_to_grid()
 
 
@@ -1002,7 +1014,7 @@ func _place_model_on(track: Dictionary) -> void:
 	# 상체 비율을 보존하기 위해 모델 루트는 반드시 균일 스케일만 사용한다.
 	_cat_model.scale = Vector3.ONE * _grid_fitted_model_scale()
 	var visual_offset := level_manager.tile_size * visual_forward_offset_tiles
-	_cat_model.position = head + _forward * (overhang + visual_offset) - _cat_model.basis * _bone_rests[0].origin
+	_cat_model.position = head + _forward * (overhang + visual_offset) - _cat_model.basis * _head_bone_rest_global.origin
 
 
 func _grid_path_length() -> float:
@@ -1071,44 +1083,58 @@ func _cache_bone_rests() -> void:
 	_bone_chain.clear()
 	_bone_chain_distances.clear()
 	_rest_chain_length = 0.0
+	_head_bone_index = -1
+	_head_bone_rest_global = Transform3D.IDENTITY
 	if _skeleton == null:
 		return
 	for index in _skeleton.get_bone_count():
 		_bone_rests.append(_skeleton.get_bone_rest(index))
+	_head_bone_index = _skeleton.find_bone(HEAD_BONE_NAME)
+	if _head_bone_index >= 0:
+		_head_bone_rest_global = _skeleton.get_bone_global_rest(_head_bone_index)
 	_build_bone_chain()
 
 
 func _build_bone_chain() -> void:
 	# 본 순서를 상수로 적어두지 않고 부모-자식 링크를 따라 머리에서 꼬리까지 실제로 걷는다.
 	# 리그가 바뀌어도 경로 순서와 관절 간격이 자동으로 따라온다.
-	var root_index := -1
-	for index in _skeleton.get_bone_count():
-		if _skeleton.get_bone_parent(index) == -1:
-			root_index = index
-			break
-	if root_index < 0:
+	var head_index := _skeleton.find_bone(HEAD_BONE_NAME)
+	var tail_index := _skeleton.find_bone(TAIL_BONE_NAME)
+	if head_index < 0 or tail_index < 0:
+		return
+	var head_to_root: Array[int] = _bone_path_to_root(head_index)
+	var tail_to_root: Array[int] = _bone_path_to_root(tail_index)
+	if head_to_root.is_empty() or tail_to_root.is_empty() or head_to_root.back() != tail_to_root.back():
 		return
 
-	var current := root_index
+	_bone_chain = head_to_root
+	tail_to_root.reverse()
+	for index in range(1, tail_to_root.size()):
+		_bone_chain.append(tail_to_root[index])
+
 	var distance := 0.0
-	_bone_chain.append(current)
 	_bone_chain_distances.append(0.0)
 
-	while true:
-		var children: PackedInt32Array = _skeleton.get_bone_children(current)
-		if children.is_empty():
-			break
+	for chain_index in range(1, _bone_chain.size()):
+		var previous_bone: int = _bone_chain[chain_index - 1]
+		var next_bone: int = _bone_chain[chain_index]
 		# 뱀형 리그는 단일 체인이다. 갈래가 생기면 가장 긴 뼈를 몸통 진행 방향으로 본다.
-		var next_bone: int = children[0]
-		for child in children:
-			if _bone_rests[child].origin.length() > _bone_rests[next_bone].origin.length():
-				next_bone = child
-		distance += _bone_rests[next_bone].origin.length()
-		_bone_chain.append(next_bone)
+		if _skeleton.get_bone_parent(previous_bone) == next_bone:
+			distance += _bone_rests[previous_bone].origin.length()
+		else:
+			distance += _bone_rests[next_bone].origin.length()
 		_bone_chain_distances.append(distance)
-		current = next_bone
 
 	_rest_chain_length = distance
+
+
+func _bone_path_to_root(bone_index: int) -> Array[int]:
+	var path: Array[int] = []
+	var current := bone_index
+	while current >= 0:
+		path.append(current)
+		current = _skeleton.get_bone_parent(current)
+	return path
 
 
 func _grid_fitted_model_scale() -> float:
@@ -1136,13 +1162,13 @@ func _is_stretchable_chain_bone(chain_index: int) -> bool:
 func _stretchable_rest_length() -> float:
 	var total := 0.0
 	for chain_index in range(1, _bone_chain_distances.size()):
-		if _is_stretchable_chain_bone(chain_index - 1):
+		if _is_stretchable_chain_bone(chain_index):
 			total += _bone_chain_distances[chain_index] - _bone_chain_distances[chain_index - 1]
 	return total
 
 
 func _stretchable_bone_scale() -> float:
-	# Only the middle Bone004..Bone014 section absorbs added Initial Length.
+	# Only the middle Bone006..Bone014 section absorbs added Initial Length.
 	var stretchable_length := _stretchable_rest_length()
 	if stretchable_length <= 0.000001:
 		return 1.0
@@ -1155,7 +1181,7 @@ func _stretched_chain_distance(chain_index: int) -> float:
 	var distance := 0.0
 	for index in range(1, mini(chain_index + 1, _bone_chain_distances.size())):
 		var segment := _bone_chain_distances[index] - _bone_chain_distances[index - 1]
-		if _is_stretchable_chain_bone(index - 1):
+		if _is_stretchable_chain_bone(index):
 			segment *= _stretchable_bone_scale()
 		distance += segment
 	return distance
@@ -1171,9 +1197,9 @@ func _apply_stretchable_bone_offsets() -> void:
 	var stretch_scale := _stretchable_bone_scale()
 	# Scaling a parent bone is inherited by every child, causing the length to
 	# multiply down the chain.  Instead, extend only the rest-position of each
-	# segment after Bone004..Bone014.  The positions are on local X in this FBX.
+	# segment entering Bone006..Bone014. The positions are on local X in this FBX.
 	for chain_index in range(1, _bone_chain.size()):
-		if _is_stretchable_chain_bone(chain_index - 1):
+		if _is_stretchable_chain_bone(chain_index):
 			var bone_index := _bone_chain[chain_index]
 			_skeleton.set_bone_pose_position(
 				bone_index, _bone_rests[bone_index].origin * stretch_scale
@@ -1215,19 +1241,28 @@ func _find_skeleton_in(node: Node) -> Skeleton3D:
 func _apply_material_recursive(node: Node) -> void:
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
-		# Keep the FBX surface split: surface 1 is 3ds Max Material ID 2
-		# (Material #26).  A material override would flatten both surfaces into
-		# one, preventing the body-only UV tiling correction below.
+		# Keep the FBX material split. A material override would flatten both
+		# surfaces into one, preventing body-only UV tiling correction.
 		mesh_instance.material_override = null
 		if mesh_instance.mesh != null:
 			for surface_index in mesh_instance.mesh.get_surface_count():
 				var material: Material = _cat_material
-				if surface_index == MATERIAL_ID_2_SURFACE_INDEX and _material_id_2 != null:
+				if _is_tile_material_surface(mesh_instance, surface_index) and _material_id_2 != null:
 					material = _material_id_2
 				mesh_instance.set_surface_override_material(surface_index, material)
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
 	for child in node.get_children():
 		_apply_material_recursive(child)
+
+
+func _is_tile_material_surface(mesh_instance: MeshInstance3D, surface_index: int) -> bool:
+	var source_material := mesh_instance.mesh.surface_get_material(surface_index) if mesh_instance.mesh != null else null
+	# Godot can import FBX materials as unnamed subresources, so resource_name is
+	# not reliable by itself. This FBX orders Material_cat first and
+	# Material cat_tile second; retain that verified slot as a fallback.
+	return (
+		source_material != null and source_material.resource_name in TILE_MATERIAL_NAMES
+	) or surface_index == TILE_MATERIAL_FALLBACK_SURFACE_INDEX
 
 
 func _build_cat_material() -> void:
@@ -1274,23 +1309,34 @@ func _apply_current_shader_parameters() -> void:
 	_apply_shader_parameters(_get_open_eyes_texture())
 
 
-func _apply_shader_parameters(texture: Texture2D) -> void:
+func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := true) -> void:
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
+		_cat_material.set_shader_parameter(
+			"tint_exclusion_mask", _get_tint_exclusion_mask() if use_tint_exclusion_mask else null
+		)
+		_cat_material.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_cat_material.set_shader_parameter("tint_color", tint_color)
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
 	if _material_id_2 != null:
-		# The exported FBX uses V (UV.y) along the body's local Y axis.  More
-		# cells need proportionally more repeats; centering the offset keeps the
-		# texture locked at the middle while either end grows or shrinks.
-		var tile_scale := _body_length_scale()
+		# Material cat_tile covers the Bone006..Bone014 section. Only this section
+		# is moved to change the cat's length, so its UV repeats must follow the
+		# actual pose extension rather than the total grid-length ratio.
+		var tile_scale := _stretchable_bone_scale()
 		_material_id_2.set_shader_parameter("albedo_tex", texture)
+		_material_id_2.set_shader_parameter(
+			"tint_exclusion_mask", _get_tint_exclusion_mask() if use_tint_exclusion_mask else null
+		)
+		_material_id_2.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_material_id_2.set_shader_parameter("tint_color", tint_color)
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
+		_material_id_2.set_shader_parameter("tile_uv_min_u", TILE_UV_REGION_MIN_U)
+		# Material cat_tile already uses the right-side tile region in its UV map.
+		# Keep U unchanged; repeat only along its vertical V direction.
 		_material_id_2.set_shader_parameter("uv_tiling", Vector2(1.0, tile_scale))
 		_material_id_2.set_shader_parameter("uv_offset", Vector2(0.0, (1.0 - tile_scale) * 0.5))
 	if _outline_material != null:
@@ -1305,6 +1351,12 @@ func _get_open_eyes_texture() -> Texture2D:
 	if _open_eyes_texture == null:
 		_open_eyes_texture = load(MODEL_TEXTURE_PATH) as Texture2D
 	return _open_eyes_texture
+
+
+func _get_tint_exclusion_mask() -> Texture2D:
+	if _tint_exclusion_mask == null:
+		_tint_exclusion_mask = load(TINT_EXCLUSION_MASK_PATH) as Texture2D
+	return _tint_exclusion_mask
 
 
 func _schedule_next_blink() -> void:
