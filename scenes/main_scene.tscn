@@ -43,7 +43,7 @@ script = ExtResource("2_5srec")
 
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
-[node name="Cat2" type="Area3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
+[node name="Cat2" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.78, -8)
 script = ExtResource("3_cat")
 initial_length = 9

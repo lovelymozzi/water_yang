@@ -66,8 +66,6 @@ var _tiles_root: Node3D
 var _obstacles_root: Node3D
 var _layout_cats_root: Node3D
 var _layout_obstacles_root: Node3D
-var _drag_cat: CatEntity
-var _drag_endpoint: StringName = &""
 
 
 func _ready() -> void:
@@ -81,26 +79,6 @@ func _ready() -> void:
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_CHILD_ORDER_CHANGED and Engine.is_editor_hint():
 		request_preview_refresh()
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	# 마우스 클릭과 모바일 터치를 모두 같은 선택 흐름으로 처리한다.
-	if Engine.is_editor_hint():
-		return
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			_begin_endpoint_drag(event.position)
-		else:
-			_end_endpoint_drag()
-	elif event is InputEventMouseMotion and _drag_cat != null and event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-		_update_endpoint_drag(event.position)
-	elif event is InputEventScreenTouch:
-		if event.pressed:
-			_begin_endpoint_drag(event.position)
-		else:
-			_end_endpoint_drag()
-	elif event is InputEventScreenDrag and _drag_cat != null:
-		_update_endpoint_drag(event.position)
 
 
 func request_preview_refresh() -> void:
@@ -163,30 +141,6 @@ func update_cat_occupancy(cat: CatEntity) -> void:
 			_set_cell_ref(cell, cat)
 
 
-func can_extend_cat_to(cat: CatEntity, cell: Vector2i) -> bool:
-	if not is_inside_grid(cell):
-		return false
-	return _get_cell_state(cell) == CellState.EMPTY
-
-
-func can_place_cat_body(cat: CatEntity, candidate: Array[Vector2i]) -> bool:
-	var body_cells := {}
-	for cell in candidate:
-		# 같은 셀을 다시 지나가면 몸통끼리도 겹친다.
-		if body_cells.has(cell):
-			return false
-		body_cells[cell] = true
-
-	for cell in candidate:
-		if not is_inside_grid(cell):
-			return false
-		var occupant: Variant = _get_cell_ref(cell)
-		# 현재 이 고양이가 차지하던 셀은 후보 경로를 검사하는 동안만 통과를 허용한다.
-		if occupant != null and occupant != cat:
-			return false
-	return true
-
-
 func get_escape_result(cat: CatEntity) -> Dictionary:
 	var probe: Vector2i = cat.grid_pos + cat.facing_dir
 
@@ -213,17 +167,6 @@ func on_cat_escaped(cat: CatEntity) -> void:
 	_cats.erase(cat)
 	if _cats.is_empty():
 		level_cleared.emit()
-
-
-func describe_state() -> String:
-	# 프리즈 진단용 스냅샷. 로그 한 줄로 어느 상황에서 멈췄는지 좁힐 수 있게 한다.
-	var parts: Array[String] = []
-	parts.append("cats=%d" % _cats.size())
-	parts.append("drag=%s/%s" % [
-		"none" if _drag_cat == null else _drag_cat.name, str(_drag_endpoint)])
-	for cat in _cats:
-		parts.append(cat.describe_state())
-	return " | ".join(parts)
 
 
 func _setup_roots() -> void:
@@ -410,52 +353,6 @@ func _tile_color_for(cell: Vector2i) -> Color:
 	if (cell.x + cell.y) % 2 == 0:
 		return Color(0.95, 0.77, 0.62, 1.0)
 	return Color(0.93, 0.72, 0.56, 1.0)
-
-
-func _begin_endpoint_drag(screen_pos: Vector2) -> void:
-	var camera: Camera3D = get_viewport().get_camera_3d()
-	if camera == null:
-		return
-
-	var ray_origin: Vector3 = camera.project_ray_origin(screen_pos)
-	var ray_end: Vector3 = ray_origin + camera.project_ray_normal(screen_pos) * 200.0
-
-	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
-	query.collide_with_areas = true
-	query.collide_with_bodies = false
-
-	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
-	if result.is_empty():
-		return
-
-	var collider: Variant = result.get("collider")
-	if collider is Area3D and (collider as Area3D).has_meta("cat_endpoint"):
-		var handle := collider as Area3D
-		var cat := handle.get_parent().get_parent() as CatEntity
-		if cat != null:
-			_drag_cat = cat
-			_drag_endpoint = handle.get_meta("cat_endpoint") as StringName
-			# 잡은 지점을 함께 넘긴다. 정중앙이 아닌 곳을 잡아도 편향이 남지 않는다.
-			_drag_cat.begin_drag(_drag_endpoint, _screen_to_board_point(screen_pos))
-
-
-func _update_endpoint_drag(screen_pos: Vector2) -> void:
-	if _drag_cat == null:
-		return
-	# 셀 번호가 아니라 보드 평면 위의 연속 좌표를 그대로 넘긴다.
-	# 고양이는 이 좌표를 따라 셀 사이 중간 지점까지 미끄러진다.
-	var board_point: Variant = _screen_to_board_point(screen_pos)
-	if board_point == null:
-		return
-	_drag_cat.update_drag(_drag_endpoint, board_point as Vector3)
-
-
-func _end_endpoint_drag() -> void:
-	if _drag_cat != null:
-		# 손을 놓으면 가장 가까운 그리드 정위치로 각지게 수렴한다.
-		_drag_cat.end_drag()
-	_drag_cat = null
-	_drag_endpoint = &""
 
 
 func _screen_to_board_point(screen_pos: Vector2) -> Variant:

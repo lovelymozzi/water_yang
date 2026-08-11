@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 	if delta < FRAME_STALL_WARNING_SECONDS or _stall_reports >= 40:
 		return
 	_stall_reports += 1
-	push_warning("[stall] 프레임 %.0fms  %s" % [delta * 1000.0, level_manager.describe_state()])
+	push_warning("[stall] 프레임 %.0fms" % (delta * 1000.0))
 
 
 func _on_level_cleared() -> void:
