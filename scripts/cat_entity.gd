@@ -219,6 +219,7 @@ func _process_blink(delta: float) -> void:
 	# albedo left the live material dependent on its previous mask binding.
 	_apply_shader_parameters(
 		_closed_eyes_texture if _eyes_are_closed else _get_open_eyes_texture(),
+		not _eyes_are_closed,
 		not _eyes_are_closed
 	)
 	if _eyes_are_closed:
@@ -622,7 +623,11 @@ func _get_tint_gradient_axis() -> Vector2:
 	return Vector2(head_y, tail_y)
 
 
-func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := true) -> void:
+func _apply_shader_parameters(
+	texture: Texture2D,
+	use_tint_exclusion_mask := true,
+	use_line_art := true
+) -> void:
 	var gradient_axis := _get_tint_gradient_axis()
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
@@ -640,7 +645,9 @@ func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := tru
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
 		_cat_material.set_shader_parameter("line_art_tex", line_art_texture)
-		_cat_material.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
+		_cat_material.set_shader_parameter(
+			"line_art_enabled", 1.0 if use_line_art and line_art_texture != null else 0.0
+		)
 		_cat_material.set_shader_parameter("line_art_color", line_art_color)
 		_cat_material.set_shader_parameter("line_art_strength", line_art_strength)
 	if _material_id_2 != null:
@@ -663,7 +670,9 @@ func _apply_shader_parameters(texture: Texture2D, use_tint_exclusion_mask := tru
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
 		_material_id_2.set_shader_parameter("line_art_tex", line_art_texture)
-		_material_id_2.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
+		_material_id_2.set_shader_parameter(
+			"line_art_enabled", 1.0 if use_line_art and line_art_texture != null else 0.0
+		)
 		_material_id_2.set_shader_parameter("line_art_color", line_art_color)
 		_material_id_2.set_shader_parameter("line_art_strength", line_art_strength)
 		_material_id_2.set_shader_parameter("tile_uv_min_u", TILE_UV_REGION_MIN_U)
