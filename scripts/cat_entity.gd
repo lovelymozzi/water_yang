@@ -220,7 +220,7 @@ func _process_blink(delta: float) -> void:
 	_apply_shader_parameters(
 		_closed_eyes_texture if _eyes_are_closed else _get_open_eyes_texture(),
 		not _eyes_are_closed,
-		not _eyes_are_closed
+		_eyes_are_closed
 	)
 	if _eyes_are_closed:
 		_blink_time_remaining = BLINK_CLOSED_DURATION
