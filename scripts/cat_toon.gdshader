@@ -69,27 +69,20 @@ void fragment() {
 	vec3 base_color = tex.rgb * mix(tint_multiplier, vec3(1.0), eye_mask);
 	vec4 line_art = texture(line_art_tex, mapped_uv);
 	float line_alpha = line_art.a * line_art_enabled * line_art_strength;
-	// The painted eye outline sits just outside the white area in cat1_mask.jpg.
-	// Expand that mask by ten texels so the entire outline disappears on a blink,
-	// while the separate nose region remains untouched.
-	float eye_mask_radius = 10.0 / 1024.0;
-	float line_art_eye_mask_value = texture(line_art_eye_mask, mapped_uv).r;
-	line_art_eye_mask_value = max(
-		line_art_eye_mask_value,
-		texture(line_art_eye_mask, mapped_uv + vec2(eye_mask_radius, 0.0)).r
-	);
-	line_art_eye_mask_value = max(
-		line_art_eye_mask_value,
-		texture(line_art_eye_mask, mapped_uv + vec2(-eye_mask_radius, 0.0)).r
-	);
-	line_art_eye_mask_value = max(
-		line_art_eye_mask_value,
-		texture(line_art_eye_mask, mapped_uv + vec2(0.0, eye_mask_radius)).r
-	);
-	line_art_eye_mask_value = max(
-		line_art_eye_mask_value,
-		texture(line_art_eye_mask, mapped_uv + vec2(0.0, -eye_mask_radius)).r
-	);
+	// The eye outlines in Cat_Line extend past the white eye areas of
+	// cat1_mask.jpg. Dilate the mask in both axes so all of the eye ink is
+	// removed during a blink, while the separate nose/mouth line art remains.
+	const float eye_mask_sample_step = 12.0 / 1024.0;
+	float line_art_eye_mask_value = 0.0;
+	for (int y = -2; y <= 2; y++) {
+		for (int x = -2; x <= 2; x++) {
+			vec2 eye_mask_offset = vec2(float(x), float(y)) * eye_mask_sample_step;
+			line_art_eye_mask_value = max(
+				line_art_eye_mask_value,
+				texture(line_art_eye_mask, mapped_uv + eye_mask_offset).r
+			);
+		}
+	}
 	line_alpha *= 1.0 - (line_art_eyes_hidden * line_art_eye_mask_value);
 	ALBEDO = mix(base_color, line_art_color.rgb, line_alpha);
 	ROUGHNESS = 0.82;
