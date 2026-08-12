@@ -44,8 +44,6 @@ obstacles_enabled = true
 board_visuals_color = Color(0.57254905, 0.67058825, 0.34509805, 1)
 tile_primary_color = Color(0.43130937, 0.57282066, 0.2760929, 1)
 tile_secondary_color = Color(0.4151132, 0.55480856, 0.31393868, 1)
-obstacle_primary_color = Color(0.4, 0.32, 0.23, 1)
-obstacle_secondary_color = Color(0.34, 0.27, 0.19, 1)
 pair_colors = PackedColorArray(0.94, 0.72, 0.47, 1, 0.53, 0.71, 0.94, 1, 0.58, 0.83, 0.56, 1, 0.92, 0.6, 0.74, 1)
 
 [node name="BoardVisuals" type="Node3D" parent="LevelManager" unique_id=1755716270]
@@ -165,7 +163,8 @@ color_id = 3
 [node name="MapGenerator" type="Node" parent="." unique_id=1306831349]
 script = ExtResource("6_gen")
 generate_on_play = true
-generator_seed = 1
+generator_seed = 22
+body_length_max = 8
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=411557567]
 
