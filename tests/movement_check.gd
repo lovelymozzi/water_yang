@@ -18,6 +18,9 @@ func _process(_delta: float) -> bool:
 	if _frames < 10:
 		return false
 	var manager: LevelManager = _scene.get_node("LevelManager")
+	# 이동 검사는 레벨 배치와 무관해야 한다. 검사들이 고양이를 보드 곳곳에 순간이동시키므로
+	# 구멍이 놓여 있으면 흡입이 끼어든다. 구멍은 tests/hole_check.gd 가 본다.
+	_clear_holes(manager)
 	var cat: CatEntity = manager.get_cats()[0]
 	_check_rig(cat)
 	_check_bone_placement(cat, "정지")
@@ -460,6 +463,12 @@ func _check_reverse_wall_slide(manager: LevelManager, cat: CatEntity) -> void:
 	for cell in [Vector2i(2, 2), Vector2i(4, 2), Vector2i(2, 3), Vector2i(4, 3), Vector2i(3, 2)]:
 		manager._set_cell_state(cell, LevelManager.CellState.OBSTACLE)
 	_check_bone_placement(cat, "벽슬라이드후")
+
+
+func _clear_holes(manager: LevelManager) -> void:
+	for cell in manager.get_hole_cells().duplicate():
+		manager._set_cell_state(cell, LevelManager.CellState.EMPTY)
+	manager.get_hole_cells().clear()
 
 
 func _distance_to_polyline(point: Vector3, polyline: PackedVector3Array) -> float:

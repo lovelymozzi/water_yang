@@ -42,6 +42,9 @@ const INVALID_CELL := Vector2i(-9999, -9999)
 const OVERHANG_CALIBRATION_STEPS := 8
 const OVERHANG_RELAXATION := 0.3
 const OVERHANG_DEBUG := true
+# 구멍 흡입에서 몸이 구멍 중심을 지나 더 내려가는 깊이(칸 단위). 이 깊이를 다 내려가면
+# 바닥 아래로 완전히 사라진 것으로 보고 흡입을 끝낸다.
+const ABSORB_SINK_CELLS := 0.9
 
 @export_group("Layout")
 @export var grid_pos: Vector2i = Vector2i.ZERO:
@@ -90,6 +93,8 @@ const OVERHANG_DEBUG := true
 # 1_움직임고찰.md 1절. 큐 상한은 항상 `속도 × 0.5초`로 맞춘다.
 @export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 8.0
 @export_range(1, 12, 1) var path_queue_max: int = 4
+# 구멍에 빨려 들어가는 속도. 이동보다 빠르면 낚아채이는 느낌이 난다.
+@export_range(1.0, 32.0, 0.5) var absorb_speed_cells: float = 11.0
 
 # 발자국 양끝에 남기는 여백(칸 단위). 몸 길이와 무관하게 항상 한 칸의 이 비율만큼이다.
 # 0 이면 메시가 발자국을 꽉 채워 이동이 뻑뻑해 보인다.
@@ -100,6 +105,21 @@ const OVERHANG_DEBUG := true
 		if is_inside_tree() and not Engine.is_editor_hint() and level_manager != null:
 			_update_visual_pose()
 		_request_editor_refresh()
+
+@export_group("Color Pair")
+# LevelManager.pair_colors 의 인덱스. 같은 color_id 를 가진 구멍에만 빠진다.
+# -1 은 아무 구멍이나 쓰는 와일드카드다.
+@export_range(-1, 15, 1) var color_id: int = 0:
+	set(value):
+		color_id = value
+		_refresh_shader_material()
+
+# 켜면 틴트와 그라디언트를 팔레트의 짝 색에서 만든다. 색이 곧 짝 판정 기준이므로
+# 표시색을 손으로 따로 맞추다 어긋나는 일을 막는다. 끄면 아래 값들이 그대로 쓰인다.
+@export var tint_from_pair_color := false:
+	set(value):
+		tint_from_pair_color = value
+		_refresh_shader_material()
 
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
@@ -197,6 +217,17 @@ var _is_blocked := false
 var _pending_reverse := 0
 var _is_reversing := false
 var _slide_random := RandomNumberGenerator.new()
+
+# 구멍 흡입. 시작하면 조작을 받지 않고 흡입만 진행한다.
+var _is_absorbing := false
+var _absorb_cell := INVALID_CELL
+# 구멍으로 먼저 들어가는 끝이 리드쪽인지. 후진 중에는 후미가 먼저 닿을 수 있다.
+var _absorb_from_lead := true
+# 몸이 자기 경로를 따라 구멍 쪽으로 밀려 들어간 길이(월드 단위).
+var _swallowed_arc := 0.0
+# 흡입이 끝나는 _swallowed_arc 값. 폴리라인 계산을 두 번 하지 않으려고
+# _update_visual_pose() 가 매 프레임 채워 준다.
+var _absorb_required_arc := 0.0
 
 var _visual_root: Node3D
 var _cat_model: Node3D
@@ -397,9 +428,15 @@ func is_blocked() -> bool:
 	return _is_blocked
 
 
+func is_absorbing() -> bool:
+	return _is_absorbing
+
+
 # 새 터치. 잔여 큐를 버리고, 잡은 쪽이 뒤끝이면 리드를 그쪽으로 넘긴다.
 # 전이 중에는 레일을 뒤집지 않고 전이가 끝난 시점으로 미룬다.
 func begin_drag(end_cell: Vector2i) -> void:
+	if _is_absorbing:
+		return
 	path_queue.clear()
 	_pending_reverse = 0
 	_is_blocked = false
@@ -425,7 +462,7 @@ func _update_facing() -> void:
 
 # 손가락이 가리키는 셀까지 큐를 잇는다. 인접하면 한 칸, 끊겼으면 브릿지로 잇는다.
 func request_path_to(target: Vector2i) -> void:
-	if _pending_lead_flip or level_manager == null:
+	if _pending_lead_flip or _is_absorbing or level_manager == null:
 		return
 	if not level_manager.is_inside_grid(target):
 		# 보드 밖을 가리키는 것도 닿을 수 없는 상태다. 강제 릴리즈 판정에 들어가야 한다.
@@ -554,6 +591,9 @@ func _rebuild_path(came: Dictionary, key: Vector3i) -> Array[Vector2i]:
 func advance(delta: float) -> void:
 	if level_manager == null or body_cells.is_empty():
 		return
+	if _is_absorbing:
+		_advance_absorb(delta)
+		return
 	var remaining: float = delta * move_speed_cells
 	while remaining > 0.0:
 		if not _is_moving and not _begin_step():
@@ -646,6 +686,111 @@ func _finish_step() -> void:
 		_flip_lead()
 	# grid_pos 세터는 몸을 직선으로 되돌리는 레이아웃용이다. 이동 중에는 건드리지 않고
 	# 실제 위치는 언제나 body_cells 로만 읽는다.
+	# 흡입 판정은 셀 중앙에서 커밋한 이 순간에만 한다. 전이 중에 시작하면 레일과
+	# 점유가 어긋난다.
+	_try_begin_absorb()
+
+
+# ---------------------------------------------------------------- 구멍 흡입
+
+# 두 끝 중 하나가 구멍과 4방향 인접이면 그 끝부터 빨려 들어간다. 두 끝을 모두 보는 것은
+# 후진에서 후미가 리드가 가지 않은 칸으로 나갈 수 있기 때문이다(벽 타기). 규칙대로
+# 양끝 코드 경로는 하나이며 동시에 걸리면 리드가 먼저다.
+func _try_begin_absorb() -> bool:
+	if _is_absorbing or level_manager == null or body_cells.size() < 1:
+		return false
+	for from_lead in [true, false]:
+		var end_cell: Vector2i = body_cells[0] if from_lead else body_cells[body_cells.size() - 1]
+		# 색이 짝인 구멍만 걸린다. 짝이 아니면 옆칸에 서 있어도 아무 일도 없다.
+		var hole: Variant = level_manager.adjacent_hole(end_cell, color_id)
+		if hole != null:
+			_begin_absorb(hole as Vector2i, from_lead)
+			return true
+	return false
+
+
+func _begin_absorb(hole_cell: Vector2i, from_lead: bool) -> void:
+	_is_absorbing = true
+	_absorb_cell = hole_cell
+	_absorb_from_lead = from_lead
+	_swallowed_arc = 0.0
+	_absorb_required_arc = 0.0
+	path_queue.clear()
+	_pending_reverse = 0
+	_pending_lead_flip = false
+	_is_moving = false
+	_is_reversing = false
+	_transition_t = 0.0
+	_is_blocked = false
+	_rail = body_cells.duplicate()
+	# 빨려 들어가기 시작한 순간부터 점유를 놓는다. 다른 고양이가 곧바로 지나갈 수 있다.
+	level_manager.release_cat_cell(self)
+	_apply_current_shader_parameters()
+
+
+func _advance_absorb(delta: float) -> void:
+	_swallowed_arc += delta * absorb_speed_cells * level_manager.tile_size
+	_update_visual_pose()
+	if _absorb_required_arc > 0.0 and _swallowed_arc >= _absorb_required_arc:
+		_finish_absorb()
+
+
+func _finish_absorb() -> void:
+	_is_absorbing = false
+	visible = false
+	var manager: LevelManager = level_manager
+	# 이후 프레임에서 이동/포즈 계산이 다시 돌지 않게 끊는다.
+	level_manager = null
+	manager.release_cat_cell(self)
+	manager.on_cat_escaped(self)
+	queue_free()
+
+
+# 흡입 중 이 호 위치의 본이 놓일 자리와 머리 축 방향. 몸은 자기 경로를 따라 구멍 쪽으로
+# 밀리고, 끝점을 지난 부분은 구멍 중심까지 직선으로 간 뒤 곧장 아래로 내려간다.
+# 포즈 경로를 새로 만들지 않고 샘플 위치만 바꾸는 것이 핵심이다.
+func _absorb_pose_at(
+	polyline: PackedVector3Array,
+	cumulative: PackedFloat32Array,
+	total_length: float,
+	arc_from_lead: float
+) -> Array:
+	var entry_arc: float = 0.0 if _absorb_from_lead else total_length
+	var from_entry: float = absf(arc_from_lead - entry_arc) - _swallowed_arc
+	if from_entry >= 0.0:
+		var shifted: float = from_entry if _absorb_from_lead else total_length - from_entry
+		return [
+			_sample_polyline(polyline, cumulative, shifted),
+			_model_head_direction(polyline, cumulative, shifted),
+		]
+
+	var entry_point: Vector3 = _sample_polyline(polyline, cumulative, entry_arc)
+	var hole_point: Vector3 = level_manager.grid_to_world(_absorb_cell, level_manager.cat_world_y)
+	var to_hole: Vector3 = hole_point - entry_point
+	var span: float = to_hole.length()
+	var overshoot: float = -from_entry
+	var direction: Vector3 = _model_head_direction(polyline, cumulative, entry_arc)
+	if span > 0.000001:
+		# 모델 머리가 들어가는 쪽 끝에 있으면 머리 축이 구멍을 향한다.
+		var head_on_entry: bool = _absorb_from_lead != _lead_is_tail
+		direction = to_hole.normalized() * (1.0 if head_on_entry else -1.0)
+	if span > 0.000001 and overshoot <= span:
+		return [entry_point.lerp(hole_point, overshoot / span), direction]
+	return [hole_point + Vector3.DOWN * (overshoot - span), direction]
+
+
+# 마지막 본까지 바닥 아래로 사라지는 데 필요한 총 흡입 길이.
+func _absorb_arc_to_finish(
+	polyline: PackedVector3Array, cumulative: PackedFloat32Array, total_length: float
+) -> float:
+	var entry_arc: float = 0.0 if _absorb_from_lead else total_length
+	var entry_point: Vector3 = _sample_polyline(polyline, cumulative, entry_arc)
+	var hole_point: Vector3 = level_manager.grid_to_world(_absorb_cell, level_manager.cat_world_y)
+	return (
+		total_length
+		+ entry_point.distance_to(hole_point)
+		+ level_manager.tile_size * ABSORB_SINK_CELLS
+	)
 
 
 func can_enter(cell: Vector2i) -> bool:
@@ -750,9 +895,12 @@ func _update_visual_pose() -> void:
 	var chain_distances: PackedFloat32Array = _stretched_chain_distances()
 	# 리드를 반대쪽 끝으로 잡으면 모델의 머리 본은 폴리라인 반대편 끝에 놓인다.
 	var head_arc: float = total_length if _lead_is_tail else 0.0
-	var head_dir: Vector3 = _model_head_direction(polyline, cumulative, head_arc)
+	if _is_absorbing:
+		_absorb_required_arc = _absorb_arc_to_finish(polyline, cumulative, total_length)
+	var head_pose: Array = _pose_at(polyline, cumulative, total_length, head_arc)
+	var head_dir: Vector3 = head_pose[1]
 
-	position = _sample_polyline(polyline, cumulative, head_arc)
+	position = head_pose[0]
 	rotation = Vector3.ZERO
 	scale = Vector3.ONE
 	# FBX 로컬 +Y 는 머리가 바라보는 방향이다. 상체 비율 보존을 위해 균일 스케일만 쓴다.
@@ -771,8 +919,9 @@ func _update_visual_pose() -> void:
 	for chain_index in _bone_chain.size():
 		var arc: float = chain_distances[chain_index] * model_scale
 		var arc_from_lead: float = (total_length - arc) if _lead_is_tail else arc
-		var point: Vector3 = _sample_polyline(polyline, cumulative, arc_from_lead)
-		var direction: Vector3 = _model_head_direction(polyline, cumulative, arc_from_lead)
+		var pose: Array = _pose_at(polyline, cumulative, total_length, arc_from_lead)
+		var point: Vector3 = pose[0]
+		var direction: Vector3 = pose[1]
 		var bone_index: int = _bone_chain[chain_index]
 		var rest_basis: Basis = _skeleton.get_bone_global_rest(bone_index).basis
 		# 기준 자세(머리 방향)에서 이 본의 접선 방향으로 돌리는 회전만 얹는다.
@@ -787,6 +936,22 @@ func _update_visual_pose() -> void:
 
 	_apply_bone_globals(desired)
 	_update_tint_gradient_path(polyline, total_length)
+
+
+# 호 위치 하나를 (자리, 머리 축 방향) 으로 바꾸는 단일 창구. 평소에는 폴리라인을 그대로
+# 샘플링하고, 흡입 중에만 구멍 쪽으로 밀린 좌표계를 쓴다.
+func _pose_at(
+	polyline: PackedVector3Array,
+	cumulative: PackedFloat32Array,
+	total_length: float,
+	arc_from_lead: float
+) -> Array:
+	if _is_absorbing:
+		return _absorb_pose_at(polyline, cumulative, total_length, arc_from_lead)
+	return [
+		_sample_polyline(polyline, cumulative, arc_from_lead),
+		_model_head_direction(polyline, cumulative, arc_from_lead),
+	]
 
 
 func _update_tint_gradient_path(polyline: PackedVector3Array, total_length: float) -> void:
@@ -1287,14 +1452,17 @@ func _apply_shader_parameters(
 	custom_tint_exclusion_mask: Texture2D = null
 ) -> void:
 	var tint_exclusion_mask: Texture2D = custom_tint_exclusion_mask if custom_tint_exclusion_mask != null else _get_tint_exclusion_mask()
+	var active_tint: Color = _effective_tint_color()
+	var active_gradient_top: Color = _effective_tint_gradient_top()
+	var active_gradient_bottom: Color = _effective_tint_gradient_bottom()
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
 		_cat_material.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_cat_material.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
-		_cat_material.set_shader_parameter("tint_color", tint_color)
+		_cat_material.set_shader_parameter("tint_color", active_tint)
 		_cat_material.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
-		_cat_material.set_shader_parameter("tint_gradient_top_color", tint_gradient_top_color)
-		_cat_material.set_shader_parameter("tint_gradient_bottom_color", tint_gradient_bottom_color)
+		_cat_material.set_shader_parameter("tint_gradient_top_color", active_gradient_top)
+		_cat_material.set_shader_parameter("tint_gradient_bottom_color", active_gradient_bottom)
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
@@ -1312,10 +1480,10 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("albedo_tex", texture)
 		_material_id_2.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_material_id_2.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
-		_material_id_2.set_shader_parameter("tint_color", tint_color)
+		_material_id_2.set_shader_parameter("tint_color", active_tint)
 		_material_id_2.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
-		_material_id_2.set_shader_parameter("tint_gradient_top_color", tint_gradient_top_color)
-		_material_id_2.set_shader_parameter("tint_gradient_bottom_color", tint_gradient_bottom_color)
+		_material_id_2.set_shader_parameter("tint_gradient_top_color", active_gradient_top)
+		_material_id_2.set_shader_parameter("tint_gradient_bottom_color", active_gradient_bottom)
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
@@ -1341,6 +1509,16 @@ func _apply_shader_parameters(
 		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 
+	# 흡입 중에만 바닥 면 아래로 내려간 부분을 지운다. 본체와 아웃라인이 같은 기준을
+	# 써야 껍데기만 남는 일이 없다.
+	var tile: float = level_manager.tile_size if level_manager != null else 2.0
+	for sink_material in [_cat_material, _material_id_2, _outline_material, _material_id_2_outline]:
+		if sink_material == null:
+			continue
+		sink_material.set_shader_parameter("sink_clip_enabled", 1.0 if _is_absorbing else 0.0)
+		sink_material.set_shader_parameter("sink_clip_plane_y", LevelManager.TILE_HEIGHT)
+		sink_material.set_shader_parameter("sink_clip_span", tile * ABSORB_SINK_CELLS)
+
 
 func _get_open_eyes_texture() -> Texture2D:
 	if _open_eyes_texture == null:
@@ -1352,6 +1530,29 @@ func _get_open_mouth_texture() -> Texture2D:
 	if _open_mouth_texture == null:
 		_open_mouth_texture = load(OPEN_MOUTH_TEXTURE_PATH) as Texture2D
 	return _open_mouth_texture
+
+
+# 팔레트 짝 색. 팔레트를 쓰지 않는 설정이거나 아직 매니저가 없으면 null 이고,
+# 그때는 Inspector 에 적어 둔 틴트 값이 그대로 쓰인다.
+func _pair_color() -> Variant:
+	if not tint_from_pair_color or color_id < 0 or level_manager == null:
+		return null
+	return level_manager.get_pair_color(color_id)
+
+
+func _effective_tint_color() -> Color:
+	var pair: Variant = _pair_color()
+	return tint_color if pair == null else pair as Color
+
+
+func _effective_tint_gradient_top() -> Color:
+	var pair: Variant = _pair_color()
+	return tint_gradient_top_color if pair == null else (pair as Color).lightened(0.14)
+
+
+func _effective_tint_gradient_bottom() -> Color:
+	var pair: Variant = _pair_color()
+	return tint_gradient_bottom_color if pair == null else (pair as Color).darkened(0.12)
 
 
 func _get_tint_exclusion_mask() -> Texture2D:

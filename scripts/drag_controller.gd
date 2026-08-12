@@ -55,6 +55,10 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(_delta: float) -> void:
 	if not _has_pointer or _cat == null:
 		return
+	# 구멍에 빨려 들어간 고양이는 곧 사라진다. 참조를 붙들고 있으면 해제된 객체를 만진다.
+	if not is_instance_valid(_cat) or _cat.is_absorbing():
+		_release()
+		return
 	if not _cat.is_blocked():
 		return
 	# 막힌 방향으로 계속 끌어 손가락이 2칸 이상 벌어지면 별도 알림 없이 종료한다.
@@ -77,6 +81,8 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 	var best_cell := Vector2i.ZERO
 	var best_distance := grab_radius_cells * level_manager.tile_size
 	for cat in level_manager.get_cats():
+		if cat.is_absorbing():
+			continue
 		for end_cell in cat.get_end_cells():
 			var center: Vector3 = level_manager.grid_to_world(end_cell, level_manager.cat_world_y)
 			var distance: float = Vector2(center.x - board_point.x, center.z - board_point.z).length()
@@ -99,6 +105,9 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 
 func _move(pointer_index: int, screen_position: Vector2) -> void:
 	if not _has_pointer or pointer_index != _pointer_index or _cat == null:
+		return
+	if not is_instance_valid(_cat) or _cat.is_absorbing():
+		_release()
 		return
 	var point: Variant = level_manager.screen_to_board_point(screen_position)
 	if point == null:

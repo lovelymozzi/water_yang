@@ -35,6 +35,11 @@ uniform vec2 uv_offset = vec2(0.0);
 // Material cat_tile also contains a small lower connection cap in the main
 // cat UV area; keeping that cap untransformed prevents a repeated leg seam.
 uniform float tile_uv_min_u : hint_range(0.0, 1.0) = 0.0;
+// 구멍으로 빨려 들어가는 동안, 바닥 면보다 아래로 내려간 부분을 지운다.
+// 알파 블렌딩이 아니라 디더 discard 라서 평소 불투명 렌더 경로가 그대로 유지된다.
+uniform float sink_clip_enabled : hint_range(0.0, 1.0) = 0.0;
+uniform float sink_clip_plane_y = 0.0;
+uniform float sink_clip_span = 1.0;
 
 varying float tint_gradient_path_t;
 
@@ -68,6 +73,14 @@ void vertex() {
 }
 
 void fragment() {
+	if (sink_clip_enabled > 0.5) {
+		float world_y = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).y;
+		float sink = clamp((sink_clip_plane_y - world_y) / max(sink_clip_span, 0.0001), 0.0, 1.0);
+		float dither = fract(sin(dot(FRAGCOORD.xy, vec2(12.9898, 78.233))) * 43758.5453);
+		if (sink > dither) {
+			discard;
+		}
+	}
 	vec2 mapped_uv = UV;
 	if (UV.x >= tile_uv_min_u) {
 		mapped_uv = UV * uv_tiling + uv_offset;

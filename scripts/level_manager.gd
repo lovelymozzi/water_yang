@@ -6,16 +6,21 @@ signal level_cleared
 
 const CAT_ENTITY_SCRIPT = preload("res://scripts/cat_entity.gd")
 const OBSTACLE_MARKER_SCRIPT = preload("res://scripts/obstacle_marker.gd")
+const HOLE_MARKER_SCRIPT = preload("res://scripts/hole_marker.gd")
 const TILE_HEIGHT := 0.12
 const OBSTACLE_HEIGHT := 1.3
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
 const ROUND_CORNER_SEGMENTS := 6
+# 구멍은 정확히 한 칸이다. 안쪽 구덩이만 한 칸보다 작아 테두리가 남는다.
+const HOLE_PIT_INSET := 0.68
+const HOLE_PIT_HEIGHT := 0.05
 
 enum CellState {
 	EMPTY,
 	OBSTACLE,
 	CAT,
+	HOLE,
 }
 
 @export var grid_size: Vector2i = Vector2i(7, 9):
@@ -80,18 +85,45 @@ enum CellState {
 		obstacle_secondary_color = value
 		request_preview_refresh()
 
+@export_color_no_alpha var hole_rim_color: Color = Color(0.27, 0.33, 0.18, 1.0):
+	set(value):
+		hole_rim_color = value
+		request_preview_refresh()
+
+@export_color_no_alpha var hole_pit_color: Color = Color(0.06, 0.07, 0.05, 1.0):
+	set(value):
+		hole_pit_color = value
+		request_preview_refresh()
+
+# 색 페어 팔레트. 배열 인덱스가 곧 `color_id` 이며, 고양이와 구멍은 이 하나의 표에서
+# 같은 색을 받는다. 짝 판정과 표시색이 갈라지지 않게 하려는 것이다.
+@export var pair_colors: PackedColorArray = PackedColorArray([
+	Color(0.94, 0.72, 0.47),
+	Color(0.53, 0.71, 0.94),
+	Color(0.58, 0.83, 0.56),
+	Color(0.92, 0.60, 0.74),
+]):
+	set(value):
+		pair_colors = value
+		request_preview_refresh()
+
 @export_tool_button("Refresh Board Preview", "Reload") var refresh_board_preview_action = refresh_board_preview
 
 var _grid_state: Array = []
 var _grid_refs: Array = []
 var _cats: Array[CatEntity] = []
+var _hole_cells: Array[Vector2i] = []
+# _hole_cells 와 같은 순서의 색 인덱스. -1 은 아무 색이나 받는 와일드카드다.
+var _hole_color_ids: Array[int] = []
 var _preview_refresh_queued: bool = false
 
 var _board_root: Node3D
 var _tiles_root: Node3D
 var _obstacles_root: Node3D
+var _holes_root: Node3D
 var _layout_cats_root: Node3D
 var _layout_obstacles_root: Node3D
+var _layout_holes_root: Node3D
 var _highlight_root: Node3D
 var _highlight_tiles: Array[MeshInstance3D] = []
 
@@ -165,7 +197,8 @@ func update_cat_occupancy(cat: CatEntity) -> void:
 	release_cat_cell(cat)
 	# 걸침을 포함한 점유다. 표시용과 판정용이 같은 집합이어야 한다.
 	for cell in cat.get_occupied_cells():
-		if is_inside_grid(cell):
+		# 구멍 칸은 고양이가 덮어쓰지 않는다. 덮으면 구멍이 사라져 흡입 판정이 죽는다.
+		if is_inside_grid(cell) and not is_hole(cell):
 			_set_cell_state(cell, CellState.CAT)
 			_set_cell_ref(cell, cat)
 	_refresh_occupancy_highlight()
@@ -177,6 +210,10 @@ func is_cell_blocked_for(cat: CatEntity, cell: Vector2i) -> bool:
 		return true
 	var state: int = _get_cell_state(cell)
 	if state == CellState.OBSTACLE:
+		return true
+	# 구멍은 경로로 쓰지 않는다. 흡입은 인접 판정으로만 일어나므로 구멍 칸에
+	# 직접 들어가는 이동은 애초에 계획되지 않아야 한다.
+	if state == CellState.HOLE:
 		return true
 	return state == CellState.CAT and _get_cell_ref(cell) != cat
 
@@ -247,9 +284,11 @@ func _setup_roots() -> void:
 	_board_root = _ensure_named_child(self, "BoardVisuals")
 	_tiles_root = _ensure_named_child(self, "TileVisuals")
 	_obstacles_root = _ensure_named_child(self, "ObstacleVisuals")
+	_holes_root = _ensure_named_child(self, "HoleVisuals")
 	_highlight_root = _ensure_named_child(self, "OccupancyHighlights")
 	_layout_cats_root = _ensure_named_child(self, "LayoutCats")
 	_layout_obstacles_root = _ensure_named_child(self, "LayoutObstacles")
+	_layout_holes_root = _ensure_named_child(self, "LayoutHoles")
 
 
 func _ensure_named_child(parent: Node3D, child_name: String) -> Node3D:
@@ -268,8 +307,11 @@ func _ensure_named_child(parent: Node3D, child_name: String) -> Node3D:
 func _rebuild_from_scene_layout() -> void:
 	_clear_generated_nodes()
 	_initialize_grid_arrays()
+	# 구멍 칸은 타일을 깔지 않으므로 타일보다 먼저 확정해야 한다.
+	_sync_hole_layout()
 	_build_board_base()
 	_build_grid_tiles()
+	_build_hole_visuals()
 	_build_occupancy_highlight()
 	_sync_obstacle_layout()
 	_sync_cat_layout()
@@ -288,10 +330,15 @@ func _clear_generated_nodes() -> void:
 	for child in _obstacles_root.get_children():
 		child.queue_free()
 
+	for child in _holes_root.get_children():
+		child.queue_free()
+
 	for child in _highlight_root.get_children():
 		child.queue_free()
 
 	_highlight_tiles.clear()
+	_hole_cells.clear()
+	_hole_color_ids.clear()
 	_cats.clear()
 
 
@@ -328,6 +375,8 @@ func _build_grid_tiles() -> void:
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var cell: Vector2i = Vector2i(x, y)
+			if is_hole(cell):
+				continue
 			var tile_side := maxf(tile_size - tile_gap, 0.01)
 			var tile := _create_rounded_prism(
 				"Tile_%d_%d" % [x, y],
@@ -394,6 +443,108 @@ func _sync_obstacle_layout() -> void:
 
 		_set_cell_state(marker_grid_pos, CellState.OBSTACLE)
 		_build_obstacle_visual(marker_grid_pos)
+
+
+func _sync_hole_layout() -> void:
+	for child in _layout_holes_root.get_children():
+		if child.get_script() != HOLE_MARKER_SCRIPT:
+			continue
+
+		# 마커는 에디터에서만 보인다. 실행 중에는 생성된 구멍 비주얼이 대신 보인다.
+		child.call("set_preview_visible", Engine.is_editor_hint())
+		child.call("refresh_editor_preview")
+
+		var marker_grid_pos: Vector2i = child.get("grid_pos")
+		if not is_inside_grid(marker_grid_pos) or _hole_cells.has(marker_grid_pos):
+			continue
+
+		_hole_cells.append(marker_grid_pos)
+		_hole_color_ids.append(int(child.get("color_id")))
+		_set_cell_state(marker_grid_pos, CellState.HOLE)
+
+
+func _build_hole_visuals() -> void:
+	var tile_side := maxf(tile_size - tile_gap, 0.01)
+	var pit_side := maxf(tile_side * HOLE_PIT_INSET, 0.01)
+	for index in _hole_cells.size():
+		var cell: Vector2i = _hole_cells[index]
+		# 테두리는 타일 자리를 그대로 채우고, 그 안쪽에 어두운 구덩이를 낮게 깐다.
+		var rim := _create_rounded_prism(
+			"HoleRim_%d_%d" % [cell.x, cell.y],
+			Vector3(tile_side, TILE_HEIGHT, tile_side),
+			TILE_CORNER_RADIUS,
+			_make_material(get_hole_rim_color(_hole_color_ids[index]))
+		)
+		rim.position = grid_to_world(cell, TILE_HEIGHT * 0.5)
+		_holes_root.add_child(rim)
+
+		var pit := _create_rounded_prism(
+			"HolePit_%d_%d" % [cell.x, cell.y],
+			Vector3(pit_side, HOLE_PIT_HEIGHT, pit_side),
+			TILE_CORNER_RADIUS,
+			_make_material(get_hole_pit_color(_hole_color_ids[index]))
+		)
+		# 위에서 내려다보는 직교 카메라라 깊이 단서가 없다. 테두리 안쪽에 어두운 면을
+		# 얇게 얹어 구멍처럼 보이게 한다. 테두리 아래에 두면 슬래브에 가려 보이지 않는다.
+		pit.position = grid_to_world(cell, TILE_HEIGHT + 0.01 - HOLE_PIT_HEIGHT * 0.5)
+		_holes_root.add_child(pit)
+
+
+func is_hole(cell: Vector2i) -> bool:
+	return _hole_cells.has(cell)
+
+
+func get_hole_cells() -> Array[Vector2i]:
+	return _hole_cells
+
+
+# 구멍의 색 인덱스. 구멍이 아니거나 와일드카드면 -1 이다.
+func get_hole_color_id(cell: Vector2i) -> int:
+	var index: int = _hole_cells.find(cell)
+	if index < 0:
+		return -1
+	return _hole_color_ids[index]
+
+
+# color_id → 실제 색. 팔레트를 벗어난 값과 와일드카드(-1)는 하양이다. 색이 곧 짝이므로
+# 고양이와 구멍이 이 함수 하나만 쓰게 한다.
+func get_pair_color(color_id: int) -> Color:
+	if color_id < 0 or color_id >= pair_colors.size():
+		return Color(1.0, 1.0, 1.0, 1.0)
+	return pair_colors[color_id]
+
+
+# 와일드카드 구멍은 색 없이 예전 톤을 그대로 쓴다.
+func get_hole_rim_color(color_id: int) -> Color:
+	if color_id < 0 or color_id >= pair_colors.size():
+		return hole_rim_color
+	return get_pair_color(color_id)
+
+
+func get_hole_pit_color(color_id: int) -> Color:
+	if color_id < 0 or color_id >= pair_colors.size():
+		return hole_pit_color
+	return get_pair_color(color_id).darkened(0.72)
+
+
+# 색이 짝인지. 한쪽이 와일드카드(-1)면 아무 색과도 짝이 된다.
+func color_ids_pair(cat_color_id: int, hole_color_id: int) -> bool:
+	if cat_color_id < 0 or hole_color_id < 0:
+		return true
+	return cat_color_id == hole_color_id
+
+
+# 셀에 인접(4방향)한 구멍. 없으면 null. 흡입 판정의 단일 기준이다.
+# color_id 를 주면 색이 짝인 구멍만 걸린다. -1 은 색을 보지 않는다.
+func adjacent_hole(cell: Vector2i, color_id: int = -1) -> Variant:
+	for dir in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
+		var neighbour: Vector2i = cell + dir
+		if not is_hole(neighbour):
+			continue
+		if not color_ids_pair(color_id, get_hole_color_id(neighbour)):
+			continue
+		return neighbour
+	return null
 
 
 func _sync_cat_layout() -> void:
