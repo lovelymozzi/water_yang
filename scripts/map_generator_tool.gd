@@ -45,6 +45,12 @@ var _last_level: Dictionary = {}
 func _ready() -> void:
 	if Engine.is_editor_hint() or not generate_on_play:
 		return
+	# **검증 하네스에서는 절대 자동 생성하지 않는다.** `generate_on_play` 는 씬 파일에 저장되는
+	# 값이라, 켜 둔 채로 두면 main_scene 을 읽는 모든 하네스가 손 배치 대신 생성 레벨을 받는다.
+	# `movement_check` / `hole_check` / `obstacle_check` 는 손 배치를 전제하므로 통째로 깨진다.
+	# `--script` 로 띄운 실행은 하네스나 도구이고, F5/F6 실제 플레이에는 이 인자가 없다.
+	if OS.get_cmdline_args().has("--script"):
+		return
 	# LevelManager 가 자기 _ready 에서 씬 배치를 먼저 읽게 두고 그 뒤에 갈아 끼운다.
 	# 여기서 바로 하면 우리가 심은 고양이를 LevelManager 가 다시 지운다.
 	call_deferred("generate_level")

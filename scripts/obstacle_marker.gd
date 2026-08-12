@@ -5,8 +5,9 @@ extends Node3D
 # 장애물 한 덩어리. `scenes/obstacle_block.tscn` 을 LevelManager/LayoutObstacles 아래에
 # 떨어뜨리고 grid_pos 와 block_size 만 지정하면 된다. 1x1 이면 한 칸짜리 장애물이다.
 #
-# 게임에는 아무것도 그리지 않는다. 칸만 잠그고, 보이는 것은 나중에 들어올 장애물
-# 에셋이 맡는다. 에디터에서는 배치를 볼 수 있어야 하므로 반투명 덩어리를 그린다.
+# 마커는 아무것도 그리지 않는다. 칸만 잠그고, 보이는 것은 `LevelManager` 가 그 칸에 만드는
+# 장애물 덩어리이며 에디터에서도 같은 것이 보인다. 마커가 따로 상자를 그리면 그 덩어리 위에
+# 정체불명의 반투명 사각형이 겹쳐 보인다(구멍 마커와 같은 이유다).
 
 @export var grid_pos: Vector2i = Vector2i.ZERO:
 	set(value):
@@ -19,12 +20,9 @@ extends Node3D
 		block_size = Vector2i(maxi(value.x, 1), maxi(value.y, 1))
 		_request_editor_refresh()
 
-var _marker_mesh: MeshInstance3D
-
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
-		_ensure_marker_mesh()
 		refresh_preview()
 
 
@@ -37,61 +35,14 @@ func get_cells() -> Array[Vector2i]:
 	return cells
 
 
-# 덩어리를 자기 칸에 맞춰 놓는다. 에디터 전용이 아니다 — `LevelManager` 의
-# `show_obstacle_placeholders` 를 켜면 실행 중에도 이 덩어리가 보인다. 장애물 에셋이 아직
-# 없어서 실행 중에는 잠긴 칸이 투명 벽이 되는데, 플레이테스트에서는 그게 보여야 한다.
-# 보이는지 여부는 `set_preview_visible()` 이 따로 정한다.
+# 노드 자체를 자기 칸으로 옮겨 둔다. 에디터에서 마커를 골랐을 때 기즈모가 엉뚱한 곳에 있지
+# 않게 하려는 것이다. 그리는 것은 없다.
 func refresh_preview() -> void:
-	_ensure_marker_mesh()
 	var manager := _find_level_manager()
 	if manager == null:
 		return
 
-	# 노드는 좌상단 칸에 두고, 프리뷰 메시만 덩어리 중앙으로 밀어 맞춘다.
-	position = manager.grid_to_world(grid_pos, 0.15)
-	var span := Vector3(
-		float(block_size.x - 1) * manager.tile_size,
-		0.0,
-		float(block_size.y - 1) * manager.tile_size
-	)
-	_marker_mesh.position = span * 0.5
-	var mesh := _marker_mesh.mesh as BoxMesh
-	if mesh != null:
-		mesh.size = Vector3(
-			span.x + manager.tile_size * 0.6,
-			0.3,
-			span.z + manager.tile_size * 0.6
-		)
-	set_preview_color(manager.get_obstacle_color(grid_pos))
-
-
-func set_preview_visible(value: bool) -> void:
-	_ensure_marker_mesh()
-	_marker_mesh.visible = value
-
-
-func set_preview_color(color: Color) -> void:
-	_ensure_marker_mesh()
-	var material := _marker_mesh.material_override as StandardMaterial3D
-	if material != null:
-		material.albedo_color = Color(color.r, color.g, color.b, 0.65)
-
-
-func _ensure_marker_mesh() -> void:
-	if _marker_mesh != null:
-		return
-
-	_marker_mesh = MeshInstance3D.new()
-	_marker_mesh.name = "MarkerMesh"
-	var mesh: BoxMesh = BoxMesh.new()
-	mesh.size = Vector3(1.2, 0.3, 1.2)
-	_marker_mesh.mesh = mesh
-
-	var material: StandardMaterial3D = StandardMaterial3D.new()
-	material.albedo_color = Color(0.92, 0.84, 0.70, 0.65)
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	_marker_mesh.material_override = material
-	add_child(_marker_mesh)
+	position = manager.grid_to_world(grid_pos, 0.0)
 
 
 func _find_level_manager() -> LevelManager:

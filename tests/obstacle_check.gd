@@ -24,7 +24,7 @@ func _process(_delta: float) -> bool:
 	_check_map_has_no_obstacles(manager)
 	_check_single_cell_block(manager)
 	_check_rect_block(manager)
-	_check_block_is_invisible(manager)
+	_check_block_is_visible(manager)
 	_check_out_of_grid_is_ignored(manager)
 	_report()
 	return true
@@ -61,14 +61,21 @@ func _check_rect_block(manager: LevelManager) -> void:
 	print("[템플릿] 3x3 이 (2,4) 부터 9칸을 잠갔다")
 
 
-# 게임에는 아무것도 그리지 않는다. 실제 에셋이 들어올 자리를 비워 두는 것이다.
-func _check_block_is_invisible(manager: LevelManager) -> void:
-	_place_block(manager, Vector2i(2, 4), Vector2i(3, 3))
+# 잠긴 칸은 반드시 보여야 한다. 안 보이면 플레이어가 못 움직이는 이유가 벽인지 버그인지
+# 구분할 수 없다. 덩어리 하나가 여러 칸을 잠그더라도 비주얼은 칸마다 하나씩 만든다.
+func _check_block_is_visible(manager: LevelManager) -> void:
+	var cells: Array = _place_block(manager, Vector2i(2, 4), Vector2i(3, 3))
+	var visuals: Node = manager.get_node("ObstacleVisuals")
 	_expect(
-		manager.get_node("ObstacleVisuals").get_child_count() == 0,
-		"장애물이 화면에 그려졌다: %d개" % manager.get_node("ObstacleVisuals").get_child_count()
+		visuals.get_child_count() == cells.size(),
+		"잠긴 칸 %d개인데 그려진 노드가 %d개다" % [cells.size(), visuals.get_child_count()]
 	)
-	print("[템플릿] 잠긴 칸 9개, 그려진 노드 0개")
+	for cell in cells:
+		_expect(
+			visuals.get_node_or_null("Obstacle_%d_%d" % [cell.x, cell.y]) != null,
+			"잠긴 칸 %s 에 장애물 비주얼이 없다" % [cell]
+		)
+	print("[템플릿] 잠긴 칸 %d개가 모두 그려졌다" % cells.size())
 
 
 func _check_out_of_grid_is_ignored(manager: LevelManager) -> void:
@@ -81,7 +88,10 @@ func _check_out_of_grid_is_ignored(manager: LevelManager) -> void:
 	print("[템플릿] 보드 밖으로 걸친 덩어리가 안쪽 %d칸만 잠갔다" % cells.size())
 
 
-func _place_block(manager: LevelManager, cell: Vector2i, size: Vector2i) -> void:
+# 잠긴 칸 목록을 돌려준다. 배치 직후의 상태를 다시 조회할 일이 많다.
+func _place_block(
+	manager: LevelManager, cell: Vector2i, size: Vector2i
+) -> Array[Vector2i]:
 	var layout: Node = manager.get_node("LayoutObstacles")
 	for existing in layout.get_children():
 		layout.remove_child(existing)
@@ -93,6 +103,7 @@ func _place_block(manager: LevelManager, cell: Vector2i, size: Vector2i) -> void
 	layout.add_child(block)
 	# 배치를 바꿨으면 보드를 다시 만들어야 셀 상태가 반영된다.
 	manager._rebuild_from_scene_layout()
+	return _obstacle_cells(manager)
 
 
 func _obstacle_cells(manager: LevelManager) -> Array[Vector2i]:

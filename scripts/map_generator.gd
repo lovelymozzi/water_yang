@@ -39,8 +39,13 @@ class Config:
 	var cat_count: int = 4
 	# 이 팔레트 크기를 넘는 색은 만들지 않는다. `LevelManager.pair_colors` 와 맞춘다.
 	var color_count: int = 4
+	# 길이는 맵 설계 요소다. 짧은 고양이는 잘 돌지만 긴 고양이는 2×2 에서 회전조차 못 하므로
+	# 길이 자체가 난이도를 만든다. 그래서 한 판에 여러 길이를 섞는다(`_pick_body_lengths`).
 	var body_length_min: int = 3
-	var body_length_max: int = 4
+	var body_length_max: int = 12
+	# 고양이 몸이 차지할 수 있는 빈 칸의 최대 비율. 넘으면 몸을 눌러 줄인다. 이걸 안 두면
+	# 길이 합이 보드를 꽉 채워 아무도 움직일 수 없게 되고 생성이 통째로 실패한다.
+	var total_length_ratio: float = 0.5
 	# 고양이 한 마리가 시작 자리에서 구멍까지 걷는 수. 이게 곧 풀이 길이의 뼈대다.
 	var reverse_steps_min: int = 5
 	var reverse_steps_max: int = 12
@@ -96,10 +101,11 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	plans.resize(config.cat_count)
 	# 뒤 순번 고양이들이 밟는 칸. 여기에 몸을 얹으면 의존 간선이 생긴다.
 	var later_path_cells: Dictionary = {}
+	var lengths: Array[int] = _pick_body_lengths(config, rng, holes.size())
 
 	for k in range(config.cat_count - 1, -1, -1):
 		var plan: Dictionary = _reverse_build_cat(
-			config, rng, board, k, holes[k], later_path_cells
+			config, rng, board, k, holes[k], later_path_cells, lengths[k]
 		)
 		if plan.is_empty():
 			return {"ok": false, "reason": "고양이 %d 의 역주행이 막혔다" % k}
@@ -160,6 +166,52 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	return level
 
 
+# 고양이별 몸 길이. **한 판에 길이가 섞여 있어야 한다** — 전부 같은 길이면 길이가 맵 설계에
+# 아무 역할을 못 한다. 그래서 무작위로 뽑지 않고 [min, max] 구간에 고르게 펼친 뒤 지터를
+# 주고 섞는다. 무작위 추출은 4마리쯤에서 값이 뭉치는 일이 흔하다.
+#
+# 길이 합은 빈 칸의 `total_length_ratio` 로 제한한다. 넘으면 긴 것부터 깎는다. 몸이 판을 꽉
+# 채우면 아무도 움직일 수 없어 역주행이 첫 스텝에서 막힌다.
+func _pick_body_lengths(
+	config: Config, rng: RandomNumberGenerator, hole_count: int
+) -> Array[int]:
+	var low: int = mini(config.body_length_min, config.body_length_max)
+	var high: int = maxi(config.body_length_min, config.body_length_max)
+	var lengths: Array[int] = []
+	for index in config.cat_count:
+		var ratio: float = (
+			float(index) / float(config.cat_count - 1) if config.cat_count > 1 else 0.5
+		)
+		var spread: int = int(round(lerp(float(low), float(high), ratio)))
+		lengths.append(clampi(spread + rng.randi_range(-1, 1), low, high))
+
+	var budget: int = int(
+		floor(
+			float(config.grid_size.x * config.grid_size.y - hole_count)
+			* config.total_length_ratio
+		)
+	)
+	# 긴 것부터 한 칸씩 깎아 예산에 맞춘다.
+	while _sum(lengths) > budget:
+		var longest: int = 0
+		for index in lengths.size():
+			if lengths[index] > lengths[longest]:
+				longest = index
+		if lengths[longest] <= low:
+			break
+		lengths[longest] -= 1
+
+	_shuffle(lengths, rng)
+	return lengths
+
+
+static func _sum(values: Array[int]) -> int:
+	var total: int = 0
+	for value in values:
+		total += value
+	return total
+
+
 func _escape_order(count: int) -> Array[int]:
 	var order: Array[int] = []
 	for index in count:
@@ -207,9 +259,9 @@ func _reverse_build_cat(
 	board: PuzzleState,
 	cat_id: int,
 	hole: Dictionary,
-	later_path_cells: Dictionary
+	later_path_cells: Dictionary,
+	length: int
 ) -> Dictionary:
-	var length: int = rng.randi_range(config.body_length_min, config.body_length_max)
 	var target_steps: int = rng.randi_range(config.reverse_steps_min, config.reverse_steps_max)
 	var best: Dictionary = {}
 	var best_score: int = -1
@@ -255,23 +307,52 @@ func _make_absorbed_body(
 	_shuffle(triggers, rng)
 
 	for trigger in triggers:
-		var body: Array[Vector2i] = [trigger]
-		var used: Dictionary = {trigger: true}
-		while body.size() < length:
-			var options: Array[Vector2i] = []
-			var tip: Vector2i = body[body.size() - 1]
-			for dir in DIRS:
-				var next: Vector2i = tip + dir
-				if board.is_free_cell(next) and not used.has(next):
-					options.append(next)
-			if options.is_empty():
-				break
-			var pick: Vector2i = options[rng.randi_range(0, options.size() - 1)]
-			body.append(pick)
-			used[pick] = true
+		var body: Array[Vector2i] = _grow_self_avoiding(rng, board, trigger, length)
 		if body.size() == length:
 			return body
 	return [] as Array[Vector2i]
+
+
+# `start` 에서 뻗는 길이 `length` 의 자기회피 경로. **되추적이 필요하다** — 길이 12쯤 되면
+# 탐욕적으로 뻗다가 막다른 골목에 갇히는 일이 대부분이라, 다시 굴리는 것만으로는 긴 몸을
+# 거의 만들지 못한다. 막히면 마지막 갈림길로 돌아가 다른 방향을 시도한다.
+func _grow_self_avoiding(
+	rng: RandomNumberGenerator, board: PuzzleState, start: Vector2i, length: int
+) -> Array[Vector2i]:
+	var body: Array[Vector2i] = [start]
+	var used: Dictionary = {start: true}
+	# 각 깊이에서 아직 시도하지 않은 방향. 되추적하면 여기서 다음 후보를 꺼낸다.
+	var pending: Array = [_free_neighbours(rng, board, start, used)]
+
+	while body.size() < length:
+		var options: Array = pending[pending.size() - 1]
+		if options.is_empty():
+			# 이 자리에서 갈 곳이 없다. 한 칸 물러나 다른 방향을 시도한다.
+			if body.size() <= 1:
+				return [] as Array[Vector2i]
+			used.erase(body[body.size() - 1])
+			body.remove_at(body.size() - 1)
+			pending.remove_at(pending.size() - 1)
+			continue
+		var next: Vector2i = options.pop_back()
+		if used.has(next):
+			continue
+		body.append(next)
+		used[next] = true
+		pending.append(_free_neighbours(rng, board, next, used))
+	return body
+
+
+func _free_neighbours(
+	rng: RandomNumberGenerator, board: PuzzleState, cell: Vector2i, used: Dictionary
+) -> Array:
+	var options: Array[Vector2i] = []
+	for dir in DIRS:
+		var next: Vector2i = cell + dir
+		if board.is_free_cell(next) and not used.has(next):
+			options.append(next)
+	_shuffle(options, rng)
+	return options
 
 
 # 역주행. 현재 상태 `B'` 에서 한 스텝 앞선 상태 `earlier` 를 만들어 나간다.
