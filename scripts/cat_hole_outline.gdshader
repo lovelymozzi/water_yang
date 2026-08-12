@@ -11,10 +11,10 @@ uniform float outline_width : hint_range(0.001, 0.04, 0.001) = 0.008;
 uniform float top_outline_scale : hint_range(0.4, 1.2, 0.01) = 1.0;
 uniform float bottom_outline_scale : hint_range(0.8, 1.6, 0.01) = 1.0;
 
-// Keep the value in exactly the same scale as CatEntity's outline shader.
-// A previous 0.35 reduction made Inspector changes effectively invisible on
-// the CatHole FBX, even though the material parameter was being copied.
-const float FLAT_MESH_WIDTH_COMPENSATION = 1.0;
+// The flower's flat silhouette reads slightly thicker than CatEntity's
+// normal-based outline at the top-down camera angle.  Keep its Inspector
+// control responsive while reducing the final width by a small amount.
+const float FLAT_MESH_WIDTH_COMPENSATION = 0.82;
 
 // The imported FBX keeps the flower's mesh node rotated (Z-up source), so this
 // mesh's own local frame is NOT the world frame: local XY is the flat board
