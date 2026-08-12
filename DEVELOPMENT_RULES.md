@@ -13,7 +13,7 @@
 ## 씬과 에디터
 
 - 메인 씬은 `scenes/main_scene.tscn`이다.
-- 레벨 배치용 고양이는 `LevelManager/LayoutCats` 아래에 둔다.
+- 레벨 배치용 고양이는 `LevelManager/LayoutCats` 아래에 둔다. 새로 배치하는 고양이는 템플릿 `scenes/cat_entity.tscn` 을 인스턴스로 떨어뜨린다. 손으로 튜닝한 툰·아웃라인·라인아트 값이 거기 담겨 있으므로, 노드를 새로 만들어 값을 다시 적으면 생성 고양이와 손 배치 고양이가 서로 다르게 보인다.
 - 레벨 배치용 장애물은 `LevelManager/LayoutObstacles` 아래에 둔다. 배치는 템플릿 `scenes/obstacle_block.tscn`을 인스턴스로 떨어뜨리고 `grid_pos`(좌상단 칸)와 `block_size`(칸 수)만 지정한다. 노드를 칸마다 하나씩 만들지 않는다.
 - **장애물은 칸만 잠그고 아무것도 그리지 않는다.** 보이는 것은 나중에 들어올 장애물 에셋이 맡으며, 그때는 구멍이 `LevelManager.hole_scene`을 쓰는 것과 같은 방식으로 씬을 붙인다. 에디터에서는 배치를 볼 수 있도록 반투명 덩어리를 그린다.
 - 현재 `main_scene`에는 장애물 배치가 없다. 가운데 9칸은 임시 배치였고 제거했다. 다른 맵에서 필요하면 위 템플릿을 쓴다.
@@ -33,7 +33,8 @@
 - 후진은 "반대쪽 끝이 선두인 이동"이다. 선두(움직이는 끝)와 리드(손가락이 잡은 끝)는 별개다. 전이·점유·본 포즈는 선두만 알면 되므로 코드가 공유된다.
 - 두 끝의 이동 규칙은 완전히 대칭이다. 양쪽에 서로 다른 코드 경로를 두지 않는다. 반대쪽 끝을 잡으면 `body_cells`를 뒤집고 `_lead_is_tail`만 토글한다.
 - 이동 중 렌더는 부드럽게 이어지되, 최종 확정은 항상 그리드 단위로 끝난다.
-- `grid_pos`는 에디터 레이아웃용이다. 세터가 몸을 직선으로 되돌리므로 런타임 이동 중에는 절대 대입하지 않는다.
+- `grid_pos`는 에디터 레이아웃용이다. 세터가 몸을 시작 자세로 되돌리므로 런타임 이동 중에는 절대 대입하지 않는다. 되돌아가는 자세는 `initial_body_cells`가 유효하면 그 경로이고, 아니면 `grid_pos` + `facing_name` + `initial_length`의 직선이다.
+- 꺾인 시작 몸은 `initial_body_cells`로만 준다(맵 생성기가 쓰는 경로). 유효하면 `grid_pos`·`facing_name`·`initial_length`를 거기서 파생시키므로 그 셋을 따로 맞출 필요가 없다. 비어 있으면 직선 폴백이며 손 배치와 기존 하네스가 그 경로를 쓴다.
 - 몸통은 메시나 본의 비균일 스케일로 고양이 비율을 바꾸지 않는다.
 - 기본 고양이는 자기 몸이 차지한 셀 묶음에 정확히 맞춰 배치한다. 양 끝 본이 양 끝 셀 중심에 온다.
 - Inspector의 `Initial Length`는 그대로 셀 개수다(`5` → 5칸). 몸 길이는 최소 3칸이고 최대는 인위적으로 제한하지 않는다. 보드 크기와 유효한 빈 셀이 실제 상한이 된다.
@@ -86,6 +87,17 @@
 - 위에서 내려다보는 직교 카메라라 깊이 단서가 없다. 구멍 비주얼은 테두리(타일 자리) + 그 안쪽의 어두운 면이며, 어두운 면은 테두리보다 **위**에 얹어야 보인다.
 - 레벨 시작 시점부터 이미 인접해 있는 배치는 흡입하지 않는다. 판정이 이동 커밋에만 걸려 있기 때문이며, 그런 배치는 레벨 설계 오류로 본다.
 
+## 맵 생성
+
+- **맵 자동생성은 `2_맵생성기.md`가 단일 기준이다.** 여기에는 그 문서와 중복되지 않는 것만 남긴다.
+- 생성은 역설계다. 다 풀린 상태에서 고양이를 구멍 옆에 되돌려 놓고 거꾸로 걸어 나오게 하므로 풀이가 없는 맵이 나올 수 없다. 정방향으로 배치를 뿌려 놓고 풀리는지 확인하는 방식으로 되돌리지 않는다.
+- 생성기와 솔버는 노드 없는 `PuzzleState` 위에서만 돈다. **그 모델이 실제 게임 규칙과 어긋나는 것이 이 기능의 단골 실패 모드다.** 규칙(`can_enter`, `adjacent_hole`, 흡입 시점)을 고치면 `scripts/puzzle_state.gd`를 함께 고치고 `tests/puzzle_state_parity_check.gd`를 돌린다.
+- 흡입은 강제다. 그래서 역주행 중간 자세의 두 끝은 어떤 짝 색 구멍에도 인접해서는 안 된다. 이 가드를 빼면 정방향에서 고양이가 중간에 빨려 들어가 나머지 수순이 무효가 된다.
+- **흡입 판정은 `PuzzleState.body_touches_paired_hole()` 하나만 쓴다.** 실제 흡입 처리, 시작 배치 검증, 역설계의 조기 흡입 가드, 솔버의 목표 판정이 전부 이 함수를 거친다. 같은 판정을 여러 곳에 복사하면 생성기와 게임이 다른 규칙으로 돌기 시작한다. 몸의 두 끝(`ends_of`), 몸 정규 키(`body_key`), 탈출 거리(`escape_distance`), 장애물 덩어리 전개(`cells_of_block`)도 같은 이유로 창구가 하나다.
+- 장애물은 풀이가 밟지 않은 칸에만 사후 주입한다. 장애물은 칸을 뺏는 순수 감산이라 이것이 안전하다.
+- **기믹은 사후 주입하지 않는다.** 상태를 바꾸는 기믹은 위 논증이 성립하지 않아 기록된 풀이를 무효로 만들 수 있다. 반드시 역설계 루프 안에서 함께 되돌린다. 확장 지점은 `PuzzleState.gimmicks`와 `_apply_gimmicks_on_commit()`이다.
+- 생성기는 시드로 결정적이어야 한다. `Array.shuffle()`이나 전역 `randi()`처럼 전역 RNG를 쓰는 것을 넣지 않는다.
+
 ## 머티리얼, 조명, 그림자
 
 - 고양이에는 툰 셰이더와 아웃라인 셰이더를 적용한다.
@@ -119,7 +131,14 @@
 - 후진도 구현했다(`1_움직임고찰.md` 7절). 몸이 자기 모양을 따라 밀리고, 후미가 막히면 벽을 타고 흐른다.
 - 1칸 구멍과 흡입도 구현했다. 두 끝 중 하나가 구멍 옆칸에 들어선 순간 그 끝부터 빨려 들어가 사라지고, 탈출로 계산된다. 테스트 레벨의 구멍은 `(5, 2)`이고 색은 `0`이다.
 - 색 페어 규칙을 넣었다. `color_id`가 같은 고양이만 그 구멍으로 빠진다. `tests/hole_check.gd`의 `_check_color_pair()`가 색이 다를 때 흡입되지 않는 것까지 검사한다.
-- 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`. 하네스는 서로 독립이어야 한다.
+- 맵 자동생성기를 2026-08-12에 넣었다. 스펙은 `2_맵생성기.md`다. 역설계 + 의존성 그래프 + 오토솔버 검증이며, 시드 20개 기준 20/20 생성 성공에 의존 사슬 깊이가 항상 3(A → B → C)이다.
+  - `scripts/puzzle_state.gd` — 노드 없는 규칙 모델. 기믹 확장 지점이 여기 있다.
+  - `scripts/map_generator.gd` — 역주행 생성, 조기 흡입 가드, 의존성 유도, 장애물 사후 주입.
+  - `scripts/level_solver.gd` — 풀이 탐색, 의존성 실측, 무작위 플레이 탐침. 데드락 논증이 파일 머리에 있다.
+  - `scripts/dependency_graph.gd` — 탈출 순서 의존성. 순환 = 소프트락.
+  - `scripts/level_layout_writer.gd` — 씬 노드 / `.tscn` / JSON 출력과 모델 왕복.
+  - `scripts/map_generator_tool.gd` — `MainScene/MapGenerator` 노드의 에디터 버튼 두 개.
+- 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`, `tests/puzzle_state_parity_check.gd` → `PARITY CHECK: PASS`, `tests/generator_check.gd` → `GENERATOR CHECK: PASS`, `tests/generator_replay_check.gd` → `REPLAY CHECK: PASS`. 하네스는 서로 독립이어야 한다.
 - **이동 검사는 레벨 배치와 무관해야 한다.** 고양이를 보드 곳곳으로 순간이동시키므로 시작 시 `_isolate_board()`로 구멍·장애물·나머지 고양이를 지우고 기준 자세로 되돌린다. 배치를 바꿀 때 이동 검사가 깨지면 배치를 되돌리지 말고 이 격리를 넓힌다.
-- 시각 확인: `Godot --script tests/capture_shots.gd` → `user://shots/*.png`, `Godot --script tests/capture_hole.gd` → `user://shots_hole/*.png`. 헤드리스가 아니어야 렌더된다.
+- 시각 확인: `Godot --script tests/capture_shots.gd` → `user://shots/*.png`, `Godot --script tests/capture_hole.gd` → `user://shots_hole/*.png`, `Godot --script tests/capture_generated.gd` → `user://shots_generated/*.png`. 헤드리스가 아니어야 렌더된다.
 - 남은 시각 이슈: 90도 코너가 머리 청크 안에 들어오는 순간 목·어깨가 눌린다. 코너 회전을 관절에 분산하거나 코너를 둥글게 깎으면 완화되지만, 둘 다 "본은 셀 중앙만 관통" 규칙과 충돌한다. 결정 전까지 그대로 둔다.

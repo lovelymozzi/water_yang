@@ -164,6 +164,14 @@ func refresh_board_preview() -> void:
 		request_preview_refresh()
 
 
+# 배치를 바꾼 직후 보드를 즉시 다시 만든다. `request_preview_refresh()` 는 다음 프레임으로
+# 미루므로, 프레임을 기다릴 수 없는 맵 생성기와 검증 하네스는 이쪽을 쓴다.
+func rebuild_now() -> void:
+	_preview_refresh_queued = false
+	_setup_roots()
+	_rebuild_from_scene_layout()
+
+
 func _refresh_preview_deferred() -> void:
 	_preview_refresh_queued = false
 	_setup_roots()

@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_gubc5"]
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
+[ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
 script = ExtResource("1_q0f23")
@@ -164,6 +165,9 @@ grid_pos = Vector2i(6, 8)
 color_id = 3
 
 [node name="OccupancyHighlights" type="Node3D" parent="LevelManager" unique_id=1126319405]
+
+[node name="MapGenerator" type="Node" parent="."]
+script = ExtResource("6_gen")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=411557567]
 

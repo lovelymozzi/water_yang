@@ -50,21 +50,38 @@ const ABSORB_SINK_CELLS := 0.9
 @export var grid_pos: Vector2i = Vector2i.ZERO:
 	set(value):
 		grid_pos = value
-		_reset_straight_body()
+		if _applying_initial_body:
+			return
+		_reset_initial_body()
 		_request_editor_refresh()
 
 @export_enum("up", "right", "down", "left") var facing_name: String = "up":
 	set(value):
 		facing_name = value
 		facing_dir = _direction_from_name(facing_name)
-		_reset_straight_body()
+		if _applying_initial_body:
+			return
+		_reset_initial_body()
+		_request_editor_refresh()
+
+# 꺾인 시작 몸. 리드 끝(index 0)에서 반대쪽 끝까지 4방향으로 인접한 칸 목록이며,
+# 맵 생성기가 역설계로 만든 자세를 그대로 심기 위한 것이다(`MapGenerator`).
+#
+# 비어 있거나 유효하지 않으면 `grid_pos` + `facing_name` + `initial_length` 의 직선 몸으로
+# 폴백한다. 손 배치와 기존 회귀 검사는 그 경로를 그대로 쓴다.
+@export var initial_body_cells: Array[Vector2i] = []:
+	set(value):
+		initial_body_cells = value
+		_reset_initial_body()
 		_request_editor_refresh()
 
 @export_group("Body")
 @export_range(2, 16, 1) var initial_length: int = 4:
 	set(value):
 		initial_length = value
-		_reset_straight_body()
+		if _applying_initial_body:
+			return
+		_reset_initial_body()
 		_refresh_shader_material()
 		if is_inside_tree() and not Engine.is_editor_hint() and level_manager != null:
 			# Remote Inspector changes during Play do not use the editor preview
@@ -204,6 +221,9 @@ const ABSORB_SINK_CELLS := 0.9
 var body_cells: Array[Vector2i] = []
 var facing_dir: Vector2i = Vector2i.UP
 var level_manager: LevelManager
+# `initial_body_cells` 에서 grid_pos / facing_name / initial_length 를 파생시키는 동안 참.
+# 그 세터들이 다시 몸을 되돌리면 무한 재진입이 되므로 이 플래그로 끊는다.
+var _applying_initial_body := false
 
 # 앞으로 리드가 들어갈 셀. 손가락 입력이 여기에 쌓이고 이동은 여기서만 나온다.
 var path_queue: Array[Vector2i] = []
@@ -274,7 +294,7 @@ func _ready() -> void:
 	_ear_random.seed = get_instance_id() + 7919
 	facing_dir = _direction_from_name(facing_name)
 	if body_cells.is_empty():
-		_reset_straight_body()
+		_reset_initial_body()
 	_ensure_visual_root()
 
 	if Engine.is_editor_hint():
@@ -380,7 +400,7 @@ func refresh_editor_preview() -> void:
 	if level_manager == null:
 		return
 	facing_dir = _direction_from_name(facing_name)
-	_reset_straight_body()
+	_reset_initial_body()
 	_sync_to_grid_position()
 	_ensure_visual_root()
 	_rebuild_body_visuals()
@@ -389,7 +409,7 @@ func refresh_editor_preview() -> void:
 func initialize_runtime(manager: LevelManager) -> void:
 	level_manager = manager
 	facing_dir = _direction_from_name(facing_name)
-	_reset_straight_body()
+	_reset_initial_body()
 	_sync_to_grid_position()
 	_ensure_visual_root()
 	_rebuild_body_visuals()
@@ -815,7 +835,9 @@ func can_enter(cell: Vector2i) -> bool:
 	return not body_cells.has(cell)
 
 
-func _reset_straight_body() -> void:
+# 시작 자세로 되돌린다. `initial_body_cells` 가 유효하면 그 경로를 그대로 쓰고,
+# 아니면 `grid_pos` + `facing_name` + `initial_length` 의 직선 몸으로 폴백한다.
+func _reset_initial_body() -> void:
 	facing_dir = _direction_from_name(facing_name)
 	path_queue.clear()
 	_pending_reverse = 0
@@ -826,11 +848,53 @@ func _reset_straight_body() -> void:
 	_pending_lead_flip = false
 	_is_blocked = false
 	body_cells.clear()
+
+	if _is_valid_body_path(initial_body_cells):
+		body_cells.assign(initial_body_cells)
+		# grid_pos / facing_name / initial_length 는 여기서 파생시킨다. 세터를 다시 타면
+		# 무한 재진입이 되므로 가드 플래그를 걸고 대입한다.
+		_applying_initial_body = true
+		grid_pos = body_cells[0]
+		initial_length = body_cells.size()
+		facing_dir = body_cells[0] - body_cells[1]
+		facing_name = _name_from_direction(facing_dir)
+		_applying_initial_body = false
+		_rail = body_cells.duplicate()
+		return
+
 	var length := clampi(initial_length, min_length, max_length)
 	# 머리는 grid_pos에 두고 몸통은 바라보는 방향의 반대쪽으로 놓는다.
 	for index in range(length):
 		body_cells.append(grid_pos - facing_dir * index)
 	_rail = body_cells.duplicate()
+
+
+# 4방향으로 인접하고 자기와 교차하지 않는 2칸 이상의 경로인지. 보드 안인지는 여기서 보지
+# 않는다(`level_manager` 가 아직 없는 시점에도 세터가 돌기 때문이다).
+func _is_valid_body_path(cells: Array[Vector2i]) -> bool:
+	if cells.size() < 2:
+		return false
+	for index in cells.size():
+		if cells.find(cells[index]) != index:
+			return false
+		if index > 0:
+			var step: Vector2i = cells[index] - cells[index - 1]
+			if absi(step.x) + absi(step.y) != 1:
+				return false
+	return true
+
+
+func _name_from_direction(direction: Vector2i) -> String:
+	match direction:
+		Vector2i.UP:
+			return "up"
+		Vector2i.RIGHT:
+			return "right"
+		Vector2i.DOWN:
+			return "down"
+		Vector2i.LEFT:
+			return "left"
+	return facing_name
 
 
 func _sync_to_grid_position() -> void:
