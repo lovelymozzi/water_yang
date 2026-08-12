@@ -386,7 +386,11 @@ func _random_reverse_walk(
 		var weights: Array[float] = []
 		var total_weight: float = 0.0
 
-		for end_side in [0, 1]:
+		# 첫 역주행 스텝(= 정방향 마지막 수)은 뒤끝만 뻗는다. 흡입은 **방금 움직인 끝**에서만
+		# 걸리므로, 마지막 수는 반드시 트리거 끝(cells[0])을 구멍 옆으로 옮기는 수여야 한다.
+		# 앞끝을 뻗으면 마지막 수가 반대쪽 끝을 움직이게 되어 흡입이 걸리지 않는다.
+		var allowed_sides: Array = [1] if moves.is_empty() else [0, 1]
+		for end_side in allowed_sides:
 			var tip: Vector2i = cells[0] if end_side == 0 else cells[cells.size() - 1]
 			for dir in DIRS:
 				var extension: Vector2i = tip + dir

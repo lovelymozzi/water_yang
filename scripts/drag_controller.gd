@@ -101,6 +101,8 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 	_grab_offset = board_point - grabbed_center
 	_grab_offset.y = 0.0
 	_cat.begin_drag(best_cell)
+	# 드래그 중에는 흡입하지 않는다. 손을 떼는 순간 _release() 가 풀어 준다.
+	_cat.set_grabbed(true)
 
 
 func _move(pointer_index: int, screen_position: Vector2) -> void:
@@ -126,6 +128,9 @@ func _release_pointer(pointer_index: int) -> void:
 
 
 # 손을 떼도 큐는 남는다. 잔여 경로를 완주한 뒤 멈춘다.
+# 놓는 순간 리드가 짝 구멍 옆이면 여기서 흡입이 시작된다(set_grabbed 참고).
 func _release() -> void:
+	if _cat != null and is_instance_valid(_cat):
+		_cat.set_grabbed(false)
 	_cat = null
 	_has_pointer = false

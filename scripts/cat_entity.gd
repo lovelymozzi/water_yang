@@ -110,8 +110,8 @@ const ABSORB_SINK_CELLS := 0.9
 
 @export_group("Movement")
 # 1_움직임고찰.md 1절. 큐 상한은 항상 `속도 × 0.5초`로 맞춘다.
-@export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 8.0
-@export_range(1, 12, 1) var path_queue_max: int = 4
+@export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 10.5
+@export_range(1, 12, 1) var path_queue_max: int = 5
 # 우회 경로에만 허용하는 큐 상한. 손가락이 `path_queue_max` 안에 있는데도 벽이 두꺼워
 # 길이 그보다 길어질 때 쓴다. 손가락이 멀리 튄 목표는 이 값과 무관하게 거절된다.
 @export_range(1, 32, 1) var detour_queue_max: int = 12
@@ -238,6 +238,9 @@ var _lead_is_tail := false
 var _pending_lead_flip := false
 # 마지막 경로 요청이 브릿지를 찾지 못한 상태. 강제 릴리즈 판정에 쓴다.
 var _is_blocked := false
+# 손가락이 이 고양이를 잡고 있는 동안 참(DragController 가 넣어 준다).
+# 드래그 중에는 흡입하지 않는다 — 손을 떼야 걸린다.
+var _is_grabbed := false
 # 남은 후진 스텝 수. 전진 큐와 동시에 차 있지 않다(방향이 바뀌면 반대쪽을 비운다).
 var _pending_reverse := 0
 var _is_reversing := false
@@ -458,6 +461,16 @@ func is_blocked() -> bool:
 
 func is_absorbing() -> bool:
 	return _is_absorbing
+
+
+# 손가락이 잡거나 놓을 때 DragController 가 부른다. 놓는 순간 리드가 이미 짝 구멍 옆이면
+# 곧바로 빨려 들어간다. 전이 중이면 _finish_step 의 커밋 시점 판정이 이어받는다.
+func set_grabbed(grabbed: bool) -> void:
+	if _is_grabbed == grabbed:
+		return
+	_is_grabbed = grabbed
+	if not grabbed and not _is_moving:
+		_try_begin_absorb()
 
 
 # 새 터치. 잔여 큐를 버리고, 잡은 쪽이 뒤끝이면 리드를 그쪽으로 넘긴다.
@@ -731,19 +744,19 @@ func _finish_step() -> void:
 
 # ---------------------------------------------------------------- 구멍 흡입
 
-# 두 끝 중 하나가 구멍과 4방향 인접이면 그 끝부터 빨려 들어간다. 두 끝을 모두 보는 것은
-# 후진에서 후미가 리드가 가지 않은 칸으로 나갈 수 있기 때문이다(벽 타기). 규칙대로
-# 양끝 코드 경로는 하나이며 동시에 걸리면 리드가 먼저다.
+# **리드(잡았던 끝)만** 짝 구멍과 4방향 인접일 때 빨려 들어간다. 머리 이동 중 꼬리가
+# 스친 것은 흡입이 아니다 — 반대쪽 끝으로 넣으려면 그 끝을 잡아 리드로 만들어야 한다.
+# 그리고 **손을 떼야 걸린다.** 드래그 중에는 옆칸을 지나가도 강제로 들어가지 않는다.
 func _try_begin_absorb() -> bool:
 	if _is_absorbing or level_manager == null or body_cells.size() < 1:
 		return false
-	for from_lead in [true, false]:
-		var end_cell: Vector2i = body_cells[0] if from_lead else body_cells[body_cells.size() - 1]
-		# 색이 짝인 구멍만 걸린다. 짝이 아니면 옆칸에 서 있어도 아무 일도 없다.
-		var hole: Variant = level_manager.adjacent_hole(end_cell, color_id)
-		if hole != null:
-			_begin_absorb(hole as Vector2i, from_lead)
-			return true
+	if _is_grabbed:
+		return false
+	# 색이 짝인 구멍만 걸린다. 짝이 아니면 옆칸에 서 있어도 아무 일도 없다.
+	var hole: Variant = level_manager.adjacent_hole(body_cells[0], color_id)
+	if hole != null:
+		_begin_absorb(hole as Vector2i, true)
+		return true
 	return false
 
 
@@ -852,6 +865,7 @@ func _reset_initial_body() -> void:
 	_lead_is_tail = false
 	_pending_lead_flip = false
 	_is_blocked = false
+	_is_grabbed = false
 	body_cells.clear()
 
 	if _is_valid_body_path(initial_body_cells):

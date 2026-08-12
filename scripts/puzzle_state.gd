@@ -12,7 +12,8 @@ extends RefCounted
 #   - 새로 점유하는 칸 조건: 보드 안 + 장애물 아님 + 구멍 아님 + 다른 고양이 아님 +
 #     자기 몸 아님(뒤끝 포함). `CatEntity.can_enter()` 와 `_can_slide_into()` 가 같은 집합이라
 #     전진·후진을 구분할 필요가 없고, 원자 이동은 "두 끝 중 하나를 인접한 빈 칸으로" 하나뿐이다.
-#   - 흡입은 강제다. 두 끝 중 하나가 짝 색 구멍과 4방향 인접하면 그 순간 사라진다.
+#   - 흡입은 방금 움직인 끝(릴리즈된 리드)이 짝 색 구멍과 4방향 인접할 때만 걸린다.
+#     반대쪽 끝이 스친 것은 흡입이 아니고, 드래그 중(손을 떼기 전)에도 걸리지 않는다.
 #   - 구멍은 경로가 아니다.
 
 const DIRS: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
@@ -294,16 +295,19 @@ func apply_move(move: Dictionary) -> Dictionary:
 	# 흡입 판정은 셀 중앙에서 커밋하는 이 순간에만 한다(`CatEntity._finish_step()`).
 	# 움직인 고양이만 보면 된다. 고양이가 사라지는 것은 칸을 비우기만 하므로 다른 고양이의
 	# 인접 관계를 새로 만들지 않는다.
-	var absorbed: bool = _resolve_absorption(cat_id)
+	var absorbed: bool = _resolve_absorption(cat_id, to_cell)
 	return {"moved": true, "absorbed": absorbed}
 
 
-# `CatEntity._try_begin_absorb()`. 두 끝 중 하나라도 짝 색 구멍에 4방향 인접하면 강제로 사라진다.
-# 플레이어가 피할 수 있는 선택이 아니라는 점이 역설계의 조기 흡입 가드의 근거다.
-func _resolve_absorption(cat_id: int) -> bool:
+# `CatEntity._try_begin_absorb()`. 흡입은 **방금 움직인 끝**에서만 걸린다 — 게임에서는
+# 리드(잡은 끝)가 릴리즈된 시점에 짝 구멍과 인접할 때이고, 이 모델의 한 수는 "끝 하나를
+# 잡아 한 칸 끌고 놓는다"이므로 움직인 끝이 곧 릴리즈된 리드다. 반대쪽 끝이 스친 것은
+# 흡입이 아니다. 반대쪽 끝이 인접해 있으면 그 끝을 잡았다 놓는 것으로 넣을 수 있지만,
+# 모델에는 "제자리 잡았다 놓기" 수가 없으므로 솔버는 그 지름길 없이 푼다(보수적).
+func _resolve_absorption(cat_id: int, moved_end_cell: Vector2i) -> bool:
 	if not cats.has(cat_id):
 		return false
-	if body_touches_paired_hole(cats[cat_id]["cells"], int(cats[cat_id]["color"])):
+	if adjacent_paired_hole(moved_end_cell, int(cats[cat_id]["color"])) != null:
 		remove_cat(cat_id)
 		return true
 	return false
