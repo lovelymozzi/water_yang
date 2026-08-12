@@ -1632,12 +1632,12 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("uv_tiling", Vector2(1.0, tile_scale))
 		_material_id_2.set_shader_parameter("uv_offset", Vector2(0.0, (1.0 - tile_scale) * 0.5))
 	if _outline_material != null:
-		_outline_material.set_shader_parameter("outline_color", outline_color)
+		_outline_material.set_shader_parameter("outline_color", _effective_outline_color())
 		_outline_material.set_shader_parameter("outline_width", outline_width)
 		_outline_material.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_outline_material.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 	if _material_id_2_outline != null:
-		_material_id_2_outline.set_shader_parameter("outline_color", outline_color)
+		_material_id_2_outline.set_shader_parameter("outline_color", _effective_outline_color())
 		_material_id_2_outline.set_shader_parameter("outline_width", outline_width)
 		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
@@ -1686,6 +1686,18 @@ func _effective_tint_gradient_top() -> Color:
 func _effective_tint_gradient_bottom() -> Color:
 	var pair: Variant = _pair_color()
 	return tint_gradient_bottom_color if pair == null else (pair as Color).darkened(0.12)
+
+
+# 외곽선도 짝 색에서 만든다. 안 그러면 템플릿에 박힌 손튜닝 값(크림색 고양이 기준)이 모든
+# 생성 고양이에 복제되어, 파란 고양이가 웜톤(핑크빛) 외곽선을 받는다. 배율 0.73과 알파는
+# 손 배치 고양이들의 튜닝값(짝 색 × 0.73, 알파 0.66)에서 가져온 것이다.
+func _effective_outline_color() -> Color:
+	var pair: Variant = _pair_color()
+	if pair == null:
+		return outline_color
+	var derived: Color = (pair as Color).darkened(0.27)
+	derived.a = outline_color.a
+	return derived
 
 
 func _get_tint_exclusion_mask() -> Texture2D:
