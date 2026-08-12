@@ -54,6 +54,15 @@ enum CellState {
 		obstacles_enabled = value
 		request_preview_refresh()
 
+# 실행 중에도 장애물 자리에 반투명 덩어리를 그린다. **플레이테스트 전용이다.**
+# 장애물 에셋이 아직 없어서 평소 실행에서는 잠긴 칸이 아무것도 그리지 않는데, 사람이 직접
+# 플레이해서 맵이 재미있는지 판단할 때는 벽이 어디인지 보여야 한다. 에셋이 들어오면 이 값은
+# 지운다.
+@export var show_obstacle_placeholders: bool = false:
+	set(value):
+		show_obstacle_placeholders = value
+		request_preview_refresh()
+
 # 탈출구 에셋. 구멍 칸마다 한 개씩 생성하고 색 짝 팔레트로 틴트한다.
 @export var hole_scene: PackedScene = preload("res://scenes/cat_hole.tscn"):
 	set(value):
@@ -445,8 +454,12 @@ func _sync_obstacle_layout() -> void:
 
 		# Keep editor markers visible for layout and color editing even when
 		# obstacles are disabled for gameplay.
-		child.call("set_preview_visible", Engine.is_editor_hint())
-		child.call("refresh_editor_preview")
+		# 에디터에서는 항상 배치를 보여 주고, 실행 중에는 플레이테스트 토글을 켤 때만 보여 준다.
+		child.call("refresh_preview")
+		child.call(
+			"set_preview_visible",
+			Engine.is_editor_hint() or show_obstacle_placeholders
+		)
 
 		if not obstacles_enabled:
 			continue

@@ -25,7 +25,7 @@ var _marker_mesh: MeshInstance3D
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		_ensure_marker_mesh()
-		refresh_editor_preview()
+		refresh_preview()
 
 
 # 이 마커가 잠그는 칸 전부. LevelManager 와 에디터 프리뷰가 같은 목록을 쓴다.
@@ -37,12 +37,12 @@ func get_cells() -> Array[Vector2i]:
 	return cells
 
 
-func refresh_editor_preview() -> void:
-	if not Engine.is_editor_hint():
-		return
-
+# 덩어리를 자기 칸에 맞춰 놓는다. 에디터 전용이 아니다 — `LevelManager` 의
+# `show_obstacle_placeholders` 를 켜면 실행 중에도 이 덩어리가 보인다. 장애물 에셋이 아직
+# 없어서 실행 중에는 잠긴 칸이 투명 벽이 되는데, 플레이테스트에서는 그게 보여야 한다.
+# 보이는지 여부는 `set_preview_visible()` 이 따로 정한다.
+func refresh_preview() -> void:
 	_ensure_marker_mesh()
-	_marker_mesh.visible = true
 	var manager := _find_level_manager()
 	if manager == null:
 		return
@@ -66,9 +66,6 @@ func refresh_editor_preview() -> void:
 
 
 func set_preview_visible(value: bool) -> void:
-	if not Engine.is_editor_hint():
-		return
-
 	_ensure_marker_mesh()
 	_marker_mesh.visible = value
 
@@ -110,7 +107,7 @@ func _request_editor_refresh() -> void:
 	if not Engine.is_editor_hint():
 		return
 
-	call_deferred("refresh_editor_preview")
+	call_deferred("refresh_preview")
 	var manager := _find_level_manager()
 	if manager != null:
 		manager.request_preview_refresh()

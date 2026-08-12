@@ -96,6 +96,7 @@
 - **흡입 판정은 `PuzzleState.body_touches_paired_hole()` 하나만 쓴다.** 실제 흡입 처리, 시작 배치 검증, 역설계의 조기 흡입 가드, 솔버의 목표 판정이 전부 이 함수를 거친다. 같은 판정을 여러 곳에 복사하면 생성기와 게임이 다른 규칙으로 돌기 시작한다. 몸의 두 끝(`ends_of`), 몸 정규 키(`body_key`), 탈출 거리(`escape_distance`), 장애물 덩어리 전개(`cells_of_block`)도 같은 이유로 창구가 하나다.
 - 장애물은 풀이가 밟지 않은 칸에만 사후 주입한다. 장애물은 칸을 뺏는 순수 감산이라 이것이 안전하다.
 - **기믹은 사후 주입하지 않는다.** 상태를 바꾸는 기믹은 위 논증이 성립하지 않아 기록된 풀이를 무효로 만들 수 있다. 반드시 역설계 루프 안에서 함께 되돌린다. 확장 지점은 `PuzzleState.gimmicks`와 `_apply_gimmicks_on_commit()`이다.
+- 사람이 특정 시드를 직접 플레이해 보는 절차는 `2_맵생성기.md` 8절이다. `MapGenerator`의 `Generate On Play` + `LevelManager`의 `Show Obstacle Placeholders`를 켜고 F5. 둘 다 플레이테스트 전용이며 장애물 에셋이 들어오면 후자는 지운다.
 - 생성기는 시드로 결정적이어야 한다. `Array.shuffle()`이나 전역 `randi()`처럼 전역 RNG를 쓰는 것을 넣지 않는다.
 
 ## 머티리얼, 조명, 그림자

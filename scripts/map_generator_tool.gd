@@ -11,6 +11,11 @@ extends Node
 
 @export var level_manager_path: NodePath = ^"../LevelManager"
 
+# 켜 두면 게임을 실행하는 순간 아래 시드로 맵을 만들어 판을 갈아 끼운다. 사람이 특정 시드를
+# 직접 플레이해서 재미를 판단할 때 쓴다. 씬 파일의 손 배치를 덮어쓰지 않으므로 시드만 바꿔
+# 가며 계속 돌려 볼 수 있다. **켜져 있으면 손 배치 레벨은 플레이할 수 없다.**
+@export var generate_on_play: bool = false
+
 @export_group("Generation")
 @export var generator_seed: int = 0
 @export_range(2, 8, 1) var cat_count: int = 4
@@ -35,6 +40,14 @@ var save_action: Callable = save_level_files
 
 # 마지막으로 생성한 레벨. 저장 버튼이 이걸 쓴다. 씬 파일에는 저장되지 않는다.
 var _last_level: Dictionary = {}
+
+
+func _ready() -> void:
+	if Engine.is_editor_hint() or not generate_on_play:
+		return
+	# LevelManager 가 자기 _ready 에서 씬 배치를 먼저 읽게 두고 그 뒤에 갈아 끼운다.
+	# 여기서 바로 하면 우리가 심은 고양이를 LevelManager 가 다시 지운다.
+	call_deferred("generate_level")
 
 
 func generate_level() -> void:

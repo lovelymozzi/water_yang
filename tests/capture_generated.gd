@@ -30,6 +30,9 @@ func _process(_delta: float) -> bool:
 		return false
 	if _manager == null:
 		_manager = _scene.get_node("LevelManager")
+		# 장애물 에셋이 없어 실행 중에는 잠긴 칸이 투명 벽이다. 배치를 눈으로 판단하려면
+		# 벽이 어디인지 보여야 하므로 플레이테스트 플레이스홀더를 켠다.
+		_manager.show_obstacle_placeholders = true
 
 	if _wait > 0:
 		_wait -= 1

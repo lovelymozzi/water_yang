@@ -76,10 +76,10 @@ static func _clear_layout_root(manager: LevelManager, root_name: String) -> Node
 	return root
 
 
-# 에디터에서만 owner 를 지정한다. 런타임에 지정하면 아무 의미가 없고 PackedScene.pack() 만
-# 쓸데없이 붙잡는다.
+# owner 는 에디터 여부와 무관하게 지정한다. `PackedScene.pack()` 이 owner 없는 노드를 통째로
+# 빠뜨리므로, 이게 없으면 헤드리스에서 레벨 씬을 저장할 수 없다(빈 씬이 나온다).
 static func _claim(node: Node, scene_owner: Node) -> void:
-	if Engine.is_editor_hint() and scene_owner != null and node != scene_owner:
+	if scene_owner != null and node != scene_owner:
 		node.owner = scene_owner
 
 
