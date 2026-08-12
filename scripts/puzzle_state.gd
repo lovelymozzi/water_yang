@@ -12,8 +12,8 @@ extends RefCounted
 #   - 새로 점유하는 칸 조건: 보드 안 + 장애물 아님 + 구멍 아님 + 다른 고양이 아님 +
 #     자기 몸 아님(뒤끝 포함). `CatEntity.can_enter()` 와 `_can_slide_into()` 가 같은 집합이라
 #     전진·후진을 구분할 필요가 없고, 원자 이동은 "두 끝 중 하나를 인접한 빈 칸으로" 하나뿐이다.
-#   - 흡입은 방금 움직인 끝(릴리즈된 리드)이 짝 색 구멍과 4방향 인접할 때만 걸린다.
-#     반대쪽 끝이 스친 것은 흡입이 아니고, 드래그 중(손을 떼기 전)에도 걸리지 않는다.
+#   - 흡입은 방금 움직인 끝(리드)이 짝 색 구멍과 4방향 인접할 때만 걸린다.
+#     반대쪽 끝이 스친 것은 흡입이 아니다.
 #   - 구멍은 경로가 아니다.
 
 const DIRS: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
@@ -299,11 +299,10 @@ func apply_move(move: Dictionary) -> Dictionary:
 	return {"moved": true, "absorbed": absorbed}
 
 
-# `CatEntity._try_begin_absorb()`. 흡입은 **방금 움직인 끝**에서만 걸린다 — 게임에서는
-# 리드(잡은 끝)가 릴리즈된 시점에 짝 구멍과 인접할 때이고, 이 모델의 한 수는 "끝 하나를
-# 잡아 한 칸 끌고 놓는다"이므로 움직인 끝이 곧 릴리즈된 리드다. 반대쪽 끝이 스친 것은
-# 흡입이 아니다. 반대쪽 끝이 인접해 있으면 그 끝을 잡았다 놓는 것으로 넣을 수 있지만,
-# 모델에는 "제자리 잡았다 놓기" 수가 없으므로 솔버는 그 지름길 없이 푼다(보수적).
+# `CatEntity._try_begin_absorb()`. 흡입은 **방금 움직인 끝**(리드)에서만 걸린다. 이 모델의
+# 한 수는 "끝 하나를 잡아 한 칸 끈다"이므로 움직인 끝이 곧 리드다. 반대쪽 끝이 스친 것은
+# 흡입이 아니다. 반대쪽 끝이 인접해 있으면 그 끝을 잡는 것만으로 넣을 수 있지만, 모델에는
+# "제자리 잡기" 수가 없으므로 솔버는 그 지름길 없이 푼다(보수적).
 func _resolve_absorption(cat_id: int, moved_end_cell: Vector2i) -> bool:
 	if not cats.has(cat_id):
 		return false

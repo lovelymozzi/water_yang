@@ -24,7 +24,6 @@ func _process(_delta: float) -> bool:
 	_check_no_trigger_when_far(manager)
 	_check_lead_absorb(manager)
 	_check_rear_does_not_absorb(manager)
-	_check_no_absorb_while_grabbed(manager)
 	_check_color_pair(manager)
 	_check_clears_level(manager)
 	_report()
@@ -158,40 +157,12 @@ func _check_rear_does_not_absorb(manager: LevelManager) -> void:
 	)
 	_expect(not cat.is_absorbing(), "리드가 아닌 후미가 닿았는데 흡입이 시작됐다")
 
-	# 그 끝을 잡아 리드로 만들고 손을 떼면 들어간다.
-	cat.set_grabbed(true)
+	# 그 끝을 잡아 리드로 만드는 순간 들어간다.
 	cat.begin_drag(rear_after)
-	_expect(not cat.is_absorbing(), "손을 떼기 전에 흡입이 시작됐다")
-	cat.set_grabbed(false)
-	_expect(cat.is_absorbing(), "구멍 옆 끝을 잡았다 놓았는데 흡입이 시작되지 않았다")
+	_expect(cat.is_absorbing(), "구멍 옆 끝을 잡았는데 흡입이 시작되지 않았다")
 	_expect(cat._absorb_cell == hole, "흡입 대상 구멍이 다르다: %s" % [cat._absorb_cell])
 	_drain(cat)
-	print("[흡입] 후미 %s 는 흡입되지 않고, 잡았다 놓으면 들어간다" % [rear_before])
-
-
-# 드래그 중(손을 떼기 전)에는 리드가 옆칸에 도착해도 강제로 들어가지 않는다.
-func _check_no_absorb_while_grabbed(manager: LevelManager) -> void:
-	var hole: Vector2i = manager.get_hole_cells()[0]
-	var cat: CatEntity = _fresh_cat(manager, hole + Vector2i(0, 2))
-	cat.set_grabbed(true)
-	cat.request_path_to(hole + Vector2i(0, 1))
-	cat.advance(1.2 / cat.move_speed_cells)
-	_expect(
-		cat.body_cells[0] == hole + Vector2i(0, 1),
-		"리드가 구멍 옆칸으로 못 갔다: %s" % [cat.body_cells]
-	)
-	_expect(not cat.is_absorbing(), "손을 떼지 않았는데 흡입이 시작됐다")
-	# 잡은 채 옆칸을 지나쳐도 걸리지 않는다.
-	cat.request_path_to(hole + Vector2i(1, 1))
-	cat.advance(1.2 / cat.move_speed_cells)
-	_expect(not cat.is_absorbing(), "잡은 채 지나가는데 흡입이 걸렸다")
-	# 다시 옆칸으로 돌아와 손을 떼면 들어간다.
-	cat.request_path_to(hole + Vector2i(0, 1))
-	cat.advance(1.2 / cat.move_speed_cells)
-	cat.set_grabbed(false)
-	_expect(cat.is_absorbing(), "손을 뗐는데 흡입이 시작되지 않았다")
-	_drain(cat)
-	print("[흡입] 드래그 중에는 걸리지 않고 손을 떼는 순간 들어간다")
+	print("[흡입] 후미 %s 는 흡입되지 않고, 잡아서 리드로 만들면 들어간다" % [rear_before])
 
 
 # 색이 짝이 아니면 옆칸에 들어서도 빠지지 않는다. 짝이면 같은 자리에서 빠진다.
