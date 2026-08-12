@@ -25,7 +25,6 @@ const EAR_TIP_TWITCH_ANGLE := deg_to_rad(9.0)
 const TILE_MATERIAL_NAMES := ["Material_cat_tile", "Material cat_tile"]
 const TILE_MATERIAL_FALLBACK_SURFACE_INDEX := 1
 const TILE_UV_REGION_MIN_U := 0.625
-const TINT_GRADIENT_MAX_POINTS := 20
 const HEAD_BONE_NAME := "Bone002"
 const TAIL_BONE_NAME := "Bone022"
 # Bone006 carries the front-paw/chest transition. Keep it rigid so its baked
@@ -128,22 +127,6 @@ const ABSORB_SINK_CELLS := 0.9
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
 	set(value):
 		tint_color = value
-		_refresh_shader_material()
-
-@export_group("Tint Gradient")
-@export var tint_gradient_enabled := false:
-	set(value):
-		tint_gradient_enabled = value
-		_refresh_shader_material()
-
-@export var tint_gradient_top_color: Color = Color(1.0, 1.0, 1.0, 1.0):
-	set(value):
-		tint_gradient_top_color = value
-		_refresh_shader_material()
-
-@export var tint_gradient_bottom_color: Color = Color(0.94, 0.90, 0.86, 1.0):
-	set(value):
-		tint_gradient_bottom_color = value
 		_refresh_shader_material()
 
 @export_range(2, 5, 1) var toon_steps: int = 3:
@@ -948,7 +931,6 @@ func _update_visual_pose() -> void:
 		desired[bone_index] = Transform3D(posed_basis.orthonormalized(), to_skeleton * (point - position))
 
 	_apply_bone_globals(desired)
-	_update_tint_gradient_path(polyline, total_length)
 
 
 # 호 위치 하나를 (자리, 머리 축 방향) 으로 바꾸는 단일 창구. 평소에는 폴리라인을 그대로
@@ -965,25 +947,6 @@ func _pose_at(
 		_sample_polyline(polyline, cumulative, arc_from_lead),
 		_model_head_direction(polyline, cumulative, arc_from_lead),
 	]
-
-
-func _update_tint_gradient_path(polyline: PackedVector3Array, total_length: float) -> void:
-	# The shader projects skinned vertices onto this world-space path.  This
-	# keeps the tint continuous when a body section turns away from FBX local Y.
-	if polyline.size() < 2:
-		return
-	var point_count := mini(polyline.size(), TINT_GRADIENT_MAX_POINTS)
-	var points := PackedVector3Array()
-	for index in point_count:
-		points.append(polyline[index])
-	if _cat_material != null:
-		_cat_material.set_shader_parameter("tint_gradient_points", points)
-		_cat_material.set_shader_parameter("tint_gradient_point_count", point_count)
-		_cat_material.set_shader_parameter("tint_gradient_path_length", total_length)
-	if _material_id_2 != null:
-		_material_id_2.set_shader_parameter("tint_gradient_points", points)
-		_material_id_2.set_shader_parameter("tint_gradient_point_count", point_count)
-		_material_id_2.set_shader_parameter("tint_gradient_path_length", total_length)
 
 
 # 계산한 글로벌 포즈를 부모부터 순서대로 로컬 포즈로 환산해 넣는다.
@@ -1466,16 +1429,11 @@ func _apply_shader_parameters(
 ) -> void:
 	var tint_exclusion_mask: Texture2D = custom_tint_exclusion_mask if custom_tint_exclusion_mask != null else _get_tint_exclusion_mask()
 	var active_tint: Color = _effective_tint_color()
-	var active_gradient_top: Color = _effective_tint_gradient_top()
-	var active_gradient_bottom: Color = _effective_tint_gradient_bottom()
 	if _cat_material != null:
 		_cat_material.set_shader_parameter("albedo_tex", texture)
 		_cat_material.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_cat_material.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_cat_material.set_shader_parameter("tint_color", active_tint)
-		_cat_material.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
-		_cat_material.set_shader_parameter("tint_gradient_top_color", active_gradient_top)
-		_cat_material.set_shader_parameter("tint_gradient_bottom_color", active_gradient_bottom)
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
@@ -1494,9 +1452,6 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("tint_exclusion_mask", tint_exclusion_mask)
 		_material_id_2.set_shader_parameter("tint_exclusion_enabled", 1.0 if use_tint_exclusion_mask else 0.0)
 		_material_id_2.set_shader_parameter("tint_color", active_tint)
-		_material_id_2.set_shader_parameter("tint_gradient_enabled", 1.0 if tint_gradient_enabled else 0.0)
-		_material_id_2.set_shader_parameter("tint_gradient_top_color", active_gradient_top)
-		_material_id_2.set_shader_parameter("tint_gradient_bottom_color", active_gradient_bottom)
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
@@ -1558,14 +1513,27 @@ func _effective_tint_color() -> Color:
 	return tint_color if pair == null else pair as Color
 
 
-func _effective_tint_gradient_top() -> Color:
-	var pair: Variant = _pair_color()
-	return tint_gradient_top_color if pair == null else (pair as Color).lightened(0.14)
-
-
-func _effective_tint_gradient_bottom() -> Color:
-	var pair: Variant = _pair_color()
-	return tint_gradient_bottom_color if pair == null else (pair as Color).darkened(0.12)
+# CatHole uses this snapshot when it represents this cat's color_id.  Keep the
+# names aligned with cat_toon.gdshader and cat_outline.gdshader so a hole is
+# styled by exactly the same controls as its matching movable cat.
+func get_hole_visual_style(pair_color: Color) -> Dictionary:
+	return {
+		"tint_color": pair_color if tint_from_pair_color else tint_color,
+		"toon_steps": toon_steps,
+		"shadow_darkness": shadow_darkness,
+		"rim_strength": rim_strength,
+		"line_art_tex": line_art_texture,
+		"line_art_eye_mask": _get_tint_exclusion_mask(),
+		"line_art_enabled": 1.0 if line_art_texture != null else 0.0,
+		"line_art_color": line_art_color,
+		"line_art_strength": line_art_strength,
+		"tint_exclusion_mask": _get_tint_exclusion_mask(),
+		"tint_exclusion_enabled": 1.0,
+		"outline_color": outline_color,
+		"outline_width": outline_width,
+		"top_outline_scale": top_outline_scale,
+		"bottom_outline_scale": bottom_outline_scale,
+	}
 
 
 func _get_tint_exclusion_mask() -> Texture2D:

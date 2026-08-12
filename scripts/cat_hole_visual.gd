@@ -13,6 +13,9 @@ extends Node3D
 
 const FLOWER_SURFACE_NAME := "flower"
 const HOLE_SURFACE_NAME := "hole"
+const HOLE_TEXTURE := preload("res://water_yang/hole1.jpg")
+const HOLE_SPIN_SHADER := preload("res://scripts/hole_spin.gdshader")
+const HOLE_ROTATION_DURATION := 4.0
 
 @export var flower_material: Material:
 	set(value):
@@ -31,6 +34,7 @@ const HOLE_SURFACE_NAME := "hole"
 var _pair_color := Color(1.0, 1.0, 1.0, 1.0)
 var _pit_color := Color(0.06, 0.07, 0.05, 1.0)
 var _has_pair_color := false
+var _cat_visual_style: Dictionary = {}
 
 
 func _ready() -> void:
@@ -43,6 +47,14 @@ func apply_hole_colors(flower_color: Color, pit_color: Color) -> void:
 	_pair_color = flower_color
 	_pit_color = pit_color
 	_has_pair_color = true
+	_apply_surface_materials()
+
+
+# The LevelManager finds the layout cat with the same color_id and gives its
+# effective shader settings to this hole.  This preserves per-cat outline and
+# toon choices rather than forcing every hole to use the shared fallback.
+func apply_cat_visual_style(style: Dictionary) -> void:
+	_cat_visual_style = style.duplicate()
 	_apply_surface_materials()
 
 
@@ -112,12 +124,11 @@ func _build_flower_material() -> Material:
 		tinted.set_shader_parameter("line_art_color", appearance.line_art_color)
 		tinted.set_shader_parameter("line_art_strength", appearance.line_art_strength)
 
-	# 짝 색이 스타일의 틴트를 덮는다. 이 한 줄이 구멍마다 다른 유일한 값이다.
+	# The pair color remains the fallback for levels without a matching layout
+	# cat.  A matching cat's full style below takes precedence.
 	if _has_pair_color:
 		tinted.set_shader_parameter("tint_color", _pair_color)
-	# 그라데이션은 고양이 몸이 자기 경로를 셰이더에 먹여야 작동한다. 정지한 구멍에는
-	# 먹일 경로가 없으니 끈다.
-	tinted.set_shader_parameter("tint_gradient_enabled", 0.0)
+	_apply_toon_style(tinted)
 
 	var outline := tinted.next_pass as ShaderMaterial
 	if outline != null:
@@ -129,18 +140,41 @@ func _build_flower_material() -> Material:
 			outline_copy.set_shader_parameter("outline_width", appearance.outline_width)
 			outline_copy.set_shader_parameter("top_outline_scale", appearance.top_outline_scale)
 			outline_copy.set_shader_parameter("bottom_outline_scale", appearance.bottom_outline_scale)
+		_apply_outline_style(outline_copy)
 		tinted.next_pass = outline_copy
 
 	return tinted
+
+
+func _apply_toon_style(material: ShaderMaterial) -> void:
+	if _cat_visual_style.is_empty():
+		return
+	for parameter in [
+		"tint_color", "toon_steps", "shadow_darkness", "rim_strength",
+		"line_art_tex", "line_art_eye_mask", "line_art_enabled",
+		"line_art_color", "line_art_strength", "tint_exclusion_mask",
+		"tint_exclusion_enabled",
+	]:
+		material.set_shader_parameter(parameter, _cat_visual_style[parameter])
+
+
+func _apply_outline_style(material: ShaderMaterial) -> void:
+	if _cat_visual_style.is_empty():
+		return
+	for parameter in [
+		"outline_color", "outline_width", "top_outline_scale", "bottom_outline_scale",
+	]:
+		material.set_shader_parameter(parameter, _cat_visual_style[parameter])
 
 
 func _build_pit_material() -> Material:
 	if not _has_pair_color:
 		return null
 
-	var material := StandardMaterial3D.new()
-	material.albedo_color = _pit_color
-	material.roughness = 0.95
+	var material := ShaderMaterial.new()
+	material.shader = HOLE_SPIN_SHADER
+	material.set_shader_parameter("albedo_tex", HOLE_TEXTURE)
+	material.set_shader_parameter("rotation_duration", HOLE_ROTATION_DURATION)
 	return material
 
 

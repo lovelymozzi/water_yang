@@ -486,12 +486,28 @@ func _build_hole_visuals() -> void:
 
 		# 크기와 색은 노드가 트리에 들어간 뒤에 준다. 에셋이 자기 _ready 에서 원본
 		# 재질을 먼저 깔기 때문에, 색 짝 틴트는 그 뒤에 덮어써야 남는다.
+		visual.call("apply_cat_visual_style", _get_hole_cat_visual_style(color_id))
 		visual.call("fit_to_tile", tile_side)
 		visual.call(
 			"apply_hole_colors",
 			get_hole_rim_color(color_id),
 			get_hole_pit_color(color_id)
 		)
+
+
+func _get_hole_cat_visual_style(color_id: int) -> Dictionary:
+	# A color_id identifies both the gameplay pair and its visual counterpart.
+	# Read the editable layout node instead of generated runtime cats because
+	# holes are built before _sync_cat_layout() initializes those runtime nodes.
+	if color_id < 0:
+		return {}
+	for child in _layout_cats_root.get_children():
+		if child.get_script() != CAT_ENTITY_SCRIPT or int(child.get("color_id")) != color_id:
+			continue
+		var cat := child as CatEntity
+		if cat != null:
+			return cat.get_hole_visual_style(get_pair_color(color_id))
+	return {}
 
 
 func is_hole(cell: Vector2i) -> bool:
