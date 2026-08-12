@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CatAppearance" format=3 uid="uid://de43e12xoawxm"]
+
+[ext_resource type="Script" uid="uid://7acjgerth4ai" path="res://scripts/cat_appearance.gd" id="1_cat_appearance"]
+[ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="2_line_art"]
+
+[resource]
+resource_name = "CatAppearance"
+script = ExtResource("1_cat_appearance")
+tint_color = Color(0.7887976, 0.6066908, 0.6659563, 1)
+outline_color = Color(0.18, 0.09, 0.06, 1)
+outline_width = 0.006
+line_art_texture = ExtResource("2_line_art")

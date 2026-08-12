@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://csrvtbl5x6tvt" path="res://water_yang/cat_hole1.fbx" id="5_cat_hole"]
 [ext_resource type="Material" path="res://resources/cat_hole_flower.tres" id="6_cat_hole_flower"]
 [ext_resource type="Script" path="res://scripts/cat_hole_visual.gd" id="7_cat_hole_visual"]
+[ext_resource type="Resource" uid="uid://de43e12xoawxm" path="res://resources/cat_appearance.tres" id="8_cat_appearance"]
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
@@ -58,6 +59,7 @@ obstacle_secondary_color = Color(0.52156866, 0.6039216, 0.3647059, 1)
 transform = Transform3D(10.077361, 0, 0, 0, 10.077361, 0, 0, 0, 10.077361, 0, 0.11698222, -1.9531717)
 script = ExtResource("7_cat_hole_visual")
 flower_material = ExtResource("6_cat_hole_flower")
+appearance = ExtResource("8_cat_appearance")
 
 [node name="ObstacleVisuals" type="Node3D" parent="LevelManager" unique_id=1279314469]
 
