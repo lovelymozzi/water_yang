@@ -54,6 +54,19 @@ enum CellState {
 		obstacles_enabled = value
 		request_preview_refresh()
 
+# 장애물 에셋. 구멍이 `hole_scene` 을 쓰는 것과 같은 방식이며, 비어 있으면 아래에서 타일과
+# 같은 모양의 덩어리를 만들어 놓는다. **잠긴 칸은 반드시 보여야 한다** — 안 보이면 플레이어가
+# 못 움직이는 이유가 벽인지 버그인지 구분할 수 없다.
+@export var obstacle_scene: PackedScene = null:
+	set(value):
+		obstacle_scene = value
+		request_preview_refresh()
+
+@export_range(0.1, 1.2, 0.01) var obstacle_height: float = 0.55:
+	set(value):
+		obstacle_height = value
+		request_preview_refresh()
+
 # 탈출구 에셋. 구멍 칸마다 한 개씩 생성하고 색 짝 팔레트로 틴트한다.
 @export var hole_scene: PackedScene = preload("res://scenes/cat_hole.tscn"):
 	set(value):
@@ -82,12 +95,14 @@ enum CellState {
 		tile_secondary_color = value
 		request_preview_refresh()
 
-@export_color_no_alpha var obstacle_primary_color: Color = Color(0.95, 0.86, 0.70, 1.0):
+# 잠긴 칸은 타일과 **한눈에 구분되어야** 한다. 타일과 비슷한 색으로 두면 덩어리를 그려도
+# 플레이어에게는 그냥 타일로 보여서, 못 움직이는 이유가 벽인지 버그인지 알 수 없다.
+@export_color_no_alpha var obstacle_primary_color: Color = Color(0.40, 0.32, 0.23, 1.0):
 	set(value):
 		obstacle_primary_color = value
 		request_preview_refresh()
 
-@export_color_no_alpha var obstacle_secondary_color: Color = Color(0.86, 0.72, 0.55, 1.0):
+@export_color_no_alpha var obstacle_secondary_color: Color = Color(0.34, 0.27, 0.19, 1.0):
 	set(value):
 		obstacle_secondary_color = value
 		request_preview_refresh()
@@ -121,6 +136,8 @@ var _grid_state: Array = []
 var _grid_refs: Array = []
 var _cats: Array[CatEntity] = []
 var _hole_cells: Array[Vector2i] = []
+# 잠긴 장애물 칸. 마커가 여러 칸을 묶어 잠그므로 칸 단위로 펼쳐 들고 있는다.
+var _obstacle_cells: Array[Vector2i] = []
 # _hole_cells 와 같은 순서의 색 인덱스. -1 은 아무 색이나 받는 와일드카드다.
 var _hole_color_ids: Array[int] = []
 var _preview_refresh_queued: bool = false
@@ -163,6 +180,14 @@ func request_preview_refresh() -> void:
 func refresh_board_preview() -> void:
 	if Engine.is_editor_hint():
 		request_preview_refresh()
+
+
+# 배치를 바꾼 직후 보드를 즉시 다시 만든다. `request_preview_refresh()` 는 다음 프레임으로
+# 미루므로, 프레임을 기다릴 수 없는 맵 생성기와 검증 하네스는 이쪽을 쓴다.
+func rebuild_now() -> void:
+	_preview_refresh_queued = false
+	_setup_roots()
+	_rebuild_from_scene_layout()
 
 
 func _refresh_preview_deferred() -> void:
@@ -322,33 +347,36 @@ func _rebuild_from_scene_layout() -> void:
 	_build_hole_visuals()
 	_build_occupancy_highlight()
 	_sync_obstacle_layout()
+	_build_obstacle_visuals()
 	_sync_cat_layout()
 	_sync_hole_visual_styles()
 
 
 func _clear_generated_nodes() -> void:
-	for child in _board_root.get_children():
-		child.queue_free()
-
-	for child in _tiles_root.get_children():
-		# TileVisuals also holds manually placed scene decorations. Keep those
-		# marked as persistent when the generated board tiles are rebuilt.
-		if not child.is_in_group("persistent_tile_visuals"):
-			child.queue_free()
-
-	for child in _obstacles_root.get_children():
-		child.queue_free()
-
-	for child in _holes_root.get_children():
-		child.queue_free()
-
-	for child in _highlight_root.get_children():
-		child.queue_free()
+	_free_children(_board_root)
+	# TileVisuals also holds manually placed scene decorations. Keep those
+	# marked as persistent when the generated board tiles are rebuilt.
+	_free_children(_tiles_root, "persistent_tile_visuals")
+	_free_children(_obstacles_root)
+	_free_children(_holes_root)
+	_free_children(_highlight_root)
 
 	_highlight_tiles.clear()
 	_hole_cells.clear()
 	_hole_color_ids.clear()
+	_obstacle_cells.clear()
 	_cats.clear()
+
+
+# 생성 노드를 지운다. **`queue_free()` 만 부르면 안 된다** — 해제가 프레임 끝으로 미뤄지므로
+# 같은 프레임에 보드를 다시 만들면 옛 노드가 자식으로 남아 개수가 두 배로 보인다.
+# 트리에서 먼저 떼어 내야 `rebuild_now()` 직후의 조회가 맞는다.
+func _free_children(root: Node3D, keep_group: String = "") -> void:
+	for child in root.get_children():
+		if keep_group != "" and child.is_in_group(keep_group):
+			continue
+		root.remove_child(child)
+		child.queue_free()
 
 
 func _initialize_grid_arrays() -> void:
@@ -439,17 +467,18 @@ func _sync_obstacle_layout() -> void:
 
 		# Keep editor markers visible for layout and color editing even when
 		# obstacles are disabled for gameplay.
-		child.call("set_preview_visible", Engine.is_editor_hint())
-		child.call("refresh_editor_preview")
+		# 마커는 아무것도 그리지 않는다. 보이는 것은 아래 `_build_obstacle_visuals()` 가 만드는
+		# 덩어리이며 에디터와 실행에서 같은 것이 보인다. 마커가 따로 상자를 그리면 그 위에
+		# 정체불명의 반투명 사각형이 겹쳐 보인다(구멍 마커와 같은 이유다).
+		child.call("refresh_preview")
 
 		if not obstacles_enabled:
 			continue
 
-		# 칸만 잠그고 아무것도 그리지 않는다. 실제 장애물 에셋이 따로 들어올 자리이며,
-		# 그때는 구멍이 `hole_scene` 을 쓰는 것과 같은 방식으로 씬을 하나 붙이면 된다.
 		for cell in child.call("get_cells"):
 			if is_inside_grid(cell):
 				_set_cell_state(cell, CellState.OBSTACLE)
+				_obstacle_cells.append(cell)
 
 
 func _sync_hole_layout() -> void:
@@ -495,6 +524,29 @@ func _build_hole_visuals() -> void:
 			get_hole_rim_color(color_id),
 			get_hole_pit_color(color_id)
 		)
+
+
+# 잠긴 칸을 눈에 보이게 그린다. 에셋(`obstacle_scene`)이 있으면 그것을 붙이고, 없으면 타일과
+# 같은 둥근 덩어리를 타일 위에 얹는다. 높이는 고양이(`cat_world_y`)보다 낮게 두어 고양이를
+# 가리지 않는다.
+func _build_obstacle_visuals() -> void:
+	var block_side := maxf(tile_size - tile_gap, 0.01)
+	for cell in _obstacle_cells:
+		if obstacle_scene != null:
+			var visual := obstacle_scene.instantiate() as Node3D
+			if visual != null:
+				visual.name = "Obstacle_%d_%d" % [cell.x, cell.y]
+				visual.position = grid_to_world(cell, TILE_HEIGHT)
+				_obstacles_root.add_child(visual)
+				continue
+		var block := _create_rounded_prism(
+			"Obstacle_%d_%d" % [cell.x, cell.y],
+			Vector3(block_side, obstacle_height, block_side),
+			TILE_CORNER_RADIUS,
+			_make_material(get_obstacle_color(cell))
+		)
+		block.position = grid_to_world(cell, TILE_HEIGHT + obstacle_height * 0.5)
+		_obstacles_root.add_child(block)
 
 
 func _get_hole_cat_visual_style(color_id: int) -> Dictionary:

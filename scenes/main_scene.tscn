@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/grass_decor.tscn" id="5_6wevv"]
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="6_top_fog"]
+[ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
 
 [sub_resource type="Gradient" id="Gradient_6wevv"]
 offsets = PackedFloat32Array(0, 0.42, 1)
@@ -103,8 +104,6 @@ obstacles_enabled = true
 board_visuals_color = Color(0.57254905, 0.67058825, 0.34509805, 1)
 tile_primary_color = Color(0.43130937, 0.57282066, 0.2760929, 1)
 tile_secondary_color = Color(0.4151132, 0.55480856, 0.31393868, 1)
-obstacle_primary_color = Color(0.43137255, 0.5686275, 0.3019608, 1)
-obstacle_secondary_color = Color(0.52156866, 0.6039216, 0.3647059, 1)
 pair_colors = PackedColorArray(0.9529412, 0.61960787, 0.41960788, 1, 0.43529412, 0.6627451, 0.9098039, 1, 0.48706055, 0.7421875, 0.49617225, 1, 0.9098039, 0.53333336, 0.6627451, 1, 0.78039217, 0.58431375, 0.9098039, 1, 0.9490196, 0.7882353, 0.29803923, 1, 0.3647059, 0.78431374, 0.7607843, 1, 0.9411765, 0.54509807, 0.35686275, 1, 0.62352943, 0.79607844, 0.3529412, 1, 0.37600708, 0.5041411, 0.8671875, 1, 0.9137255, 0.4745098, 0.79607844, 1, 0.39215687, 0.7254902, 0.89411765, 1, 0.9098039, 0.74938726, 0.6431373, 1, 0.7137255, 0.6313726, 0.42745098, 1, 0.2922516, 0.69921875, 0.50309, 1, 0.8666667, 0.4509804, 0.4509804, 1, 0.59887075, 0.47547913, 0.86328125, 1, 0.8392157, 0.72156864, 0.35686275, 1, 0.335083, 0.71484375, 0.6673737, 1, 0.640625, 0.46295166, 0.5001391, 1)
 
 [node name="BoardVisuals" type="Node3D" parent="LevelManager" unique_id=1755716270]
@@ -474,6 +473,12 @@ grid_pos = Vector2i(6, 8)
 color_id = 3
 
 [node name="OccupancyHighlights" type="Node3D" parent="LevelManager" unique_id=1126319405]
+
+[node name="MapGenerator" type="Node" parent="." unique_id=1306831349]
+script = ExtResource("6_gen")
+generate_on_play = true
+generator_seed = 22
+body_length_max = 8
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=411557567]
 

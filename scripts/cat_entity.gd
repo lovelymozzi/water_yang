@@ -49,25 +49,44 @@ const ABSORB_SINK_CELLS := 0.9
 @export var grid_pos: Vector2i = Vector2i.ZERO:
 	set(value):
 		grid_pos = value
-		_reset_straight_body()
+		if _applying_initial_body:
+			return
+		_reset_initial_body()
 		_request_editor_refresh()
 
 @export_enum("up", "right", "down", "left") var facing_name: String = "up":
 	set(value):
 		facing_name = value
 		facing_dir = _direction_from_name(facing_name)
-		_reset_straight_body()
+		if _applying_initial_body:
+			return
+		_reset_initial_body()
+		_request_editor_refresh()
+
+# 꺾인 시작 몸. 리드 끝(index 0)에서 반대쪽 끝까지 4방향으로 인접한 칸 목록이며,
+# 맵 생성기가 역설계로 만든 자세를 그대로 심기 위한 것이다(`MapGenerator`).
+#
+# 비어 있거나 유효하지 않으면 `grid_pos` + `facing_name` + `initial_length` 의 직선 몸으로
+# 폴백한다. 손 배치와 기존 회귀 검사는 그 경로를 그대로 쓴다.
+@export var initial_body_cells: Array[Vector2i] = []:
+	set(value):
+		initial_body_cells = value
+		_reset_initial_body()
 		_request_editor_refresh()
 
 @export_group("Body")
 @export_range(2, 16, 1) var initial_length: int = 4:
 	set(value):
 		initial_length = value
-		_reset_straight_body()
+		if _applying_initial_body:
+			return
+		_reset_initial_body()
 		_refresh_shader_material()
 		if is_inside_tree() and not Engine.is_editor_hint() and level_manager != null:
 			# Remote Inspector changes during Play do not use the editor preview
 			# refresh path, so update the live skeleton here.
+			# 길이가 바뀌면 중간복제 개수도 달라지므로 메시·본을 새로 만들어야 한다.
+			_rebuild_body_visuals()
 			_sync_to_grid_position()
 			apply_rest_pose()
 			level_manager.update_cat_occupancy(self)
@@ -90,8 +109,8 @@ const ABSORB_SINK_CELLS := 0.9
 
 @export_group("Movement")
 # 1_움직임고찰.md 1절. 큐 상한은 항상 `속도 × 0.5초`로 맞춘다.
-@export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 8.0
-@export_range(1, 12, 1) var path_queue_max: int = 4
+@export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 10.5
+@export_range(1, 12, 1) var path_queue_max: int = 5
 # 우회 경로에만 허용하는 큐 상한. 손가락이 `path_queue_max` 안에 있는데도 벽이 두꺼워
 # 길이 그보다 길어질 때 쓴다. 손가락이 멀리 튄 목표는 이 값과 무관하게 거절된다.
 @export_range(1, 32, 1) var detour_queue_max: int = 12
@@ -187,6 +206,9 @@ const ABSORB_SINK_CELLS := 0.9
 var body_cells: Array[Vector2i] = []
 var facing_dir: Vector2i = Vector2i.UP
 var level_manager: LevelManager
+# `initial_body_cells` 에서 grid_pos / facing_name / initial_length 를 파생시키는 동안 참.
+# 그 세터들이 다시 몸을 되돌리면 무한 재진입이 되므로 이 플래그로 끊는다.
+var _applying_initial_body := false
 
 # 앞으로 리드가 들어갈 셀. 손가락 입력이 여기에 쌓이고 이동은 여기서만 나온다.
 var path_queue: Array[Vector2i] = []
@@ -245,6 +267,9 @@ var _bone_chain_distances: Array[float] = []
 var _rest_chain_length: float = 0.0
 # 부모가 항상 자식보다 앞에 오는 본 순서. 로컬 포즈 환산은 이 순서로만 해야 한다.
 var _bone_tree_order: Array[int] = []
+# 중간복제로 삽입한 본(머리→꼬리 순). 부모 걷기로는 체인에 들어오지 않으므로
+# `_build_bone_chain()` 이 Bone008 뒤에 직접 이어 붙인다.
+var _inserted_mid_bones: Array[int] = []
 # 메시가 양끝 본보다 더 내미는 양(모델 단위). 머리는 코, 꼬리는 뒷다리가 만든다.
 # 앞뒤가 4배 차이나므로 이걸 무시하면 꼬리쪽 셀이 0.4칸 비어 보인다.
 var _head_mesh_overhang := 0.0
@@ -257,7 +282,7 @@ func _ready() -> void:
 	_ear_random.seed = get_instance_id() + 7919
 	facing_dir = _direction_from_name(facing_name)
 	if body_cells.is_empty():
-		_reset_straight_body()
+		_reset_initial_body()
 	_ensure_visual_root()
 
 	if Engine.is_editor_hint():
@@ -363,7 +388,7 @@ func refresh_editor_preview() -> void:
 	if level_manager == null:
 		return
 	facing_dir = _direction_from_name(facing_name)
-	_reset_straight_body()
+	_reset_initial_body()
 	_sync_to_grid_position()
 	_ensure_visual_root()
 	_rebuild_body_visuals()
@@ -372,7 +397,7 @@ func refresh_editor_preview() -> void:
 func initialize_runtime(manager: LevelManager) -> void:
 	level_manager = manager
 	facing_dir = _direction_from_name(facing_name)
-	_reset_straight_body()
+	_reset_initial_body()
 	_sync_to_grid_position()
 	_ensure_visual_root()
 	_rebuild_body_visuals()
@@ -432,6 +457,10 @@ func begin_drag(end_cell: Vector2i) -> void:
 		_pending_lead_flip = true
 	else:
 		_flip_lead()
+		# 뒤끝을 잡아 리드가 된 순간 그 끝이 짝 구멍 옆이면 곧바로 빨려 들어간다.
+		# 흡입은 리드에서만 걸리므로, 반대쪽 끝으로 넣는 방법이 이 플립뿐이다.
+		# 전이 중이었다면 _finish_step 이 플립을 적용한 뒤 같은 판정을 한다.
+		_try_begin_absorb()
 
 
 func _flip_lead() -> void:
@@ -689,19 +718,17 @@ func _finish_step() -> void:
 
 # ---------------------------------------------------------------- 구멍 흡입
 
-# 두 끝 중 하나가 구멍과 4방향 인접이면 그 끝부터 빨려 들어간다. 두 끝을 모두 보는 것은
-# 후진에서 후미가 리드가 가지 않은 칸으로 나갈 수 있기 때문이다(벽 타기). 규칙대로
-# 양끝 코드 경로는 하나이며 동시에 걸리면 리드가 먼저다.
+# **리드(잡은 끝)만** 짝 구멍과 4방향 인접일 때 빨려 들어간다. 머리 이동 중 꼬리가
+# 스친 것은 흡입이 아니다 — 반대쪽 끝으로 넣으려면 그 끝을 잡아 리드로 만들어야 한다.
+# 드래그 중에도 걸린다. 리드가 옆칸에 커밋되는 순간 손에서 낚아채 간다.
 func _try_begin_absorb() -> bool:
 	if _is_absorbing or level_manager == null or body_cells.size() < 1:
 		return false
-	for from_lead in [true, false]:
-		var end_cell: Vector2i = body_cells[0] if from_lead else body_cells[body_cells.size() - 1]
-		# 색이 짝인 구멍만 걸린다. 짝이 아니면 옆칸에 서 있어도 아무 일도 없다.
-		var hole: Variant = level_manager.adjacent_hole(end_cell, color_id)
-		if hole != null:
-			_begin_absorb(hole as Vector2i, from_lead)
-			return true
+	# 색이 짝인 구멍만 걸린다. 짝이 아니면 옆칸에 서 있어도 아무 일도 없다.
+	var hole: Variant = level_manager.adjacent_hole(body_cells[0], color_id)
+	if hole != null:
+		_begin_absorb(hole as Vector2i, true)
+		return true
 	return false
 
 
@@ -798,7 +825,9 @@ func can_enter(cell: Vector2i) -> bool:
 	return not body_cells.has(cell)
 
 
-func _reset_straight_body() -> void:
+# 시작 자세로 되돌린다. `initial_body_cells` 가 유효하면 그 경로를 그대로 쓰고,
+# 아니면 `grid_pos` + `facing_name` + `initial_length` 의 직선 몸으로 폴백한다.
+func _reset_initial_body() -> void:
 	facing_dir = _direction_from_name(facing_name)
 	path_queue.clear()
 	_pending_reverse = 0
@@ -809,11 +838,53 @@ func _reset_straight_body() -> void:
 	_pending_lead_flip = false
 	_is_blocked = false
 	body_cells.clear()
+
+	if _is_valid_body_path(initial_body_cells):
+		body_cells.assign(initial_body_cells)
+		# grid_pos / facing_name / initial_length 는 여기서 파생시킨다. 세터를 다시 타면
+		# 무한 재진입이 되므로 가드 플래그를 걸고 대입한다.
+		_applying_initial_body = true
+		grid_pos = body_cells[0]
+		initial_length = body_cells.size()
+		facing_dir = body_cells[0] - body_cells[1]
+		facing_name = _name_from_direction(facing_dir)
+		_applying_initial_body = false
+		_rail = body_cells.duplicate()
+		return
+
 	var length := clampi(initial_length, min_length, max_length)
 	# 머리는 grid_pos에 두고 몸통은 바라보는 방향의 반대쪽으로 놓는다.
 	for index in range(length):
 		body_cells.append(grid_pos - facing_dir * index)
 	_rail = body_cells.duplicate()
+
+
+# 4방향으로 인접하고 자기와 교차하지 않는 2칸 이상의 경로인지. 보드 안인지는 여기서 보지
+# 않는다(`level_manager` 가 아직 없는 시점에도 세터가 돌기 때문이다).
+func _is_valid_body_path(cells: Array[Vector2i]) -> bool:
+	if cells.size() < 2:
+		return false
+	for index in cells.size():
+		if cells.find(cells[index]) != index:
+			return false
+		if index > 0:
+			var step: Vector2i = cells[index] - cells[index - 1]
+			if absi(step.x) + absi(step.y) != 1:
+				return false
+	return true
+
+
+func _name_from_direction(direction: Vector2i) -> String:
+	match direction:
+		Vector2i.UP:
+			return "up"
+		Vector2i.RIGHT:
+			return "right"
+		Vector2i.DOWN:
+			return "down"
+		Vector2i.LEFT:
+			return "left"
+	return facing_name
 
 
 func _sync_to_grid_position() -> void:
@@ -860,10 +931,45 @@ func _rebuild_body_visuals() -> void:
 	_cat_model.name = "SkinnedCat"
 	_visual_root.add_child(_cat_model)
 	_skeleton = _find_skeleton_in(_cat_model)
+	_inserted_mid_bones.clear()
+	# 1차 캐시: 원본 rest 길이와 오버행을 잰다. 몇 칸 분량을 복제해야 하는지가 여기서 나온다.
 	_cache_bone_rests()
+	_extend_middle_section()
 	# 타일 머티리얼의 반복 횟수는 캐시된 rest 길이에 의존한다.
 	_apply_current_shader_parameters()
 	apply_rest_pose()
+
+
+# 길이 증가분을 본+링 복제로 흡수한다(중간복제, `CatMiddleDuplicator`). 복제 후 남는 끝수만
+# 기존 신축 배율이 흡수하므로 배율이 항상 1±6% 에 머물고, 길이가 길어져도 링 밀도와 꺾임
+# 모양이 길이 3과 같다. 몸 길이는 고정이므로 스폰 시 한 번만 하면 된다.
+func _extend_middle_section() -> void:
+	if _skeleton == null or _rest_chain_length <= 0.000001:
+		return
+	var model_scale := _grid_fitted_model_scale()
+	if model_scale <= 0.000001:
+		return
+	var extra_model: float = _target_chain_world_length() / model_scale - _rest_chain_length
+	if extra_model <= 0.0:
+		return
+
+	var tile_mesh: MeshInstance3D = null
+	for mesh_instance in _skinned_meshes(_cat_model):
+		if mesh_instance.mesh.get_surface_count() > CatMiddleDuplicator.TILE_SURFACE_INDEX:
+			tile_mesh = mesh_instance
+			break
+	_inserted_mid_bones = CatMiddleDuplicator.extend(_skeleton, tile_mesh, extra_model)
+	if _inserted_mid_bones.is_empty():
+		return
+
+	# 2차 캐시: 삽입 본을 체인과 거리에 반영한다. 오버행은 1차 값을 유지한다 —
+	# 오버행은 머리·꼬리 청크의 속성이라 중간 복제와 무관한데, 측정이 바인드 공간 AABB
+	# 근사여서 복제 후에 다시 재면 꼬리쪽이 0으로 잘못 잡힌다.
+	var saved_head_overhang := _head_mesh_overhang
+	var saved_tail_overhang := _tail_mesh_overhang
+	_cache_bone_rests()
+	_head_mesh_overhang = saved_head_overhang
+	_tail_mesh_overhang = saved_tail_overhang
 
 
 # 정지 자세는 폴리라인이 직선인 이동 자세일 뿐이다. 두 경로를 따로 두지 않는다.
@@ -1236,6 +1342,17 @@ func _build_bone_chain() -> void:
 		_bone_chain = [head_index]
 		_bone_chain.append_array(tail_to_root)
 
+	# 중간복제 본은 Bone008 의 자식 사슬이지 Bone009 의 조상이 아니라서(부모 인덱스 순서
+	# 제약 때문에 리페어런트하지 않는다) 부모 걷기에 안 잡힌다. 여기서 직접 이어 붙인다.
+	# Bone009 의 rest 는 삽입 길이만큼 늘어나 있으므로 아래 거리 계산이 그대로 맞는다.
+	if not _inserted_mid_bones.is_empty():
+		var cut_index: int = _bone_chain.find(
+			_skeleton.find_bone(CatMiddleDuplicator.CUT_BONE_NAME)
+		)
+		if cut_index >= 0:
+			for offset in _inserted_mid_bones.size():
+				_bone_chain.insert(cut_index + 1 + offset, _inserted_mid_bones[offset])
+
 	# 관절 간격은 부모 링크의 로컬 오프셋이 아니라 rest 글로벌 위치의 실제 거리로 잰다.
 	# 분기 리그와 링크가 끊긴 루트 본을 함께 다루려면 이 방식이어야 한다.
 	var distance := 0.0
@@ -1270,7 +1387,12 @@ func _is_stretchable_chain_bone(chain_index: int) -> bool:
 	if _skeleton == null or chain_index < 0 or chain_index >= _bone_chain.size():
 		return false
 	var bone_name := _skeleton.get_bone_name(_bone_chain[chain_index])
-	var bone_number := bone_name.trim_prefix("Bone").to_int()
+	var suffix := bone_name.trim_prefix("Bone")
+	# 접미사가 순수 숫자인 원본 본만 신축한다. 중간복제 본("BoneMid001")은 to_int() 가
+	# 숫자를 뽑아내 7~14 로 오인할 수 있으므로 반드시 여기서 걸러야 한다.
+	if not suffix.is_valid_int():
+		return false
+	var bone_number := suffix.to_int()
 	return bone_number >= STRETCH_BONE_FIRST and bone_number <= STRETCH_BONE_LAST
 
 
@@ -1471,12 +1593,12 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("uv_tiling", Vector2(1.0, tile_scale))
 		_material_id_2.set_shader_parameter("uv_offset", Vector2(0.0, (1.0 - tile_scale) * 0.5))
 	if _outline_material != null:
-		_outline_material.set_shader_parameter("outline_color", outline_color)
+		_outline_material.set_shader_parameter("outline_color", _effective_outline_color())
 		_outline_material.set_shader_parameter("outline_width", outline_width)
 		_outline_material.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_outline_material.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 	if _material_id_2_outline != null:
-		_material_id_2_outline.set_shader_parameter("outline_color", outline_color)
+		_material_id_2_outline.set_shader_parameter("outline_color", _effective_outline_color())
 		_material_id_2_outline.set_shader_parameter("outline_width", outline_width)
 		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
@@ -1533,11 +1655,25 @@ func get_hole_visual_style(pair_color: Color) -> Dictionary:
 		"line_art_strength": line_art_strength,
 		"tint_exclusion_mask": _get_tint_exclusion_mask(),
 		"tint_exclusion_enabled": 1.0,
-		"outline_color": outline_color,
+		# 외곽선은 파생값을 쓴다. 원시 Inspector 값을 넘기면 짝 색을 쓰는 고양이의 구멍이
+		# 템플릿에 박힌 손튜닝 색(크림 고양이 기준)을 복제받는다. 고양이 본체와 같은 규칙이다.
+		"outline_color": _effective_outline_color(),
 		"outline_width": outline_width,
 		"top_outline_scale": top_outline_scale,
 		"bottom_outline_scale": bottom_outline_scale,
 	}
+
+
+# 외곽선도 짝 색에서 만든다. 안 그러면 템플릿에 박힌 손튜닝 값(크림색 고양이 기준)이 모든
+# 생성 고양이에 복제되어, 파란 고양이가 웜톤(핑크빛) 외곽선을 받는다. 배율 0.73과 알파는
+# 손 배치 고양이들의 튜닝값(짝 색 × 0.73, 알파 0.66)에서 가져온 것이다.
+func _effective_outline_color() -> Color:
+	var pair: Variant = _pair_color()
+	if pair == null:
+		return outline_color
+	var derived: Color = (pair as Color).darkened(0.27)
+	derived.a = outline_color.a
+	return derived
 
 
 func _get_tint_exclusion_mask() -> Texture2D:

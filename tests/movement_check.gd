@@ -267,7 +267,11 @@ func _check_bridge(manager: LevelManager, cat: CatEntity) -> void:
 			"브릿지 경로가 인접 연쇄가 아니다: %s" % [cat.path_queue]
 		)
 
-	# 큐 상한을 넘는 목표는 아무것도 넣지 않는다.
+	# 큐 상한을 넘는 목표는 아무것도 넣지 않는다. 보드 폭(7)이 상한+1 을 못 담을 수 있어
+	# 가장 먼 안쪽 칸까지의 거리가 상한을 넘도록 몸을 왼쪽 끝으로 옮겨 세운다.
+	cat.grid_pos = Vector2i(0, 4)
+	manager.update_cat_occupancy(cat)
+	start = cat.body_cells.duplicate()
 	cat.path_queue.clear()
 	var far: Vector2i = start[0] + Vector2i(cat.path_queue_max + 1, 0)
 	_expect(manager.is_inside_grid(far), "테스트 목표가 보드 밖이다: %s" % [far])

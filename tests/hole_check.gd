@@ -23,7 +23,7 @@ func _process(_delta: float) -> bool:
 	_check_not_a_path(manager)
 	_check_no_trigger_when_far(manager)
 	_check_lead_absorb(manager)
-	_check_rear_absorb(manager)
+	_check_rear_does_not_absorb(manager)
 	_check_color_pair(manager)
 	_check_clears_level(manager)
 	_report()
@@ -137,8 +137,9 @@ func _check_lead_absorb(manager: LevelManager) -> void:
 	print("[흡입] 리드가 %.3f초에 구멍 %s 로 사라졌다" % [elapsed, hole])
 
 
-# 후진에서는 후미가 리드가 가지 않은 칸으로 나간다. 그때는 후미쪽이 먼저 닿는다.
-func _check_rear_absorb(manager: LevelManager) -> void:
+# 리드가 아닌 끝은 흡입을 걸지 않는다. 후진으로 후미가 구멍 옆칸에 닿아도 들어가지 않고,
+# 그 끝을 잡았다 놓아 리드로 만들어야 들어간다.
+func _check_rear_does_not_absorb(manager: LevelManager) -> void:
 	var hole: Vector2i = manager.get_hole_cells()[0]
 	# 리드는 구멍에서 먼 쪽에 두고, 후미가 구멍 쪽을 향하게 세운다.
 	var cat: CatEntity = _fresh_cat(manager, hole + Vector2i(0, 5), "down")
@@ -149,26 +150,19 @@ func _check_rear_absorb(manager: LevelManager) -> void:
 	# 손가락으로 자기 몸을 가리키면 후진이다. 후미가 구멍 옆칸으로 밀려 나간다.
 	cat.request_path_to(cat.body_cells[1])
 	cat.advance(1.2 / cat.move_speed_cells)
+	var rear_after: Vector2i = cat.body_cells[cat.body_cells.size() - 1]
 	_expect(
-		cat.body_cells[cat.body_cells.size() - 1] == hole + Vector2i(0, 1),
+		rear_after == hole + Vector2i(0, 1),
 		"후미가 구멍 옆칸으로 밀리지 않았다: %s" % [cat.body_cells]
 	)
-	_expect(cat.is_absorbing(), "후미가 구멍 옆칸에 닿았는데 흡입이 시작되지 않았다")
-	_expect(not cat._absorb_from_lead, "후미가 닿았는데 리드쪽 흡입으로 잡혔다")
-	_expect(cat._absorb_cell == hole, "흡입 대상 구멍이 다르다: %s" % [cat._absorb_cell])
+	_expect(not cat.is_absorbing(), "리드가 아닌 후미가 닿았는데 흡입이 시작됐다")
 
-	# 후미쪽으로 들어가도 몸 전체가 사라진다.
-	var hole_center: Vector3 = manager.grid_to_world(hole, manager.cat_world_y)
-	var tail_sank := false
-	var elapsed := 0.0
-	while cat.is_absorbing() and elapsed < 3.0:
-		cat.advance(1.0 / 120.0)
-		elapsed += 1.0 / 120.0
-		if cat.is_absorbing() and _tail_bone_world(cat).y < hole_center.y - 0.4:
-			tail_sank = true
-	_expect(tail_sank, "꼬리 본이 구멍 아래로 내려가지 않았다")
-	_expect(not cat.is_absorbing(), "후미쪽 흡입이 끝나지 않았다 (%.2f초)" % elapsed)
-	print("[흡입] 후미 %s 가 구멍 %s 로 %.3f초에 사라졌다" % [rear_before, hole, elapsed])
+	# 그 끝을 잡아 리드로 만드는 순간 들어간다.
+	cat.begin_drag(rear_after)
+	_expect(cat.is_absorbing(), "구멍 옆 끝을 잡았는데 흡입이 시작되지 않았다")
+	_expect(cat._absorb_cell == hole, "흡입 대상 구멍이 다르다: %s" % [cat._absorb_cell])
+	_drain(cat)
+	print("[흡입] 후미 %s 는 흡입되지 않고, 잡아서 리드로 만들면 들어간다" % [rear_before])
 
 
 # 색이 짝이 아니면 옆칸에 들어서도 빠지지 않는다. 짝이면 같은 자리에서 빠진다.
