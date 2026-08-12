@@ -86,6 +86,8 @@ const ABSORB_SINK_CELLS := 0.9
 		if is_inside_tree() and not Engine.is_editor_hint() and level_manager != null:
 			# Remote Inspector changes during Play do not use the editor preview
 			# refresh path, so update the live skeleton here.
+			# 길이가 바뀌면 중간복제 개수도 달라지므로 메시·본을 새로 만들어야 한다.
+			_rebuild_body_visuals()
 			_sync_to_grid_position()
 			apply_rest_pose()
 			level_manager.update_cat_occupancy(self)
@@ -282,6 +284,9 @@ var _bone_chain_distances: Array[float] = []
 var _rest_chain_length: float = 0.0
 # 부모가 항상 자식보다 앞에 오는 본 순서. 로컬 포즈 환산은 이 순서로만 해야 한다.
 var _bone_tree_order: Array[int] = []
+# 중간복제로 삽입한 본(머리→꼬리 순). 부모 걷기로는 체인에 들어오지 않으므로
+# `_build_bone_chain()` 이 Bone008 뒤에 직접 이어 붙인다.
+var _inserted_mid_bones: Array[int] = []
 # 메시가 양끝 본보다 더 내미는 양(모델 단위). 머리는 코, 꼬리는 뒷다리가 만든다.
 # 앞뒤가 4배 차이나므로 이걸 무시하면 꼬리쪽 셀이 0.4칸 비어 보인다.
 var _head_mesh_overhang := 0.0
@@ -941,10 +946,45 @@ func _rebuild_body_visuals() -> void:
 	_cat_model.name = "SkinnedCat"
 	_visual_root.add_child(_cat_model)
 	_skeleton = _find_skeleton_in(_cat_model)
+	_inserted_mid_bones.clear()
+	# 1차 캐시: 원본 rest 길이와 오버행을 잰다. 몇 칸 분량을 복제해야 하는지가 여기서 나온다.
 	_cache_bone_rests()
+	_extend_middle_section()
 	# 타일 머티리얼의 반복 횟수는 캐시된 rest 길이에 의존한다.
 	_apply_current_shader_parameters()
 	apply_rest_pose()
+
+
+# 길이 증가분을 본+링 복제로 흡수한다(중간복제, `CatMiddleDuplicator`). 복제 후 남는 끝수만
+# 기존 신축 배율이 흡수하므로 배율이 항상 1±6% 에 머물고, 길이가 길어져도 링 밀도와 꺾임
+# 모양이 길이 3과 같다. 몸 길이는 고정이므로 스폰 시 한 번만 하면 된다.
+func _extend_middle_section() -> void:
+	if _skeleton == null or _rest_chain_length <= 0.000001:
+		return
+	var model_scale := _grid_fitted_model_scale()
+	if model_scale <= 0.000001:
+		return
+	var extra_model: float = _target_chain_world_length() / model_scale - _rest_chain_length
+	if extra_model <= 0.0:
+		return
+
+	var tile_mesh: MeshInstance3D = null
+	for mesh_instance in _skinned_meshes(_cat_model):
+		if mesh_instance.mesh.get_surface_count() > CatMiddleDuplicator.TILE_SURFACE_INDEX:
+			tile_mesh = mesh_instance
+			break
+	_inserted_mid_bones = CatMiddleDuplicator.extend(_skeleton, tile_mesh, extra_model)
+	if _inserted_mid_bones.is_empty():
+		return
+
+	# 2차 캐시: 삽입 본을 체인과 거리에 반영한다. 오버행은 1차 값을 유지한다 —
+	# 오버행은 머리·꼬리 청크의 속성이라 중간 복제와 무관한데, 측정이 바인드 공간 AABB
+	# 근사여서 복제 후에 다시 재면 꼬리쪽이 0으로 잘못 잡힌다.
+	var saved_head_overhang := _head_mesh_overhang
+	var saved_tail_overhang := _tail_mesh_overhang
+	_cache_bone_rests()
+	_head_mesh_overhang = saved_head_overhang
+	_tail_mesh_overhang = saved_tail_overhang
 
 
 # 정지 자세는 폴리라인이 직선인 이동 자세일 뿐이다. 두 경로를 따로 두지 않는다.
@@ -1337,6 +1377,17 @@ func _build_bone_chain() -> void:
 		_bone_chain = [head_index]
 		_bone_chain.append_array(tail_to_root)
 
+	# 중간복제 본은 Bone008 의 자식 사슬이지 Bone009 의 조상이 아니라서(부모 인덱스 순서
+	# 제약 때문에 리페어런트하지 않는다) 부모 걷기에 안 잡힌다. 여기서 직접 이어 붙인다.
+	# Bone009 의 rest 는 삽입 길이만큼 늘어나 있으므로 아래 거리 계산이 그대로 맞는다.
+	if not _inserted_mid_bones.is_empty():
+		var cut_index: int = _bone_chain.find(
+			_skeleton.find_bone(CatMiddleDuplicator.CUT_BONE_NAME)
+		)
+		if cut_index >= 0:
+			for offset in _inserted_mid_bones.size():
+				_bone_chain.insert(cut_index + 1 + offset, _inserted_mid_bones[offset])
+
 	# 관절 간격은 부모 링크의 로컬 오프셋이 아니라 rest 글로벌 위치의 실제 거리로 잰다.
 	# 분기 리그와 링크가 끊긴 루트 본을 함께 다루려면 이 방식이어야 한다.
 	var distance := 0.0
@@ -1371,7 +1422,12 @@ func _is_stretchable_chain_bone(chain_index: int) -> bool:
 	if _skeleton == null or chain_index < 0 or chain_index >= _bone_chain.size():
 		return false
 	var bone_name := _skeleton.get_bone_name(_bone_chain[chain_index])
-	var bone_number := bone_name.trim_prefix("Bone").to_int()
+	var suffix := bone_name.trim_prefix("Bone")
+	# 접미사가 순수 숫자인 원본 본만 신축한다. 중간복제 본("BoneMid001")은 to_int() 가
+	# 숫자를 뽑아내 7~14 로 오인할 수 있으므로 반드시 여기서 걸러야 한다.
+	if not suffix.is_valid_int():
+		return false
+	var bone_number := suffix.to_int()
 	return bone_number >= STRETCH_BONE_FIRST and bone_number <= STRETCH_BONE_LAST
 
 

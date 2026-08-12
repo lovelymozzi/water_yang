@@ -15,7 +15,7 @@
 - 메인 씬은 `scenes/main_scene.tscn`이다.
 - 레벨 배치용 고양이는 `LevelManager/LayoutCats` 아래에 둔다. 새로 배치하는 고양이는 템플릿 `scenes/cat_entity.tscn` 을 인스턴스로 떨어뜨린다. 손으로 튜닝한 툰·아웃라인·라인아트 값이 거기 담겨 있으므로, 노드를 새로 만들어 값을 다시 적으면 생성 고양이와 손 배치 고양이가 서로 다르게 보인다.
 - 레벨 배치용 장애물은 `LevelManager/LayoutObstacles` 아래에 둔다. 배치는 템플릿 `scenes/obstacle_block.tscn`을 인스턴스로 떨어뜨리고 `grid_pos`(좌상단 칸)와 `block_size`(칸 수)만 지정한다. 노드를 칸마다 하나씩 만들지 않는다.
-- **장애물은 칸만 잠그고 아무것도 그리지 않는다.** 보이는 것은 나중에 들어올 장애물 에셋이 맡으며, 그때는 구멍이 `LevelManager.hole_scene`을 쓰는 것과 같은 방식으로 씬을 붙인다. 에디터에서는 배치를 볼 수 있도록 반투명 덩어리를 그린다.
+- **잠긴 칸은 반드시 보여야 한다.** 안 보이면 플레이어가 못 움직이는 이유가 벽인지 버그인지 구분할 수 없다. 마커는 아무것도 그리지 않고, `LevelManager._build_obstacle_visuals()`가 칸마다 덩어리를 만든다(에디터·실행 동일). 장애물 에셋이 들어오면 `LevelManager.obstacle_scene`에 꽂으면 구멍의 `hole_scene`과 같은 방식으로 대체된다. 장애물 색은 타일과 한눈에 구분되는 어두운 갈색이다 — 타일과 비슷하게 두면 그려도 벽으로 안 보인다.
 - 현재 `main_scene`에는 장애물 배치가 없다. 가운데 9칸은 임시 배치였고 제거했다. 다른 맵에서 필요하면 위 템플릿을 쓴다.
 - 에디터 미리보기와 실행 결과는 같은 직렬화된 `grid_pos`, 방향, 길이를 사용해야 한다.
 - 배치값을 변경한 뒤에는 `LevelManager` Inspector의 `Refresh Board Preview`를 실행해 보드와 고양이 미리보기를 갱신한다.
@@ -61,7 +61,10 @@
 - 고양이의 본 체인은 뱀처럼 꺾이는 이동을 위한 의도된 구조다. 부모-자식 연결을 임의로 끊지 않는다.
 - 머리→꼬리 경로는 `Bone002`(별도 루트) 다음에 `Bone003 → Bone004 → … → Bone022`가 이어진다. `Bone001`은 이 경로에 없다. 앞발(`Bone031`, `Bone033`)의 부모이며 `Bone003`과 같은 위치에 있다.
 - `Bone001`, `Bone002`, `Bone017`에는 어떤 상황에서도 스케일 값을 적용하지 않는다.
-- 길이 증감에는 `Bone007`부터 `Bone014`까지의 관절 간격만 늘린다(`STRETCH_BONE_FIRST`/`LAST`). 모든 본의 포즈 스케일은 항상 `(1, 1, 1)`로 유지한다.
+- **길이 증가는 잡아늘리기가 아니라 중간복제다.** 늘어난 칸 수만큼 `CatMiddleDuplicator`가 스폰 시 본(`BoneMid###`)과 28정점 링 기하를 쌍으로 복제해 Bone008 뒤에 꽂는다. `Bone007`~`Bone014` 신축(`STRETCH_BONE_FIRST`/`LAST`)은 복제 후 남는 끝수(±반 칸)만 다듬으므로 배율이 항상 1±15% 안에 있고, 길이가 길어져도 링 밀도·꺾임 모양·몸통 굵기가 길이 3과 같다. 모든 본의 포즈 스케일은 항상 `(1, 1, 1)`로 유지한다.
+- 복제가 가능한 것은 계측으로 확인한 이 리그의 구조 덕이다: 서피스 1(Material cat_tile)이 반경 프로파일이 균일한 28정점 링 스택이고, Bone008 링만 웨이트 1.0 순수 링이라 거기가 삽입 지점이다. 복제 링의 웨이트는 원본과 같은 이웃 본 0.5/0.5 — 단일 본 1.0으로 물리면 코너 안쪽이 접혀 아웃라인이 검은 쐐기로 비집고 나온다. 텍스처는 링마다 UV V를 원본 증분(+0.0451)만큼 전진시켜 기존 uv_tiling 방식이 그대로 유지된다(배율 ~1이라 항등).
+- 본만 복사해서는 안 된다. 표면은 링 사이에서 직선이라, 링 없이 본만 촘촘해지면 코너가 여전히 잘린다. 본과 링은 반드시 쌍으로 복제한다.
+- 길이는 스폰 시 고정이므로 복제는 `_rebuild_body_visuals()`에서 한 번만 한다. 런타임에 `initial_length`를 바꾸면 복제 개수가 달라지므로 세터가 비주얼을 다시 만든다.
 - 본 포즈로 길이와 방향을 표현하되, 고양이 전체 노드의 스케일을 이동 중 변경하지 않는다.
 - 모델의 기준 크기는 타일 크기와 연동한다. 현재 `fbx_scale_per_tile` 기본값은 `7.65`이며, 변경 시 4칸 배치와 몸 비율을 함께 확인한다.
 - `cat1.fbx`는 분기형 리그다. 게임에서 사용하는 본 경로는 `Bone002`(머리 끝)에서 `Bone022`(꼬리 끝)까지이며, `cat_entity.gd`의 `_build_bone_chain()`이 구성한다.
@@ -139,7 +142,7 @@
   - `scripts/dependency_graph.gd` — 탈출 순서 의존성. 순환 = 소프트락.
   - `scripts/level_layout_writer.gd` — 씬 노드 / `.tscn` / JSON 출력과 모델 왕복.
   - `scripts/map_generator_tool.gd` — `MainScene/MapGenerator` 노드의 에디터 버튼 두 개.
-- 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`, `tests/puzzle_state_parity_check.gd` → `PARITY CHECK: PASS`, `tests/generator_check.gd` → `GENERATOR CHECK: PASS`, `tests/generator_replay_check.gd` → `REPLAY CHECK: PASS`. 하네스는 서로 독립이어야 한다.
+- 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`, `tests/puzzle_state_parity_check.gd` → `PARITY CHECK: PASS`, `tests/generator_check.gd` → `GENERATOR CHECK: PASS`, `tests/generator_replay_check.gd` → `REPLAY CHECK: PASS`, `tests/length_check.gd` → `LENGTH CHECK: PASS`. 하네스는 서로 독립이어야 한다.
 - **이동 검사는 레벨 배치와 무관해야 한다.** 고양이를 보드 곳곳으로 순간이동시키므로 시작 시 `_isolate_board()`로 구멍·장애물·나머지 고양이를 지우고 기준 자세로 되돌린다. 배치를 바꿀 때 이동 검사가 깨지면 배치를 되돌리지 말고 이 격리를 넓힌다.
-- 시각 확인: `Godot --script tests/capture_shots.gd` → `user://shots/*.png`, `Godot --script tests/capture_hole.gd` → `user://shots_hole/*.png`, `Godot --script tests/capture_generated.gd` → `user://shots_generated/*.png`. 헤드리스가 아니어야 렌더된다.
+- 시각 확인: `Godot --script tests/capture_shots.gd` → `user://shots/*.png`, `Godot --script tests/capture_hole.gd` → `user://shots_hole/*.png`, `Godot --script tests/capture_generated.gd` → `user://shots_generated/*.png`, `Godot --script tests/capture_length.gd` → `user://shots_length/*.png`. 헤드리스가 아니어야 렌더된다.
 - 남은 시각 이슈: 90도 코너가 머리 청크 안에 들어오는 순간 목·어깨가 눌린다. 코너 회전을 관절에 분산하거나 코너를 둥글게 깎으면 완화되지만, 둘 다 "본은 셀 중앙만 관통" 규칙과 충돌한다. 결정 전까지 그대로 둔다.
