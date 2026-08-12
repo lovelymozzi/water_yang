@@ -19,6 +19,7 @@ func _process(_delta: float) -> bool:
 		return false
 	var manager: LevelManager = _scene.get_node("LevelManager")
 	_check_layout(manager)
+	_check_runtime_outline_sync(manager)
 	_check_not_a_path(manager)
 	_check_no_trigger_when_far(manager)
 	_check_lead_absorb(manager)
@@ -52,6 +53,24 @@ func _check_layout(manager: LevelManager) -> void:
 
 
 # 구멍은 경로로 쓰이지 않는다. 브릿지가 구멍을 지나가면 인접 판정 전에 밟게 된다.
+func _check_runtime_outline_sync(manager: LevelManager) -> void:
+	var cat := manager.get_node_or_null("LayoutCats/Cat_C0") as CatEntity
+	var hole := manager.get_node_or_null("HoleVisuals/CatHole_0_0")
+	_expect(cat != null and hole != null, "Runtime outline sync test nodes are missing")
+	if cat == null or hole == null:
+		return
+	var expected := 0.031
+	cat.outline_width = expected
+	# Property setters defer material application; invoke the same live update
+	# path once so this test covers the non-editor (runtime) branch.
+	cat.call("_apply_current_shader_parameters")
+	_expect(
+		is_equal_approx(float(hole.call("get_applied_outline_width")), expected),
+		"Runtime cat outline was not copied to the matching CatHole"
+	)
+	print("[runtime outline] CatHole received %.3f" % expected)
+
+
 func _check_not_a_path(manager: LevelManager) -> void:
 	var hole: Vector2i = manager.get_hole_cells()[0]
 	var cat: CatEntity = _fresh_cat(manager, hole + Vector2i(0, 3))

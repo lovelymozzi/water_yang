@@ -16,7 +16,7 @@ extends Node3D
 
 # LevelManager.pair_colors 의 인덱스. 같은 color_id 를 가진 고양이만 이 구멍으로 빠진다.
 # -1 은 아무 색이나 받는 와일드카드다.
-@export_range(-1, 15, 1) var color_id: int = 0:
+@export_range(-1, 31, 1) var color_id: int = 0:
 	set(value):
 		color_id = value
 		_request_editor_refresh()

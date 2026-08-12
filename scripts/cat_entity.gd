@@ -111,7 +111,7 @@ const ABSORB_SINK_CELLS := 0.9
 @export_group("Color Pair")
 # LevelManager.pair_colors 의 인덱스. 같은 color_id 를 가진 구멍에만 빠진다.
 # -1 은 아무 구멍이나 쓰는 와일드카드다.
-@export_range(-1, 15, 1) var color_id: int = 0:
+@export_range(-1, 31, 1) var color_id: int = 0:
 	set(value):
 		color_id = value
 		_refresh_shader_material()
@@ -1419,6 +1419,10 @@ func _apply_current_shader_parameters() -> void:
 		_eyes_are_closed and not _mouth_is_open,
 		_get_active_tint_exclusion_mask()
 	)
+	# Inspector and Remote Inspector changes both need to refresh the matching
+	# CatHole immediately. Do not wait for a board rebuild to copy this style.
+	if level_manager != null:
+		level_manager.sync_hole_visual_style_for_color(color_id)
 
 
 func _apply_shader_parameters(

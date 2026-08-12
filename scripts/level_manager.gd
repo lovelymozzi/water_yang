@@ -105,10 +105,11 @@ enum CellState {
 # 색 페어 팔레트. 배열 인덱스가 곧 `color_id` 이며, 고양이와 구멍은 이 하나의 표에서
 # 같은 색을 받는다. 짝 판정과 표시색이 갈라지지 않게 하려는 것이다.
 @export var pair_colors: PackedColorArray = PackedColorArray([
-	Color(0.94, 0.72, 0.47),
-	Color(0.53, 0.71, 0.94),
-	Color(0.58, 0.83, 0.56),
-	Color(0.92, 0.60, 0.74),
+	Color("#F39C6B"), Color("#6FA9E8"), Color("#75C978"), Color("#E888A9"),
+	Color("#C795E8"), Color("#F2C94C"), Color("#5DC8C2"), Color("#F08B5B"),
+	Color("#9FCB5A"), Color("#7795EA"), Color("#E979CB"), Color("#64B9E4"),
+	Color("#E8A4D2"), Color("#B6A16D"), Color("#6CBF97"), Color("#DD7373"),
+	Color("#A78BE3"), Color("#D6B85B"), Color("#5BB3A8"), Color("#E58FBA"),
 ]):
 	set(value):
 		pair_colors = value
@@ -322,6 +323,7 @@ func _rebuild_from_scene_layout() -> void:
 	_build_occupancy_highlight()
 	_sync_obstacle_layout()
 	_sync_cat_layout()
+	_sync_hole_visual_styles()
 
 
 func _clear_generated_nodes() -> void:
@@ -508,6 +510,30 @@ func _get_hole_cat_visual_style(color_id: int) -> Dictionary:
 		if cat != null:
 			return cat.get_hole_visual_style(get_pair_color(color_id))
 	return {}
+
+
+# Hole visuals are created before their movable-cat counterparts.  Run a
+# second pass after the cats have rebuilt their shader materials so outline
+# colour, width and top/bottom weighting are always copied from the matching
+# cat rather than remaining on a creation-time fallback.
+func _sync_hole_visual_styles() -> void:
+	if _holes_root == null:
+		return
+	var visuals := _holes_root.get_children()
+	for index in mini(visuals.size(), _hole_color_ids.size()):
+		visuals[index].call("apply_cat_visual_style", _get_hole_cat_visual_style(_hole_color_ids[index]))
+
+
+# Called directly by CatEntity after an Inspector shader edit. This keeps the
+# matching CatHole outline in sync in the same editor update, without relying
+# on a deferred board preview rebuild.
+func sync_hole_visual_style_for_color(color_id: int) -> void:
+	if _holes_root == null or color_id < 0:
+		return
+	var visuals := _holes_root.get_children()
+	for index in mini(visuals.size(), _hole_color_ids.size()):
+		if _hole_color_ids[index] == color_id:
+			visuals[index].call("apply_cat_visual_style", _get_hole_cat_visual_style(color_id))
 
 
 func is_hole(cell: Vector2i) -> bool:

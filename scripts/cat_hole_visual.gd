@@ -58,6 +58,12 @@ func apply_cat_visual_style(style: Dictionary) -> void:
 	_apply_surface_materials()
 
 
+# Used by the regression check to verify that a runtime cat edit reached the
+# exact material-style snapshot consumed by this CatHole.
+func get_applied_outline_width() -> float:
+	return float(_cat_visual_style.get("outline_width", -1.0))
+
+
 # 에셋 크기와 무관하게 정확히 한 칸을 덮게 맞춘다. 타일 크기를 바꿔도 따라간다.
 func fit_to_tile(tile_side: float) -> void:
 	var mesh_instance := _find_mesh_instance(self)

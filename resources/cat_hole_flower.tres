@@ -35,3 +35,6 @@ shader_parameter/rim_strength = 0.39
 shader_parameter/uv_tiling = Vector2(1, 1)
 shader_parameter/uv_offset = Vector2(0, 0)
 shader_parameter/tile_uv_min_u = 0.0
+shader_parameter/sink_clip_enabled = 0.0
+shader_parameter/sink_clip_plane_y = 0.0
+shader_parameter/sink_clip_span = 1.0

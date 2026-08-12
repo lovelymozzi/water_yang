@@ -39,12 +39,14 @@ directional_shadow_pancake_size = 0.1
 
 [node name="LevelManager" type="Node3D" parent="." unique_id=1305581177]
 script = ExtResource("2_5srec")
+cat_world_y = 0.5
 obstacles_enabled = true
 board_visuals_color = Color(0.57254905, 0.67058825, 0.34509805, 1)
 tile_primary_color = Color(0.43130937, 0.57282066, 0.2760929, 1)
 tile_secondary_color = Color(0.4151132, 0.55480856, 0.31393868, 1)
 obstacle_primary_color = Color(0.43137255, 0.5686275, 0.3019608, 1)
 obstacle_secondary_color = Color(0.52156866, 0.6039216, 0.3647059, 1)
+pair_colors = PackedColorArray(0.9529412, 0.61960787, 0.41960788, 1, 0.43529412, 0.6627451, 0.9098039, 1, 0.6138916, 0.8359375, 0.6218219, 1, 0.9098039, 0.53333336, 0.6627451, 1, 0.78039217, 0.58431375, 0.9098039, 1, 0.9490196, 0.7882353, 0.29803923, 1, 0.3647059, 0.78431374, 0.7607843, 1, 0.9411765, 0.54509807, 0.35686275, 1, 0.62352943, 0.79607844, 0.3529412, 1, 0.37600708, 0.5041411, 0.8671875, 1, 0.9137255, 0.4745098, 0.79607844, 1, 0.39215687, 0.7254902, 0.89411765, 1, 0.9098039, 0.74938726, 0.6431373, 1, 0.7137255, 0.6313726, 0.42745098, 1, 0.2922516, 0.69921875, 0.50309, 1, 0.8666667, 0.4509804, 0.4509804, 1, 0.59887075, 0.47547913, 0.86328125, 1, 0.8392157, 0.72156864, 0.35686275, 1, 0.335083, 0.71484375, 0.6673737, 1, 0.640625, 0.46295166, 0.5001391, 1)
 
 [node name="BoardVisuals" type="Node3D" parent="LevelManager" unique_id=1755716270]
 
@@ -52,31 +54,30 @@ obstacle_secondary_color = Color(0.52156866, 0.6039216, 0.3647059, 1)
 
 [node name="ObstacleVisuals" type="Node3D" parent="LevelManager" unique_id=1279314469]
 
-[node name="HoleVisuals" type="Node3D" parent="LevelManager"]
+[node name="HoleVisuals" type="Node3D" parent="LevelManager" unique_id=1074621782]
 
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
 [node name="Cat_C0" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.78, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -6)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 1)
 facing_name = "left"
 initial_length = 3
 fbx_scale_per_tile = 7.5
-color_id = 0
 tint_from_pair_color = true
 tint_color = Color(0.95577335, 0.8633, 0.97, 1)
 shadow_darkness = 0.0
-rim_strength = 0.39
+rim_strength = 0.56
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
-outline_width = 0.006
+outline_width = 0.007
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 line_art_strength = 1.0
 
-[node name="Cat_C1" type="Node3D" parent="LevelManager/LayoutCats"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.78, -2)
+[node name="Cat_C1" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1587945065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -2)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 3)
 facing_name = "left"
@@ -85,45 +86,43 @@ fbx_scale_per_tile = 7.5
 color_id = 1
 tint_from_pair_color = true
 shadow_darkness = 0.0
-rim_strength = 0.39
+rim_strength = 0.56
 outline_color = Color(0.387, 0.518, 0.686, 0.6627451)
-outline_width = 0.006
+outline_width = 0.007
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 line_art_strength = 1.0
 
-[node name="Cat_C2" type="Node3D" parent="LevelManager/LayoutCats"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.78, 0)
+[node name="Cat_C2" type="Node3D" parent="LevelManager/LayoutCats" unique_id=747906881]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.5, 0)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(0, 4)
-facing_name = "up"
 initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 2
 tint_from_pair_color = true
 shadow_darkness = 0.0
-rim_strength = 0.39
+rim_strength = 0.56
 outline_color = Color(0.423, 0.606, 0.409, 0.6627451)
-outline_width = 0.006
+outline_width = 0.007
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 line_art_strength = 1.0
 
-[node name="Cat_C3" type="Node3D" parent="LevelManager/LayoutCats"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.78, 0)
+[node name="Cat_C3" type="Node3D" parent="LevelManager/LayoutCats" unique_id=485963275]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.5, 0)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(6, 4)
-facing_name = "up"
 initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 3
 tint_from_pair_color = true
 shadow_darkness = 0.0
-rim_strength = 0.39
+rim_strength = 0.56
 outline_color = Color(0.672, 0.438, 0.54, 0.6627451)
-outline_width = 0.006
+outline_width = 0.007
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
@@ -131,28 +130,26 @@ line_art_strength = 1.0
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 
-[node name="LayoutHoles" type="Node3D" parent="LevelManager"]
+[node name="LayoutHoles" type="Node3D" parent="LevelManager" unique_id=1615590764]
 
-[node name="Hole_0_0" type="Node3D" parent="LevelManager/LayoutHoles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.15, -8)
+[node name="Hole_0_0" type="Node3D" parent="LevelManager/LayoutHoles" unique_id=272362285]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -8)
 script = ExtResource("5_hole")
-grid_pos = Vector2i(0, 0)
-color_id = 0
 
-[node name="Hole_6_0" type="Node3D" parent="LevelManager/LayoutHoles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.15, -8)
+[node name="Hole_6_0" type="Node3D" parent="LevelManager/LayoutHoles" unique_id=1261150902]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -8)
 script = ExtResource("5_hole")
 grid_pos = Vector2i(6, 0)
 color_id = 1
 
-[node name="Hole_0_8" type="Node3D" parent="LevelManager/LayoutHoles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.15, 8)
+[node name="Hole_0_8" type="Node3D" parent="LevelManager/LayoutHoles" unique_id=908517495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 8)
 script = ExtResource("5_hole")
 grid_pos = Vector2i(0, 8)
 color_id = 2
 
-[node name="Hole_6_8" type="Node3D" parent="LevelManager/LayoutHoles"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.15, 8)
+[node name="Hole_6_8" type="Node3D" parent="LevelManager/LayoutHoles" unique_id=1718217984]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 8)
 script = ExtResource("5_hole")
 grid_pos = Vector2i(6, 8)
 color_id = 3
