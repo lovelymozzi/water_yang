@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://water_yang/tree_shadow.png" id="1_tree_shadow"]
+
+; Place this scene directly beneath LevelManager/TileVisuals in main_scene.
+; Its Sprite3D lies flat on the board and can be moved, rotated, and scaled
+; independently from every tree model.
+[node name="TreeShadowDecor" type="Sprite3D" groups=["persistent_tile_visuals"]]
+texture = ExtResource("1_tree_shadow")
+pixel_size = 0.016
+modulate = Color(0.08, 0.11, 0.07, 0.38)
+render_priority = -1
+billboard = 0
+rotation_degrees = Vector3(-90, 0, 0)

@@ -1,0 +1,32 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://scripts/cat_toon.gdshader" id="1_toon"]
+[ext_resource type="Texture2D" path="res://water_yang/cat1.jpeg" id="2_texture"]
+[ext_resource type="Shader" path="res://scripts/cat_outline.gdshader" id="3_outline"]
+
+[sub_resource type="ShaderMaterial" id="GrassOutline"]
+render_priority = 0
+shader = ExtResource("3_outline")
+shader_parameter/outline_color = Color(0.18, 0.09, 0.06, 1)
+shader_parameter/outline_width = 0.006
+shader_parameter/top_outline_scale = 0.78
+shader_parameter/bottom_outline_scale = 1.12
+
+[resource]
+resource_name = "GrassMaterial"
+render_priority = 0
+next_pass = SubResource("GrassOutline")
+shader = ExtResource("1_toon")
+shader_parameter/albedo_tex = ExtResource("2_texture")
+shader_parameter/tint_exclusion_enabled = 0.0
+shader_parameter/line_art_enabled = 0.0
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/shadow_steps = 3
+shader_parameter/shadow_darkness = 0.3
+shader_parameter/rim_strength = 0.56
+shader_parameter/uv_tiling = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/tile_uv_min_u = 0.0
+shader_parameter/sink_clip_enabled = 0.0
+shader_parameter/sink_clip_plane_y = 0.0
+shader_parameter/sink_clip_span = 1.0

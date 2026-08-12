@@ -17,6 +17,7 @@
 - 레벨 배치용 장애물은 `LevelManager/LayoutObstacles` 아래에 둔다. 배치는 템플릿 `scenes/obstacle_block.tscn`을 인스턴스로 떨어뜨리고 `grid_pos`(좌상단 칸)와 `block_size`(칸 수)만 지정한다. 노드를 칸마다 하나씩 만들지 않는다.
 - **장애물은 칸만 잠그고 아무것도 그리지 않는다.** 보이는 것은 나중에 들어올 장애물 에셋이 맡으며, 그때는 구멍이 `LevelManager.hole_scene`을 쓰는 것과 같은 방식으로 씬을 붙인다. 에디터에서는 배치를 볼 수 있도록 반투명 덩어리를 그린다.
 - 현재 `main_scene`에는 장애물 배치가 없다. 가운데 9칸은 임시 배치였고 제거했다. 다른 맵에서 필요하면 위 템플릿을 쓴다.
+- 나무 장식은 `scenes/tree_decor.tscn`을 `LevelManager/TileVisuals` 아래에 인스턴스로 배치한다. 이 장식은 그리드 점유나 이동 판정에 영향을 주지 않으며, 루트의 Transform으로 맵 어디에나 자유롭게 놓는다. `TreeDecor` Inspector에서 전용 머터리얼의 색·거칠기와 외곽선 색·두께를 각 인스턴스별로 조절한다.
 - 에디터 미리보기와 실행 결과는 같은 직렬화된 `grid_pos`, 방향, 길이를 사용해야 한다.
 - 배치값을 변경한 뒤에는 `LevelManager` Inspector의 `Refresh Board Preview`를 실행해 보드와 고양이 미리보기를 갱신한다.
 - 실행 중 Inspector에서 바꾼 값은 기본적으로 씬 파일에 저장되지 않는다. 영구 변경은 플레이를 멈춘 뒤 적용한다.

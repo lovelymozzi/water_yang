@@ -1,0 +1,23 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://crufw7u4jbc6s"]
+
+[ext_resource type="Shader" uid="uid://cw8x1ira7y6ir" path="res://scripts/tree_toon.gdshader" id="1_toon"]
+[ext_resource type="Texture2D" uid="uid://dnyxufy3t81cg" path="res://water_yang/tree1.JPEG" id="2_texture"]
+[ext_resource type="Shader" uid="uid://cr5b0ji5t3bo0" path="res://scripts/tree_outline.gdshader" id="3_outline"]
+
+[sub_resource type="ShaderMaterial" id="TreeOutline"]
+render_priority = 0
+shader = ExtResource("3_outline")
+shader_parameter/outline_color = Color(0.105, 0.16, 0.075, 1)
+shader_parameter/outline_width = 0.018
+
+[resource]
+resource_name = "TreeMaterial"
+render_priority = 0
+next_pass = SubResource("TreeOutline")
+shader = ExtResource("1_toon")
+shader_parameter/albedo_tex = ExtResource("2_texture")
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/roughness = 0.9
+shader_parameter/shadow_steps = 3
+shader_parameter/shadow_darkness = 0.58
+shader_parameter/rim_strength = 0.24

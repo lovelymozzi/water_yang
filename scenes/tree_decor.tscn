@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/tree_decor.gd" id="1_tree"]
+[ext_resource type="PackedScene" path="res://water_yang/tree1.fbx" id="2_tree_fbx"]
+
+[node name="TreeDecor" type="Node3D" groups=["persistent_tile_visuals"]]
+script = ExtResource("1_tree")
+
+[node name="TreeModel" parent="." instance=ExtResource("2_tree_fbx")]
