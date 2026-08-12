@@ -32,7 +32,7 @@ script = ExtResource("2_visual")
 flower_material = ExtResource("3_flower")
 appearance = ExtResource("4_appearance")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="HoleSpinPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_spin")
 }

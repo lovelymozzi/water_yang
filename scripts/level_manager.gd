@@ -556,10 +556,12 @@ func _get_hole_cat_visual_style(color_id: int) -> Dictionary:
 	if color_id < 0:
 		return {}
 	for child in _layout_cats_root.get_children():
-		if child.get_script() != CAT_ENTITY_SCRIPT or int(child.get("color_id")) != color_id:
+		# Inspector edits can briefly leave an @tool CatEntity as an editor
+		# placeholder. It retains its script resource but cannot use script APIs.
+		if child.get_script() != CAT_ENTITY_SCRIPT or not child.has_method("get_hole_visual_style"):
 			continue
 		var cat := child as CatEntity
-		if cat != null:
+		if cat != null and cat.color_id == color_id:
 			return cat.get_hole_visual_style(get_pair_color(color_id))
 	return {}
 
@@ -586,6 +588,23 @@ func sync_hole_visual_style_for_color(color_id: int) -> void:
 	for index in mini(visuals.size(), _hole_color_ids.size()):
 		if _hole_color_ids[index] == color_id:
 			visuals[index].call("apply_cat_visual_style", _get_hole_cat_visual_style(color_id))
+
+
+# Runs after the palette Inspector changes a shared shader control.  Editing a
+# layout node updates the saved value, but an editor preview may still be using
+# materials made before that value was applied.  Refresh the existing cats and
+# holes directly instead of rebuilding the board (which reparses the Inspector
+# while its slider is being dragged).
+func refresh_shared_shader_preview() -> void:
+	for child in _layout_cats_root.get_children():
+		if child.get_script() != CAT_ENTITY_SCRIPT:
+			continue
+		if Engine.is_editor_hint():
+			if child.has_method("refresh_editor_preview"):
+				child.call("refresh_editor_preview")
+		elif child.has_method("_apply_current_shader_parameters"):
+			child.call("_apply_current_shader_parameters")
+	_sync_hole_visual_styles()
 
 
 func is_hole(cell: Vector2i) -> bool:
@@ -651,7 +670,13 @@ func _sync_cat_layout() -> void:
 			continue
 
 		var cat := child as CatEntity
+		if cat == null:
+			continue
 		if Engine.is_editor_hint():
+			# Avoid property assignments and method calls until the @tool script is
+			# available again after the Inspector has finished rebuilding it.
+			if not child.has_method("refresh_editor_preview"):
+				continue
 			cat.level_manager = self
 			cat.refresh_editor_preview()
 		else:

@@ -191,8 +191,12 @@ func _commit_shader_property(property_name: String, value: Variant) -> void:
 		var previous: Variant = cat.get(property_name)
 		_undo_redo.add_do_property(cat, property_name, value)
 		_undo_redo.add_undo_property(cat, property_name, previous)
+	# Property values are saved through Undo/Redo, then this method reapplies
+	# them to the already-instanced shader materials.  It is registered for both
+	# directions so Undo/Redo has the same visible result as dragging.
+	_undo_redo.add_do_method(_manager, "refresh_shared_shader_preview")
+	_undo_redo.add_undo_method(_manager, "refresh_shared_shader_preview")
 	_undo_redo.commit_action()
-	_manager.request_preview_refresh()
 	_status.text = "%s 조정됨 · 고양이와 홀 미리보기 갱신" % property_name
 
 

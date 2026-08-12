@@ -8,8 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_gubc5"]
 [ext_resource type="PackedScene" path="res://scenes/grass_decor.tscn" id="5_6wevv"]
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
-[ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="6_top_fog"]
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
+[ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="6_top_fog"]
 
 [sub_resource type="Gradient" id="Gradient_6wevv"]
 offsets = PackedFloat32Array(0, 0.42, 1)
@@ -22,20 +22,9 @@ height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_c1pb6"]
-offsets = PackedFloat32Array(0, 0.42, 1)
-colors = PackedColorArray(0.7851094, 0.56642294, 0.7917671, 0.83, 0.7851094, 0.56642294, 0.7917671, 0.3569, 0.7851094, 0.56642294, 0.7917671, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_6wevv"]
-gradient = SubResource("Gradient_c1pb6")
-width = 4
-height = 256
-fill_from = Vector2(0.5, 0)
-fill_to = Vector2(0.5, 1)
-
 [sub_resource type="Gradient" id="Gradient_mngbo"]
 offsets = PackedFloat32Array(0, 0.42, 1)
-colors = PackedColorArray(0.7514384, 0.5066881, 0.18772957, 0.83, 0.7514384, 0.5066881, 0.18772957, 0.3569, 0.7514384, 0.5066881, 0.18772957, 0)
+colors = PackedColorArray(0.7851094, 0.56642294, 0.7917671, 0.83, 0.7851094, 0.56642294, 0.7917671, 0.3569, 0.7851094, 0.56642294, 0.7917671, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_4w45t"]
 gradient = SubResource("Gradient_mngbo")
@@ -46,7 +35,7 @@ fill_to = Vector2(0.5, 1)
 
 [sub_resource type="Gradient" id="Gradient_r6p65"]
 offsets = PackedFloat32Array(0, 0.42, 1)
-colors = PackedColorArray(0.23053429, 0.46946675, 0.53734034, 0.83, 0.23053429, 0.46946675, 0.53734034, 0.3569, 0.23053429, 0.46946675, 0.53734034, 0)
+colors = PackedColorArray(0.7514384, 0.5066881, 0.18772957, 0.83, 0.7514384, 0.5066881, 0.18772957, 0.3569, 0.7514384, 0.5066881, 0.18772957, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_si52b"]
 gradient = SubResource("Gradient_r6p65")
@@ -55,12 +44,23 @@ height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_bottom_fog"]
+[sub_resource type="Gradient" id="Gradient_01n6w"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.23053429, 0.46946675, 0.53734034, 0.83, 0.23053429, 0.46946675, 0.53734034, 0.3569, 0.23053429, 0.46946675, 0.53734034, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6u1mn"]
+gradient = SubResource("Gradient_01n6w")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_bcnxi"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.16800675, 0.41237494, 0.40861246, 0.83, 0.16800675, 0.41237494, 0.40861246, 0.3569, 0.16800675, 0.41237494, 0.40861246, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bottom_fog"]
-gradient = SubResource("Gradient_bottom_fog")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7nt27"]
+gradient = SubResource("Gradient_bcnxi")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 1)
@@ -385,14 +385,14 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 tint_from_pair_color = true
 tint_color = Color(0.95577335, 0.8633, 0.97, 1)
-shadow_darkness = 0.3
+shadow_darkness = 0.17
 rim_strength = 0.56
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 1.0
+line_art_strength = 0.54
 
 [node name="Cat_C1" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1587945065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -2)
@@ -403,14 +403,14 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 1
 tint_from_pair_color = true
-shadow_darkness = 0.3
+shadow_darkness = 0.17
 rim_strength = 0.56
 outline_color = Color(0.387, 0.518, 0.686, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 1.0
+line_art_strength = 0.54
 
 [node name="Cat_C2" type="Node3D" parent="LevelManager/LayoutCats" unique_id=747906881]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.5, 0)
@@ -420,14 +420,14 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 2
 tint_from_pair_color = true
-shadow_darkness = 0.3
+shadow_darkness = 0.17
 rim_strength = 0.56
 outline_color = Color(0.423, 0.606, 0.409, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 1.0
+line_art_strength = 0.54
 
 [node name="Cat_C3" type="Node3D" parent="LevelManager/LayoutCats" unique_id=485963275]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.5, 0)
@@ -437,14 +437,14 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 3
 tint_from_pair_color = true
-shadow_darkness = 0.3
+shadow_darkness = 0.17
 rim_strength = 0.56
 outline_color = Color(0.672, 0.438, 0.54, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 1.0
+line_art_strength = 0.54
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 
@@ -508,7 +508,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.5700908
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_6wevv")
+texture = SubResource("GradientTexture2D_4w45t")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -526,7 +526,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -3.602787
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_4w45t")
+texture = SubResource("GradientTexture2D_si52b")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -544,7 +544,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -5.3999376
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_si52b")
+texture = SubResource("GradientTexture2D_6u1mn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -559,7 +559,7 @@ offset_top = 78.19995
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_bottom_fog")
+texture = SubResource("GradientTexture2D_7nt27")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 screen_y = 0.66

@@ -16,7 +16,7 @@ func _run() -> void:
 	hole.call("apply_hole_colors", Color.WHITE, Color.BLACK)
 	await process_frame
 
-	var animation_player := hole.get_node_or_null("AnimationPlayer") as AnimationPlayer
+	var animation_player := hole.get_node_or_null("HoleSpinPlayer") as AnimationPlayer
 	_expect(animation_player != null, "CatHole AnimationPlayer가 없다")
 	if animation_player != null:
 		_expect(animation_player.is_playing(), "spin 애니메이션이 자동 재생되지 않는다")
