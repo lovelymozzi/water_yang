@@ -35,6 +35,7 @@ var _pair_color := Color(1.0, 1.0, 1.0, 1.0)
 var _pit_color := Color(0.06, 0.07, 0.05, 1.0)
 var _has_pair_color := false
 var _cat_visual_style: Dictionary = {}
+var _pit_material: ShaderMaterial
 
 
 func _ready() -> void:
@@ -177,11 +178,12 @@ func _build_pit_material() -> Material:
 	if not _has_pair_color:
 		return null
 
-	var material := ShaderMaterial.new()
-	material.shader = HOLE_SPIN_SHADER
-	material.set_shader_parameter("albedo_tex", HOLE_TEXTURE)
-	material.set_shader_parameter("rotation_duration", HOLE_ROTATION_DURATION)
-	return material
+	if _pit_material == null:
+		_pit_material = ShaderMaterial.new()
+		_pit_material.shader = HOLE_SPIN_SHADER
+		_pit_material.set_shader_parameter("albedo_tex", HOLE_TEXTURE)
+		_pit_material.set_shader_parameter("rotation_duration", HOLE_ROTATION_DURATION)
+	return _pit_material
 
 
 func _find_mesh_instance(node: Node) -> MeshInstance3D:

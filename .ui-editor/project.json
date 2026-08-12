@@ -1,0 +1,25 @@
+{
+  "version": 3,
+  "name": "water_yang",
+  "createdAt": "2026-08-12T07:56:05.702Z",
+  "editorVersion": "2.0",
+  "assetRoot": "",
+  "rendererPath": "web/ui",
+  "engine": "godot",
+  "sceneMeta": {
+    "skeleton": [],
+    "groupCollapsed": {
+      "Scenes": false
+    },
+    "groupMap": {},
+    "aliasMap": {
+      "New Scene": "Shop",
+      "race_started": "Race_Started",
+      "home_bottom": "Home"
+    },
+    "customGroups": [],
+    "activePreset": null,
+    "flowNodePositions": {},
+    "sceneOrder": []
+  }
+}

@@ -13,7 +13,6 @@ void fragment() {
 		centered_uv.x * cosine - centered_uv.y * sine,
 		centered_uv.x * sine + centered_uv.y * cosine
 	) + vec2(0.5);
-
 	ALBEDO = texture(albedo_tex, rotated_uv).rgb;
 	ROUGHNESS = 0.95;
 }
