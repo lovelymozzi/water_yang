@@ -16,17 +16,23 @@ uniform float bottom_outline_scale : hint_range(0.8, 1.6, 0.01) = 1.0;
 // equivalent on-screen line weight.
 const float FLAT_MESH_WIDTH_COMPENSATION = 0.35;
 
+// The imported FBX keeps the flower's mesh node rotated (Z-up source), so this
+// mesh's own local frame is NOT the world frame: local XY is the flat board
+// plane and local +Z is world up. Expanding in local XZ pushed the hull along
+// the thin axis and offset it sideways instead of downward, which let the
+// enlarged copy cover the petals from the top-down camera. Use the real axes.
 void vertex() {
-	float upward_facing = max(NORMAL.y, 0.0);
-	float downward_facing = max(-NORMAL.y, 0.0);
+	float upward_facing = max(NORMAL.z, 0.0);
+	float downward_facing = max(-NORMAL.z, 0.0);
 	float line_weight = mix(1.0, top_outline_scale, upward_facing);
 	line_weight = mix(line_weight, bottom_outline_scale, downward_facing);
 
-	vec2 radial = VERTEX.xz;
+	vec2 radial = VERTEX.xy;
 	if (length(radial) > 0.0001) {
-		VERTEX.xz += normalize(radial) * outline_width * line_weight * FLAT_MESH_WIDTH_COMPENSATION;
+		VERTEX.xy += normalize(radial) * outline_width * line_weight * FLAT_MESH_WIDTH_COMPENSATION;
 	}
-	VERTEX.y -= 0.002;
+	// Local -Z is world down. Sink the copy so the flower depth-masks its middle.
+	VERTEX.z -= 0.002;
 }
 
 void fragment() {

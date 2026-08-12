@@ -42,7 +42,7 @@ func _check_layout(manager: LevelManager) -> void:
 		"구멍 칸에 타일이 깔렸다: %s" % [hole]
 	)
 	_expect(
-		manager.get_node("HoleVisuals").get_node_or_null("HolePit_%d_%d" % [hole.x, hole.y]) != null,
+		manager.get_node("HoleVisuals").get_node_or_null("CatHole_%d_%d" % [hole.x, hole.y]) != null,
 		"구멍 비주얼이 만들어지지 않았다: %s" % [hole]
 	)
 	# 인접 조회는 4방향만이다. 대각선은 걸리지 않는다.

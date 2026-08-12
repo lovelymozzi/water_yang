@@ -14,7 +14,9 @@
 
 - 메인 씬은 `scenes/main_scene.tscn`이다.
 - 레벨 배치용 고양이는 `LevelManager/LayoutCats` 아래에 둔다.
-- 레벨 배치용 장애물은 `LevelManager/LayoutObstacles` 아래에 둔다.
+- 레벨 배치용 장애물은 `LevelManager/LayoutObstacles` 아래에 둔다. 배치는 템플릿 `scenes/obstacle_block.tscn`을 인스턴스로 떨어뜨리고 `grid_pos`(좌상단 칸)와 `block_size`(칸 수)만 지정한다. 노드를 칸마다 하나씩 만들지 않는다.
+- **장애물은 칸만 잠그고 아무것도 그리지 않는다.** 보이는 것은 나중에 들어올 장애물 에셋이 맡으며, 그때는 구멍이 `LevelManager.hole_scene`을 쓰는 것과 같은 방식으로 씬을 붙인다. 에디터에서는 배치를 볼 수 있도록 반투명 덩어리를 그린다.
+- 현재 `main_scene`에는 장애물 배치가 없다. 가운데 9칸은 임시 배치였고 제거했다. 다른 맵에서 필요하면 위 템플릿을 쓴다.
 - 에디터 미리보기와 실행 결과는 같은 직렬화된 `grid_pos`, 방향, 길이를 사용해야 한다.
 - 배치값을 변경한 뒤에는 `LevelManager` Inspector의 `Refresh Board Preview`를 실행해 보드와 고양이 미리보기를 갱신한다.
 - 실행 중 Inspector에서 바꾼 값은 기본적으로 씬 파일에 저장되지 않는다. 영구 변경은 플레이를 멈춘 뒤 적용한다.
@@ -117,6 +119,7 @@
 - 후진도 구현했다(`1_움직임고찰.md` 7절). 몸이 자기 모양을 따라 밀리고, 후미가 막히면 벽을 타고 흐른다.
 - 1칸 구멍과 흡입도 구현했다. 두 끝 중 하나가 구멍 옆칸에 들어선 순간 그 끝부터 빨려 들어가 사라지고, 탈출로 계산된다. 테스트 레벨의 구멍은 `(5, 2)`이고 색은 `0`이다.
 - 색 페어 규칙을 넣었다. `color_id`가 같은 고양이만 그 구멍으로 빠진다. `tests/hole_check.gd`의 `_check_color_pair()`가 색이 다를 때 흡입되지 않는 것까지 검사한다.
-- 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `Godot --headless --script tests/hole_check.gd` → `HOLE CHECK: PASS`. 이동 검사는 고양이를 보드 곳곳으로 순간이동시키므로 시작 시 구멍을 지운다. 두 하네스는 서로 독립이어야 한다.
+- 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`. 하네스는 서로 독립이어야 한다.
+- **이동 검사는 레벨 배치와 무관해야 한다.** 고양이를 보드 곳곳으로 순간이동시키므로 시작 시 `_isolate_board()`로 구멍·장애물·나머지 고양이를 지우고 기준 자세로 되돌린다. 배치를 바꿀 때 이동 검사가 깨지면 배치를 되돌리지 말고 이 격리를 넓힌다.
 - 시각 확인: `Godot --script tests/capture_shots.gd` → `user://shots/*.png`, `Godot --script tests/capture_hole.gd` → `user://shots_hole/*.png`. 헤드리스가 아니어야 렌더된다.
 - 남은 시각 이슈: 90도 코너가 머리 청크 안에 들어오는 순간 목·어깨가 눌린다. 코너 회전을 관절에 분산하거나 코너를 둥글게 깎으면 완화되지만, 둘 다 "본은 셀 중앙만 관통" 규칙과 충돌한다. 결정 전까지 그대로 둔다.

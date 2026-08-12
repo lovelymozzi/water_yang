@@ -18,10 +18,7 @@ func _process(_delta: float) -> bool:
 	if _frames < 10:
 		return false
 	var manager: LevelManager = _scene.get_node("LevelManager")
-	# 이동 검사는 레벨 배치와 무관해야 한다. 검사들이 고양이를 보드 곳곳에 순간이동시키므로
-	# 구멍이 놓여 있으면 흡입이 끼어든다. 구멍은 tests/hole_check.gd 가 본다.
-	_clear_holes(manager)
-	var cat: CatEntity = manager.get_cats()[0]
+	var cat: CatEntity = _isolate_board(manager)
 	_check_rig(cat)
 	_check_bone_placement(cat, "정지")
 	_check_trace(manager, cat)
@@ -32,6 +29,7 @@ func _process(_delta: float) -> bool:
 	_check_corner(cat)
 	_check_drag(manager, cat)
 	_check_detour(manager, cat)
+	_check_thick_detour(manager, cat)
 	_check_ear_pose_survives(cat)
 	_check_footprint_fill(manager, cat)
 	_check_reverse(manager, cat)
@@ -116,6 +114,49 @@ func _check_detour(manager: LevelManager, cat: CatEntity) -> void:
 	_expect(cat.path_queue.is_empty(), "완전히 막혔는데 경로가 생겼다: %s" % [cat.path_queue])
 	_expect(cat.is_blocked(), "완전히 막혔는데 막힘 표시가 서지 않았다")
 	_expect(not cat.can_enter(wall), "벽으로 들어갈 수 있다고 판정했다")
+	for cell in [wall, Vector2i(0, 4), Vector2i(2, 4), Vector2i(0, 3), Vector2i(2, 3)]:
+		manager._set_cell_state(cell, LevelManager.CellState.EMPTY)
+
+
+# 스펙 3절. 손가락은 바로 옆에 있는데 벽이 두꺼워 길이 큐 상한보다 길어지는 경우다.
+# 착지점까지 열린 길이 있으면 길이에 상관없이 찾아야 한다. 벽 두께가 1칸일 때만
+# 우회하던 것이 실제 플레이에서 "우회를 안 한다"로 보였다.
+func _check_thick_detour(manager: LevelManager, cat: CatEntity) -> void:
+	cat.facing_name = "up"
+	cat.grid_pos = Vector2i(3, 6)
+	manager.update_cat_occupancy(cat)
+	cat.advance(0.0)
+
+	# y=5 줄을 x=5 까지 막는다. 오른쪽 끝 한 칸만 열려 있다.
+	var wall: Array[Vector2i] = []
+	for x in range(0, 6):
+		wall.append(Vector2i(x, 5))
+	for cell in wall:
+		manager._set_cell_state(cell, LevelManager.CellState.OBSTACLE)
+
+	var target := Vector2i(3, 4)
+	var reach: int = absi(target.x - cat.body_cells[0].x) + absi(target.y - cat.body_cells[0].y)
+	_expect(reach <= cat.path_queue_max, "테스트 목표가 손가락 도달 범위 밖이다: %d칸" % reach)
+
+	cat.path_queue.clear()
+	cat.request_path_to(target)
+	_expect(
+		cat.path_queue.size() > cat.path_queue_max,
+		"두꺼운 벽 우회가 큐 상한에 잘려 실패했다: %s" % [cat.path_queue]
+	)
+	_expect(cat.path_queue.back() == target, "우회 경로가 목표에 닿지 않았다: %s" % [cat.path_queue])
+	for cell in wall:
+		_expect(not cat.path_queue.has(cell), "우회 경로가 두꺼운 벽을 통과했다: %s" % [cat.path_queue])
+	var previous: Vector2i = cat.body_cells[0]
+	for cell in cat.path_queue:
+		var step: Vector2i = cell - previous
+		_expect(absi(step.x) + absi(step.y) == 1, "우회 경로에 비인접 점프가 있다: %s" % [cat.path_queue])
+		previous = cell
+	print("[두꺼운우회] 손가락 %d칸 거리, 경로 %d칸: %s" % [reach, cat.path_queue.size(), cat.path_queue])
+
+	cat.path_queue.clear()
+	for cell in wall:
+		manager._set_cell_state(cell, LevelManager.CellState.EMPTY)
 
 
 func _send_touch(controller: Node, position: Vector2, pressed: bool) -> void:
@@ -465,10 +506,49 @@ func _check_reverse_wall_slide(manager: LevelManager, cat: CatEntity) -> void:
 	_check_bone_placement(cat, "벽슬라이드후")
 
 
+# 이동 검사는 레벨 배치와 무관해야 한다. 검사들이 고양이를 보드 곳곳에 순간이동시키므로
+# 구멍이 남아 있으면 흡입이, 장애물이나 다른 고양이가 남아 있으면 충돌이 끼어든다.
+# main_scene 배치가 바뀌어도 이 검사는 흔들리지 않아야 한다. 구멍과 색 짝은
+# tests/hole_check.gd 가 본다.
+func _isolate_board(manager: LevelManager) -> CatEntity:
+	_clear_holes(manager)
+	_clear_obstacles(manager)
+	return _keep_single_cat(manager)
+
+
 func _clear_holes(manager: LevelManager) -> void:
 	for cell in manager.get_hole_cells().duplicate():
 		manager._set_cell_state(cell, LevelManager.CellState.EMPTY)
 	manager.get_hole_cells().clear()
+
+
+func _clear_obstacles(manager: LevelManager) -> void:
+	for y in range(manager.grid_size.y):
+		for x in range(manager.grid_size.x):
+			var cell := Vector2i(x, y)
+			if manager._get_cell_state(cell) == LevelManager.CellState.OBSTACLE:
+				manager._set_cell_state(cell, LevelManager.CellState.EMPTY)
+
+
+# 첫 고양이만 남긴다. get_cats() 는 내부 배열을 그대로 돌려주므로 erase 가 곧 등록 해제다.
+func _keep_single_cat(manager: LevelManager) -> CatEntity:
+	var cats: Array[CatEntity] = manager.get_cats()
+	var kept: CatEntity = cats[0]
+	for extra in cats.duplicate():
+		if extra == kept:
+			continue
+		manager.release_cat_cell(extra)
+		cats.erase(extra)
+		extra.get_parent().remove_child(extra)
+		extra.queue_free()
+
+	# 검사들은 몸이 위로 뻗은 자세를 기준으로 좌표를 적어 두었다. 배치가 어느 방향을
+	# 보게 두었든 여기서 기준 자세로 되돌린다.
+	kept.facing_name = "up"
+	manager.update_cat_occupancy(kept)
+	# 몸 셀만 되돌리면 본은 이전 자세에 남는다. 한 번 진행시켜 리그를 새 몸에 맞춘다.
+	kept.advance(0.0)
+	return kept
 
 
 func _distance_to_polyline(point: Vector3, polyline: PackedVector3Array) -> float:

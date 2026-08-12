@@ -2,8 +2,12 @@
 class_name HoleMarker
 extends Node3D
 
-# 1칸 크기의 구멍. 배치는 장애물 마커와 완전히 같은 방식이다.
+# 1칸 크기의 탈출구. 배치는 장애물 마커와 완전히 같은 방식이다.
 # LevelManager/LayoutHoles 아래에 두고 grid_pos 만 지정한다.
+#
+# 마커는 아무것도 그리지 않는다. 실제로 보이는 것은 LevelManager 가 이 칸에 만드는
+# 캣홀 비주얼이며 에디터에서도 같은 것이 보인다. 마커가 따로 상자를 그리면 그 캣홀
+# 위에 정체불명의 반투명 사각형이 겹쳐 보인다.
 
 @export var grid_pos: Vector2i = Vector2i.ZERO:
 	set(value):
@@ -17,59 +21,23 @@ extends Node3D
 		color_id = value
 		_request_editor_refresh()
 
-var _marker_mesh: MeshInstance3D
-
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
-		_ensure_marker_mesh()
 		refresh_editor_preview()
 
 
+# 노드 자체를 자기 칸으로 옮겨 둔다. 에디터에서 마커를 골랐을 때 기즈모가 엉뚱한 곳에
+# 있지 않게 하려는 것이다.
 func refresh_editor_preview() -> void:
 	if not Engine.is_editor_hint():
 		return
 
-	_ensure_marker_mesh()
-	_marker_mesh.visible = true
 	var manager := _find_level_manager()
 	if manager == null:
 		return
 
-	position = manager.grid_to_world(grid_pos, 0.15)
-	set_preview_color(manager.get_hole_rim_color(color_id))
-
-
-func set_preview_visible(value: bool) -> void:
-	if not Engine.is_editor_hint():
-		return
-
-	_ensure_marker_mesh()
-	_marker_mesh.visible = value
-
-
-func set_preview_color(color: Color) -> void:
-	_ensure_marker_mesh()
-	var material := _marker_mesh.material_override as StandardMaterial3D
-	if material != null:
-		material.albedo_color = Color(color.r, color.g, color.b, 0.75)
-
-
-func _ensure_marker_mesh() -> void:
-	if _marker_mesh != null:
-		return
-
-	_marker_mesh = MeshInstance3D.new()
-	_marker_mesh.name = "MarkerMesh"
-	var mesh: BoxMesh = BoxMesh.new()
-	mesh.size = Vector3(1.2, 0.3, 1.2)
-	_marker_mesh.mesh = mesh
-
-	var material: StandardMaterial3D = StandardMaterial3D.new()
-	material.albedo_color = Color(0.06, 0.07, 0.05, 0.75)
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	_marker_mesh.material_override = material
-	add_child(_marker_mesh)
+	position = manager.grid_to_world(grid_pos, 0.0)
 
 
 func _find_level_manager() -> LevelManager:

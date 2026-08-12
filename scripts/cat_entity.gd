@@ -93,6 +93,9 @@ const ABSORB_SINK_CELLS := 0.9
 # 1_움직임고찰.md 1절. 큐 상한은 항상 `속도 × 0.5초`로 맞춘다.
 @export_range(1.0, 24.0, 0.5) var move_speed_cells: float = 8.0
 @export_range(1, 12, 1) var path_queue_max: int = 4
+# 우회 경로에만 허용하는 큐 상한. 손가락이 `path_queue_max` 안에 있는데도 벽이 두꺼워
+# 길이 그보다 길어질 때 쓴다. 손가락이 멀리 튄 목표는 이 값과 무관하게 거절된다.
+@export_range(1, 32, 1) var detour_queue_max: int = 12
 # 구멍에 빨려 들어가는 속도. 이동보다 빠르면 낚아채이는 느낌이 난다.
 @export_range(1.0, 32.0, 0.5) var absorb_speed_cells: float = 11.0
 
@@ -509,11 +512,21 @@ func _future_body() -> Array[Vector2i]:
 
 # (셀, 스텝) BFS. 스텝 k 에서는 몸의 뒤쪽 k 칸이 이미 비켜난 것으로 본다.
 func _plan_bridge(future: Array[Vector2i], target: Vector2i) -> Array[Vector2i]:
-	var budget: int = path_queue_max - path_queue.size()
+	var start: Vector2i = future[0]
+	# 손가락이 앵커에서 얼마나 떨어져 있는지가 입력을 받아들이는 기준이다. 빠른 플릭으로
+	# 멀리 튄 목표를 자동 주행으로 만들지 않으려는 가드이며, 벽과는 무관하다.
+	var reach: int = path_queue_max - path_queue.size()
+	if reach <= 0:
+		return []
+	if absi(target.x - start.x) + absi(target.y - start.y) > reach:
+		return []
+
+	# 손가락이 가까운데 길이 막혔으면 경로 자체는 더 길어도 좋다. 벽 두께와 상관없이
+	# 착지점까지 열린 길이 있으면 찾아 준다.
+	var budget: int = maxi(reach, detour_queue_max - path_queue.size())
 	if budget <= 0:
 		return []
 
-	var start: Vector2i = future[0]
 	var start_dir: Vector2i = (start - future[1]) if future.size() >= 2 else facing_dir
 	var came := {}
 	var frontier: Array = [[start, 0, start_dir]]

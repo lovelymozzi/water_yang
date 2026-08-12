@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqh3wcat0hole"]
+
+[ext_resource type="PackedScene" uid="uid://csrvtbl5x6tvt" path="res://water_yang/cat_hole1.fbx" id="1_fbx"]
+[ext_resource type="Script" uid="uid://cidd7t5i6ase5" path="res://scripts/cat_hole_visual.gd" id="2_visual"]
+[ext_resource type="Material" uid="uid://308g6ad1fhot" path="res://resources/cat_hole_flower.tres" id="3_flower"]
+[ext_resource type="Resource" uid="uid://de43e12xoawxm" path="res://resources/cat_appearance.tres" id="4_appearance"]
+
+[node name="CatHole" instance=ExtResource("1_fbx")]
+script = ExtResource("2_visual")
+flower_material = ExtResource("3_flower")
+appearance = ExtResource("4_appearance")

@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://dnbvdfthy6i28" path="res://scripts/obstacle_marker.gd" id="1_marker"]
+
+[node name="ObstacleBlock" type="Node3D"]
+script = ExtResource("1_marker")
+grid_pos = Vector2i(0, 0)
+block_size = Vector2i(1, 1)

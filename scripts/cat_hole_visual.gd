@@ -1,62 +1,154 @@
 @tool
 extends Node3D
 
-@export var flower_material: Material
+# 탈출구 한 개의 비주얼. cat_hole1.fbx 는 메시 하나에 "flower"(테두리)와
+# "hole"(가운데 구덩이) 두 서피스를 갖고 있어, 표면 이름으로 재질을 갈아끼운다.
+#
+# 색의 출처가 둘로 갈리지 않게 역할을 나눠 둔다.
+#   - 스타일(툰 단계, 그림자, 림, 라인아트, 아웃라인)은 `CatAppearance` 하나에서 오고
+#     움직이는 고양이와 공유한다. 고양이와 구멍이 같은 톤으로 보여야 하기 때문이다.
+#   - 색만 구멍마다 다르다. `LevelManager.pair_colors` 의 짝 색이며 LevelManager 가
+#     `apply_hole_colors()` 로 넣어 준다. 이 값이 `CatAppearance.tint_color` 를 덮는다.
+#     짝 색이 표시색을 못 이기면 플레이어가 짝을 볼 수 없다.
+
+const FLOWER_SURFACE_NAME := "flower"
+const HOLE_SURFACE_NAME := "hole"
+
+@export var flower_material: Material:
+	set(value):
+		flower_material = value
+		_request_apply()
+
 @export var appearance: CatAppearance:
 	set(value):
-		if appearance != null and appearance.changed.is_connected(_apply_appearance):
-			appearance.changed.disconnect(_apply_appearance)
+		if appearance != null and appearance.changed.is_connected(_request_apply):
+			appearance.changed.disconnect(_request_apply)
 		appearance = value
 		if appearance != null:
-			appearance.changed.connect(_apply_appearance)
-		_apply_appearance()
+			appearance.changed.connect(_request_apply)
+		_request_apply()
+
+var _pair_color := Color(1.0, 1.0, 1.0, 1.0)
+var _pit_color := Color(0.06, 0.07, 0.05, 1.0)
+var _has_pair_color := false
 
 
 func _ready() -> void:
-	call_deferred("_apply_flower_material")
+	call_deferred("_apply_surface_materials")
 
 
-func _apply_flower_material() -> void:
-	if flower_material == null:
+# LevelManager 가 구멍마다 한 번 부른다. 꽃잎과 구덩이 색이 같은 color_id 에서
+# 나와야 하므로 둘을 함께 받는다.
+func apply_hole_colors(flower_color: Color, pit_color: Color) -> void:
+	_pair_color = flower_color
+	_pit_color = pit_color
+	_has_pair_color = true
+	_apply_surface_materials()
+
+
+# 에셋 크기와 무관하게 정확히 한 칸을 덮게 맞춘다. 타일 크기를 바꿔도 따라간다.
+func fit_to_tile(tile_side: float) -> void:
+	var mesh_instance := _find_mesh_instance(self)
+	if mesh_instance == null or mesh_instance.mesh == null:
 		return
-	_apply_to_meshes(self)
-	_apply_appearance()
 
-
-func _apply_appearance() -> void:
-	if appearance == null or not flower_material is ShaderMaterial:
+	# 메시 로컬 AABB 를 메시 노드 변환까지 태워야 FBX 의 Z-up 회전이 반영된다.
+	var bounds: AABB = mesh_instance.transform * mesh_instance.mesh.get_aabb()
+	var footprint: float = maxf(bounds.size.x, bounds.size.z)
+	if footprint <= 0.0001:
 		return
-	var toon_material := flower_material as ShaderMaterial
-	toon_material.set_shader_parameter("tint_color", appearance.tint_color)
-	toon_material.set_shader_parameter("shadow_steps", appearance.toon_steps)
-	toon_material.set_shader_parameter("shadow_darkness", appearance.shadow_darkness)
-	toon_material.set_shader_parameter("rim_strength", appearance.rim_strength)
-	toon_material.set_shader_parameter("line_art_tex", appearance.line_art_texture)
-	toon_material.set_shader_parameter("line_art_enabled", 1.0 if appearance.line_art_texture != null else 0.0)
-	toon_material.set_shader_parameter("line_art_color", appearance.line_art_color)
-	toon_material.set_shader_parameter("line_art_strength", appearance.line_art_strength)
-	var outline_material := toon_material.next_pass as ShaderMaterial
-	if outline_material != null:
-		# CatHole uses the same shared outline settings as Cat2. Its shader only
-		# changes the expansion direction because this FBX is almost flat.
-		outline_material.set_shader_parameter("outline_color", appearance.outline_color)
-		outline_material.set_shader_parameter("outline_width", appearance.outline_width)
-		outline_material.set_shader_parameter("top_outline_scale", appearance.top_outline_scale)
-		outline_material.set_shader_parameter("bottom_outline_scale", appearance.bottom_outline_scale)
-	# Reassign the override so @tool previews refresh after an external resource
-	# changes. Updating a shared ShaderMaterial alone can leave the editor's
-	# imported-FBX render instance stale.
-	if is_inside_tree():
-		_apply_to_meshes(self)
+
+	scale = Vector3.ONE * (tile_side / footprint)
 
 
-func _apply_to_meshes(node: Node) -> void:
+func _request_apply() -> void:
+	if not is_inside_tree():
+		return
+	call_deferred("_apply_surface_materials")
+
+
+func _apply_surface_materials() -> void:
+	_apply_to_meshes(self, _build_flower_material(), _build_pit_material())
+
+
+func _apply_to_meshes(node: Node, flower: Material, hole: Material) -> void:
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
 		if mesh_instance.mesh != null:
 			for surface_index in mesh_instance.mesh.get_surface_count():
 				var source_material := mesh_instance.mesh.surface_get_material(surface_index)
-				if source_material != null and source_material.resource_name.to_lower() == "flower":
-					mesh_instance.set_surface_override_material(surface_index, flower_material)
+				if source_material == null:
+					continue
+				match source_material.resource_name.to_lower():
+					FLOWER_SURFACE_NAME:
+						if flower != null:
+							mesh_instance.set_surface_override_material(surface_index, flower)
+					HOLE_SURFACE_NAME:
+						if hole != null:
+							mesh_instance.set_surface_override_material(surface_index, hole)
 	for child in node.get_children():
-		_apply_to_meshes(child)
+		_apply_to_meshes(child, flower, hole)
+
+
+# 원본 재질은 모든 구멍이 공유한다. 구멍마다 색이 달라야 하므로 복제한 뒤 칠한다.
+# 복제하지 않고 공유 재질에 쓰면 마지막 구멍의 색이 넷 다에 적용된다.
+func _build_flower_material() -> Material:
+	if flower_material == null:
+		return null
+
+	var tinted := flower_material.duplicate() as ShaderMaterial
+	if tinted == null:
+		return flower_material
+
+	if appearance != null:
+		tinted.set_shader_parameter("tint_color", appearance.tint_color)
+		tinted.set_shader_parameter("shadow_steps", appearance.toon_steps)
+		tinted.set_shader_parameter("shadow_darkness", appearance.shadow_darkness)
+		tinted.set_shader_parameter("rim_strength", appearance.rim_strength)
+		tinted.set_shader_parameter("line_art_tex", appearance.line_art_texture)
+		tinted.set_shader_parameter(
+			"line_art_enabled", 1.0 if appearance.line_art_texture != null else 0.0
+		)
+		tinted.set_shader_parameter("line_art_color", appearance.line_art_color)
+		tinted.set_shader_parameter("line_art_strength", appearance.line_art_strength)
+
+	# 짝 색이 스타일의 틴트를 덮는다. 이 한 줄이 구멍마다 다른 유일한 값이다.
+	if _has_pair_color:
+		tinted.set_shader_parameter("tint_color", _pair_color)
+	# 그라데이션은 고양이 몸이 자기 경로를 셰이더에 먹여야 작동한다. 정지한 구멍에는
+	# 먹일 경로가 없으니 끈다.
+	tinted.set_shader_parameter("tint_gradient_enabled", 0.0)
+
+	var outline := tinted.next_pass as ShaderMaterial
+	if outline != null:
+		# 아웃라인은 고양이와 같은 설정을 그대로 쓴다. 셰이더만 다른데, 이 FBX 가
+		# 거의 평면이라 확장 방향을 바꿔야 하기 때문이다.
+		var outline_copy := outline.duplicate() as ShaderMaterial
+		if appearance != null:
+			outline_copy.set_shader_parameter("outline_color", appearance.outline_color)
+			outline_copy.set_shader_parameter("outline_width", appearance.outline_width)
+			outline_copy.set_shader_parameter("top_outline_scale", appearance.top_outline_scale)
+			outline_copy.set_shader_parameter("bottom_outline_scale", appearance.bottom_outline_scale)
+		tinted.next_pass = outline_copy
+
+	return tinted
+
+
+func _build_pit_material() -> Material:
+	if not _has_pair_color:
+		return null
+
+	var material := StandardMaterial3D.new()
+	material.albedo_color = _pit_color
+	material.roughness = 0.95
+	return material
+
+
+func _find_mesh_instance(node: Node) -> MeshInstance3D:
+	if node is MeshInstance3D:
+		return node as MeshInstance3D
+	for child in node.get_children():
+		var found := _find_mesh_instance(child)
+		if found != null:
+			return found
+	return null

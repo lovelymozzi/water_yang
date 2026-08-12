@@ -4,11 +4,6 @@
 [ext_resource type="Script" uid="uid://kc76tu4jlnus" path="res://scripts/level_manager.gd" id="2_5srec"]
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_gubc5"]
-[ext_resource type="Script" uid="uid://dnbvdfthy6i28" path="res://scripts/obstacle_marker.gd" id="4_obs"]
-[ext_resource type="PackedScene" uid="uid://csrvtbl5x6tvt" path="res://water_yang/cat_hole1.fbx" id="5_cat_hole"]
-[ext_resource type="Material" path="res://resources/cat_hole_flower.tres" id="6_cat_hole_flower"]
-[ext_resource type="Script" path="res://scripts/cat_hole_visual.gd" id="7_cat_hole_visual"]
-[ext_resource type="Resource" uid="uid://de43e12xoawxm" path="res://resources/cat_appearance.tres" id="8_cat_appearance"]
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
@@ -54,12 +49,6 @@ obstacle_secondary_color = Color(0.52156866, 0.6039216, 0.3647059, 1)
 [node name="BoardVisuals" type="Node3D" parent="LevelManager" unique_id=1755716270]
 
 [node name="TileVisuals" type="Node3D" parent="LevelManager" unique_id=97076465]
-
-[node name="CatHole1" parent="LevelManager/TileVisuals" unique_id=1598683596 groups=["persistent_tile_visuals"] instance=ExtResource("5_cat_hole")]
-transform = Transform3D(10.077361, 0, 0, 0, 10.077361, 0, 0, 0, 10.077361, 0, 0.11698222, -1.9531717)
-script = ExtResource("7_cat_hole_visual")
-flower_material = ExtResource("6_cat_hole_flower")
-appearance = ExtResource("8_cat_appearance")
 
 [node name="ObstacleVisuals" type="Node3D" parent="LevelManager" unique_id=1279314469]
 
@@ -147,51 +136,6 @@ line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 line_art_strength = 1.0
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
-
-[node name="Obstacle_2_4" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=1430695689]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.15, 0)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(2, 4)
-
-[node name="Obstacle_3_4" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=65712348]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(3, 4)
-
-[node name="Obstacle_4_4" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=877352690]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.15, 0)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(4, 4)
-
-[node name="Obstacle_2_5" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=929017231]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.15, 2)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(2, 5)
-
-[node name="Obstacle_3_5" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=627036155]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 2)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(3, 5)
-
-[node name="Obstacle_4_5" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=2051384528]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.15, 2)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(4, 5)
-
-[node name="Obstacle_2_6" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=2131577772]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.15, 4)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(2, 6)
-
-[node name="Obstacle_3_6" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=1347035617]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 4)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(3, 6)
-
-[node name="Obstacle_4_6" type="Node3D" parent="LevelManager/LayoutObstacles" unique_id=689686541]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.15, 4)
-script = ExtResource("4_obs")
-grid_pos = Vector2i(4, 6)
 
 [node name="LayoutHoles" type="Node3D" parent="LevelManager"]
 

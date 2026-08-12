@@ -8,13 +8,9 @@ const CAT_ENTITY_SCRIPT = preload("res://scripts/cat_entity.gd")
 const OBSTACLE_MARKER_SCRIPT = preload("res://scripts/obstacle_marker.gd")
 const HOLE_MARKER_SCRIPT = preload("res://scripts/hole_marker.gd")
 const TILE_HEIGHT := 0.12
-const OBSTACLE_HEIGHT := 1.3
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
 const ROUND_CORNER_SEGMENTS := 6
-# 구멍은 정확히 한 칸이다. 안쪽 구덩이만 한 칸보다 작아 테두리가 남는다.
-const HOLE_PIT_INSET := 0.68
-const HOLE_PIT_HEIGHT := 0.05
 
 enum CellState {
 	EMPTY,
@@ -56,6 +52,17 @@ enum CellState {
 @export var obstacles_enabled: bool = false:
 	set(value):
 		obstacles_enabled = value
+		request_preview_refresh()
+
+# 탈출구 에셋. 구멍 칸마다 한 개씩 생성하고 색 짝 팔레트로 틴트한다.
+@export var hole_scene: PackedScene = preload("res://scenes/cat_hole.tscn"):
+	set(value):
+		hole_scene = value
+		request_preview_refresh()
+
+@export_range(-0.4, 0.6, 0.01) var hole_visual_height: float = 0.0:
+	set(value):
+		hole_visual_height = value
 		request_preview_refresh()
 
 # 이미 열린 씬에서도 Inspector 버튼으로 에디터용 보드를 즉시 다시 만든다.
@@ -436,13 +443,11 @@ func _sync_obstacle_layout() -> void:
 		if not obstacles_enabled:
 			continue
 
-		var marker_grid_pos: Vector2i = child.get("grid_pos")
-
-		if not is_inside_grid(marker_grid_pos):
-			continue
-
-		_set_cell_state(marker_grid_pos, CellState.OBSTACLE)
-		_build_obstacle_visual(marker_grid_pos)
+		# 칸만 잠그고 아무것도 그리지 않는다. 실제 장애물 에셋이 따로 들어올 자리이며,
+		# 그때는 구멍이 `hole_scene` 을 쓰는 것과 같은 방식으로 씬을 하나 붙이면 된다.
+		for cell in child.call("get_cells"):
+			if is_inside_grid(cell):
+				_set_cell_state(cell, CellState.OBSTACLE)
 
 
 func _sync_hole_layout() -> void:
@@ -450,8 +455,7 @@ func _sync_hole_layout() -> void:
 		if child.get_script() != HOLE_MARKER_SCRIPT:
 			continue
 
-		# 마커는 에디터에서만 보인다. 실행 중에는 생성된 구멍 비주얼이 대신 보인다.
-		child.call("set_preview_visible", Engine.is_editor_hint())
+		# 마커는 그리는 것이 없다. 보이는 것은 아래에서 만드는 캣홀 비주얼뿐이다.
 		child.call("refresh_editor_preview")
 
 		var marker_grid_pos: Vector2i = child.get("grid_pos")
@@ -464,30 +468,30 @@ func _sync_hole_layout() -> void:
 
 
 func _build_hole_visuals() -> void:
+	if hole_scene == null:
+		return
+
 	var tile_side := maxf(tile_size - tile_gap, 0.01)
-	var pit_side := maxf(tile_side * HOLE_PIT_INSET, 0.01)
 	for index in _hole_cells.size():
 		var cell: Vector2i = _hole_cells[index]
-		# 테두리는 타일 자리를 그대로 채우고, 그 안쪽에 어두운 구덩이를 낮게 깐다.
-		var rim := _create_rounded_prism(
-			"HoleRim_%d_%d" % [cell.x, cell.y],
-			Vector3(tile_side, TILE_HEIGHT, tile_side),
-			TILE_CORNER_RADIUS,
-			_make_material(get_hole_rim_color(_hole_color_ids[index]))
-		)
-		rim.position = grid_to_world(cell, TILE_HEIGHT * 0.5)
-		_holes_root.add_child(rim)
+		var color_id: int = _hole_color_ids[index]
+		var visual := hole_scene.instantiate() as Node3D
+		if visual == null:
+			continue
 
-		var pit := _create_rounded_prism(
-			"HolePit_%d_%d" % [cell.x, cell.y],
-			Vector3(pit_side, HOLE_PIT_HEIGHT, pit_side),
-			TILE_CORNER_RADIUS,
-			_make_material(get_hole_pit_color(_hole_color_ids[index]))
+		visual.name = "CatHole_%d_%d" % [cell.x, cell.y]
+		# 구멍 칸에는 타일을 깔지 않으므로 보드 베이스 윗면(y=0)에 앉힌다.
+		visual.position = grid_to_world(cell, hole_visual_height)
+		_holes_root.add_child(visual)
+
+		# 크기와 색은 노드가 트리에 들어간 뒤에 준다. 에셋이 자기 _ready 에서 원본
+		# 재질을 먼저 깔기 때문에, 색 짝 틴트는 그 뒤에 덮어써야 남는다.
+		visual.call("fit_to_tile", tile_side)
+		visual.call(
+			"apply_hole_colors",
+			get_hole_rim_color(color_id),
+			get_hole_pit_color(color_id)
 		)
-		# 위에서 내려다보는 직교 카메라라 깊이 단서가 없다. 테두리 안쪽에 어두운 면을
-		# 얇게 얹어 구멍처럼 보이게 한다. 테두리 아래에 두면 슬래브에 가려 보이지 않는다.
-		pit.position = grid_to_world(cell, TILE_HEIGHT + 0.01 - HOLE_PIT_HEIGHT * 0.5)
-		_holes_root.add_child(pit)
 
 
 func is_hole(cell: Vector2i) -> bool:
@@ -564,16 +568,6 @@ func _sync_cat_layout() -> void:
 
 		update_cat_occupancy(cat)
 		_cats.append(cat)
-
-
-func _build_obstacle_visual(cell: Vector2i) -> void:
-	var obstacle: MeshInstance3D = MeshInstance3D.new()
-	var obstacle_mesh: BoxMesh = BoxMesh.new()
-	obstacle_mesh.size = Vector3(tile_size * 0.94, OBSTACLE_HEIGHT * 0.38, tile_size * 0.94)
-	obstacle.mesh = obstacle_mesh
-	obstacle.position = grid_to_world(cell, OBSTACLE_HEIGHT * 0.19)
-	obstacle.material_override = _make_material(get_obstacle_color(cell))
-	_obstacles_root.add_child(obstacle)
 
 
 func _make_material(color: Color) -> StandardMaterial3D:
