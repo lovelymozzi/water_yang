@@ -7,6 +7,9 @@ signal level_cleared
 const CAT_ENTITY_SCRIPT = preload("res://scripts/cat_entity.gd")
 const OBSTACLE_MARKER_SCRIPT = preload("res://scripts/obstacle_marker.gd")
 const HOLE_MARKER_SCRIPT = preload("res://scripts/hole_marker.gd")
+const BOARD_VISUAL_TEXTURE = preload("res://water_yang/bg_tile1_1.jpg")
+const FLOOR_TILE_SCENE = preload("res://scenes/path_tile_1x1.tscn")
+const PATH_PREVIEW_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const TILE_HEIGHT := 0.12
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
@@ -44,6 +47,33 @@ enum CellState {
 		board_vertical_margin = value
 		request_preview_refresh()
 
+@export_range(-0.2, 0.2, 0.01) var board_visual_y_offset: float = 0.0:
+	set(value):
+		board_visual_y_offset = value
+		request_preview_refresh()
+
+@export_group("Board Texture")
+@export var board_visual_texture: Texture2D = BOARD_VISUAL_TEXTURE:
+	set(value):
+		board_visual_texture = value
+		request_preview_refresh()
+
+@export var board_texture_tiling: Vector2 = Vector2.ONE:
+	set(value):
+		board_texture_tiling = Vector2(maxf(value.x, 0.01), maxf(value.y, 0.01))
+		request_preview_refresh()
+
+@export_group("Board Tiles")
+@export var floor_tile_scene: PackedScene = FLOOR_TILE_SCENE:
+	set(value):
+		floor_tile_scene = value
+		request_preview_refresh()
+
+@export_range(0.02, 0.4, 0.01) var floor_tile_height: float = TILE_HEIGHT:
+	set(value):
+		floor_tile_height = value
+		request_preview_refresh()
+
 @export var cat_world_y: float = 0.78:
 	set(value):
 		cat_world_y = value
@@ -57,14 +87,30 @@ enum CellState {
 # 장애물 에셋. 구멍이 `hole_scene` 을 쓰는 것과 같은 방식이며, 비어 있으면 아래에서 타일과
 # 같은 모양의 덩어리를 만들어 놓는다. **잠긴 칸은 반드시 보여야 한다** — 안 보이면 플레이어가
 # 못 움직이는 이유가 벽인지 버그인지 구분할 수 없다.
-@export var obstacle_scene: PackedScene = null:
+@export var obstacle_scene: PackedScene = preload("res://scenes/obstacle_tile_1x1.tscn"):
 	set(value):
 		obstacle_scene = value
 		request_preview_refresh()
 
-@export_range(0.1, 1.2, 0.01) var obstacle_height: float = 0.55:
+@export_range(0.1, 1.2, 0.01) var obstacle_fbx_height: float = 0.55:
 	set(value):
-		obstacle_height = value
+		obstacle_fbx_height = value
+		request_preview_refresh()
+
+@export_group("Path Preview")
+@export var path_preview_scene: PackedScene = PATH_PREVIEW_SCENE:
+	set(value):
+		path_preview_scene = value
+		request_preview_refresh()
+
+@export_range(0.02, 0.4, 0.01) var path_preview_height: float = 0.12:
+	set(value):
+		path_preview_height = value
+		request_preview_refresh()
+
+@export_color_no_alpha var path_preview_color: Color = Color(0.64, 0.79, 0.40, 1.0):
+	set(value):
+		path_preview_color = value
 		request_preview_refresh()
 
 # 탈출구 에셋. 구멍 칸마다 한 개씩 생성하고 색 짝 팔레트로 틴트한다.
@@ -146,6 +192,7 @@ var _board_root: Node3D
 var _tiles_root: Node3D
 var _obstacles_root: Node3D
 var _holes_root: Node3D
+var _path_preview_root: Node3D
 var _layout_cats_root: Node3D
 var _layout_obstacles_root: Node3D
 var _layout_holes_root: Node3D
@@ -235,6 +282,7 @@ func update_cat_occupancy(cat: CatEntity) -> void:
 			_set_cell_state(cell, CellState.CAT)
 			_set_cell_ref(cell, cat)
 	_refresh_occupancy_highlight()
+	_refresh_path_preview()
 
 
 # 자기 자신을 뺀 차단 여부. 자기 몸 판정은 시간 전개가 필요해 CatEntity 가 따로 본다.
@@ -285,6 +333,40 @@ func _build_occupancy_highlight() -> void:
 			_highlight_tiles.append(tile)
 
 
+func refresh_path_preview() -> void:
+	_refresh_path_preview()
+
+
+func _refresh_path_preview() -> void:
+	if _path_preview_root == null:
+		return
+	_free_children(_path_preview_root)
+	if path_preview_scene == null:
+		return
+
+	var seen := {}
+	for cat in _cats:
+		if cat == null or not is_instance_valid(cat) or not cat.has_method("get_preview_path_cells"):
+			continue
+		for cell_variant in cat.call("get_preview_path_cells"):
+			var cell := cell_variant as Vector2i
+			if not is_inside_grid(cell) or is_hole(cell) or seen.has(cell):
+				continue
+			seen[cell] = true
+			var visual := path_preview_scene.instantiate() as Node3D
+			if visual == null:
+				continue
+			visual.name = "Path_%d_%d" % [cell.x, cell.y]
+			visual.position = grid_to_world(cell, TILE_HEIGHT)
+			for property_info in visual.get_property_list():
+				if property_info.get("name") == "cast_shadow":
+					visual.set("cast_shadow", false)
+					break
+			if visual.has_method("apply_cell_style"):
+				visual.call("apply_cell_style", cell, path_preview_color, path_preview_height)
+			_path_preview_root.add_child(visual)
+
+
 func get_escape_result(cat: CatEntity) -> Dictionary:
 	var probe: Vector2i = cat.grid_pos + cat.facing_dir
 
@@ -318,6 +400,7 @@ func _setup_roots() -> void:
 	_tiles_root = _ensure_named_child(self, "TileVisuals")
 	_obstacles_root = _ensure_named_child(self, "ObstacleVisuals")
 	_holes_root = _ensure_named_child(self, "HoleVisuals")
+	_path_preview_root = _ensure_named_child(self, "PathPreviewVisuals")
 	_highlight_root = _ensure_named_child(self, "OccupancyHighlights")
 	_layout_cats_root = _ensure_named_child(self, "LayoutCats")
 	_layout_obstacles_root = _ensure_named_child(self, "LayoutObstacles")
@@ -349,6 +432,7 @@ func _rebuild_from_scene_layout() -> void:
 	_sync_obstacle_layout()
 	_build_obstacle_visuals()
 	_sync_cat_layout()
+	_refresh_path_preview()
 	_sync_hole_visual_styles()
 
 
@@ -359,6 +443,7 @@ func _clear_generated_nodes() -> void:
 	_free_children(_tiles_root, "persistent_tile_visuals")
 	_free_children(_obstacles_root)
 	_free_children(_holes_root)
+	_free_children(_path_preview_root)
 	_free_children(_highlight_root)
 
 	_highlight_tiles.clear()
@@ -402,9 +487,9 @@ func _build_board_base() -> void:
 	)
 	var board := _create_rounded_prism(
 		"BoardBase", board_size, BOARD_CORNER_RADIUS,
-		_make_material(board_visuals_color)
+		_make_board_material(board_size)
 	)
-	board.position = Vector3(0.0, -0.18, 0.0)
+	board.position = Vector3(0.0, -0.18 + board_visual_y_offset, 0.0)
 	_board_root.add_child(board)
 
 
@@ -414,6 +499,15 @@ func _build_grid_tiles() -> void:
 			var cell: Vector2i = Vector2i(x, y)
 			if is_hole(cell):
 				continue
+			if floor_tile_scene != null:
+				var visual := floor_tile_scene.instantiate() as Node3D
+				if visual != null:
+					visual.name = "Tile_%d_%d" % [x, y]
+					visual.position = grid_to_world(cell, 0.0)
+					if visual.has_method("apply_cell_style"):
+						visual.call("apply_cell_style", cell, _tile_color_for(cell), floor_tile_height)
+					_tiles_root.add_child(visual)
+					continue
 			var tile_side := maxf(tile_size - tile_gap, 0.01)
 			var tile := _create_rounded_prism(
 				"Tile_%d_%d" % [x, y],
@@ -537,15 +631,17 @@ func _build_obstacle_visuals() -> void:
 			if visual != null:
 				visual.name = "Obstacle_%d_%d" % [cell.x, cell.y]
 				visual.position = grid_to_world(cell, TILE_HEIGHT)
+				if visual.has_method("apply_cell_style"):
+					visual.call("apply_cell_style", cell, get_obstacle_color(cell), obstacle_fbx_height)
 				_obstacles_root.add_child(visual)
 				continue
 		var block := _create_rounded_prism(
 			"Obstacle_%d_%d" % [cell.x, cell.y],
-			Vector3(block_side, obstacle_height, block_side),
+			Vector3(block_side, obstacle_fbx_height, block_side),
 			TILE_CORNER_RADIUS,
 			_make_material(get_obstacle_color(cell))
 		)
-		block.position = grid_to_world(cell, TILE_HEIGHT + obstacle_height * 0.5)
+		block.position = grid_to_world(cell, TILE_HEIGHT + obstacle_fbx_height * 0.5)
 		_obstacles_root.add_child(block)
 
 
@@ -693,6 +789,20 @@ func _make_material(color: Color) -> StandardMaterial3D:
 	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = 0.95
+	return material
+
+
+func _make_board_material(board_size: Vector3) -> StandardMaterial3D:
+	var material := _make_material(board_visuals_color)
+	if board_visual_texture != null:
+		material.albedo_texture = board_visual_texture
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		material.texture_repeat = true
+		material.uv1_scale = Vector3(
+			maxf(board_size.x / tile_size, 0.01) * board_texture_tiling.x,
+			maxf(board_size.z / tile_size, 0.01) * board_texture_tiling.y,
+			1.0
+		)
 	return material
 
 

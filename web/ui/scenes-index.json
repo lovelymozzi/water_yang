@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "generatedBy": "ui-editor",
+  "scenes": [
+    {
+      "uuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+      "name": "home_bottom",
+      "contract": "home_bottom.contract.json",
+      "sceneType": "navigation"
+    },
+    {
+      "uuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "name": "ingame",
+      "contract": "ingame.contract.json",
+      "sceneType": "scene"
+    }
+  ]
+}

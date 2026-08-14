@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b63oh241gytye"]
+
+[ext_resource type="Script" uid="uid://c4djsccgrejue" path="res://scripts/obstacle_decor.gd" id="1_obstacle"]
+[ext_resource type="PackedScene" uid="uid://booeo6hufwyh1" path="res://water_yang/obstacle_tile_1x1.fbx" id="2_obstacle_fbx"]
+
+[node name="ObstacleTile1x1" type="Node3D" unique_id=1602154034]
+script = ExtResource("1_obstacle")
+footprint_scale = 1.03
+tint_color = Color(0.8132577, 0.8132577, 0.81325763, 1)
+line_art_color = Color(0.4791438, 0.693057, 0.34148824, 1)
+line_art_strength = 0.41
+shadow_darkness = 0.35
+shadow_receive_strength = 1.0
+rim_strength = 0.1
+outline_width = 0.005
+
+[node name="ObstacleModel" parent="." unique_id=1582905166 instance=ExtResource("2_obstacle_fbx")]
+transform = Transform3D(1.03, 0, 0, 0, 1, 0, 0, 0, 1.03, 0, 0, 0)

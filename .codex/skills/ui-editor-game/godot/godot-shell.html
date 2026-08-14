@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- ui-editor Godot 웹 익스포트 셸 — 익스포트 프리셋 html/custom_html_shell 로 이 파일을 지정한다.
+     UI 셸(FlowDriver+매니저)이 호스트, Godot 익스포트가 카트리지(godot-bridge.js)로 장착되는 구조.
+
+     ⚠ 익스포트 산출물 web/index.html 을 직접 수정하지 말 것 — 재익스포트 때마다 이 원본으로 덮어써진다.
+        수정은 이 파일(custom shell 원본)에 하고 재익스포트로 반영한다.
+
+     폴더 규약: web/ = 익스포트 대상(export_path=web/index.html), web/ui/ = ui-editor publish 출력(rendererPath).
+     프리셋에 variant/thread_support=false 권장 — COOP/COEP 헤더 없는 정적 서버에서 동작.
+     GODOT_URL·GODOT_CONFIG 플레이스홀더($ 표기)는 익스포트가 치환한다 — 건드리지 않는다.
+     (주석에도 $ 플레이스홀더 원문을 쓰면 익스포트가 주석까지 치환하므로 여기서는 $ 없이 표기) -->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>$GODOT_PROJECT_NAME</title>
+$GODOT_HEAD_INCLUDE
+<style>html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }</style>
+</head>
+<body>
+<script type="module">
+// ── 게임 설정 블록 (게임 AI 수정 허용) ─────────────────────────────────────────
+const UI_DIR = './ui/';         // ui-editor publish 출력(rendererPath=web/ui) — 엔트리(web/index.html) 기준
+const ASSET_BASE = '../';       // contract 이미지 경로 보정 — 프로젝트 루트 기준 에셋을 web/ 아래에서 해석
+const STORAGE_PREFIX = 'game_'; // 하트·코인·진행도 localStorage 접두사(게임별 고유값 권장)
+const INGAME_SCENE = 'Ingame';  // GameField 레이어를 가진 인게임 씬 이름
+// ──────────────────────────────────────────────────────────────────────────────
+const GODOT_ENGINE_URL = "$GODOT_URL"; // 수정 금지 — 익스포트가 치환
+const GODOT_CONFIG = $GODOT_CONFIG;    // 수정 금지 — 익스포트가 치환(executable·args·fileSizes 등)
+
+import { FlowDriver } from './ui/flow-driver.js';
+import { SoundManager } from './ui/sound-manager.js';
+import { EconomyManager } from './ui/economy-manager.js';
+import { ProgressManager } from './ui/progress-manager.js';
+import { GameSession } from './ui/game-session.js';
+import { makeGodotCartridge } from './ui/godot-bridge.js';
+
+const sound = new SoundManager({ storagePrefix: STORAGE_PREFIX });
+const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX });   // 수치는 게임 기획대로 옵션 지정(스킬 §4)
+const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX });
+const flow = new FlowDriver({
+  basePath: ASSET_BASE,
+  dataPath: UI_DIR,               // scenes-index.json·scene-flow.json 위치
+  managers: { economy, progress },
+});
+
+// ── 게임 배선 블록 (게임 AI 수정 허용 — publish-report.json 의 미배선 목록대로 채운다) ──
+// 조건 술어: publish-report 의 game-unwired-condition 목록 전부. 예:
+// flow.defineCondition('hasHearts', () => economy.getHearts() > 0);
+
+const godotCartridge = makeGodotCartridge({ engineUrl: GODOT_ENGINE_URL, engineConfig: GODOT_CONFIG });
+
+flow.on('scene:enter', async ({ sceneName, renderer }) => {
+  if (sceneName !== INGAME_SCENE) return;
+  if (!(await economy.consumeHeart())) { await flow.back(); return; } // 하트 정책이 없는 게임은 이 줄 제거
+  const stageN = progress.getCurrentStage();
+  const game = new GameSession({ renderer, initTimeoutMs: 30000 });   // Godot 부팅+pck 로드 예산(기본 10s로는 부족)
+  await game.start(godotCartridge, {
+    stage: stageN, config: {},
+    onEnd: async (result) => {
+      // ★ 경제·진행도 적용은 여기(호스트)에서만 — Godot 은 결과만 보고한다(스킬 §5)
+      if (result.outcome === 'clear') {
+        await economy.grantCoins(result.score, 'stage-clear');
+        await progress.recordClear(stageN, { stars: result.stats?.stars || 0, score: result.score, ticket: result.ticket });
+      }
+      // 결과 흐름은 문서 엣지로: 예) await flow.fire('게임 클리어 시');  (publish-report 의 game-unfired-doc-edge 목록 참조)
+    },
+    onError: () => { flow.back(); }, // 카트리지 실패 시 아웃게임 복귀 — 오류 원인은 [GameSession]/[godot-bridge] 로그로 판정
+  });
+  if (game.state === 'ready') game.startGame(); // 부트 실패(onError 처리됨) 시 호출 생략. 연출 뒤에 부르는 게임은 팝업 닫힘으로 옮긴다
+});
+// ──────────────────────────────────────────────────────────────────────────────
+
+sound.unlockOnFirstGesture();
+await flow.start(); // 시작 씬은 흐름도에서 지정(미지정이면 throw — 코드로 우회하지 말고 에디터에서 지정)
+</script>
+</body>
+</html>

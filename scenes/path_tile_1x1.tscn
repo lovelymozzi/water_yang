@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cufx1b1kwifmx"]
+
+[ext_resource type="Script" uid="uid://c4djsccgrejue" path="res://scripts/obstacle_decor.gd" id="1_path"]
+[ext_resource type="PackedScene" uid="uid://cly7b4q6l0k8n" path="res://water_yang/path_tile_1x1.fbx" id="2_path_fbx"]
+[ext_resource type="Texture2D" uid="uid://dhu80e174olmx" path="res://water_yang/bg_road1_1.jpg" id="4_road_primary"]
+[ext_resource type="Texture2D" uid="uid://ba1xqruffpsaw" path="res://water_yang/bg_road1_2.jpg" id="5_road_secondary"]
+
+[node name="PathTile1x1" type="Node3D" unique_id=1195070291]
+script = ExtResource("1_path")
+footprint_scale = 1.03
+visual_height = 0.12
+cast_shadow = true
+primary_texture = ExtResource("4_road_primary")
+secondary_texture = ExtResource("5_road_secondary")
+tint_color = Color(0.86036915, 0.8603692, 0.8603692, 1)
+line_art_enabled = 0.0
+line_art_color = Color(0.432, 0.582, 0.241, 1)
+line_art_strength = 0.0
+shadow_darkness = 0.12
+shadow_receive_strength = 2.2
+rim_strength = 0.02
+outline_color = Color(0.471, 0.643, 0.269, 1)
+outline_width = 0.001
+top_outline_scale = 1.0
+bottom_outline_scale = 1.0
+
+[node name="ObstacleModel" parent="." unique_id=246459461 instance=ExtResource("2_path_fbx")]
+transform = Transform3D(1.03, 0, 0, 0, 0.21818182, 0, 0, 0, 1.03, 0, 0, 0)

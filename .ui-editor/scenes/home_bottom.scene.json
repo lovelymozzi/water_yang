@@ -1,0 +1,127 @@
+{
+  "name": "home_bottom",
+  "sceneType": "navigation",
+  "navAnchor": "bottom",
+  "navOffsetX": 0,
+  "navOffsetY": 0,
+  "navBarWidth": 390,
+  "navBarHeight": 80,
+  "navBgColor": "#1d58a8",
+  "transitionType": "slide",
+  "transitionDuration": 600,
+  "defaultTabId": "t1",
+  "tabs": [
+    {
+      "id": "t0",
+      "label": "Shop",
+      "sceneName": "New Scene",
+      "iconExportPath": "icon_menu_place.png",
+      "iconAssetId": "icon_menu_place.png"
+    },
+    {
+      "id": "t1",
+      "label": "Home",
+      "sceneName": "home",
+      "iconExportPath": "icon_menu_home.png",
+      "iconAssetId": "icon_menu_home.png"
+    },
+    {
+      "id": "t1785291258215",
+      "label": "Ranking",
+      "sceneName": "Ranking",
+      "iconExportPath": "icon_menu_rank.png",
+      "iconAssetId": "icon_menu_rank.png"
+    }
+  ],
+  "layers": [],
+  "zLayers": [
+    {
+      "id": "zl-bg",
+      "name": "Background",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-content",
+      "name": "Content",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-ui",
+      "name": "UI",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-overlay",
+      "name": "Overlay",
+      "locked": false,
+      "hidden": false
+    }
+  ],
+  "activeZLayerId": "zl-content",
+  "groups": [],
+  "fxGroups": [],
+  "sceneAnimations": [],
+  "guides": {
+    "v": [],
+    "h": []
+  },
+  "navTabBar": {
+    "enabled": true,
+    "activeGrow": 160,
+    "iconScale": 200,
+    "iconLift": 30,
+    "iconSize": 54,
+    "labelMode": "always",
+    "label": {
+      "fontSize": 20,
+      "fontWeight": "normal",
+      "fontFamily": "\"Lilita One\", cursive",
+      "color": "#ffffff",
+      "textStrokeWidth": 5.5,
+      "textStrokeColor": "#1b4e8d",
+      "textDepthSize": 0,
+      "textDepthColor": "#000000",
+      "textShadowX": 0,
+      "textShadowY": 0,
+      "textShadowBlur": 0,
+      "textShadowColor": "#000000",
+      "textShadowOpacity": 0,
+      "offsetX": 0,
+      "offsetY": -5,
+      "colorGradEnabled": false,
+      "colorGrad2": "#ffffff",
+      "colorGradAngle": 180
+    },
+    "inactiveOpacity": 100,
+    "duration": 450,
+    "overshoot": true,
+    "indicator": {
+      "type": "image",
+      "color": "#3f86e0",
+      "exportPath": "home_bottom_select.png",
+      "imagePath": "",
+      "radius": 12,
+      "extendTop": 20,
+      "extendBottom": 0,
+      "inset": 12,
+      "assetId": "home_bottom_select.png"
+    }
+  },
+  "uuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+  "navBgImage": {
+    "enabled": true,
+    "exportPath": "home_bottom.png",
+    "stretch": true,
+    "sliceEnabled": true,
+    "sliceL": 6,
+    "sliceT": 0,
+    "sliceR": 6,
+    "sliceB": 0,
+    "sliceScale": 0.32,
+    "sliceRepeat": "stretch",
+    "assetId": "home_bottom.png"
+  }
+}

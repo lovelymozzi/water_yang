@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dsxar24l12iqq"
-path="res://.godot/imported/cat1.fbx-bdfb10a8ddf68fae7e61251cdec2d9ad.scn"
+uid="uid://booeo6hufwyh1"
+path="res://.godot/imported/obstacle_tile_1x1.fbx-9b8762a4d3371457c56b22b42f3448b7.scn"
 
 [deps]
 
-source_file="res://cat1.fbx"
-dest_files=["res://.godot/imported/cat1.fbx-bdfb10a8ddf68fae7e61251cdec2d9ad.scn"]
+source_file="res://water_yang/obstacle_tile_1x1.fbx"
+dest_files=["res://.godot/imported/obstacle_tile_1x1.fbx-9b8762a4d3371457c56b22b42f3448b7.scn"]
 
 [params]
 

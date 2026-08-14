@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "generatedBy": "ui-editor",
+  "generatedAt": "2026-08-14T12:33:17.838Z",
+  "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
+  "errors": [
+    {
+      "code": "missing-scene",
+      "where": "nav home_bottom 탭 \"Shop\"",
+      "message": "참조하는 씬이 publish 대상에 없습니다 — 해당 씬을 열어 저장(publish)하거나 연결을 정리하세요.",
+      "detail": "탭 씬 New Scene"
+    },
+    {
+      "code": "missing-scene",
+      "where": "nav home_bottom 탭 \"Home\"",
+      "message": "참조하는 씬이 publish 대상에 없습니다 — 해당 씬을 열어 저장(publish)하거나 연결을 정리하세요.",
+      "detail": "탭 씬 home"
+    },
+    {
+      "code": "missing-scene",
+      "where": "nav home_bottom 탭 \"Ranking\"",
+      "message": "참조하는 씬이 publish 대상에 없습니다 — 해당 씬을 열어 저장(publish)하거나 연결을 정리하세요.",
+      "detail": "탭 씬 Ranking"
+    }
+  ],
+  "warnings": [],
+  "infos": []
+}

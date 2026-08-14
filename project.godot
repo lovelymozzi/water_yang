@@ -32,6 +32,10 @@ window/handheld/orientation=1
 
 enabled=PackedStringArray("res://addons/cat_hole_palette_inspector/plugin.cfg")
 
+[filesystem]
+
+import/blender/enabled=false
+
 [rendering]
 
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=4

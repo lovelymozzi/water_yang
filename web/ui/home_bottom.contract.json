@@ -1,0 +1,98 @@
+{
+  "contractVersion": 1,
+  "sceneId": "home-bottom",
+  "sceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+  "sceneName": "home_bottom",
+  "sceneType": "navigation",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "navAnchor": "bottom",
+  "navOffsetX": 0,
+  "navOffsetY": 0,
+  "navBarWidth": 390,
+  "navBarHeight": 80,
+  "navBgColor": "#1d58a8",
+  "navBgImage": {
+    "stretch": true,
+    "sliceEnabled": true,
+    "sliceL": 6,
+    "sliceT": 0,
+    "sliceR": 6,
+    "sliceB": 0,
+    "sliceScale": 0.32,
+    "sliceRepeat": "stretch",
+    "imagePath": "home_bottom.png"
+  },
+  "transitionType": "slide",
+  "transitionDuration": 600,
+  "defaultTabId": "t1",
+  "navTabBar": {
+    "enabled": true,
+    "activeGrow": 160,
+    "iconScale": 200,
+    "iconLift": 30,
+    "iconSize": 54,
+    "labelMode": "always",
+    "label": {
+      "fontSize": 20,
+      "fontWeight": "normal",
+      "fontFamily": "\"Lilita One\", cursive",
+      "color": "#ffffff",
+      "textStrokeWidth": 5.5,
+      "textStrokeColor": "#1b4e8d",
+      "textDepthSize": 0,
+      "textDepthColor": "#000000",
+      "textShadowX": 0,
+      "textShadowY": 0,
+      "textShadowBlur": 0,
+      "textShadowColor": "#000000",
+      "textShadowOpacity": 0,
+      "offsetX": 0,
+      "offsetY": -5,
+      "colorGradEnabled": false,
+      "colorGrad2": "#ffffff",
+      "colorGradAngle": 180
+    },
+    "inactiveOpacity": 100,
+    "duration": 450,
+    "overshoot": true,
+    "indicator": {
+      "type": "image",
+      "color": "#3f86e0",
+      "imagePath": "home_bottom_select.png",
+      "radius": 12,
+      "extendTop": 20,
+      "extendBottom": 0,
+      "inset": 12
+    }
+  },
+  "tabs": [
+    {
+      "id": "t0",
+      "label": "Shop",
+      "sceneName": "New Scene",
+      "iconPath": "icon_menu_place.png",
+      "iconActivePath": ""
+    },
+    {
+      "id": "t1",
+      "label": "Home",
+      "sceneName": "home",
+      "iconPath": "icon_menu_home.png",
+      "iconActivePath": ""
+    },
+    {
+      "id": "t1785291258215",
+      "label": "Ranking",
+      "sceneName": "Ranking",
+      "iconPath": "icon_menu_rank.png",
+      "iconActivePath": ""
+    }
+  ],
+  "groups": [],
+  "fxGroups": [],
+  "sceneAnimations": [],
+  "layers": []
+}
