@@ -11,6 +11,10 @@ uniform float bottom_outline_scale : hint_range(0.8, 1.6, 0.01) = 1.12;
 uniform float sink_clip_enabled : hint_range(0.0, 1.0) = 0.0;
 uniform float sink_clip_plane_y = 0.0;
 uniform float sink_clip_span = 1.0;
+// Move the shell's depth just behind the source mesh.  This makes normal depth
+// testing remove the hull where a curved body folds over itself, while the
+// shell remains visible where it extends past the true outer silhouette.
+uniform float self_overlap_depth_scale : hint_range(1.0, 3.0, 0.01) = 2.0;
 
 void vertex() {
 	float upward_facing = max(NORMAL.y, 0.0);
@@ -21,6 +25,19 @@ void vertex() {
 }
 
 void fragment() {
+	// Derive the bias from this cat's actual uniform model scale, so the same
+	// Inspector width behaves the same on every board tile.  Projecting the
+	// farther view-space depth works with both regular and reverse-Z renderers.
+	float model_scale = max(
+		length(MODEL_MATRIX[0].xyz),
+		max(length(MODEL_MATRIX[1].xyz), length(MODEL_MATRIX[2].xyz))
+	);
+	vec4 outline_view = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, FRAGCOORD.z, 1.0);
+	float outline_depth = -outline_view.z / outline_view.w;
+	float shell_depth_bias = outline_width * model_scale * self_overlap_depth_scale;
+	vec4 biased_clip = PROJECTION_MATRIX * vec4(0.0, 0.0, -outline_depth - shell_depth_bias, 1.0);
+	DEPTH = biased_clip.z / biased_clip.w;
+
 	if (sink_clip_enabled > 0.5) {
 		float world_y = (INV_VIEW_MATRIX * vec4(VERTEX, 1.0)).y;
 		float sink = clamp((sink_clip_plane_y - world_y) / max(sink_clip_span, 0.0001), 0.0, 1.0);
