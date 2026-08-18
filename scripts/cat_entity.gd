@@ -3,6 +3,9 @@ class_name CatEntity
 extends Node3D
 
 const MODEL_SCENE_PATH := "res://water_yang/cat1.fbx"
+const KEY_MODEL_SCENE_PATH := "res://water_yang/key1.fbx"
+const KEY_TOON_MATERIAL := preload("res://resources/key_toon_material.tres")
+const ORANGE_CAT_COLOR_ID := 0
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
 const TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat1_mask.jpg"
 const CLOSED_EYES_TEXTURE_PATH := "res://water_yang/cat1_1.jpeg"
@@ -141,6 +144,36 @@ const ABSORB_SINK_CELLS := 0.9
 	set(value):
 		tint_from_pair_color = value
 		_refresh_shader_material()
+
+@export_group("Orange Cat Key (key1.fbx)")
+# These fields drive only color_id 0, the orange cat. They remain editable in
+# the Inspector so artists can tune the key without touching this script.
+@export var key_local_position := Vector3(0.1, -0.04, 0.1):
+	set(value):
+		key_local_position = value
+		_refresh_key_visual()
+
+@export var key_rotation_degrees := Vector3(0.0, 0.0, 90.0):
+	set(value):
+		key_rotation_degrees = value
+		_refresh_key_visual()
+
+@export var key_scale := Vector3.ONE:
+	set(value):
+		key_scale = value
+		_refresh_key_visual()
+
+# This resource uses the same toon-light and outline pipeline as the cat.
+# Select it in the Inspector to edit its shader parameters directly.
+@export var key_material_override: Material = KEY_TOON_MATERIAL:
+	set(value):
+		key_material_override = value
+		_refresh_key_visual()
+
+@export var key_outline_material: Material:
+	set(value):
+		key_outline_material = value
+		_refresh_key_visual()
 
 @export_group("Toon Shader")
 @export var tint_color: Color = Color(1.0, 0.97, 0.97, 1.0):
@@ -966,6 +999,38 @@ func _rebuild_body_visuals() -> void:
 	# 타일 머티리얼의 반복 횟수는 캐시된 rest 길이에 의존한다.
 	_apply_current_shader_parameters()
 	apply_rest_pose()
+
+	# color_id 0 is the orange pair.  Keep the key under Bone004 so it
+	# stays just below the neck while the cat follows corners and animates.
+	if color_id == ORANGE_CAT_COLOR_ID:
+		var neck_key_attachment := BoneAttachment3D.new()
+		neck_key_attachment.name = "NeckKeyAttachment"
+		neck_key_attachment.bone_name = "Bone004"
+		_skeleton.add_child(neck_key_attachment)
+		var key_model := (load(KEY_MODEL_SCENE_PATH) as PackedScene).instantiate() as Node3D
+		key_model.name = "Key"
+		neck_key_attachment.add_child(key_model)
+		_apply_key_visual_settings(key_model)
+
+
+func _refresh_key_visual() -> void:
+	if _skeleton != null:
+		var key := _skeleton.get_node_or_null("NeckKeyAttachment/Key") as Node3D
+		if key != null:
+			_apply_key_visual_settings(key)
+	_request_editor_refresh()
+
+
+func _apply_key_visual_settings(key: Node3D) -> void:
+	# The imported mesh sits off its FBX root. The Inspector default recenters
+	# it on Bone004 and lifts it onto the cat's visible surface.
+	key.position = key_local_position
+	key.rotation_degrees = key_rotation_degrees
+	key.scale = key_scale
+	for mesh in _skinned_meshes(key):
+		mesh.material_override = key_material_override
+	if key_material_override != null and key_outline_material != null:
+		key_material_override.next_pass = key_outline_material
 
 
 # 길이 증가분을 본+링 복제로 흡수한다(중간복제, `CatMiddleDuplicator`). 복제 후 남는 끝수만

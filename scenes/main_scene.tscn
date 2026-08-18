@@ -93,7 +93,7 @@ script = ExtResource("1_q0f23")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
 process_mode = 4
-transform = Transform3D(1, 0, 0, 0, 0.24022803, 0.9707165, 0, -0.9707165, 0.24022803, 0, 77.27166, 18.208935)
+transform = Transform3D(1, 0, 0, 0, 0.24022803, 0.9707165, 0, -0.9707165, 0.24022803, 0, 77.27166, 19.13752)
 current = true
 fov = 19.5
 size = 25.321
@@ -101,7 +101,7 @@ near = 10.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)
-light_color = Color(0.94401413, 0.94179875, 0.8442465, 1)
+light_color = Color(0.9270025, 0.921934, 0.79404676, 1)
 light_energy = 1.252
 light_indirect_energy = 0.3
 light_volumetric_fog_energy = 0.0
@@ -407,12 +407,14 @@ facing_name = "left"
 initial_length = 3
 fbx_scale_per_tile = 7.5
 tint_from_pair_color = true
+key_local_position = Vector3(0.14, 0, 0.07)
 tint_color = Color(0.95577335, 0.8633, 0.97, 1)
 shadow_darkness = 0.38
 rim_strength = 0.42
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
+cat_hole_outline_width = 0.001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 
@@ -425,6 +427,7 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 1
 tint_from_pair_color = true
+key_material_override = null
 shadow_darkness = 0.38
 rim_strength = 0.42
 outline_color = Color(0.387, 0.518, 0.686, 0.6627451)
@@ -441,6 +444,7 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 2
 tint_from_pair_color = true
+key_material_override = null
 shadow_darkness = 0.38
 rim_strength = 0.42
 outline_color = Color(0.423, 0.606, 0.409, 0.6627451)
@@ -457,6 +461,7 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 3
 tint_from_pair_color = true
+key_material_override = null
 shadow_darkness = 0.38
 rim_strength = 0.42
 outline_color = Color(0.672, 0.438, 0.54, 0.6627451)
@@ -497,7 +502,6 @@ color_id = 3
 
 [node name="MapGenerator" type="Node" parent="." unique_id=1306831349]
 script = ExtResource("6_gen")
-generate_on_play = true
 generator_seed = 22
 body_length_max = 8
 

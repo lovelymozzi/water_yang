@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://kioibimc2db6"]
+
+[ext_resource type="Shader" uid="uid://ceako7jldaeo2" path="res://scripts/key_toon.gdshader" id="1_key_toon"]
+[ext_resource type="Shader" uid="uid://dpg3bnyosk2dd" path="res://scripts/cat_outline.gdshader" id="2_cat_outline"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_key_outline"]
+render_priority = 1
+shader = ExtResource("2_cat_outline")
+shader_parameter/outline_color = Color(0.28, 0.18, 0.08, 1)
+shader_parameter/outline_width = 0.0030000001425
+shader_parameter/top_outline_scale = 0.46000000461934
+shader_parameter/bottom_outline_scale = 1.12
+shader_parameter/sink_clip_enabled = 0.0
+shader_parameter/sink_clip_plane_y = 0.0
+shader_parameter/sink_clip_span = 1.0
+shader_parameter/self_overlap_depth_scale = 2.0
+
+[resource]
+render_priority = 0
+next_pass = SubResource("ShaderMaterial_key_outline")
+shader = ExtResource("1_key_toon")
+shader_parameter/albedo_color = Color(0.7930556, 0.6063011, 0.3022093, 1)
+shader_parameter/shadow_steps = 3
+shader_parameter/shadow_darkness = 0.0
+shader_parameter/rim_strength = 0.5070000240825
