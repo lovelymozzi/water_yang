@@ -7,9 +7,9 @@
 [ext_resource type="PackedScene" path="res://scenes/tree_decor.tscn" id="3_rt2n2"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_gubc5"]
 [ext_resource type="PackedScene" path="res://scenes/grass_decor.tscn" id="5_6wevv"]
-[ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
-[ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
-[ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="6_top_fog"]
+[ext_resource type="Script" path="res://scripts/hole_marker.gd" id="5_hole"]
+[ext_resource type="Script" path="res://scripts/map_generator_tool.gd" id="6_gen"]
+[ext_resource type="Script" path="res://scripts/top_fog.gd" id="6_top_fog"]
 
 [sub_resource type="Gradient" id="Gradient_6wevv"]
 offsets = PackedFloat32Array(0, 0.58, 1)
@@ -100,27 +100,26 @@ size = 25.321
 near = 10.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
-transform = Transform3D(0.9843766, -0.003566263, 0.17603987, -0.15316989, -0.5104574, 0.8461514, 0.08684326, -0.85989565, -0.5030286, 0.24871826, 10.015869, -0.15698242)
+rotation_degrees = Vector3(-35, -24, 0)
 light_energy = 1.293
-light_indirect_energy = 3.033
-light_volumetric_fog_energy = 2.791
+light_indirect_energy = 0.3
+light_volumetric_fog_energy = 0.0
 light_angular_distance = 0.05
 light_specular = 0.0
 shadow_enabled = true
-shadow_bias = 0.02
-shadow_normal_bias = 0.2
+shadow_bias = 0.005
+shadow_normal_bias = 0.02
 shadow_transmittance_bias = 0.0
 shadow_opacity = 0.94
 shadow_blur = 0.08
 directional_shadow_split_1 = 0.17
 directional_shadow_split_2 = 0.404
 directional_shadow_split_3 = 0.765
-directional_shadow_max_distance = 80.0
-directional_shadow_pancake_size = 20.0
+directional_shadow_max_distance = 100.0
+directional_shadow_pancake_size = 25.0
 
 [node name="LevelManager" type="Node3D" parent="." unique_id=1305581177]
 script = ExtResource("2_5srec")
-board_visual_y_offset = 0.2
 board_texture_tiling = Vector2(2, 2)
 cat_world_y = 0.68
 obstacles_enabled = true
@@ -401,7 +400,7 @@ outline_width = 0.001
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
 [node name="Cat_C0" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.68, -6)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 1)
 facing_name = "left"
@@ -409,17 +408,18 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 tint_from_pair_color = true
 tint_color = Color(0.95577335, 0.8633, 0.97, 1)
-shadow_darkness = 0.17
-rim_strength = 0.56
+toon_steps = 3
+shadow_darkness = 0.38
+rim_strength = 0.42
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 0.54
+line_art_strength = 0.82
 
 [node name="Cat_C1" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1587945065]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.5, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.68, -2)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(2, 3)
 facing_name = "left"
@@ -427,48 +427,51 @@ initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 1
 tint_from_pair_color = true
-shadow_darkness = 0.17
-rim_strength = 0.56
+toon_steps = 3
+shadow_darkness = 0.38
+rim_strength = 0.42
 outline_color = Color(0.387, 0.518, 0.686, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 0.54
+line_art_strength = 0.82
 
 [node name="Cat_C2" type="Node3D" parent="LevelManager/LayoutCats" unique_id=747906881]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.68, 0)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(0, 4)
 initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 2
 tint_from_pair_color = true
-shadow_darkness = 0.17
-rim_strength = 0.56
+toon_steps = 3
+shadow_darkness = 0.38
+rim_strength = 0.42
 outline_color = Color(0.423, 0.606, 0.409, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 0.54
+line_art_strength = 0.82
 
 [node name="Cat_C3" type="Node3D" parent="LevelManager/LayoutCats" unique_id=485963275]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.68, 0)
 script = ExtResource("3_cat")
 grid_pos = Vector2i(6, 4)
 initial_length = 3
 fbx_scale_per_tile = 7.5
 color_id = 3
 tint_from_pair_color = true
-shadow_darkness = 0.17
-rim_strength = 0.56
+toon_steps = 3
+shadow_darkness = 0.38
+rim_strength = 0.42
 outline_color = Color(0.672, 0.438, 0.54, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
-line_art_strength = 0.54
+line_art_strength = 0.82
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 

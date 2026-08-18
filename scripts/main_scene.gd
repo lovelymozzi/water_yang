@@ -12,6 +12,29 @@ var _stall_reports := 0
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.98, 0.90, 0.78, 1.0))
+	# The editor viewport has its own preview environment, but the Play View
+	# does not inherit it. Define the runtime environment explicitly so the
+	# toon rim and bright cat highlights keep the same soft, bloomed finish.
+	var runtime_environment := Environment.new()
+	runtime_environment.background_mode = Environment.BG_COLOR
+	runtime_environment.background_color = Color(0.40, 0.48, 0.42, 1.0)
+	runtime_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	runtime_environment.ambient_light_color = Color(0.63, 0.72, 0.66, 1.0)
+	runtime_environment.ambient_light_energy = 0.42
+	runtime_environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+	runtime_environment.tonemap_exposure = 1.08
+	runtime_environment.tonemap_white = 1.35
+	runtime_environment.glow_enabled = true
+	runtime_environment.glow_normalized = true
+	runtime_environment.glow_hdr_threshold = 0.25
+	runtime_environment.glow_hdr_scale = 2.0
+	runtime_environment.glow_intensity = 0.85
+	runtime_environment.glow_strength = 0.72
+	runtime_environment.glow_bloom = 0.18
+	var world_environment := WorldEnvironment.new()
+	world_environment.name = "RuntimeWorldEnvironment"
+	world_environment.environment = runtime_environment
+	add_child(world_environment)
 
 	clear_label.visible = false
 	clear_label.text = ""

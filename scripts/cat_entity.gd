@@ -10,7 +10,6 @@ const OPEN_MOUTH_TEXTURE_PATH := "res://water_yang/cat1_2.jpeg"
 const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
-const CONTACT_SHADOW_SHADER_PATH := "res://scripts/cat_contact_shadow.gdshader"
 const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
@@ -240,7 +239,6 @@ var _absorb_required_arc := 0.0
 
 var _visual_root: Node3D
 var _cat_model: Node3D
-var _contact_shadow: MeshInstance3D
 var _skeleton: Skeleton3D
 var _bone_rests: Array[Transform3D] = []
 var _head_bone_index := -1
@@ -947,17 +945,6 @@ func _rebuild_body_visuals() -> void:
 	_cat_model = load_model_with_texture()
 	_cat_model.name = "SkinnedCat"
 	_visual_root.add_child(_cat_model)
-	_contact_shadow = MeshInstance3D.new()
-	_contact_shadow.name = "ContactShadow"
-	_contact_shadow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	var shadow_mesh := QuadMesh.new()
-	_contact_shadow.mesh = shadow_mesh
-	var shadow_shader := load(CONTACT_SHADOW_SHADER_PATH) as Shader
-	if shadow_shader != null:
-		var shadow_material := ShaderMaterial.new()
-		shadow_material.shader = shadow_shader
-		_contact_shadow.material_override = shadow_material
-	_visual_root.add_child(_contact_shadow)
 	_skeleton = _find_skeleton_in(_cat_model)
 	_inserted_mid_bones.clear()
 	# 1차 캐시: 원본 rest 길이와 오버행을 잰다. 몇 칸 분량을 복제해야 하는지가 여기서 나온다.
@@ -1044,29 +1031,6 @@ func _update_visual_pose() -> void:
 	var skeleton_rotation_inverse: Basis = skeleton_rotation.inverse()
 	var reference_inverse: Basis = _fbx_basis_for_direction(head_dir).inverse()
 	var to_skeleton: Transform3D = cat_to_skeleton.affine_inverse()
-	if _contact_shadow != null and _contact_shadow.mesh is QuadMesh:
-		var shadow_start: Vector3 = polyline[0]
-		var shadow_end: Vector3 = polyline[polyline.size() - 1]
-		var shadow_direction := shadow_end - shadow_start
-		if shadow_direction.length_squared() > 0.000001:
-			shadow_direction = shadow_direction.normalized()
-			var shadow_side := shadow_direction.cross(Vector3.UP).normalized()
-			var shadow_center := shadow_start.lerp(shadow_end, 0.5)
-			var shadow_quad := _contact_shadow.mesh as QuadMesh
-			shadow_quad.size = Vector2(
-				level_manager.tile_size * 1.56,
-				shadow_start.distance_to(shadow_end) + level_manager.tile_size * 1.08
-			)
-			_contact_shadow.basis = Basis(shadow_side, shadow_direction, Vector3.UP).orthonormalized()
-			_contact_shadow.position = Vector3(
-				shadow_center.x - position.x + shadow_side.x * level_manager.tile_size * 0.11,
-				LevelManager.TILE_HEIGHT + 0.02 - position.y,
-				shadow_center.z - position.z + shadow_side.z * level_manager.tile_size * 0.11
-			)
-			_contact_shadow.visible = true
-		else:
-			_contact_shadow.visible = false
-
 	var desired := {}
 	for chain_index in _bone_chain.size():
 		var arc: float = chain_distances[chain_index] * model_scale

@@ -72,17 +72,27 @@ void fragment() {
 	ALBEDO = mix(base_color, line_art_color.rgb, line_alpha);
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;
+	// The editor preview makes rim highlights bloom through its HDR
+	// environment. Emit the same rim in Play View so the runtime glow pass
+	// can reproduce that soft silhouette instead of only brightening diffuse.
+	float view_rim = pow(1.0 - max(dot(normalize(NORMAL), normalize(VIEW)), 0.0), 2.5);
+	EMISSION = tint_color.rgb * view_rim * rim_strength * 2.2;
 }
 
 void light() {
 	float ndotl = max(dot(NORMAL, LIGHT), 0.0);
-	float stepped = floor(ndotl * float(max(shadow_steps, 1))) / float(max(shadow_steps, 1));
+	// ATTENUATION contains the DirectionalLight shadow-map result. Quantize
+	// the final light amount, not only the surface normal, so cast shadows
+	// and the three toon bands remain part of one lighting model.
+	float received_light = ndotl * clamp(ATTENUATION, 0.0, 1.0);
+	float steps = float(max(shadow_steps, 2));
+	float stepped = min(floor(received_light * steps), steps - 1.0) / (steps - 1.0);
 	float light_band = mix(shadow_darkness, 1.0, stepped);
 
 	float view_term = 1.0 - max(dot(NORMAL, VIEW), 0.0);
 	float rim = pow(view_term, 2.5) * rim_strength;
 
-	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * ATTENUATION;
-	vec3 toon_rim = LIGHT_COLOR.rgb * rim * ATTENUATION;
+	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band;
+	vec3 toon_rim = LIGHT_COLOR.rgb * rim * clamp(ATTENUATION, 0.0, 1.0);
 	DIFFUSE_LIGHT += toon_diffuse + toon_rim;
 }
