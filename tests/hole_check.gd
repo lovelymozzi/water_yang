@@ -60,13 +60,32 @@ func _check_runtime_outline_sync(manager: LevelManager) -> void:
 	if cat == null or hole == null:
 		return
 	var expected := 0.031
+	var expected_brightness := 1.42
 	cat.outline_width = expected
+	cat.outline_brightness = expected_brightness
 	# Property setters defer material application; invoke the same live update
 	# path once so this test covers the non-editor (runtime) branch.
 	cat.call("_apply_current_shader_parameters")
+	var expected_outline_color: Color = manager.get_pair_color(cat.color_id).darkened(0.27)
+	expected_outline_color = Color(
+		minf(expected_outline_color.r * expected_brightness, 1.0),
+		minf(expected_outline_color.g * expected_brightness, 1.0),
+		minf(expected_outline_color.b * expected_brightness, 1.0),
+		cat.outline_color.a
+	)
+	var hole_style: Dictionary = hole.get("_cat_visual_style")
+	var hole_outline_color: Color = hole_style["outline_color"] if hole_style.get("outline_color") is Color else Color()
 	_expect(
 		is_equal_approx(float(hole.call("get_applied_outline_width")), expected),
 		"Runtime cat outline was not copied to the matching CatHole"
+	)
+	_expect(
+		hole_style.get("outline_color") is Color
+		and is_equal_approx(hole_outline_color.r, expected_outline_color.r)
+		and is_equal_approx(hole_outline_color.g, expected_outline_color.g)
+		and is_equal_approx(hole_outline_color.b, expected_outline_color.b)
+		and is_equal_approx(hole_outline_color.a, expected_outline_color.a),
+		"Runtime cat outline brightness was not copied to the matching CatHole"
 	)
 	print("[runtime outline] CatHole received %.3f" % expected)
 

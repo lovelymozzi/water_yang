@@ -21,16 +21,27 @@ func _run() -> void:
 		"outline_width": 0.021,
 		"line_art_strength": 0.37,
 	}
+	var expected_outline_brightness := 1.37
 	var cats: Array[CatEntity] = []
+	var expected_outline_colors_by_color_id: Dictionary = {}
 	for child in manager.get_node("LayoutCats").get_children():
 		if child is CatEntity:
 			var cat := child as CatEntity
 			cats.append(cat)
 			for property_name in expected:
 				cat.set(property_name, expected[property_name])
+			cat.outline_brightness = expected_outline_brightness
 
 	manager.refresh_shared_shader_preview()
 	for cat in cats:
+		var expected_outline_color: Color = manager.get_pair_color(cat.color_id).darkened(0.27)
+		expected_outline_color = Color(
+			minf(expected_outline_color.r * expected_outline_brightness, 1.0),
+			minf(expected_outline_color.g * expected_outline_brightness, 1.0),
+			minf(expected_outline_color.b * expected_outline_brightness, 1.0),
+			cat.outline_color.a
+		)
+		expected_outline_colors_by_color_id[cat.color_id] = expected_outline_color
 		_expect(
 			is_equal_approx(
 				float(cat._cat_material.get_shader_parameter("shadow_darkness")),
@@ -52,6 +63,14 @@ func _run() -> void:
 			),
 			"Cat outline did not receive outline_width"
 		)
+		var actual_outline_color: Color = cat._outline_material.get_shader_parameter("outline_color")
+		_expect(
+			is_equal_approx(actual_outline_color.r, expected_outline_color.r)
+			and is_equal_approx(actual_outline_color.g, expected_outline_color.g)
+			and is_equal_approx(actual_outline_color.b, expected_outline_color.b)
+			and is_equal_approx(actual_outline_color.a, expected_outline_color.a),
+			"Cat outline did not receive outline_brightness"
+		)
 		_expect(
 			is_equal_approx(
 				float(cat._cat_material.get_shader_parameter("line_art_strength")),
@@ -64,11 +83,27 @@ func _run() -> void:
 		var style: Dictionary = hole.get("_cat_visual_style")
 		if style.is_empty():
 			continue
+		var layout_hole_name := "Hole_%s" % String(hole.name).trim_prefix("CatHole_")
+		var layout_hole := manager.get_node("LayoutHoles").get_node_or_null(layout_hole_name)
+		var expected_outline_color: Variant = null
+		if layout_hole != null:
+			expected_outline_color = expected_outline_colors_by_color_id.get(int(layout_hole.get("color_id")), null)
+		var hole_outline_color: Color = style["outline_color"] if style["outline_color"] is Color else Color()
+		var expected_hole_outline_color: Color = expected_outline_color if expected_outline_color != null else Color()
 		for property_name in expected:
 			_expect(
 				is_equal_approx(float(style[property_name]), float(expected[property_name])),
 				"CatHole did not receive %s" % property_name
 			)
+		_expect(
+			expected_outline_color != null
+			and style["outline_color"] is Color
+			and is_equal_approx(hole_outline_color.r, expected_hole_outline_color.r)
+			and is_equal_approx(hole_outline_color.g, expected_hole_outline_color.g)
+			and is_equal_approx(hole_outline_color.b, expected_hole_outline_color.b)
+			and is_equal_approx(hole_outline_color.a, expected_hole_outline_color.a),
+			"CatHole did not receive outline_brightness"
+		)
 
 	if _failures.is_empty():
 		print("SHARED SHADER PREVIEW CHECK: PASS")

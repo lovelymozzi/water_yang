@@ -1,25 +1,20 @@
-[gd_scene load_steps=3 format=3]
-
-; 생성기가 떨어뜨리는 고양이 템플릿. 장애물이 `obstacle_block.tscn` 을 인스턴스로 쓰는 것과
-; 같은 방식이다. 손 배치 고양이(main_scene 의 Cat_C0)와 같아 보여야 하므로 툰/아웃라인/
-; 라인아트 튜닝값을 그대로 담고, `color_id` 와 `initial_body_cells` 만 생성기가 채운다.
-; 색은 `tint_from_pair_color` 로 팔레트에서 받는다. 손으로 맞춘 색과 짝 색이 어긋나면
-; 플레이어가 짝을 볼 수 없기 때문이다.
+[gd_scene format=3 uid="uid://x2u7otokhcn"]
 
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="1_cat"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="2_line"]
 
-[node name="CatEntity" type="Node3D"]
+[node name="CatEntity" type="Node3D" unique_id=1185820988]
 script = ExtResource("1_cat")
 initial_length = 3
 fbx_scale_per_tile = 7.5
-color_id = 0
 tint_from_pair_color = true
-tint_gradient_enabled = true
+toon_steps = 4
 shadow_darkness = 0.0
-rim_strength = 0.39
-outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
+rim_strength = 0.13
+outline_color = Color(0.25764564, 0.19400671, 0.14799774, 1)
+outline_brightness = null
 outline_width = 0.006
+top_outline_scale = 0.4
 bottom_outline_scale = 0.84
 line_art_texture = ExtResource("2_line")
 line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)

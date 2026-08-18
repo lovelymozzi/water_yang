@@ -7,12 +7,12 @@
 script = ExtResource("1_obstacle")
 footprint_scale = 1.03
 tint_color = Color(0.8132577, 0.8132577, 0.81325763, 1)
-line_art_color = Color(0.4791438, 0.693057, 0.34148824, 1)
-line_art_strength = 0.41
+line_art_color = Color(0.29704356, 0.44634485, 0.20062926, 1)
+line_art_strength = 0.46
 shadow_darkness = 0.35
-shadow_receive_strength = 1.0
 rim_strength = 0.1
-outline_width = 0.005
+outline_color = Color(1, 1, 1, 1)
+outline_width = 0.004
 
 [node name="ObstacleModel" parent="." unique_id=1582905166 instance=ExtResource("2_obstacle_fbx")]
 transform = Transform3D(1.03, 0, 0, 0, 1, 0, 0, 0, 1.03, 0, 0, 0)

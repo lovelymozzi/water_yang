@@ -169,6 +169,11 @@ const ABSORB_SINK_CELLS := 0.9
 		outline_color = value
 		_refresh_shader_material()
 
+@export_range(0.2, 2.0, 0.01) var outline_brightness: float = 1.0:
+	set(value):
+		outline_brightness = value
+		_refresh_shader_material()
+
 @export_range(0.001, 0.04, 0.001) var outline_width: float = 0.008:
 	set(value):
 		outline_width = value
@@ -1678,16 +1683,19 @@ func get_hole_visual_style(pair_color: Color) -> Dictionary:
 	}
 
 
-# 외곽선도 짝 색에서 만든다. 안 그러면 템플릿에 박힌 손튜닝 값(크림색 고양이 기준)이 모든
-# 생성 고양이에 복제되어, 파란 고양이가 웜톤(핑크빛) 외곽선을 받는다. 배율 0.73과 알파는
-# 손 배치 고양이들의 튜닝값(짝 색 × 0.73, 알파 0.66)에서 가져온 것이다.
+# 외곽선 기본색도 짝 색에서 만든다. 안 그러면 템플릿에 박힌 손튜닝 값(크림색 고양이 기준)이
+# 모든 생성 고양이에 복제되어, 파란 고양이가 웜톤(핑크빛) 외곽선을 받는다. 밝기와 알파는
+# CatEntity Inspector 에서 개별 조정할 수 있게 별도 배율/알파를 얹는다.
 func _effective_outline_color() -> Color:
 	var pair: Variant = _pair_color()
-	if pair == null:
-		return outline_color
-	var derived: Color = (pair as Color).darkened(0.27)
-	derived.a = outline_color.a
-	return derived
+	var base_color: Color = outline_color if pair == null else (pair as Color).darkened(0.27)
+	var effective := Color(
+		clampf(base_color.r * outline_brightness, 0.0, 1.0),
+		clampf(base_color.g * outline_brightness, 0.0, 1.0),
+		clampf(base_color.b * outline_brightness, 0.0, 1.0),
+		outline_color.a
+	)
+	return effective
 
 
 func _get_tint_exclusion_mask() -> Texture2D:
