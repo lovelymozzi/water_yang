@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dq0pdjrylk65r" path="res://water_yang/cat1.jpeg" id="2_cat_texture"]
 [ext_resource type="Texture2D" uid="uid://0py6fh251laq" path="res://water_yang/cat1_mask.jpg" id="3_eye_mask"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_line_art"]
-[ext_resource type="Shader" uid="uid://cjvjaxdpqrir" path="res://scripts/cat_hole_outline.gdshader" id="5_outline_shader"]
+[ext_resource type="Shader" path="res://scripts/cat_hole_outline.gdshader" id="5_outline_shader"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
 render_priority = 0
