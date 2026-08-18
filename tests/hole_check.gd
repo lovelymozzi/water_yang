@@ -61,7 +61,8 @@ func _check_runtime_outline_sync(manager: LevelManager) -> void:
 		return
 	var expected := 0.031
 	var expected_brightness := 1.42
-	cat.outline_width = expected
+	cat.outline_width = 0.011
+	cat.cat_hole_outline_width = expected
 	cat.outline_brightness = expected_brightness
 	# Property setters defer material application; invoke the same live update
 	# path once so this test covers the non-editor (runtime) branch.
@@ -77,7 +78,7 @@ func _check_runtime_outline_sync(manager: LevelManager) -> void:
 	var hole_outline_color: Color = hole_style["outline_color"] if hole_style.get("outline_color") is Color else Color()
 	_expect(
 		is_equal_approx(float(hole.call("get_applied_outline_width")), expected),
-		"Runtime cat outline was not copied to the matching CatHole"
+		"Runtime CatHole outline width was not copied independently from the matching CatEntity"
 	)
 	_expect(
 		hole_style.get("outline_color") is Color

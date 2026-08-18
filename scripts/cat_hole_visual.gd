@@ -5,8 +5,8 @@ extends Node3D
 # "hole"(가운데 구덩이) 두 서피스를 갖고 있어, 표면 이름으로 재질을 갈아끼운다.
 #
 # 색의 출처가 둘로 갈리지 않게 역할을 나눠 둔다.
-#   - 스타일(툰 단계, 그림자, 림, 라인아트, 아웃라인)은 `CatAppearance` 하나에서 오고
-#     움직이는 고양이와 공유한다. 고양이와 구멍이 같은 톤으로 보여야 하기 때문이다.
+#   - 스타일(툰 단계, 그림자, 림, 라인아트, 아웃라인 색/비율)은 `CatAppearance` 하나에서 오고
+#     움직이는 고양이와 공유한다. 아웃라인 폭은 `CatEntity.cat_hole_outline_width`로 따로 관리한다.
 #   - 색만 구멍마다 다르다. `LevelManager.pair_colors` 의 짝 색이며 LevelManager 가
 #     `apply_hole_colors()` 로 넣어 준다. 이 값이 `CatAppearance.tint_color` 를 덮는다.
 #     짝 색이 표시색을 못 이기면 플레이어가 짝을 볼 수 없다.
@@ -56,8 +56,8 @@ func apply_hole_colors(flower_color: Color, pit_color: Color) -> void:
 
 
 # The LevelManager finds the layout cat with the same color_id and gives its
-# effective shader settings to this hole.  This preserves per-cat outline and
-# toon choices rather than forcing every hole to use the shared fallback.
+# effective shader settings to this hole.  This preserves per-cat CatHole outline
+# width and toon choices rather than forcing every hole to use the shared fallback.
 func apply_cat_visual_style(style: Dictionary) -> void:
 	_cat_visual_style = style.duplicate()
 	_apply_surface_materials()
@@ -147,8 +147,9 @@ func _build_flower_material() -> Material:
 
 	var outline := tinted.next_pass as ShaderMaterial
 	if outline != null:
-		# 아웃라인은 고양이와 같은 설정을 그대로 쓴다. 셰이더만 다른데, 이 FBX 가
-		# 거의 평면이라 확장 방향을 바꿔야 하기 때문이다.
+		# The outline style comes from the matching cat. Its width is independently
+		# controlled by CatEntity.cat_hole_outline_width because this FBX is nearly
+		# flat and needs a different visual weight from the movable cat.
 		var outline_copy := outline.duplicate() as ShaderMaterial
 		if appearance != null:
 			outline_copy.set_shader_parameter("outline_color", appearance.outline_color)

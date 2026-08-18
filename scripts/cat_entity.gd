@@ -189,6 +189,14 @@ const ABSORB_SINK_CELLS := 0.9
 		bottom_outline_scale = value
 		_refresh_shader_material()
 
+@export_group("Cat Hole (cat_hole1.fbx) Outline")
+# Keep the escape-hole silhouette independent from the movable cat's outline.
+# The matching CatHole receives this through get_hole_visual_style().
+@export_range(0.001, 0.04, 0.001) var cat_hole_outline_width: float = 0.008:
+	set(value):
+		cat_hole_outline_width = value
+		_refresh_shader_material()
+
 @export_group("Internal Line Art")
 @export var line_art_texture: Texture2D:
 	set(value):
@@ -1658,9 +1666,10 @@ func _effective_tint_color() -> Color:
 	return tint_color if pair == null else pair as Color
 
 
-# CatHole uses this snapshot when it represents this cat's color_id.  Keep the
-# names aligned with cat_toon.gdshader and cat_outline.gdshader so a hole is
-# styled by exactly the same controls as its matching movable cat.
+# CatHole uses this snapshot when it represents this cat's color_id. Keep the
+# names aligned with cat_toon.gdshader and cat_outline.gdshader. The CatHole
+# keeps its own outline-width control because cat_hole1.fbx needs a different
+# visual weight from the movable cat.
 func get_hole_visual_style(pair_color: Color) -> Dictionary:
 	return {
 		"tint_color": pair_color if tint_from_pair_color else tint_color,
@@ -1674,10 +1683,10 @@ func get_hole_visual_style(pair_color: Color) -> Dictionary:
 		"line_art_strength": line_art_strength,
 		"tint_exclusion_mask": _get_tint_exclusion_mask(),
 		"tint_exclusion_enabled": 1.0,
-		# 외곽선은 파생값을 쓴다. 원시 Inspector 값을 넘기면 짝 색을 쓰는 고양이의 구멍이
-		# 템플릿에 박힌 손튜닝 색(크림 고양이 기준)을 복제받는다. 고양이 본체와 같은 규칙이다.
+		# 외곽선 색은 파생값을 쓴다. 원시 Inspector 값을 넘기면 짝 색을 쓰는 고양이의 구멍이
+		# 템플릿에 박힌 손튜닝 색(크림 고양이 기준)을 복제받는다. 폭은 위의 전용 값으로 관리한다.
 		"outline_color": _effective_outline_color(),
-		"outline_width": outline_width,
+		"outline_width": cat_hole_outline_width,
 		"top_outline_scale": top_outline_scale,
 		"bottom_outline_scale": bottom_outline_scale,
 	}
