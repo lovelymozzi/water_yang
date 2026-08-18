@@ -4,6 +4,7 @@ extends Node3D
 
 ## A freely movable visual decoration. Place instances below
 ## LevelManager/TileVisuals; it never reserves board cells or affects movement.
+## The same toon/outline setup is shared by grass and flower decor scenes.
 
 const GRASS_MATERIAL_PATH := "res://resources/grass_material.tres"
 
@@ -39,6 +40,17 @@ const GRASS_MATERIAL_PATH := "res://resources/grass_material.tres"
 		rim_strength = value
 		_apply_material_style()
 
+@export_group("Ambient")
+@export var ambient_color := Color.WHITE:
+	set(value):
+		ambient_color = value
+		_apply_material_style()
+
+@export_range(0.0, 2.0, 0.01) var ambient_energy := 0.0:
+	set(value):
+		ambient_energy = value
+		_apply_material_style()
+
 @export_group("Outline")
 @export var outline_color := Color(0.18, 0.09, 0.06, 1.0):
 	set(value):
@@ -67,7 +79,10 @@ var _outline_material: ShaderMaterial
 
 func _ready() -> void:
 	add_to_group("persistent_tile_visuals")
-	_model_root = get_node_or_null("GrassModel") as Node3D
+	_model_root = get_child(0) as Node3D if get_child_count() > 0 else null
+	if _model_root == null:
+		push_error("GrassDecor requires a Node3D model child")
+		return
 	_build_materials()
 	_apply_model_scale()
 	_apply_material_style()
@@ -96,6 +111,8 @@ func _apply_material_style() -> void:
 	_grass_material.set_shader_parameter("shadow_steps", toon_steps)
 	_grass_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 	_grass_material.set_shader_parameter("rim_strength", rim_strength)
+	_grass_material.set_shader_parameter("ambient_color", ambient_color)
+	_grass_material.set_shader_parameter("ambient_energy", ambient_energy)
 	if _outline_material != null:
 		_outline_material.set_shader_parameter("outline_color", outline_color)
 		_outline_material.set_shader_parameter("outline_width", outline_width)

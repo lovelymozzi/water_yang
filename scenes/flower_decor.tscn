@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/grass_decor.gd" id="1_decor"]
+[ext_resource type="PackedScene" path="res://water_yang/flower1.fbx" id="2_flower_fbx"]
+
+[sub_resource type="Animation" id="Animation_flower_pulse"]
+resource_name = "flower_pulse"
+length = 2.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FlowerGlow:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [3, 8, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FlowerGlow:omni_range")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.8, 1.5, 0.8]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:ambient_energy")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1.2, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.2, 3.4, 1.2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_flower_pulse"]
+_data = {
+"flower_pulse": SubResource("Animation_flower_pulse")
+}
+
+[node name="FlowerDecor" type="Node3D" groups=["persistent_tile_visuals"]]
+script = ExtResource("1_decor")
+ambient_color = Color(0.04, 0.24, 1, 1)
+ambient_energy = 1.2
+
+[node name="FlowerModel" parent="." instance=ExtResource("2_flower_fbx")]
+
+[node name="FlowerGlow" type="OmniLight3D" parent="."]
+position = Vector3(0, 0.25, 0)
+light_color = Color(0.04, 0.24, 1, 1)
+light_energy = 3.0
+omni_range = 0.8
+omni_attenuation = 1.0
+
+[node name="FlowerPulsePlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_flower_pulse")
+}
+autoplay = "flower_pulse"

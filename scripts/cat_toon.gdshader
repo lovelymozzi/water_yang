@@ -19,6 +19,8 @@ uniform vec4 tint_color : source_color = vec4(1.0);
 uniform int shadow_steps = 3;
 uniform float shadow_darkness : hint_range(0.0, 1.0) = 0.58;
 uniform float rim_strength : hint_range(0.0, 1.0) = 0.24;
+uniform vec4 ambient_color : source_color = vec4(1.0);
+uniform float ambient_energy : hint_range(0.0, 2.0) = 0.0;
 uniform vec2 uv_tiling = vec2(1.0);
 uniform vec2 uv_offset = vec2(0.0);
 // Only UVs in the right-side tile region receive the V repeat transform.
@@ -77,6 +79,7 @@ void fragment() {
 	// can reproduce that soft silhouette instead of only brightening diffuse.
 	float view_rim = pow(1.0 - max(dot(normalize(NORMAL), normalize(VIEW)), 0.0), 2.5);
 	EMISSION = tint_color.rgb * view_rim * rim_strength * 2.2;
+	EMISSION += ambient_color.rgb * ambient_energy;
 }
 
 void light() {

@@ -7,94 +7,95 @@
 [ext_resource type="PackedScene" path="res://scenes/tree_decor.tscn" id="3_rt2n2"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_gubc5"]
 [ext_resource type="PackedScene" path="res://scenes/grass_decor.tscn" id="5_6wevv"]
+[ext_resource type="PackedScene" path="res://scenes/flower_decor.tscn" id="5_flower"]
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="6_top_fog"]
 [ext_resource type="Texture2D" uid="uid://c0x7f8an0831k" path="res://water_yang/ui_bg.png" id="7_ui_bg"]
 
-[sub_resource type="Gradient" id="Gradient_e1cbu"]
+[sub_resource type="Gradient" id="Gradient_mngbo"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_mngbo"]
-gradient = SubResource("Gradient_e1cbu")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4w45t"]
+gradient = SubResource("Gradient_mngbo")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_4w45t"]
+[sub_resource type="Gradient" id="Gradient_r6p65"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_r6p65"]
-gradient = SubResource("Gradient_4w45t")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_si52b"]
+gradient = SubResource("Gradient_r6p65")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_si52b"]
+[sub_resource type="Gradient" id="Gradient_01n6w"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_01n6w"]
-gradient = SubResource("Gradient_si52b")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6u1mn"]
+gradient = SubResource("Gradient_01n6w")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_6u1mn"]
+[sub_resource type="Gradient" id="Gradient_bcnxi"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5501482, 0.3202245, 0.56168336, 0.83, 0.5501482, 0.3202245, 0.56168336, 0.3569, 0.5501482, 0.3202245, 0.56168336, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bcnxi"]
-gradient = SubResource("Gradient_6u1mn")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7nt27"]
+gradient = SubResource("Gradient_bcnxi")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_7nt27"]
+[sub_resource type="Gradient" id="Gradient_k6f3i"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5501482, 0.3202245, 0.56168336, 0.83, 0.5501482, 0.3202245, 0.56168336, 0.3569, 0.5501482, 0.3202245, 0.56168336, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_k6f3i"]
-gradient = SubResource("Gradient_7nt27")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xdqt8"]
+gradient = SubResource("Gradient_k6f3i")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_xdqt8"]
+[sub_resource type="Gradient" id="Gradient_adb74"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.13614139, 0.30416697, 0.35069743, 0.83, 0.13614139, 0.30416697, 0.35069743, 0.3569, 0.13614139, 0.30416697, 0.35069743, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_adb74"]
-gradient = SubResource("Gradient_xdqt8")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_58gk3"]
+gradient = SubResource("Gradient_adb74")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_58gk3"]
+[sub_resource type="Gradient" id="Gradient_to7gp"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5186065, 0.39951208, 0.16007605, 0.83, 0.5186065, 0.39951208, 0.16007605, 0.3569, 0.5186065, 0.39951208, 0.16007605, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_to7gp"]
-gradient = SubResource("Gradient_58gk3")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u0fll"]
+gradient = SubResource("Gradient_to7gp")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_u0fll"]
+[sub_resource type="Gradient" id="Gradient_6p3nn"]
 offsets = PackedFloat32Array(0, 0.82, 1)
 colors = PackedColorArray(0.09129093, 0.11507381, 0.31847164, 1, 0.09129093, 0.11507381, 0.31847164, 0.43, 0.09129093, 0.11507381, 0.31847164, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_6p3nn"]
-gradient = SubResource("Gradient_u0fll")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k67gn"]
+gradient = SubResource("Gradient_6p3nn")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 1)
@@ -146,20 +147,106 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="TileVisuals" type="Node3D" parent="LevelManager" unique_id=97076465]
 
+[node name="FlowerDecor" parent="LevelManager/TileVisuals" unique_id=2046117615 instance=ExtResource("5_flower")]
+transform = Transform3D(7.638849, -2.095415, -1.1212636, 2.3765512, 6.7352037, 3.60403, 2.3841858e-07, -3.7744224, 7.0536327, -2.7372444, -0.17088008, -9.748416)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor3" parent="LevelManager/TileVisuals" unique_id=1035231507 instance=ExtResource("5_flower")]
+transform = Transform3D(7.96484, -0.66059184, -0.35348493, 0.7492212, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536327, -4.182023, -0.17088008, -10.404666)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor4" parent="LevelManager/TileVisuals" unique_id=1817950996 instance=ExtResource("5_flower")]
+transform = Transform3D(7.96484, -0.66059184, -0.35348493, 0.7492212, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536327, -7.4515314, -0.17088008, -8.610843)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor5" parent="LevelManager/TileVisuals" unique_id=31506908 instance=ExtResource("5_flower")]
+transform = Transform3D(7.96484, -0.66059184, -0.35348493, 0.7492212, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536327, 4.6027136, -0.17088008, -9.542117)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor7" parent="LevelManager/TileVisuals" unique_id=72674384 instance=ExtResource("5_flower")]
+transform = Transform3D(7.9138074, 1.1140214, 0.36138272, -1.1532618, 6.9824734, 3.730288, 0.20403475, -3.7421942, 7.0678387, 7.641959, -0.17088008, -8.793704)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor8" parent="LevelManager/TileVisuals" unique_id=749317579 instance=ExtResource("5_flower")]
+transform = Transform3D(7.9138064, 1.1140211, 0.3613827, -0.569435, 5.8171096, -5.4623227, -1.023419, 5.3777494, 5.8337336, 2.584464, -0.17088008, 10.340695)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor9" parent="LevelManager/TileVisuals" unique_id=1943292646 instance=ExtResource("5_flower")]
+transform = Transform3D(7.9138064, 1.1140211, 0.3613827, -0.569435, 5.8171096, -5.4623227, -1.023419, 5.3777494, 5.8337336, 2.898841, -0.17088008, 10.13281)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor10" parent="LevelManager/TileVisuals" unique_id=1153102757 instance=ExtResource("5_flower")]
+transform = Transform3D(7.747761, -0.9076955, -1.7743382, -0.56943506, 5.8171086, -5.4623237, 1.909954, 5.4163938, 5.5690904, -3.6078424, -0.17088008, 10.238156)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor11" parent="LevelManager/TileVisuals" unique_id=1476381988 instance=ExtResource("5_flower")]
+transform = Transform3D(7.7477612, -0.90769553, -1.7743386, 1.4113636, 7.5274615, 2.3120074, 1.4072076, -2.5521374, 7.4502597, -7.6159754, -0.17088008, 5.209958)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor12" parent="LevelManager/TileVisuals" unique_id=888064840 instance=ExtResource("5_flower")]
+transform = Transform3D(7.7477612, -0.90769553, -1.7743386, 1.4113636, 7.5274615, 2.3120074, 1.4072076, -2.5521374, 7.4502597, -8.120843, -0.17088008, -3.4453154)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor14" parent="LevelManager/TileVisuals" unique_id=2097612853 instance=ExtResource("5_flower")]
+transform = Transform3D(7.859897, 0.9276581, -1.1668057, -0.491682, 7.525029, 2.6706219, 1.4072076, -2.5521379, 7.450261, 7.839011, -0.17088008, 0.5296602)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor13" parent="LevelManager/TileVisuals" unique_id=2044247642 instance=ExtResource("5_flower")]
+transform = Transform3D(6.8885465, 0.57030773, -1.1057485, -0.17836472, 6.609684, 2.297882, 1.231307, -2.2331202, 6.5189767, -7.769021, -0.17088008, -3.4453154)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor6" parent="LevelManager/TileVisuals" unique_id=238674548 instance=ExtResource("5_flower")]
+transform = Transform3D(9.579451, 2.5300632, 1.3538449, -2.869515, 8.446241, 4.5196123, 2.9802322e-07, -4.718028, 8.81704, 4.8346624, -0.17088008, -9.488528)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
+[node name="FlowerDecor2" parent="LevelManager/TileVisuals" unique_id=1314489011 instance=ExtResource("5_flower")]
+transform = Transform3D(9.785751, 1.8153391, 0.97139394, -2.0588984, 8.628139, 4.6169457, 0, -4.7180285, 8.817042, -2.5454185, -0.17088008, -9.748416)
+tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
+rim_strength = 0.0
+outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
+outline_width = 0.004
+
 [node name="TreeShadowDecor" parent="LevelManager/TileVisuals" unique_id=35423290 instance=ExtResource("3_c1pb6")]
 transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, -6.479742, 1.0393701, -10.698379)
-
-[node name="TreeShadowDecor5" parent="LevelManager/TileVisuals" unique_id=1175683944 instance=ExtResource("3_c1pb6")]
-transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, 6.966316, 1.0612636, -10.659027)
-
-[node name="TreeShadowDecor3" parent="LevelManager/TileVisuals" unique_id=253690894 instance=ExtResource("3_c1pb6")]
-transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, 0.8113861, 1.0608974, -11.767066)
-
-[node name="TreeShadowDecor2" parent="LevelManager/TileVisuals" unique_id=908055572 instance=ExtResource("3_c1pb6")]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -2.7716827, 1.0608974, -10.932333)
-
-[node name="TreeShadowDecor4" parent="LevelManager/TileVisuals" unique_id=1216494703 instance=ExtResource("3_c1pb6")]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 3.5466003, 1.0610194, -11.974651)
 
 [node name="TreeDecor4" parent="LevelManager/TileVisuals" unique_id=336948251 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.854678, 0.22081338, -1.2938244, 0.668489, 4.588242, 3.8080375, 1.1295415, -3.8599577, 4.452513, -2.9919102, -0.34438372, -11.40588)
@@ -740,7 +827,7 @@ offset_bottom = -61.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_mngbo")
+texture = SubResource("GradientTexture2D_4w45t")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
@@ -760,7 +847,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -1.5669663
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_r6p65")
+texture = SubResource("GradientTexture2D_si52b")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
@@ -780,7 +867,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -4.707341
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_01n6w")
+texture = SubResource("GradientTexture2D_6u1mn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
@@ -800,7 +887,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.5700908
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_bcnxi")
+texture = SubResource("GradientTexture2D_7nt27")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -818,7 +905,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -3.7135055
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_k6f3i")
+texture = SubResource("GradientTexture2D_xdqt8")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -836,7 +923,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -5.3999376
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_adb74")
+texture = SubResource("GradientTexture2D_58gk3")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -854,7 +941,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -2.1428132
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_to7gp")
+texture = SubResource("GradientTexture2D_u0fll")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -870,7 +957,7 @@ offset_bottom = 28.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_6p3nn")
+texture = SubResource("GradientTexture2D_k67gn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 screen_y = 0.66
