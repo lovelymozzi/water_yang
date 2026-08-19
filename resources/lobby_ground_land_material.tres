@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://duuy5lh6kw6l6"]
+
+[ext_resource type="Texture2D" uid="uid://c5wimm6503jf3" path="res://water_yang/bg_tile1_1.jpg" id="1_land_texture"]
+
+[resource]
+resource_name = "Lobby Ground Land"
+albedo_texture = ExtResource("1_land_texture")
+uv1_scale = Vector3(10, 10, 10)

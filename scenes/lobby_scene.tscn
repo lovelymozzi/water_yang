@@ -13,8 +13,6 @@
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="17_puvrh"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="18_dr74i"]
 [ext_resource type="Texture2D" uid="uid://c0x7f8an0831k" path="res://water_yang/ui_bg.png" id="19_7tji0"]
-[ext_resource type="Texture2D" path="res://water_yang/bg_tile1_1.jpg" id="20_lobby_land"]
-[ext_resource type="Texture2D" path="res://water_yang/wall.jpg" id="21_lobby_water"]
 
 [sub_resource type="Gradient" id="Gradient_otfnl"]
 offsets = PackedFloat32Array(0, 0.6, 1)
@@ -126,16 +124,6 @@ volumetric_fog_emission = Color(0.29157785, 0.65763474, 0.8717881, 1)
 adjustment_enabled = true
 adjustment_brightness = 1.08
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lobby_land"]
-resource_name = "Lobby Ground Land"
-albedo_texture = ExtResource("20_lobby_land")
-roughness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lobby_water"]
-resource_name = "Lobby Ground Water"
-albedo_texture = ExtResource("21_lobby_water")
-roughness = 1.0
-
 [node name="LobbyScene" type="Node3D" unique_id=1923355865]
 process_priority = 100
 script = ExtResource("2_lobby_scene")
@@ -152,7 +140,7 @@ near = 10.0
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)
 light_color = Color(0.8427468, 0.832763, 0.60438275, 1)
-light_energy = 2.656
+light_energy = 1.008
 light_indirect_energy = 0.3
 light_volumetric_fog_energy = 0.0
 light_angular_distance = 0.05
@@ -951,9 +939,4 @@ expand_mode = 1
 environment = SubResource("Environment_lobby")
 
 [node name="LobbyGround" parent="." unique_id=755407211 instance=ExtResource("3_lobby_ground")]
-transform = Transform3D(80, 0, 0, 0, 80, 0, 0, 0, 80, 0, 0, 1.0139494)
-editable_children = true
-
-[node name="LobbyGround" parent="LobbyGround" index="0"]
-surface_material_override/0 = SubResource("StandardMaterial3D_lobby_land")
-surface_material_override/1 = SubResource("StandardMaterial3D_lobby_water")
+transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0, 0, 1.0139494)
