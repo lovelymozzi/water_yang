@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://jmupbnn352yk"]
+
+[ext_resource type="PackedScene" uid="uid://b8awtp3vw87yq" path="res://scenes/main_scene.tscn" id="1_main_scene"]
+
+[sub_resource type="Gradient" id="Gradient_yftba"]
+offsets = PackedFloat32Array(0, 0.58, 1)
+colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4tn4g"]
+gradient = SubResource("Gradient_yftba")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_g76d4"]
+offsets = PackedFloat32Array(0, 0.58, 1)
+colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d4cga"]
+gradient = SubResource("Gradient_g76d4")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_qyrwf"]
+offsets = PackedFloat32Array(0, 0.58, 1)
+colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u8tpf"]
+gradient = SubResource("Gradient_qyrwf")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_i5c85"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.5501482, 0.3202245, 0.56168336, 0.83, 0.5501482, 0.3202245, 0.56168336, 0.3569, 0.5501482, 0.3202245, 0.56168336, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x8gfy"]
+gradient = SubResource("Gradient_i5c85")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_wmq5u"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.5501482, 0.3202245, 0.56168336, 0.83, 0.5501482, 0.3202245, 0.56168336, 0.3569, 0.5501482, 0.3202245, 0.56168336, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8iwp3"]
+gradient = SubResource("Gradient_wmq5u")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_ejhxm"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.13614139, 0.30416697, 0.35069743, 0.83, 0.13614139, 0.30416697, 0.35069743, 0.3569, 0.13614139, 0.30416697, 0.35069743, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_s71l5"]
+gradient = SubResource("Gradient_ejhxm")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_otfnl"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.5186065, 0.39951208, 0.16007605, 0.83, 0.5186065, 0.39951208, 0.16007605, 0.3569, 0.5186065, 0.39951208, 0.16007605, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dbdus"]
+gradient = SubResource("Gradient_otfnl")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_06unt"]
+offsets = PackedFloat32Array(0, 0.82, 1)
+colors = PackedColorArray(0.09129093, 0.11507381, 0.31847164, 1, 0.09129093, 0.11507381, 0.31847164, 0.43, 0.09129093, 0.11507381, 0.31847164, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_t7bip"]
+gradient = SubResource("Gradient_06unt")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="Environment" id="Environment_lobby"]
+background_mode = 1
+background_color = Color(0.4, 0.48, 0.42, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.63, 0.72, 0.66, 1)
+ambient_light_energy = 0.42
+tonemap_mode = 2
+tonemap_exposure = 1.08
+tonemap_white = 1.35
+glow_enabled = true
+glow_normalized = true
+glow_intensity = 0.85
+glow_strength = 0.72
+glow_bloom = 0.18
+glow_hdr_threshold = 0.25
+
+[node name="LobbyScene" unique_id=1923355865 instance=ExtResource("1_main_scene")]
+script = null
+
+[node name="MapGenerator" parent="." index="3" unique_id=1306831349]
+generate_on_play = false
+
+[node name="CanvasLayer" parent="." index="4" unique_id=411557567]
+visible = false
+
+[node name="TopFog" parent="CanvasLayer" index="0" unique_id=1683079334]
+texture = SubResource("GradientTexture2D_4tn4g")
+
+[node name="TopFog5" parent="CanvasLayer" index="1" unique_id=896030614]
+texture = SubResource("GradientTexture2D_d4cga")
+
+[node name="TopFog6" parent="CanvasLayer" index="2" unique_id=819386610]
+texture = SubResource("GradientTexture2D_u8tpf")
+
+[node name="TopFog2" parent="CanvasLayer" index="3" unique_id=393871392]
+texture = SubResource("GradientTexture2D_x8gfy")
+
+[node name="TopFog3" parent="CanvasLayer" index="4" unique_id=1214358096]
+texture = SubResource("GradientTexture2D_8iwp3")
+
+[node name="TopFog4" parent="CanvasLayer" index="5" unique_id=2115787559]
+texture = SubResource("GradientTexture2D_s71l5")
+
+[node name="TopFog7" parent="CanvasLayer" index="6" unique_id=2015031252]
+texture = SubResource("GradientTexture2D_dbdus")
+
+[node name="BottomFog" parent="CanvasLayer" index="7" unique_id=2102111729]
+texture = SubResource("GradientTexture2D_t7bip")
+
+[node name="LobbyWorldEnvironment" type="WorldEnvironment" parent="." index="5" unique_id=1363010940]
+environment = SubResource("Environment_lobby")
