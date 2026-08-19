@@ -31,6 +31,7 @@ shader_parameter/tint_exclusion_enabled = 1.0
 shader_parameter/tint_color = Color(0.7887976, 0.6066908, 0.6659563, 1)
 shader_parameter/shadow_steps = 3
 shader_parameter/shadow_darkness = 0.0
+shader_parameter/toon_shadow_spread = 0.0
 shader_parameter/rim_strength = 0.39
 shader_parameter/ambient_color = Color(1, 1, 1, 1)
 shader_parameter/ambient_energy = 0.0

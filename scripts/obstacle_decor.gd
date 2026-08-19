@@ -6,10 +6,11 @@ extends Node3D
 ## properties in scenes/obstacle_tile_1x1.tscn to adjust every placed block.
 
 const MODEL_SCENE_PATH := "res://water_yang/obstacle_tile_1x1.fbx"
-const OBSTACLE_MATERIAL_PATH := "res://resources/obstacle_material.tres"
 const DEFAULT_VISUAL_HEIGHT := 0.55
 
 @export_group("Model")
+@export var base_material: ShaderMaterial = preload("res://resources/obstacle_material.tres")
+
 @export_range(0.01, 20.0, 0.01) var model_scale := 1.0:
 	set(value):
 		model_scale = value
@@ -145,6 +146,11 @@ const DEFAULT_VISUAL_HEIGHT := 0.55
 		rim_strength = value
 		_apply_material_style()
 
+@export_color_no_alpha var specular_color: Color = Color.WHITE:
+	set(value):
+		specular_color = value
+		_apply_material_style()
+
 @export_group("Outline")
 @export var outline_color := Color(0.18, 0.09, 0.06, 1.0):
 	set(value):
@@ -236,9 +242,9 @@ func _ensure_model() -> void:
 
 
 func _build_materials() -> void:
-	var source := load(OBSTACLE_MATERIAL_PATH) as ShaderMaterial
+	var source := base_material
 	if source == null:
-		push_error("ObstacleDecor could not load %s" % OBSTACLE_MATERIAL_PATH)
+		push_error("ObstacleDecor requires a base material")
 		return
 	_obstacle_material = source.duplicate(true) as ShaderMaterial
 	_outline_material = _obstacle_material.next_pass as ShaderMaterial
@@ -296,6 +302,7 @@ func _apply_material_style() -> void:
 	_obstacle_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 	_obstacle_material.set_shader_parameter("shadow_receive_strength", shadow_receive_strength)
 	_obstacle_material.set_shader_parameter("rim_strength", rim_strength)
+	_obstacle_material.set_shader_parameter("specular_color", specular_color)
 	_obstacle_material.set_shader_parameter("uv_tiling", uv_tiling)
 	_obstacle_material.set_shader_parameter("uv_offset", uv_offset)
 	_obstacle_material.set_shader_parameter("tile_uv_min_u", tile_uv_min_u)

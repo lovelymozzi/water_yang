@@ -1,14 +1,14 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://7xcst3emmxeu"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bge6jl45lrd5k"]
 
-[ext_resource type="Shader" uid="uid://ciecnmuv3dceg" path="res://scripts/obstacle_toon.gdshader" id="1_toon"]
-[ext_resource type="Texture2D" uid="uid://baklye0bsjnck" path="res://water_yang/obstacle1_1.jpg" id="2_texture"]
+[ext_resource type="Shader" uid="uid://233xbuxhkcfd" path="res://scripts/ice_block.gdshader" id="1_ice_shader"]
+[ext_resource type="Texture2D" uid="uid://bkokswf8h1eiw" path="res://water_yang/ice1.png" id="2_ice_texture"]
 [ext_resource type="Shader" uid="uid://bcaldpdcsidgr" path="res://scripts/obstacle_outline.gdshader" id="3_outline"]
 
-[sub_resource type="ShaderMaterial" id="ObstacleOutline"]
+[sub_resource type="ShaderMaterial" id="IceOutline"]
 render_priority = 0
 shader = ExtResource("3_outline")
-shader_parameter/outline_color = Color(0.18, 0.09, 0.06, 1)
-shader_parameter/outline_width = 0.006
+shader_parameter/outline_color = Color(0.11, 0.35, 0.52, 1)
+shader_parameter/outline_width = 0.005
 shader_parameter/line_art_enabled = 1.0
 shader_parameter/line_art_color = Color(0.32, 0.24, 0.2, 1)
 shader_parameter/line_art_strength = 0.82
@@ -19,22 +19,23 @@ shader_parameter/sink_clip_plane_y = 0.0
 shader_parameter/sink_clip_span = 1.0
 
 [resource]
-resource_name = "ObstacleMaterial"
+resource_name = "IceBlockMaterial"
 render_priority = 0
-next_pass = SubResource("ObstacleOutline")
-shader = ExtResource("1_toon")
-shader_parameter/albedo_tex = ExtResource("2_texture")
+next_pass = SubResource("IceOutline")
+shader = ExtResource("1_ice_shader")
+shader_parameter/albedo_tex = ExtResource("2_ice_texture")
 shader_parameter/line_art_enabled = 0.0
 shader_parameter/tint_exclusion_enabled = 0.0
 shader_parameter/line_art_eyes_hidden = 0.0
-shader_parameter/line_art_color = Color(0.32, 0.24, 0.2, 1)
+shader_parameter/line_art_color = Color(0.12, 0.36, 0.52, 1)
 shader_parameter/line_art_strength = 0.82
-shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/tint_color = Color(0.28923082, 0.58655834, 0.8961809, 1)
+shader_parameter/opacity = 1.0
 shader_parameter/shadow_steps = 3
-shader_parameter/shadow_darkness = 0.58
+shader_parameter/shadow_darkness = 0.42
 shader_parameter/shadow_receive_strength = 1.0
-shader_parameter/rim_strength = 0.24
-shader_parameter/specular_color = Color(1, 1, 1, 1)
+shader_parameter/rim_strength = 0.390000018525
+shader_parameter/specular_color = Color(0.088965036, 0.5359806, 0.54097736, 1)
 shader_parameter/uv_tiling = Vector2(1, 1)
 shader_parameter/uv_offset = Vector2(0, 0)
 shader_parameter/tile_uv_min_u = 0.0

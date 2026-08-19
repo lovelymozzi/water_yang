@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://b12ol36oflkqq"]
+
+[ext_resource type="Script" uid="uid://c4djsccgrejue" path="res://scripts/obstacle_decor.gd" id="1_obstacle"]
+[ext_resource type="PackedScene" uid="uid://booeo6hufwyh1" path="res://water_yang/obstacle_tile_1x1.fbx" id="2_obstacle_fbx"]
+[ext_resource type="Material" uid="uid://bge6jl45lrd5k" path="res://resources/ice_block_material.tres" id="3_ice_material"]
+[ext_resource type="Texture2D" uid="uid://bkokswf8h1eiw" path="res://water_yang/ice1.png" id="4_ice_texture"]
+
+[node name="IceBlock" type="Node3D" unique_id=720538579]
+script = ExtResource("1_obstacle")
+base_material = ExtResource("3_ice_material")
+primary_texture = ExtResource("4_ice_texture")
+secondary_texture = ExtResource("4_ice_texture")
+use_checker_texture_variation = false
+tint_color = Color(0.11838832, 0.6118129, 0.7185195, 1)
+tint_exclusion_enabled = 1.0
+line_art_enabled = 0.0
+line_art_color = Color(0.11, 0.35, 0.52, 1)
+line_art_strength = 0.0
+shadow_darkness = 0.5
+rim_strength = 0.42
+specular_color = Color(0.07458497, 0.57276624, 0.62023175, 1)
+outline_color = Color(0.11, 0.35, 0.52, 1)
+outline_width = 0.013
+
+[node name="ObstacleModel" parent="." unique_id=992399686 instance=ExtResource("2_obstacle_fbx")]

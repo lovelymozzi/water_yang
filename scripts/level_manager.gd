@@ -10,6 +10,7 @@ const HOLE_MARKER_SCRIPT = preload("res://scripts/hole_marker.gd")
 const BOARD_VISUAL_TEXTURE = preload("res://water_yang/bg_tile1_1.jpg")
 const FLOOR_TILE_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const PATH_PREVIEW_SCENE = preload("res://scenes/path_tile_1x1.tscn")
+const ICE_BLOCK_SCENE = preload("res://scenes/ice_block.tscn")
 const TILE_HEIGHT := 0.12
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
@@ -182,10 +183,10 @@ var _grid_state: Array = []
 var _grid_refs: Array = []
 var _cats: Array[CatEntity] = []
 var _hole_cells: Array[Vector2i] = []
-# 잠긴 장애물 칸. 마커가 여러 칸을 묶어 잠그므로 칸 단위로 펼쳐 들고 있는다.
 var _obstacle_cells: Array[Vector2i] = []
 # _hole_cells 와 같은 순서의 색 인덱스. -1 은 아무 색이나 받는 와일드카드다.
 var _hole_color_ids: Array[int] = []
+var _hole_ice_covers: Array[bool] = []
 var _preview_refresh_queued: bool = false
 
 var _board_root: Node3D
@@ -449,6 +450,7 @@ func _clear_generated_nodes() -> void:
 	_highlight_tiles.clear()
 	_hole_cells.clear()
 	_hole_color_ids.clear()
+	_hole_ice_covers.clear()
 	_obstacle_cells.clear()
 	_cats.clear()
 
@@ -589,6 +591,7 @@ func _sync_hole_layout() -> void:
 
 		_hole_cells.append(marker_grid_pos)
 		_hole_color_ids.append(int(child.get("color_id")))
+		_hole_ice_covers.append(bool(child.get("ice_cover")))
 		_set_cell_state(marker_grid_pos, CellState.HOLE)
 
 
@@ -618,6 +621,17 @@ func _build_hole_visuals() -> void:
 			get_hole_rim_color(color_id),
 			get_hole_pit_color(color_id)
 		)
+		if _hole_ice_covers[index]:
+			var ice_cover := ICE_BLOCK_SCENE.instantiate() as Node3D
+			if ice_cover != null:
+				ice_cover.name = "IceCover"
+				visual.add_child(ice_cover)
+				# CatHole은 fit_to_tile()에서 원본 FBX 크기만큼 스케일된다. ice도 그
+				# 자식이므로 그 스케일을 상쇄해야 obstacle_tile_1x1.fbx의 1.88폭이
+				# 정확히 한 타일(기본 1.88)에 머문다.
+				ice_cover.scale = Vector3.ONE / visual.scale
+				ice_cover.position = Vector3(0.0, TILE_HEIGHT / visual.scale.y, 0.0)
+				ice_cover.call("apply_cell_style", cell, Color.WHITE, obstacle_fbx_height)
 
 
 # 잠긴 칸을 눈에 보이게 그린다. 에셋(`obstacle_scene`)이 있으면 그것을 붙이고, 없으면 타일과

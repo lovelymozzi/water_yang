@@ -21,6 +21,13 @@ extends Node3D
 		color_id = value
 		_request_editor_refresh()
 
+# cat_hole1 위를 ice 블록으로 덮는 시각 기믹. 구멍의 흡입 판정과는 분리되어 있으며,
+# 해제 규칙이 정해지면 그 규칙이 이 값만 변경하도록 연결한다.
+@export var ice_cover := false:
+	set(value):
+		ice_cover = value
+		_request_editor_refresh()
+
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
