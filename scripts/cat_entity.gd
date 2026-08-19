@@ -186,9 +186,14 @@ const ABSORB_SINK_CELLS := 0.9
 		toon_steps = value
 		_refresh_shader_material()
 
-@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.58:
+@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.22:
 	set(value):
 		shadow_darkness = value
+		_refresh_shader_material()
+
+@export_range(0.0, 0.5, 0.01) var toon_shadow_spread: float = 0.14:
+	set(value):
+		toon_shadow_spread = value
 		_refresh_shader_material()
 
 @export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.24:
@@ -1654,6 +1659,7 @@ func _apply_shader_parameters(
 		_cat_material.set_shader_parameter("tint_color", active_tint)
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
+		_cat_material.set_shader_parameter("toon_shadow_spread", toon_shadow_spread)
 		_cat_material.set_shader_parameter("rim_strength", rim_strength)
 		_cat_material.set_shader_parameter("line_art_tex", line_art_texture)
 		_cat_material.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
@@ -1672,6 +1678,7 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("tint_color", active_tint)
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
+		_material_id_2.set_shader_parameter("toon_shadow_spread", toon_shadow_spread)
 		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
 		_material_id_2.set_shader_parameter("line_art_tex", line_art_texture)
 		_material_id_2.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
@@ -1740,6 +1747,7 @@ func get_hole_visual_style(pair_color: Color) -> Dictionary:
 		"tint_color": pair_color if tint_from_pair_color else tint_color,
 		"toon_steps": toon_steps,
 		"shadow_darkness": shadow_darkness,
+		"toon_shadow_spread": toon_shadow_spread,
 		"rim_strength": rim_strength,
 		"line_art_tex": line_art_texture,
 		"line_art_eye_mask": _get_tint_exclusion_mask(),

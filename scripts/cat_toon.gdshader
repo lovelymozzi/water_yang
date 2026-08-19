@@ -18,6 +18,9 @@ uniform float tint_exclusion_enabled : hint_range(0.0, 1.0) = 1.0;
 uniform vec4 tint_color : source_color = vec4(1.0);
 uniform int shadow_steps = 3;
 uniform float shadow_darkness : hint_range(0.0, 1.0) = 0.58;
+// Moves the toon-band boundaries toward the light. A positive value gives the
+// darker bands more surface area while retaining the selected number of steps.
+uniform float toon_shadow_spread : hint_range(0.0, 0.5) = 0.0;
 uniform float rim_strength : hint_range(0.0, 1.0) = 0.24;
 uniform vec4 ambient_color : source_color = vec4(1.0);
 uniform float ambient_energy : hint_range(0.0, 2.0) = 0.0;
@@ -87,7 +90,11 @@ void light() {
 	// ATTENUATION contains the DirectionalLight shadow-map result. Quantize
 	// the final light amount, not only the surface normal, so cast shadows
 	// and the three toon bands remain part of one lighting model.
-	float received_light = ndotl * clamp(ATTENUATION, 0.0, 1.0);
+	float received_light = clamp(
+		ndotl * clamp(ATTENUATION, 0.0, 1.0) - toon_shadow_spread,
+		0.0,
+		1.0
+	);
 	float steps = float(max(shadow_steps, 2));
 	float stepped = min(floor(received_light * steps), steps - 1.0) / (steps - 1.0);
 	float light_band = mix(shadow_darkness, 1.0, stepped);

@@ -166,7 +166,7 @@ func _apply_toon_style(material: ShaderMaterial) -> void:
 	if _cat_visual_style.is_empty():
 		return
 	for parameter in [
-		"tint_color", "toon_steps", "shadow_darkness", "rim_strength",
+		"tint_color", "toon_steps", "shadow_darkness", "toon_shadow_spread", "rim_strength",
 		"line_art_tex", "line_art_eye_mask", "line_art_enabled",
 		"line_art_color", "line_art_strength", "tint_exclusion_mask",
 		"tint_exclusion_enabled",
