@@ -709,7 +709,16 @@ outline_width = 0.001
 [node name="HoleVisuals" type="Node3D" parent="LevelManager" unique_id=1074621782]
 
 [node name="IceBlock" parent="LevelManager/HoleVisuals" unique_id=720538579 instance=ExtResource("10_4w45t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.007352, 0, -7.9178915)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9880635, 0, 0)
+
+[node name="IceBlock2" parent="LevelManager/HoleVisuals" unique_id=1203172812 instance=ExtResource("10_4w45t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0616217, 0, -7.8957834)
+
+[node name="IceBlock3" parent="LevelManager/HoleVisuals" unique_id=1228536881 instance=ExtResource("10_4w45t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0076231956, 0, -5.9960785)
+
+[node name="IceBlock4" parent="LevelManager/HoleVisuals" unique_id=1170500060 instance=ExtResource("10_4w45t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9584317, 0, 4.0483413)
 
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 

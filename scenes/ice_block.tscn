@@ -4,6 +4,83 @@
 [ext_resource type="PackedScene" uid="uid://booeo6hufwyh1" path="res://water_yang/obstacle_tile_1x1.fbx" id="2_obstacle_fbx"]
 [ext_resource type="Material" uid="uid://bge6jl45lrd5k" path="res://resources/ice_block_material.tres" id="3_ice_material"]
 [ext_resource type="Texture2D" uid="uid://bkokswf8h1eiw" path="res://water_yang/ice1.png" id="4_ice_texture"]
+[ext_resource type="Texture2D" uid="uid://ioh41rsw4l8a" path="res://water_yang/snow.png" id="5_snow_texture"]
+
+[sub_resource type="Gradient" id="Gradient_snow_color"]
+offsets = PackedFloat32Array(0, 0.15, 0.72, 1)
+colors = PackedColorArray(0.843137, 1, 0.333333, 0, 0.843137, 1, 0.333333, 1, 0.47451, 0.654902, 1, 0.7, 0.47451, 0.654902, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_snow_color"]
+gradient = SubResource("Gradient_snow_color")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_snow_small"]
+emission_shape = 3
+emission_box_extents = Vector3(0.65, 0.02, 0.65)
+angle_min = 0.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+angular_velocity_min = 90.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.04
+scale_max = 0.12
+color_ramp = SubResource("GradientTexture1D_snow_color")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_snow_medium"]
+emission_shape = 3
+emission_box_extents = Vector3(0.65, 0.02, 0.65)
+angle_min = 0.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+angular_velocity_min = 90.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.13
+scale_max = 0.20
+color_ramp = SubResource("GradientTexture1D_snow_color")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_snow_large"]
+emission_shape = 3
+emission_box_extents = Vector3(0.65, 0.02, 0.65)
+angle_min = 0.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+angular_velocity_min = 90.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.21
+scale_max = 0.28
+color_ramp = SubResource("GradientTexture1D_snow_color")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_snow_extra_large"]
+emission_shape = 3
+emission_box_extents = Vector3(0.65, 0.02, 0.65)
+angle_min = 0.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+angular_velocity_min = 90.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.29
+scale_max = 0.36
+color_ramp = SubResource("GradientTexture1D_snow_color")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_snow"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("5_snow_texture")
+billboard_mode = 3
+
+[sub_resource type="QuadMesh" id="QuadMesh_snow"]
+material = SubResource("StandardMaterial3D_snow")
+size = Vector2(0.45, 0.45)
 
 [node name="IceBlock" type="Node3D" unique_id=720538579]
 script = ExtResource("1_obstacle")
@@ -11,15 +88,55 @@ base_material = ExtResource("3_ice_material")
 primary_texture = ExtResource("4_ice_texture")
 secondary_texture = ExtResource("4_ice_texture")
 use_checker_texture_variation = false
-tint_color = Color(0.11838832, 0.6118129, 0.7185195, 1)
+tint_color = Color(0.15142214, 0.69922864, 0.81804377, 1)
 tint_exclusion_enabled = 1.0
 line_art_enabled = 0.0
 line_art_color = Color(0.11, 0.35, 0.52, 1)
 line_art_strength = 0.0
 shadow_darkness = 0.5
 rim_strength = 0.42
-specular_color = Color(0.07458497, 0.57276624, 0.62023175, 1)
+specular_color = Color(3.3691526e-06, 0.67110705, 0.7304648, 1)
 outline_color = Color(0.11, 0.35, 0.52, 1)
 outline_width = 0.013
 
 [node name="ObstacleModel" parent="." unique_id=992399686 instance=ExtResource("2_obstacle_fbx")]
+
+[node name="SnowEffectSmall" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+amount = 1
+lifetime = 4.0
+preprocess = 0.25
+randomness = 0.25
+visibility_aabb = AABB(-1.1, -0.3, -1.1, 2.2, 0.6, 2.2)
+process_material = SubResource("ParticleProcessMaterial_snow_small")
+draw_pass_1 = SubResource("QuadMesh_snow")
+
+[node name="SnowEffectMedium" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+amount = 1
+lifetime = 4.0
+preprocess = 1.25
+randomness = 0.25
+visibility_aabb = AABB(-1.1, -0.3, -1.1, 2.2, 0.6, 2.2)
+process_material = SubResource("ParticleProcessMaterial_snow_medium")
+draw_pass_1 = SubResource("QuadMesh_snow")
+
+[node name="SnowEffectLarge" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+amount = 1
+lifetime = 4.0
+preprocess = 2.25
+randomness = 0.25
+visibility_aabb = AABB(-1.1, -0.3, -1.1, 2.2, 0.6, 2.2)
+process_material = SubResource("ParticleProcessMaterial_snow_large")
+draw_pass_1 = SubResource("QuadMesh_snow")
+
+[node name="SnowEffectExtraLarge" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+amount = 1
+lifetime = 4.0
+preprocess = 3.25
+randomness = 0.25
+visibility_aabb = AABB(-1.1, -0.3, -1.1, 2.2, 0.6, 2.2)
+process_material = SubResource("ParticleProcessMaterial_snow_extra_large")
+draw_pass_1 = SubResource("QuadMesh_snow")
