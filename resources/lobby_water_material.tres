@@ -1,0 +1,39 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b1wyeb0sv3jqv"]
+
+[ext_resource type="Shader" uid="uid://54vp170fm1pp" path="res://scripts/lobby_water.gdshader" id="1_lobby_water"]
+
+[resource]
+resource_name = "Lobby Water"
+render_priority = 1
+shader = ExtResource("1_lobby_water")
+shader_parameter/shallow_color = Color(0.12, 0.62, 0.82, 1)
+shader_parameter/deep_color = Color(0.035, 0.23, 0.46, 1)
+shader_parameter/water_opacity = 0.47999998927104
+shader_parameter/shallow_depth = 1.85999995842528
+shader_parameter/deep_depth = 5.91999986767616
+shader_parameter/depth_color_strength = 0.10999999754128
+shader_parameter/wave_direction_a = Vector2(1, 0.18)
+shader_parameter/wave_scale_a = 11.0
+shader_parameter/wave_speed_a = 0.7
+shader_parameter/wave_strength_a = 0.34
+shader_parameter/wave_direction_b = Vector2(-0.28, 1)
+shader_parameter/wave_scale_b = 17.0
+shader_parameter/wave_speed_b = 0.44
+shader_parameter/wave_strength_b = 0.2
+shader_parameter/wave_brightness = 0.16
+shader_parameter/noise_direction = Vector2(0.72, -0.46)
+shader_parameter/noise_scale = 26.0
+shader_parameter/noise_speed = 1.15
+shader_parameter/noise_strength = 0.16
+shader_parameter/gloss_strength = 0.5999999865888
+shader_parameter/gloss_roughness = 0.18
+shader_parameter/sparkle_color = Color(0.72, 0.94, 1, 1)
+shader_parameter/sparkle_strength = 0.05999999865888
+shader_parameter/sparkle_density = 5.2
+shader_parameter/foam_color = Color(0.88, 0.98, 1, 1)
+shader_parameter/shore_foam_width = 0.21999999508256
+shader_parameter/shore_foam_softness = 0.62999998591824
+shader_parameter/foam_strength = 0.4499999899416
+shader_parameter/foam_speed = 0.76999998278896
+shader_parameter/foam_breakup = 0.0
+shader_parameter/foam_pattern_scale = 10.60000014305152

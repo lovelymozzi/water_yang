@@ -13,90 +13,91 @@
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="17_puvrh"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="18_dr74i"]
 [ext_resource type="Texture2D" uid="uid://c0x7f8an0831k" path="res://water_yang/ui_bg.png" id="19_7tji0"]
+[ext_resource type="PackedScene" uid="uid://bon52b0jge40n" path="res://water_yang/water1.fbx" id="20_water"]
 
-[sub_resource type="Gradient" id="Gradient_otfnl"]
+[sub_resource type="Gradient" id="Gradient_dbdus"]
 offsets = PackedFloat32Array(0, 0.6, 1)
 colors = PackedColorArray(0.23030433, 0.46488988, 0.92612416, 0.32, 0.23030433, 0.46488988, 0.92612416, 0.1376, 0.23030433, 0.46488988, 0.92612416, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_dbdus"]
-gradient = SubResource("Gradient_otfnl")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_06unt"]
+gradient = SubResource("Gradient_dbdus")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_06unt"]
+[sub_resource type="Gradient" id="Gradient_t7bip"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_t7bip"]
-gradient = SubResource("Gradient_06unt")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_38fwc"]
+gradient = SubResource("Gradient_t7bip")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_38fwc"]
+[sub_resource type="Gradient" id="Gradient_7cb08"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_7cb08"]
-gradient = SubResource("Gradient_38fwc")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ethtu"]
+gradient = SubResource("Gradient_7cb08")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_ethtu"]
+[sub_resource type="Gradient" id="Gradient_03qjf"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.76167256, 0.6007306, 0.21869814, 0.83, 0.76167256, 0.6007306, 0.21869814, 0.3569, 0.76167256, 0.6007306, 0.21869814, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_03qjf"]
-gradient = SubResource("Gradient_ethtu")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ouubi"]
+gradient = SubResource("Gradient_03qjf")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_ouubi"]
+[sub_resource type="Gradient" id="Gradient_c0qc0"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5501482, 0.3202245, 0.56168336, 0.83, 0.5501482, 0.3202245, 0.56168336, 0.3569, 0.5501482, 0.3202245, 0.56168336, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_c0qc0"]
-gradient = SubResource("Gradient_ouubi")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1uvfp"]
+gradient = SubResource("Gradient_c0qc0")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_1uvfp"]
+[sub_resource type="Gradient" id="Gradient_asdhi"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.30494362, 0.16241252, 0.5875979, 0.83, 0.30494362, 0.16241252, 0.5875979, 0.3569, 0.30494362, 0.16241252, 0.5875979, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_asdhi"]
-gradient = SubResource("Gradient_1uvfp")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tf6sc"]
+gradient = SubResource("Gradient_asdhi")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_tf6sc"]
+[sub_resource type="Gradient" id="Gradient_onm0k"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5186065, 0.39951208, 0.16007605, 0.83, 0.5186065, 0.39951208, 0.16007605, 0.3569, 0.5186065, 0.39951208, 0.16007605, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_onm0k"]
-gradient = SubResource("Gradient_tf6sc")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_rg4kk"]
+gradient = SubResource("Gradient_onm0k")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_rg4kk"]
+[sub_resource type="Gradient" id="Gradient_y47cq"]
 offsets = PackedFloat32Array(0, 0.82, 1)
 colors = PackedColorArray(0.1135621, 0.1977553, 0.49082178, 1, 0.1135621, 0.1977553, 0.49082178, 0.43, 0.1135621, 0.1977553, 0.49082178, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_y47cq"]
-gradient = SubResource("Gradient_rg4kk")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_pdm7g"]
+gradient = SubResource("Gradient_y47cq")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 1)
@@ -779,7 +780,7 @@ offset_bottom = 62.400024
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_dbdus")
+texture = SubResource("GradientTexture2D_06unt")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 height_ratio = 0.32
@@ -799,7 +800,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -1.5669663
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_t7bip")
+texture = SubResource("GradientTexture2D_38fwc")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 height_ratio = 0.25
@@ -819,7 +820,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -4.707341
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_7cb08")
+texture = SubResource("GradientTexture2D_ethtu")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 height_ratio = 0.25
@@ -839,7 +840,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.5700908
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_03qjf")
+texture = SubResource("GradientTexture2D_ouubi")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 density = 0.83
@@ -857,7 +858,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -3.7135055
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_c0qc0")
+texture = SubResource("GradientTexture2D_1uvfp")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 density = 0.83
@@ -875,7 +876,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -5.3999376
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_asdhi")
+texture = SubResource("GradientTexture2D_tf6sc")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 density = 0.83
@@ -893,7 +894,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -2.1428132
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_onm0k")
+texture = SubResource("GradientTexture2D_rg4kk")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 density = 0.83
@@ -911,7 +912,7 @@ offset_bottom = 479.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_y47cq")
+texture = SubResource("GradientTexture2D_pdm7g")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 screen_y = 0.66
@@ -940,3 +941,6 @@ environment = SubResource("Environment_lobby")
 
 [node name="LobbyGround" parent="." unique_id=755407211 instance=ExtResource("3_lobby_ground")]
 transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0, 0, 1.0139494)
+
+[node name="Water" parent="LobbyGround" unique_id=2138602713 instance=ExtResource("20_water")]
+transform = Transform3D(0.99999976, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999976, 0, -0.05399793, 0)
