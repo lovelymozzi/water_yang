@@ -75,6 +75,11 @@ enum CellState {
 		floor_tile_height = value
 		request_preview_refresh()
 
+@export var show_grid_tiles: bool = true:
+	set(value):
+		show_grid_tiles = value
+		request_preview_refresh()
+
 @export var cat_world_y: float = 0.78:
 	set(value):
 		cat_world_y = value
@@ -123,6 +128,11 @@ enum CellState {
 @export_range(-0.4, 0.6, 0.01) var hole_visual_height: float = 0.0:
 	set(value):
 		hole_visual_height = value
+		request_preview_refresh()
+
+@export var show_hole_visuals: bool = true:
+	set(value):
+		show_hole_visuals = value
 		request_preview_refresh()
 
 # 이미 열린 씬에서도 Inspector 버튼으로 에디터용 보드를 즉시 다시 만든다.
@@ -496,6 +506,9 @@ func _build_board_base() -> void:
 
 
 func _build_grid_tiles() -> void:
+	if not show_grid_tiles:
+		return
+
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var cell: Vector2i = Vector2i(x, y)
@@ -596,7 +609,7 @@ func _sync_hole_layout() -> void:
 
 
 func _build_hole_visuals() -> void:
-	if hole_scene == null:
+	if not show_hole_visuals or hole_scene == null:
 		return
 
 	var tile_side := maxf(tile_size - tile_gap, 0.01)
