@@ -23,11 +23,11 @@
     "sliceB": 0,
     "sliceScale": 0.32,
     "sliceRepeat": "stretch",
-    "imagePath": "ranking_tab_slash.png"
+    "imagePath": "home_bottom_1.png"
   },
   "transitionType": "slide",
   "transitionDuration": 600,
-  "defaultTabId": "t0",
+  "defaultTabId": "t1",
   "navTabBar": {
     "enabled": true,
     "activeGrow": 160,
@@ -61,7 +61,7 @@
     "indicator": {
       "type": "image",
       "color": "#3f86e0",
-      "imagePath": "",
+      "imagePath": "home_bottom_select.png",
       "radius": 12,
       "extendTop": 20,
       "extendBottom": 0,
@@ -72,22 +72,22 @@
     {
       "id": "t0",
       "label": "Shop",
-      "sceneName": "New Scene",
-      "iconPath": "icon_menu_place.png",
+      "sceneName": "shop",
+      "iconPath": "icon_menu_place_1.png",
       "iconActivePath": ""
     },
     {
       "id": "t1",
       "label": "Home",
-      "sceneName": "Lobby_godot",
-      "iconPath": "icon_menu_home.png",
+      "sceneName": "home",
+      "iconPath": "icon_menu_home_1.png",
       "iconActivePath": ""
     },
     {
       "id": "t1785291258215",
       "label": "Ranking",
       "sceneName": "Ranking",
-      "iconPath": "icon_menu_rank.png",
+      "iconPath": "icon_menu_rank_1.png",
       "iconActivePath": ""
     }
   ],

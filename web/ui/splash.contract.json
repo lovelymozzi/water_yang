@@ -115,7 +115,14 @@
         "exportPath": "src/assets/loading_out.png",
         "width": 220,
         "height": 39
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
+        }
+      ]
     },
     {
       "stableId": "loading-inner-png-12",
@@ -128,7 +135,14 @@
         "exportPath": "loading_inner.png",
         "width": 210,
         "height": 30
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
+        }
+      ]
     },
     {
       "stableId": "loading-bar-png-13",
@@ -141,7 +155,14 @@
         "exportPath": "loading_bar.png",
         "width": 97,
         "height": 26
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
+        }
+      ]
     },
     {
       "stableId": "text-loading-15",
@@ -259,6 +280,13 @@
               "opacity": 60
             }
           }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
         }
       ]
     }

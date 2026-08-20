@@ -8,5 +8,14 @@
   "ingame_top_baseline.webp": [
     "match",
     "line"
+  ],
+  "anniversaryPack_time.webp": [
+    "match",
+    "time"
+  ],
+  "common_time_needle.webp": [
+    "match",
+    "needle",
+    "time"
   ]
 }

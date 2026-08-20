@@ -17,11 +17,11 @@
 - 이벤트: 없음
 <!-- SCENE:Ranking END -->
 
-<!-- SCENE:Shop BEGIN -->
-#### `Shop`  ·  contract: `./web/ui/Shop.contract.json`
-- sceneUuid: `33babcc6-19bd-4418-bb3e-ba255b06bac7`
+<!-- SCENE:home BEGIN -->
+#### `home`  ·  contract: `./web/ui/home.contract.json`
+- sceneUuid: `0ad51a82-1069-4948-ad6f-e97422300c6d`
 - 이벤트: 없음
-<!-- SCENE:Shop END -->
+<!-- SCENE:home END -->
 
 <!-- SCENE:home_bottom BEGIN -->
 #### `home_bottom`  ·  contract: `./web/ui/home_bottom.contract.json`
@@ -33,14 +33,26 @@
 <!-- SCENE:ingame BEGIN -->
 #### `ingame`  ·  contract: `./web/ui/ingame.contract.json`
 - sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
-- 이벤트: 없음
+- 이벤트: `bar1-png-2:click`
 - GameField 레이어 있음
 <!-- SCENE:ingame END -->
+
+<!-- SCENE:popup_entry BEGIN -->
+#### `popup_entry`  ·  contract: `./web/ui/popup_entry.contract.json`
+- sceneUuid: `87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa`
+- 이벤트: 없음
+<!-- SCENE:popup_entry END -->
+
+<!-- SCENE:shop BEGIN -->
+#### `shop`  ·  contract: `./web/ui/shop.contract.json`
+- sceneUuid: `b11144cd-f2c6-4f82-a4a8-c76b3496cd70`
+- 이벤트: 없음
+<!-- SCENE:shop END -->
 
 <!-- SCENE:splash BEGIN -->
 #### `splash`  ·  contract: `./web/ui/splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: 없음
+- 이벤트: `loading-out-png-11:click` · `loading-inner-png-12:click` · `loading-bar-png-13:click` · `text-loading-15:click`
 - 텍스트 바인딩: `loadingMessage`
 <!-- SCENE:splash END -->
 

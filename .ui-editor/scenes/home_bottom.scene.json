@@ -9,25 +9,25 @@
   "navBgColor": "#1d58a8",
   "transitionType": "slide",
   "transitionDuration": 600,
-  "defaultTabId": "t0",
+  "defaultTabId": "t1",
   "tabs": [
     {
       "id": "t0",
       "label": "Shop",
-      "sceneName": "New Scene",
-      "iconExportPath": "icon_menu_place.png"
+      "sceneName": "shop",
+      "iconExportPath": "icon_menu_place_1.png"
     },
     {
       "id": "t1",
       "label": "Home",
-      "sceneName": "Lobby_godot",
-      "iconExportPath": "icon_menu_home.png"
+      "sceneName": "home",
+      "iconExportPath": "icon_menu_home_1.png"
     },
     {
       "id": "t1785291258215",
       "label": "Ranking",
       "sceneName": "Ranking",
-      "iconExportPath": "icon_menu_rank.png"
+      "iconExportPath": "icon_menu_rank_1.png"
     }
   ],
   "layers": [],
@@ -98,7 +98,7 @@
     "indicator": {
       "type": "image",
       "color": "#3f86e0",
-      "exportPath": "",
+      "exportPath": "home_bottom_select.png",
       "imagePath": "",
       "radius": 12,
       "extendTop": 20,
@@ -109,7 +109,7 @@
   "uuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
   "navBgImage": {
     "enabled": true,
-    "exportPath": "ranking_tab_slash.png",
+    "exportPath": "home_bottom_1.png",
     "stretch": true,
     "sliceEnabled": true,
     "sliceL": 6,

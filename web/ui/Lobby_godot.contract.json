@@ -265,14 +265,5 @@
         }
       ]
     }
-  ],
-  "hostedBy": [
-    {
-      "navScene": "home_bottom",
-      "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
-      "navContract": "home_bottom.contract.json",
-      "tabId": "t1",
-      "tabLabel": "Home"
-    }
   ]
 }
