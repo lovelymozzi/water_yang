@@ -52,13 +52,10 @@ func _initialize() -> void:
 	var started: int = Time.get_ticks_msec()
 
 	for index in count:
-		var t: float = float(index) / float(count - 1) if count > 1 else 0.0
-		var cat_count: int = int(round(lerp(float(cats_range.x), float(cats_range.y), t)))
-		var chain_depth: int = mini(
-			int(round(lerp(float(chain_range.x), float(chain_range.y), t))), cat_count
-		)
+		var cat_count: int = ramp(cats_range, index, count)
+		var chain_depth: int = mini(ramp(chain_range, index, count), cat_count)
 
-		var level: Dictionary = _generate_stage(
+		var level: Dictionary = generate_stage(
 			generator, params, base_seed, grid, index, cat_count, chain_depth
 		)
 		if level.is_empty():
@@ -85,9 +82,16 @@ func _initialize() -> void:
 	quit()
 
 
+# 스테이지 순번에 따라 [a..b] 를 선형으로 램프한다. 1스테이지가 a, 마지막이 b.
+static func ramp(value_range: Vector2i, index: int, count: int) -> int:
+	var t: float = float(index) / float(count - 1) if count > 1 else 0.0
+	return int(round(lerp(float(value_range.x), float(value_range.y), t)))
+
+
 # 스테이지 하나. 첫 시드가 실패하면 시드를 흔들어 보고, 그래도 안 되면 사슬 깊이를
 # 한 단계씩 낮춰서라도 반드시 풀리는 맵을 낸다 (낮췄으면 로그에 남긴다).
-func _generate_stage(
+# static 인 이유: 에디터 어드민(addons/stage_admin)이 같은 로직을 그대로 쓴다.
+static func generate_stage(
 	generator: MapGenerator,
 	params: Dictionary,
 	base_seed: int,
@@ -122,7 +126,7 @@ func _generate_stage(
 
 
 # 갯수를 줄여 다시 만들었을 때 옛 파일이 뒤에 붙어 재생되지 않도록 전부 지우고 시작한다.
-func _remove_old_stages(out_dir: String) -> void:
+static func _remove_old_stages(out_dir: String) -> void:
 	var dir: DirAccess = DirAccess.open(out_dir)
 	if dir == null:
 		return

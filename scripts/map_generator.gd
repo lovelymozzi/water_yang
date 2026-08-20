@@ -503,6 +503,26 @@ func _choose_obstacles(
 	var chosen: Dictionary = {}
 	for index in mini(wanted, free_cells.size()):
 		chosen[free_cells[index]] = true
+
+	# 장애물에 둘러싸여 플레이 영역에서 도달할 수 없게 된 빈 칸은 마저 장애물로 채운다.
+	# 그런 공간은 쓸모가 없는데 플레이어 눈에는 가야 할 곳처럼 보여 혼란만 준다.
+	# 채우는 칸도 풀이가 밟지 않는 칸이므로 사후 주입의 안전성 논증이 그대로 성립한다.
+	var reachable: Dictionary = touched.duplicate()
+	var frontier: Array = touched.keys()
+	while not frontier.is_empty():
+		var cell: Vector2i = frontier.pop_back()
+		for dir in DIRS:
+			var next: Vector2i = cell + dir
+			if reachable.has(next) or chosen.has(next):
+				continue
+			if next.x < 0 or next.y < 0 or next.x >= config.grid_size.x or next.y >= config.grid_size.y:
+				continue
+			reachable[next] = true
+			frontier.append(next)
+	for cell in free_cells:
+		if not chosen.has(cell) and not reachable.has(cell):
+			chosen[cell] = true
+
 	return _group_rectangles(chosen)
 
 
