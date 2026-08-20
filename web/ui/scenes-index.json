@@ -3,9 +3,21 @@
   "generatedBy": "ui-editor",
   "scenes": [
     {
-      "uuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
-      "name": "home",
-      "contract": "home.contract.json",
+      "uuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "name": "BuyLives_1",
+      "contract": "BuyLives_1.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "name": "Fail",
+      "contract": "Fail.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
+      "name": "Give_up",
+      "contract": "Give_up.contract.json",
       "sceneType": "scene"
     },
     {
@@ -16,14 +28,44 @@
     },
     {
       "uuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "name": "ingame",
-      "contract": "ingame.contract.json",
+      "name": "Ingame",
+      "contract": "Ingame.contract.json",
       "sceneType": "scene"
     },
     {
-      "uuid": "12aab2db-25ee-4160-aa65-1fbd872d84dc",
-      "name": "Lobby_godot",
-      "contract": "Lobby_godot.contract.json",
+      "uuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "name": "Lobby",
+      "contract": "Lobby.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "name": "pop_BuyCoins",
+      "contract": "pop_BuyCoins.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
+      "name": "pop_LevelFail",
+      "contract": "pop_LevelFail.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "af666955-071f-412b-832b-02370af5062f",
+      "name": "pop_LevelWin",
+      "contract": "pop_LevelWin.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "name": "pop_OutOfMoves",
+      "contract": "pop_OutOfMoves.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b",
+      "name": "pop_Settings",
+      "contract": "pop_Settings.contract.json",
       "sceneType": "scene"
     },
     {
@@ -39,15 +81,15 @@
       "sceneType": "scene"
     },
     {
-      "uuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-      "name": "shop",
-      "contract": "shop.contract.json",
+      "uuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "name": "Settings_1",
+      "contract": "Settings_1.contract.json",
       "sceneType": "scene"
     },
     {
       "uuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
-      "name": "splash",
-      "contract": "splash.contract.json",
+      "name": "Splash",
+      "contract": "Splash.contract.json",
       "sceneType": "scene"
     }
   ]

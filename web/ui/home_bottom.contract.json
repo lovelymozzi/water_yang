@@ -11,7 +11,7 @@
   "navAnchor": "bottom",
   "navOffsetX": 0,
   "navOffsetY": 0,
-  "navBarWidth": 390,
+  "navBarWidth": 393,
   "navBarHeight": 80,
   "navBgColor": "#1d58a8",
   "navBgImage": {
@@ -72,14 +72,14 @@
     {
       "id": "t0",
       "label": "Shop",
-      "sceneName": "shop",
+      "sceneName": "pop_BuyCoins",
       "iconPath": "icon_menu_place_1.png",
       "iconActivePath": ""
     },
     {
       "id": "t1",
       "label": "Home",
-      "sceneName": "home",
+      "sceneName": "Lobby",
       "iconPath": "icon_menu_home_1.png",
       "iconActivePath": ""
     },

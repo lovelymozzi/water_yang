@@ -2,7 +2,7 @@
   "contractVersion": 1,
   "sceneId": "ingame",
   "sceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-  "sceneName": "ingame",
+  "sceneName": "Ingame",
   "canvas": {
     "width": 393,
     "height": 852
@@ -228,7 +228,7 @@
       "stableId": "gimmick-coinpurse-coin-png-3",
       "layerType": "image",
       "displayName": "gimmick_coinpurse_coin.png",
-      "x": 268,
+      "x": 265,
       "y": 88,
       "scaleX": 0.6530924811374309,
       "scaleY": 0.6389348369225045,
@@ -344,13 +344,13 @@
       "texts": [
         {
           "slotIndex": 0,
-          "staticContent": "00 :00",
-          "bindingKey": "",
+          "staticContent": "00 : 00",
+          "bindingKey": "stage.timer",
           "fontSize": 30,
           "fontWeight": "bold",
           "fontFamily": "\"Lilita One\", cursive",
           "color": "#ffffff",
-          "offsetX": 0,
+          "offsetX": 19,
           "offsetY": 0,
           "zIndex": 1,
           "style": {
@@ -498,7 +498,7 @@
       "layerType": "image",
       "displayName": "common_time_needle.webp",
       "x": 151,
-      "y": 92,
+      "y": 94,
       "scale": 0.75,
       "zIndex": 13,
       "visual": {

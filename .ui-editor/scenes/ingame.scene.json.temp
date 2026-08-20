@@ -1,5 +1,5 @@
 {
-  "name": "ingame",
+  "name": "Ingame",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -146,7 +146,7 @@
           "textDepthColor": "#000000",
           "offsetX": 8,
           "offsetY": 0,
-          "bindingKey": "",
+          "bindingKey": "coin.current",
           "zIndex": 1
         }
       ],
@@ -263,7 +263,7 @@
           "textDepthColor": "#000000",
           "offsetX": 0,
           "offsetY": 0,
-          "bindingKey": "",
+          "bindingKey": "stage.current",
           "zIndex": 1
         }
       ],
@@ -380,7 +380,7 @@
           "textDepthColor": "#000000",
           "offsetX": 19,
           "offsetY": 0,
-          "bindingKey": "",
+          "bindingKey": "stage.timer",
           "zIndex": 1
         }
       ],
@@ -491,8 +491,7 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1,
-      "groupId": "grp-303"
+      "selectedTextIndex": -1
     },
     {
       "id": 298,
@@ -532,8 +531,7 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1,
-      "groupId": "grp-303"
+      "selectedTextIndex": -1
     },
     {
       "id": 299,
@@ -573,8 +571,7 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1,
-      "groupId": "grp-303"
+      "selectedTextIndex": -1
     },
     {
       "id": 300,
@@ -615,7 +612,13 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-303"
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "",
+          "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
+        }
+      ]
     },
     {
       "id": 301,
@@ -746,10 +749,6 @@
     },
     {
       "id": "grp-296",
-      "name": "Group"
-    },
-    {
-      "id": "grp-303",
       "name": "Group"
     },
     {

@@ -12,8 +12,9 @@ $GODOT_HEAD_INCLUDE
 const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
-const LOBBY_UI_SCENE = 'Lobby_godot';
-const INGAME_UI_SCENE = 'ingame';
+const INGAME_UI_SCENE = 'Ingame';
+const COIN_COST = 900;
+const STAGE_TIME_LIMIT_SECONDS = 60;
 const GODOT_ENGINE_URL = "$GODOT_URL";
 const GODOT_CONFIG = $GODOT_CONFIG;
 
@@ -31,34 +32,66 @@ const flow = new FlowDriver({
   managers: { economy, progress },
 });
 
-// UI editor will replace this temporary condition with the real game rule later.
-flow.defineCondition('버튼누르면 인게임씬으로 이동', () => true);
+flow.defineCondition('current stage>4', () => progress.getCurrentStage() > 4);
+flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
+flow.defineCondition('no_heart', () => economy.getHearts() === 0);
+flow.defineCondition('900코인 소모 후 하트풀충전', async () => {
+  if (!(await economy.spendCoins(COIN_COST, 'heart-refill'))) return false;
+  await economy.refillHearts();
+  return true;
+});
+flow.defineCondition('광고호출 후 하트1개 충전', async () => {
+  // TODO(ad-sdk): reward verification callback must replace this local fallback before release.
+  alert('ad complete');
+  await economy.grantHearts(1);
+  return true;
+});
 
 const godotCartridge = makeGodotCartridge({
   engineUrl: GODOT_ENGINE_URL,
   engineConfig: GODOT_CONFIG,
 });
 let activeGame = null;
+let activeSceneName = '';
+let continueWithoutHeart = false;
+
+flow.defineCondition('not enough coin', async () => {
+  if (economy.getCoins() < COIN_COST) return true;
+  if (activeSceneName !== 'pop_OutOfMoves') return false;
+  if (!(await economy.spendCoins(COIN_COST, 'out-of-moves-continue'))) return true;
+  continueWithoutHeart = true;
+  return false;
+});
+
+flow.update({ cost: { refill: String(COIN_COST) }, continue: { coin: String(COIN_COST) }, stage: { timer: '01:00' } });
+// pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
 
 flow.on('scene:enter', async ({ sceneName, renderer }) => {
-  const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
-    : sceneName === INGAME_UI_SCENE ? 'main' : null;
-  if (!godotScene) return;
+  activeSceneName = sceneName;
+  if (sceneName !== INGAME_UI_SCENE) return;
+
+  if (!continueWithoutHeart && !(await economy.consumeHeart())) {
+    throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
+  }
+  continueWithoutHeart = false;
 
   if (activeGame) await activeGame.abort('scene-change');
-  const game = new GameSession({ renderer, initTimeoutMs: 30000 });
+  const game = new GameSession({ renderer, initTimeoutMs: 30000, hudMap: { timeLeft: 'stage.timer' } });
   activeGame = game;
   await game.start(godotCartridge, {
     stage: progress.getCurrentStage(),
-    config: { godotScene },
+    config: { godotScene: 'main', timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
     onEnd: async (result) => {
       if (result.outcome === 'clear') {
+        await economy.grantHearts(1);
         await progress.recordClear(progress.getCurrentStage(), {
           stars: result.stats?.stars || 0,
           score: result.score,
           ticket: result.ticket,
         });
-        await flow.fire('임시) 스테이지 클리어시 로비로 복귀');
+        await flow.fire('스테이지 클리어시');
+      } else if (result.outcome === 'fail') {
+        await flow.fire('스테이지 시간이 다되어 게임패배시');
       }
     },
     onError: (error) => console.error('[Godot integration] session error', error),

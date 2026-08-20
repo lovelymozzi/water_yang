@@ -1,5 +1,5 @@
 {
-  "name": "splash",
+  "name": "Splash",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -118,7 +118,14 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
         }
       ]
     },
@@ -166,7 +173,14 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
         }
       ]
     },
@@ -226,7 +240,14 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
         }
       ]
     },
@@ -322,7 +343,14 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148"
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
         }
       ]
     }

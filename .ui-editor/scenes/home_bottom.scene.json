@@ -4,7 +4,7 @@
   "navAnchor": "bottom",
   "navOffsetX": 0,
   "navOffsetY": 0,
-  "navBarWidth": 390,
+  "navBarWidth": 393,
   "navBarHeight": 80,
   "navBgColor": "#1d58a8",
   "transitionType": "slide",
@@ -14,13 +14,13 @@
     {
       "id": "t0",
       "label": "Shop",
-      "sceneName": "shop",
+      "sceneName": "pop_BuyCoins",
       "iconExportPath": "icon_menu_place_1.png"
     },
     {
       "id": "t1",
       "label": "Home",
-      "sceneName": "home",
+      "sceneName": "Lobby",
       "iconExportPath": "icon_menu_home_1.png"
     },
     {

@@ -1,0 +1,825 @@
+{
+  "contractVersion": 1,
+  "sceneId": "lobby",
+  "sceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+  "sceneName": "Lobby",
+  "canvas": {
+    "width": 393,
+    "height": 852
+  },
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "background": {
+    "type": "image-stretch",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "home_bg.png",
+    "imagePaths": [],
+    "tileSize": 86,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": true,
+    "scrollDirection": "up-right",
+    "scrollDuration": 18
+  },
+  "groups": [
+    {
+      "id": "grp-103",
+      "name": "Group",
+      "layerStableIds": [
+        "shop-package-time-png-100",
+        "common-time-needle-png-101"
+      ]
+    },
+    {
+      "id": "grp-165",
+      "name": "Group",
+      "layerStableIds": [
+        "home-btn-stage-normal-png-145",
+        "text-level-5-163"
+      ]
+    }
+  ],
+  "fxGroups": [
+    {
+      "id": "fx-166",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "home-btn-stage-normal-png-145",
+        "text-level-5-163"
+      ]
+    }
+  ],
+  "sceneAnimations": [],
+  "layers": [
+    {
+      "stableId": "home-btn-setting-png-87",
+      "layerType": "image",
+      "displayName": "home_btn_setting.png",
+      "x": 334,
+      "y": 51,
+      "zIndex": 1,
+      "visual": {
+        "exportPath": "home_btn_setting_2.png",
+        "width": 48,
+        "height": 48
+      },
+      "effects": [
+        {
+          "type": "press",
+          "source": {
+            "provider": "internal",
+            "name": "press"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "pointer",
+          "params": {
+            "transitionMs": 100,
+            "brightness": 95,
+            "scale": 95,
+            "useDepthOffset": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "home-btn-setting-png-87:click",
+          "targetSceneUuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b"
+        }
+      ]
+    },
+    {
+      "stableId": "bar1-png-89",
+      "layerType": "image",
+      "displayName": "bar1.png",
+      "x": 201,
+      "y": 58,
+      "zIndex": 2,
+      "visual": {
+        "exportPath": "bar1_3.png",
+        "width": 133,
+        "height": 29
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "23:34",
+          "bindingKey": "heart.timer",
+          "fontSize": 15,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 3,
+          "offsetY": 0,
+          "zIndex": 1,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "icon-heart-png-83",
+      "layerType": "image",
+      "displayName": "icon_heart.png",
+      "x": 207,
+      "y": 51,
+      "scale": 0.8737373737373737,
+      "zIndex": 3,
+      "visual": {
+        "exportPath": "icon_heart_2.png",
+        "width": 44,
+        "height": 44
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "5",
+          "bindingKey": "heart.current",
+          "fontSize": 20,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "zIndex": 1,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 5,
+              "color": "#b13033"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "bar1-png-90",
+      "layerType": "image",
+      "displayName": "bar1.png",
+      "x": 85,
+      "y": 58,
+      "zIndex": 4,
+      "visual": {
+        "exportPath": "bar1_3.png",
+        "width": 133,
+        "height": 29
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "325678",
+          "bindingKey": "coin.current",
+          "fontSize": 15,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "zIndex": 1,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "gimmick-coinpurse-coin-png-86",
+      "layerType": "image",
+      "displayName": "gimmick_coinpurse_coin.png",
+      "x": 91,
+      "y": 54,
+      "zIndex": 5,
+      "visual": {
+        "exportPath": "gimmick_coinpurse_coin_3.png",
+        "width": 34,
+        "height": 35
+      }
+    },
+    {
+      "stableId": "profile-png-93",
+      "layerType": "image",
+      "displayName": "profile.png",
+      "x": 10,
+      "y": 36,
+      "zIndex": 6,
+      "visual": {
+        "exportPath": "profile.png",
+        "width": 74,
+        "height": 73
+      }
+    },
+    {
+      "stableId": "home-btn-plus-png-94",
+      "layerType": "image",
+      "displayName": "home_btn_plus.png",
+      "x": 295,
+      "y": 61,
+      "zIndex": 7,
+      "visual": {
+        "exportPath": "home_btn_plus_2.png",
+        "width": 23,
+        "height": 23
+      },
+      "effects": [
+        {
+          "type": "press",
+          "source": {
+            "provider": "internal",
+            "name": "press"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "pointer",
+          "params": {
+            "transitionMs": 100,
+            "brightness": 95,
+            "scale": 95,
+            "useDepthOffset": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "home-btn-plus-png-94:click",
+          "branches": [
+            {
+              "condition": "not max_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "BuyLives_1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "home-btn-plus-png-95",
+      "layerType": "image",
+      "displayName": "home_btn_plus.png",
+      "x": 179,
+      "y": 61,
+      "zIndex": 8,
+      "visual": {
+        "exportPath": "home_btn_plus_2.png",
+        "width": 23,
+        "height": 23
+      },
+      "effects": [
+        {
+          "type": "press",
+          "source": {
+            "provider": "internal",
+            "name": "press"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "pointer",
+          "params": {
+            "transitionMs": 100,
+            "brightness": 95,
+            "scale": 95,
+            "useDepthOffset": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "home-btn-plus-png-95:click",
+          "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
+        }
+      ]
+    },
+    {
+      "stableId": "main-event-png-98",
+      "layerType": "image",
+      "displayName": "main_event.png",
+      "x": 190,
+      "y": 127,
+      "zIndex": 9,
+      "visible": false,
+      "visual": {
+        "exportPath": "main_event.png",
+        "width": 190,
+        "height": 73
+      }
+    },
+    {
+      "stableId": "main-event-png-99",
+      "layerType": "image",
+      "displayName": "main_event.png",
+      "x": 6,
+      "y": 127,
+      "zIndex": 10,
+      "visible": false,
+      "visual": {
+        "exportPath": "main_event.png",
+        "width": 190,
+        "height": 73
+      },
+      "flipX": true
+    },
+    {
+      "stableId": "shop-package-time-png-100",
+      "layerType": "image",
+      "displayName": "shop_package_time.png",
+      "x": 142,
+      "y": 170,
+      "zIndex": 11,
+      "visible": false,
+      "visual": {
+        "exportPath": "shop_package_time_1.png",
+        "width": 30,
+        "height": 31
+      }
+    },
+    {
+      "stableId": "common-time-needle-png-101",
+      "layerType": "image",
+      "displayName": "common_time_needle.png",
+      "x": 154,
+      "y": 172,
+      "zIndex": 12,
+      "visible": false,
+      "visual": {
+        "exportPath": "common_time_needle.png",
+        "width": 6,
+        "height": 11
+      }
+    },
+    {
+      "stableId": "plain-text-104",
+      "layerType": "component",
+      "displayName": "Plain Text",
+      "x": 172,
+      "y": 180,
+      "zIndex": 13,
+      "visible": false,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 54,
+            "height": 10,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "03:56:22",
+          "bindingKey": "",
+          "fontSize": 12,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 2,
+              "color": "#225d93"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "block-active-4-png-105",
+      "layerType": "image",
+      "displayName": "block_active_4.png",
+      "x": 318,
+      "y": 138,
+      "zIndex": 14,
+      "visible": false,
+      "visual": {
+        "exportPath": "block_active_4.png",
+        "width": 49,
+        "height": 40
+      }
+    },
+    {
+      "stableId": "home-btn-stage-normal-png-145",
+      "layerType": "image",
+      "displayName": "home_btn_stage_normal.png",
+      "x": 104,
+      "y": 613,
+      "scale": 0.4833823529411765,
+      "zIndex": 15,
+      "visual": {
+        "exportPath": "home_btn_stage_normal.png",
+        "width": 378,
+        "height": 170,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 49,
+            "top": 0,
+            "right": 46,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "press",
+          "source": {
+            "provider": "internal",
+            "name": "press"
+          },
+          "enabled": false,
+          "target": "self",
+          "trigger": "pointer",
+          "params": {
+            "transitionMs": 100,
+            "brightness": 95,
+            "scale": 95,
+            "useDepthOffset": false
+          }
+        },
+        {
+          "type": "css-animation",
+          "source": {
+            "provider": "animate.css",
+            "name": "bounce-in",
+            "className": "animate__bounceIn"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "timing": {
+            "durationMs": 800,
+            "delayMs": 0,
+            "iteration": 1,
+            "loopDelayMs": 600
+          },
+          "params": {
+            "presetId": "bounce-in",
+            "group": "Appear",
+            "phase": "enter",
+            "className": "animate__bounceIn",
+            "baseClass": "animate__animated",
+            "loop": false
+          }
+        },
+        {
+          "type": "shine",
+          "source": {
+            "provider": "internal",
+            "name": "shine-sweep"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "params": {
+            "angle": -20,
+            "widthPct": 28,
+            "opacity": 18,
+            "softness": 70,
+            "durationS": 0.9,
+            "intervalS": 2,
+            "direction": "right",
+            "color": "#d0fd6e"
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "home-btn-stage-normal-png-145:click",
+          "branches": [
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "BuyLives_1"
+            },
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "Ingame"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "text-level-5-163",
+      "layerType": "component",
+      "displayName": "text_Level 5",
+      "x": 115,
+      "y": 632,
+      "zIndex": 16,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 160,
+            "height": 40,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "LEVEL 5",
+          "bindingKey": "stage.current",
+          "fontSize": 27,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 4,
+              "color": "#206603"
+            },
+            "depth": {
+              "size": 4,
+              "color": "#206603"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 60
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "home-btn-stage-normal-png-145:click",
+          "branches": [
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "BuyLives_1"
+            },
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "Ingame"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hostedBy": [
+    {
+      "navScene": "home_bottom",
+      "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+      "navContract": "home_bottom.contract.json",
+      "tabId": "t1",
+      "tabLabel": "Home"
+    }
+  ]
+}

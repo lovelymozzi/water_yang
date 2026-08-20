@@ -2,20 +2,188 @@
   "version": 1,
   "edges": [
     {
-      "id": "edge-mt1chnjc484m",
+      "id": "edge-mt1cuk1lwrka",
       "fromSceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
-      "toSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
       "trigger": {
         "stableId": "loading-out-png-11",
         "eventName": "loading-out-png-11:click"
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "splash",
-      "toSceneName": "home_bottom"
+      "fromSceneName": "Splash",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
     },
     {
-      "id": "edge-mt1ckike6p37",
+      "id": "edge-mt1cuwopx3lz",
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "home-btn-stage-normal-png-145",
+        "eventName": "home-btn-stage-normal-png-145:click",
+        "condition": "else"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Lobby",
+      "toSceneName": "Ingame"
+    },
+    {
+      "id": "edge-mt1czhl33aer",
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "toSceneUuid": "af666955-071f-412b-832b-02370af5062f",
+      "trigger": null,
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Ingame",
+      "toSceneName": "pop_LevelWin",
+      "label": "스테이지 클리어시"
+    },
+    {
+      "id": "edge-mt1czhl4q2if",
+      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "shape-round-rect-751",
+        "eventName": "shape-round-rect-751:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Settings_1",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt1czhl4mad9",
+      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "toSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
+      "trigger": {
+        "stableId": "button-red-png-695",
+        "eventName": "ingame.setting.home"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Settings_1",
+      "toSceneName": "Give_up"
+    },
+    {
+      "id": "edge-mt1czhl4i9t5",
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "toSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "trigger": null,
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Ingame",
+      "toSceneName": "pop_OutOfMoves",
+      "label": "스테이지 시간이 다되어 게임패배시"
+    },
+    {
+      "id": "edge-mt1czhl5oco2",
+      "fromSceneUuid": "af666955-071f-412b-832b-02370af5062f",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "button-green-png-133",
+        "eventName": "button-green-png-133:click",
+        "condition": "current stage>4"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_LevelWin",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt1czhl5vdpi",
+      "fromSceneUuid": "af666955-071f-412b-832b-02370af5062f",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "button-yellow1-png-132",
+        "eventName": "button-yellow1-png-132:click",
+        "condition": "current stage>4"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_LevelWin",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt1czhl55jqh",
+      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "toSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
+      "trigger": {
+        "stableId": "button-blue-png-693",
+        "eventName": "ingame.setting.restart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Settings_1",
+      "toSceneName": "pop_LevelFail"
+    },
+    {
+      "id": "edge-mt1czhl6iq0v",
+      "fromSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "shape-round-rect-568",
+        "eventName": "shape-round-rect-568:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_LevelFail",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt1dgf4j0cmp",
+      "fromSceneUuid": "af666955-071f-412b-832b-02370af5062f",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "button-green-png-133",
+        "eventName": "button-green-png-133:click",
+        "condition": "else"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_LevelWin",
+      "toSceneName": "Ingame"
+    },
+    {
+      "id": "edge-mt1dgo9u8brx",
+      "fromSceneUuid": "af666955-071f-412b-832b-02370af5062f",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "button-yellow1-png-132",
+        "eventName": "button-yellow1-png-132:click",
+        "condition": "else"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_LevelWin",
+      "toSceneName": "Ingame"
+    },
+    {
+      "id": "edge-mt1dlu9i389d",
       "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
       "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
       "trigger": {
@@ -24,8 +192,8 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "ingame",
-      "toSceneName": "shop",
+      "fromSceneName": "Ingame",
+      "toSceneName": "pop_BuyCoins",
       "toHostedBy": [
         {
           "navScene": "home_bottom",
@@ -34,8 +202,310 @@
           "tabId": "t0"
         }
       ]
+    },
+    {
+      "id": "edge-mt1dm5606nr7",
+      "fromSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "common-btn-top-x-blue-png-2186",
+        "eventName": "common-btn-top-x-blue-png-2186:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_BuyCoins",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt1e8c2mz2w8",
+      "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "shape-round-rect-1769",
+        "eventName": "shape-round-rect-1769:click",
+        "condition": "else"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_OutOfMoves",
+      "toSceneName": "Ingame"
+    },
+    {
+      "id": "edge-mt1e909qwolf",
+      "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "shape-round-rect-1769",
+        "eventName": "shape-round-rect-1769:click",
+        "condition": "not enough coin"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_OutOfMoves",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt1e9l5v8pqc",
+      "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "toSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "trigger": {
+        "stableId": "shape-round-rect-1765",
+        "eventName": "shape-round-rect-1765:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_OutOfMoves",
+      "toSceneName": "Fail"
+    },
+    {
+      "id": "edge-mt1e9pbelpds",
+      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "toSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "trigger": {
+        "stableId": "shape-round-rect-520",
+        "eventName": "shape-round-rect-520:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Fail",
+      "toSceneName": "pop_OutOfMoves"
+    },
+    {
+      "id": "edge-mt1e9wnxdu2t",
+      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "plain-text-515",
+        "eventName": "plain-text-515:click",
+        "condition": "else"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Fail",
+      "toSceneName": "Ingame"
+    },
+    {
+      "id": "edge-mt1eh7bj44kn",
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "trigger": {
+        "stableId": "home-btn-plus-png-94",
+        "eventName": "home-btn-plus-png-94:click",
+        "condition": "not max_heart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Lobby",
+      "toSceneName": "BuyLives_1"
+    },
+    {
+      "id": "edge-mt1ei00jp5mc",
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "trigger": {
+        "stableId": "home-btn-stage-normal-png-145",
+        "eventName": "home-btn-stage-normal-png-145:click",
+        "condition": "no_heart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Lobby",
+      "toSceneName": "BuyLives_1"
+    },
+    {
+      "id": "edge-mt1eigfwpmco",
+      "fromSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "trigger": {
+        "stableId": "plain-text-563",
+        "eventName": "plain-text-563:click",
+        "condition": "no_heart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_LevelFail",
+      "toSceneName": "BuyLives_1"
+    },
+    {
+      "id": "edge-mt1eity3symg",
+      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "trigger": {
+        "stableId": "plain-text-515",
+        "eventName": "plain-text-515:click",
+        "condition": "no_heart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Fail",
+      "toSceneName": "BuyLives_1"
+    },
+    {
+      "id": "edge-mt1ej5stg65s",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "button-yellow1-png-311",
+        "eventName": "button-yellow1-png-311:click",
+        "condition": "광고호출 후 하트1개 충전"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "BuyLives_1",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt1ejaozfy4d",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "button-green-png-309",
+        "eventName": "button-green-png-309:click",
+        "condition": "900코인 소모 후 하트풀충전"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "BuyLives_1",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt1ek4ip3o5w",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "icon-close01-png-2233",
+        "eventName": "icon-close01-png-2233:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "BuyLives_1",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt1elmm0miew",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "button-green-png-309",
+        "eventName": "button-green-png-309:click",
+        "condition": "not enough coin"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "BuyLives_1",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt1emkmeqhmv",
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "toSceneUuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b",
+      "trigger": {
+        "stableId": "home-btn-setting-png-87",
+        "eventName": "home-btn-setting-png-87:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Lobby",
+      "toSceneName": "pop_Settings"
+    },
+    {
+      "id": "edge-mt1emw3cqjf7",
+      "fromSceneUuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "common-btn-top-x-blue-png-290",
+        "eventName": "common-btn-top-x-blue-png-290:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_Settings",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt1er4gyvgqi",
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "home-btn-plus-png-95",
+        "eventName": "home-btn-plus-png-95:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Lobby",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt1hdv4ifeaz",
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "toSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "trigger": {
+        "stableId": "entry-box-normal-png-300",
+        "eventName": "entry-box-normal-png-300:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Ingame",
+      "toSceneName": "Settings_1"
+    },
+    {
+      "id": "edge-mt1hez4rahh4",
+      "fromSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "plain-text-346",
+        "eventName": "plain-text-346:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Give_up",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt1hf5hs7c58",
+      "fromSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "shape-round-rect-350",
+        "eventName": "shape-round-rect-350:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Give_up",
+      "toSceneName": "✕ 팝업 닫기"
     }
   ],
   "entrySceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
-  "entrySceneName": "splash"
+  "entrySceneName": "Splash"
 }

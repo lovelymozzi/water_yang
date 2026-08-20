@@ -7,23 +7,89 @@
   "rendererPath": "web/ui",
   "engine": "godot",
   "sceneMeta": {
-    "skeleton": [],
+    "skeleton": [
+      "LevelMap",
+      "pop_LevelStart",
+      "pop_Pause",
+      "DecorMap",
+      "pop_AreaComplete",
+      "pop_BuyCoins",
+      "pop_OutOfLives",
+      "pop_BuyBooster",
+      "pop_SpecialOffer",
+      "pop_UnlimitedLives",
+      "Team",
+      "Leaderboard",
+      "pop_JoinTeam",
+      "pop_RequestLives",
+      "pop_InviteFriends",
+      "Tournament",
+      "RankingEvent",
+      "CollectionEvent",
+      "pop_EventReward",
+      "pop_EventInfo",
+      "SeasonPass",
+      "pop_PassReward",
+      "pop_BuyPass",
+      "pop_DailyBonus",
+      "pop_TreasureChest",
+      "pop_Notice",
+      "pop_ConnectAccount"
+    ],
     "groupCollapsed": {
-      "Scenes": false
+      "Scenes": false,
+      "Shop": false
     },
-    "groupMap": {},
+    "groupMap": {
+      "Splash": "Core",
+      "Lobby": "Core",
+      "LevelMap": "Core",
+      "Ingame": "Core",
+      "pop_LevelStart": "Core",
+      "pop_LevelWin": "Core",
+      "pop_LevelFail": "Core",
+      "pop_OutOfMoves": "Core",
+      "pop_Pause": "Core",
+      "DecorMap": "Decoration",
+      "pop_AreaComplete": "Decoration",
+      "Shop": "Shop",
+      "pop_BuyCoins": "Shop",
+      "pop_BuyLives": "Shop",
+      "pop_OutOfLives": "Shop",
+      "pop_BuyBooster": "Shop",
+      "pop_SpecialOffer": "Shop",
+      "pop_UnlimitedLives": "Shop",
+      "Team": "Social",
+      "Leaderboard": "Social",
+      "pop_JoinTeam": "Social",
+      "pop_RequestLives": "Social",
+      "pop_InviteFriends": "Social",
+      "Tournament": "Events",
+      "RankingEvent": "Events",
+      "CollectionEvent": "Events",
+      "pop_EventReward": "Events",
+      "pop_EventInfo": "Events",
+      "SeasonPass": "Pass",
+      "pop_PassReward": "Pass",
+      "pop_BuyPass": "Pass",
+      "pop_Settings": "System",
+      "pop_DailyBonus": "System",
+      "pop_TreasureChest": "System",
+      "pop_Notice": "System",
+      "pop_ConnectAccount": "System"
+    },
     "aliasMap": {
       "New Scene": "Shop",
       "race_started": "Race_Started",
       "home_bottom": "Home",
-      "splash": "splash"
+      "Splash": "splash"
     },
     "customGroups": [],
-    "activePreset": null,
+    "activePreset": "Puzzle",
     "flowNodePositions": {
       "8fc00305-7288-4b2a-90df-9ff83554cb5b": {
-        "x": 671,
-        "y": 692
+        "x": -77.3437,
+        "y": 450.961
       },
       "__start__": {
         "x": -582,
@@ -34,8 +100,8 @@
         "y": -76
       },
       "37f376d8-4e32-4340-9bbd-4ed17767e148": {
-        "x": 38,
-        "y": -73
+        "x": -1130,
+        "y": -161
       },
       "87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa": {
         "x": -832,
@@ -50,8 +116,8 @@
         "y": 753
       },
       "__close__": {
-        "x": -54,
-        "y": 768
+        "x": 1427.82,
+        "y": 87.4215
       },
       "321eb56d-18f3-4c27-baa9-8e48c6f38541": {
         "x": 344,
@@ -66,20 +132,147 @@
         "y": -107
       },
       "3db24195-9465-47f6-be12-e9aeeebf74e6": {
-        "x": 717.091,
-        "y": 512.818
+        "x": -860.76,
+        "y": -171.455
       },
       "0ad51a82-1069-4948-ad6f-e97422300c6d": {
-        "x": -847,
-        "y": 15
+        "x": -9.5,
+        "y": -87.9
       },
       "b11144cd-f2c6-4f82-a4a8-c76b3496cd70": {
-        "x": 430,
-        "y": 501
+        "x": 645.86,
+        "y": -58.84
+      },
+      "eb985186-43f4-4b21-b7e8-de269865d64d": {
+        "x": -1375.64,
+        "y": 1.57159
+      },
+      "8fc40a42-e507-4e05-9c08-6c40fabd64db": {
+        "x": -666.759,
+        "y": 43.6365
+      },
+      "060b1064-734f-4667-8ca6-bf7b7b7ade55": {
+        "x": -338.055,
+        "y": 53.8504
+      },
+      "2e6bc06f-ecf8-421e-b708-c44a184f8024": {
+        "x": 6.52706,
+        "y": 71.8881
+      },
+      "af666955-071f-412b-832b-02370af5062f": {
+        "x": 413.468,
+        "y": -647.94
+      },
+      "26578336-5751-476b-b24d-f144818b21ce": {
+        "x": 778.14,
+        "y": -645.683
+      },
+      "a6896a21-a1a2-43ae-8299-e446bc104c24": {
+        "x": 691.15,
+        "y": -471.154
+      },
+      "afd468ee-25ac-4e8c-b452-dbf5a3548662": {
+        "x": 846.937,
+        "y": 1094.25
+      },
+      "c7984bd5-a727-468c-91eb-65d6b3d37c57": {
+        "x": 1741.95,
+        "y": 458.359
+      },
+      "235b7eb7-c304-45b3-aa55-25f18050fd64": {
+        "x": 51.8517,
+        "y": 1000.9
+      },
+      "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be": {
+        "x": 1181.87,
+        "y": 373.128
+      },
+      "2bce71e3-b626-4295-919d-e24cb07f1ae2": {
+        "x": 386.28,
+        "y": 894.673
+      },
+      "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd": {
+        "x": 1145.59,
+        "y": -488.721
+      },
+      "2547f73d-d8d6-47d7-bbbc-43404b4069f9": {
+        "x": 1844.73,
+        "y": 907.179
+      },
+      "e17278ec-df16-42b0-8071-ea8ffdeebe19": {
+        "x": -353.336,
+        "y": -577.943
+      },
+      "7adbcc4e-4fda-4ba2-b5fd-c533d7348a7e": {
+        "x": 1720.43,
+        "y": -227.768
+      },
+      "b5d7c895-e1b1-4d2c-8d3d-236c46947cbd": {
+        "x": 2022.4,
+        "y": -193.2
+      },
+      "90273ac1-a04e-4ec2-876f-ae4d16671774": {
+        "x": 2087.1,
+        "y": 411.3
       }
     },
-    "sceneOrder": [],
-    "lastScene": "ingame"
+    "sceneOrder": [
+      "Lobby",
+      "pop_LevelFail",
+      "Ingame_1",
+      "Splash_1",
+      "pop_LevelWin",
+      "OutOfMoves_1",
+      "LevelMap",
+      "pop_LevelStart",
+      "pop_Pause",
+      "DecorMap",
+      "pop_AreaComplete",
+      "Shop",
+      "BuyLives_1",
+      "pop_BuyCoins",
+      "pop_OutOfLives",
+      "pop_BuyBooster",
+      "pop_SpecialOffer",
+      "pop_UnlimitedLives",
+      "Team",
+      "Leaderboard",
+      "pop_JoinTeam",
+      "pop_RequestLives",
+      "pop_InviteFriends",
+      "Tournament",
+      "RankingEvent",
+      "CollectionEvent",
+      "pop_EventReward",
+      "pop_EventInfo",
+      "SeasonPass",
+      "pop_PassReward",
+      "pop_BuyPass",
+      "Settings_1",
+      "pop_DailyBonus",
+      "pop_TreasureChest",
+      "pop_Notice",
+      "pop_ConnectAccount",
+      "Ingame",
+      "Lobby_godot",
+      "pop_BuyCoins",
+      "Ranking",
+      "Splash",
+      "popup_entry",
+      "refill",
+      "Time_Out",
+      "ReTry",
+      "Fail",
+      "Give_up",
+      "Out_of_Space",
+      "pop_OutOfMoves",
+      "pop_Settings_lobby 2",
+      "no_heart",
+      "New Scene",
+      "Lobby_1",
+      "home_bottom"
+    ],
+    "lastScene": "Ingame"
   },
   "globalViewport": {
     "width": 393,

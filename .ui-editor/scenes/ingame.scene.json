@@ -1,5 +1,5 @@
 {
-  "name": "ingame",
+  "name": "Ingame",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -101,8 +101,7 @@
           "color": "#ffffff"
         }
       },
-      "locked": true,
-      "events": []
+      "locked": true
     },
     {
       "id": 2,
@@ -165,27 +164,13 @@
       },
       "selectedTextIndex": 0,
       "groupId": "grp-296",
-      "assetId": "bar1_2.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 3,
@@ -193,7 +178,7 @@
       "type": "image",
       "name": "gimmick_coinpurse_coin.png",
       "exportPath": "gimmick_coinpurse_coin_2.png",
-      "x": 268,
+      "x": 265,
       "y": 88,
       "scale": 1,
       "scaleX": 0.6530924811374309,
@@ -227,27 +212,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-296",
-      "assetId": "gimmick_coinpurse_coin_2.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 15,
@@ -310,27 +281,13 @@
       },
       "selectedTextIndex": 0,
       "groupId": "grp-296",
-      "assetId": "bar1_2.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 289,
@@ -372,27 +329,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-296",
-      "assetId": "home_btn_plus_1.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 304,
@@ -421,7 +364,7 @@
       "pressScale": 95,
       "texts": [
         {
-          "content": "00 :00",
+          "content": "00 : 00",
           "fontSize": 30,
           "fontWeight": "bold",
           "fontFamily": "\"Lilita One\", cursive",
@@ -435,9 +378,9 @@
           "textShadowOpacity": 50,
           "textDepthSize": 0,
           "textDepthColor": "#000000",
-          "offsetX": 0,
+          "offsetX": 19,
           "offsetY": 0,
-          "bindingKey": "",
+          "bindingKey": "stage.timer",
           "zIndex": 1
         }
       ],
@@ -455,27 +398,13 @@
       },
       "selectedTextIndex": 0,
       "groupId": "grp-296",
-      "assetId": "bar1_2.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 292,
@@ -522,22 +451,7 @@
       "sliceB": 0,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "assetId": "home_bottom.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "sliceRepeat": "stretch"
     },
     {
       "id": 293,
@@ -578,22 +492,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-303",
-      "assetId": "entry_box_normal.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-303"
     },
     {
       "id": 298,
@@ -634,22 +533,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-303",
-      "assetId": "entry_box_normal.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-303"
     },
     {
       "id": 299,
@@ -690,22 +574,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-303",
-      "assetId": "entry_box_normal.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-303"
     },
     {
       "id": 300,
@@ -746,22 +615,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-303",
-      "assetId": "entry_box_normal.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-303"
     },
     {
       "id": 301,
@@ -802,22 +656,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-304",
-      "assetId": "anniversaryPack_time.webp",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-304"
     },
     {
       "id": 302,
@@ -826,7 +665,7 @@
       "name": "common_time_needle.webp",
       "exportPath": "common_time_needle.webp",
       "x": 151,
-      "y": 92,
+      "y": 94,
       "scale": 0.75,
       "scaleX": 1,
       "scaleY": 1,
@@ -858,22 +697,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-304",
-      "assetId": "common_time_needle.webp",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-304"
     }
   ],
   "zLayers": [

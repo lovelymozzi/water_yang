@@ -8,6 +8,7 @@ const DRAG_CONTROLLER_SCRIPT = preload("res://scripts/drag_controller.gd")
 # 파일이 하나라도 있으면 플레이는 1스테이지부터 차례로 진행한다.
 const STAGE_LEVELS_DIR := "res://resources/levels"
 const STAGE_ADVANCE_DELAY_SECONDS := 1.4
+const DEFAULT_STAGE_TIME_SECONDS := 60.0
 
 @onready var level_manager: LevelManager = $LevelManager
 @onready var clear_label: Label = $CanvasLayer/ClearLabel
@@ -17,6 +18,10 @@ var _stage_paths: PackedStringArray = PackedStringArray()
 # -1 은 스테이지 모드가 아니라는 뜻 (씬 손 배치나 시드 테스트 플레이).
 var _stage_index: int = -1
 var _stage_label: Label
+var _stage_time_left := DEFAULT_STAGE_TIME_SECONDS
+var _stage_timer_running := false
+var _last_reported_seconds := -1
+var _requested_stage_index := 0
 
 
 func _ready() -> void:
@@ -60,6 +65,9 @@ func _ready() -> void:
 	clear_label.modulate = Color(1.0, 1.0, 1.0, 0.0)
 
 	level_manager.level_cleared.connect(_on_level_cleared)
+	UiBridge.host_initialize.connect(_on_host_initialize)
+	UiBridge.host_start.connect(_on_host_start)
+	UiBridge.host_force_quit.connect(_on_host_force_quit)
 
 	# 드래그 입력은 별도 노드가 전담한다. 헤드리스 검증에서 이벤트를 직접 주입하기 쉽다.
 	var drag_controller: Node = DRAG_CONTROLLER_SCRIPT.new()
@@ -78,6 +86,17 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if _stage_timer_running:
+		_stage_time_left = maxf(0.0, _stage_time_left - delta)
+		var seconds_left := ceili(_stage_time_left)
+		if seconds_left != _last_reported_seconds:
+			_last_reported_seconds = seconds_left
+			UiBridge.post_hud({"timeLeft": _format_stage_timer(seconds_left)})
+		if seconds_left == 0:
+			_stage_timer_running = false
+			if UiBridge.is_hosted:
+				UiBridge.post_end("fail", 0)
+
 	# 멈춘 프레임을 그 시점의 상태와 함께 기록한다. 로그가 없으면 원인을 좁힐 수 없다.
 	if delta < FRAME_STALL_WARNING_SECONDS or _stall_reports >= 40:
 		return
@@ -86,6 +105,7 @@ func _process(delta: float) -> void:
 
 
 func _on_level_cleared() -> void:
+	_stage_timer_running = false
 	if UiBridge.is_hosted:
 		UiBridge.post_end("clear", 0)
 	var has_next: bool = _stage_index >= 0 and _stage_index + 1 < _stage_paths.size()
@@ -102,11 +122,34 @@ func _on_level_cleared() -> void:
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(clear_label, "modulate:a", 1.0, 0.35)
 
-	if has_next:
+	if has_next and not UiBridge.is_hosted:
 		var next_index: int = _stage_index + 1
 		get_tree().create_timer(STAGE_ADVANCE_DELAY_SECONDS).timeout.connect(
 			_load_stage.bind(next_index)
 		)
+
+
+func _on_host_initialize(stage_data: Dictionary) -> void:
+	var config: Dictionary = stage_data.get("config", {})
+	_requested_stage_index = max(0, int(stage_data.get("stage", 1)) - 1)
+	_stage_time_left = maxf(1.0, float(config.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
+	_stage_timer_running = false
+	_last_reported_seconds = -1
+	UiBridge.post_hud({"timeLeft": _format_stage_timer(ceili(_stage_time_left))})
+	if not _stage_paths.is_empty():
+		call_deferred("_load_stage", min(_requested_stage_index, _stage_paths.size() - 1))
+
+
+func _on_host_start() -> void:
+	_stage_timer_running = true
+
+
+func _on_host_force_quit(_reason: String) -> void:
+	_stage_timer_running = false
+
+
+func _format_stage_timer(seconds: int) -> String:
+	return "%02d:%02d" % [seconds / 60, seconds % 60]
 
 
 # ---------------------------------------------------------------- 스테이지 진행

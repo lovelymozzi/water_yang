@@ -30,6 +30,8 @@ func _process(_delta: float) -> bool:
 
 
 func _run_checks() -> void:
+	_expect(_main._format_stage_timer(60) == "01:00", "1분 타이머 표시가 01:00이 아니다")
+	_expect(_main._format_stage_timer(0) == "00:00", "0초 타이머 표시가 00:00이 아니다")
 	var paths: PackedStringArray = _main._list_stage_files()
 	_expect(paths.size() > 0, "스테이지 파일이 하나도 없다")
 	if paths.size() > 1:
