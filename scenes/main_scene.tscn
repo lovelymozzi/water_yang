@@ -839,7 +839,6 @@ color_id = 3
 
 [node name="MapGenerator" type="Node" parent="." unique_id=1306831349]
 script = ExtResource("6_gen")
-generate_on_play = true
 generator_seed = 22
 body_length_max = 8
 
