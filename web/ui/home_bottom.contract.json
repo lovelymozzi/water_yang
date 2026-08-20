@@ -3,11 +3,11 @@
   "sceneId": "home-bottom",
   "sceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
   "sceneName": "home_bottom",
-  "sceneType": "navigation",
   "viewport": {
-    "width": 390,
-    "height": 844
+    "width": 393,
+    "height": 852
   },
+  "sceneType": "navigation",
   "navAnchor": "bottom",
   "navOffsetX": 0,
   "navOffsetY": 0,
@@ -23,11 +23,11 @@
     "sliceB": 0,
     "sliceScale": 0.32,
     "sliceRepeat": "stretch",
-    "imagePath": "home_bottom.png"
+    "imagePath": "ranking_tab_slash.png"
   },
   "transitionType": "slide",
   "transitionDuration": 600,
-  "defaultTabId": "t1",
+  "defaultTabId": "t0",
   "navTabBar": {
     "enabled": true,
     "activeGrow": 160,
@@ -61,7 +61,7 @@
     "indicator": {
       "type": "image",
       "color": "#3f86e0",
-      "imagePath": "home_bottom_select.png",
+      "imagePath": "",
       "radius": 12,
       "extendTop": 20,
       "extendBottom": 0,
@@ -79,7 +79,7 @@
     {
       "id": "t1",
       "label": "Home",
-      "sceneName": "home",
+      "sceneName": "Lobby_godot",
       "iconPath": "icon_menu_home.png",
       "iconActivePath": ""
     },

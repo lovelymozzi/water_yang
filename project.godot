@@ -14,6 +14,10 @@ config/name="LeonOutPrototype"
 run/main_scene="res://scenes/lobby_scene.tscn"
 config/features=PackedStringArray("4.7")
 
+[autoload]
+
+UiBridge="*res://scripts/ui_bridge.gd"
+
 [debug]
 
 settings/stdout/verbose_stdout=true
@@ -22,8 +26,8 @@ file_logging/max_log_files=10
 
 [display]
 
-window/size/viewport_width=720
-window/size/viewport_height=1280
+window/size/viewport_width=393
+window/size/viewport_height=852
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1

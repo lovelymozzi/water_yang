@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "generatedBy": "ui-editor",
+  "generatedAt": "2026-08-20T07:18:45.192Z",
+  "note": "흐름도 변경 통지 — 각 항목을 게임 배선 코드와 대조·반영한 뒤 이 파일을 삭제(소비)하세요. baseline 은 게임이 마지막으로 반영한 시점의 흐름도(비교 기준)라 직접 읽을 필요 없습니다.",
+  "changes": [
+    {
+      "type": "added",
+      "edge": {
+        "fromSceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
+        "fromSceneName": "splash",
+        "toSceneUuid": "12aab2db-25ee-4160-aa65-1fbd872d84dc",
+        "toSceneName": "Lobby_godot"
+      }
+    }
+  ],
+  "baseline": {
+    "version": 1,
+    "edges": [
+      {
+        "id": "edge-mt0zxwatgp23",
+        "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+        "toSceneUuid": "12aab2db-25ee-4160-aa65-1fbd872d84dc",
+        "trigger": null,
+        "transitionOut": null,
+        "transitionIn": null,
+        "fromSceneName": "ingame",
+        "toSceneName": "Lobby_godot",
+        "label": "임시) 스테이지 클리어시 로비로 복귀",
+        "toHostedBy": [
+          {
+            "navScene": "home_bottom",
+            "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+            "navContract": "home_bottom.contract.json",
+            "tabId": "t1"
+          }
+        ]
+      },
+      {
+        "id": "edge-mt0zzdzzwskm",
+        "fromSceneUuid": "12aab2db-25ee-4160-aa65-1fbd872d84dc",
+        "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+        "trigger": {
+          "stableId": "candy-bevel-button-20",
+          "eventName": "candy-bevel-button-20:click",
+          "condition": "버튼누르면 인게임씬으로 이동"
+        },
+        "transitionOut": null,
+        "transitionIn": null,
+        "fromSceneName": "Lobby_godot",
+        "toSceneName": "ingame"
+      }
+    ],
+    "entrySceneUuid": "12aab2db-25ee-4160-aa65-1fbd872d84dc",
+    "entrySceneName": "Lobby_godot"
+  }
+}

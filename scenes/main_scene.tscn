@@ -12,91 +12,90 @@
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="6_top_fog"]
 [ext_resource type="Texture2D" uid="uid://c0x7f8an0831k" path="res://water_yang/ui_bg.png" id="7_ui_bg"]
-[ext_resource type="PackedScene" uid="uid://b12ol36oflkqq" path="res://scenes/ice_block.tscn" id="10_4w45t"]
 
-[sub_resource type="Gradient" id="Gradient_4w45t"]
+[sub_resource type="Gradient" id="Gradient_mngbo"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_r6p65"]
-gradient = SubResource("Gradient_4w45t")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4w45t"]
+gradient = SubResource("Gradient_mngbo")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_si52b"]
+[sub_resource type="Gradient" id="Gradient_r6p65"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_01n6w"]
-gradient = SubResource("Gradient_si52b")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_si52b"]
+gradient = SubResource("Gradient_r6p65")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_6u1mn"]
+[sub_resource type="Gradient" id="Gradient_01n6w"]
 offsets = PackedFloat32Array(0, 0.58, 1)
 colors = PackedColorArray(0.08799503, 0.117553465, 0.4753844, 0.83, 0.08799503, 0.117553465, 0.4753844, 0.3569, 0.08799503, 0.117553465, 0.4753844, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bcnxi"]
-gradient = SubResource("Gradient_6u1mn")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6u1mn"]
+gradient = SubResource("Gradient_01n6w")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_7nt27"]
+[sub_resource type="Gradient" id="Gradient_bcnxi"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5501482, 0.3202245, 0.56168336, 0.83, 0.5501482, 0.3202245, 0.56168336, 0.3569, 0.5501482, 0.3202245, 0.56168336, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_k6f3i"]
-gradient = SubResource("Gradient_7nt27")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7nt27"]
+gradient = SubResource("Gradient_bcnxi")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_xdqt8"]
+[sub_resource type="Gradient" id="Gradient_k6f3i"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5501482, 0.3202245, 0.56168336, 0.83, 0.5501482, 0.3202245, 0.56168336, 0.3569, 0.5501482, 0.3202245, 0.56168336, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_adb74"]
-gradient = SubResource("Gradient_xdqt8")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xdqt8"]
+gradient = SubResource("Gradient_k6f3i")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_58gk3"]
+[sub_resource type="Gradient" id="Gradient_adb74"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.13614139, 0.30416697, 0.35069743, 0.83, 0.13614139, 0.30416697, 0.35069743, 0.3569, 0.13614139, 0.30416697, 0.35069743, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_to7gp"]
-gradient = SubResource("Gradient_58gk3")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_58gk3"]
+gradient = SubResource("Gradient_adb74")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_u0fll"]
+[sub_resource type="Gradient" id="Gradient_to7gp"]
 offsets = PackedFloat32Array(0, 0.42, 1)
 colors = PackedColorArray(0.5186065, 0.39951208, 0.16007605, 0.83, 0.5186065, 0.39951208, 0.16007605, 0.3569, 0.5186065, 0.39951208, 0.16007605, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_6p3nn"]
-gradient = SubResource("Gradient_u0fll")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_u0fll"]
+gradient = SubResource("Gradient_to7gp")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 0)
 fill_to = Vector2(0.5, 1)
 
-[sub_resource type="Gradient" id="Gradient_k67gn"]
+[sub_resource type="Gradient" id="Gradient_6p3nn"]
 offsets = PackedFloat32Array(0, 0.82, 1)
 colors = PackedColorArray(0.09129093, 0.11507381, 0.31847164, 1, 0.09129093, 0.11507381, 0.31847164, 0.43, 0.09129093, 0.11507381, 0.31847164, 0)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_k3g67"]
-gradient = SubResource("Gradient_k67gn")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_k67gn"]
+gradient = SubResource("Gradient_6p3nn")
 width = 4
 height = 256
 fill_from = Vector2(0.5, 1)
@@ -109,7 +108,7 @@ script = ExtResource("1_q0f23")
 process_mode = 4
 transform = Transform3D(1, 0, 0, 0, 0.24022803, 0.9707165, 0, -0.9707165, 0.24022803, 0, 77.27166, 19.13752)
 current = true
-fov = 20.7
+fov = 23.0
 size = 25.321
 near = 10.0
 
@@ -265,6 +264,37 @@ rim_strength = 0.51
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
+[node name="TreeDecor17" parent="LevelManager/TileVisuals" unique_id=1979147080 instance=ExtResource("3_rt2n2")]
+transform = Transform3D(5.92216, 0.27145115, -0.9243133, 0.31861493, 4.880985, 3.4748335, 0.9091339, -3.4788382, 4.8032413, 2.4944768, -0.2901001, -14.212839)
+tint_color = Color(0.95133823, 0.809188, 0.9328923, 1)
+roughness = 0.31
+rim_strength = 0.51
+outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
+outline_width = 0.005
+
+[node name="TreeDecor20" parent="LevelManager/TileVisuals" unique_id=444416261 instance=ExtResource("3_rt2n2")]
+transform = Transform3D(5.92216, 0.27145115, -0.9243133, 0.31861493, 4.880985, 3.4748335, 0.9091339, -3.4788382, 4.8032413, 5.591429, -0.2904663, -14.410776)
+roughness = 0.31
+rim_strength = 0.51
+outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
+outline_width = 0.005
+
+[node name="TreeDecor18" parent="LevelManager/TileVisuals" unique_id=378859390 instance=ExtResource("3_rt2n2")]
+transform = Transform3D(5.92216, 0.27145115, -0.9243133, 0.31861493, 4.880985, 3.4748335, 0.9091339, -3.4788382, 4.8032413, -4.9800797, -0.2897339, -13.424889)
+tint_color = Color(0.80245715, 0.8664177, 0.9492844, 1)
+roughness = 0.31
+rim_strength = 0.51
+outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
+outline_width = 0.005
+
+[node name="TreeDecor19" parent="LevelManager/TileVisuals" unique_id=87345645 instance=ExtResource("3_rt2n2")]
+transform = Transform3D(5.92216, 0.27145118, -0.92431337, 0.31630105, 4.889819, 3.4626029, 0.9099415, -3.4664094, 4.8120656, -1.2679145, -0.2892456, -14.065001)
+tint_color = Color(0.8075, 0.874, 0.95, 1)
+roughness = 0.31
+rim_strength = 0.51
+outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
+outline_width = 0.005
+
 [node name="TreeDecor2" parent="LevelManager/TileVisuals" unique_id=955409879 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(-7.9725947, -0.64902145, -0.12842718, -0.38872176, 5.851748, -5.441133, 0.5353668, -5.4162536, -5.8632407, 7.276475, 0.08136606, -10.114599)
 roughness = 0.31
@@ -350,7 +380,7 @@ outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor16" parent="LevelManager/TileVisuals" unique_id=1515352377 instance=ExtResource("3_rt2n2")]
-transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, 5.27199, 0.6949487, 14.833761)
+transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, 4.794363, 0.6949487, 14.714743)
 roughness = 0.31
 rim_strength = 0.51
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
@@ -708,18 +738,6 @@ outline_width = 0.001
 
 [node name="HoleVisuals" type="Node3D" parent="LevelManager" unique_id=1074621782]
 
-[node name="IceBlock" parent="LevelManager/HoleVisuals" unique_id=720538579 instance=ExtResource("10_4w45t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9880635, 0, 0)
-
-[node name="IceBlock2" parent="LevelManager/HoleVisuals" unique_id=1203172812 instance=ExtResource("10_4w45t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0616217, 0, -7.8957834)
-
-[node name="IceBlock3" parent="LevelManager/HoleVisuals" unique_id=1228536881 instance=ExtResource("10_4w45t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0076231956, 0, -5.9960785)
-
-[node name="IceBlock4" parent="LevelManager/HoleVisuals" unique_id=1170500060 instance=ExtResource("10_4w45t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9584317, 0, 4.0483413)
-
 [node name="LayoutCats" type="Node3D" parent="LevelManager" unique_id=2093450806]
 
 [node name="Cat_C0" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1244985065]
@@ -831,12 +849,12 @@ body_length_max = 8
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.25
-offset_top = 67.0
+offset_top = -2.0
 offset_bottom = -61.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_r6p65")
+texture = SubResource("GradientTexture2D_4w45t")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
@@ -856,7 +874,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -1.5669663
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_01n6w")
+texture = SubResource("GradientTexture2D_si52b")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
@@ -876,7 +894,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = -4.707341
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_bcnxi")
+texture = SubResource("GradientTexture2D_6u1mn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
@@ -888,15 +906,15 @@ fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = -244.36423
-offset_top = 212.90617
-offset_right = -265.36423
-offset_bottom = 90.89032
+offset_left = -204.0
+offset_top = 104.00001
+offset_right = -43.086548
+offset_bottom = 50.881775
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.5700908
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_k6f3i")
+texture = SubResource("GradientTexture2D_7nt27")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -906,15 +924,15 @@ fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = 995.00006
-offset_top = 1027.0001
-offset_right = 974.0001
-offset_bottom = 908.7347
+offset_left = 618.7508
+offset_top = 769.59607
+offset_right = 597.75085
+offset_bottom = 770.9644
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -3.7135055
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_adb74")
+texture = SubResource("GradientTexture2D_xdqt8")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -924,15 +942,15 @@ fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = 547.0
-offset_top = -147.0
-offset_right = 526.0
-offset_bottom = -349.0907
+offset_left = 280.0
+offset_top = -136.0
+offset_right = 282.63147
+offset_bottom = -254.79767
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -5.3999376
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_to7gp")
+texture = SubResource("GradientTexture2D_58gk3")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -942,15 +960,15 @@ fog_color = Color(0.13614139, 0.30416697, 0.35069743, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = 193.00003
-offset_top = 1510.0
-offset_right = 172.0
-offset_bottom = 1391.7344
+offset_left = 57.476208
+offset_top = 1057.3977
+offset_right = 134.41803
+offset_bottom = 1007.56915
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -2.1428132
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_6p3nn")
+texture = SubResource("GradientTexture2D_u0fll")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 density = 0.83
@@ -961,12 +979,12 @@ anchors_preset = -1
 anchor_top = 0.66
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 222.19995
-offset_bottom = 28.0
+offset_top = 102.67999
+offset_bottom = 5.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
-texture = SubResource("GradientTexture2D_k3g67")
+texture = SubResource("GradientTexture2D_k67gn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 screen_y = 0.66

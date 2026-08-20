@@ -9,28 +9,25 @@
   "navBgColor": "#1d58a8",
   "transitionType": "slide",
   "transitionDuration": 600,
-  "defaultTabId": "t1",
+  "defaultTabId": "t0",
   "tabs": [
     {
       "id": "t0",
       "label": "Shop",
       "sceneName": "New Scene",
-      "iconExportPath": "icon_menu_place.png",
-      "iconAssetId": "icon_menu_place.png"
+      "iconExportPath": "icon_menu_place.png"
     },
     {
       "id": "t1",
       "label": "Home",
-      "sceneName": "home",
-      "iconExportPath": "icon_menu_home.png",
-      "iconAssetId": "icon_menu_home.png"
+      "sceneName": "Lobby_godot",
+      "iconExportPath": "icon_menu_home.png"
     },
     {
       "id": "t1785291258215",
       "label": "Ranking",
       "sceneName": "Ranking",
-      "iconExportPath": "icon_menu_rank.png",
-      "iconAssetId": "icon_menu_rank.png"
+      "iconExportPath": "icon_menu_rank.png"
     }
   ],
   "layers": [],
@@ -101,19 +98,18 @@
     "indicator": {
       "type": "image",
       "color": "#3f86e0",
-      "exportPath": "home_bottom_select.png",
+      "exportPath": "",
       "imagePath": "",
       "radius": 12,
       "extendTop": 20,
       "extendBottom": 0,
-      "inset": 12,
-      "assetId": "home_bottom_select.png"
+      "inset": 12
     }
   },
   "uuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
   "navBgImage": {
     "enabled": true,
-    "exportPath": "home_bottom.png",
+    "exportPath": "ranking_tab_slash.png",
     "stretch": true,
     "sliceEnabled": true,
     "sliceL": 6,
@@ -121,7 +117,6 @@
     "sliceR": 6,
     "sliceB": 0,
     "sliceScale": 0.32,
-    "sliceRepeat": "stretch",
-    "assetId": "home_bottom.png"
+    "sliceRepeat": "stretch"
   }
 }

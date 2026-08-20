@@ -30,7 +30,7 @@ func _process(_delta: float) -> bool:
 	return true
 
 
-# 씬에 놓인 구멍이 정확히 한 칸이고, 타일이 그 자리에 깔리지 않았다.
+# 씬에 놓인 구멍이 정확히 한 칸이고, 바닥 타일 위에 표시된다.
 func _check_layout(manager: LevelManager) -> void:
 	var holes: Array[Vector2i] = manager.get_hole_cells()
 	_expect(not holes.is_empty(), "씬에 구멍이 하나도 없다")
@@ -39,17 +39,23 @@ func _check_layout(manager: LevelManager) -> void:
 	var hole: Vector2i = holes[0]
 	_expect(manager.is_hole(hole), "구멍 칸이 is_hole() 로 조회되지 않는다: %s" % [hole])
 	_expect(
-		manager.get_node("TileVisuals").get_node_or_null("Tile_%d_%d" % [hole.x, hole.y]) == null,
-		"구멍 칸에 타일이 깔렸다: %s" % [hole]
+		manager.get_node("TileVisuals").get_node_or_null("Tile_%d_%d" % [hole.x, hole.y]) != null,
+		"구멍 칸에 바닥 타일이 없다: %s" % [hole]
 	)
+	var hole_visual := manager.get_node("HoleVisuals").get_node_or_null("CatHole_%d_%d" % [hole.x, hole.y]) as Node3D
 	_expect(
-		manager.get_node("HoleVisuals").get_node_or_null("CatHole_%d_%d" % [hole.x, hole.y]) != null,
+		hole_visual != null,
 		"구멍 비주얼이 만들어지지 않았다: %s" % [hole]
 	)
+	if hole_visual != null:
+		_expect(
+			is_equal_approx(hole_visual.position.y, manager.floor_tile_height + manager.hole_visual_height),
+			"구멍 비주얼이 바닥 타일 위에 놓이지 않았다: %s" % [hole]
+		)
 	# 인접 조회는 4방향만이다. 대각선은 걸리지 않는다.
 	_expect(manager.adjacent_hole(hole + Vector2i.LEFT) == hole, "옆칸에서 구멍을 못 찾았다")
 	_expect(manager.adjacent_hole(hole + Vector2i(1, 1)) == null, "대각선이 인접으로 걸렸다")
-	print("[구멍] %s 한 칸, 타일 없음, 4방향 인접만 걸림" % [hole])
+	print("[구멍] %s 한 칸, 타일 위 배치, 4방향 인접만 걸림" % [hole])
 
 
 # 구멍은 경로로 쓰이지 않는다. 브릿지가 구멍을 지나가면 인접 판정 전에 밟게 된다.

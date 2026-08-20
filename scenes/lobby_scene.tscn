@@ -16,15 +16,15 @@
 [ext_resource type="PackedScene" uid="uid://bon52b0jge40n" path="res://water_yang/water1.fbx" id="20_water"]
 
 [sub_resource type="Gradient" id="Gradient_dbdus"]
-offsets = PackedFloat32Array(0, 0.6, 1)
-colors = PackedColorArray(0.23030433, 0.46488988, 0.92612416, 0.32, 0.23030433, 0.46488988, 0.92612416, 0.1376, 0.23030433, 0.46488988, 0.92612416, 0)
+offsets = PackedFloat32Array(0, 0.73, 1)
+colors = PackedColorArray(0.07338134, 0.24427584, 0.58293784, 0.73, 0.07338134, 0.24427584, 0.58293784, 0.3139, 0.07338134, 0.24427584, 0.58293784, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_06unt"]
 gradient = SubResource("Gradient_dbdus")
 width = 4
 height = 256
-fill_from = Vector2(0.5, 0)
-fill_to = Vector2(0.5, 1)
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
 
 [sub_resource type="Gradient" id="Gradient_t7bip"]
 offsets = PackedFloat32Array(0, 0.58, 1)
@@ -100,22 +100,29 @@ colors = PackedColorArray(0.1135621, 0.1977553, 0.49082178, 1, 0.1135621, 0.1977
 gradient = SubResource("Gradient_y47cq")
 width = 4
 height = 256
-fill_from = Vector2(0.5, 1)
-fill_to = Vector2(0.5, 0)
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
 
 [sub_resource type="Environment" id="Environment_lobby"]
 ambient_light_source = 2
 ambient_light_color = Color(0.63, 0.72, 0.66, 1)
 ambient_light_energy = 0.42
+tonemap_mode = 2
+tonemap_exposure = 1.0
 tonemap_white = 1.35
 glow_enabled = true
-glow_intensity = 1.4
-glow_strength = 0.39
-glow_bloom = 1.0
-glow_map_strength = 0.55
+glow_normalized = true
+glow_hdr_threshold = 0.25
+glow_hdr_scale = 2.0
+glow_intensity = 0.85
+glow_strength = 0.72
+glow_bloom = 0.18
 fog_enabled = true
 fog_light_color = Color(0.3816994, 0.5671194, 0.75167954, 1)
+fog_light_energy = 1.55
 fog_density = 0.0
+fog_height = -149.85
+fog_height_density = 14.6732
 fog_depth_curve = 1.5
 fog_depth_begin = 35.0
 fog_depth_end = 105.0
@@ -123,7 +130,8 @@ volumetric_fog_density = 0.0
 volumetric_fog_albedo = Color(0.8069303, 0.70817614, 0.30541062, 1)
 volumetric_fog_emission = Color(0.29157785, 0.65763474, 0.8717881, 1)
 adjustment_enabled = true
-adjustment_brightness = 1.08
+adjustment_brightness = 1.0
+adjustment_contrast = 1.0
 
 [node name="LobbyScene" type="Node3D" unique_id=1923355865]
 process_priority = 100
@@ -140,9 +148,9 @@ near = 10.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)
-light_color = Color(0.8427468, 0.832763, 0.60438275, 1)
+light_color = Color(0.728971, 0.71533513, 0.45211238, 1)
 light_energy = 1.008
-light_indirect_energy = 0.3
+light_indirect_energy = 0.683
 light_volumetric_fog_energy = 0.0
 light_angular_distance = 0.05
 light_specular = 0.0
@@ -772,21 +780,22 @@ body_length_max = 8
 [node name="TopFog" type="TextureRect" parent="CanvasLayer" unique_id=1683079334]
 anchors_preset = -1
 anchor_right = 1.0
-anchor_bottom = 0.32
-offset_left = 16.0
-offset_top = -3.0
-offset_right = 16.0
-offset_bottom = 62.400024
+anchor_bottom = 0.18
+offset_left = 740.0
+offset_top = 263.0
+offset_right = 808.0
+offset_bottom = 334.59998
 grow_horizontal = 2
 grow_vertical = 2
+rotation = -3.130162
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_06unt")
 expand_mode = 1
 script = ExtResource("18_dr74i")
-height_ratio = 0.32
-density = 0.32
-fade_start = 0.6
-fog_color = Color(0.23030433, 0.46488988, 0.92612416, 1)
+height_ratio = 0.18
+density = 0.73
+fade_start = 0.73
+fog_color = Color(0.07338134, 0.24427584, 0.58293784, 1)
 
 [node name="TopFog5" type="TextureRect" parent="CanvasLayer" unique_id=896030614]
 anchors_preset = -1
@@ -901,16 +910,18 @@ density = 0.83
 fog_color = Color(0.5186065, 0.39951208, 0.16007605, 1)
 
 [node name="BottomFog" type="TextureRect" parent="CanvasLayer" unique_id=2102111729]
+visible = false
 anchors_preset = -1
 anchor_top = 0.66
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -28.0
-offset_top = 190.19995
-offset_right = 16.0
-offset_bottom = 479.0
+offset_left = 738.41833
+offset_top = 459.0432
+offset_right = 782.0514
+offset_bottom = 390.83057
 grow_horizontal = 2
 grow_vertical = 0
+rotation = 3.1392357
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_pdm7g")
 expand_mode = 1

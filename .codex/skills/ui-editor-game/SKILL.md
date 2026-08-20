@@ -42,6 +42,7 @@ description: ui-editor로 publish된 씬(*.contract.json, scene-renderer.js)을 
 - `progress-manager.js` — 스테이지 진행도 매니저. 해금·클리어 기록·별점·최고점수 영속화를 직접 구현하지 말 것(localStorage 스키마 발명 금지).
 - `promo-manager.js` — 이벤트/상품 프로모 매니저. 로비 도크 채우기·서프라이즈 상품 트리거를 직접 구현하지 말 것.
 - `flow-driver.js` — 씬 흐름 드라이버. scene-flow.json 의 버튼 엣지·팝업·전환효과·nav 진입·이력(__back__)을 자동 실행한다. 씬 전환 코드를 직접 작성하지 말 것(§6).
+- `tutorial-hint.js` — 튜토리얼 터치 힌트(손가락·암전 포커싱·안내 문구·진행 게이팅). 암전 div·포인터를 직접 만들지 말 것 — 사용법은 `ui-editor-tutorial` 스킬 참조, 튜닝은 `configure()`.
 - `*.contract.json` — 씬 데이터. 레이아웃·스타일·효과가 완성돼 있으므로 HTML/CSS로 다시 만들지 말 것.
 - `scenes-index.json` — sceneUuid → 현재 contract 파일 해석표.
 - `scene-flow.json` — 씬 연결 그래프(있는 경우).
@@ -170,9 +171,11 @@ const sound = new SoundManager({ storagePrefix: 'mygame_' }); // 뮤트·볼륨 
 sound.unlockOnFirstGesture(onFirst);   // 첫 pointerdown/keydown 에서 unlock (+선택 콜백)
 sound.playBgm(src, { loop: true });    // unlock 전 호출은 pending → 첫 제스처에서 자동 시작
 sound.stopBgm();
-sound.playSfx(src);                    // 중첩 재생 허용. unlock 전·뮤트 중엔 무시
+sound.playSfx(src, 0.2);               // 중첩 재생 허용. 2번째 인자 = 이 재생만의 개별 볼륨(gain)
+sound.playKeyedSfx('glow', src, 0.5);  // 키당 1개 — 같은 키 재요청은 재시작. 끊어야 하는 소리용
+sound.stopSfx('glow');                 // 그 키만 중단. 인자 생략 시 재생 중인 SFX 전부 중단
 sound.setMuted(true); sound.toggleMuted(); sound.muted;
-sound.setVolume('master'|'bgm'|'sfx', 0.5);  // 실효 볼륨 = master × 채널
+sound.setVolume('master'|'bgm'|'sfx', 0.5);  // 실효 볼륨 = master × 채널 × gain
 sound.getVolume('bgm');
 ```
 

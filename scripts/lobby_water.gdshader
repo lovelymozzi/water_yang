@@ -75,8 +75,11 @@ void fragment() {
 	float scene_depth = -scene_view_position.z;
 	float water_depth = -(VIEW_MATRIX * vec4(water_world_position, 1.0)).z;
 	float depth_gap = max(scene_depth - water_depth, 0.0);
-	float depth_mix = smoothstep(shallow_depth, deep_depth, depth_gap) * depth_color_strength;
-	float depth_opacity = mix(shallow_opacity, deep_opacity, clamp(depth_mix * depth_opacity_strength, 0.0, 1.0));
+	// Keep the visual color blend independent from visibility.  Reducing the
+	// color effect must not make deep, submerged geometry visible again.
+	float raw_depth_mix = smoothstep(shallow_depth, deep_depth, depth_gap);
+	float depth_mix = raw_depth_mix * depth_color_strength;
+	float depth_opacity = mix(shallow_opacity, deep_opacity, clamp(raw_depth_mix * depth_opacity_strength, 0.0, 1.0));
 	float shore_foam = 1.0 - smoothstep(shore_foam_width, shore_foam_width + shore_foam_softness, depth_gap);
 	float moving_foam = sin((UV.x - UV.y) * foam_pattern_scale + TIME * foam_speed) * 0.5 + 0.5;
 	float foam_coverage = mix(1.0, smoothstep(0.28, 0.76, moving_foam), foam_breakup);

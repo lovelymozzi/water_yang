@@ -1,0 +1,266 @@
+{
+  "contractVersion": 1,
+  "sceneId": "splash",
+  "sceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
+  "sceneName": "splash",
+  "canvas": {
+    "width": 393,
+    "height": 852
+  },
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "background": {
+    "type": "solid",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "",
+    "imagePaths": [],
+    "tileSize": 64,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": false,
+    "scrollDirection": "right",
+    "scrollDuration": 4
+  },
+  "groups": [
+    {
+      "id": "grp-7",
+      "name": "Progress Bar",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-11",
+      "name": "Group",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-15",
+      "name": "Title_Loading_bar",
+      "layerStableIds": [
+        "loading-out-png-11",
+        "loading-inner-png-12",
+        "loading-bar-png-13",
+        "text-loading-15"
+      ]
+    }
+  ],
+  "fxGroups": [],
+  "sceneAnimations": [],
+  "layers": [
+    {
+      "stableId": "title1-png-3",
+      "layerType": "image",
+      "displayName": "Title1.png",
+      "x": -46,
+      "y": 0,
+      "zIndex": 1,
+      "visual": {
+        "exportPath": "Title1.png",
+        "width": 487,
+        "height": 861
+      }
+    },
+    {
+      "stableId": "title1-text1-png-5",
+      "layerType": "image",
+      "displayName": "Title1_text1.png",
+      "x": 41,
+      "y": 64,
+      "zIndex": 2,
+      "visual": {
+        "exportPath": "Title1_text1.png",
+        "width": 309,
+        "height": 295
+      },
+      "effects": [
+        {
+          "type": "css-animation",
+          "source": {
+            "provider": "animate.css",
+            "name": "bounce-in",
+            "className": "animate__bounceIn"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "timing": {
+            "durationMs": 800,
+            "delayMs": 0,
+            "iteration": 1,
+            "loopDelayMs": 600
+          },
+          "params": {
+            "presetId": "bounce-in",
+            "group": "Appear",
+            "phase": "enter",
+            "className": "animate__bounceIn",
+            "baseClass": "animate__animated",
+            "loop": false
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "loading-out-png-11",
+      "layerType": "image",
+      "displayName": "loading_out.png",
+      "x": 85,
+      "y": 740,
+      "zIndex": 3,
+      "visual": {
+        "exportPath": "src/assets/loading_out.png",
+        "width": 220,
+        "height": 39
+      }
+    },
+    {
+      "stableId": "loading-inner-png-12",
+      "layerType": "image",
+      "displayName": "loading_inner.png",
+      "x": 90,
+      "y": 744,
+      "zIndex": 4,
+      "visual": {
+        "exportPath": "loading_inner.png",
+        "width": 210,
+        "height": 30
+      }
+    },
+    {
+      "stableId": "loading-bar-png-13",
+      "layerType": "image",
+      "displayName": "loading_bar.png",
+      "x": 92,
+      "y": 746,
+      "zIndex": 5,
+      "visual": {
+        "exportPath": "loading_bar.png",
+        "width": 97,
+        "height": 26
+      }
+    },
+    {
+      "stableId": "text-loading-15",
+      "layerType": "component",
+      "displayName": "Text_Loading..",
+      "x": 116,
+      "y": 739,
+      "zIndex": 6,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 160,
+            "height": 40,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "Loading..",
+          "bindingKey": "loadingMessage",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "fontFamily": "Arial, sans-serif",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 2,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 2,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 60
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -17,7 +17,10 @@
     "color2": "#0e4a8c",
     "gradientAngle": 180,
     "imagePath": "",
+    "imagePaths": [],
     "tileSize": 64,
+    "tilePad": 0,
+    "imageAlpha": 100,
     "stretchMode": "cover",
     "scrollEnabled": false,
     "scrollDirection": "right",
@@ -55,6 +58,91 @@
   "sceneAnimations": [],
   "layers": [
     {
+      "stableId": "gamefield-19",
+      "layerType": "component",
+      "displayName": "GameField",
+      "x": -44,
+      "y": 1,
+      "scale": 0.5,
+      "zIndex": 1,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 962,
+            "height": 1711,
+            "radius": 0,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#9aa5b1",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      }
+    },
+    {
       "stableId": "bar1-png-2",
       "layerType": "image",
       "displayName": "bar1.png",
@@ -63,7 +151,7 @@
       "scale": 0.813751894577811,
       "scaleX": 0.6530924811374309,
       "scaleY": 0.6389348369225045,
-      "zIndex": 2,
+      "zIndex": 3,
       "visual": {
         "exportPath": "bar1.png",
         "width": 209,
@@ -114,7 +202,7 @@
       "y": 129,
       "scaleX": 0.6530924811374309,
       "scaleY": 0.6389348369225045,
-      "zIndex": 3,
+      "zIndex": 4,
       "visual": {
         "exportPath": "gimmick_coinpurse_coin.png",
         "width": 48,
@@ -130,7 +218,7 @@
       "scale": 0.813751894577811,
       "scaleX": 0.6530924811374309,
       "scaleY": 0.6389348369225045,
-      "zIndex": 4,
+      "zIndex": 5,
       "visual": {
         "exportPath": "bar1.png",
         "width": 209,
@@ -181,7 +269,7 @@
       "y": 129,
       "scaleX": 0.6530924811374309,
       "scaleY": 0.6389348369225045,
-      "zIndex": 5,
+      "zIndex": 6,
       "visual": {
         "exportPath": "sandglass.png",
         "width": 48,
@@ -197,7 +285,7 @@
       "scale": 0.813751894577811,
       "scaleX": 0.6530924811374309,
       "scaleY": 0.6389348369225045,
-      "zIndex": 6,
+      "zIndex": 7,
       "visual": {
         "exportPath": "bar1.png",
         "width": 209,
@@ -246,7 +334,7 @@
       "displayName": "사각형",
       "x": 0,
       "y": 717,
-      "zIndex": 7,
+      "zIndex": 8,
       "visual": {
         "model": {
           "shape": {
@@ -331,7 +419,7 @@
       "x": -9,
       "y": 713,
       "scale": 0.48275862068965525,
-      "zIndex": 8,
+      "zIndex": 9,
       "visual": {
         "exportPath": "ingame_top_baseline.webp",
         "width": 850,

@@ -15,12 +15,63 @@
     "aliasMap": {
       "New Scene": "Shop",
       "race_started": "Race_Started",
-      "home_bottom": "Home"
+      "home_bottom": "Home",
+      "splash": "splash"
     },
     "customGroups": [],
     "activePreset": null,
-    "flowNodePositions": {},
-    "sceneOrder": []
+    "flowNodePositions": {
+      "8fc00305-7288-4b2a-90df-9ff83554cb5b": {
+        "x": 671,
+        "y": 692
+      },
+      "__start__": {
+        "x": -498,
+        "y": -67
+      },
+      "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9": {
+        "x": -237,
+        "y": -72
+      },
+      "37f376d8-4e32-4340-9bbd-4ed17767e148": {
+        "x": -841,
+        "y": 35
+      },
+      "87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa": {
+        "x": -832,
+        "y": 594
+      },
+      "f32bb13d-3544-48a5-93a4-69bbca59301f": {
+        "x": 316,
+        "y": 40
+      },
+      "__back__": {
+        "x": -401,
+        "y": 753
+      },
+      "__close__": {
+        "x": -54,
+        "y": 768
+      },
+      "321eb56d-18f3-4c27-baa9-8e48c6f38541": {
+        "x": 336,
+        "y": -182
+      },
+      "33babcc6-19bd-4418-bb3e-ba255b06bac7": {
+        "x": 334,
+        "y": 487
+      },
+      "12aab2db-25ee-4160-aa65-1fbd872d84dc": {
+        "x": 54,
+        "y": -78
+      },
+      "3db24195-9465-47f6-be12-e9aeeebf74e6": {
+        "x": 750,
+        "y": 263
+      }
+    },
+    "sceneOrder": [],
+    "lastScene": "splash"
   },
   "globalViewport": {
     "width": 393,

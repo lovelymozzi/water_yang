@@ -13,6 +13,30 @@
       "name": "ingame",
       "contract": "ingame.contract.json",
       "sceneType": "scene"
+    },
+    {
+      "uuid": "12aab2db-25ee-4160-aa65-1fbd872d84dc",
+      "name": "Lobby_godot",
+      "contract": "Lobby_godot.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "3db24195-9465-47f6-be12-e9aeeebf74e6",
+      "name": "Ranking",
+      "contract": "Ranking.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "33babcc6-19bd-4418-bb3e-ba255b06bac7",
+      "name": "Shop",
+      "contract": "Shop.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
+      "name": "splash",
+      "contract": "splash.contract.json",
+      "sceneType": "scene"
     }
   ]
 }

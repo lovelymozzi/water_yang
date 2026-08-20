@@ -292,7 +292,8 @@ function loadScriptWithFallback(id, localSrc, cdnSrc) {
             document.head.appendChild(s);
         };
         mk(localSrc, () => {
-            console.warn('[SceneRenderer] 로컬 vendor 스크립트 로드 실패 — CDN 폴백:', localSrc, '→', cdnSrc);
+            console.warn('[SceneRenderer] 로컬 vendor 스크립트 로드 실패 — CDN 폴백:', localSrc, '→', cdnSrc,
+                '| 실제 요청 URL:', new URL(localSrc, document.baseURI).href, '| baseURI:', document.baseURI);
             mk(cdnSrc, () => resolve(false));
         });
     });
@@ -338,6 +339,9 @@ const CSS_ANIMATION_PRESETS = [
     { id: 'jello', label: 'Jello', group: 'Cute / Attention', provider: 'animate.css', className: 'animate__jello', phase: 'attention', durationMs: 900 },
     { id: 'wobble', label: 'Wobble', group: 'Cute / Attention', provider: 'animate.css', className: 'animate__wobble', phase: 'attention', durationMs: 900 },
     { id: 'swing', label: 'Swing', group: 'Cute / Attention', provider: 'animate.css', className: 'animate__swing', phase: 'attention', durationMs: 900 },
+    // 점멸(fade in-out) — 타임라인에서 defaultLoop 로 추가 즉시 무한 반복(레일 프리셋 매핑 참조).
+    // className 은 자체 키프레임(1사이클 = 1회 점멸). animate__flash 는 1사이클에 2번 깜빡인다.
+    { id: 'flash', label: 'Flash (점멸)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-blink-once', phase: 'attention', durationMs: 1000, defaultLoop: true },
 ];
 
 function getCssAnimationPreset(presetId) {
@@ -385,6 +389,10 @@ const PARTICLE_EFFECT_PRESETS = [
     { id: 'ambient-sparkle-aura', label: 'Ambient Sparkle Aura', group: 'Sparkle / Halo', provider: 'internal', template: 'ambient-aura', count: 18, auraWidth: 140, auraHeight: 140, speedMin: 0, speedMax: 0, sizeMin: 0.45, sizeMax: 0.9, spread: 360, loop: true },
     //  - healing-aura(내부 반복형): 발밑에서 피어오르는 녹빛 세로 광선 + 십자가 — RPG 힐 이펙트
     { id: 'healing-aura', label: 'Healing Aura', group: 'Sparkle / Halo', provider: 'internal', template: 'healing-aura', count: 26, auraWidth: 150, auraHeight: 160, speedMin: 0, speedMax: 0, sizeMin: 0.5, sizeMax: 1.1, spread: 0, loop: true },
+    //  - warp-streaks(내부 반복형): 얇은 빛줄기가 중심에서 가속하며 통째로 날아가는 1인칭 하이퍼스페이스
+    { id: 'warp-streaks', label: 'Warp Streaks (워프)', group: 'Sparkle / Halo', provider: 'internal', template: 'warp-streaks', count: 60, auraWidth: 100, auraHeight: 100, speedMin: 0, speedMax: 0, sizeMin: 1, sizeMax: 1, spread: 0, loop: true, colors: ['#ffffff', '#cfe4ff', '#9ec6ff'] },
+    //  - manga-focus-lines(내부 반복형): 바깥은 화면 밖에 고정, 안쪽 뾰족한 끝만 물러나며 구멍이 벌어지는 만화 집중선 줌인
+    { id: 'manga-focus-lines', label: 'Manga Focus Lines (집중선)', group: 'Sparkle / Halo', provider: 'internal', template: 'manga-focus-lines', count: 40, auraWidth: 100, auraHeight: 100, speedMin: 0, speedMax: 0, sizeMin: 1, sizeMax: 1, spread: 0, loop: true, colors: ['rgba(255,255,255,0.95)', 'rgba(228,240,255,0.8)'] },
     { id: 'sparkle-burst', label: 'Sparkle Burst', group: 'Sparkle / Halo', provider: 'canvas-confetti', template: 'burst', count: 36, speedMin: 200, speedMax: 420, sizeMin: 0.8, sizeMax: 1.6, spread: 360, lifetimeMin: 0.5, lifetimeMax: 0.9, colors: ['#ffd700', '#ffb300', '#fff3b0'], shapes: ['star'] },
     { id: 'sparkle-halo', label: 'Sparkle Halo', group: 'Sparkle / Halo', provider: 'canvas-confetti', template: 'halo', count: 24, speedMin: 30, speedMax: 80, sizeMin: 0.45, sizeMax: 0.9, spread: 360, lifetimeMin: 1.6, lifetimeMax: 2.4, colors: ['#ffffff', '#cfe8ff', '#9ad8ff'], shapes: ['circle', 'star'] },
     { id: 'reward-pop', label: 'Reward Pop', group: 'Sparkle / Halo', provider: 'canvas-confetti', template: 'confetti', count: 42, speedMin: 180, speedMax: 420, sizeMin: 0.7, sizeMax: 1.2, spread: 80, lifetimeMin: 1.6, lifetimeMax: 2.2 },
@@ -1218,48 +1226,6 @@ function normalizeMaskFlowCfg(f) {
     };
 }
 
-// 패딩(타일 간 여백) 셀 합성 캐시 — key: `${imageUrl}|${w}x${h}|${pad}` → { dataUrl } | Promise
-const FLOW_TILE_CACHE = new Map();
-
-// 자식 이미지를 (w+pad)×(h+pad) 셀 중앙에 그린 dataURL 을 비동기 생성 — 타일 사이 pad px 여백 형성.
-// brick 합성과 동일 패턴(1회 합성·캐시 재사용). onReady({ dataUrl }) — 실패 시 미호출(호출자는 무패딩 패턴 유지).
-function buildPaddedTileDataUrl(imageUrl, w, h, pad, onReady) {
-    if (typeof document === 'undefined' || !imageUrl) return;
-    const key = `${imageUrl}|${w}x${h}|${pad}`;
-    const cached = FLOW_TILE_CACHE.get(key);
-    if (cached && cached.dataUrl) { onReady(cached); return; }
-    if (cached && typeof cached.then === 'function') { cached.then(onReady).catch(() => {}); return; }
-    const promise = new Promise((resolve, reject) => {
-        const img = new Image();
-        if (!imageUrl.startsWith('data:')) img.crossOrigin = 'anonymous';
-        img.onload = () => {
-            try {
-                const c = document.createElement('canvas');
-                c.width = w + pad;
-                c.height = h + pad;
-                const ctx = c.getContext('2d');
-                ctx.imageSmoothingEnabled = true;
-                ctx.drawImage(img, Math.round(pad / 2), Math.round(pad / 2), w, h);
-                const result = { dataUrl: c.toDataURL('image/png') };
-                FLOW_TILE_CACHE.set(key, result);
-                resolve(result);
-            } catch (e) {
-                console.error('[mask-flow] 패딩 타일 합성 실패 (CORS taint 가능성)', e);
-                FLOW_TILE_CACHE.delete(key);
-                reject(e);
-            }
-        };
-        img.onerror = (e) => {
-            console.error('[mask-flow] 타일 이미지 로드 실패:', imageUrl, e);
-            FLOW_TILE_CACHE.delete(key);
-            reject(e);
-        };
-        img.src = imageUrl;
-    });
-    FLOW_TILE_CACHE.set(key, promise);
-    promise.then(onReady).catch(() => {});
-}
-
 // 통과 이동 키프레임 1회 주입 — (시작/끝 translate px, 진행 pct) 조합별 dedup
 function ensureMaskFlowKeyframes(sx, sy, ex, ey, pct) {
     if (typeof document === 'undefined') return null;
@@ -1458,6 +1424,21 @@ function ensureCssEffectProvider(provider) {
     return p;
 }
 
+// animate.css 에 없는 자체 CSS 애니메이션 클래스 — 1회 주입(기존 ensure*Keyframes 들과 같은 패턴).
+// ui-blink-once: animate.css 의 flash 는 키프레임이 0/50/100% 불투명 · 25/75% 투명이라
+// 한 사이클에 2번 깜빡인다. 1회 점멸은 가운데서 한 번만 꺼지는 별도 키프레임이 필요하다.
+// 지속시간/fill-mode 는 animate__animated(baseClass)가 --animate-duration 으로 그대로 처리한다.
+function ensureLocalCssAnimationKeyframes() {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById('ui-css-animation-keyframes')) return;
+    const st = document.createElement('style');
+    st.id = 'ui-css-animation-keyframes';
+    st.textContent =
+        '@keyframes ui-blink-once{0%,100%{opacity:1}50%{opacity:0}}' +
+        '.ui-blink-once{animation-name:ui-blink-once}';
+    document.head.appendChild(st);
+}
+
 function applyCssAnimationEffect(el, effect) {
     if (!el || !el.classList) return;
     if (el._uiCssAnimationLoopTimer) {
@@ -1479,6 +1460,7 @@ function applyCssAnimationEffect(el, effect) {
     const className = params.className || effect.source?.className;
     if (!className) return;
     ensureCssEffectProvider(effect.source?.provider || 'animate.css');
+    ensureLocalCssAnimationKeyframes();
     const baseClass = params.baseClass || 'animate__animated';
     const classes = [baseClass, className];
     const timing = effect.timing || {};
@@ -1647,6 +1629,90 @@ function applyHealingAura(el, effect) {
     el.appendChild(aura);
 }
 
+// 방사형 스트릭 — 중심에서 바깥으로 가속하며 뻗는 '유한 길이' 광선. warp/manga 공용 단일 구현.
+// 원근 투영(화면반지름 = k / z)의 CSS 근사: 반지름을 가속 곡선으로 밀면서 길이를 함께 키운다.
+// conic-gradient 는 각도만의 함수라 확대해도 패턴이 제자리(자기닮음)이므로 쓰지 않는다 —
+// 반지름 방향 이동이 성립하려면 광선마다 독립된 span 이어야 한다.
+//   warp  : 얇고 균일한 빛줄기가 통째로 바깥으로 날아간다 (스타필드 하이퍼스페이스)
+//   manga : 안쪽이 뾰족한 삼각형(clip-path). 바깥 끝은 요소 밖에 걸친 채 안쪽 끝만 물러나
+//           중심 구멍이 벌어진다 — 만화 집중선 줌인
+// healing-aura 와 같은 내부 반복형(DOM+CSS 키프레임, RAF 없음). 배치는 i 기반 결정적이라
+// 재렌더에도 모양이 같고, 컨테이너에 ui-ambient-aura 클래스를 달아 제거 경로를 공유한다.
+function ensureRadialStreakKeyframes() {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById('ui-radial-streak-keyframes')) return;
+    const st = document.createElement('style');
+    st.id = 'ui-radial-streak-keyframes';
+    st.textContent =
+        '@keyframes ui-radial-streak{' +
+        '0%{transform:rotate(var(--a)) translateX(var(--r0)) scaleX(var(--s0));opacity:0}' +
+        '14%{opacity:var(--o)}' +
+        '72%{opacity:var(--o)}' +
+        '100%{transform:rotate(var(--a)) translateX(var(--r1)) scaleX(var(--s1));opacity:0}' +
+        '}' +
+        // ambient-aura 스타일시트가 주입되지 않은 경우에도 자립하도록 기본 규칙을 직접 갖는다(healing-aura 와 동일).
+        '.ui-streak-aura{position:absolute;inset:0;pointer-events:none;z-index:20}' +
+        // overflow 만은 ambient-aura 의 visible 과 충돌 — 주입 순서가 불정이라 2-클래스로 확실히 덮는다.
+        '.ui-ambient-aura.ui-streak-aura{overflow:hidden}' +
+        // transform-origin 을 요소 중심에 두고 rotate→translateX→scaleX 순으로 합성하면
+        // 광선은 반지름 [r, r + len×s] 구간을 차지한다(r 은 자기 너비 = --len 기준 %).
+        '.ui-streak{position:absolute;left:50%;top:50%;width:var(--len);height:var(--w);' +
+        'margin-top:calc(var(--w) * -0.5);transform-origin:0 50%;background:var(--c);' +
+        'animation:ui-radial-streak var(--d) cubic-bezier(.55,0,.95,.45) infinite;animation-delay:var(--delay)}' +
+        '.ui-streak-manga{clip-path:polygon(0 50%,100% 0,100% 100%)}' +
+        // 모션 민감 사용자 — 애니메이션 없이 중심에서 모서리까지 뻗은 정지 집중선으로 대체
+        '@media (prefers-reduced-motion:reduce){.ui-streak{animation:none;opacity:calc(var(--o) * .6);' +
+        'transform:rotate(var(--a)) translateX(var(--r0)) scaleX(1)}}';
+    document.head.appendChild(st);
+}
+
+function applyRadialStreaks(el, effect, kind) {
+    if (typeof document === 'undefined' || !el) return;
+    const old = el.querySelector?.(':scope > .ui-ambient-aura');
+    if (old) old.remove();
+    if (!effect?.enabled) return;
+    ensureRadialStreakKeyframes();
+    const params = effect.params || {};
+    const manga = kind === 'manga';
+    const count = Math.max(1, Math.min(96, params.count || (manga ? 40 : 60)));
+    // 길이·반지름의 기준자 = 요소 half-diagonal(px). 이 값이면 어떤 종횡비에서도 모서리까지 닿는다.
+    // transform:scale 로 축소 표시되는 씬에서도 어긋나지 않도록 getBoundingClientRect 가 아니라
+    // 레이아웃 px 인 offsetWidth/Height 로 잰다. 레이아웃 전(0)이면 fallback.
+    const unit = Math.round(Math.hypot(el.offsetWidth || 0, el.offsetHeight || 0) / 2) || 220;
+    // Aura Width = 바깥 도달 범위(%), Aura Height = 중심 여백(%) — 둘 다 '방출 범위' 파라미터
+    const reach = Math.max(10, params.auraWidth || 100) / 100;
+    const hole = Math.max(10, params.auraHeight || 100) / 100;
+    const colors = (params.colors && params.colors.length) ? params.colors : ['#ffffff'];
+    // [시작 반지름%, 시작 길이배율, 끝 반지름%, 끝 길이배율] — % 와 배율 모두 unit 기준.
+    // manga 는 시작부터 바깥 끝이 1.08 로 요소 밖에 걸쳐 있고 안쪽만 0.08→0.55 로 물러난다.
+    const geo = manga ? [8, 1.00, 55, 0.75] : [4, 0.07, 100, 0.35];
+    const baseMs = manga ? 900 : 1500;
+    const aura = document.createElement('span');
+    aura.className = 'ui-ambient-aura ui-streak-aura';
+    aura.style.setProperty('--len', unit + 'px');
+    for (let i = 0; i < count; i++) {
+        const s = document.createElement('span');
+        s.className = 'ui-streak' + (manga ? ' ui-streak-manga' : '');
+        const d = baseMs + ((i * 61) % 5) * (manga ? 90 : 170);
+        // 균등 분할 + i 기반 지터 — 규칙적인 바퀴살 격자 느낌을 없앤다
+        s.style.setProperty('--a', ((360 / count) * i + ((i * 37) % 19) - 9).toFixed(1) + 'deg');
+        s.style.setProperty('--r0', (geo[0] * hole).toFixed(1) + '%');
+        s.style.setProperty('--s0', geo[1].toFixed(2));
+        // 끝 반지름만 흔들어 광선들이 한 줄로 도착하지 않게 한다
+        s.style.setProperty('--r1', (geo[2] * reach * (0.88 + ((i * 23) % 25) / 100)).toFixed(1) + '%');
+        s.style.setProperty('--s1', geo[3].toFixed(2));
+        s.style.setProperty('--w', (manga ? 3 + ((i * 43) % 12) : 1 + ((i * 43) % 3)) + 'px');
+        s.style.setProperty('--o', (manga ? 0.55 + ((i * 71) % 45) / 100 : 0.40 + ((i * 71) % 60) / 100).toFixed(2));
+        s.style.setProperty('--d', d + 'ms');
+        s.style.setProperty('--delay', -((i * 137) % d) + 'ms');
+        // warp 은 진행 방향(바깥)이 밝은 머리, 뒤가 꼬리 — manga 는 잉크처럼 단색
+        const c = colors[i % colors.length];
+        s.style.setProperty('--c', manga ? c : `linear-gradient(90deg,transparent,${c})`);
+        aura.appendChild(s);
+    }
+    el.appendChild(aura);
+}
+
 // 소프트 글리터 낙하 레시피 — Sparkle 프리셋(fall)과 confetti 컴포넌트(glitter-fall)가
 // 동일 물리(하강각/중력/감쇠/드리프트/시간차 6회 방출)를 공유하는 단일 구현.
 // fire = canvas-confetti 발사 함수(전역 confetti 또는 create 인스턴스),
@@ -1692,6 +1758,10 @@ function playParticleEffect(el, effect) {
     }
     if (template === 'healing-aura') {
         applyHealingAura(el, effect);
+        return;
+    }
+    if (template === 'warp-streaks' || template === 'manga-focus-lines') {
+        applyRadialStreaks(el, effect, template === 'manga-focus-lines' ? 'manga' : 'warp');
         return;
     }
     ensureEffectProviderScript('canvas-confetti').then(ok => {
@@ -1964,10 +2034,10 @@ const BG_SCROLL_DIRS = {
     'up-right':   [ 1, -1],
 };
 
-// brick 합성 타일 캐시 — key: `${imageUrl}|${bh}` → { dataUrl, bw, bh } | Promise<...>
-// 동일 (이미지, 높이) 조합은 1회만 canvas 합성, 이후 즉시 재사용 → 클라이언트 부하 최소화.
-// brick 가로폭(bw)은 이미지 자연 비율(naturalWidth/naturalHeight)로 자동 계산.
-const BRICK_TILE_CACHE = new Map();
+// 패턴 셀 합성 캐시 — key: `${mode}|${urls}|${cell}|${pad}|${alpha}` → { dataUrl, w, h, cols } | Promise<...>
+// 동일 조합은 1회만 canvas 합성, 이후 즉시 재사용 → 클라이언트 부하 최소화.
+// brick 가로폭(bw)은 첫 이미지 자연 비율(naturalWidth/naturalHeight)로 자동 계산.
+const PATTERN_TILE_CACHE = new Map();
 
 // tint(재색칠) SVG 필터 dedup 캐시. 모바일 WebKit 은 filter:url(data:...) 형태의
 // data-URI SVG 필터를 무시하므로, <filter> 를 문서에 인라인 등록하고 url(#id) 로 참조한다.
@@ -1975,54 +2045,68 @@ const BRICK_TILE_CACHE = new Map();
 const TINT_FILTER_CACHE = new Map();
 let _tintFilterSeq = 0;
 
-// 사용자 이미지를 받아 (2bw × 2bh) 짜리 brick-staggered 합성 타일 dataURL 을 비동기 생성.
-// bh 는 사용자 입력(brick 높이), bw 는 이미지 naturalAspect 로 결정.
-// row 0: x=0, x=bw 두 장 / row 1: x=-bw/2, bw/2, 1.5bw 세 장 (캔버스 밖은 clip 되어 stagger 형성).
-// onReady({ dataUrl, bw, bh }) 콜백 — 실패 시 호출되지 않음 (호출자는 fallback 단색 유지).
-function buildBrickTileDataUrl(imageUrl, bh, onReady) {
-    if (typeof document === 'undefined' || !imageUrl) return;
-    const key = `${imageUrl}|${bh}`;
-    const cached = BRICK_TILE_CACHE.get(key);
+// 이미지 1~N 장을 격자에 고루 섞어 그린 합성 타일 dataURL 을 비동기 생성 (배경/마스크 tile·brick 공용 단일 소스).
+// tile: cellW×cellH 셀 격자 + pad 여백(셀 중앙 배치). brick: cellH=벽돌 높이·폭은 첫 이미지 비율, 홀수 행 반 칸 stagger.
+// 복수 이미지는 [0..N-1] 반복 덱을 시드 셔플로 균등 분배 — key 해시 시드라 같은 입력은 항상 같은 배치(캐시·재렌더 일치).
+// alpha(0~1) 는 합성 시 globalAlpha 로 적용. onReady({ dataUrl, w, h, cols }) — 실패 시 미호출(호출자는 fallback 유지).
+function buildPatternTileDataUrl(urls, mode, cellW, cellH, pad, alpha, onReady) {
+    if (typeof document === 'undefined' || !urls.length) return;
+    const key = `${mode}|${urls.join(',')}|${cellW}x${cellH}|${pad}|${alpha}`;
+    const cached = PATTERN_TILE_CACHE.get(key);
     if (cached && cached.dataUrl) { onReady(cached); return; }
     if (cached && typeof cached.then === 'function') { cached.then(onReady).catch(() => {}); return; }
-    const promise = new Promise((resolve, reject) => {
+    const load = (url) => new Promise((resolve, reject) => {
         const img = new Image();
-        if (!imageUrl.startsWith('data:')) img.crossOrigin = 'anonymous';
-        img.onload = () => {
-            try {
-                const natW = img.naturalWidth || img.width || bh;
-                const natH = img.naturalHeight || img.height || bh;
-                const aspect = natW / natH;
-                const bw = Math.max(1, Math.round(bh * aspect));
-                const c = document.createElement('canvas');
-                c.width = bw * 2;
-                c.height = bh * 2;
-                const ctx = c.getContext('2d');
-                ctx.imageSmoothingEnabled = true;
-                // row 0: 두 장 나란히 (x=0, x=bw)
-                ctx.drawImage(img, 0, 0, bw, bh);
-                ctx.drawImage(img, bw, 0, bw, bh);
-                // row 1: 세 장 (x=-bw/2, bw/2, 1.5bw) — 캔버스 밖은 clip 되어 stagger 형성
-                ctx.drawImage(img, -bw / 2, bh, bw, bh);
-                ctx.drawImage(img,  bw / 2, bh, bw, bh);
-                ctx.drawImage(img,  bw * 1.5, bh, bw, bh);
-                const result = { dataUrl: c.toDataURL('image/png'), bw, bh };
-                BRICK_TILE_CACHE.set(key, result);
-                resolve(result);
-            } catch (e) {
-                console.error('[brick] canvas 합성 실패 (CORS taint 가능성)', e);
-                BRICK_TILE_CACHE.delete(key);
-                reject(e);
-            }
-        };
-        img.onerror = (e) => {
-            console.error('[brick] 이미지 로드 실패:', imageUrl, e);
-            BRICK_TILE_CACHE.delete(key);
-            reject(e);
-        };
-        img.src = imageUrl;
+        if (!url.startsWith('data:')) img.crossOrigin = 'anonymous';
+        img.onload = () => resolve(img);
+        img.onerror = (e) => { console.error('[pattern] 이미지 로드 실패:', url, e); reject(e); };
+        img.src = url;
     });
-    BRICK_TILE_CACHE.set(key, promise);
+    const promise = Promise.all(urls.map(load)).then(imgs => {
+        const brick = mode === 'brick';
+        const bh = cellH;
+        const bw = brick ? Math.max(1, Math.round(bh * ((imgs[0].naturalWidth || bh) / (imgs[0].naturalHeight || bh)))) : cellW;
+        const cw = bw + pad, ch = bh + pad;   // 셀 1칸 = 이미지 + pad 여백
+        const N = imgs.length;
+        // 격자 칸수 — 단일 이미지는 최소(tile 1×1 / brick 2×2 stagger), 복수는 4×4 로 섞을 공간 확보
+        const G = N === 1 ? (brick ? 2 : 1) : 4;
+        // 시드 셔플 덱 — key 문자열 해시 시드의 mulberry32 로 결정적 셔플 (균등 분배 + 무작위 배치)
+        let seed = 0;
+        for (let i = 0; i < key.length; i++) seed = (seed * 31 + key.charCodeAt(i)) | 0;
+        const rand = () => {
+            seed = (seed + 0x6D2B79F5) | 0;
+            let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+        const deck = Array.from({ length: G * G }, (_, i) => i % N);
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(rand() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+        const c = document.createElement('canvas');
+        c.width = cw * G;
+        c.height = ch * G;
+        const ctx = c.getContext('2d');
+        ctx.imageSmoothingEnabled = true;
+        ctx.globalAlpha = alpha;
+        for (let r = 0; r < G; r++) {
+            // brick 홀수 행은 반 칸 밀기 — 좌측 wrap 은 col=-1(덱 인덱스는 mod G 로 우측 끝과 동일 이미지)이 커버
+            const off = brick ? (r % 2) * (cw / 2) : 0;
+            for (let col = off ? -1 : 0; col < G; col++) {
+                const img = imgs[deck[r * G + ((col + G) % G)]];
+                ctx.drawImage(img, col * cw + off + pad / 2, r * ch + pad / 2, bw, bh);
+            }
+        }
+        const result = { dataUrl: c.toDataURL('image/png'), w: c.width, h: c.height, cols: G };
+        PATTERN_TILE_CACHE.set(key, result);
+        return result;
+    }).catch(e => {
+        console.error('[pattern] 합성 실패 (이미지 로드/CORS taint 가능성)', e);
+        PATTERN_TILE_CACHE.delete(key);
+        throw e;
+    });
+    PATTERN_TILE_CACHE.set(key, promise);
     promise.then(onReady).catch(() => {});
 }
 
@@ -2051,13 +2135,14 @@ function applyPatternScroll(el, scroll, cycleW, cycleH, tilesPerCycle) {
 }
 
 // 반복 패턴(tile/brick)으로 el 을 채움 + 선택적 스크롤. 호출자가 el 의 크기/위치를 잡아둔다.
-// opts: imageUrl, mode('tile'|'brick'), cellW, cellH(brick=벽돌 높이), pad(tile 간 여백 px), color(뒤 배경색),
+// opts: imageUrl 또는 imageUrls[](복수=고루 섞어 합성), mode('tile'|'brick'), cellW, cellH(brick=벽돌 높이),
+//       pad(셀 간 여백 px, tile/brick 공통), alpha(0~1 이미지 불투명도), color(뒤 배경색),
 //       scroll({enabled,direction,secPerTile,epoch}|null), stamp(비동기 합성 stale-guard 키 → el.dataset.patStamp).
-// brick 합성/패딩 셀 합성은 비동기 — 완료 전 stamp 가 바뀌면(타입/이미지 변경) 콜백 무시.
+// 합성은 비동기 — 완료 전 stamp 가 바뀌면(타입/이미지 변경) 콜백 무시.
 function applyPatternFill(el, opts) {
     if (!el) return;
     const o = opts || {};
-    const imageUrl = o.imageUrl || '';
+    const urls = (Array.isArray(o.imageUrls) ? o.imageUrls : [o.imageUrl]).filter(Boolean);
     const scroll = o.scroll || null;
     const stamp = o.stamp || '';
     if (el.classList) el.classList.remove('sr-bg-scroll');
@@ -2065,38 +2150,31 @@ function applyPatternFill(el, opts) {
     el.style.animationDelay = '';
     if (el.dataset) el.dataset.patStamp = stamp;
     if (o.color) el.style.backgroundColor = o.color;
-    if (!imageUrl) { el.style.backgroundImage = 'none'; return; }
+    if (!urls.length) { el.style.backgroundImage = 'none'; return; }
+    const tw = Math.max(2, Math.round(o.cellW || 64)), th = Math.max(2, Math.round(o.cellH || 64));
+    const pad = Math.max(0, Math.round(o.pad || 0));
+    const alpha = Math.max(0, Math.min(1, o.alpha ?? 1));
+    const setPattern = (url, w, h, cols) => {
+        el.style.backgroundImage = `url('${url}')`;
+        el.style.backgroundSize = `${w}px ${h}px`;
+        el.style.backgroundRepeat = 'repeat';
+        el.style.backgroundPosition = '0 0';
+        applyPatternScroll(el, scroll, w, h, cols);
+    };
+    // 단일 tile + 무여백 + 불투명 → 합성 없이 원본 repeat (즉시 표시)
+    if (o.mode !== 'brick' && urls.length === 1 && pad === 0 && alpha >= 1) { setPattern(urls[0], tw, th, 1); return; }
+    // 합성 필요(brick/복수 이미지/pad/alpha) — 완료 전 fallback: tile=원본 1장 repeat, brick=이미지 없음(뒤 색만)
     if (o.mode === 'brick') {
-        const bh = Math.max(2, Math.round(o.cellH || 64));
-        // 합성 완료 전 fallback: 이미지 제거(뒤 색만) + 잔류 multi-bg 흔적 제거
         el.style.backgroundImage = 'none';
         el.style.backgroundRepeat = '';
         el.style.backgroundPosition = '';
         el.style.backgroundSize = '';
-        buildBrickTileDataUrl(imageUrl, bh, ({ dataUrl, bw }) => {
-            if (el.dataset && el.dataset.patStamp !== stamp) return; // 그 사이 타입/이미지 갱신됨
-            el.style.backgroundImage = `url('${dataUrl}')`;
-            el.style.backgroundSize = `${bw * 2}px ${bh * 2}px`;
-            el.style.backgroundRepeat = 'repeat';
-            el.style.backgroundPosition = '0 0';
-            applyPatternScroll(el, scroll, bw * 2, bh * 2, 2); // 합성타일 = 2 brick
-        });
-        return;
+    } else {
+        setPattern(urls[0], tw, th, 1);
     }
-    // tile — 직사각 repeat. pad>0 이면 패딩 셀 비동기 합성으로 교체(brick 과 동일 fallback 규약)
-    const tw = Math.max(2, Math.round(o.cellW || 64)), th = Math.max(2, Math.round(o.cellH || 64));
-    const pad = Math.max(0, Math.round(o.pad || 0));
-    const setPattern = (url, cw, ch) => {
-        el.style.backgroundImage = `url('${url}')`;
-        el.style.backgroundSize = `${cw}px ${ch}px`;
-        el.style.backgroundRepeat = 'repeat';
-        el.style.backgroundPosition = '0 0';
-        applyPatternScroll(el, scroll, cw, ch, 1);
-    };
-    setPattern(imageUrl, tw, th);
-    if (pad > 0) buildPaddedTileDataUrl(imageUrl, tw, th, pad, ({ dataUrl }) => {
-        if (el.dataset && el.dataset.patStamp !== stamp) return;
-        setPattern(dataUrl, tw + pad, th + pad);
+    buildPatternTileDataUrl(urls, o.mode === 'brick' ? 'brick' : 'tile', tw, th, pad, alpha, ({ dataUrl, w, h, cols }) => {
+        if (el.dataset && el.dataset.patStamp !== stamp) return; // 그 사이 타입/이미지 갱신됨
+        setPattern(dataUrl, w, h, cols);
     });
 }
 
@@ -2188,6 +2266,40 @@ function normalizeNavTabBar(cfg) {
         ...c,
         indicator: { ...NAV_TAB_BAR_DEFAULTS.indicator, ...(c.indicator || {}) },
         label,
+    };
+}
+
+// navigation 씬 데이터 → 계약(contract)의 nav 전용 필드 — 에디터 buildSceneContract nav 분기와
+// 에셋스토어 프리뷰(sceneToContract)가 공유하는 단일 소스. 저장본·라이브 씬 모두 입력 가능
+// (에디터 전용 assetId 는 버리고 exportPath 만 imagePath/iconPath 로 export).
+function navSceneContractFields(ss, vw) {
+    return {
+        sceneType: 'navigation',
+        navAnchor: ss.navAnchor || 'bottom',
+        navOffsetX: ss.navOffsetX || 0,
+        navOffsetY: ss.navOffsetY || 0,
+        navBarWidth: ss.navBarWidth || vw,
+        navBarHeight: ss.navBarHeight || 80,
+        navBgColor: ss.navBgColor || 'rgba(22,33,62,0.95)',
+        // 배경 이미지 — 에디터 전용 assetId/enabled/편집용 width·height 는 제외하고 imagePath(exportPath) 로 export (인디케이터와 동일 규약)
+        navBgImage: (() => {
+            const nb = ss.navBgImage;
+            if (!nb || !nb.enabled || !(nb.exportPath || nb.assetId)) return null;
+            const { assetId, enabled, exportPath, width, height, ...rest } = nb;
+            return { ...rest, imagePath: exportPath || '' };
+        })(),
+        transitionType: ss.transitionType || 'slide',
+        transitionDuration: ss.transitionDuration || 300,
+        defaultTabId: ss.defaultTabId || ((ss.tabs && ss.tabs[0]) ? ss.tabs[0].id : ''),
+        navTabBar: (() => {
+            const tb = normalizeNavTabBar(ss.navTabBar);
+            const { assetId, exportPath, ...indRest } = tb.indicator;
+            return { ...tb, indicator: { ...indRest, imagePath: exportPath || '' } };
+        })(),
+        tabs: (ss.tabs || []).map(t => ({
+            id: t.id, label: t.label || t.id, sceneName: t.sceneName || '',
+            iconPath: t.iconExportPath || '', iconActivePath: t.iconActiveExportPath || ''
+        })),
     };
 }
 
@@ -3118,7 +3230,8 @@ export class SceneRenderer {
                     duration: Math.max(0.001, duration / 1000),
                     delay: 0,
                     repeat: 1,
-                    loop: false,
+                    loop: !!item.loop,
+                    loopDelay: 0, // 타임라인 loop 는 즉시 재시작(점멸 연속성) — 휴식은 duration 으로 조절
                 },
             });
             if (effect.params?.phase === 'enter') {
@@ -3191,7 +3304,8 @@ export class SceneRenderer {
                     duration: Math.max(0.001, duration / 1000),
                     delay: 0,
                     repeat: 1,
-                    loop: false,
+                    loop: !!item.loop,
+                    loopDelay: 0,
                 },
             });
             setTimeout(() => {
@@ -4097,8 +4211,9 @@ export class SceneRenderer {
                 // 등장/퇴장 통지의 기준선은 휴지 자세 — 첫 프레임에서 이미 바뀌었다면 그것도 전환이다.
                 Object.keys(poseEls).forEach(k => { poseEls[k].wasHidden = poseEls[k].rest.visible === false; });
                 const t0 = performance.now();
+                const rate = Number(opts.rate) > 0 ? Number(opts.rate) : 1; // 재생 배속 — 게임 진행속도 배수 연동용(등장/퇴장 훅·onEnd 도 같이 빨라진다)
                 const step = (now) => {
-                    let t = now - t0;
+                    let t = (now - t0) * rate;
                     if (t >= dur) {
                         if (loop) t = t % dur;
                         else {
@@ -4501,10 +4616,16 @@ export class SceneRenderer {
         // white-space:pre = 수동 줄바꿈(\n)만 반영. autoWrap 이면 오브젝트 폭(objW, 이미 스케일된 px)
         // 기준으로 접는다. abs-pos 중앙정렬의 shrink-to-fit 조기 줄바꿈을
         // 피하려고 width:max-content + max-width 조합을 쓴다.
-        const wrapW = (t.autoWrap && !isTextCurved(t)) ? Math.round(objW || 0) : 0;
-        const ws = wrapW > 0
-            ? `white-space:pre-wrap;overflow-wrap:break-word;width:max-content;max-width:${wrapW}px;text-align:center;`
-            : 'white-space:pre;';
+        // 정렬 기준 박스 = 소속 오브젝트 폭. 글자에 딱 맞는(shrink-to-fit) 박스를 쓰면 가장 긴 줄이
+        // 박스를 꽉 채워 늘 가운데로 보이고 나머지 줄만 정렬돼 기준이 두 개가 된다 — 오브젝트 폭으로
+        // 고정해 모든 줄이 같은 좌우 경계에 맞는다. objW 를 모르는 경로만 종전 shrink-to-fit 폴백.
+        const boxW = Math.round(objW || 0);
+        // 미지정 텍스트는 가운데 — 종전에도 박스가 앵커에 중앙 정렬돼 한 줄·최장 줄이 가운데였다(표시 불변).
+        const align = t.textAlign || 'center';
+        const wrap = t.autoWrap && !isTextCurved(t) && boxW > 0;
+        const ws = (wrap ? 'white-space:pre-wrap;overflow-wrap:break-word;' : 'white-space:pre;')
+            + (boxW > 0 ? `width:${boxW}px;` : '')
+            + `text-align:${align};`;
         return `position:absolute;${ws}pointer-events:none;line-height:1.2;${textAppearanceCss(t, sx)}left:calc(50% + ${ox}px);top:calc(50% + ${oy}px);transform:translate(-50%,-50%);${zi}`;
     }
 
@@ -4520,16 +4641,20 @@ export class SceneRenderer {
         else if (bg.type === 'linear-gradient') el.style.background = `linear-gradient(${bg.gradientAngle || 180}deg,${bg.color},${bg.color2})`;
         else if (bg.type === 'image-tile' || bg.type === 'image-brick') {
             // tile/brick 채움+스크롤은 마스크 자식과 공용 헬퍼 단일 소스. brick=tileSize 를 벽돌 높이로, tile=정사각 셀.
+            // imagePaths(추가 이미지) 는 imagePath 와 함께 고루 섞어 합성. tilePad=셀 간 여백, imageAlpha=0~100 불투명도.
             const size = bg.tileSize || 64;
-            const resolved = this._resolveAssetPath(bg.imagePath);
+            const urls = [bg.imagePath, ...(bg.imagePaths || [])].map(p => this._resolveAssetPath(p)).filter(Boolean);
+            const pad = Math.max(0, Math.round(bg.tilePad || 0));
+            const alpha = Math.max(0, Math.min(1, (bg.imageAlpha ?? 100) / 100));
             const scroll = bg.scrollEnabled ? { enabled: true, direction: bg.scrollDirection, secPerTile: bg.scrollDuration, epoch: bg.scrollEpoch } : null;
             applyPatternFill(el, {
-                imageUrl: resolved,
+                imageUrls: urls,
                 mode: bg.type === 'image-brick' ? 'brick' : 'tile',
                 cellW: size, cellH: size,
+                pad, alpha,
                 color: bg.color || (bg.type === 'image-brick' ? '#16213e' : ''),
                 scroll,
-                stamp: `${bg.type}|${resolved}|${size}`,
+                stamp: `${bg.type}|${urls.join(',')}|${size}|${pad}|${alpha}`,
             });
         }
         else if (bg.type === 'image-stretch') { el.style.background = `${bg.color} url('${this._resolveAssetPath(bg.imagePath)}') no-repeat center`; el.style.backgroundSize = bg.stretchMode || 'cover'; }
@@ -4592,6 +4717,84 @@ SceneRenderer.mountCharacter = function (hostEl, characterId, opts) {
     return el.__uiCharacter;
 };
 
+// ── 전역 이펙트(씬 밖 스프라이트) ────────────────────────────────────────────
+// 씬 레이어가 아닌 이펙트(캐릭터 공격·타격점·스킬 연출)는 씬 json 에서 꺼낼 수 없으므로
+// 발행된 effects.json(전역 이펙트 맵)에서 id 로 정의를 찾는다. 재생은 씬 안 스프라이트 레이어와
+// 완전히 같은 _buildSpriteVisual/_runSpriteLoop 을 그대로 쓴다(재생 코드 이원화 금지).
+// 정의 기준 폴더는 캐릭터와 같은 publish 출력 폴더라 characterBase 를 공유한다(기준값 1개 유지).
+SceneRenderer.effectDefs = null;        // effects.json 의 effects 맵(1회 로드 캐시)
+SceneRenderer._effectDefsLoad = null;   // 인플라이트 fetch 공유(중복 요청 방지)
+
+SceneRenderer.loadEffectDefs = function (defBase) {
+    if (defBase !== undefined) SceneRenderer.characterBase = defBase;
+    if (SceneRenderer.effectDefs) return Promise.resolve(SceneRenderer.effectDefs);
+    if (SceneRenderer._effectDefsLoad) return SceneRenderer._effectDefsLoad;
+    const base = SceneRenderer.characterBase;
+    const url = (base ? base.replace(/\/?$/, '/') : '') + 'effects.json';
+    SceneRenderer._effectDefsLoad = fetch(url)
+        .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(doc => (SceneRenderer.effectDefs = (doc && doc.effects) || {}))
+        .catch(e => {
+            console.error('[SceneRenderer] 이펙트 정의 로드 실패 — mountSprite 가 동작하지 않습니다:', url, e);
+            return null;
+        })
+        .finally(() => { SceneRenderer._effectDefsLoad = null; });
+    return SceneRenderer._effectDefsLoad;
+};
+
+// 스프라이트 1회 재생 길이(ms). _runSpriteLoop 의 프레임 지연 규칙(delays 우선, 없으면 fps)과 동일 계산.
+function spriteClipDurationMs(clip) {
+    const count = Math.max(1, clip.count || (Array.isArray(clip.delays) ? clip.delays.length : 1));
+    const defDelay = Math.max(1, Math.round(1000 / (clip.fps || 10)));
+    if (Array.isArray(clip.delays) && clip.delays.length)
+        return clip.delays.slice(0, count).reduce((a, d) => a + (d || defDelay), 0);
+    return count * defDelay;
+}
+
+// 씬 없이 이펙트 하나를 재생한다(인게임용). hostEl 안에 붙고, x/y 를 주면 그 좌표(호스트 기준 px)에
+// 이펙트 중심을 맞춰 절대배치한다 — 타격점 표시가 기본 용도.
+// opts: { defBase: 'src/js' (effects.json 이 있는 발행 폴더 — 생략 시 characterBase),
+//         basePath: '' (아틀라스 exportPath 기준 = 씬 렌더러와 동일),
+//         x, y, loop(기본 1회, 0=무한), rate(재생속도), startDelayMs, width, height,
+//         removeOnEnd(기본 true — 유한 루프가 끝나면 스스로 제거) }
+// 반환 Promise<HTMLElement|null> — 정의를 못 찾으면 null(원인은 콘솔).
+SceneRenderer.mountSprite = async function (hostEl, effectId, opts) {
+    const o = opts || {};
+    const defs = await SceneRenderer.loadEffectDefs(o.defBase);
+    const def = defs && defs[effectId];
+    if (!def) {
+        console.error('[SceneRenderer] 이펙트 정의 없음:', effectId,
+            '— 등록된 id:', defs ? Object.keys(defs) : '(effects.json 로드 실패)');
+        return null;
+    }
+    // 정의(격자·프레임 지연)는 effects.json, 인스턴스 값(루프/속도/지연)은 호출측 — 씬 레이어와 같은 분담.
+    const loop = o.loop !== undefined ? o.loop : 1;
+    const clip = Object.assign({}, def.clip, { loop },
+        o.rate != null ? { playbackRate: o.rate } : null,
+        o.startDelayMs != null ? { startDelayMs: o.startDelayMs } : null);
+    const el = new SceneRenderer(null, { basePath: o.basePath || '' }).buildVisual({
+        layerType: 'sprite',
+        exportPath: def.exportPath,
+        clip,
+        visual: { width: o.width || clip.cellW || 64, height: o.height || clip.cellH || 64 },
+    });
+    if (o.x != null || o.y != null) {
+        el.style.position = 'absolute';
+        el.style.left = (o.x || 0) + 'px';
+        el.style.top  = (o.y || 0) + 'px';
+        el.style.transform = 'translate(-50%,-50%)'; // 좌표 = 이펙트 중심(타격점)
+        el.style.pointerEvents = 'none';
+    }
+    hostEl.appendChild(el);
+    // 1회성 이펙트는 끝나면 스스로 사라진다 — 호출측이 정리 코드를 쓰지 않게. 무한 루프(0)/정지(rate 0)는 유지.
+    const rate = clip.playbackRate != null ? clip.playbackRate : 1;
+    if (loop > 0 && rate > 0 && o.removeOnEnd !== false) {
+        const total = (clip.startDelayMs || 0) + spriteClipDurationMs(clip) * loop / rate;
+        setTimeout(() => el.remove(), total + 50); // 마지막 프레임이 그려질 여유
+    }
+    return el;
+};
+
 SceneRenderer.utils = {
     /** depth-gradient CSS 문자열 생성 */
     depthGradientCss,
@@ -4613,6 +4816,8 @@ SceneRenderer.utils = {
     textureAssetPath,
     /** 위젯(표시/토글/슬라이더) contract 방출 판정 — 완성 시 위젯 객체, 미완성 null (에디터 _mapGroups 공용) */
     widgetContractValue,
+    /** navigation 씬 데이터 → 계약 nav 전용 필드 (에디터 buildSceneContract·스토어 프리뷰 공용) */
+    navSceneContractFields,
     /** 캐릭터 소켓 변환(로컬↔절대) — v1 캐릭터 파일을 v2(절대 좌표)로 굽는 마이그레이션 전용 */
     applySocketTransform,
     /** 계약 레이어의 배율 포함 bounds — 소켓 변환 입력 */
@@ -4844,6 +5049,7 @@ SceneRenderer.utils = {
                 style: normalizeTextStyleModel(t),
                 ...(t.curveType === 'arc' ? { curveType: 'arc', curveAngle: t.curveAngle || 0 } : {}),
                 ...(t.autoWrap ? { autoWrap: true } : {}),
+                ...(t.textAlign ? { textAlign: t.textAlign } : {}),
             })),
             image: layer.type === 'image' ? { exportPath: layer.exportPath || '', imageKey: layer.imageKey || '', style: normalizedImageStyle } : null,
             // 오브젝트 마스크 — 자식: 부모 stableId 참조 / 부모: 스텐실 전용(그래픽 숨김) 플래그 / 자식 흐름 설정

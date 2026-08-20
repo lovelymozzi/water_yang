@@ -1,7 +1,7 @@
 @tool
 extends Node3D
 
-const LOBBY_GROUND_LAND_MATERIAL: StandardMaterial3D = preload("res://resources/lobby_ground_land_material.tres")
+const LOBBY_GROUND_LAND_MATERIAL: ShaderMaterial = preload("res://resources/lobby_ground_land_material.tres")
 const LOBBY_GROUND_WATER_MATERIAL: StandardMaterial3D = preload("res://resources/lobby_ground_water_material.tres")
 const LOBBY_WATER_MATERIAL: ShaderMaterial = preload("res://resources/lobby_water_material.tres")
 
@@ -16,6 +16,7 @@ func _ready() -> void:
 	ground_mesh.set_surface_override_material(0, LOBBY_GROUND_LAND_MATERIAL)
 	ground_mesh.set_surface_override_material(1, LOBBY_GROUND_WATER_MATERIAL)
 	water_mesh.material_override = LOBBY_WATER_MATERIAL
+	LOBBY_GROUND_LAND_MATERIAL.set_shader_parameter("water_level", water_mesh.global_position.y)
 
 
 func _process(_delta: float) -> void:

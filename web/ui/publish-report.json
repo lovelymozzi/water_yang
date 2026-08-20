@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-14T12:33:17.838Z",
+  "generatedAt": "2026-08-20T07:18:45.388Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
   "errors": [
     {
@@ -9,20 +9,20 @@
       "where": "nav home_bottom 탭 \"Shop\"",
       "message": "참조하는 씬이 publish 대상에 없습니다 — 해당 씬을 열어 저장(publish)하거나 연결을 정리하세요.",
       "detail": "탭 씬 New Scene"
-    },
-    {
-      "code": "missing-scene",
-      "where": "nav home_bottom 탭 \"Home\"",
-      "message": "참조하는 씬이 publish 대상에 없습니다 — 해당 씬을 열어 저장(publish)하거나 연결을 정리하세요.",
-      "detail": "탭 씬 home"
-    },
-    {
-      "code": "missing-scene",
-      "where": "nav home_bottom 탭 \"Ranking\"",
-      "message": "참조하는 씬이 publish 대상에 없습니다 — 해당 씬을 열어 저장(publish)하거나 연결을 정리하세요.",
-      "detail": "탭 씬 Ranking"
     }
   ],
-  "warnings": [],
-  "infos": []
+  "warnings": [
+    {
+      "code": "doc-edge-no-label",
+      "where": "edge splash→Lobby_godot",
+      "message": "시스템 트리거 설명(label)이 없습니다. \"게임오버 시\"처럼 기입해야 게임이 이 흐름의 발생 조건을 추측하지 않습니다."
+    }
+  ],
+  "infos": [
+    {
+      "code": "game-flow-driver",
+      "where": "game",
+      "message": "FlowDriver 사용 감지 — 버튼 엣지 배선은 드라이버 전담이라 이벤트 배선 스캔을 생략합니다(조건 키·문서 엣지 발화만 검사)."
+    }
+  ]
 }

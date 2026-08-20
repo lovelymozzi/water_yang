@@ -70,6 +70,8 @@ func _process(delta: float) -> void:
 
 
 func _on_level_cleared() -> void:
+	if UiBridge.is_hosted:
+		UiBridge.post_end("clear", 0)
 	clear_label.text = "LEVEL CLEAR!"
 	clear_label.visible = true
 	clear_label.modulate = Color(1.0, 1.0, 1.0, 0.0)

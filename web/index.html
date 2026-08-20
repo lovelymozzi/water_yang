@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>LeonOutPrototype</title>
+<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+
+<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}</style>
+</head>
+<body>
+<script type="module">
+const UI_DIR = './ui/';
+const ASSET_BASE = '../';
+const STORAGE_PREFIX = 'leonout_';
+const LOBBY_UI_SCENE = 'Lobby_godot';
+const INGAME_UI_SCENE = 'ingame';
+const GODOT_ENGINE_URL = "index.js";
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":12975088,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+
+import { FlowDriver } from './ui/flow-driver.js';
+import { EconomyManager } from './ui/economy-manager.js';
+import { ProgressManager } from './ui/progress-manager.js';
+import { GameSession } from './ui/game-session.js';
+import { makeGodotCartridge } from './ui/godot-bridge.js';
+
+const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX });
+const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX });
+const flow = new FlowDriver({
+  basePath: ASSET_BASE,
+  dataPath: UI_DIR,
+  managers: { economy, progress },
+});
+
+// UI editor will replace this temporary condition with the real game rule later.
+flow.defineCondition('버튼누르면 인게임씬으로 이동', () => true);
+
+const godotCartridge = makeGodotCartridge({
+  engineUrl: GODOT_ENGINE_URL,
+  engineConfig: GODOT_CONFIG,
+});
+let activeGame = null;
+
+flow.on('scene:enter', async ({ sceneName, renderer }) => {
+  const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
+    : sceneName === INGAME_UI_SCENE ? 'main' : null;
+  if (!godotScene) return;
+
+  if (activeGame) await activeGame.abort('scene-change');
+  const game = new GameSession({ renderer, initTimeoutMs: 30000 });
+  activeGame = game;
+  await game.start(godotCartridge, {
+    stage: progress.getCurrentStage(),
+    config: { godotScene },
+    onEnd: async (result) => {
+      if (result.outcome === 'clear') {
+        await progress.recordClear(progress.getCurrentStage(), {
+          stars: result.stats?.stars || 0,
+          score: result.score,
+          ticket: result.ticket,
+        });
+        await flow.fire('임시) 스테이지 클리어시 로비로 복귀');
+      }
+    },
+    onError: (error) => console.error('[Godot integration] session error', error),
+  });
+  if (game.state === 'ready') game.startGame();
+});
+
+await flow.start();
+</script>
+</body>
+</html>

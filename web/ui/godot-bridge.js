@@ -9,6 +9,7 @@
 //   4. startGame() 이후 hud/progress/end/error 가 session.post 로 관통
 //   5. 종료: end 수신 시 이후 post 전부 드롭. forceQuit 은 end 포함 전부 드롭(계약: forceQuit 에서 end 금지).
 //      unmount: engine.requestQuit() → canvas 제거 → window.UiBridge 삭제. 멱등.
+//      다음 세션의 엔진 부팅은 이전 엔진의 onExit(WASM 정리 완료)를 기다린다(수명 경합 방지).
 //
 // 호스트→Godot 커맨드 — setHandler 로 등록된 콜백에 JSON 문자열 1개:
 //   JSON.stringify({ v:1, cmd, payload })
@@ -32,6 +33,9 @@ export const GODOT_INTERFACE_NAME = 'UiBridge';
 
 let _engineScriptP = null; // engine.js(전역 Engine 클래스) 로드는 페이지당 1회 memoize
 let _activeLock = false;   // Godot 웹 엔진 동시 1세션 강제
+let _prevQuitP = Promise.resolve(); // 직전 엔진의 onExit(WASM 정리 완료) 게이트 — 다음 엔진 부팅은 이걸 기다린다.
+//   requestQuit() 은 종료 "요청"일 뿐 완료를 안 알려줘서, 이 게이트 없이는 이전 엔진 teardown 중에
+//   새 엔진이 부팅되는 수명 경합("Object was deleted while awaiting a callback"/WASM OOB)이 난다.
 
 function loadEngineScript(url) {
     if (typeof window.Engine === 'function') return Promise.resolve();
@@ -73,6 +77,7 @@ export function makeGodotCartridge({ engineUrl, engineConfig, bootTimeoutMs = 20
         let bootP = null;
         let readyResolve; const readyP = new Promise((r) => { readyResolve = r; });
         let initedResolve; const initedP = new Promise((r) => { initedResolve = r; });
+        let quitResolve; const quitP = new Promise((r) => { quitResolve = r; }); // 이 엔진의 onExit 완료
 
         function sendCommand(cmd, payload = {}) {
             if (!handler) { console.warn('[godot-bridge] 커맨드 드롭(GDScript 핸들러 미등록):', cmd); return; }
@@ -120,9 +125,9 @@ export function makeGodotCartridge({ engineUrl, engineConfig, bootTimeoutMs = 20
                     ready() { console.log('[godot-bridge] GDScript ready'); readyResolve(); },
                     post: onPost,
                 };
-                bootP = loadEngineScript(engineUrl).then(() => {
+                bootP = Promise.all([loadEngineScript(engineUrl), _prevQuitP]).then(() => {
                     if (terminating) return; // 부팅 대기 중 forceQuit/unmount — 엔진 생성 자체를 건너뛴다
-                    engine = new window.Engine({ ...engineConfig, canvas, canvasResizePolicy: 0, ...(configOverrides || {}) });
+                    engine = new window.Engine({ ...engineConfig, canvas, canvasResizePolicy: 0, onExit: () => quitResolve(), ...(configOverrides || {}) });
                     return engine.startGame();
                 });
                 bootP.catch(() => {}); // 정식 소비는 initialize 의 await — mount 단계 unhandled rejection 방지
@@ -151,7 +156,13 @@ export function makeGodotCartridge({ engineUrl, engineConfig, bootTimeoutMs = 20
 
             unmount() {
                 terminating = true;
-                try { if (engine) engine.requestQuit(); } catch (e) { console.error('[godot-bridge] requestQuit 예외(강제 정리로 계속):', e); }
+                if (engine) {
+                    try { engine.requestQuit(); } catch (e) {
+                        console.error('[godot-bridge] requestQuit 예외(강제 정리로 계속):', e);
+                        quitResolve(); // onExit 이 안 올 수 있으므로 게이트 해제 — 다음 부팅 영구대기 방지
+                    }
+                    _prevQuitP = quitP; // 다음 세션의 엔진 부팅은 이 엔진의 onExit 이후
+                }
                 engine = null;
                 if (ro) { ro.disconnect(); ro = null; }
                 if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas);

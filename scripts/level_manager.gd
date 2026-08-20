@@ -434,7 +434,7 @@ func _ensure_named_child(parent: Node3D, child_name: String) -> Node3D:
 func _rebuild_from_scene_layout() -> void:
 	_clear_generated_nodes()
 	_initialize_grid_arrays()
-	# 구멍 칸은 타일을 깔지 않으므로 타일보다 먼저 확정해야 한다.
+	# 구멍 비주얼을 타일 위에 올리려면 타일을 만들기 전에 위치를 확정해야 한다.
 	_sync_hole_layout()
 	_build_board_base()
 	_build_grid_tiles()
@@ -512,8 +512,6 @@ func _build_grid_tiles() -> void:
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var cell: Vector2i = Vector2i(x, y)
-			if is_hole(cell):
-				continue
 			if floor_tile_scene != null:
 				var visual := floor_tile_scene.instantiate() as Node3D
 				if visual != null:
@@ -621,8 +619,10 @@ func _build_hole_visuals() -> void:
 			continue
 
 		visual.name = "CatHole_%d_%d" % [cell.x, cell.y]
-		# 구멍 칸에는 타일을 깔지 않으므로 보드 베이스 윗면(y=0)에 앉힌다.
-		visual.position = grid_to_world(cell, hole_visual_height)
+		# 구멍은 같은 칸의 바닥 타일 위에 놓는다. hole_visual_height 는
+		# 타일 윗면을 기준으로 한 추가 보정값으로 유지한다.
+		var floor_height := floor_tile_height if show_grid_tiles else 0.0
+		visual.position = grid_to_world(cell, floor_height + hole_visual_height)
 		_holes_root.add_child(visual)
 
 		# 크기와 색은 노드가 트리에 들어간 뒤에 준다. 에셋이 자기 _ready 에서 원본

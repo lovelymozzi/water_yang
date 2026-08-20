@@ -159,13 +159,16 @@ export class GameSession {
    * @param {object} [opts.hudMap] - hud payload 필드 → bindingKey 매핑 (기본 DEFAULT_HUD_MAP)
    * @param {number} [opts.initTimeoutMs] - initialize() 완료 대기 한도 (기본 10000)
    * @param {object} [opts.authority] - Authority 계약 구현체 (기본 LOCAL_AUTHORITY — 파일 상단 계약 주석 참조)
+   * @param {boolean} [opts.debug] - 메시지·상태 전이 로그 출력 (기본 false — 효과음 post 가 1건당 1줄이라
+   *   전투 중 초당 수십 줄이 되고, 콘솔 버퍼가 payload 객체를 붙잡아 모바일 장기 세션 메모리에도 해롭다)
    */
-  constructor({ renderer, mountLayerName = GAME_FIELD_LAYER_NAME, hudMap = DEFAULT_HUD_MAP, initTimeoutMs = 10000, authority = null } = {}) {
+  constructor({ renderer, mountLayerName = GAME_FIELD_LAYER_NAME, hudMap = DEFAULT_HUD_MAP, initTimeoutMs = 10000, authority = null, debug = false } = {}) {
     if (!renderer) throw new Error('[GameSession] renderer 필수');
     this._renderer = renderer;
     this._mountLayerName = mountLayerName;
     this._hudMap = hudMap;
     this._initTimeoutMs = initTimeoutMs;
+    this._debug = !!debug;
     this._state = 'idle';
     this._cartridge = null;
     this._hostEl = null;
@@ -272,7 +275,7 @@ export class GameSession {
     if (this._cartridge) {
       try {
         assertSerializable(reason, 'forceQuit.reason');
-        console.log('[GameSession] →cartridge forceQuit', reason);
+        if (this._debug) console.log('[GameSession] →cartridge forceQuit', reason);
         this._cartridge.forceQuit(reason);
       } catch (e) { console.error('[GameSession] forceQuit 예외(강제 정리로 계속):', e); }
     }
@@ -286,7 +289,7 @@ export class GameSession {
   _setState(next) {
     const allowed = ALLOWED_TRANSITIONS[this._state] || [];
     if (!allowed.includes(next)) { console.warn(`[GameSession] 전이표 위반 무시: ${this._state} → ${next}`); return false; }
-    console.log(`[GameSession] state: ${this._state} → ${next}`);
+    if (this._debug) console.log(`[GameSession] state: ${this._state} → ${next}`);
     this._state = next;
     return true;
   }
@@ -295,7 +298,7 @@ export class GameSession {
   async _callCartridge(method, args, timeoutMs = 0) {
     try {
       args.forEach((a, i) => assertSerializable(a, `${method}.args[${i}]`));
-      console.log(`[GameSession] →cartridge ${method}`, ...args);
+      if (this._debug) console.log(`[GameSession] →cartridge ${method}`, ...args);
       const result = this._cartridge[method](...args);
       if (result && typeof result.then === 'function') {
         if (timeoutMs > 0) {
@@ -319,7 +322,7 @@ export class GameSession {
     const check = validateMessage(msg);
     if (!check.ok) { console.warn(`[GameSession] 수신 차단: ${check.error}`); return; }
     assertSerializable(payload);
-    console.log('[GameSession] ←cartridge', type, payload);
+    if (this._debug) console.log('[GameSession] ←cartridge', type, payload); // 효과음 post 1건 = 1줄 — 기본은 침묵
 
     if (type === 'hud') {
       if (!this.isActive) return;
