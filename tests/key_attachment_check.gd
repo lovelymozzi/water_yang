@@ -36,6 +36,10 @@ func _process(_delta: float) -> bool:
 			var attachment := cat._skeleton.get_node_or_null("NeckKeyAttachment") as BoneAttachment3D
 			var key := attachment.get_node_or_null("Key") as Node3D if attachment != null else null
 			var mesh := key.get_node_or_null("key1") as MeshInstance3D if key != null else null
+			if not cat.show_key:
+				if attachment != null:
+					_failures.append("%s: key attachment should be disabled" % cat.name)
+				continue
 			if attachment == null:
 				_failures.append("%s: Bone004 attachment missing" % cat.name)
 				continue

@@ -65,7 +65,12 @@ func _on_command(args: Array) -> void:
 		"forceQuit":
 			emit_signal("host_force_quit", str(payload.get("reason", "")))
 		"message":
-			emit_signal("host_message", str(payload.get("topic", "")), payload.get("payload"))
+			var topic := str(payload.get("topic", ""))
+			if topic == "load_scene":
+				var scene_data: Dictionary = payload.get("payload", {})
+				_initialize_host_scene(scene_data)
+			else:
+				emit_signal("host_message", topic, payload.get("payload"))
 		_:
 			push_warning("[UiBridge] Unknown command: %s" % [message.get("cmd", "")])
 
@@ -77,6 +82,18 @@ func _initialize_host_scene(stage_data: Dictionary) -> void:
 	if scene_path.is_empty():
 		post_error("Unknown host scene: %s" % scene_key)
 		return
+	var preload_scenes: Array = config.get("preloadGodotScenes", [])
+	for preload_key in preload_scenes:
+		var preload_path: String = HOST_SCENES.get(str(preload_key), "")
+		if preload_path.is_empty():
+			post_error("Unknown preload scene: %s" % preload_key)
+			return
+		if get_tree().current_scene == null or get_tree().current_scene.scene_file_path != preload_path:
+			var preload_error := get_tree().change_scene_to_file(preload_path)
+			if preload_error != OK:
+				post_error("Could not preload host scene: %s" % preload_path)
+				return
+			await get_tree().process_frame
 	if get_tree().current_scene == null or get_tree().current_scene.scene_file_path != scene_path:
 		var error := get_tree().change_scene_to_file(scene_path)
 		if error != OK:
@@ -85,6 +102,8 @@ func _initialize_host_scene(stage_data: Dictionary) -> void:
 		await get_tree().process_frame
 	emit_signal("host_initialize", stage_data)
 	notify_initialized()
+	await get_tree().process_frame
+	post_progress({"sceneReady": scene_key})
 
 
 func notify_initialized() -> void:

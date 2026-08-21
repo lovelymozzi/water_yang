@@ -148,6 +148,8 @@ const ABSORB_SINK_CELLS := 0.9
 @export_group("Orange Cat Key (key1.fbx)")
 # These fields drive only color_id 0, the orange cat. They remain editable in
 # the Inspector so artists can tune the key without touching this script.
+@export var show_key := true
+
 @export var key_local_position := Vector3(0.1, -0.04, 0.1):
 	set(value):
 		key_local_position = value
@@ -1007,7 +1009,7 @@ func _rebuild_body_visuals() -> void:
 
 	# color_id 0 is the orange pair.  Keep the key under Bone004 so it
 	# stays just below the neck while the cat follows corners and animates.
-	if color_id == ORANGE_CAT_COLOR_ID:
+	if color_id == ORANGE_CAT_COLOR_ID and show_key:
 		var neck_key_attachment := BoneAttachment3D.new()
 		neck_key_attachment.name = "NeckKeyAttachment"
 		neck_key_attachment.bone_name = "Bone004"
@@ -1109,6 +1111,8 @@ func _update_visual_pose() -> void:
 	# 노드 원점이 머리 본 위치이므로, 머리 본이 원점에 오도록 모델을 밀어 준다.
 	_cat_model.position = _cat_model.basis * (-_head_bone_rest_global.origin)
 
+	if not is_inside_tree() or not _skeleton.is_inside_tree():
+		return
 	var cat_to_skeleton: Transform3D = global_transform.affine_inverse() * _skeleton.global_transform
 	var skeleton_rotation: Basis = cat_to_skeleton.basis.orthonormalized()
 	var skeleton_rotation_inverse: Basis = skeleton_rotation.inverse()
