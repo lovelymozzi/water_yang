@@ -293,7 +293,7 @@
       "scaleY": 0.6389348369225045,
       "zIndex": 2,
       "visual": {
-        "exportPath": "bar1_2.png",
+        "exportPath": "src/assets/bar1_2.png",
         "width": 209,
         "height": 57
       },
@@ -351,7 +351,7 @@
       "scaleY": 0.6389348369225045,
       "zIndex": 3,
       "visual": {
-        "exportPath": "gimmick_coinpurse_coin_2.png",
+        "exportPath": "src/assets/gimmick_coinpurse_coin_2.png",
         "width": 48,
         "height": 50
       },
@@ -374,7 +374,7 @@
       "scaleY": 0.6389348369225045,
       "zIndex": 4,
       "visual": {
-        "exportPath": "bar1_2.png",
+        "exportPath": "src/assets/bar1_2.png",
         "width": 209,
         "height": 57
       },
@@ -431,7 +431,7 @@
       "scale": 0.6047430830039525,
       "zIndex": 5,
       "visual": {
-        "exportPath": "home_btn_plus_1.png",
+        "exportPath": "src/assets/home_btn_plus_1.png",
         "width": 40,
         "height": 40
       },
@@ -472,7 +472,7 @@
       "scaleY": 0.6389348369225045,
       "zIndex": 6,
       "visual": {
-        "exportPath": "bar1_2.png",
+        "exportPath": "src/assets/bar1_2.png",
         "width": 209,
         "height": 57
       },
@@ -528,7 +528,7 @@
       "y": 690,
       "zIndex": 7,
       "visual": {
-        "exportPath": "home_bottom.png",
+        "exportPath": "src/assets/home_bottom.png",
         "width": 400,
         "height": 250,
         "style": {
@@ -566,7 +566,7 @@
       "y": 662,
       "zIndex": 8,
       "visual": {
-        "exportPath": "ingame_item_bg.png",
+        "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
       }
@@ -579,7 +579,7 @@
       "y": 662,
       "zIndex": 9,
       "visual": {
-        "exportPath": "ingame_item_bg.png",
+        "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
       }
@@ -592,7 +592,7 @@
       "y": 662,
       "zIndex": 10,
       "visual": {
-        "exportPath": "ingame_item_bg.png",
+        "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
       }
@@ -605,7 +605,7 @@
       "y": 662,
       "zIndex": 11,
       "visual": {
-        "exportPath": "ingame_item_bg.png",
+        "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
       },
@@ -626,7 +626,7 @@
       "scale": 0.75,
       "zIndex": 12,
       "visual": {
-        "exportPath": "anniversaryPack_time.webp",
+        "exportPath": "src/assets/anniversaryPack_time.webp",
         "width": 50,
         "height": 50
       }
@@ -640,7 +640,7 @@
       "scale": 0.75,
       "zIndex": 13,
       "visual": {
-        "exportPath": "common_time_needle.webp",
+        "exportPath": "src/assets/common_time_needle.webp",
         "width": 10,
         "height": 18
       }
@@ -682,7 +682,7 @@
       "scale": 0.6630434782608695,
       "zIndex": 16,
       "visual": {
-        "exportPath": "common_icon_greendot2.webp",
+        "exportPath": "src/assets/common_icon_greendot2.webp",
         "width": 46,
         "height": 46
       },
@@ -732,7 +732,7 @@
       "scale": 0.6630434782608695,
       "zIndex": 17,
       "visual": {
-        "exportPath": "common_icon_greendot2.webp",
+        "exportPath": "src/assets/common_icon_greendot2.webp",
         "width": 46,
         "height": 46
       },
@@ -782,7 +782,7 @@
       "scale": 0.6630434782608695,
       "zIndex": 18,
       "visual": {
-        "exportPath": "common_icon_greendot2.webp",
+        "exportPath": "src/assets/common_icon_greendot2.webp",
         "width": 46,
         "height": 46
       },
@@ -846,7 +846,7 @@
       "scale": 0.47875494071146246,
       "zIndex": 20,
       "visual": {
-        "exportPath": "home_btn_setting.webp",
+        "exportPath": "src/assets/home_btn_setting.webp",
         "width": 88,
         "height": 88,
         "style": {

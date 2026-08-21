@@ -4,25 +4,6 @@
 > 금지 규칙은 [`./AGENTS.md`](./AGENTS.md), `SceneRenderer` API·통합 절차는 `.claude/skills/ui-editor-game/SKILL.md` 참조.
 > **표기 규약(전 씬 공통 — 씬 섹션은 데이터만)**: 이벤트=`renderer.on(name, fn)` 구독(여기 있는 이름만 사용, 기본 트리거 click — 다르면 괄호 표기) · 바인딩=`renderer.update({...})` 주입 · sceneUuid=불변(씬 연결은 이 값 기준) · sceneType 표기 없음=일반 씬 · 위젯=visibility/toggle:boolean, slider:0~1, fill:0~100(표시 전용) — 입력은 `widget:<key>` 이벤트로 오고 게임이 update 로 에코해야 UI가 움직임 · GameField=GameSession 인게임 카트리지 마운트 지점.
 
-<!-- SCENE:BuyLives_1 BEGIN -->
-#### `BuyLives_1`  ·  contract: `./web/ui/BuyLives_1.contract.json`
-- sceneUuid: `f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be`
-- 이벤트: `button-green-png-309:click` · `button-yellow1-png-311:click` · `icon-close01-png-2233:click`
-- 텍스트 바인딩: `heart.timer` · `heart.current` · `cost.refill`
-<!-- SCENE:BuyLives_1 END -->
-
-<!-- SCENE:Fail BEGIN -->
-#### `Fail`  ·  contract: `./web/ui/Fail.contract.json`
-- sceneUuid: `ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd`
-- 이벤트: `plain-text-515:click` · `shape-round-rect-520:click`
-<!-- SCENE:Fail END -->
-
-<!-- SCENE:Give_up BEGIN -->
-#### `Give_up`  ·  contract: `./web/ui/Give_up.contract.json`
-- sceneUuid: `afd468ee-25ac-4e8c-b452-dbf5a3548662`
-- 이벤트: `plain-text-346:click` · `shape-round-rect-350:click`
-<!-- SCENE:Give_up END -->
-
 <!-- SCENE:Ingame BEGIN -->
 #### `Ingame`  ·  contract: `./web/ui/Ingame.contract.json`
 - sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
@@ -45,17 +26,10 @@
 - 이벤트: 없음
 <!-- SCENE:Ranking END -->
 
-<!-- SCENE:Settings_1 BEGIN -->
-#### `Settings_1`  ·  contract: `./web/ui/Settings_1.contract.json`
-- sceneUuid: `235b7eb7-c304-45b3-aa55-25f18050fd64`
-- 이벤트: `shape-rect-2276:click` · `setting-btn-option-png-2243:click` · `setting-btn-option-png-2244:click` · `setting-btn-option-png-2278:click`
-- 위젯: `music`(toggle) · `sound`(toggle) · `vibration`(toggle) · `lobby`(toggle) · `retry`(toggle) — 입력 이벤트: `widget:music` · `widget:sound` · `widget:vibration` · `widget:lobby` · `widget:retry`
-<!-- SCENE:Settings_1 END -->
-
 <!-- SCENE:Splash BEGIN -->
 #### `Splash`  ·  contract: `./web/ui/Splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: `loading-out-png-11:click` · `loading-inner-png-12:click` · `loading-bar-png-13:click` · `text-loading-15:click`
+- 이벤트: `loading-out-png-11:click`
 - 텍스트 바인딩: `loadingMessage`
 - 위젯: `loading.prograss`(fill)
 - GameField 레이어 있음
@@ -73,6 +47,25 @@
 - sceneUuid: `b11144cd-f2c6-4f82-a4a8-c76b3496cd70`
 - 이벤트: `common-btn-top-x-blue-png-2186:click`
 <!-- SCENE:pop_BuyCoins END -->
+
+<!-- SCENE:pop_BuyLives_1 BEGIN -->
+#### `pop_BuyLives_1`  ·  contract: `./web/ui/pop_BuyLives_1.contract.json`
+- sceneUuid: `f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be`
+- 이벤트: `button-green-png-309:click` · `button-yellow1-png-311:click` · `icon-close01-png-2233:click`
+- 텍스트 바인딩: `heart.timer` · `heart.current` · `cost.refill`
+<!-- SCENE:pop_BuyLives_1 END -->
+
+<!-- SCENE:pop_Fail BEGIN -->
+#### `pop_Fail`  ·  contract: `./web/ui/pop_Fail.contract.json`
+- sceneUuid: `ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd`
+- 이벤트: `plain-text-515:click` · `shape-round-rect-520:click`
+<!-- SCENE:pop_Fail END -->
+
+<!-- SCENE:pop_Give_up BEGIN -->
+#### `pop_Give_up`  ·  contract: `./web/ui/pop_Give_up.contract.json`
+- sceneUuid: `afd468ee-25ac-4e8c-b452-dbf5a3548662`
+- 이벤트: `plain-text-346:click` · `shape-round-rect-350:click`
+<!-- SCENE:pop_Give_up END -->
 
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
@@ -99,10 +92,17 @@
 - 이벤트: `common-btn-top-x-blue-png-290:click`
 <!-- SCENE:pop_Settings END -->
 
-<!-- SCENE:popup_entry BEGIN -->
-#### `popup_entry`  ·  contract: `./web/ui/popup_entry.contract.json`
+<!-- SCENE:pop_Settings_1 BEGIN -->
+#### `pop_Settings_1`  ·  contract: `./web/ui/pop_Settings_1.contract.json`
+- sceneUuid: `235b7eb7-c304-45b3-aa55-25f18050fd64`
+- 이벤트: `setting-btn-option-png-2243:click` · `setting-btn-option-png-2244:click` · `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click`
+- 위젯: `music`(toggle) · `sound`(toggle) · `vibration`(toggle) · `lobby`(toggle) · `retry`(toggle) — 입력 이벤트: `widget:music` · `widget:sound` · `widget:vibration` · `widget:lobby` · `widget:retry`
+<!-- SCENE:pop_Settings_1 END -->
+
+<!-- SCENE:pop_entry BEGIN -->
+#### `pop_entry`  ·  contract: `./web/ui/pop_entry.contract.json`
 - sceneUuid: `87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa`
 - 이벤트: 없음
-<!-- SCENE:popup_entry END -->
+<!-- SCENE:pop_entry END -->
 
 

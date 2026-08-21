@@ -23,7 +23,7 @@
     "sliceB": 0,
     "sliceScale": 0.32,
     "sliceRepeat": "stretch",
-    "imagePath": "home_bottom_1.png"
+    "imagePath": "src/assets/home_bottom_1.png"
   },
   "transitionType": "slide",
   "transitionDuration": 600,
@@ -61,7 +61,7 @@
     "indicator": {
       "type": "image",
       "color": "#3f86e0",
-      "imagePath": "home_bottom_select.png",
+      "imagePath": "src/assets/home_bottom_select.png",
       "radius": 12,
       "extendTop": 20,
       "extendBottom": 0,

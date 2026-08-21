@@ -1,5 +1,5 @@
 {
-  "name": "popup_entry",
+  "name": "pop_entry",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "image-tile",
@@ -8,6 +8,8 @@
   "bgGradientAngle": 180,
   "bgImagePath": "",
   "bgTileSize": 86,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
   "bgStretchMode": "cover",
   "bgScrollEnabled": true,
   "bgScrollDirection": "up-right",
@@ -61,22 +63,7 @@
       "sliceB": 73,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "assetId": "src/assets/common_popup_box copy.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "sliceRepeat": "stretch"
     },
     {
       "id": 440,
@@ -116,22 +103,7 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1,
-      "assetId": "src/assets/entry_popup2_textbase_normal.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "selectedTextIndex": -1
     },
     {
       "id": 441,
@@ -171,22 +143,7 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1,
-      "assetId": "src/assets/common_btn_top_x_red.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "selectedTextIndex": -1
     },
     {
       "id": 442,
@@ -291,8 +248,7 @@
           "direction": "right",
           "color": "#ffffff"
         }
-      },
-      "events": []
+      }
     },
     {
       "id": 443,
@@ -396,8 +352,7 @@
           "direction": "right",
           "color": "#ffffff"
         }
-      },
-      "events": []
+      }
     },
     {
       "id": 444,
@@ -444,22 +399,7 @@
       "sliceB": 40,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "assetId": "src/assets/entry_box_normal.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "sliceRepeat": "stretch"
     },
     {
       "id": 445,
@@ -508,22 +448,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-448",
-      "fxGroupId": "fx-449",
-      "assetId": "src/assets/common_btn_green_sales.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-449"
     },
     {
       "id": 446,
@@ -629,8 +554,7 @@
         }
       },
       "groupId": "grp-448",
-      "fxGroupId": "fx-449",
-      "events": []
+      "fxGroupId": "fx-449"
     },
     {
       "id": 449,
@@ -672,22 +596,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-457",
-      "fxGroupId": "fx-460",
-      "assetId": "src/assets/entry_item_on.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-460"
     },
     {
       "id": 450,
@@ -729,22 +638,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-458",
-      "fxGroupId": "fx-459",
-      "assetId": "src/assets/entry_item_off.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-459"
     },
     {
       "id": 451,
@@ -784,22 +678,7 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1,
-      "assetId": "src/assets/entry_item_off.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "selectedTextIndex": -1
     },
     {
       "id": 452,
@@ -902,8 +781,7 @@
           "direction": "right",
           "color": "#ffffff"
         }
-      },
-      "events": []
+      }
     },
     {
       "id": 453,
@@ -945,22 +823,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-457",
-      "fxGroupId": "fx-460",
-      "assetId": "src/assets/entry_item_check.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-460"
     },
     {
       "id": 454,
@@ -1002,22 +865,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-458",
-      "fxGroupId": "fx-459",
-      "assetId": "src/assets/entry_item_num.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-459"
     },
     {
       "id": 455,
@@ -1122,8 +970,7 @@
         }
       },
       "groupId": "grp-458",
-      "fxGroupId": "fx-459",
-      "events": []
+      "fxGroupId": "fx-459"
     }
   ],
   "zLayers": [

@@ -82,7 +82,6 @@
 | `#FDDCBB` | 1 | 텍스트 외곽선 |
 | `#FFC17A` | 1 | 컴포넌트 채움 |
 | `#FFDE00` | 1 | 텍스트 |
-| `rgba(0,0,0,0.57)` | 1 | 컴포넌트 채움 |
 | `rgba(0,255,204,0)` | 1 | 컴포넌트 채움 |
 | `rgba(103,254,237,0.52)` | 1 | 컴포넌트 채움 |
 | `rgba(112,253,255,0.48)` | 1 | 컴포넌트 채움 |
@@ -100,11 +99,11 @@
 - `"Fredoka One", cursive` — 1곳 · 크기 20px · 굵기 bold
 - `Arial, sans-serif` — 1곳 · 크기 18px · 굵기 bold
 
-## 형태 언어 (컴포넌트 137개 기준)
+## 형태 언어 (컴포넌트 136개 기준)
 
-- 도형: `rectangle` 124 · `circle` 8 · `top-round-rect` 4 · `pill` 1
-- 모서리 반경(px): 0(11) · 8(1) · 12(94) · 16(27) · 115(4)
-- 채움: `none` 95 · `solid` 28 · `linear-gradient` 6 · `radial-gradient` 6 · `conic-gradient` 2
+- 도형: `rectangle` 123 · `circle` 8 · `top-round-rect` 4 · `pill` 1
+- 모서리 반경(px): 0(10) · 8(1) · 12(94) · 16(27) · 115(4)
+- 채움: `none` 95 · `solid` 27 · `linear-gradient` 6 · `radial-gradient` 6 · `conic-gradient` 2
 - 테두리 두께(px): 1(2) · 3(1) · 19(4)
 - 그림자: 입체(depth-edge) 14 · 외부 7 · 내부 23
 - 텍스트 스타일: 외곽선 78 · 입체 37 · 그림자 90
@@ -118,18 +117,18 @@
 
 ## 씬별 배경
 
-- `BuyLives_1` — 단색 `rgba(0,0,0,0.3)`
-- `Fail` — 단색 `rgba(0,0,0,0.3)`
-- `Give_up` — 단색 `rgba(0,0,0,0.3)`
 - `home_bottom` — navigation · 바 배경 `#1d58a8`
 - `Ingame` — 단색 `#16213e`
 - `Lobby` — 이미지 `-` (image-stretch)
 - `pop_BuyCoins` — 이미지 `common_bg_pt_3.png` (image-tile)
+- `pop_BuyLives_1` — 단색 `rgba(0,0,0,0.3)`
+- `pop_entry` — 이미지 `-` (image-tile)
+- `pop_Fail` — 단색 `rgba(0,0,0,0.3)`
+- `pop_Give_up` — 단색 `rgba(0,0,0,0.3)`
 - `pop_LevelFail` — 단색 `rgba(0,0,0,0.3)`
 - `pop_LevelWin` — 단색 `rgba(0,0,0,0.3)`
 - `pop_OutOfMoves` — 단색 `rgba(0,0,0,0.3)`
 - `pop_Settings` — 이미지 `common_bg_pt_2.png` (image-tile)
-- `popup_entry` — 이미지 `-` (image-tile)
+- `pop_Settings_1` — 단색 `rgba(0,0,0,0.3)`
 - `Ranking` — 이미지 `common_bg_pt.png` (image-tile)
-- `Settings_1` — 단색 `rgba(0,0,0,0.3)`
 - `Splash` — 단색 `#16213e`

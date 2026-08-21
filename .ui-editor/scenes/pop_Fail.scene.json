@@ -1,5 +1,5 @@
 {
-  "name": "Give_up",
+  "name": "pop_Fail",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -8,14 +8,19 @@
   "bgGradientAngle": 180,
   "bgImagePath": "",
   "bgTileSize": 64,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
   "bgStretchMode": "cover",
   "bgScrollEnabled": false,
   "bgScrollDirection": "right",
   "bgScrollDuration": 4,
+  "refImagePath": "",
+  "refVisible": true,
+  "refDim": 70,
   "layers": [
     {
-      "id": 341,
-      "stableId": "-341",
+      "id": 511,
+      "stableId": "-511",
       "type": "component",
       "source": "preset",
       "name": "팝업_라인",
@@ -74,8 +79,8 @@
       "zLayerId": "zl-content"
     },
     {
-      "id": 342,
-      "stableId": "-342",
+      "id": 512,
+      "stableId": "-512",
       "type": "component",
       "source": "preset",
       "name": "팝업",
@@ -134,8 +139,8 @@
       "zLayerId": "zl-content"
     },
     {
-      "id": 343,
-      "stableId": "plain-text-343",
+      "id": 513,
+      "stableId": "plain-text-513",
       "type": "component",
       "source": "preset",
       "name": "plain-text",
@@ -213,13 +218,13 @@
       "zLayerId": "zl-content"
     },
     {
-      "id": 353,
-      "stableId": "button-green-png-353",
+      "id": 571,
+      "stableId": "button-yellow1-png-571",
       "type": "image",
-      "name": "button_green.png",
-      "exportPath": "src/assets/button_green_4.png",
-      "x": 115,
-      "y": 488,
+      "name": "button_yellow1.png",
+      "exportPath": "src/assets/button_yellow1_1.png",
+      "x": 116,
+      "y": 494,
       "scale": 1,
       "scaleX": 1,
       "scaleY": 1,
@@ -227,7 +232,7 @@
       "zIndex": 4,
       "visible": true,
       "width": 162,
-      "height": 88,
+      "height": 77,
       "flipX": false,
       "flipY": false,
       "tintMode": "off",
@@ -239,26 +244,12 @@
       "pressScale": 95,
       "texts": [],
       "selectedTextIndex": -1,
-      "fxGroupId": "fx-355",
-      "assetId": "src/assets/button_green_4.png",
-      "zLayerId": "zl-content",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-573",
+      "zLayerId": "zl-content"
     },
     {
-      "id": 346,
-      "stableId": "plain-text-346",
+      "id": 515,
+      "stableId": "plain-text-515",
       "type": "component",
       "source": "preset",
       "name": "plain-text",
@@ -300,7 +291,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "GiveUp",
+            "content": "ReTry",
             "fontSize": 36,
             "fontWeight": "bold",
             "fontFamily": "\"Lilita One\", cursive",
@@ -333,19 +324,31 @@
         "maskInnerPct": 28,
         "maskOuterPct": 76
       },
-      "fxGroupId": "fx-355",
+      "fxGroupId": "fx-573",
       "zLayerId": "zl-content",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d"
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "BuyLives_1"
+            },
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "Ingame"
+            }
+          ]
         }
       ]
     },
     {
-      "id": 347,
-      "stableId": "shape-top-round-347",
+      "id": 516,
+      "stableId": "shape-top-round-516",
       "type": "component",
       "source": "preset",
       "name": "shape-top-round",
@@ -404,8 +407,8 @@
       "zLayerId": "zl-content"
     },
     {
-      "id": 348,
-      "stableId": "gold-glow-348",
+      "id": 517,
+      "stableId": "gold-glow-517",
       "type": "component",
       "source": "preset",
       "name": "gold-glow",
@@ -465,11 +468,11 @@
       "zLayerId": "zl-content"
     },
     {
-      "id": 349,
-      "stableId": "heart-broken-png-349",
+      "id": 518,
+      "stableId": "heart-broken-png-518",
       "type": "image",
       "name": "heart_broken.png",
-      "exportPath": "src/assets/heart_broken_2.png",
+      "exportPath": "src/assets/heart_broken_1.png",
       "x": 139,
       "y": 352,
       "scale": 1,
@@ -492,31 +495,17 @@
       "texts": [],
       "selectedTextIndex": -1,
       "locked": true,
-      "assetId": "src/assets/heart_broken_2.png",
-      "zLayerId": "zl-content",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "zLayerId": "zl-content"
     },
     {
-      "id": 344,
-      "stableId": "plain-text-344",
+      "id": 519,
+      "stableId": "plain-text-519",
       "type": "component",
       "source": "preset",
       "name": "plain-text",
       "exportPath": "",
-      "x": 159,
-      "y": 391,
+      "x": 196,
+      "y": 422,
       "scale": 1,
       "scaleX": 1,
       "scaleY": 1,
@@ -552,7 +541,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "0!",
+            "content": "-1",
             "fontSize": 51,
             "fontWeight": "bold",
             "fontFamily": "\"Lilita One\", cursive",
@@ -588,8 +577,8 @@
       "zLayerId": "zl-content"
     },
     {
-      "id": 350,
-      "stableId": "shape-round-rect-350",
+      "id": 520,
+      "stableId": "shape-round-rect-520",
       "type": "component",
       "source": "preset",
       "name": "shape-round-rect",
@@ -644,8 +633,7 @@
             "shadowBlur": 8,
             "shadowColor": "#000000",
             "shadowOpacity": 50,
-            "zIndex": 2,
-            "assetId": "src/assets/Icon_Close02.png"
+            "zIndex": 2
           }
         ],
         "selectedImageIndex": 0,
@@ -668,13 +656,13 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "__close__"
+          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
         }
       ]
     },
     {
-      "id": 351,
-      "stableId": "shape-round-rect-351",
+      "id": 521,
+      "stableId": "shape-round-rect-521",
       "type": "component",
       "source": "preset",
       "name": "shape-round-rect",
@@ -729,8 +717,7 @@
             "shadowBlur": 8,
             "shadowColor": "#000000",
             "shadowOpacity": 50,
-            "zIndex": 2,
-            "assetId": "src/assets/Icon_Close02.png"
+            "zIndex": 2
           }
         ],
         "selectedImageIndex": 0,
@@ -753,13 +740,13 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "__close__"
+          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
         }
       ]
     },
     {
-      "id": 352,
-      "stableId": "text-fail-352",
+      "id": 522,
+      "stableId": "text-fail-522",
       "type": "component",
       "source": "preset",
       "name": "text_fail",
@@ -801,7 +788,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "GiveUp",
+            "content": "Fail",
             "fontSize": 43,
             "fontWeight": "bold",
             "fontFamily": "\"Lilita One\", cursive",
@@ -837,6 +824,33 @@
       "zLayerId": "zl-content"
     }
   ],
+  "zLayers": [
+    {
+      "id": "zl-bg",
+      "name": "Background",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-content",
+      "name": "Content",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-ui",
+      "name": "UI",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-overlay",
+      "name": "Overlay",
+      "locked": false,
+      "hidden": false
+    }
+  ],
+  "activeZLayerId": "zl-content",
   "groups": [
     {
       "id": "grp-141",
@@ -923,6 +937,24 @@
         "loop": false,
         "repeat": 1
       }
+    },
+    {
+      "id": "fx-573",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
     }
   ],
   "sceneAnimations": [],
@@ -930,5 +962,5 @@
     "v": [],
     "h": []
   },
-  "uuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
+  "uuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
 }

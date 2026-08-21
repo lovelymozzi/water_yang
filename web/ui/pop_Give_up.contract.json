@@ -1,8 +1,8 @@
 {
   "contractVersion": 1,
-  "sceneId": "fail",
-  "sceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-  "sceneName": "Fail",
+  "sceneId": "pop-give-up",
+  "sceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
+  "sceneName": "pop_Give_up",
   "canvas": {
     "width": 393,
     "height": 852
@@ -41,8 +41,8 @@
       "id": "grp-282",
       "name": "button_close",
       "layerStableIds": [
-        "shape-round-rect-520",
-        "shape-round-rect-521"
+        "shape-round-rect-350",
+        "shape-round-rect-351"
       ]
     }
   ],
@@ -65,8 +65,8 @@
         "repeat": 1
       },
       "layerStableIds": [
-        "shape-round-rect-520",
-        "shape-round-rect-521"
+        "shape-round-rect-350",
+        "shape-round-rect-351"
       ]
     },
     {
@@ -124,35 +124,16 @@
         "loop": false,
         "repeat": 1
       },
-      "layerStableIds": []
-    },
-    {
-      "id": "fx-573",
-      "name": "FxBundle",
-      "press": {
-        "enabled": true,
-        "scale": 95,
-        "brightness": 95,
-        "transitionMs": 100
-      },
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "loop": false,
-        "repeat": 1
-      },
       "layerStableIds": [
-        "button-yellow1-png-571",
-        "plain-text-515"
+        "button-green-png-353",
+        "plain-text-346"
       ]
     }
   ],
   "sceneAnimations": [],
   "layers": [
     {
-      "stableId": "-511",
+      "stableId": "-341",
       "layerType": "component",
       "displayName": "팝업_라인",
       "x": 22,
@@ -236,7 +217,7 @@
       }
     },
     {
-      "stableId": "-512",
+      "stableId": "-342",
       "layerType": "component",
       "displayName": "팝업",
       "x": 23,
@@ -320,7 +301,7 @@
       }
     },
     {
-      "stableId": "plain-text-513",
+      "stableId": "plain-text-343",
       "layerType": "component",
       "displayName": "Plain Text",
       "x": 117,
@@ -439,20 +420,20 @@
       ]
     },
     {
-      "stableId": "button-yellow1-png-571",
+      "stableId": "button-green-png-353",
       "layerType": "image",
-      "displayName": "button_yellow1.png",
-      "x": 116,
-      "y": 494,
+      "displayName": "button_green.png",
+      "x": 115,
+      "y": 488,
       "zIndex": 4,
       "visual": {
-        "exportPath": "button_yellow1_1.png",
+        "exportPath": "src/assets/button_green_4.png",
         "width": 162,
-        "height": 77
+        "height": 88
       }
     },
     {
-      "stableId": "plain-text-515",
+      "stableId": "plain-text-346",
       "layerType": "component",
       "displayName": "Plain Text",
       "x": 117,
@@ -537,7 +518,7 @@
       "texts": [
         {
           "slotIndex": 0,
-          "staticContent": "ReTry",
+          "staticContent": "GiveUp",
           "bindingKey": "",
           "fontSize": 36,
           "fontWeight": "bold",
@@ -572,24 +553,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "plain-text-515:click",
-          "branches": [
-            {
-              "condition": "no_heart",
-              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "BuyLives_1"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "Ingame"
-            }
-          ]
+          "eventName": "plain-text-346:click",
+          "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d"
         }
       ]
     },
     {
-      "stableId": "shape-top-round-516",
+      "stableId": "shape-top-round-347",
       "layerType": "component",
       "displayName": "상단 라운드",
       "x": 23,
@@ -673,7 +643,7 @@
       }
     },
     {
-      "stableId": "gold-glow-517",
+      "stableId": "gold-glow-348",
       "layerType": "component",
       "displayName": "Gold Glow",
       "x": 93,
@@ -757,25 +727,25 @@
       }
     },
     {
-      "stableId": "heart-broken-png-518",
+      "stableId": "heart-broken-png-349",
       "layerType": "image",
       "displayName": "heart_broken.png",
       "x": 139,
       "y": 352,
       "zIndex": 8,
       "visual": {
-        "exportPath": "heart_broken_1.png",
+        "exportPath": "src/assets/heart_broken_2.png",
         "width": 112,
         "height": 114
       },
       "rotation": 8
     },
     {
-      "stableId": "plain-text-519",
+      "stableId": "plain-text-344",
       "layerType": "component",
       "displayName": "Plain Text",
-      "x": 196,
-      "y": 422,
+      "x": 159,
+      "y": 391,
       "zIndex": 9,
       "visual": {
         "model": {
@@ -856,7 +826,7 @@
       "texts": [
         {
           "slotIndex": 0,
-          "staticContent": "-1",
+          "staticContent": "0!",
           "bindingKey": "",
           "fontSize": 51,
           "fontWeight": "bold",
@@ -890,7 +860,7 @@
       ]
     },
     {
-      "stableId": "shape-round-rect-520",
+      "stableId": "shape-round-rect-350",
       "layerType": "component",
       "displayName": "둥근 사각형",
       "x": 316,
@@ -986,13 +956,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "shape-round-rect-520:click",
-          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
+          "eventName": "shape-round-rect-350:click",
+          "targetSceneUuid": "__close__"
         }
       ]
     },
     {
-      "stableId": "shape-round-rect-521",
+      "stableId": "shape-round-rect-351",
       "layerType": "component",
       "displayName": "둥근 사각형",
       "x": 317,
@@ -1088,13 +1058,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "shape-round-rect-520:click",
-          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
+          "eventName": "shape-round-rect-350:click",
+          "targetSceneUuid": "__close__"
         }
       ]
     },
     {
-      "stableId": "text-fail-522",
+      "stableId": "text-fail-352",
       "layerType": "component",
       "displayName": "text_fail",
       "x": 115,
@@ -1179,7 +1149,7 @@
       "texts": [
         {
           "slotIndex": 0,
-          "staticContent": "Fail",
+          "staticContent": "GiveUp",
           "bindingKey": "",
           "fontSize": 43,
           "fontWeight": "bold",

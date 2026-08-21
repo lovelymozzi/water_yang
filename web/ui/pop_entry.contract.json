@@ -1,8 +1,8 @@
 {
   "contractVersion": 1,
-  "sceneId": "popup-entry",
+  "sceneId": "pop-entry",
   "sceneUuid": "87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa",
-  "sceneName": "popup_entry",
+  "sceneName": "pop_entry",
   "canvas": {
     "width": 393,
     "height": 852
@@ -519,7 +519,7 @@
       "scale": 0.7,
       "zIndex": 1,
       "visual": {
-        "exportPath": "common_popup_box copy.png",
+        "exportPath": "src/assets/common_popup_box copy.png",
         "width": 480,
         "height": 480,
         "style": {
@@ -558,7 +558,7 @@
       "scale": 0.5,
       "zIndex": 2,
       "visual": {
-        "exportPath": "entry_popup2_textbase_normal.png",
+        "exportPath": "src/assets/entry_popup2_textbase_normal.png",
         "width": 720,
         "height": 190
       }
@@ -572,7 +572,7 @@
       "scale": 0.5854037267080746,
       "zIndex": 3,
       "visual": {
-        "exportPath": "common_btn_top_x_red.png",
+        "exportPath": "src/assets/common_btn_top_x_red.png",
         "width": 86,
         "height": 92
       },
@@ -842,7 +842,7 @@
       "scale": 0.5681599024362575,
       "zIndex": 6,
       "visual": {
-        "exportPath": "entry_box_normal_1.png",
+        "exportPath": "src/assets/entry_box_normal_1.png",
         "width": 530,
         "height": 261,
         "style": {
@@ -881,7 +881,7 @@
       "scale": 0.6470588235294117,
       "zIndex": 7,
       "visual": {
-        "exportPath": "common_btn_green_sales.png",
+        "exportPath": "src/assets/common_btn_green_sales.png",
         "width": 295,
         "height": 140,
         "style": {
@@ -1039,7 +1039,7 @@
       "scale": 0.5,
       "zIndex": 9,
       "visual": {
-        "exportPath": "entry_item_on.png",
+        "exportPath": "src/assets/entry_item_on.png",
         "width": 156,
         "height": 164
       }
@@ -1053,7 +1053,7 @@
       "scale": 0.5,
       "zIndex": 10,
       "visual": {
-        "exportPath": "entry_item_off.png",
+        "exportPath": "src/assets/entry_item_off.png",
         "width": 156,
         "height": 164
       }
@@ -1067,7 +1067,7 @@
       "scale": 0.5,
       "zIndex": 11,
       "visual": {
-        "exportPath": "entry_item_off.png",
+        "exportPath": "src/assets/entry_item_off.png",
         "width": 156,
         "height": 164
       },
@@ -1218,7 +1218,7 @@
       "scale": 0.5294117647058822,
       "zIndex": 13,
       "visual": {
-        "exportPath": "entry_item_check.png",
+        "exportPath": "src/assets/entry_item_check.png",
         "width": 68,
         "height": 70
       }
@@ -1232,7 +1232,7 @@
       "scale": 0.5190311418685121,
       "zIndex": 14,
       "visual": {
-        "exportPath": "entry_item_num.png",
+        "exportPath": "src/assets/entry_item_num.png",
         "width": 68,
         "height": 70
       }

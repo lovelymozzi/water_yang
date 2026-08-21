@@ -3,24 +3,6 @@
   "generatedBy": "ui-editor",
   "scenes": [
     {
-      "uuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "name": "BuyLives_1",
-      "contract": "BuyLives_1.contract.json",
-      "sceneType": "scene"
-    },
-    {
-      "uuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "name": "Fail",
-      "contract": "Fail.contract.json",
-      "sceneType": "scene"
-    },
-    {
-      "uuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
-      "name": "Give_up",
-      "contract": "Give_up.contract.json",
-      "sceneType": "scene"
-    },
-    {
       "uuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
       "name": "home_bottom",
       "contract": "home_bottom.contract.json",
@@ -42,6 +24,30 @@
       "uuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
       "name": "pop_BuyCoins",
       "contract": "pop_BuyCoins.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "name": "pop_BuyLives_1",
+      "contract": "pop_BuyLives_1.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa",
+      "name": "pop_entry",
+      "contract": "pop_entry.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "name": "pop_Fail",
+      "contract": "pop_Fail.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
+      "name": "pop_Give_up",
+      "contract": "pop_Give_up.contract.json",
       "sceneType": "scene"
     },
     {
@@ -69,21 +75,15 @@
       "sceneType": "scene"
     },
     {
-      "uuid": "87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa",
-      "name": "popup_entry",
-      "contract": "popup_entry.contract.json",
+      "uuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "name": "pop_Settings_1",
+      "contract": "pop_Settings_1.contract.json",
       "sceneType": "scene"
     },
     {
       "uuid": "3db24195-9465-47f6-be12-e9aeeebf74e6",
       "name": "Ranking",
       "contract": "Ranking.contract.json",
-      "sceneType": "scene"
-    },
-    {
-      "uuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
-      "name": "Settings_1",
-      "contract": "Settings_1.contract.json",
       "sceneType": "scene"
     },
     {

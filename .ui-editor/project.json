@@ -39,7 +39,11 @@
     "groupCollapsed": {
       "Scenes": false,
       "Shop": false,
-      "Decoration": true
+      "Decoration": true,
+      "Social": true,
+      "Events": true,
+      "Pass": true,
+      "System": true
     },
     "groupMap": {
       "Splash": "Core",
@@ -230,7 +234,7 @@
       "DecorMap",
       "pop_AreaComplete",
       "Shop",
-      "BuyLives_1",
+      "pop_BuyLives_1",
       "pop_BuyCoins",
       "pop_OutOfLives",
       "pop_BuyBooster",
@@ -249,7 +253,7 @@
       "SeasonPass",
       "pop_PassReward",
       "pop_BuyPass",
-      "Settings_1",
+      "pop_Settings_1",
       "pop_DailyBonus",
       "pop_TreasureChest",
       "pop_Notice",
@@ -259,12 +263,12 @@
       "pop_BuyCoins",
       "Ranking",
       "Splash",
-      "popup_entry",
+      "pop_entry",
       "refill",
       "Time_Out",
       "ReTry",
-      "Fail",
-      "Give_up",
+      "pop_Fail",
+      "pop_Give_up",
       "Out_of_Space",
       "pop_OutOfMoves",
       "pop_Settings_lobby 2",
@@ -273,7 +277,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "Splash"
+    "lastScene": "pop_BuyCoins"
   },
   "globalViewport": {
     "width": 393,

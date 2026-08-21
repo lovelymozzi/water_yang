@@ -1,5 +1,5 @@
 {
-  "name": "BuyLives_1",
+  "name": "pop_BuyLives_1",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -517,7 +517,7 @@
       "stableId": "video-png-312",
       "type": "image",
       "name": "Video.png",
-      "exportPath": "src/assets/Video.Png",
+      "exportPath": "src/assets/Video.png",
       "x": 61,
       "y": 513,
       "scale": 1,
@@ -659,7 +659,7 @@
       "stableId": "itemicon-heart-red-png-322",
       "type": "image",
       "name": "ItemIcon_Heart_Red.png",
-      "exportPath": "src/assets/ItemIcon_Heart_Red.Png",
+      "exportPath": "src/assets/ItemIcon_Heart_Red.png",
       "x": 137,
       "y": 512,
       "scale": 1,
@@ -956,7 +956,7 @@
         "selectedTextIndex": 0,
         "images": [
           {
-            "exportPath": "src/assets/ItemIcon_Heart_Red.Png",
+            "exportPath": "src/assets/ItemIcon_Heart_Red.png",
             "width": 148,
             "height": 125,
             "offsetX": 1,
@@ -1111,7 +1111,7 @@
       "stableId": "itemicon-money-coin-1-png-990",
       "type": "image",
       "name": "ItemIcon_Money_Coin_1.Png",
-      "exportPath": "src/assets/ItemIcon_Money_Coin_1_1.Png",
+      "exportPath": "src/assets/ItemIcon_Money_Coin_1_1.png",
       "x": 227,
       "y": 522,
       "scale": 1,

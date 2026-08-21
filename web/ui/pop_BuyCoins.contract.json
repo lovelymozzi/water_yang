@@ -154,7 +154,7 @@
       "y": 160,
       "zIndex": 1,
       "visual": {
-        "exportPath": "shop_bg_inner_pattern_1.png",
+        "exportPath": "src/assets/shop_bg_inner_pattern_1.png",
         "width": 71,
         "height": 71
       },
@@ -300,7 +300,7 @@
       "y": 294,
       "zIndex": 3,
       "visual": {
-        "exportPath": "shop_teampackage_dot_off_1.png",
+        "exportPath": "src/assets/shop_teampackage_dot_off_1.png",
         "width": 15,
         "height": 15
       }
@@ -313,7 +313,7 @@
       "y": 294,
       "zIndex": 4,
       "visual": {
-        "exportPath": "shop_teampackage_dot_on_1.png",
+        "exportPath": "src/assets/shop_teampackage_dot_on_1.png",
         "width": 15,
         "height": 15
       }
@@ -326,7 +326,7 @@
       "y": 294,
       "zIndex": 5,
       "visual": {
-        "exportPath": "shop_teampackage_dot_off_1.png",
+        "exportPath": "src/assets/shop_teampackage_dot_off_1.png",
         "width": 15,
         "height": 15
       }
@@ -340,7 +340,7 @@
       "scale": 0.5247851949768672,
       "zIndex": 6,
       "visual": {
-        "exportPath": "shop_bg_1.png",
+        "exportPath": "src/assets/shop_bg_1.png",
         "width": 712,
         "height": 356,
         "style": {
@@ -378,7 +378,7 @@
       "y": 105,
       "zIndex": 7,
       "visual": {
-        "exportPath": "shop_bg_inner_1.png",
+        "exportPath": "src/assets/shop_bg_inner_1.png",
         "width": 368,
         "height": 168
       },
@@ -394,7 +394,7 @@
       "scale": 0.4349346305868046,
       "zIndex": 8,
       "visual": {
-        "exportPath": "shop_teampackage_textbg_silver_1.png",
+        "exportPath": "src/assets/shop_teampackage_textbg_silver_1.png",
         "width": 550,
         "height": 84,
         "style": {
@@ -433,7 +433,7 @@
       "scale": 1.0212445308701992,
       "zIndex": 9,
       "visual": {
-        "exportPath": "shop_box_01_1.png",
+        "exportPath": "src/assets/shop_box_01_1.png",
         "width": 363,
         "height": 113,
         "style": {
@@ -472,7 +472,7 @@
       "scale": 1.0389863547758285,
       "zIndex": 10,
       "visual": {
-        "exportPath": "shop_tag_1.png",
+        "exportPath": "src/assets/shop_tag_1.png",
         "width": 76,
         "height": 84
       }
@@ -606,7 +606,7 @@
       "scale": 0.75,
       "zIndex": 12,
       "visual": {
-        "exportPath": "shop_package_time_blue_1.png",
+        "exportPath": "src/assets/shop_package_time_blue_1.png",
         "width": 152,
         "height": 56,
         "style": {
@@ -680,7 +680,7 @@
       "y": 36,
       "zIndex": 13,
       "visual": {
-        "exportPath": "gimmick_coinpurse_coin_4.png",
+        "exportPath": "src/assets/gimmick_coinpurse_coin_4.png",
         "width": 39,
         "height": 39
       }
@@ -693,7 +693,7 @@
       "y": 41,
       "zIndex": 14,
       "visual": {
-        "exportPath": "home_btn_plus_3.png",
+        "exportPath": "src/assets/home_btn_plus_3.png",
         "width": 32,
         "height": 29
       }
@@ -707,7 +707,7 @@
       "scale": 0.6339285714285714,
       "zIndex": 15,
       "visual": {
-        "exportPath": "shop_package_time_blue2_1.png",
+        "exportPath": "src/assets/shop_package_time_blue2_1.png",
         "width": 151,
         "height": 56,
         "style": {
@@ -746,7 +746,7 @@
       "scale": 0.85,
       "zIndex": 16,
       "visual": {
-        "exportPath": "shop_package_time_2.png",
+        "exportPath": "src/assets/shop_package_time_2.png",
         "width": 25,
         "height": 27
       }
@@ -760,7 +760,7 @@
       "scale": 0.7,
       "zIndex": 17,
       "visual": {
-        "exportPath": "common_time_needle_1.png",
+        "exportPath": "src/assets/common_time_needle_1.png",
         "width": 12,
         "height": 10
       }
@@ -774,7 +774,7 @@
       "scale": 0.6217857142857143,
       "zIndex": 18,
       "visual": {
-        "exportPath": "shop_package_step_01_1.png",
+        "exportPath": "src/assets/shop_package_step_01_1.png",
         "width": 600,
         "height": 320,
         "style": {
@@ -813,7 +813,7 @@
       "scale": 1.3619746475614392,
       "zIndex": 19,
       "visual": {
-        "exportPath": "icon_coin_4_1.png",
+        "exportPath": "src/assets/icon_coin_4_1.png",
         "width": 81,
         "height": 83
       },
@@ -849,7 +849,7 @@
       "scale": 1.6666666666666667,
       "zIndex": 20,
       "visual": {
-        "exportPath": "icon_coin_2.png",
+        "exportPath": "src/assets/icon_coin_2.png",
         "width": 78,
         "height": 62
       },
@@ -885,7 +885,7 @@
       "scale": 0.2256410256410256,
       "zIndex": 21,
       "visual": {
-        "exportPath": "icon_coin_1_1.png",
+        "exportPath": "src/assets/icon_coin_1_1.png",
         "width": 260,
         "height": 260
       },
@@ -1279,7 +1279,7 @@
       "scale": 0.5578231292517007,
       "zIndex": 25,
       "visual": {
-        "exportPath": "ingame_toggle_on_2.png",
+        "exportPath": "src/assets/ingame_toggle_on_2.png",
         "width": 211,
         "height": 84,
         "style": {
@@ -1556,7 +1556,7 @@
       "scale": 0.5578231292517007,
       "zIndex": 28,
       "visual": {
-        "exportPath": "ingame_toggle_on_2.png",
+        "exportPath": "src/assets/ingame_toggle_on_2.png",
         "width": 211,
         "height": 84,
         "style": {
@@ -1714,7 +1714,7 @@
       "scale": 0.5578231292517007,
       "zIndex": 30,
       "visual": {
-        "exportPath": "ingame_toggle_on_2.png",
+        "exportPath": "src/assets/ingame_toggle_on_2.png",
         "width": 211,
         "height": 84,
         "style": {
@@ -1872,7 +1872,7 @@
       "scale": 0.4652411760297754,
       "zIndex": 32,
       "visual": {
-        "exportPath": "shop_box_bonus_1.png",
+        "exportPath": "src/assets/shop_box_bonus_1.png",
         "width": 333,
         "height": 49,
         "style": {
@@ -2066,7 +2066,7 @@
       "scale": 0.34230769230769237,
       "zIndex": 34,
       "visual": {
-        "exportPath": "icon_heartribbon_1.png",
+        "exportPath": "src/assets/icon_heartribbon_1.png",
         "width": 260,
         "height": 260
       },
@@ -2235,7 +2235,7 @@
       "scale": 0.7909090909090909,
       "zIndex": 36,
       "visual": {
-        "exportPath": "team_icon_package_1.png",
+        "exportPath": "src/assets/team_icon_package_1.png",
         "width": 140,
         "height": 110
       }
@@ -2249,7 +2249,7 @@
       "scale": 0.5163464779238286,
       "zIndex": 37,
       "visual": {
-        "exportPath": "common_btn_top_x_blue.png",
+        "exportPath": "src/assets/common_btn_top_x_blue.png",
         "width": 86,
         "height": 92
       },

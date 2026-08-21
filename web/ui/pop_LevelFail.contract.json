@@ -471,7 +471,7 @@
         },
         "images": [
           {
-            "exportPath": "button_green_4_1.png",
+            "exportPath": "src/assets/button_green_4_1.png",
             "width": 162,
             "height": 88,
             "offsetX": 0,
@@ -543,7 +543,7 @@
             {
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "BuyLives_1"
+              "targetSceneName": "pop_BuyLives_1"
             }
           ]
         }
@@ -725,7 +725,7 @@
       "y": 352,
       "zIndex": 7,
       "visual": {
-        "exportPath": "heart_broken_1_1.png",
+        "exportPath": "src/assets/heart_broken_1_1.png",
         "width": 112,
         "height": 114
       },
@@ -935,7 +935,7 @@
         },
         "images": [
           {
-            "exportPath": "Icon_Close02_2.png",
+            "exportPath": "src/assets/Icon_Close02_2.png",
             "width": 8,
             "height": 8,
             "offsetX": 0,
@@ -1037,7 +1037,7 @@
         },
         "images": [
           {
-            "exportPath": "Icon_Close02_2.png",
+            "exportPath": "src/assets/Icon_Close02_2.png",
             "width": 32,
             "height": 32,
             "offsetX": 0,

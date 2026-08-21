@@ -706,7 +706,7 @@
       "scale": 0.55,
       "zIndex": 2,
       "visual": {
-        "exportPath": "common_box_teambox.png",
+        "exportPath": "src/assets/common_box_teambox.png",
         "width": 680,
         "height": 1050,
         "style": {
@@ -745,7 +745,7 @@
       "scale": 0.5163464779238286,
       "zIndex": 3,
       "visual": {
-        "exportPath": "common_btn_top_x_blue.png",
+        "exportPath": "src/assets/common_btn_top_x_blue.png",
         "width": 86,
         "height": 92
       },
@@ -903,7 +903,7 @@
       "scale": 0.5,
       "zIndex": 5,
       "visual": {
-        "exportPath": "setting_btn_option.png",
+        "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
         "height": 126
       }
@@ -917,7 +917,7 @@
       "scale": 0.5,
       "zIndex": 6,
       "visual": {
-        "exportPath": "setting_btn_option.png",
+        "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
         "height": 126
       }
@@ -931,7 +931,7 @@
       "scale": 0.5,
       "zIndex": 7,
       "visual": {
-        "exportPath": "setting_btn_option.png",
+        "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
         "height": 126
       }
@@ -945,7 +945,7 @@
       "scale": 0.5,
       "zIndex": 8,
       "visual": {
-        "exportPath": "setting_btn_option.png",
+        "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
         "height": 126
       }
@@ -1435,7 +1435,7 @@
       "scale": 0.5,
       "zIndex": 13,
       "visual": {
-        "exportPath": "ingame_btn_pause_music.png",
+        "exportPath": "src/assets/ingame_btn_pause_music.png",
         "width": 76,
         "height": 70
       }
@@ -1450,7 +1450,7 @@
       "zIndex": 14,
       "visible": false,
       "visual": {
-        "exportPath": "ingame_btn_pause_music_off.png",
+        "exportPath": "src/assets/ingame_btn_pause_music_off.png",
         "width": 76,
         "height": 70
       }
@@ -1465,7 +1465,7 @@
       "zIndex": 15,
       "visible": false,
       "visual": {
-        "exportPath": "ingame_btn_pause_sound.png",
+        "exportPath": "src/assets/ingame_btn_pause_sound.png",
         "width": 76,
         "height": 70
       }
@@ -1479,7 +1479,7 @@
       "scale": 0.5,
       "zIndex": 16,
       "visual": {
-        "exportPath": "ingame_btn_pause_sound_off.png",
+        "exportPath": "src/assets/ingame_btn_pause_sound_off.png",
         "width": 76,
         "height": 70
       }
@@ -1494,7 +1494,7 @@
       "zIndex": 17,
       "visible": false,
       "visual": {
-        "exportPath": "ingame_btn_pause_vibration_off.png",
+        "exportPath": "src/assets/ingame_btn_pause_vibration_off.png",
         "width": 76,
         "height": 70
       }
@@ -1508,7 +1508,7 @@
       "scale": 0.5,
       "zIndex": 18,
       "visual": {
-        "exportPath": "ingame_btn_pause_vibration2.png",
+        "exportPath": "src/assets/ingame_btn_pause_vibration2.png",
         "width": 90,
         "height": 70
       }
@@ -1522,7 +1522,7 @@
       "scale": 0.5,
       "zIndex": 19,
       "visual": {
-        "exportPath": "ingame_btn_pause_hint.png",
+        "exportPath": "src/assets/ingame_btn_pause_hint.png",
         "width": 76,
         "height": 70
       }
@@ -1537,7 +1537,7 @@
       "zIndex": 20,
       "visible": false,
       "visual": {
-        "exportPath": "ingame_btn_pause_hint_off.png",
+        "exportPath": "src/assets/ingame_btn_pause_hint_off.png",
         "width": 76,
         "height": 70
       }
@@ -1551,7 +1551,7 @@
       "scale": 0.65,
       "zIndex": 21,
       "visual": {
-        "exportPath": "ingame_toggle_default.png",
+        "exportPath": "src/assets/ingame_toggle_default.png",
         "width": 181,
         "height": 80,
         "style": {
@@ -1626,7 +1626,7 @@
       "scale": 0.63,
       "zIndex": 22,
       "visual": {
-        "exportPath": "ingame_toggle_off.png",
+        "exportPath": "src/assets/ingame_toggle_off.png",
         "width": 80,
         "height": 84,
         "style": {
@@ -1665,7 +1665,7 @@
       "scale": 0.65,
       "zIndex": 23,
       "visual": {
-        "exportPath": "ingame_toggle_default.png",
+        "exportPath": "src/assets/ingame_toggle_default.png",
         "width": 181,
         "height": 80,
         "style": {
@@ -1740,7 +1740,7 @@
       "scale": 0.6293183940242764,
       "zIndex": 24,
       "visual": {
-        "exportPath": "ingame_toggle_on_1.png",
+        "exportPath": "src/assets/ingame_toggle_on_1.png",
         "width": 80,
         "height": 84,
         "style": {
@@ -1897,7 +1897,7 @@
       "y": 354,
       "zIndex": 26,
       "visual": {
-        "exportPath": "setting_box_slash.png",
+        "exportPath": "src/assets/setting_box_slash.png",
         "width": 300,
         "height": 6,
         "style": {
@@ -1936,7 +1936,7 @@
       "scale": 0.65,
       "zIndex": 27,
       "visual": {
-        "exportPath": "setting_btn_connect_line.png",
+        "exportPath": "src/assets/setting_btn_connect_line.png",
         "width": 214,
         "height": 102,
         "style": {
@@ -2094,7 +2094,7 @@
       "scale": 0.65,
       "zIndex": 29,
       "visual": {
-        "exportPath": "setting_btn_connect_line.png",
+        "exportPath": "src/assets/setting_btn_connect_line.png",
         "width": 214,
         "height": 102,
         "style": {
@@ -2252,7 +2252,7 @@
       "scale": 0.65,
       "zIndex": 31,
       "visual": {
-        "exportPath": "setting_btn_connect_line.png",
+        "exportPath": "src/assets/setting_btn_connect_line.png",
         "width": 214,
         "height": 102,
         "style": {
@@ -2410,7 +2410,7 @@
       "scale": 0.65,
       "zIndex": 33,
       "visual": {
-        "exportPath": "setting_btn_connect_line.png",
+        "exportPath": "src/assets/setting_btn_connect_line.png",
         "width": 214,
         "height": 102,
         "style": {
@@ -2567,7 +2567,7 @@
       "y": 529,
       "zIndex": 35,
       "visual": {
-        "exportPath": "setting_box_slash.png",
+        "exportPath": "src/assets/setting_box_slash.png",
         "width": 300,
         "height": 6,
         "style": {
@@ -2606,7 +2606,7 @@
       "scale": 0.5230769230769231,
       "zIndex": 36,
       "visual": {
-        "exportPath": "setting_btn_copy.png",
+        "exportPath": "src/assets/setting_btn_copy.png",
         "width": 100,
         "height": 50,
         "style": {
@@ -2883,7 +2883,7 @@
       "scale": 0.6828752642706132,
       "zIndex": 39,
       "visual": {
-        "exportPath": "setting_btn_account.png",
+        "exportPath": "src/assets/setting_btn_account.png",
         "width": 160,
         "height": 86,
         "style": {
@@ -2922,7 +2922,7 @@
       "scale": 0.6828752642706132,
       "zIndex": 40,
       "visual": {
-        "exportPath": "setting_btn_account.png",
+        "exportPath": "src/assets/setting_btn_account.png",
         "width": 160,
         "height": 86,
         "style": {
@@ -3199,7 +3199,7 @@
       "scale": 0.7,
       "zIndex": 43,
       "visual": {
-        "exportPath": "common_icon_reddot.png",
+        "exportPath": "src/assets/common_icon_reddot.png",
         "width": 26,
         "height": 30
       }
@@ -3451,7 +3451,7 @@
       "scale": 0.85,
       "zIndex": 46,
       "visual": {
-        "exportPath": "setting_btn_account.png",
+        "exportPath": "src/assets/setting_btn_account.png",
         "width": 249,
         "height": 86,
         "style": {

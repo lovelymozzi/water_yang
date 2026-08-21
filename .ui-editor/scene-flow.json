@@ -185,7 +185,7 @@
       "transitionOut": null,
       "transitionIn": null,
       "fromSceneName": "pop_OutOfMoves",
-      "toSceneName": "Fail"
+      "toSceneName": "pop_Fail"
     },
     {
       "id": "edge-mt1e9pbelpds",
@@ -197,7 +197,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Fail",
+      "fromSceneName": "pop_Fail",
       "toSceneName": "pop_OutOfMoves"
     },
     {
@@ -211,7 +211,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Fail",
+      "fromSceneName": "pop_Fail",
       "toSceneName": "Ingame"
     },
     {
@@ -226,7 +226,7 @@
       "transitionOut": null,
       "transitionIn": null,
       "fromSceneName": "Lobby",
-      "toSceneName": "BuyLives_1"
+      "toSceneName": "pop_BuyLives_1"
     },
     {
       "id": "edge-mt1ei00jp5mc",
@@ -240,7 +240,7 @@
       "transitionOut": null,
       "transitionIn": null,
       "fromSceneName": "Lobby",
-      "toSceneName": "BuyLives_1"
+      "toSceneName": "pop_BuyLives_1"
     },
     {
       "id": "edge-mt1eigfwpmco",
@@ -254,7 +254,7 @@
       "transitionOut": null,
       "transitionIn": null,
       "fromSceneName": "pop_LevelFail",
-      "toSceneName": "BuyLives_1"
+      "toSceneName": "pop_BuyLives_1"
     },
     {
       "id": "edge-mt1eity3symg",
@@ -267,8 +267,8 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Fail",
-      "toSceneName": "BuyLives_1"
+      "fromSceneName": "pop_Fail",
+      "toSceneName": "pop_BuyLives_1"
     },
     {
       "id": "edge-mt1ej5stg65s",
@@ -281,7 +281,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "BuyLives_1",
+      "fromSceneName": "pop_BuyLives_1",
       "toSceneName": "✕ 팝업 닫기"
     },
     {
@@ -295,7 +295,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "BuyLives_1",
+      "fromSceneName": "pop_BuyLives_1",
       "toSceneName": "✕ 팝업 닫기"
     },
     {
@@ -308,7 +308,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "BuyLives_1",
+      "fromSceneName": "pop_BuyLives_1",
       "toSceneName": "✕ 팝업 닫기"
     },
     {
@@ -322,7 +322,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "BuyLives_1",
+      "fromSceneName": "pop_BuyLives_1",
       "toSceneName": "pop_BuyCoins"
     },
     {
@@ -375,7 +375,7 @@
       "transitionOut": null,
       "transitionIn": null,
       "fromSceneName": "Ingame",
-      "toSceneName": "Settings_1"
+      "toSceneName": "pop_Settings_1"
     },
     {
       "id": "edge-mt1hez4rahh4",
@@ -387,7 +387,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Give_up",
+      "fromSceneName": "pop_Give_up",
       "toSceneName": "Lobby"
     },
     {
@@ -400,7 +400,7 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Give_up",
+      "fromSceneName": "pop_Give_up",
       "toSceneName": "✕ 팝업 닫기"
     },
     {
@@ -413,21 +413,8 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Settings_1",
+      "fromSceneName": "pop_Settings_1",
       "toSceneName": "Ingame"
-    },
-    {
-      "id": "edge-mt2pev5a4hcc",
-      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
-      "toSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "trigger": {
-        "stableId": "shape-rect-2276",
-        "eventName": "shape-rect-2276:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "Settings_1",
-      "toSceneName": "Fail"
     },
     {
       "id": "edge-mt2s5zm58kw7",
@@ -439,8 +426,8 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Settings_1",
-      "toSceneName": "Give_up"
+      "fromSceneName": "pop_Settings_1",
+      "toSceneName": "pop_Give_up"
     },
     {
       "id": "edge-mt2s61yid7xb",
@@ -452,8 +439,21 @@
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Settings_1",
+      "fromSceneName": "pop_Settings_1",
       "toSceneName": "pop_LevelFail"
+    },
+    {
+      "id": "edge-mt2xs3kqkdvy",
+      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "toSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "trigger": {
+        "stableId": "setting-btn-option-png-2245",
+        "eventName": "setting-btn-option-png-2245:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_Settings_1",
+      "toSceneName": "pop_Fail"
     }
   ],
   "entrySceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9"

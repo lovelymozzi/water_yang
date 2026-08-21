@@ -1069,7 +1069,7 @@
       "stableId": "itemicon-money-coin-png-1773",
       "type": "image",
       "name": "ItemIcon_Money_Coin.Png",
-      "exportPath": "src/assets/ItemIcon_Money_Coin_4.Png",
+      "exportPath": "src/assets/ItemIcon_Money_Coin_4.png",
       "x": 122,
       "y": 506,
       "scale": 1,

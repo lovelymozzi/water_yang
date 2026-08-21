@@ -1,8 +1,8 @@
 {
   "contractVersion": 1,
-  "sceneId": "settings-1",
+  "sceneId": "pop-settings-1",
   "sceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
-  "sceneName": "Settings_1",
+  "sceneName": "pop_Settings_1",
   "canvas": {
     "width": 393,
     "height": 852
@@ -515,97 +515,6 @@
   "sceneAnimations": [],
   "layers": [
     {
-      "stableId": "shape-rect-2276",
-      "layerType": "component",
-      "displayName": "사각형",
-      "x": -43,
-      "y": 0,
-      "zIndex": 1,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 462,
-            "height": 829,
-            "radius": 0,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "rgba(0,0,0,0.57)",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#4a90d9",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "shape-rect-2276:click",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
-        }
-      ]
-    },
-    {
       "stableId": "setting-btn-option-png-2242",
       "layerType": "image",
       "displayName": "setting_btn_option.png",
@@ -673,7 +582,14 @@
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
         "height": 126
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "setting-btn-option-png-2245:click",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
     },
     {
       "stableId": "ingame-btn-pause-music-png-2250",
@@ -800,7 +716,14 @@
         "exportPath": "src/assets/back_off.png",
         "width": 59,
         "height": 64
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "setting-btn-option-png-2245:click",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
     },
     {
       "stableId": "back-on-png-2277",
@@ -814,7 +737,14 @@
         "exportPath": "src/assets/back_on.png",
         "width": 50,
         "height": 64
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "setting-btn-option-png-2245:click",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
     },
     {
       "stableId": "setting-btn-option-png-2278",

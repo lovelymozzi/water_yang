@@ -732,7 +732,7 @@
       "y": 109,
       "zIndex": 8,
       "visual": {
-        "exportPath": "Icon_Trophy02.png",
+        "exportPath": "src/assets/Icon_Trophy02.png",
         "width": 187,
         "height": 117
       }
@@ -745,7 +745,7 @@
       "y": 107,
       "zIndex": 9,
       "visual": {
-        "exportPath": "Ribbon01_Blue.png",
+        "exportPath": "src/assets/Ribbon01_Blue.png",
         "width": 347,
         "height": 299,
         "style": {
@@ -902,7 +902,7 @@
       "y": 371,
       "zIndex": 11,
       "visual": {
-        "exportPath": "ItemIcon_Coins_l_2.png",
+        "exportPath": "src/assets/ItemIcon_Coins_l_2.png",
         "width": 112,
         "height": 102
       }
@@ -1153,7 +1153,7 @@
       "y": 463,
       "zIndex": 14,
       "visual": {
-        "exportPath": "button_green_1_1.png",
+        "exportPath": "src/assets/button_green_1_1.png",
         "width": 138,
         "height": 138
       },
@@ -1322,7 +1322,7 @@
       "y": 463,
       "zIndex": 16,
       "visual": {
-        "exportPath": "button_yellow1_1_1.png",
+        "exportPath": "src/assets/button_yellow1_1_1.png",
         "width": 138,
         "height": 138
       },
@@ -1353,7 +1353,7 @@
       "y": 513,
       "zIndex": 17,
       "visual": {
-        "exportPath": "Video_1.png",
+        "exportPath": "src/assets/Video_1.png",
         "width": 40,
         "height": 37
       },
@@ -1521,7 +1521,7 @@
       "y": 517,
       "zIndex": 19,
       "visual": {
-        "exportPath": "ItemIcon_Coins_l_2.png",
+        "exportPath": "src/assets/ItemIcon_Coins_l_2.png",
         "width": 31,
         "height": 31
       },

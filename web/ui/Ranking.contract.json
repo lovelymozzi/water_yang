@@ -446,7 +446,7 @@
       "scale": 0.9107142857142859,
       "zIndex": 3,
       "visual": {
-        "exportPath": "ranking_tab_slash.png",
+        "exportPath": "src/assets/ranking_tab_slash.png",
         "width": 435,
         "height": 24,
         "style": {
@@ -485,7 +485,7 @@
       "scale": 0.7,
       "zIndex": 4,
       "visual": {
-        "exportPath": "ranking_tab_sub_r_off.png",
+        "exportPath": "src/assets/ranking_tab_sub_r_off.png",
         "width": 250,
         "height": 88,
         "style": {
@@ -643,7 +643,7 @@
       "scale": 0.7,
       "zIndex": 6,
       "visual": {
-        "exportPath": "ranking_tab_sub_l_on.png",
+        "exportPath": "src/assets/ranking_tab_sub_l_on.png",
         "width": 250,
         "height": 88,
         "style": {
@@ -801,7 +801,7 @@
       "scale": 0.6773448773448774,
       "zIndex": 8,
       "visual": {
-        "exportPath": "ranking_box_list.png",
+        "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
         "height": 126,
         "style": {
@@ -841,7 +841,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 9,
       "visual": {
-        "exportPath": "profile_avatar_dummy_22.png",
+        "exportPath": "src/assets/profile_avatar_dummy_22.png",
         "width": 122,
         "height": 122
       }
@@ -857,7 +857,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 10,
       "visual": {
-        "exportPath": "profile_frame_default_1.png",
+        "exportPath": "src/assets/profile_frame_default_1.png",
         "width": 160,
         "height": 168,
         "style": {
@@ -896,7 +896,7 @@
       "scale": 0.5612588716036991,
       "zIndex": 11,
       "visual": {
-        "exportPath": "ranking_icon_1st.png",
+        "exportPath": "src/assets/ranking_icon_1st.png",
         "width": 58,
         "height": 74
       }
@@ -910,7 +910,7 @@
       "scale": 0.3000474383301708,
       "zIndex": 12,
       "visual": {
-        "exportPath": "team_normal_01.png",
+        "exportPath": "src/assets/team_normal_01.png",
         "width": 110,
         "height": 124
       }
@@ -924,7 +924,7 @@
       "scale": 0.65675057208238,
       "zIndex": 13,
       "visual": {
-        "exportPath": "ranking_box_num.png",
+        "exportPath": "src/assets/ranking_box_num.png",
         "width": 102,
         "height": 46,
         "style": {
@@ -999,7 +999,7 @@
       "scale": 0.48026315789473684,
       "zIndex": 14,
       "visual": {
-        "exportPath": "team_icon_token.png",
+        "exportPath": "src/assets/team_icon_token.png",
         "width": 80,
         "height": 80
       }
@@ -1370,7 +1370,7 @@
       "scale": 0.6773448773448774,
       "zIndex": 18,
       "visual": {
-        "exportPath": "ranking_box_list.png",
+        "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
         "height": 126,
         "style": {
@@ -1410,7 +1410,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 19,
       "visual": {
-        "exportPath": "profile_avatar_dummy_43.png",
+        "exportPath": "src/assets/profile_avatar_dummy_43.png",
         "width": 122,
         "height": 122
       }
@@ -1426,7 +1426,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 20,
       "visual": {
-        "exportPath": "profile_frame_default_5.png",
+        "exportPath": "src/assets/profile_frame_default_5.png",
         "width": 160,
         "height": 168,
         "style": {
@@ -1465,7 +1465,7 @@
       "scale": 0.5612588716036991,
       "zIndex": 21,
       "visual": {
-        "exportPath": "ranking_icon_2nd.png",
+        "exportPath": "src/assets/ranking_icon_2nd.png",
         "width": 58,
         "height": 74
       }
@@ -1479,7 +1479,7 @@
       "scale": 0.3000474383301708,
       "zIndex": 22,
       "visual": {
-        "exportPath": "team_normal_02.png",
+        "exportPath": "src/assets/team_normal_02.png",
         "width": 110,
         "height": 124
       }
@@ -1493,7 +1493,7 @@
       "scale": 0.65675057208238,
       "zIndex": 23,
       "visual": {
-        "exportPath": "ranking_box_num.png",
+        "exportPath": "src/assets/ranking_box_num.png",
         "width": 102,
         "height": 46,
         "style": {
@@ -1568,7 +1568,7 @@
       "scale": 0.48026315789473684,
       "zIndex": 24,
       "visual": {
-        "exportPath": "team_icon_token.png",
+        "exportPath": "src/assets/team_icon_token.png",
         "width": 80,
         "height": 80
       }
@@ -1939,7 +1939,7 @@
       "scale": 0.6773448773448774,
       "zIndex": 28,
       "visual": {
-        "exportPath": "ranking_box_list.png",
+        "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
         "height": 126,
         "style": {
@@ -1979,7 +1979,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 29,
       "visual": {
-        "exportPath": "profile_avatar_dummy_16.png",
+        "exportPath": "src/assets/profile_avatar_dummy_16.png",
         "width": 122,
         "height": 122
       }
@@ -1995,7 +1995,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 30,
       "visual": {
-        "exportPath": "profile_frame_default_9.png",
+        "exportPath": "src/assets/profile_frame_default_9.png",
         "width": 160,
         "height": 168,
         "style": {
@@ -2034,7 +2034,7 @@
       "scale": 0.5612588716036991,
       "zIndex": 31,
       "visual": {
-        "exportPath": "ranking_icon_3rd.png",
+        "exportPath": "src/assets/ranking_icon_3rd.png",
         "width": 58,
         "height": 74
       }
@@ -2048,7 +2048,7 @@
       "scale": 0.3000474383301708,
       "zIndex": 32,
       "visual": {
-        "exportPath": "team_normal_03.png",
+        "exportPath": "src/assets/team_normal_03.png",
         "width": 110,
         "height": 124
       }
@@ -2062,7 +2062,7 @@
       "scale": 0.65675057208238,
       "zIndex": 33,
       "visual": {
-        "exportPath": "ranking_box_num.png",
+        "exportPath": "src/assets/ranking_box_num.png",
         "width": 102,
         "height": 46,
         "style": {
@@ -2137,7 +2137,7 @@
       "scale": 0.48026315789473684,
       "zIndex": 34,
       "visual": {
-        "exportPath": "team_icon_token.png",
+        "exportPath": "src/assets/team_icon_token.png",
         "width": 80,
         "height": 80
       }
@@ -2508,7 +2508,7 @@
       "scale": 0.6773448773448774,
       "zIndex": 38,
       "visual": {
-        "exportPath": "ranking_box_list_my.png",
+        "exportPath": "src/assets/ranking_box_list_my.png",
         "width": 550,
         "height": 126,
         "style": {
@@ -2548,7 +2548,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 39,
       "visual": {
-        "exportPath": "profile_avatar_dummy_48.png",
+        "exportPath": "src/assets/profile_avatar_dummy_48.png",
         "width": 122,
         "height": 122
       }
@@ -2564,7 +2564,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 40,
       "visual": {
-        "exportPath": "profile_frame_default_8.png",
+        "exportPath": "src/assets/profile_frame_default_8.png",
         "width": 160,
         "height": 168,
         "style": {
@@ -2603,7 +2603,7 @@
       "scale": 0.3000474383301708,
       "zIndex": 41,
       "visual": {
-        "exportPath": "team_normal_08.png",
+        "exportPath": "src/assets/team_normal_08.png",
         "width": 110,
         "height": 124
       }
@@ -2617,7 +2617,7 @@
       "scale": 0.65675057208238,
       "zIndex": 42,
       "visual": {
-        "exportPath": "ranking_box_num.png",
+        "exportPath": "src/assets/ranking_box_num.png",
         "width": 102,
         "height": 46,
         "style": {
@@ -2692,7 +2692,7 @@
       "scale": 0.48026315789473684,
       "zIndex": 43,
       "visual": {
-        "exportPath": "team_icon_token.png",
+        "exportPath": "src/assets/team_icon_token.png",
         "width": 80,
         "height": 80
       }
@@ -3182,7 +3182,7 @@
       "scale": 0.6773448773448774,
       "zIndex": 48,
       "visual": {
-        "exportPath": "ranking_box_list.png",
+        "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
         "height": 126,
         "style": {
@@ -3222,7 +3222,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 49,
       "visual": {
-        "exportPath": "profile_avatar_dummy_17.png",
+        "exportPath": "src/assets/profile_avatar_dummy_17.png",
         "width": 122,
         "height": 122
       }
@@ -3238,7 +3238,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 50,
       "visual": {
-        "exportPath": "profile_frame_default_6.png",
+        "exportPath": "src/assets/profile_frame_default_6.png",
         "width": 160,
         "height": 168,
         "style": {
@@ -3277,7 +3277,7 @@
       "scale": 0.3000474383301708,
       "zIndex": 51,
       "visual": {
-        "exportPath": "team_normal_09.png",
+        "exportPath": "src/assets/team_normal_09.png",
         "width": 110,
         "height": 124
       }
@@ -3291,7 +3291,7 @@
       "scale": 0.65675057208238,
       "zIndex": 52,
       "visual": {
-        "exportPath": "ranking_box_num.png",
+        "exportPath": "src/assets/ranking_box_num.png",
         "width": 102,
         "height": 46,
         "style": {
@@ -3366,7 +3366,7 @@
       "scale": 0.48026315789473684,
       "zIndex": 53,
       "visual": {
-        "exportPath": "team_icon_token.png",
+        "exportPath": "src/assets/team_icon_token.png",
         "width": 80,
         "height": 80
       }
@@ -3856,7 +3856,7 @@
       "scale": 0.6773448773448774,
       "zIndex": 58,
       "visual": {
-        "exportPath": "ranking_box_list.png",
+        "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
         "height": 126,
         "style": {
@@ -3896,7 +3896,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 59,
       "visual": {
-        "exportPath": "profile_avatar_dummy_44.png",
+        "exportPath": "src/assets/profile_avatar_dummy_44.png",
         "width": 122,
         "height": 122
       }
@@ -3912,7 +3912,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 60,
       "visual": {
-        "exportPath": "profile_frame_default_2.png",
+        "exportPath": "src/assets/profile_frame_default_2.png",
         "width": 160,
         "height": 168,
         "style": {
@@ -3951,7 +3951,7 @@
       "scale": 0.3000474383301708,
       "zIndex": 61,
       "visual": {
-        "exportPath": "team_normal_09.png",
+        "exportPath": "src/assets/team_normal_09.png",
         "width": 110,
         "height": 124
       }
@@ -3965,7 +3965,7 @@
       "scale": 0.65675057208238,
       "zIndex": 62,
       "visual": {
-        "exportPath": "ranking_box_num.png",
+        "exportPath": "src/assets/ranking_box_num.png",
         "width": 102,
         "height": 46,
         "style": {
@@ -4040,7 +4040,7 @@
       "scale": 0.48026315789473684,
       "zIndex": 63,
       "visual": {
-        "exportPath": "team_icon_token.png",
+        "exportPath": "src/assets/team_icon_token.png",
         "width": 80,
         "height": 80
       }
@@ -4530,7 +4530,7 @@
       "scale": 0.6773448773448774,
       "zIndex": 68,
       "visual": {
-        "exportPath": "ranking_box_list.png",
+        "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
         "height": 126,
         "style": {
@@ -4570,7 +4570,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 69,
       "visual": {
-        "exportPath": "profile_avatar_dummy_21.png",
+        "exportPath": "src/assets/profile_avatar_dummy_21.png",
         "width": 122,
         "height": 122
       }
@@ -4586,7 +4586,7 @@
       "scaleY": 0.3329851439182918,
       "zIndex": 70,
       "visual": {
-        "exportPath": "profile_frame_default_7.png",
+        "exportPath": "src/assets/profile_frame_default_7.png",
         "width": 160,
         "height": 168,
         "style": {
@@ -4625,7 +4625,7 @@
       "scale": 0.3000474383301708,
       "zIndex": 71,
       "visual": {
-        "exportPath": "team_normal_12.png",
+        "exportPath": "src/assets/team_normal_12.png",
         "width": 110,
         "height": 124
       }
@@ -4639,7 +4639,7 @@
       "scale": 0.65675057208238,
       "zIndex": 72,
       "visual": {
-        "exportPath": "ranking_box_num.png",
+        "exportPath": "src/assets/ranking_box_num.png",
         "width": 102,
         "height": 46,
         "style": {
@@ -4714,7 +4714,7 @@
       "scale": 0.48026315789473684,
       "zIndex": 73,
       "visual": {
-        "exportPath": "team_icon_token.png",
+        "exportPath": "src/assets/team_icon_token.png",
         "width": 80,
         "height": 80
       }

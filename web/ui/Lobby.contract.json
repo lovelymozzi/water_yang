@@ -405,7 +405,7 @@
             {
               "condition": "not max_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "BuyLives_1"
+              "targetSceneName": "pop_BuyLives_1"
             }
           ]
         }
@@ -749,7 +749,7 @@
             {
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "BuyLives_1"
+              "targetSceneName": "pop_BuyLives_1"
             },
             {
               "condition": "else",
@@ -886,7 +886,7 @@
             {
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "BuyLives_1"
+              "targetSceneName": "pop_BuyLives_1"
             },
             {
               "condition": "else",

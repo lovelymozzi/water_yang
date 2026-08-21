@@ -1,5 +1,5 @@
 {
-  "name": "Settings_1",
+  "name": "pop_Settings_1",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -18,98 +18,6 @@
   "refVisible": true,
   "refDim": 70,
   "layers": [
-    {
-      "id": 2276,
-      "stableId": "shape-rect-2276",
-      "type": "component",
-      "source": "preset",
-      "name": "shape-rect",
-      "exportPath": "",
-      "x": -43,
-      "y": 0,
-      "scale": 1,
-      "scaleX": 1,
-      "scaleY": 1,
-      "rotation": 0,
-      "zIndex": 1,
-      "visible": true,
-      "zLayerId": "zl-bg",
-      "componentState": {
-        "name": "사각형",
-        "shapeType": "rectangle",
-        "width": 462,
-        "height": 829,
-        "borderRadius": 0,
-        "bgType": "solid",
-        "bgColor1": "rgba(0,0,0,0.57)",
-        "bgColor2": "#2e6ab4",
-        "gradientAngle": 180,
-        "borderWidth": 0,
-        "borderColor": "#6bb5ff",
-        "depthEnabled": false,
-        "depthSize": 0,
-        "depthColor": "#1e4a80",
-        "outerShadowEnabled": false,
-        "outerShadowX": 0,
-        "outerShadowY": 4,
-        "outerShadowBlur": 8,
-        "outerShadowColor": "#000000",
-        "outerShadowOpacity": 30,
-        "innerShadowEnabled": false,
-        "innerShadowX": 0,
-        "innerShadowY": 1,
-        "innerShadowBlur": 4,
-        "innerShadowColor": "#ffffff",
-        "innerShadowOpacity": 15,
-        "texts": [],
-        "selectedTextIndex": 0,
-        "images": [],
-        "selectedImageIndex": 0,
-        "pressEnabled": false,
-        "pressTransition": 100,
-        "pressBrightness": 95,
-        "pressScale": 95,
-        "depthIntensity": 50,
-        "rayCount": 8,
-        "bgTexture": "wood",
-        "bgTextureScale": 120,
-        "maskEnabled": false,
-        "maskInnerPct": 28,
-        "maskOuterPct": 76,
-        "outlineWidth": 0,
-        "outlineColor": "#1e4a80",
-        "glossEnabled": false,
-        "glossSize": 10,
-        "glossBlur": 8,
-        "glossColor": "#ffffff",
-        "glossOpacity": 45,
-        "bevelEnabled": false,
-        "bevelTop": 7,
-        "bevelSide": 8,
-        "bevelBottom": 12,
-        "bevelColor": "#4a90d9",
-        "bevelSoftness": 6,
-        "shine": {
-          "enabled": false,
-          "angle": -20,
-          "width": 28,
-          "opacity": 65,
-          "softness": 70,
-          "duration": 0.9,
-          "interval": 2,
-          "direction": "right",
-          "color": "#ffffff"
-        },
-        "bgColor1Role": "fixed"
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
-        }
-      ]
-    },
     {
       "id": 2242,
       "stableId": "setting-btn-option-png-2242",
@@ -150,22 +58,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2235",
-      "fxGroupId": "fx-2239",
-      "assetId": "src/assets/setting_btn_option.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-2239"
     },
     {
       "id": 2243,
@@ -208,27 +101,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2236",
       "fxGroupId": "fx-2240",
-      "assetId": "src/assets/setting_btn_option.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 2244,
@@ -271,27 +150,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2237",
       "fxGroupId": "fx-2241",
-      "assetId": "src/assets/setting_btn_option.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 2245,
@@ -334,21 +199,13 @@
       "selectedTextIndex": -1,
       "fxGroupId": "fx-2285",
       "groupId": "grp-2281",
-      "assetId": "src/assets/setting_btn_option.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
     },
     {
       "id": 2250,
@@ -390,22 +247,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2235",
-      "fxGroupId": "fx-2239",
-      "assetId": "src/assets/ingame_btn_pause_music.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-2239"
     },
     {
       "id": 2251,
@@ -447,22 +289,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2235",
-      "fxGroupId": "fx-2239",
-      "assetId": "src/assets/ingame_btn_pause_music_off.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-2239"
     },
     {
       "id": 2252,
@@ -505,27 +332,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2236",
       "fxGroupId": "fx-2240",
-      "assetId": "src/assets/ingame_btn_pause_sound.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 2253,
@@ -568,27 +381,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2236",
       "fxGroupId": "fx-2240",
-      "assetId": "src/assets/ingame_btn_pause_sound_off.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 2254,
@@ -631,27 +430,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2237",
       "fxGroupId": "fx-2241",
-      "assetId": "src/assets/ingame_btn_pause_vibration_off.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 2255,
@@ -694,27 +479,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2237",
       "fxGroupId": "fx-2241",
-      "assetId": "src/assets/ingame_btn_pause_vibration2.png",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
         }
-      ],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 2278,
@@ -757,21 +528,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2281",
       "fxGroupId": "fx-2285",
-      "assetId": "src/assets/back_off.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
     },
     {
       "id": 2277,
@@ -814,21 +577,13 @@
       "selectedTextIndex": -1,
       "groupId": "grp-2281",
       "fxGroupId": "fx-2285",
-      "assetId": "src/assets/back_on.png",
-      "events": [],
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
     },
     {
       "id": 2278,
@@ -877,21 +632,7 @@
           "eventName": "",
           "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
-      ],
-      "assetId": "src/assets/setting_btn_option.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      ]
     },
     {
       "id": 2282,
@@ -940,21 +681,7 @@
           "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ],
-      "fxGroupId": "fx-2284",
-      "assetId": "src/assets/return_on.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-2284"
     },
     {
       "id": 2277,
@@ -1003,21 +730,7 @@
           "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ],
-      "fxGroupId": "fx-2284",
-      "assetId": "src/assets/return_off.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-2284"
     }
   ],
   "zLayers": [

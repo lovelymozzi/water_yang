@@ -1,8 +1,8 @@
 {
   "contractVersion": 1,
-  "sceneId": "buylives-1",
+  "sceneId": "pop-buylives-1",
   "sceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-  "sceneName": "BuyLives_1",
+  "sceneName": "pop_BuyLives_1",
   "canvas": {
     "width": 393,
     "height": 852
@@ -417,7 +417,7 @@
       "y": 218,
       "zIndex": 4,
       "visual": {
-        "exportPath": "Ribbon01_Orange.png",
+        "exportPath": "src/assets/Ribbon01_Orange.png",
         "width": 347,
         "height": 80,
         "style": {
@@ -574,7 +574,7 @@
       "y": 463,
       "zIndex": 6,
       "visual": {
-        "exportPath": "button_green_9.png",
+        "exportPath": "src/assets/button_green_9.png",
         "width": 138,
         "height": 138
       },
@@ -745,7 +745,7 @@
       "y": 463,
       "zIndex": 8,
       "visual": {
-        "exportPath": "button_yellow1_4.png",
+        "exportPath": "src/assets/button_yellow1_4.png",
         "width": 138,
         "height": 138
       },
@@ -772,7 +772,7 @@
       "y": 513,
       "zIndex": 9,
       "visual": {
-        "exportPath": "Video.png",
+        "exportPath": "src/assets/Video.png",
         "width": 40,
         "height": 37
       },
@@ -932,7 +932,7 @@
       "y": 512,
       "zIndex": 11,
       "visual": {
-        "exportPath": "ItemIcon_Heart_Red.png",
+        "exportPath": "src/assets/ItemIcon_Heart_Red.png",
         "width": 50,
         "height": 43
       },
@@ -1309,7 +1309,7 @@
         },
         "images": [
           {
-            "exportPath": "ItemIcon_Heart_Red.png",
+            "exportPath": "src/assets/ItemIcon_Heart_Red.png",
             "width": 148,
             "height": 125,
             "offsetX": 1,
@@ -1502,7 +1502,7 @@
       "y": 522,
       "zIndex": 16,
       "visual": {
-        "exportPath": "ItemIcon_Money_Coin_1_1.png",
+        "exportPath": "src/assets/ItemIcon_Money_Coin_1_1.png",
         "width": 39,
         "height": 39
       },
@@ -1534,7 +1534,7 @@
       "y": 635,
       "zIndex": 17,
       "visual": {
-        "exportPath": "Icon_Close01.webp",
+        "exportPath": "src/assets/Icon_Close01.webp",
         "width": 64,
         "height": 64
       },
