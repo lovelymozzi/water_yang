@@ -8,8 +8,9 @@ extends RefCounted
 # 1. **한 칸 이동은 항상 되돌릴 수 있다.** 끝 `e` 를 칸 `c` 로 옮긴 뒤 반대쪽 끝을 방금 비운
 #    칸으로 옮기면 원래 상태다. 그 칸은 자기가 비운 칸이라 비어 있고, 장애물·구멍일 수 없으며,
 #    되돌아간 상태는 원래 흡입이 걸리지 않은 상태였으므로 흡입도 새로 걸리지 않는다.
-# 2. **흡입은 되돌릴 수 없지만 칸을 비우기만 한다.** 고양이는 서로에게 장애물일 뿐이므로
-#    한 마리가 사라지는 것은 남은 고양이의 풀이를 절대 없애지 않는다.
+# 2. **흡입은 되돌릴 수 없지만 칸을 비우기만 한다.** 고양이가 사라지고 그 구멍도 함께
+#    닫히는데, 둘 다 막힌 칸을 여는 순수 감산이다. 닫힌 구멍은 그 고양이만 쓰던 것이므로
+#    남은 고양이의 풀이를 절대 없애지 않는다.
 #
 # ⇒ **시작 상태가 풀리면 도달 가능한 모든 상태도 풀린다.** 그래서 이 솔버는 최소 수순을
 # 구하지 않는다. 고양이 4마리 × 63칸이면 상태공간이 폭발하는데 데드락 논증이 있으므로 필요도
@@ -192,8 +193,12 @@ func can_escape_alone(
 ) -> bool:
 	var work: PuzzleState = state.clone()
 	for ignored in ignored_ids:
-		if ignored != cat_id:
+		if ignored != cat_id and work.cats.has(ignored):
+			var ignored_color: int = work.color_of(ignored)
 			work.remove_cat(ignored)
+			# 이미 나간 고양이의 구멍은 닫혀 빈 칸이 된 상태다. 이것을 빼먹으면
+			# "닫힌 구멍 자리를 지나야만 나갈 수 있는" 의존성을 실측하지 못한다.
+			work.remove_holes_of_color(ignored_color)
 	if not work.cats.has(cat_id):
 		# 이미 나간 고양이는 탈출 가능으로 본다.
 		return true
@@ -253,6 +258,186 @@ func build_dependency_graph(
 			if not can_escape_alone(state, cat_id, kept):
 				graph.add_edge(cat_id, blocker)
 	return graph
+
+
+# 혼자(다른 고양이 전부 제자리) 탈출할 수 있으면 그 탈출이 쓸고 지나가는 칸 전부를,
+# 못 하면 빈 Dictionary 를 돌려준다. 첫 탈출 가로막이가 "실제로 새는 길" 위에 벽을
+# 세울 때 쓴다 — 기록된 풀이 경로만 막으면 BFS 가 샛길로 빠져나간다.
+func solo_escape_route(state: PuzzleState, cat_id: int) -> Dictionary:
+	var work: PuzzleState = state.clone()
+	if not work.cats.has(cat_id):
+		return {}
+	var color_id: int = work.color_of(cat_id)
+	var start_body: Array[Vector2i] = work.body_of(cat_id)
+	if work.body_touches_paired_hole(start_body, color_id):
+		return _cells_union([start_body])
+
+	var bodies: Array = [start_body]
+	var parents: Array[int] = [-1]
+	var visited: Dictionary = {PuzzleState.body_key(start_body): true}
+	var head: int = 0
+	while head < bodies.size():
+		var body: Array[Vector2i] = bodies[head]
+		work.set_cat_body(cat_id, body)
+		for move in work.moves_for(cat_id):
+			var next_body: Array[Vector2i] = PuzzleState.body_after(
+				body, move["from_end_cell"], move["to_cell"]
+			)
+			if next_body.is_empty():
+				continue
+			var next_key: String = PuzzleState.body_key(next_body)
+			if visited.has(next_key):
+				continue
+			if work.body_touches_paired_hole(next_body, color_id):
+				# 흡입 자세에서 시작 자세까지 부모 사슬을 되짚어 쓸고 간 칸을 모은다.
+				var chain: Array = [next_body]
+				var cursor: int = head
+				while cursor >= 0:
+					chain.append(bodies[cursor])
+					cursor = parents[cursor]
+				return _cells_union(chain)
+			visited[next_key] = true
+			bodies.append(next_body)
+			parents.append(head)
+		head += 1
+	return {}
+
+
+static func _cells_union(bodies: Array) -> Dictionary:
+	var cells: Dictionary = {}
+	for body in bodies:
+		for cell in body:
+			cells[cell] = true
+	return cells
+
+
+# ---------------------------------------------------------------- 첫 탈출까지 치우는 수
+
+# 첫 흡입까지 "치워야 하는" 최소 드래그 수. 탈출하는 고양이 자신의 이동과, 방금 끌던
+# 고양이를 이어서 끄는 것(드래그 지속)은 세지 않는다 — 게임은 드래그 한 번으로 몇 칸이든
+# 어떤 모양으로든 끌 수 있으므로, **다른 고양이로 손을 옮기는 횟수**만이 체감 난이도다.
+#
+# 고양이마다 0-1 BFS 를 돈다. 노드 = (판 상태, 마지막으로 끌던 고양이). 어떤 고양이라도
+# 드래그 < limit 에 흡입되면 그 값을, 아무도 안 되면 limit 을 돌려준다("limit 이상"의 뜻).
+func clearing_moves_to_first_escape(
+	state: PuzzleState, limit: int, node_budget: int = DEFAULT_NODE_BUDGET
+) -> int:
+	return int(first_escape_witness(state, limit, node_budget)["clearing"])
+
+
+# 가장 싼 첫 탈출의 목격 수순. {"clearing": 드래그 수, "cat_id": 탈출 고양이, "moves": 수순}.
+# 생성기가 "이 수순의 길목을 막으면 된다"를 알 수 있게 수순 자체를 돌려준다.
+func first_escape_witness(
+	state: PuzzleState, limit: int, node_budget: int = DEFAULT_NODE_BUDGET
+) -> Dictionary:
+	var best: Dictionary = {"clearing": limit, "cat_id": -1, "moves": []}
+	for cat_id in state.cat_ids():
+		var probe: Dictionary = _clearing_moves_for(
+			state, int(cat_id), int(best["clearing"]), node_budget
+		)
+		if int(probe["clearing"]) < int(best["clearing"]):
+			best = {
+				"clearing": int(probe["clearing"]),
+				"cat_id": int(cat_id),
+				"moves": probe["moves"],
+			}
+			if int(best["clearing"]) <= 0:
+				break
+	return best
+
+
+# ponytail: 노드 예산을 넘기면 limit(통과)으로 본다 — 예산이 모자랄 만큼 꼬인 판은
+# 어차피 일찍 빠지는 판이 아니다. 오탐이 생기면 예산을 올린다.
+func _clearing_moves_for(
+	state: PuzzleState, cat_id: int, limit: int, node_budget: int
+) -> Dictionary:
+	if limit <= 0:
+		return {"clearing": 0, "moves": []}
+	var start: PuzzleState = state.clone()
+	# 노드: {state, last(마지막으로 움직인 고양이, -1=없음), parent, move}. 수순 복원용.
+	var nodes: Array = [{"state": start, "last": -1, "parent": -1, "move": {}}]
+	var visited: Dictionary = {_drag_key(start, -1): true}
+	var frontier: Array = [0]
+	var expanded: int = 0
+
+	for cost in limit:
+		# 비용 0 층: cat_id 자신의 수 + 직전에 끌던 고양이를 이어 끄는 수.
+		var closure: Array = []
+		while not frontier.is_empty():
+			var index: int = frontier.pop_back()
+			closure.append(index)
+			expanded += 1
+			if expanded > node_budget:
+				return {"clearing": limit, "moves": []}
+			var node: Dictionary = nodes[index]
+			var current: PuzzleState = node["state"]
+			var last: int = int(node["last"])
+			for move in current.legal_moves():
+				var mover: int = int(move["cat_id"])
+				if mover != cat_id and mover != last:
+					continue
+				var next_state: PuzzleState = current.clone()
+				var result: Dictionary = next_state.apply_move(move)
+				if not bool(result["moved"]):
+					continue
+				if bool(result["absorbed"]) and mover == cat_id:
+					nodes.append({"state": next_state, "last": mover, "parent": index, "move": move})
+					return {"clearing": cost, "moves": _rebuild_moves(nodes, nodes.size() - 1)}
+				# 남이 흡입된 것은 그 고양이의 자체 탐색이 더 싸게 잡는다. 상태만 이어 간다.
+				var next_key: String = _drag_key(next_state, mover)
+				if visited.has(next_key):
+					continue
+				visited[next_key] = true
+				nodes.append({"state": next_state, "last": mover, "parent": index, "move": move})
+				frontier.append(nodes.size() - 1)
+
+		# 비용 +1: 다른 고양이로 손을 옮긴다.
+		if cost + 1 >= limit:
+			break
+		for index in closure:
+			var node: Dictionary = nodes[index]
+			var current: PuzzleState = node["state"]
+			var last: int = int(node["last"])
+			for move in current.legal_moves():
+				var mover: int = int(move["cat_id"])
+				if mover == cat_id or mover == last:
+					continue
+				var next_state: PuzzleState = current.clone()
+				if not bool(next_state.apply_move(move)["moved"]):
+					continue
+				var next_key: String = _drag_key(next_state, mover)
+				if visited.has(next_key):
+					continue
+				visited[next_key] = true
+				nodes.append({"state": next_state, "last": mover, "parent": index, "move": move})
+				frontier.append(nodes.size() - 1)
+	return {"clearing": limit, "moves": []}
+
+
+static func _drag_key(state: PuzzleState, last_cat: int) -> String:
+	return "%d|%s" % [last_cat, state.key()]
+
+
+# 앞에서부터 `escapes`마리를 빼내는 데 드는 실측 드래그 수 목록. [첫 탈출 치우기 수,
+# 그 직후 상태에서 둘째 탈출 치우기 수, ...]. 각 값은 limit 에서 잘린다.
+# 고양이가 빠질수록 몸+구멍만큼 공간이 열려 난이도가 급락하므로, **초반 탈출이 얼마나
+# 비싼가**가 판의 실질 난이도다. 난이도 채점이 이 목록을 쓴다.
+func early_escape_costs(
+	state: PuzzleState, escapes: int = 3, limit: int = 4,
+	node_budget: int = DEFAULT_NODE_BUDGET
+) -> Array[int]:
+	var costs: Array[int] = []
+	var work: PuzzleState = state.clone()
+	for index in escapes:
+		if work.cats.is_empty():
+			break
+		var witness: Dictionary = first_escape_witness(work, limit, node_budget)
+		costs.append(int(witness["clearing"]))
+		if int(witness["cat_id"]) < 0:
+			break  # limit 안에 탈출이 없다 — 뒤는 더 비싸므로 여기서 그친다.
+		for move in (witness["moves"] as Array):
+			work.apply_move(move)
+	return costs
 
 
 # ---------------------------------------------------------------- 데드락 샘플링

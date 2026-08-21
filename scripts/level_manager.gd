@@ -400,10 +400,33 @@ func get_escape_result(cat: CatEntity) -> Dictionary:
 	}
 
 
-func on_cat_escaped(cat: CatEntity) -> void:
+func on_cat_escaped(cat: CatEntity, hole_cell: Vector2i) -> void:
 	_cats.erase(cat)
+	_close_hole(hole_cell)
 	if _cats.is_empty():
 		level_cleared.emit()
+
+
+# 고양이를 다 삼킨 구멍은 함께 수축해 사라진다. 닫힌 자리는 평범한 빈 칸이 되어 다른
+# 고양이가 지나갈 수 있다. `PuzzleState._resolve_absorption()` 과 같은 규칙이어야 한다 —
+# 갈라지면 생성기는 풀린다는데 게임에서는 안 풀리는 맵이 나온다.
+func _close_hole(cell: Vector2i) -> void:
+	var index: int = _hole_cells.find(cell)
+	if index < 0:
+		return
+	_hole_cells.remove_at(index)
+	_hole_color_ids.remove_at(index)
+	_hole_ice_covers.remove_at(index)
+	if is_inside_grid(cell):
+		_set_cell_state(cell, CellState.EMPTY)
+
+	var visual: Node = _holes_root.get_node_or_null("CatHole_%d_%d" % [cell.x, cell.y])
+	if visual is Node3D:
+		var tween: Tween = create_tween()
+		tween.tween_property(
+			visual, "scale", Vector3(0.001, 0.001, 0.001), 0.25
+		).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+		tween.tween_callback((visual as Node3D).queue_free)
 
 
 func _setup_roots() -> void:

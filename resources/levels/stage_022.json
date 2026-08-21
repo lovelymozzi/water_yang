@@ -1,0 +1,359 @@
+{
+  "cats": [
+    {
+      "body_cells": [
+        [
+          2,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "color_id": 0
+    },
+    {
+      "body_cells": [
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "color_id": 1
+    },
+    {
+      "body_cells": [
+        [
+          5,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "color_id": 2
+    }
+  ],
+  "dependency": {
+    "chain": [
+      2,
+      1,
+      0
+    ],
+    "chain_depth": 3,
+    "edges": [
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        1
+      ]
+    ]
+  },
+  "escape_order": [
+    0,
+    1,
+    2
+  ],
+  "grid_size": [
+    7,
+    9
+  ],
+  "holes": [
+    {
+      "color_id": 0,
+      "grid_pos": [
+        2,
+        1
+      ]
+    },
+    {
+      "color_id": 1,
+      "grid_pos": [
+        2,
+        5
+      ]
+    },
+    {
+      "color_id": 2,
+      "grid_pos": [
+        2,
+        3
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "block_size": [
+        7,
+        1
+      ],
+      "grid_pos": [
+        0,
+        0
+      ]
+    },
+    {
+      "block_size": [
+        2,
+        1
+      ],
+      "grid_pos": [
+        0,
+        1
+      ]
+    },
+    {
+      "block_size": [
+        4,
+        1
+      ],
+      "grid_pos": [
+        3,
+        1
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        0,
+        2
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        7
+      ],
+      "grid_pos": [
+        6,
+        2
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        5,
+        3
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        2
+      ],
+      "grid_pos": [
+        4,
+        5
+      ]
+    },
+    {
+      "block_size": [
+        2,
+        2
+      ],
+      "grid_pos": [
+        0,
+        7
+      ]
+    },
+    {
+      "block_size": [
+        4,
+        1
+      ],
+      "grid_pos": [
+        2,
+        8
+      ]
+    }
+  ],
+  "seed": 2218849,
+  "solution": [
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        2,
+        6
+      ],
+      "to_cell": [
+        2,
+        7
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        3,
+        4
+      ],
+      "to_cell": [
+        2,
+        4
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        4
+      ],
+      "to_cell": [
+        2,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        3,
+        5
+      ],
+      "to_cell": [
+        3,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        3,
+        4
+      ],
+      "to_cell": [
+        3,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        2,
+        4
+      ],
+      "to_cell": [
+        2,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        2,
+        3
+      ],
+      "to_cell": [
+        2,
+        2
+      ]
+    }
+  ],
+  "stats": {
+    "early_clearing": [
+      1,
+      0
+    ],
+    "obstacle_cells": 32,
+    "solution_length": 7,
+    "solver_moves": 7,
+    "solver_nodes": 8
+  }
+}
