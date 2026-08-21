@@ -14,7 +14,8 @@ extends RefCounted
 #     전진·후진을 구분할 필요가 없고, 원자 이동은 "두 끝 중 하나를 인접한 빈 칸으로" 하나뿐이다.
 #   - 흡입은 방금 움직인 끝(리드)이 짝 색 구멍과 4방향 인접할 때만 걸린다.
 #     반대쪽 끝이 스친 것은 흡입이 아니다.
-#   - 구멍은 경로가 아니다.
+#   - 구멍은 경로가 아니다. 단, 고양이를 다 삼킨 구멍은 함께 닫혀 평범한 빈 칸이 되고
+#     그 뒤로는 다른 고양이가 지나갈 수 있다. (`LevelManager._close_hole()` 대응)
 
 const DIRS: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
 # 짝 구멍이 없어 닿을 수 없는 거리. 솔버 휴리스틱이 그쪽을 피하도록 크게 잡는다.
@@ -306,10 +307,23 @@ func apply_move(move: Dictionary) -> Dictionary:
 func _resolve_absorption(cat_id: int, moved_end_cell: Vector2i) -> bool:
 	if not cats.has(cat_id):
 		return false
-	if adjacent_paired_hole(moved_end_cell, int(cats[cat_id]["color"])) != null:
+	var hole_cell: Variant = adjacent_paired_hole(moved_end_cell, int(cats[cat_id]["color"]))
+	if hole_cell != null:
 		remove_cat(cat_id)
+		# 고양이를 다 삼킨 구멍은 함께 닫힌다. 닫힌 자리는 평범한 빈 칸이 되어 다른
+		# 고양이가 지나갈 수 있다. `LevelManager._close_hole()` 와 같은 규칙이어야 한다.
+		holes.erase(hole_cell)
 		return true
 	return false
+
+
+# 이 색과 짝인 구멍을 전부 치운다. 의존성 실측(`LevelSolver.can_escape_alone`)이
+# "이미 나간 고양이"의 구멍을 닫을 때 쓴다. 색이 고양이:구멍 1:1 이라는 전제가 있다
+# (생성기 기본 설정이 보장하며, 색이 겹치는 수제 맵에서는 과하게 치울 수 있다).
+func remove_holes_of_color(color_id: int) -> void:
+	for cell in holes.keys():
+		if int(holes[cell]) == color_id:
+			holes.erase(cell)
 
 
 # 기믹 커밋 훅. 기믹이 생기면 여기서 상태를 바꾸고, **같은 규칙을 MapGenerator 의 역주행에도

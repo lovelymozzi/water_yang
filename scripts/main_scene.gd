@@ -10,6 +10,10 @@ const STAGE_LEVELS_DIR := "res://resources/levels"
 const STAGE_ADVANCE_DELAY_SECONDS := 1.4
 const DEFAULT_STAGE_TIME_SECONDS := 60.0
 
+# 개발용 시작 스테이지 (1부터). Inspector 에서 바꾸거나 실행 인자 `-- stage=10` 으로
+# 덮어쓴다. 특정 스테이지만 다시 플레이해 볼 때 쓴다. 범위를 넘으면 마지막 스테이지다.
+@export_range(1, 999) var start_stage: int = 1
+
 @onready var level_manager: LevelManager = $LevelManager
 @onready var clear_label: Label = $CanvasLayer/ClearLabel
 
@@ -22,6 +26,12 @@ var _stage_time_left := DEFAULT_STAGE_TIME_SECONDS
 var _stage_timer_running := false
 var _last_reported_seconds := -1
 var _requested_stage_index := 0
+# 재현용. 스테이지 파일에 함께 저장된 정답 수순과 그 재생 상태다.
+var _stage_solution: Array = []
+var _replay_button: Button
+var _replay_index := -1
+# 지금 수를 이미 눌렀는지. 누른 뒤에는 커밋될 때까지 프레임을 넘겨 줘야 한다.
+var _replay_issued := false
 
 
 func _ready() -> void:
@@ -78,14 +88,20 @@ func _ready() -> void:
 	print("[boot] 로그 파일 위치: ", ProjectSettings.globalize_path("user://logs/"))
 
 	_setup_stage_label()
+	_setup_replay_button()
 	if _stage_mode_allowed():
 		_stage_paths = _list_stage_files()
 		if not _stage_paths.is_empty():
 			# LevelManager 가 자기 _ready 의 씬 배치 처리를 끝낸 뒤에 갈아 끼운다.
-			call_deferred("_load_stage", 0)
+			call_deferred(
+				"_load_stage", clampi(_dev_start_stage() - 1, 0, _stage_paths.size() - 1)
+			)
 
 
 func _process(delta: float) -> void:
+	if _replay_index >= 0:
+		_advance_replay()
+
 	if _stage_timer_running:
 		_stage_time_left = maxf(0.0, _stage_time_left - delta)
 		var seconds_left := ceili(_stage_time_left)
@@ -131,7 +147,11 @@ func _on_level_cleared() -> void:
 
 func _on_host_initialize(stage_data: Dictionary) -> void:
 	var config: Dictionary = stage_data.get("config", {})
-	_requested_stage_index = max(0, int(stage_data.get("stage", 1)) - 1)
+	var requested: int = int(stage_data.get("stage", 1))
+	if not UiBridge.is_hosted:
+		# 스탠드얼론 부트의 stage 는 항상 1인 스텁이라, 개발용 시작 스테이지가 우선한다.
+		requested = maxi(requested, _dev_start_stage())
+	_requested_stage_index = max(0, requested - 1)
 	_stage_time_left = maxf(1.0, float(config.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 	_stage_timer_running = false
 	_last_reported_seconds = -1
@@ -156,6 +176,15 @@ func _format_stage_timer(seconds: int) -> String:
 
 # 스테이지 모드를 켜면 안 되는 경우 둘: `--script` 는 검증 하네스라 손 배치를 전제하고,
 # MapGenerator 의 generate_on_play 는 시드 테스트 플레이라 그쪽이 판을 가져야 한다.
+# 개발용 시작 스테이지 (1부터). Inspector 의 start_stage 를 실행 인자 `-- stage=N` 이 덮는다.
+func _dev_start_stage() -> int:
+	var requested: int = start_stage
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("stage="):
+			requested = int(arg.substr(6))
+	return requested
+
+
 func _stage_mode_allowed() -> bool:
 	if OS.get_cmdline_args().has("--script"):
 		return false
@@ -189,10 +218,114 @@ func _load_stage(index: int) -> void:
 		return
 	_stage_index = index
 	LevelLayoutWriter.apply_to_manager(level_manager, level)
+	_stage_solution = level.get("solution", [])
 	clear_label.visible = false
 	_stage_label.text = "STAGE %d / %d" % [index + 1, _stage_paths.size()]
 	_stage_label.visible = true
+	# 정답이 함께 저장된 스테이지에서만 재현 버튼을 띄운다.
+	_replay_button.visible = not _stage_solution.is_empty()
+	_replay_button.text = "정답 재현 (%d수)" % _stage_solution.size()
 	print("[스테이지] %d/%d 시작 (%s)" % [index + 1, _stage_paths.size(), path])
+
+
+# ---------------------------------------------------------------- 정답 재현
+
+# 스테이지 파일의 `solution` 을 실제 고양이에게 눌러 넣어 정답을 눈으로 보여 준다.
+#
+# **자동 재생용 별도 경로를 만들지 않는다.** 사람이 드래그할 때와 똑같이
+# `begin_drag()` → `request_path_to()` 만 쓰고, 움직이는 것은 `CatEntity._process()` 의
+# `advance()` 가 한다. 그래서 재현이 성공한다는 것은 곧 그 수순을 사람이 따라 해도
+# 클리어된다는 뜻이다. (헤드리스 버전은 `tests/stage_replay_check.gd`.)
+#
+# 한 프레임에 한 수만 밀어 넣고, 리드가 목표 칸에 도착할 때까지 기다린다. 몰아서 넣으면
+# `begin_drag()` 가 이전 수의 큐를 지워 버려 수순이 어긋난다.
+func _setup_replay_button() -> void:
+	_replay_button = Button.new()
+	_replay_button.name = "ReplayButton"
+	_replay_button.text = "정답 재현"
+	_replay_button.visible = false
+	_replay_button.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_replay_button.offset_left = -132.0
+	_replay_button.offset_top = 24.0
+	_replay_button.offset_right = -24.0
+	_replay_button.offset_bottom = 64.0
+	_replay_button.pressed.connect(_on_replay_pressed)
+	$CanvasLayer.add_child(_replay_button)
+
+
+func _on_replay_pressed() -> void:
+	if _stage_index < 0 or _stage_solution.is_empty():
+		return
+	# 판을 시작 상태로 되돌리고 다음 프레임부터 누른다. 다시 심은 고양이 노드가
+	# `_ready` 를 지나야 드래그를 받을 수 있다.
+	_load_stage(_stage_index)
+	_replay_index = 0
+	_replay_issued = false
+	_replay_button.disabled = true
+	print("[재현] 스테이지 %d 정답 %d수 재생 시작" % [_stage_index + 1, _stage_solution.size()])
+
+
+func _advance_replay() -> void:
+	if _replay_index >= _stage_solution.size():
+		_stop_replay("%d수 재생 완료" % _stage_solution.size())
+		return
+	var move: Dictionary = _stage_solution[_replay_index]
+	var cat: CatEntity = _find_replay_cat(int(move["cat_id"]))
+
+	if not _replay_issued:
+		if cat == null:
+			_stop_replay(
+				"%d번째 수: 고양이 %d 가 이미 나갔다" % [_replay_index + 1, int(move["cat_id"])]
+			)
+			return
+		# 움직일 끝이 뒤끝이면 리드를 그쪽으로 넘긴다. 앞끝이면 잔여 큐만 비운다.
+		cat.begin_drag(move["from_end_cell"])
+		if cat.body_cells.is_empty() or cat.body_cells[0] != move["from_end_cell"]:
+			_stop_replay(
+				"%d번째 수: 고양이 %d 의 끝이 %s 가 아니다 (몸 %s)" % [
+					_replay_index + 1, int(move["cat_id"]),
+					move["from_end_cell"], cat.body_cells,
+				]
+			)
+			return
+		cat.request_path_to(move["to_cell"])
+		_replay_issued = true
+		return
+
+	# 이 수가 흡입으로 끝나면 고양이가 사라진다. 그건 실패가 아니라 그 수의 성공이다.
+	# 흡입 연출이 끝날 때까지(노드가 해제될 때까지) 기다린 뒤 다음 수로 넘어간다.
+	if cat == null:
+		_replay_index += 1
+		_replay_issued = false
+		return
+	if cat.is_absorbing():
+		return
+	if cat.is_blocked():
+		_stop_replay("%d번째 수가 막혔다: 고양이 %d → %s" % [
+			_replay_index + 1, int(move["cat_id"]), move["to_cell"],
+		])
+		return
+	if cat.body_cells[0] != move["to_cell"]:
+		return
+	_replay_index += 1
+	_replay_issued = false
+
+
+# 흡입이 끝나 노드가 해제된 고양이는 null 이다. 그 상태로 다음 수가 그 고양이를
+# 가리키면 수순이 어긋난 것이므로 조용히 넘기지 않는다.
+func _find_replay_cat(cat_id: int) -> CatEntity:
+	var cats_root: Node = level_manager.get_node_or_null("LayoutCats")
+	if cats_root == null:
+		return null
+	var cat: CatEntity = cats_root.get_node_or_null("Cat_%d" % cat_id) as CatEntity
+	return cat if is_instance_valid(cat) else null
+
+
+func _stop_replay(reason: String) -> void:
+	_replay_index = -1
+	_replay_issued = false
+	_replay_button.disabled = false
+	print("[재현] ", reason)
 
 
 func _setup_stage_label() -> void:

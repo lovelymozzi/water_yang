@@ -830,7 +830,7 @@ func _finish_absorb() -> void:
 	# 이후 프레임에서 이동/포즈 계산이 다시 돌지 않게 끊는다.
 	level_manager = null
 	manager.release_cat_cell(self)
-	manager.on_cat_escaped(self)
+	manager.on_cat_escaped(self, _absorb_cell)
 	queue_free()
 
 
