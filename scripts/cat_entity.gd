@@ -148,7 +148,7 @@ const ABSORB_SINK_CELLS := 0.9
 @export_group("Orange Cat Key (key1.fbx)")
 # These fields drive only color_id 0, the orange cat. They remain editable in
 # the Inspector so artists can tune the key without touching this script.
-@export var show_key := true
+@export var show_key := false
 
 @export var key_local_position := Vector3(0.1, -0.04, 0.1):
 	set(value):

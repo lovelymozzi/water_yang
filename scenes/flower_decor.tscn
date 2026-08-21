@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://c05e6poo2shdo"]
 
-[ext_resource type="Script" path="res://scripts/grass_decor.gd" id="1_decor"]
-[ext_resource type="PackedScene" path="res://water_yang/flower1.fbx" id="2_flower_fbx"]
+[ext_resource type="Script" uid="uid://ba6ar86o754ob" path="res://scripts/grass_decor.gd" id="1_decor"]
+[ext_resource type="PackedScene" uid="uid://b0wgvoeoleps2" path="res://water_yang/flower1.fbx" id="2_flower_fbx"]
 
 [sub_resource type="Animation" id="Animation_flower_pulse"]
 resource_name = "flower_pulse"
@@ -46,25 +46,23 @@ tracks/2/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_flower_pulse"]
 _data = {
-"flower_pulse": SubResource("Animation_flower_pulse")
+&"flower_pulse": SubResource("Animation_flower_pulse")
 }
 
-[node name="FlowerDecor" type="Node3D" groups=["persistent_tile_visuals"]]
+[node name="FlowerDecor" type="Node3D" unique_id=2135738411 groups=["persistent_tile_visuals"]]
 script = ExtResource("1_decor")
-ambient_color = Color(0.04, 0.24, 1, 1)
-ambient_energy = 1.2
+ambient_color = Color(0.12721485, 0.5322297, 0.6142478, 1)
+ambient_energy = 0.56
 
-[node name="FlowerModel" parent="." instance=ExtResource("2_flower_fbx")]
+[node name="FlowerModel" parent="." unique_id=1577571980 instance=ExtResource("2_flower_fbx")]
 
-[node name="FlowerGlow" type="OmniLight3D" parent="."]
-position = Vector3(0, 0.25, 0)
+[node name="FlowerGlow" type="OmniLight3D" parent="." unique_id=347360526]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+visible = false
 light_color = Color(0.04, 0.24, 1, 1)
 light_energy = 3.0
 omni_range = 0.8
-omni_attenuation = 1.0
 
-[node name="FlowerPulsePlayer" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_flower_pulse")
-}
-autoplay = "flower_pulse"
+[node name="FlowerPulsePlayer" type="AnimationPlayer" parent="." unique_id=2027938923]
+libraries/ = SubResource("AnimationLibrary_flower_pulse")
+autoplay = &"flower_pulse"
