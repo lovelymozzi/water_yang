@@ -16,7 +16,7 @@
     "color": "#16213e",
     "color2": "#0e4a8c",
     "gradientAngle": 180,
-    "imagePath": "home_bg.png",
+    "imagePath": "",
     "imagePaths": [],
     "tileSize": 86,
     "tilePad": 0,
@@ -71,14 +71,99 @@
   "sceneAnimations": [],
   "layers": [
     {
+      "stableId": "gamefield-2283",
+      "layerType": "component",
+      "displayName": "GameField",
+      "x": 0,
+      "y": 1,
+      "scale": 0.5,
+      "zIndex": 1,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 780,
+            "height": 1712,
+            "radius": 0,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#9aa5b1",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      }
+    },
+    {
       "stableId": "home-btn-setting-png-87",
       "layerType": "image",
       "displayName": "home_btn_setting.png",
       "x": 334,
       "y": 51,
-      "zIndex": 1,
+      "zIndex": 2,
       "visual": {
-        "exportPath": "home_btn_setting_2.png",
+        "exportPath": "src/assets/home_btn_setting_2.png",
         "width": 48,
         "height": 48
       },
@@ -114,9 +199,9 @@
       "displayName": "bar1.png",
       "x": 201,
       "y": 58,
-      "zIndex": 2,
+      "zIndex": 3,
       "visual": {
-        "exportPath": "bar1_3.png",
+        "exportPath": "src/assets/bar1_3.png",
         "width": 133,
         "height": 29
       },
@@ -164,9 +249,9 @@
       "x": 207,
       "y": 51,
       "scale": 0.8737373737373737,
-      "zIndex": 3,
+      "zIndex": 4,
       "visual": {
-        "exportPath": "icon_heart_2.png",
+        "exportPath": "src/assets/icon_heart_2.png",
         "width": 44,
         "height": 44
       },
@@ -213,9 +298,9 @@
       "displayName": "bar1.png",
       "x": 85,
       "y": 58,
-      "zIndex": 4,
+      "zIndex": 5,
       "visual": {
-        "exportPath": "bar1_3.png",
+        "exportPath": "src/assets/bar1_3.png",
         "width": 133,
         "height": 29
       },
@@ -262,9 +347,9 @@
       "displayName": "gimmick_coinpurse_coin.png",
       "x": 91,
       "y": 54,
-      "zIndex": 5,
+      "zIndex": 6,
       "visual": {
-        "exportPath": "gimmick_coinpurse_coin_3.png",
+        "exportPath": "src/assets/gimmick_coinpurse_coin_3.png",
         "width": 34,
         "height": 35
       }
@@ -275,9 +360,9 @@
       "displayName": "profile.png",
       "x": 10,
       "y": 36,
-      "zIndex": 6,
+      "zIndex": 7,
       "visual": {
-        "exportPath": "profile.png",
+        "exportPath": "src/assets/profile.png",
         "width": 74,
         "height": 73
       }
@@ -288,9 +373,9 @@
       "displayName": "home_btn_plus.png",
       "x": 295,
       "y": 61,
-      "zIndex": 7,
+      "zIndex": 8,
       "visual": {
-        "exportPath": "home_btn_plus_2.png",
+        "exportPath": "src/assets/home_btn_plus_2.png",
         "width": 23,
         "height": 23
       },
@@ -332,9 +417,9 @@
       "displayName": "home_btn_plus.png",
       "x": 179,
       "y": 61,
-      "zIndex": 8,
+      "zIndex": 9,
       "visual": {
-        "exportPath": "home_btn_plus_2.png",
+        "exportPath": "src/assets/home_btn_plus_2.png",
         "width": 23,
         "height": 23
       },
@@ -370,10 +455,10 @@
       "displayName": "main_event.png",
       "x": 190,
       "y": 127,
-      "zIndex": 9,
+      "zIndex": 10,
       "visible": false,
       "visual": {
-        "exportPath": "main_event.png",
+        "exportPath": "src/assets/main_event.png",
         "width": 190,
         "height": 73
       }
@@ -384,10 +469,10 @@
       "displayName": "main_event.png",
       "x": 6,
       "y": 127,
-      "zIndex": 10,
+      "zIndex": 11,
       "visible": false,
       "visual": {
-        "exportPath": "main_event.png",
+        "exportPath": "src/assets/main_event.png",
         "width": 190,
         "height": 73
       },
@@ -399,10 +484,10 @@
       "displayName": "shop_package_time.png",
       "x": 142,
       "y": 170,
-      "zIndex": 11,
+      "zIndex": 12,
       "visible": false,
       "visual": {
-        "exportPath": "shop_package_time_1.png",
+        "exportPath": "src/assets/shop_package_time_1.png",
         "width": 30,
         "height": 31
       }
@@ -413,10 +498,10 @@
       "displayName": "common_time_needle.png",
       "x": 154,
       "y": 172,
-      "zIndex": 12,
+      "zIndex": 13,
       "visible": false,
       "visual": {
-        "exportPath": "common_time_needle.png",
+        "exportPath": "src/assets/common_time_needle.png",
         "width": 6,
         "height": 11
       }
@@ -427,7 +512,7 @@
       "displayName": "Plain Text",
       "x": 172,
       "y": 180,
-      "zIndex": 13,
+      "zIndex": 14,
       "visible": false,
       "visual": {
         "model": {
@@ -547,10 +632,10 @@
       "displayName": "block_active_4.png",
       "x": 318,
       "y": 138,
-      "zIndex": 14,
+      "zIndex": 15,
       "visible": false,
       "visual": {
-        "exportPath": "block_active_4.png",
+        "exportPath": "src/assets/block_active_4.png",
         "width": 49,
         "height": 40
       }
@@ -562,9 +647,9 @@
       "x": 104,
       "y": 613,
       "scale": 0.4833823529411765,
-      "zIndex": 15,
+      "zIndex": 16,
       "visual": {
-        "exportPath": "home_btn_stage_normal.png",
+        "exportPath": "src/assets/home_btn_stage_normal.png",
         "width": 378,
         "height": 170,
         "style": {
@@ -681,7 +766,7 @@
       "displayName": "text_Level 5",
       "x": 115,
       "y": 632,
-      "zIndex": 16,
+      "zIndex": 17,
       "visual": {
         "model": {
           "shape": {

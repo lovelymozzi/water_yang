@@ -1135,12 +1135,14 @@ function characterAimWorld(poseEl) {
 
 // ── 위젯(표시/토글/슬라이더) contract 방출 판정 — key+필수 슬롯 완비 시 위젯 객체, 아니면 null ──
 // 방출 지점이 두 곳(layerToContractLayer / 에디터 _mapGroups)이라 판정을 여기 한 곳에 둔다.
-// visibility=슬롯 없음(호스트 자신), toggle=on·off 필수, slider=track·handle 필수(fill 옵션).
+// visibility=슬롯 없음(호스트 자신), toggle=on·off 필수, slider=track·handle 필수(fill 옵션),
+// fill=fill 필수(bg 옵션 — 배경 페어링 표시용, 런타임 동작 없음).
 function widgetContractValue(wg) {
     if (!wg || !wg.key || !wg.type) return null;
     if (wg.type === 'visibility') return wg;
     if (wg.type === 'toggle') return (wg.on && wg.off) ? wg : null;
     if (wg.type === 'slider') return (wg.track && wg.handle) ? wg : null;
+    if (wg.type === 'fill') return wg.fill ? wg : null;
     return null;
 }
 
@@ -3002,6 +3004,7 @@ export class SceneRenderer {
     //   visibility — 슬롯 없음, 호스트 자신(그룹 멤버들/오브젝트)을 boolean 으로 표시/숨김
     //   toggle    — on/off ref, boolean 으로 두 참조를 반대로 표시 스왑
     //   slider    — track/handle(/fill) ref, 0~1 값으로 핸들 이동·채우기 클립
+    //   fill      — fill ref(/bg), 0~100 값으로 채우기 클립(로딩바). 표시 전용, 입력 배선 없음
     // ref = { kind:'group'|'layer', id } — group=contract 그룹 id, layer=stableId.
     // 입력: 토글 클릭·슬라이더 드래그는 'widget:<key>' 이벤트({key,type,value,phase})로만 방출하고
     //   스스로 시각 상태를 바꾸지 않는다. 상태의 진실은 게임 — update({key:값}) 에코로만 UI가 움직인다.
@@ -3084,6 +3087,9 @@ export class SceneRenderer {
             } else if (wg.type === 'toggle') {
                 const onEls = refEls(wg.on), offEls = refEls(wg.off);
                 if (onEls.length || offEls.length) inst = { type: 'toggle', onEls, offEls };
+            } else if (wg.type === 'fill') {
+                const fb = refBounds(wg.fill), fillEls = refEls(wg.fill);
+                if (fb && fillEls.length) inst = { type: 'fill', vertical: fb.h > fb.w, fillEls };
             } else if (wg.type === 'slider') {
                 const track = refBounds(wg.track);
                 const handle = refBounds(wg.handle);
@@ -3116,6 +3122,14 @@ export class SceneRenderer {
             const on = (value === 'false' || value === '0') ? false : !!value;
             w.onEls.forEach(el => this._applyBoundVisibility(el, on));
             w.offEls.forEach(el => this._applyBoundVisibility(el, !on));
+            return;
+        }
+        // fill — 0~100 을 진행률로 클램프해 "가득 찬 상태" 오브젝트를 잘라 보여준다 (입력 배선 없음, 표시 전용)
+        if (w.type === 'fill') {
+            const v = Math.max(0, Math.min(1, (parseFloat(value) || 0) / 100));
+            w.fillEls.forEach(el => {
+                el.style.clipPath = w.vertical ? `inset(${(1 - v) * 100}% 0 0 0)` : `inset(0 ${(1 - v) * 100}% 0 0)`;
+            });
             return;
         }
         // slider — 0~1 클램프. 가로=좌→우 증가, 세로=아래→위 증가. 핸들 중심이 트랙 범위를 따라간다.
@@ -3445,10 +3459,11 @@ export class SceneRenderer {
         const safeBottom = sa.bottom || 0;
         const effViewH = Math.max(0, vh - safeTop - safeBottom);
 
-        // 스마트 스크롤: 콘텐츠 높이 계산
+        // 스마트 스크롤: 콘텐츠 높이 계산 — 핀(scrollFixed) 그룹 멤버는 스크롤 밖에 살므로 높이에서 제외
+        const pinnedSids = new Set((c.groups || []).flatMap(g => g.scrollFixed ? g.layerStableIds : []));
         let maxBottom = 0;
         (c.layers || []).forEach(l => {
-            if (l.visible === false) return;
+            if (l.visible === false || pinnedSids.has(l.stableId)) return;
             const baseH = l.visual?.height
                        || l.visual?.model?.shape?.height
                        || 0;
@@ -3654,14 +3669,13 @@ export class SceneRenderer {
         // 평면이 몸체 안이라 별도 컨테이너/z 배치가 필요 없다(부모의 z·그룹·번들 소속을 그대로 상속).
         placeMaskChildren();
 
-        // 그룹 래퍼 배치
-        groupList.forEach(({ gDiv }) => {
+        // 그룹 래퍼 배치 — scrollFixed(핀) 그룹은 스크롤 씬에서 root 밖(outerWrap)에 붙여 스크롤 제외
+        const pinnedGDivs = [];
+        groupList.forEach(({ g, gDiv }) => {
             if (gDiv.children.length === 0) return;
-            root.appendChild(gDiv);
+            if (isScrollable && g.scrollFixed) pinnedGDivs.push(gDiv);
+            else root.appendChild(gDiv);
         });
-
-        // 그룹 위젯(토글/슬라이더) 레지스트리 — 모든 레이어 엘리먼트가 root 에 들어온 뒤 해석
-        this._initWidgets(c, root);
 
         this._rootEl = root;
 
@@ -3674,6 +3688,11 @@ export class SceneRenderer {
             scrollInner.style.cssText = `position:absolute;top:${safeTop}px;left:0;width:${vw}px;height:${effViewH}px;overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;`;
             scrollInner.appendChild(root);
             outerWrap.appendChild(scrollInner);
+            // 핀 그룹 — scrollInner 뒤 DOM 순서로 항상 위. safeTop 만큼 내려 스크롤 0 시점의 자리 그대로 고정.
+            pinnedGDivs.forEach(gDiv => {
+                if (safeTop > 0) gDiv.style.top = safeTop + 'px';
+                outerWrap.appendChild(gDiv);
+            });
             this._el = outerWrap;
         } else {
             // 비스크롤이지만 safeArea 가 있으면 root 를 밀어내야 콘텐츠가 nav 와 겹치지 않음
@@ -3682,6 +3701,9 @@ export class SceneRenderer {
             if (safeBottom > 0) root.style.bottom = safeBottom + 'px';
             this._el = root;
         }
+
+        // 그룹 위젯(토글/슬라이더) 레지스트리 — 핀 그룹 포함 모든 엘리먼트가 최종 트리에 들어온 뒤 해석
+        this._initWidgets(c, this._el);
     }
 
     _buildNavigationDOM() {

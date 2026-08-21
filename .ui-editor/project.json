@@ -3,7 +3,7 @@
   "name": "water_yang",
   "createdAt": "2026-08-12T07:56:05.702Z",
   "editorVersion": "2.0",
-  "assetRoot": "",
+  "assetRoot": "src/assets",
   "rendererPath": "web/ui",
   "engine": "godot",
   "sceneMeta": {
@@ -38,7 +38,8 @@
     ],
     "groupCollapsed": {
       "Scenes": false,
-      "Shop": false
+      "Shop": false,
+      "Decoration": true
     },
     "groupMap": {
       "Splash": "Core",
@@ -96,8 +97,8 @@
         "y": -70
       },
       "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9": {
-        "x": -317,
-        "y": -76
+        "x": -362.254,
+        "y": -70.676
       },
       "37f376d8-4e32-4340-9bbd-4ed17767e148": {
         "x": -1130,
@@ -272,7 +273,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "Ingame"
+    "lastScene": "Splash"
   },
   "globalViewport": {
     "width": 393,

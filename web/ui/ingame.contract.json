@@ -59,25 +59,142 @@
       ]
     },
     {
-      "id": "grp-303",
-      "name": "Group",
-      "layerStableIds": [
-        "entry-box-normal-png-293",
-        "entry-box-normal-png-298",
-        "entry-box-normal-png-299",
-        "entry-box-normal-png-300"
-      ]
-    },
-    {
       "id": "grp-304",
       "name": "time",
       "layerStableIds": [
         "anniversarypack-time-webp-301",
         "common-time-needle-webp-302"
       ]
+    },
+    {
+      "id": "grp-314",
+      "name": "setting",
+      "layerStableIds": [
+        "entry-box-normal-png-300",
+        "home-btn-setting-webp-312"
+      ]
+    },
+    {
+      "id": "grp-315",
+      "name": "item3",
+      "layerStableIds": [
+        "entry-box-normal-png-299",
+        "common-icon-greendot2-webp-308",
+        "itme3-1-png-311"
+      ]
+    },
+    {
+      "id": "grp-316",
+      "name": "item_2",
+      "layerStableIds": [
+        "entry-box-normal-png-298",
+        "item2-png-305",
+        "common-icon-greendot2-webp-309"
+      ]
+    },
+    {
+      "id": "grp-317",
+      "name": "item1",
+      "layerStableIds": [
+        "entry-box-normal-png-293",
+        "item1-png-307",
+        "common-icon-greendot2-webp-310"
+      ]
     }
   ],
-  "fxGroups": [],
+  "fxGroups": [
+    {
+      "id": "fx-2286",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "entry-box-normal-png-293",
+        "item1-png-307",
+        "common-icon-greendot2-webp-310"
+      ]
+    },
+    {
+      "id": "fx-2287",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "entry-box-normal-png-298",
+        "item2-png-305",
+        "common-icon-greendot2-webp-309"
+      ]
+    },
+    {
+      "id": "fx-2288",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "entry-box-normal-png-299",
+        "common-icon-greendot2-webp-308",
+        "itme3-1-png-311"
+      ]
+    },
+    {
+      "id": "fx-2289",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "entry-box-normal-png-300",
+        "home-btn-setting-webp-312"
+      ]
+    }
+  ],
   "sceneAnimations": [],
   "layers": [
     {
@@ -184,7 +301,7 @@
         {
           "slotIndex": 0,
           "staticContent": "99,999",
-          "bindingKey": "",
+          "bindingKey": "coin.current",
           "fontSize": 30,
           "fontWeight": "bold",
           "fontFamily": "\"Lilita One\", cursive",
@@ -265,7 +382,7 @@
         {
           "slotIndex": 0,
           "staticContent": "Level 01",
-          "bindingKey": "",
+          "bindingKey": "stage.current",
           "fontSize": 30,
           "fontWeight": "bold",
           "fontFamily": "\"Lilita One\", cursive",
@@ -318,6 +435,24 @@
         "width": 40,
         "height": 40
       },
+      "effects": [
+        {
+          "type": "press",
+          "source": {
+            "provider": "internal",
+            "name": "press"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "pointer",
+          "params": {
+            "transitionMs": 100,
+            "brightness": 95,
+            "scale": 95,
+            "useDepthOffset": false
+          }
+        }
+      ],
       "events": [
         {
           "trigger": "click",
@@ -427,12 +562,11 @@
       "stableId": "entry-box-normal-png-293",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
-      "x": 18,
+      "x": 17,
       "y": 662,
-      "scale": 0.8586956521739131,
       "zIndex": 8,
       "visual": {
-        "exportPath": "entry_box_normal.png",
+        "exportPath": "ingame_item_bg.png",
         "width": 92,
         "height": 94
       }
@@ -441,12 +575,11 @@
       "stableId": "entry-box-normal-png-298",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
-      "x": 110,
+      "x": 104,
       "y": 662,
-      "scale": 0.8586956521739131,
       "zIndex": 9,
       "visual": {
-        "exportPath": "entry_box_normal.png",
+        "exportPath": "ingame_item_bg.png",
         "width": 92,
         "height": 94
       }
@@ -455,12 +588,11 @@
       "stableId": "entry-box-normal-png-299",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
-      "x": 202,
+      "x": 200,
       "y": 662,
-      "scale": 0.8586956521739131,
       "zIndex": 10,
       "visual": {
-        "exportPath": "entry_box_normal.png",
+        "exportPath": "ingame_item_bg.png",
         "width": 92,
         "height": 94
       }
@@ -469,15 +601,21 @@
       "stableId": "entry-box-normal-png-300",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
-      "x": 294,
+      "x": 293,
       "y": 662,
-      "scale": 0.8586956521739131,
       "zIndex": 11,
       "visual": {
-        "exportPath": "entry_box_normal.png",
+        "exportPath": "ingame_item_bg.png",
         "width": 92,
         "height": 94
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "entry-box-normal-png-300:click",
+          "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
+        }
+      ]
     },
     {
       "stableId": "anniversarypack-time-webp-301",
@@ -505,6 +643,237 @@
         "exportPath": "common_time_needle.webp",
         "width": 10,
         "height": 18
+      }
+    },
+    {
+      "stableId": "item2-png-305",
+      "layerType": "image",
+      "displayName": "item2.png",
+      "x": 118,
+      "y": 669,
+      "scale": 0.26078431372549016,
+      "zIndex": 14,
+      "visual": {
+        "exportPath": "water_yang/item2.png",
+        "width": 253,
+        "height": 255
+      }
+    },
+    {
+      "stableId": "item1-png-307",
+      "layerType": "image",
+      "displayName": "item1.png",
+      "x": 30,
+      "y": 672,
+      "scale": 0.25,
+      "zIndex": 15,
+      "visual": {
+        "exportPath": "water_yang/item1.png",
+        "width": 254,
+        "height": 254
+      }
+    },
+    {
+      "stableId": "common-icon-greendot2-webp-308",
+      "layerType": "image",
+      "displayName": "common_icon_greendot2.webp",
+      "x": 262,
+      "y": 718,
+      "scale": 0.6630434782608695,
+      "zIndex": 16,
+      "visual": {
+        "exportPath": "common_icon_greendot2.webp",
+        "width": 46,
+        "height": 46
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "5",
+          "bindingKey": "",
+          "fontSize": 28,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": -1,
+          "zIndex": 1,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "common-icon-greendot2-webp-309",
+      "layerType": "image",
+      "displayName": "common_icon_greendot2.webp",
+      "x": 168,
+      "y": 718,
+      "scale": 0.6630434782608695,
+      "zIndex": 17,
+      "visual": {
+        "exportPath": "common_icon_greendot2.webp",
+        "width": 46,
+        "height": 46
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "5",
+          "bindingKey": "",
+          "fontSize": 28,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": -1,
+          "zIndex": 1,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "common-icon-greendot2-webp-310",
+      "layerType": "image",
+      "displayName": "common_icon_greendot2.webp",
+      "x": 75,
+      "y": 718,
+      "scale": 0.6630434782608695,
+      "zIndex": 18,
+      "visual": {
+        "exportPath": "common_icon_greendot2.webp",
+        "width": 46,
+        "height": 46
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "5",
+          "bindingKey": "",
+          "fontSize": 28,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": -1,
+          "zIndex": 1,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "itme3-1-png-311",
+      "layerType": "image",
+      "displayName": "itme3_1.png",
+      "x": 214,
+      "y": 672,
+      "scale": 0.4147058823529412,
+      "zIndex": 19,
+      "visual": {
+        "exportPath": "water_yang/itme3_1.png",
+        "width": 155,
+        "height": 170
+      }
+    },
+    {
+      "stableId": "home-btn-setting-webp-312",
+      "layerType": "image",
+      "displayName": "home_btn_setting.webp",
+      "x": 318,
+      "y": 686,
+      "scale": 0.47875494071146246,
+      "zIndex": 20,
+      "visual": {
+        "exportPath": "home_btn_setting.webp",
+        "width": 88,
+        "height": 88,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "tint",
+            "color": "#977f72",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": false,
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
       }
     }
   ]

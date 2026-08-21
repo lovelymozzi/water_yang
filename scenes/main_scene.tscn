@@ -11,7 +11,7 @@
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="6_top_fog"]
-[ext_resource type="Texture2D" uid="uid://c0x7f8an0831k" path="res://water_yang/ui_bg.png" id="7_ui_bg"]
+[ext_resource type="Texture2D" path="res://water_yang/ui_bg.png" id="7_ui_bg"]
 
 [sub_resource type="Gradient" id="Gradient_mngbo"]
 offsets = PackedFloat32Array(0, 0.58, 1)
@@ -148,100 +148,114 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 [node name="TileVisuals" type="Node3D" parent="LevelManager" unique_id=97076465]
 
 [node name="FlowerDecor" parent="LevelManager/TileVisuals" unique_id=2046117615 instance=ExtResource("5_flower")]
-transform = Transform3D(7.638849, -2.095415, -1.1212636, 2.3765512, 6.7352037, 3.60403, 2.3841858e-07, -3.7744224, 7.0536327, -2.7372444, -0.17088008, -9.748416)
+transform = Transform3D(7.638849, -2.0954149, -1.1212636, 2.3765512, 6.7352037, 3.60403, 2.3841858e-07, -3.7744224, 7.0536327, -2.7372444, -0.17088008, -9.748416)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor3" parent="LevelManager/TileVisuals" unique_id=1035231507 instance=ExtResource("5_flower")]
-transform = Transform3D(7.96484, -0.66059184, -0.35348493, 0.7492212, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536327, -4.182023, -0.17088008, -10.404666)
+transform = Transform3D(7.9648395, -0.66059124, -0.35348484, 0.74922115, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536323, -4.182023, -0.17088008, -10.404666)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor4" parent="LevelManager/TileVisuals" unique_id=1817950996 instance=ExtResource("5_flower")]
-transform = Transform3D(7.96484, -0.66059184, -0.35348493, 0.7492212, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536327, -7.4515314, -0.17088008, -8.610843)
+transform = Transform3D(7.9648395, -0.66059124, -0.35348484, 0.74922115, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536323, -7.4515314, -0.17088008, -8.610843)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor5" parent="LevelManager/TileVisuals" unique_id=31506908 instance=ExtResource("5_flower")]
-transform = Transform3D(7.96484, -0.66059184, -0.35348493, 0.7492212, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536327, 4.6027136, -0.17088008, -9.542117)
+transform = Transform3D(7.9648395, -0.66059124, -0.35348484, 0.74922115, 7.0226316, 3.7578337, 2.3841858e-07, -3.7744224, 7.0536323, 4.6027136, -0.17088008, -9.542117)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor7" parent="LevelManager/TileVisuals" unique_id=72674384 instance=ExtResource("5_flower")]
-transform = Transform3D(7.9138074, 1.1140214, 0.36138272, -1.1532618, 6.9824734, 3.730288, 0.20403475, -3.7421942, 7.0678387, 7.641959, -0.17088008, -8.793704)
+transform = Transform3D(7.9138074, 1.1140223, 0.3613828, -1.1532619, 6.982473, 3.730288, 0.20403485, -3.7421942, 7.067838, 7.641959, -0.17088008, -8.793704)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor8" parent="LevelManager/TileVisuals" unique_id=749317579 instance=ExtResource("5_flower")]
-transform = Transform3D(7.9138064, 1.1140211, 0.3613827, -0.569435, 5.8171096, -5.4623227, -1.023419, 5.3777494, 5.8337336, 2.584464, -0.17088008, 10.340695)
+transform = Transform3D(7.913807, 1.1140224, 0.3613829, -0.569435, 5.817109, -5.462324, -1.0234191, 5.3777494, 5.833732, 2.584464, -0.17088008, 10.340695)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor9" parent="LevelManager/TileVisuals" unique_id=1943292646 instance=ExtResource("5_flower")]
-transform = Transform3D(7.9138064, 1.1140211, 0.3613827, -0.569435, 5.8171096, -5.4623227, -1.023419, 5.3777494, 5.8337336, 2.898841, -0.17088008, 10.13281)
+transform = Transform3D(7.913807, 1.1140224, 0.3613829, -0.569435, 5.817109, -5.462324, -1.0234191, 5.3777494, 5.833732, 2.898841, -0.17088008, 10.13281)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor10" parent="LevelManager/TileVisuals" unique_id=1153102757 instance=ExtResource("5_flower")]
-transform = Transform3D(7.747761, -0.9076955, -1.7743382, -0.56943506, 5.8171086, -5.4623237, 1.909954, 5.4163938, 5.5690904, -3.6078424, -0.17088008, 10.238156)
+transform = Transform3D(7.747761, -0.90769446, -1.7743374, -0.569435, 5.817108, -5.462325, 1.9099538, 5.416395, 5.569088, -3.6078424, -0.17088008, 10.238156)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor11" parent="LevelManager/TileVisuals" unique_id=1476381988 instance=ExtResource("5_flower")]
-transform = Transform3D(7.7477612, -0.90769553, -1.7743386, 1.4113636, 7.5274615, 2.3120074, 1.4072076, -2.5521374, 7.4502597, -7.8233423, -0.17088008, 5.209958)
+transform = Transform3D(7.7477612, -0.90769404, -1.7743376, 1.4113636, 7.5274615, 2.3120058, 1.4072076, -2.5521374, 7.450261, -7.8233423, -0.17088008, 5.209958)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor12" parent="LevelManager/TileVisuals" unique_id=888064840 instance=ExtResource("5_flower")]
-transform = Transform3D(7.7477612, -0.90769553, -1.7743386, 1.4113636, 7.5274615, 2.3120074, 1.4072076, -2.5521374, 7.4502597, -8.120843, -0.17088008, -3.4453154)
+transform = Transform3D(7.7477612, -0.90769404, -1.7743376, 1.4113636, 7.5274615, 2.3120058, 1.4072076, -2.5521374, 7.450261, -8.120843, -0.17088008, -3.4453154)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor14" parent="LevelManager/TileVisuals" unique_id=2097612853 instance=ExtResource("5_flower")]
-transform = Transform3D(7.859897, 0.9276581, -1.1668057, -0.491682, 7.525029, 2.6706219, 1.4072076, -2.5521379, 7.450261, 7.839011, -0.17088008, 0.5296602)
+transform = Transform3D(7.859897, 0.9276595, -1.1668053, -0.49168193, 7.5250287, 2.67062, 1.4072076, -2.5521374, 7.4502616, 7.839011, -0.17088008, 0.5296602)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor13" parent="LevelManager/TileVisuals" unique_id=2044247642 instance=ExtResource("5_flower")]
-transform = Transform3D(6.8885465, 0.57030773, -1.1057485, -0.17836472, 6.609684, 2.297882, 1.231307, -2.2331202, 6.5189767, -7.769021, -0.17088008, -3.4453154)
+transform = Transform3D(6.888547, 0.57030773, -1.1057488, -0.17836472, 6.609684, 2.297882, 1.2313073, -2.23312, 6.5189767, -7.769021, -0.17088008, -3.4453154)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor6" parent="LevelManager/TileVisuals" unique_id=238674548 instance=ExtResource("5_flower")]
-transform = Transform3D(9.579451, 2.5300632, 1.3538449, -2.869515, 8.446241, 4.5196123, 2.9802322e-07, -4.718028, 8.81704, 4.8346624, -0.17088008, -9.488528)
+transform = Transform3D(9.579451, 2.5300627, 1.353845, -2.869515, 8.446241, 4.519612, 0, -4.718028, 8.817041, 4.8346624, -0.17088008, -9.488528)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="FlowerDecor2" parent="LevelManager/TileVisuals" unique_id=1314489011 instance=ExtResource("5_flower")]
-transform = Transform3D(9.785751, 1.8153391, 0.97139394, -2.0588984, 8.628139, 4.6169457, 0, -4.7180285, 8.817042, -2.5454185, -0.17088008, -9.748416)
+transform = Transform3D(9.785751, 1.8153397, 0.9713943, -2.0588987, 8.6281395, 4.6169457, -7.4505806e-08, -4.7180285, 8.817042, -2.5454185, -0.17088008, -9.748416)
 tint_color = Color(0.5233848, 0.89296085, 0.99894863, 1)
 rim_strength = 0.0
+ambient_energy = 0.0
 outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 

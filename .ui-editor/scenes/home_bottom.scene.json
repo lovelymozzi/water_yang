@@ -98,7 +98,7 @@
     "indicator": {
       "type": "image",
       "color": "#3f86e0",
-      "exportPath": "home_bottom_select.png",
+      "exportPath": "src/assets/home_bottom_select.png",
       "imagePath": "",
       "radius": 12,
       "extendTop": 20,
@@ -109,7 +109,7 @@
   "uuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
   "navBgImage": {
     "enabled": true,
-    "exportPath": "home_bottom_1.png",
+    "exportPath": "src/assets/home_bottom_1.png",
     "stretch": true,
     "sliceEnabled": true,
     "sliceL": 6,

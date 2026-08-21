@@ -222,7 +222,7 @@
       "stableId": "button-yellow1-png-1759",
       "type": "image",
       "name": "button_yellow1.png",
-      "exportPath": "button_green_8.png",
+      "exportPath": "src/assets/button_green_8.png",
       "x": 116,
       "y": 494,
       "scale": 1,
@@ -455,7 +455,7 @@
       "stableId": "time-03-png-1776",
       "type": "image",
       "name": "time_03.png",
-      "exportPath": "time_03_1.png",
+      "exportPath": "src/assets/time_03_1.png",
       "x": 82,
       "y": 337,
       "scale": 1,
@@ -615,7 +615,7 @@
         "selectedTextIndex": 0,
         "images": [
           {
-            "exportPath": "Icon_Close02_8.png",
+            "exportPath": "src/assets/Icon_Close02_8.png",
             "width": 8,
             "height": 8,
             "offsetX": 0,
@@ -699,7 +699,7 @@
         "selectedTextIndex": 0,
         "images": [
           {
-            "exportPath": "Icon_Close02_8.png",
+            "exportPath": "src/assets/Icon_Close02_8.png",
             "width": 32,
             "height": 32,
             "offsetX": 0,
@@ -1069,7 +1069,7 @@
       "stableId": "itemicon-money-coin-png-1773",
       "type": "image",
       "name": "ItemIcon_Money_Coin.Png",
-      "exportPath": "ItemIcon_Money_Coin_4.png",
+      "exportPath": "src/assets/ItemIcon_Money_Coin_4.Png",
       "x": 122,
       "y": 506,
       "scale": 1,

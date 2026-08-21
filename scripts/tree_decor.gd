@@ -127,7 +127,6 @@ func _apply_model_scale() -> void:
 
 func _apply_material_style() -> void:
 	if _tree_material == null:
-		call_deferred("_apply_material_style")
 		return
 	_tree_material.set_shader_parameter("tint_color", tint_color)
 	_tree_material.set_shader_parameter("roughness", roughness)

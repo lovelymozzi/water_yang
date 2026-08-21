@@ -12,6 +12,8 @@ $GODOT_HEAD_INCLUDE
 const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
+const SPLASH_UI_SCENE = 'Splash';
+const LOBBY_UI_SCENE = 'Lobby';
 const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
 const STAGE_TIME_LIMIT_SECONDS = 60;
@@ -32,6 +34,13 @@ const flow = new FlowDriver({
   managers: { economy, progress },
 });
 
+const updateLoading = (current, total) => {
+  const percent = total ? Math.min(99, Math.floor(current * 100 / total)) : 0;
+  flow.update({ loading: { prograss: percent }, loadingMessage: `Loading... ${percent}%` });
+};
+
+let loadingReady = false;
+flow.defineCondition('로딩', () => loadingReady);
 flow.defineCondition('current stage>4', () => progress.getCurrentStage() > 4);
 flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
 flow.defineCondition('no_heart', () => economy.getHearts() === 0);
@@ -50,10 +59,16 @@ flow.defineCondition('광고호출 후 하트1개 충전', async () => {
 const godotCartridge = makeGodotCartridge({
   engineUrl: GODOT_ENGINE_URL,
   engineConfig: GODOT_CONFIG,
+  configOverrides: {
+    onProgress: (current, total) => {
+      if (activeSceneName === SPLASH_UI_SCENE) updateLoading(current, total);
+    },
+  },
 });
 let activeGame = null;
 let activeSceneName = '';
 let continueWithoutHeart = false;
+let sceneSessionToken = 0;
 
 flow.defineCondition('not enough coin', async () => {
   if (economy.getCoins() < COIN_COST) return true;
@@ -63,25 +78,40 @@ flow.defineCondition('not enough coin', async () => {
   return false;
 });
 
-flow.update({ cost: { refill: String(COIN_COST) }, continue: { coin: String(COIN_COST) }, stage: { timer: '01:00' } });
+flow.update({
+  loading: { prograss: 0 },
+  loadingMessage: 'Loading... 0%',
+  cost: { refill: String(COIN_COST) },
+  continue: { coin: String(COIN_COST) },
+  stage: { timer: '01:00' },
+});
 // pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
 
 flow.on('scene:enter', async ({ sceneName, renderer }) => {
   activeSceneName = sceneName;
-  if (sceneName !== INGAME_UI_SCENE) return;
+  const godotScene = sceneName === SPLASH_UI_SCENE || sceneName === LOBBY_UI_SCENE ? 'lobby'
+    : sceneName === INGAME_UI_SCENE ? 'main' : null;
+  if (!godotScene) return;
+  const sessionToken = ++sceneSessionToken;
 
-  if (!continueWithoutHeart && !(await economy.consumeHeart())) {
-    throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
+  if (godotScene === 'main' && !continueWithoutHeart) {
+    const consumedHeart = await economy.consumeHeart();
+    if (sessionToken !== sceneSessionToken) return;
+    if (!consumedHeart) {
+      throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
+    }
   }
+  if (sessionToken !== sceneSessionToken) return;
   continueWithoutHeart = false;
 
-  if (activeGame) await activeGame.abort('scene-change');
+  if (activeGame) activeGame.abort('scene-change');
   const game = new GameSession({ renderer, initTimeoutMs: 30000, hudMap: { timeLeft: 'stage.timer' } });
   activeGame = game;
   await game.start(godotCartridge, {
     stage: progress.getCurrentStage(),
-    config: { godotScene: 'main', timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
+    config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS } : {}) },
     onEnd: async (result) => {
+      if (godotScene !== 'main') return;
       if (result.outcome === 'clear') {
         await economy.grantHearts(1);
         await progress.recordClear(progress.getCurrentStage(), {
@@ -96,6 +126,20 @@ flow.on('scene:enter', async ({ sceneName, renderer }) => {
     },
     onError: (error) => console.error('[Godot integration] session error', error),
   });
+  if (sessionToken !== sceneSessionToken || activeGame !== game) {
+    game.abort('stale-scene-enter');
+    return;
+  }
+  if (sceneName === SPLASH_UI_SCENE) {
+    if (game.state !== 'ready') {
+      flow.update({ loadingMessage: 'Loading failed' });
+      return;
+    }
+    loadingReady = true;
+    flow.update({ loading: { prograss: 100 }, loadingMessage: 'Loading... 100%' });
+    renderer.getElement('loading-out-png-11')?.click();
+    return;
+  }
   if (game.state === 'ready') game.startGame();
 });
 

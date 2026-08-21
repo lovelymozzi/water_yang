@@ -292,7 +292,7 @@
         "selectedTextIndex": 0,
         "images": [
           {
-            "exportPath": "button_green_4_1.png",
+            "exportPath": "src/assets/button_green_4_1.png",
             "width": 162,
             "height": 88,
             "offsetX": 0,
@@ -309,7 +309,7 @@
             "sliceScale": 1,
             "sliceRepeat": "stretch",
             "zIndex": 1,
-            "assetId": "button_green_4_1.png"
+            "assetId": "src/assets/button_green_4_1.png"
           }
         ],
         "selectedImageIndex": 0,
@@ -479,7 +479,7 @@
       "stableId": "heart-broken-png-566",
       "type": "image",
       "name": "heart_broken.png",
-      "exportPath": "heart_broken_1_1.png",
+      "exportPath": "src/assets/heart_broken_1_1.png",
       "x": 139,
       "y": 352,
       "scale": 1,
@@ -503,7 +503,7 @@
       "selectedTextIndex": -1,
       "locked": true,
       "zLayerId": "zl-content",
-      "assetId": "heart_broken_1_1.png",
+      "assetId": "src/assets/heart_broken_1_1.png",
       "cssAnimation": {
         "enabled": false,
         "presetId": "bounce-in",
@@ -643,7 +643,7 @@
         "selectedTextIndex": 0,
         "images": [
           {
-            "exportPath": "Icon_Close02_2.png",
+            "exportPath": "src/assets/Icon_Close02_2.png",
             "width": 8,
             "height": 8,
             "offsetX": 0,
@@ -655,7 +655,7 @@
             "shadowColor": "#000000",
             "shadowOpacity": 50,
             "zIndex": 2,
-            "assetId": "Icon_Close02_2.png"
+            "assetId": "src/assets/Icon_Close02_2.png"
           }
         ],
         "selectedImageIndex": 0,
@@ -728,7 +728,7 @@
         "selectedTextIndex": 0,
         "images": [
           {
-            "exportPath": "Icon_Close02_2.png",
+            "exportPath": "src/assets/Icon_Close02_2.png",
             "width": 32,
             "height": 32,
             "offsetX": 0,
@@ -740,7 +740,7 @@
             "shadowColor": "#000000",
             "shadowOpacity": 50,
             "zIndex": 2,
-            "assetId": "Icon_Close02_2.png"
+            "assetId": "src/assets/Icon_Close02_2.png"
           }
         ],
         "selectedImageIndex": 0,

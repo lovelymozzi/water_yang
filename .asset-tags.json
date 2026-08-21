@@ -17,5 +17,19 @@
     "match",
     "needle",
     "time"
+  ],
+  "common_icon_greendot2.webp": [
+    "match",
+    "dot"
+  ],
+  "home_btn_setting.webp": [
+    "chef",
+    "picto"
+  ],
+  "Icon_WhiteIcon_Restart.webp": [
+    "picto"
+  ],
+  "Icon_WhiteIcon_Exit.webp": [
+    "picto"
   ]
 }

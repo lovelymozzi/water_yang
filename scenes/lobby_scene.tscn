@@ -12,7 +12,7 @@
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="16_rc321"]
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="17_puvrh"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="18_dr74i"]
-[ext_resource type="Texture2D" uid="uid://c0x7f8an0831k" path="res://water_yang/ui_bg.png" id="19_7tji0"]
+[ext_resource type="Texture2D" path="res://water_yang/ui_bg.png" id="19_7tji0"]
 [ext_resource type="PackedScene" uid="uid://bon52b0jge40n" path="res://water_yang/water1.fbx" id="20_water"]
 
 [sub_resource type="Gradient" id="Gradient_dbdus"]
@@ -108,15 +108,13 @@ ambient_light_source = 2
 ambient_light_color = Color(0.63, 0.72, 0.66, 1)
 ambient_light_energy = 0.42
 tonemap_mode = 2
-tonemap_exposure = 1.0
 tonemap_white = 1.35
 glow_enabled = true
 glow_normalized = true
-glow_hdr_threshold = 0.25
-glow_hdr_scale = 2.0
 glow_intensity = 0.85
 glow_strength = 0.72
 glow_bloom = 0.18
+glow_hdr_threshold = 0.25
 fog_enabled = true
 fog_light_color = Color(0.3816994, 0.5671194, 0.75167954, 1)
 fog_light_energy = 1.55
@@ -130,8 +128,6 @@ volumetric_fog_density = 0.0
 volumetric_fog_albedo = Color(0.8069303, 0.70817614, 0.30541062, 1)
 volumetric_fog_emission = Color(0.29157785, 0.65763474, 0.8717881, 1)
 adjustment_enabled = true
-adjustment_brightness = 1.0
-adjustment_contrast = 1.0
 
 [node name="LobbyScene" type="Node3D" unique_id=1923355865]
 process_priority = 100
@@ -781,10 +777,10 @@ body_length_max = 8
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.18
-offset_left = 740.0
-offset_top = 263.0
-offset_right = 808.0
-offset_bottom = 334.59998
+offset_left = 432.00006
+offset_top = 216.0
+offset_right = 500.00006
+offset_bottom = 287.59998
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -3.130162
@@ -841,10 +837,10 @@ fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = -430.00003
-offset_top = 167.00002
-offset_right = 155.88525
-offset_bottom = 273.70258
+offset_left = -157.46692
+offset_top = 102.3105
+offset_right = -30.737488
+offset_bottom = 116.38367
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.5700908
@@ -859,10 +855,10 @@ fog_color = Color(0.76167256, 0.6007306, 0.21869814, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = 1195.7766
-offset_top = 1022.2209
-offset_right = 1864.8589
-offset_bottom = 1131.1519
+offset_left = 595.75214
+offset_top = 794.84796
+offset_right = 704.3917
+offset_bottom = 824.5739
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -3.7135055
@@ -877,10 +873,10 @@ fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = 280.07123
-offset_top = -650.7121
-offset_right = 793.1162
-offset_bottom = -563.5321
+offset_left = 354.4102
+offset_top = -120.55998
+offset_right = 303.71606
+offset_bottom = -216.82251
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -5.3999376
@@ -895,10 +891,10 @@ fog_color = Color(0.30494362, 0.16241252, 0.5875979, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.34
-offset_left = -13.111237
-offset_top = 1995.919
-offset_right = 808.6814
-offset_bottom = 2428.0789
+offset_left = 23.236008
+offset_top = 1084.4888
+offset_right = 255.19403
+offset_bottom = 1160.0076
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -2.1428132
@@ -954,4 +950,11 @@ environment = SubResource("Environment_lobby")
 transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0, 0, 1.0139494)
 
 [node name="Water" parent="LobbyGround" unique_id=2138602713 instance=ExtResource("20_water")]
-transform = Transform3D(0.99999976, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999976, 0, -0.05399793, 0)
+transform = Transform3D(0.9999995, 0, 0, 0, 0.9999995, 0, 0, 0, 0.9999995, 0, -0.055519108, 0)
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=198053193]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105163574, -8.356716, -0.08203125)
+visible = false
+size = Vector3(28.373413, 13.728909, 17.872429)
+box_projection = true
+cull_mask = 1048574

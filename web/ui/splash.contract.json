@@ -40,6 +40,14 @@
     {
       "id": "grp-15",
       "name": "Title_Loading_bar",
+      "widget": {
+        "type": "fill",
+        "key": "loading.prograss",
+        "fill": {
+          "kind": "layer",
+          "id": "loading-bar-png-13"
+        }
+      },
       "layerStableIds": [
         "loading-out-png-11",
         "loading-inner-png-12",
@@ -52,14 +60,99 @@
   "sceneAnimations": [],
   "layers": [
     {
+      "stableId": "gamefield-2284",
+      "layerType": "component",
+      "displayName": "GameField",
+      "x": 0,
+      "y": 1,
+      "scale": 0.5,
+      "zIndex": 1,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 780,
+            "height": 1712,
+            "radius": 0,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#9aa5b1",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      }
+    },
+    {
       "stableId": "title1-png-3",
       "layerType": "image",
       "displayName": "Title1.png",
       "x": -46,
       "y": 0,
-      "zIndex": 1,
+      "zIndex": 2,
       "visual": {
-        "exportPath": "Title1.png",
+        "exportPath": "src/assets/Title1.png",
         "width": 487,
         "height": 861
       }
@@ -70,9 +163,9 @@
       "displayName": "Title1_text1.png",
       "x": 41,
       "y": 64,
-      "zIndex": 2,
+      "zIndex": 3,
       "visual": {
-        "exportPath": "Title1_text1.png",
+        "exportPath": "src/assets/Title1_text1.png",
         "width": 309,
         "height": 295
       },
@@ -110,7 +203,7 @@
       "displayName": "loading_out.png",
       "x": 85,
       "y": 740,
-      "zIndex": 3,
+      "zIndex": 4,
       "visual": {
         "exportPath": "src/assets/loading_out.png",
         "width": 220,
@@ -136,9 +229,9 @@
       "displayName": "loading_inner.png",
       "x": 90,
       "y": 744,
-      "zIndex": 4,
+      "zIndex": 5,
       "visual": {
-        "exportPath": "loading_inner.png",
+        "exportPath": "src/assets/loading_inner.png",
         "width": 210,
         "height": 30
       },
@@ -162,9 +255,9 @@
       "displayName": "loading_bar.png",
       "x": 92,
       "y": 746,
-      "zIndex": 5,
+      "zIndex": 6,
       "visual": {
-        "exportPath": "loading_bar.png",
+        "exportPath": "src/assets/loading_bar.png",
         "width": 97,
         "height": 26
       },
@@ -188,7 +281,7 @@
       "displayName": "Text_Loading..",
       "x": 116,
       "y": 739,
-      "zIndex": 6,
+      "zIndex": 7,
       "visual": {
         "model": {
           "shape": {

@@ -105,7 +105,6 @@ func _apply_model_scale() -> void:
 
 func _apply_material_style() -> void:
 	if _grass_material == null:
-		call_deferred("_apply_material_style")
 		return
 	_grass_material.set_shader_parameter("tint_color", tint_color)
 	_grass_material.set_shader_parameter("shadow_steps", toon_steps)
