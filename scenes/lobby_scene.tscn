@@ -16,6 +16,7 @@
 [ext_resource type="Material" uid="uid://duuy5lh6kw6l6" path="res://resources/lobby_ground_land_material.tres" id="21_land_material"]
 [ext_resource type="Material" uid="uid://bqgt33f4c1otr" path="res://resources/lobby_ground_water_material.tres" id="22_form_material"]
 [ext_resource type="Material" uid="uid://b1wyeb0sv3jqv" path="res://resources/lobby_water_material.tres" id="23_water_material"]
+[ext_resource type="Script" path="res://scripts/lobby_floating_cats.gd" id="24_floating_cats"]
 
 [sub_resource type="Gradient" id="Gradient_dbdus"]
 offsets = PackedFloat32Array(0, 0.73, 1)
@@ -135,6 +136,9 @@ adjustment_enabled = true
 process_priority = 100
 script = ExtResource("2_lobby_scene")
 flower_glow_range_cap = 0.4
+
+[node name="FloatingCats" type="Node3D" parent="."]
+script = ExtResource("24_floating_cats")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
 process_mode = 4

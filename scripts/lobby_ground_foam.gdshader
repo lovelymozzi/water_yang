@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_test_disabled;
+render_mode unshaded, cull_disabled, depth_test_disabled, fog_disabled;
 
 group_uniforms shoreline_foam;
 uniform vec4 foam_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);

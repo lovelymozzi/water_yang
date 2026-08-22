@@ -106,7 +106,6 @@ void fragment() {
 #endif
 	float depth_mix = raw_depth_mix * depth_color_strength;
 	float depth_opacity = mix(shallow_opacity, deep_opacity, clamp(raw_depth_mix * depth_opacity_strength, 0.0, 1.0));
-
 	ALBEDO = mix(shallow_color.rgb, deep_color.rgb, clamp(depth_mix, 0.0, 1.0));
 	ALBEDO = clamp(ALBEDO + vec3(surface_wave * wave_brightness), 0.0, 1.0);
 	ALBEDO = mix(ALBEDO, foam_color.rgb, clamp(foam, 0.0, 1.0));

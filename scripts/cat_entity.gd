@@ -13,6 +13,8 @@ const OPEN_MOUTH_TEXTURE_PATH := "res://water_yang/cat1_2.jpeg"
 const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
+const FLOATING_WATER_OUTLINE_COLOR := Color("f8ffff")
+const FLOATING_WATER_OUTLINE_WIDTH := 0.020
 const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
@@ -308,6 +310,7 @@ var _open_mouth_tint_exclusion_mask: Texture2D
 var _blink_time_remaining := -1.0
 var _eyes_are_closed := false
 var _mouth_is_open := false
+var _floating_water_outline := false
 var _blink_random := RandomNumberGenerator.new()
 var _ear_twitch_time_remaining := -1.0
 var _ear_twitch_elapsed := 0.0
@@ -348,6 +351,35 @@ func _process(delta: float) -> void:
 	_process_blink(delta)
 	_process_ear_twitch(delta)
 	advance(delta)
+
+
+func set_floating_water_wave(time: float, phase: float, amplitude: float) -> void:
+	if not _floating_water_outline:
+		_floating_water_outline = true
+		_apply_current_shader_parameters()
+		_apply_material_recursive(_cat_model)
+	for material in [_cat_material, _material_id_2, _outline_material, _material_id_2_outline]:
+		if material == null:
+			continue
+		# Lobby motion is driven by the rig below.  Leaving vertex displacement
+		# disabled keeps the opaque cat and its outline on the same depth surface.
+		material.set_shader_parameter("water_wave_amplitude", 0.0)
+
+	if _skeleton == null:
+		return
+	if _bone_rests.is_empty():
+		_cache_bone_rests()
+	for chain_index in _bone_chain.size():
+		var bone_index: int = _bone_chain[chain_index]
+		if bone_index < 0 or bone_index >= _bone_rests.size():
+			continue
+		var distance_ratio := float(chain_index) / maxf(float(_bone_chain.size() - 1), 1.0)
+		var wave := sin(time * 2.1 + phase - distance_ratio * TAU * 0.7)
+		var rest_rotation := _bone_rests[bone_index].basis.get_rotation_quaternion()
+		_skeleton.set_bone_pose_rotation(
+			bone_index,
+			rest_rotation * Quaternion(Vector3.FORWARD, wave * amplitude * 1.45)
+		)
 
 
 func _process_blink(delta: float) -> void:
@@ -1555,6 +1587,12 @@ func load_model_with_texture() -> Node3D:
 	var model_root := packed_scene.instantiate() as Node3D if packed_scene != null else Node3D.new()
 	_build_cat_material()
 	_apply_material_recursive(model_root)
+	# Lobby actors mount the model directly rather than through board setup.
+	# The floating-water method caches the live rig on its first update.
+	# Board setup clears its inserted-bone cache immediately after this call,
+	# so it must remain responsible for its own rest-pose cache.
+	_cat_model = model_root
+	_skeleton = _find_skeleton_in(model_root)
 	return model_root
 
 
@@ -1580,7 +1618,11 @@ func _apply_material_recursive(node: Node) -> void:
 				if _is_tile_material_surface(mesh_instance, surface_index) and _material_id_2 != null:
 					material = _material_id_2
 				mesh_instance.set_surface_override_material(surface_index, material)
-		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
+		mesh_instance.cast_shadow = (
+			GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			if _floating_water_outline
+			else GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
+		)
 	for child in node.get_children():
 		_apply_material_recursive(child)
 
@@ -1664,7 +1706,7 @@ func _apply_shader_parameters(
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("toon_shadow_spread", toon_shadow_spread)
-		_cat_material.set_shader_parameter("rim_strength", rim_strength)
+		_cat_material.set_shader_parameter("rim_strength", 0.0 if _floating_water_outline else rim_strength)
 		_cat_material.set_shader_parameter("line_art_tex", line_art_texture)
 		_cat_material.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
 		_cat_material.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
@@ -1683,7 +1725,7 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("toon_shadow_spread", toon_shadow_spread)
-		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
+		_material_id_2.set_shader_parameter("rim_strength", 0.0 if _floating_water_outline else rim_strength)
 		_material_id_2.set_shader_parameter("line_art_tex", line_art_texture)
 		_material_id_2.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
 		_material_id_2.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
@@ -1697,12 +1739,18 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("uv_offset", Vector2(0.0, (1.0 - tile_scale) * 0.5))
 	if _outline_material != null:
 		_outline_material.set_shader_parameter("outline_color", _effective_outline_color())
-		_outline_material.set_shader_parameter("outline_width", outline_width)
+		_outline_material.set_shader_parameter(
+			"outline_width",
+			FLOATING_WATER_OUTLINE_WIDTH if _floating_water_outline else outline_width
+		)
 		_outline_material.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_outline_material.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 	if _material_id_2_outline != null:
 		_material_id_2_outline.set_shader_parameter("outline_color", _effective_outline_color())
-		_material_id_2_outline.set_shader_parameter("outline_width", outline_width)
+		_material_id_2_outline.set_shader_parameter(
+			"outline_width",
+			FLOATING_WATER_OUTLINE_WIDTH if _floating_water_outline else outline_width
+		)
 		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 
@@ -1773,6 +1821,8 @@ func get_hole_visual_style(pair_color: Color) -> Dictionary:
 # 모든 생성 고양이에 복제되어, 파란 고양이가 웜톤(핑크빛) 외곽선을 받는다. 밝기와 알파는
 # CatEntity Inspector 에서 개별 조정할 수 있게 별도 배율/알파를 얹는다.
 func _effective_outline_color() -> Color:
+	if _floating_water_outline:
+		return FLOATING_WATER_OUTLINE_COLOR
 	var pair: Variant = _pair_color()
 	var base_color: Color = outline_color if pair == null else (pair as Color).darkened(0.27)
 	var effective := Color(

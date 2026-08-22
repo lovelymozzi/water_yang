@@ -7,6 +7,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_foam"]
 render_priority = 1
 shader = ExtResource("2_foam_shader")
+shader_parameter/foam_color = Color(0.5568628, 0.8627451, 0.8941177, 1)
 shader_parameter/foam_uv_center = 0.08
 
 [resource]

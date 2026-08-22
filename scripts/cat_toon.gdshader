@@ -35,6 +35,18 @@ uniform float tile_uv_min_u : hint_range(0.0, 1.0) = 0.0;
 uniform float sink_clip_enabled : hint_range(0.0, 1.0) = 0.0;
 uniform float sink_clip_plane_y = 0.0;
 uniform float sink_clip_span = 1.0;
+// Lobby-only water motion. Gameplay cats retain the default zero amplitude.
+uniform float water_wave_time = 0.0;
+uniform float water_wave_phase = 0.0;
+uniform float water_wave_amplitude : hint_range(0.0, 0.08, 0.001) = 0.0;
+
+void vertex() {
+	if (water_wave_amplitude > 0.0) {
+		float wave = VERTEX.y * 3.2 + water_wave_time * 2.1 + water_wave_phase;
+		VERTEX.z += sin(wave) * water_wave_amplitude;
+		VERTEX.x += cos(wave) * water_wave_amplitude * 0.22;
+	}
+}
 
 void fragment() {
 	if (sink_clip_enabled > 0.5) {

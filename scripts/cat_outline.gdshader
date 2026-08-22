@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_front;
+render_mode unshaded, cull_front, fog_disabled;
 
 uniform vec4 outline_color : source_color = vec4(0.18, 0.09, 0.06, 1.0);
 uniform float outline_width : hint_range(0.001, 0.04, 0.001) = 0.008;
@@ -15,8 +15,17 @@ uniform float sink_clip_span = 1.0;
 // testing remove the hull where a curved body folds over itself, while the
 // shell remains visible where it extends past the true outer silhouette.
 uniform float self_overlap_depth_scale : hint_range(1.0, 3.0, 0.01) = 2.0;
+// Matches the optional lobby wave deformation in cat_toon.gdshader.
+uniform float water_wave_time = 0.0;
+uniform float water_wave_phase = 0.0;
+uniform float water_wave_amplitude : hint_range(0.0, 0.08, 0.001) = 0.0;
 
 void vertex() {
+	if (water_wave_amplitude > 0.0) {
+		float wave = VERTEX.y * 3.2 + water_wave_time * 2.1 + water_wave_phase;
+		VERTEX.z += sin(wave) * water_wave_amplitude;
+		VERTEX.x += cos(wave) * water_wave_amplitude * 0.22;
+	}
 	float upward_facing = max(NORMAL.y, 0.0);
 	float downward_facing = max(-NORMAL.y, 0.0);
 	float line_weight = mix(1.0, top_outline_scale, upward_facing);
@@ -47,4 +56,5 @@ void fragment() {
 		}
 	}
 	ALBEDO = outline_color.rgb;
+	EMISSION = outline_color.rgb * 0.16;
 }
