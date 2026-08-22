@@ -11,7 +11,7 @@
     {
       "uuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
       "name": "Ingame",
-      "contract": "Ingame.contract.json",
+      "contract": "ingame.contract.json",
       "sceneType": "scene"
     },
     {
@@ -89,7 +89,7 @@
     {
       "uuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
       "name": "Splash",
-      "contract": "Splash.contract.json",
+      "contract": "splash.contract.json",
       "sceneType": "scene"
     }
   ]

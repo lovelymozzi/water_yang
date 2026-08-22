@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "proposals": [
+    {
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "stableId": "entry-box-normal-png-383",
+      "toSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "note": "Ingame의 새 설정 버튼 그룹 → 설정 팝업 열기"
+    },
+    {
+      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+      "stableId": "entry-box-normal-png-2287",
+      "toSceneUuid": "__close__",
+      "note": "설정 팝업 안에 추가된 설정 버튼을 누르면 팝업 닫기"
+    }
+  ]
+}

@@ -30,7 +30,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 2,
+      "zIndex": 1,
       "visible": true,
       "width": 118,
       "height": 126,
@@ -72,7 +72,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 3,
+      "zIndex": 2,
       "visible": true,
       "width": 118,
       "height": 126,
@@ -121,7 +121,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 4,
+      "zIndex": 3,
       "visible": true,
       "width": 118,
       "height": 126,
@@ -170,7 +170,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 5,
+      "zIndex": 4,
       "visible": true,
       "width": 118,
       "height": 126,
@@ -219,7 +219,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 6,
+      "zIndex": 5,
       "visible": true,
       "width": 76,
       "height": 70,
@@ -261,7 +261,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 7,
+      "zIndex": 6,
       "visible": true,
       "width": 76,
       "height": 70,
@@ -303,7 +303,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 8,
+      "zIndex": 7,
       "visible": false,
       "width": 76,
       "height": 70,
@@ -352,7 +352,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 9,
+      "zIndex": 8,
       "visible": true,
       "width": 76,
       "height": 70,
@@ -401,7 +401,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 10,
+      "zIndex": 9,
       "visible": true,
       "width": 76,
       "height": 70,
@@ -450,7 +450,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 11,
+      "zIndex": 10,
       "visible": true,
       "width": 90,
       "height": 70,
@@ -499,7 +499,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 12,
+      "zIndex": 11,
       "visible": true,
       "width": 59,
       "height": 64,
@@ -548,7 +548,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 13,
+      "zIndex": 12,
       "visible": true,
       "width": 50,
       "height": 64,
@@ -597,7 +597,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 14,
+      "zIndex": 13,
       "visible": true,
       "width": 118,
       "height": 126,
@@ -646,7 +646,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 15,
+      "zIndex": 14,
       "visible": true,
       "width": 76,
       "height": 70,
@@ -695,7 +695,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 16,
+      "zIndex": 15,
       "visible": true,
       "width": 76,
       "height": 70,
@@ -731,6 +731,122 @@
         }
       ],
       "fxGroupId": "fx-2284"
+    },
+    {
+      "id": 2287,
+      "stableId": "entry-box-normal-png-2287",
+      "type": "image",
+      "name": "entry_box_normal.png",
+      "exportPath": "src/assets/ingame_item_bg.png",
+      "x": 293,
+      "y": 662,
+      "scale": 1,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 16,
+      "visible": true,
+      "width": 92,
+      "height": 94,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1,
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "",
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "\bpopup close",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "ingame"
+            },
+            {
+              "condition": "else",
+              "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+              "targetSceneName": "pop_Settings_1"
+            }
+          ]
+        }
+      ],
+      "groupId": "grp-2286",
+      "fxGroupId": "fx-2287"
+    },
+    {
+      "id": 2288,
+      "stableId": "home-btn-setting-webp-2288",
+      "type": "image",
+      "name": "home_btn_setting.webp",
+      "exportPath": "src/assets/home_btn_setting.webp",
+      "x": 318,
+      "y": 686,
+      "scale": 0.47875494071146246,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 17,
+      "visible": true,
+      "width": 88,
+      "height": 88,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "tint",
+      "tintColor": "#977f72",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1,
+      "groupId": "grp-2286",
+      "fxGroupId": "fx-2287",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "",
+          "branches": [
+            {
+              "condition": "\bpopup close",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "ingame"
+            }
+          ]
+        }
+      ]
     }
   ],
   "zLayers": [
@@ -852,6 +968,10 @@
           "id": "return-off-png-2277"
         }
       }
+    },
+    {
+      "id": "grp-2286",
+      "name": "setting"
     }
   ],
   "fxGroups": [
@@ -1163,6 +1283,24 @@
     },
     {
       "id": "fx-2285",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-2287",
       "name": "FxBundle",
       "press": {
         "enabled": true,

@@ -146,6 +146,14 @@
         "return-on-png-2282",
         "return-off-png-2277"
       ]
+    },
+    {
+      "id": "grp-2286",
+      "name": "setting",
+      "layerStableIds": [
+        "entry-box-normal-png-2287",
+        "home-btn-setting-webp-2288"
+      ]
     }
   ],
   "fxGroups": [
@@ -510,6 +518,28 @@
         "back-off-png-2278",
         "back-on-png-2277"
       ]
+    },
+    {
+      "id": "fx-2287",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "entry-box-normal-png-2287",
+        "home-btn-setting-webp-2288"
+      ]
     }
   ],
   "sceneAnimations": [],
@@ -521,7 +551,7 @@
       "x": 312,
       "y": 592,
       "scale": 0.5,
-      "zIndex": 2,
+      "zIndex": 1,
       "visual": {
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
@@ -535,7 +565,7 @@
       "x": 310,
       "y": 519,
       "scale": 0.5,
-      "zIndex": 3,
+      "zIndex": 2,
       "visual": {
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
@@ -556,7 +586,7 @@
       "x": 311,
       "y": 446,
       "scale": 0.5,
-      "zIndex": 4,
+      "zIndex": 3,
       "visual": {
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
@@ -577,7 +607,7 @@
       "x": 311,
       "y": 373,
       "scale": 0.5,
-      "zIndex": 5,
+      "zIndex": 4,
       "visual": {
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
@@ -598,7 +628,7 @@
       "x": 323,
       "y": 602,
       "scale": 0.5,
-      "zIndex": 6,
+      "zIndex": 5,
       "visual": {
         "exportPath": "src/assets/ingame_btn_pause_music.png",
         "width": 76,
@@ -612,7 +642,7 @@
       "x": 323,
       "y": 602,
       "scale": 0.5,
-      "zIndex": 7,
+      "zIndex": 6,
       "visual": {
         "exportPath": "src/assets/ingame_btn_pause_music_off.png",
         "width": 76,
@@ -626,7 +656,7 @@
       "x": 321,
       "y": 529,
       "scale": 0.5,
-      "zIndex": 8,
+      "zIndex": 7,
       "visible": false,
       "visual": {
         "exportPath": "src/assets/ingame_btn_pause_sound.png",
@@ -648,7 +678,7 @@
       "x": 321,
       "y": 529,
       "scale": 0.5,
-      "zIndex": 9,
+      "zIndex": 8,
       "visual": {
         "exportPath": "src/assets/ingame_btn_pause_sound_off.png",
         "width": 76,
@@ -669,7 +699,7 @@
       "x": 321,
       "y": 456,
       "scale": 0.5,
-      "zIndex": 10,
+      "zIndex": 9,
       "visual": {
         "exportPath": "src/assets/ingame_btn_pause_vibration_off.png",
         "width": 76,
@@ -690,7 +720,7 @@
       "x": 318,
       "y": 456,
       "scale": 0.5,
-      "zIndex": 11,
+      "zIndex": 10,
       "visual": {
         "exportPath": "src/assets/ingame_btn_pause_vibration2.png",
         "width": 90,
@@ -711,7 +741,7 @@
       "x": 320,
       "y": 381,
       "scale": 0.65,
-      "zIndex": 12,
+      "zIndex": 11,
       "visual": {
         "exportPath": "src/assets/back_off.png",
         "width": 59,
@@ -732,7 +762,7 @@
       "x": 320,
       "y": 378,
       "scale": 0.7760416666666665,
-      "zIndex": 13,
+      "zIndex": 12,
       "visual": {
         "exportPath": "src/assets/back_on.png",
         "width": 50,
@@ -753,7 +783,7 @@
       "x": 313,
       "y": 301,
       "scale": 0.5,
-      "zIndex": 14,
+      "zIndex": 13,
       "visual": {
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
@@ -774,7 +804,7 @@
       "x": 323,
       "y": 311,
       "scale": 0.5,
-      "zIndex": 15,
+      "zIndex": 14,
       "visual": {
         "exportPath": "src/assets/return_on.png",
         "width": 76,
@@ -795,7 +825,7 @@
       "x": 323,
       "y": 311,
       "scale": 0.5,
-      "zIndex": 16,
+      "zIndex": 15,
       "visual": {
         "exportPath": "src/assets/return_off.png",
         "width": 76,
@@ -806,6 +836,89 @@
           "trigger": "click",
           "eventName": "setting-btn-option-png-2278:click",
           "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+        }
+      ]
+    },
+    {
+      "stableId": "entry-box-normal-png-2287",
+      "layerType": "image",
+      "displayName": "entry_box_normal.png",
+      "x": 293,
+      "y": 662,
+      "zIndex": 16,
+      "visual": {
+        "exportPath": "src/assets/ingame_item_bg.png",
+        "width": 92,
+        "height": 94
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "entry-box-normal-png-2287:click",
+          "branches": [
+            {
+              "condition": "\bpopup close",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "Ingame"
+            },
+            {
+              "condition": "else",
+              "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
+              "targetSceneName": "pop_Settings_1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "home-btn-setting-webp-2288",
+      "layerType": "image",
+      "displayName": "home_btn_setting.webp",
+      "x": 318,
+      "y": 686,
+      "scale": 0.47875494071146246,
+      "zIndex": 17,
+      "visual": {
+        "exportPath": "src/assets/home_btn_setting.webp",
+        "width": 88,
+        "height": 88,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "tint",
+            "color": "#977f72",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": false,
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "entry-box-normal-png-2287:click",
+          "branches": [
+            {
+              "condition": "\bpopup close",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "Ingame"
+            }
+          ]
         }
       ]
     }

@@ -17,6 +17,22 @@ const LOBBY_UI_SCENE = 'Lobby';
 const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
 const STAGE_TIME_LIMIT_SECONDS = 60;
+const SETTINGS_MENU_MOTION_MS = 240;
+const SETTINGS_MENU_STAGGER_MS = 60;
+const SETTINGS_MENU_GROUPS = [
+  { name: 'Music', offset: 86 },
+  { name: 'Sound', offset: 159 },
+  { name: 'Vibration', offset: 232 },
+  {
+    offset: 305,
+    layerIds: [
+      'setting-btn-option-png-2245',
+      'back-off-png-2278',
+      'back-on-png-2277',
+    ],
+  },
+  { name: 'retry', offset: 377 },
+];
 const GODOT_ENGINE_URL = "$GODOT_URL";
 const GODOT_CONFIG = $GODOT_CONFIG;
 
@@ -39,6 +55,13 @@ flow.defineCondition('로딩', () => loadingReady);
 flow.defineCondition('current stage>4', () => progress.getCurrentStage() > 4);
 flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
 flow.defineCondition('no_heart', () => economy.getHearts() === 0);
+// UI editor가 설정 팝업의 닫기 버튼에 기록한 제어문자 포함 조건 키.
+// 이 분기는 현재 Ingame으로 복귀하면서 열린 팝업을 닫고, 아래 scene:enter 훅에서 게임을 재개한다.
+flow.defineCondition('\bpopup close', async () => {
+  // 설정 메뉴가 버튼 안으로 모두 접힌 뒤 팝업 자체를 정리한다.
+  await new Promise(resolve => setTimeout(resolve, SETTINGS_MENU_MOTION_MS + SETTINGS_MENU_STAGGER_MS * SETTINGS_MENU_GROUPS.length + 20));
+  return true;
+});
 flow.defineCondition('900코인 소모 후 하트풀충전', async () => {
   if (!(await economy.spendCoins(COIN_COST, 'heart-refill'))) return false;
   await economy.refillHearts();
@@ -59,6 +82,21 @@ let activeGame = null;
 let activeSceneName = '';
 let continueWithoutHeart = false;
 let sceneSessionToken = 0;
+const settingsOpenWired = new WeakSet();
+
+const handleMainGameEnd = async (result) => {
+  if (result.outcome === 'clear') {
+    await economy.grantHearts(1);
+    await progress.recordClear(progress.getCurrentStage(), {
+      stars: result.stats?.stars || 0,
+      score: result.score,
+      ticket: result.ticket,
+    });
+    await flow.fire('스테이지 클리어시');
+  } else if (result.outcome === 'fail') {
+    await flow.fire('스테이지 시간이 다되어 게임패배시');
+  }
+};
 
 flow.defineCondition('not enough coin', async () => {
   if (economy.getCoins() < COIN_COST) return true;
@@ -79,6 +117,76 @@ flow.update({
 
 flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
   activeSceneName = sceneName;
+  if (sceneName === 'pop_Settings_1' && popup) {
+    if (activeGame?.state === 'running') activeGame.pause('settings');
+    const menuMotionTargets = SETTINGS_MENU_GROUPS.map(({ name, offset, layerIds }) => ({
+      offset,
+      targets: layerIds
+        ? layerIds.map(stableId => renderer.getElement(stableId)).filter(Boolean)
+        : [renderer.getGroup(name)].filter(Boolean),
+    }));
+    ['entry-box-normal-png-2287', 'home-btn-setting-webp-2288'].forEach(stableId => {
+      const closeButton = renderer.getElement(stableId);
+      if (!closeButton) return;
+      ['mousedown', 'mouseup', 'mouseleave', 'touchstart', 'touchend'].forEach(eventName => {
+        closeButton.addEventListener(eventName, event => event.stopPropagation());
+      });
+    });
+    const popupSettingsFx = renderer.getElement('entry-box-normal-png-2287')?.closest('[data-fx-group]');
+    const popupSettingsGroup = renderer.getGroup('setting');
+    menuMotionTargets.forEach(({ offset, targets }, index) => {
+      const translate = `translateY(${offset}px)`;
+      targets.forEach(target => {
+        target.style.transform = translate;
+        target.animate(
+          [{ transform: translate }, { transform: 'translateY(0)' }],
+          {
+            duration: SETTINGS_MENU_MOTION_MS,
+            delay: index * SETTINGS_MENU_STAGGER_MS,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'forwards',
+          },
+        );
+      });
+    });
+    renderer.on('entry-box-normal-png-2287:click', () => {
+      popupSettingsFx?.animate(
+        [
+          { transform: 'scale(1)', filter: 'brightness(1)' },
+          { transform: 'scale(.95)', filter: 'brightness(.95)' },
+          { transform: 'scale(1)', filter: 'brightness(1)' },
+        ],
+        { duration: 100, easing: 'ease-out' },
+      );
+      [...menuMotionTargets].reverse().forEach(({ offset, targets }, index) => {
+        targets.forEach(target => target.animate(
+          [{ transform: 'translateY(0)' }, { transform: `translateY(${offset}px)` }],
+          {
+            duration: SETTINGS_MENU_MOTION_MS,
+            delay: index * SETTINGS_MENU_STAGGER_MS,
+            easing: 'cubic-bezier(0.4, 0, 1, 1)',
+            fill: 'forwards',
+          },
+        ));
+      });
+      setTimeout(() => {
+        menuMotionTargets.forEach(({ targets }) => {
+          targets.forEach(target => target.style.setProperty('visibility', 'hidden'));
+        });
+        popupSettingsGroup?.style.setProperty('visibility', 'hidden');
+      }, SETTINGS_MENU_MOTION_MS + SETTINGS_MENU_STAGGER_MS * (SETTINGS_MENU_GROUPS.length - 1));
+    });
+    return;
+  }
+  if (sceneName === INGAME_UI_SCENE) {
+    renderer.getGroup('setting')?.style.removeProperty('visibility');
+  }
+  if (sceneName === INGAME_UI_SCENE && !settingsOpenWired.has(renderer)) {
+    settingsOpenWired.add(renderer);
+    renderer.on('entry-box-normal-png-300:click', () => {
+      flow.goto('pop_Settings_1').catch(error => console.error('[Settings] 팝업 열기 오류:', error));
+    });
+  }
   if (sceneName === SPLASH_UI_SCENE) {
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
@@ -89,6 +197,7 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
         if (sceneReady === 'main' && activeSceneName === INGAME_UI_SCENE && activeGame === game && game.state === 'ready') game.startGame();
       },
       onHud: ({ timeLeft }) => flow.update({ stage: { timer: timeLeft } }),
+      onEnd: handleMainGameEnd,
       onError: (error) => console.error('[Godot preload] session error', error),
     });
     if (activeGame !== game || game.state !== 'ready') {
@@ -118,6 +227,10 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
     gameHost.style.cssText = 'position:absolute;inset:0;overflow:hidden;display:block;';
     gameField.appendChild(gameHost);
   }
+  if (godotScene === 'main' && activeGame?.state === 'paused') {
+    activeGame.resume();
+    return;
+  }
   if (activeGame?.state === 'ready') {
     if (godotScene === 'lobby') return;
     activeGame.message('load_scene', {
@@ -144,20 +257,7 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
   await game.start(godotCartridge, {
     stage: progress.getCurrentStage(),
     config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS } : {}) },
-    onEnd: async (result) => {
-      if (godotScene !== 'main') return;
-      if (result.outcome === 'clear') {
-        await economy.grantHearts(1);
-        await progress.recordClear(progress.getCurrentStage(), {
-          stars: result.stats?.stars || 0,
-          score: result.score,
-          ticket: result.ticket,
-        });
-        await flow.fire('스테이지 클리어시');
-      } else if (result.outcome === 'fail') {
-        await flow.fire('스테이지 시간이 다되어 게임패배시');
-      }
-    },
+    onEnd: handleMainGameEnd,
     onError: (error) => console.error('[Godot integration] session error', error),
   });
   if (sessionToken !== sceneSessionToken || activeGame !== game) {

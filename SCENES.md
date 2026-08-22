@@ -5,9 +5,9 @@
 > **표기 규약(전 씬 공통 — 씬 섹션은 데이터만)**: 이벤트=`renderer.on(name, fn)` 구독(여기 있는 이름만 사용, 기본 트리거 click — 다르면 괄호 표기) · 바인딩=`renderer.update({...})` 주입 · sceneUuid=불변(씬 연결은 이 값 기준) · sceneType 표기 없음=일반 씬 · 위젯=visibility/toggle:boolean, slider:0~1, fill:0~100(표시 전용) — 입력은 `widget:<key>` 이벤트로 오고 게임이 update 로 에코해야 UI가 움직임 · GameField=GameSession 인게임 카트리지 마운트 지점.
 
 <!-- SCENE:Ingame BEGIN -->
-#### `Ingame`  ·  contract: `./web/ui/Ingame.contract.json`
+#### `Ingame`  ·  contract: `./web/ui/ingame.contract.json`
 - sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
-- 이벤트: `bar1-png-2:click` · `entry-box-normal-png-300:click`
+- 이벤트: `bar1-png-374:click` · `entry-box-normal-png-300:click`
 - 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer`
 - GameField 레이어 있음
 <!-- SCENE:Ingame END -->
@@ -27,7 +27,7 @@
 <!-- SCENE:Ranking END -->
 
 <!-- SCENE:Splash BEGIN -->
-#### `Splash`  ·  contract: `./web/ui/Splash.contract.json`
+#### `Splash`  ·  contract: `./web/ui/splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
 - 이벤트: `loading-out-png-11:click`
 - 텍스트 바인딩: `loadingMessage`
@@ -41,6 +41,14 @@
 - sceneUuid: `37f376d8-4e32-4340-9bbd-4ed17767e148`
 - 이벤트: 없음
 <!-- SCENE:home_bottom END -->
+
+<!-- SCENE:ingame BEGIN -->
+#### `ingame`  ·  contract: `./web/ui/ingame.contract.json`
+- sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
+- 이벤트: `bar1-png-374:click` · `gimmick-coinpurse-coin-png-375:click` · `bar1-png-376:click` · `home-btn-plus-png-377:click` · `bar1-png-378:click` · `entry-box-normal-png-300:click`
+- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer`
+- GameField 레이어 있음
+<!-- SCENE:ingame END -->
 
 <!-- SCENE:pop_BuyCoins BEGIN -->
 #### `pop_BuyCoins`  ·  contract: `./web/ui/pop_BuyCoins.contract.json`
@@ -95,7 +103,7 @@
 <!-- SCENE:pop_Settings_1 BEGIN -->
 #### `pop_Settings_1`  ·  contract: `./web/ui/pop_Settings_1.contract.json`
 - sceneUuid: `235b7eb7-c304-45b3-aa55-25f18050fd64`
-- 이벤트: `setting-btn-option-png-2243:click` · `setting-btn-option-png-2244:click` · `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click`
+- 이벤트: `setting-btn-option-png-2243:click` · `setting-btn-option-png-2244:click` · `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click` · `entry-box-normal-png-2287:click`
 - 위젯: `music`(toggle) · `sound`(toggle) · `vibration`(toggle) · `lobby`(toggle) · `retry`(toggle) — 입력 이벤트: `widget:music` · `widget:sound` · `widget:vibration` · `widget:lobby` · `widget:retry`
 <!-- SCENE:pop_Settings_1 END -->
 

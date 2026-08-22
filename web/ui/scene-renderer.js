@@ -342,6 +342,12 @@ const CSS_ANIMATION_PRESETS = [
     // 점멸(fade in-out) — 타임라인에서 defaultLoop 로 추가 즉시 무한 반복(레일 프리셋 매핑 참조).
     // className 은 자체 키프레임(1사이클 = 1회 점멸). animate__flash 는 1사이클에 2번 깜빡인다.
     { id: 'flash', label: 'Flash (점멸)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-blink-once', phase: 'attention', durationMs: 1000, defaultLoop: true },
+    // 자체 키프레임(ensureLocalCssAnimationKeyframes) — 수축+떨림 후 터지는 연출 2종
+    { id: 'charge-pop', label: 'Charge Pop (모았다 빵)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-charge-pop', phase: 'attention', durationMs: 1300 },
+    { id: 'squash-jump', label: 'Squash Jump (움츠렸다 점프)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-jump', phase: 'attention', durationMs: 1400 },
+    // squash-jump 2단 분리 — crouch(눌린 자세로 끝, fill 유지)→[이미지 교체]→launch(눌린 자세에서 점프 착지)
+    { id: 'squash-crouch', label: 'Squash Crouch (움츠리기)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-crouch', phase: 'attention', durationMs: 600 },
+    { id: 'squash-launch', label: 'Squash Launch (점프 착지)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-launch', phase: 'attention', durationMs: 900 },
 ];
 
 function getCssAnimationPreset(presetId) {
@@ -389,6 +395,8 @@ const PARTICLE_EFFECT_PRESETS = [
     { id: 'ambient-sparkle-aura', label: 'Ambient Sparkle Aura', group: 'Sparkle / Halo', provider: 'internal', template: 'ambient-aura', count: 18, auraWidth: 140, auraHeight: 140, speedMin: 0, speedMax: 0, sizeMin: 0.45, sizeMax: 0.9, spread: 360, loop: true },
     //  - healing-aura(내부 반복형): 발밑에서 피어오르는 녹빛 세로 광선 + 십자가 — RPG 힐 이펙트
     { id: 'healing-aura', label: 'Healing Aura', group: 'Sparkle / Halo', provider: 'internal', template: 'healing-aura', count: 26, auraWidth: 150, auraHeight: 160, speedMin: 0, speedMax: 0, sizeMin: 0.5, sizeMax: 1.1, spread: 0, loop: true },
+    //  - treasure-glow(내부 반복형): 바닥 중심에 고정된 금빛 광선이 부채꼴로 일렁이고 반짝임이 피어오르는 보물상자 개봉 광채
+    { id: 'treasure-glow', label: 'Treasure Glow (보물 광채)', group: 'Sparkle / Halo', provider: 'internal', template: 'treasure-glow', count: 30, auraWidth: 150, auraHeight: 170, speedMin: 0, speedMax: 0, sizeMin: 0.6, sizeMax: 1.2, spread: 44, loop: true },
     //  - warp-streaks(내부 반복형): 얇은 빛줄기가 중심에서 가속하며 통째로 날아가는 1인칭 하이퍼스페이스
     { id: 'warp-streaks', label: 'Warp Streaks (워프)', group: 'Sparkle / Halo', provider: 'internal', template: 'warp-streaks', count: 60, auraWidth: 100, auraHeight: 100, speedMin: 0, speedMax: 0, sizeMin: 1, sizeMax: 1, spread: 0, loop: true, colors: ['#ffffff', '#cfe4ff', '#9ec6ff'] },
     //  - manga-focus-lines(내부 반복형): 바깥은 화면 밖에 고정, 안쪽 뾰족한 끝만 물러나며 구멍이 벌어지는 만화 집중선 줌인
@@ -1437,7 +1445,60 @@ function ensureLocalCssAnimationKeyframes() {
     st.id = 'ui-css-animation-keyframes';
     st.textContent =
         '@keyframes ui-blink-once{0%,100%{opacity:1}50%{opacity:0}}' +
-        '.ui-blink-once{animation-name:ui-blink-once}';
+        '.ui-blink-once{animation-name:ui-blink-once}' +
+        // ui-charge-pop: 살짝 수축한 채 부들부들 떨다가 빵 터지며 감쇠 바운스로 복귀
+        '@keyframes ui-charge-pop{' +
+        '0%{transform:scale(1)}' +
+        '8%{transform:scale(.86) rotate(-2deg)}14%{transform:scale(.85) rotate(2deg)}' +
+        '20%{transform:scale(.84) rotate(-2.5deg)}26%{transform:scale(.85) rotate(2.5deg)}' +
+        '32%{transform:scale(.83) rotate(-3deg)}38%{transform:scale(.84) rotate(3deg)}' +
+        '44%{transform:scale(.82) rotate(-3deg)}50%{transform:scale(.8)}' +
+        '60%{transform:scale(1.32)}72%{transform:scale(.93)}82%{transform:scale(1.1)}' +
+        '90%{transform:scale(.97)}100%{transform:scale(1)}' +
+        '}' +
+        '.ui-charge-pop{animation-name:ui-charge-pop}' +
+        // ui-squash-jump: 바닥 기준(origin 50% 100%) — 상단이 아래로 눌리며 떨다가 점프 후 착지 바운스
+        '@keyframes ui-squash-jump{' +
+        '0%{transform:translateY(0) scale(1,1)}' +
+        '8%{transform:translateY(0) scale(1.08,.78) rotate(-1.5deg)}' +
+        '14%{transform:translateY(0) scale(1.07,.76) rotate(1.5deg)}' +
+        '20%{transform:translateY(0) scale(1.09,.75) rotate(-2deg)}' +
+        '26%{transform:translateY(0) scale(1.07,.74) rotate(2deg)}' +
+        '32%{transform:translateY(0) scale(1.1,.73) rotate(-2deg)}' +
+        '38%{transform:translateY(0) scale(1.08,.72)}' +
+        '48%{transform:translateY(-46%) scale(.92,1.18)}' +
+        '56%{transform:translateY(-58%) scale(.96,1.06)}' +
+        '68%{transform:translateY(0) scale(1.12,.82)}' +
+        '78%{transform:translateY(-14%) scale(.98,1.04)}' +
+        '86%{transform:translateY(0) scale(1.05,.92)}' +
+        '93%{transform:translateY(-4%) scale(1,1.01)}' +
+        '100%{transform:translateY(0) scale(1,1)}' +
+        '}' +
+        '.ui-squash-jump{animation-name:ui-squash-jump;transform-origin:50% 100%}' +
+        // ui-squash-crouch / ui-squash-launch — squash-jump 를 둘로 쪼갠 것(0~38% / 38~100% 재매핑).
+        // crouch 는 눌린 자세(scale 1.08,.72)로 "끝나고"(fill both 로 유지), launch 는 그 자세에서 시작 —
+        // 사이에 image-swap 을 끼우면 교체된 이미지로 점프 착지가 이어진다(개봉 연출 2단 구성).
+        '@keyframes ui-squash-crouch{' +
+        '0%{transform:translateY(0) scale(1,1)}' +
+        '21%{transform:translateY(0) scale(1.08,.78) rotate(-1.5deg)}' +
+        '37%{transform:translateY(0) scale(1.07,.76) rotate(1.5deg)}' +
+        '53%{transform:translateY(0) scale(1.09,.75) rotate(-2deg)}' +
+        '68%{transform:translateY(0) scale(1.07,.74) rotate(2deg)}' +
+        '84%{transform:translateY(0) scale(1.1,.73) rotate(-2deg)}' +
+        '100%{transform:translateY(0) scale(1.08,.72)}' +
+        '}' +
+        '.ui-squash-crouch{animation-name:ui-squash-crouch;transform-origin:50% 100%;animation-fill-mode:both}' +
+        '@keyframes ui-squash-launch{' +
+        '0%{transform:translateY(0) scale(1.08,.72)}' +
+        '16%{transform:translateY(-46%) scale(.92,1.18)}' +
+        '29%{transform:translateY(-58%) scale(.96,1.06)}' +
+        '48%{transform:translateY(0) scale(1.12,.82)}' +
+        '65%{transform:translateY(-14%) scale(.98,1.04)}' +
+        '77%{transform:translateY(0) scale(1.05,.92)}' +
+        '89%{transform:translateY(-4%) scale(1,1.01)}' +
+        '100%{transform:translateY(0) scale(1,1)}' +
+        '}' +
+        '.ui-squash-launch{animation-name:ui-squash-launch;transform-origin:50% 100%}';
     document.head.appendChild(st);
 }
 
@@ -1631,6 +1692,99 @@ function applyHealingAura(el, effect) {
     el.appendChild(aura);
 }
 
+// 보물 광채 — 바닥 중심에서 부채꼴로 뻗은 금빛 광선 + 코어 글로우 + 상승 반짝임 (보물상자 개봉).
+// healing-aura 와 같은 내부 반복형(DOM+CSS 키프레임, i 기반 결정적 배치). 모션 차이:
+// heal 스트릭은 위로 '이동'하지만 이 광선은 바닥에 고정된 채 scaleY 로 '일렁'인다.
+// 상승 반짝임과 컨테이너 규칙은 heal 스타일시트(ui-heal-p/ui-heal-rise/ui-heal-aura)를 재사용한다.
+function ensureTreasureGlowKeyframes() {
+    if (typeof document === 'undefined') return;
+    if (document.getElementById('ui-tg-keyframes')) return;
+    const st = document.createElement('style');
+    st.id = 'ui-tg-keyframes';
+    st.textContent =
+        '@keyframes ui-tg-beam{' +
+        '0%,100%{transform:translateX(-50%) rotate(var(--a)) scaleY(.5);opacity:.2}' +
+        '45%{transform:translateX(-50%) rotate(var(--a)) scaleY(1);opacity:.85}' +
+        '}' +
+        '@keyframes ui-tg-core{' +
+        '0%,100%{opacity:.55;transform:translateX(-50%) scale(.85)}' +
+        '50%{opacity:.95;transform:translateX(-50%) scale(1.1)}' +
+        '}' +
+        // heal-rise 와 달리 가로 드리프트(--dx) 포함 — 모트가 광선 부채꼴을 따라 벌어지며 상승한다
+        '@keyframes ui-tg-rise{' +
+        '0%{transform:translate(-50%,0);opacity:0}' +
+        '15%{opacity:.9}' +
+        '70%{opacity:.55}' +
+        '100%{transform:translate(calc(-50% + var(--dx)),var(--rise));opacity:0}' +
+        '}' +
+        '.ui-tg-beam{position:absolute;left:var(--x);bottom:0;width:var(--w);height:var(--h);' +
+        'transform-origin:50% 100%;border-radius:999px;' +
+        'background:linear-gradient(to top,rgba(255,214,110,.95),rgba(255,242,205,.55) 45%,rgba(255,214,110,0));' +
+        'filter:drop-shadow(0 0 6px rgba(255,200,90,.8));' +
+        'animation:ui-tg-beam var(--d) ease-in-out infinite;animation-delay:var(--delay)}' +
+        '.ui-tg-core{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:var(--w);height:var(--h);border-radius:50%;' +
+        'background:radial-gradient(ellipse at center,rgba(255,236,170,.95),rgba(255,200,90,.45) 55%,rgba(255,200,90,0) 75%);' +
+        'animation:ui-tg-core 1600ms ease-in-out infinite}' +
+        '.ui-tg-mote{position:absolute;left:var(--x);bottom:var(--b);width:var(--s);height:var(--s);' +
+        'border-radius:50%;background:rgba(255,240,200,.95);filter:drop-shadow(0 0 4px rgba(255,205,95,.9));' +
+        'animation:ui-tg-rise var(--d) ease-out infinite;animation-delay:var(--delay)}';
+    document.head.appendChild(st);
+}
+
+function applyTreasureGlow(el, effect) {
+    if (typeof document === 'undefined' || !el) return;
+    const old = el.querySelector?.(':scope > .ui-ambient-aura');
+    if (old) old.remove();
+    if (!effect?.enabled) return;
+    ensureHealingAuraKeyframes();
+    ensureTreasureGlowKeyframes();
+    const params = effect.params || {};
+    const count = Math.max(1, Math.min(96, params.count || 30));
+    const auraWidth = Math.max(10, params.auraWidth || 150);
+    const auraHeight = Math.max(10, params.auraHeight || 170);
+    const sizeMin = params.sizeMin || 0.6, sizeMax = params.sizeMax || 1.2;
+    const spread = params.spread ?? 44;
+    const aura = document.createElement('span');
+    aura.className = 'ui-ambient-aura ui-heal-aura';
+    // 코어 글로우 — 상자 틈에서 새어나오는 빛 웅덩이
+    const core = document.createElement('span');
+    core.className = 'ui-tg-core';
+    core.style.setProperty('--w', Math.round(auraWidth * 0.8) + 'px');
+    core.style.setProperty('--h', Math.round(auraHeight * 0.22) + 'px');
+    aura.appendChild(core);
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        const size = sizeMin + (sizeMax - sizeMin) * ((i % 5) / 4);
+        if (i % 2 === 0) {
+            // 광선 — 밑동을 Aura Width 에 걸쳐 가로 분산(상자 폭), Spread(총 방사각°)만큼 바깥으로 기울고 scaleY 로 일렁임
+            p.className = 'ui-tg-beam';
+            const duration = 1400 + (i % 5) * 300;
+            const xNorm = (((i * 53) % 100) / 100) - 0.5;
+            p.style.setProperty('--x', `calc(50% + ${Math.round(xNorm * auraWidth * 0.7)}px)`);
+            p.style.setProperty('--a', Math.round(xNorm * spread + ((i * 37) % 9) - 4) + 'deg');
+            p.style.setProperty('--w', (3 + (i % 3) * 2) + 'px');
+            p.style.setProperty('--h', Math.round(auraHeight * (0.6 + (i % 4) * 0.13) * size) + 'px');
+            p.style.setProperty('--d', duration + 'ms');
+            p.style.setProperty('--delay', -(i * 310 % duration) + 'ms');
+        } else {
+            // 상승 반짝임 — 밑동은 광선 밑동과 동일 폭, 상승하며 방사각을 따라 바깥으로 드리프트(윗면 = 광선 윗면)
+            p.className = 'ui-tg-mote';
+            const duration = 1800 + (i % 7) * 260;
+            const xNorm = (((i * 53) % 100) / 100) - 0.5;
+            const rise = Math.round(auraHeight * (0.55 + (i % 4) * 0.15));
+            p.style.setProperty('--x', `calc(50% + ${Math.round(xNorm * auraWidth * 0.7)}px)`);
+            p.style.setProperty('--b', ((i * 29) % 12) + 'px');
+            p.style.setProperty('--rise', -rise + 'px');
+            p.style.setProperty('--dx', Math.round(Math.tan(xNorm * spread * Math.PI / 180) * rise) + 'px');
+            p.style.setProperty('--d', duration + 'ms');
+            p.style.setProperty('--delay', -(i * 230 % duration) + 'ms');
+            p.style.setProperty('--s', Math.round(size * 5) + 'px');
+        }
+        aura.appendChild(p);
+    }
+    el.appendChild(aura);
+}
+
 // 방사형 스트릭 — 중심에서 바깥으로 가속하며 뻗는 '유한 길이' 광선. warp/manga 공용 단일 구현.
 // 원근 투영(화면반지름 = k / z)의 CSS 근사: 반지름을 가속 곡선으로 밀면서 길이를 함께 키운다.
 // conic-gradient 는 각도만의 함수라 확대해도 패턴이 제자리(자기닮음)이므로 쓰지 않는다 —
@@ -1760,6 +1914,10 @@ function playParticleEffect(el, effect) {
     }
     if (template === 'healing-aura') {
         applyHealingAura(el, effect);
+        return;
+    }
+    if (template === 'treasure-glow') {
+        applyTreasureGlow(el, effect);
         return;
     }
     if (template === 'warp-streaks' || template === 'manga-focus-lines') {
@@ -3200,10 +3358,8 @@ export class SceneRenderer {
 
     // ── Internal ──────────────────────────────────────────────────────────────
 
-    _runSceneAnimations() {
-        const items = this._contract?.sceneAnimations;
-        if (!Array.isArray(items) || !items.length || !this._el) return;
-
+    /** 타임라인 항목들의 시작·길이 스케줄 계산 — _runSceneAnimations(재생)와 _timelineEmitDeferMs(총 길이)가 공유. */
+    _scheduleSceneAnimations(items) {
         let cursor = 0;
         let previousStart = 0;
         const scheduled = [];
@@ -3217,6 +3373,50 @@ export class SceneRenderer {
             previousStart = start;
             scheduled.push({ item, index, start, duration });
         });
+        return scheduled;
+    }
+
+    /**
+     * 클릭 트리거 타임라인 대상(또는 같은 그룹 멤버)의 흐름 이벤트 발화 지연량(ms). 해당 없으면 0.
+     * 개봉 연출처럼 "클릭 → 연출 재생 → 끝나면 자동 전환"인 씬에서, 같은 클릭에 걸린 흐름 이벤트가
+     * 연출을 끊고 즉시 전환하지 않도록 타임라인 총 길이만큼 지연 발화한다(연출 소비 후 클릭은 즉시).
+     */
+    _timelineEmitDeferMs(stableId) {
+        const trig = this._contract?.sceneAnimationsTrigger;
+        const items = this._contract?.sceneAnimations;
+        if (trig?.type !== 'click' || !Array.isArray(items) || !items.length) return 0;
+        if (this._timelineClickRan) return 0;
+        if (stableId !== trig.targetStableId) {
+            const grouped = (this._contract.groups || []).some(g => {
+                const ids = g.layerStableIds || [];
+                return ids.includes(trig.targetStableId) && ids.includes(stableId);
+            });
+            if (!grouped) return 0;
+        }
+        return this._scheduleSceneAnimations(items).reduce((end, s) => Math.max(end, s.start + s.duration), 0);
+    }
+
+    _runSceneAnimations() {
+        const items = this._contract?.sceneAnimations;
+        if (!Array.isArray(items) || !items.length || !this._el) return;
+
+        // 터치 트리거 — 씬 표시 시점 대신 대상 레이어 클릭에서 1회 재생(표시마다 재무장).
+        // 개봉 연출(닫힌 상자 터치 → 점프 중 이미지 교체 → 광채) 같은 유저 입력 기점 타임라인용.
+        const trig = this._contract.sceneAnimationsTrigger;
+        if (trig?.type === 'click' && !this._timelineClickWired) {
+            const target = this.getElement(trig.targetStableId);
+            if (!target) {
+                console.warn('[SceneRenderer] 타임라인 터치 트리거 대상 레이어 없음:', trig.targetStableId);
+                return;
+            }
+            this._timelineClickWired = true;
+            target.style.cursor = 'pointer';
+            target.addEventListener('click', () => this._runSceneAnimations(), { once: true });
+            return;
+        }
+        if (trig?.type === 'click') this._timelineClickRan = true; // 소비됨 — 이후 클릭 이벤트는 즉시 발화
+
+        const scheduled = this._scheduleSceneAnimations(items);
         console.info('[SceneRenderer] scene animation schedule', scheduled.map(({ item, index, start, duration }) => ({
             index,
             type: item.type,
@@ -3263,6 +3463,29 @@ export class SceneRenderer {
                 return;
             }
 
+            // 이미지 교체 타임라인 항목: 시작 시점에 대상 image 레이어의 그림을 소스 레이어의 그림으로
+            // 교체한다. 같은 엘리먼트에서 src 만 바꿔야 진행 중인 css 애니메이션 모션이 끊기지 않는다
+            // (개봉 연출: 점프 도중 닫힌 상자 → 열린 상자).
+            if (item.type === 'image-swap' && item.targetStableId) {
+                const target = this.getElement(item.targetStableId);
+                const srcLayer = (this._contract.layers || []).find(l => l.stableId === item.sourceStableId);
+                const srcPath = srcLayer?.image?.exportPath || srcLayer?.visual?.exportPath || '';
+                if (!target || !srcPath) {
+                    console.warn('[SceneRenderer] image-swap 대상/소스 미해석:', item.targetStableId, '→', item.sourceStableId);
+                    return;
+                }
+                const src = this._resolveAssetPath(srcPath);
+                setTimeout(() => {
+                    if (!target.isConnected) return;
+                    const img = target.querySelector('img');
+                    if (!img) {
+                        console.warn('[SceneRenderer] image-swap: 대상에 <img> 가 없습니다(image 레이어만 지원):', item.targetStableId);
+                        return;
+                    }
+                    img.src = src;
+                }, start);
+                return;
+            }
             // Sparkle(파티클) 타임라인 항목: 시작 시점에 1회 재생. ambient-aura(반복형)는
             // duration 동안만 유지 후 제거(0이면 계속) — 타임라인 시점 제어 의미 유지.
             if (item.type === 'particle-effect' && item.targetStableId) {
@@ -3274,10 +3497,28 @@ export class SceneRenderer {
                 const effect = normalizeParticleEffect({ particleEffect: { enabled: true, presetId: item.particlePresetId || '' } });
                 setTimeout(() => {
                     if (!target.isConnected) return;
-                    playParticleEffect(target, effect);
+                    // 부착 영역(대상 박스 기준 %): boxX/Y = 영역의 "밑변 중심"(기준점), boxW/H = 이펙트 크기.
+                    // % 단위라 대상 오브젝트를 리사이즈해도 위치·크기가 비율로 따라간다.
+                    // 기준점이 밑변 중심이라 W/H 를 바꿔도 발밑(상자 입구선)이 고정된 채 크기만 변한다.
+                    // 내부형(treasure-glow 등)은 auraWidth/Height 도 영역의 실측 px 로 맞춘다 — 영역이 곧 이펙트 크기.
+                    // (미지정 시 대상 전체 박스 = 기존 동작.)
+                    let host = target;
+                    const ov = {}; // 항목별 파라미터 노브(0/미지정 = 프리셋 값)
+                    if (item.fxCount > 0) ov.count = item.fxCount;
+                    if (item.fxSpread > 0) ov.spread = item.fxSpread;
+                    if (item.boxW > 0 || item.boxH > 0) {
+                        const w = item.boxW || 0, h = item.boxH || 0;
+                        host = document.createElement('div');
+                        host.style.cssText = `position:absolute;left:${(item.boxX || 0) - w / 2}%;top:${(item.boxY || 0) - h}%;width:${w}%;height:${h}%;pointer-events:none;`;
+                        target.appendChild(host);
+                        if (w) ov.auraWidth = host.offsetWidth;
+                        if (h) ov.auraHeight = host.offsetHeight;
+                    }
+                    if (Object.keys(ov).length) effect.params = { ...effect.params, ...ov };
+                    playParticleEffect(host, effect);
                     // 내부 반복형(ambient/healing)은 컨테이너 클래스를 공유하므로 제거 경로도 하나로 통한다
                     if (effect.source?.provider === 'internal' && duration > 0) {
-                        setTimeout(() => applyAmbientSparkleAura(target, { enabled: false }), duration);
+                        setTimeout(() => applyAmbientSparkleAura(host, { enabled: false }), duration);
                     }
                 }, start);
                 return;
@@ -3442,6 +3683,9 @@ export class SceneRenderer {
     _buildDOM() {
         const c = this._contract;
         this._groupWrappers = {};
+        this._timelineClickWired = false; // 터치 트리거 타임라인 — DOM 재구축마다 재무장
+        this._timelineClickRan = false;   // 지연 발화 판정도 재무장 (_timelineEmitDeferMs)
+        this._timelinePendingEmits?.clear();
 
         // ── Navigation Scene 모드 ────────────────────────────────────────────
         if (c.sceneType === 'navigation') {
@@ -4486,6 +4730,20 @@ export class SceneRenderer {
                 if (this._isFlowEventUnwired(ev, evtName)) {
                     console.warn('[SceneRenderer] 흐름도 연결 이벤트에 구독자가 없습니다(게임 미배선):', evtName,
                         ev.targetSceneUuid ? { targetSceneUuid: ev.targetSceneUuid } : { branches: ev.branches });
+                }
+                // 클릭 트리거 타임라인(개봉 연출 등)과 같은 클릭이면 연출 종료까지 지연 발화 — _timelineEmitDeferMs 참조
+                const pending = this._timelinePendingEmits || (this._timelinePendingEmits = new Set());
+                if (pending.has(evtName)) return; // 지연 발화 대기 중(연출 재생 중) 재클릭 무시
+                const deferMs = this._timelineEmitDeferMs(layer.stableId);
+                if (deferMs > 0) {
+                    pending.add(evtName);
+                    console.info('[SceneRenderer] 타임라인 연출 종료까지 이벤트 발화 지연:', evtName, deferMs + 'ms');
+                    setTimeout(() => {
+                        pending.delete(evtName);
+                        if (!this._rootEl?.isConnected) return; // 지연 중 hide/reload 되면 발화 취소
+                        this._emit(evtName, { stableId: layer.stableId, originalEvent: e });
+                    }, deferMs);
+                    return;
                 }
                 this._emit(evtName, { stableId: layer.stableId, originalEvent: e });
             });

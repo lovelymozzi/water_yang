@@ -123,6 +123,9 @@ export class FlowDriver {
     return this._transitionTo(target, null);
   }
 
+  /** 열린 팝업 닫기(씬 이동 없음). trigger 없는 __close__ 문서 엣지("아무곳 터치 시 닫기" 등)를 게임 사건 시점에 실행하는 공개 경로 — 매니저 detach 까지 정리한다. */
+  async closePopup() { return this._closePopupIfOpen(); }
+
   /** 이전 씬으로(이력 pop). 팝업이 열려 있으면 먼저 닫는다. __back__ 센티널과 동일 동작. */
   async back(opts = {}) {
     await this._closePopupIfOpen();
