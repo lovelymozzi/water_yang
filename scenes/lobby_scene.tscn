@@ -12,8 +12,10 @@
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="16_rc321"]
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="17_puvrh"]
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="18_dr74i"]
-[ext_resource type="Texture2D" path="res://water_yang/ui_bg.png" id="19_7tji0"]
 [ext_resource type="PackedScene" uid="uid://bon52b0jge40n" path="res://water_yang/water1.fbx" id="20_water"]
+[ext_resource type="Material" uid="uid://duuy5lh6kw6l6" path="res://resources/lobby_ground_land_material.tres" id="21_land_material"]
+[ext_resource type="Material" uid="uid://bqgt33f4c1otr" path="res://resources/lobby_ground_water_material.tres" id="22_form_material"]
+[ext_resource type="Material" uid="uid://b1wyeb0sv3jqv" path="res://resources/lobby_water_material.tres" id="23_water_material"]
 
 [sub_resource type="Gradient" id="Gradient_dbdus"]
 offsets = PackedFloat32Array(0, 0.73, 1)
@@ -932,25 +934,21 @@ visible = false
 offset_right = 1152.0
 offset_bottom = 648.0
 
-[node name="UiBackground" type="TextureRect" parent="CanvasLayer" unique_id=1620259911]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("19_7tji0")
-expand_mode = 1
-
 [node name="LobbyWorldEnvironment" type="WorldEnvironment" parent="." unique_id=1363010940]
 environment = SubResource("Environment_lobby")
 
 [node name="LobbyGround" parent="." unique_id=755407211 instance=ExtResource("3_lobby_ground")]
 transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0, 0, 1.0139494)
 
+[node name="LobbyGround" parent="LobbyGround"]
+surface_material_override/0 = ExtResource("21_land_material")
+surface_material_override/1 = ExtResource("22_form_material")
+
 [node name="Water" parent="LobbyGround" unique_id=2138602713 instance=ExtResource("20_water")]
 transform = Transform3D(0.9999995, 0, 0, 0, 0.9999995, 0, 0, 0, 0.9999995, 0, -0.055519108, 0)
+
+[node name="water1" parent="LobbyGround/Water"]
+material_override = ExtResource("23_water_material")
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=198053193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105163574, -8.356716, -0.08203125)

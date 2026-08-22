@@ -1,7 +1,8 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://bqgt33f4c1otr"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bqgt33f4c1otr"]
 
 [ext_resource type="Texture2D" uid="uid://voml2p150fee" path="res://water_yang/wall.jpg" id="1_water_texture"]
 [ext_resource type="Shader" path="res://scripts/lobby_ground_foam.gdshader" id="2_foam_shader"]
+[ext_resource type="Shader" path="res://scripts/lobby_ground_water_fade.gdshader" id="3_water_fade"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_foam"]
 render_priority = 1
@@ -11,4 +12,6 @@ shader_parameter/foam_uv_center = 0.08
 [resource]
 resource_name = "Lobby Ground Water"
 next_pass = SubResource("ShaderMaterial_foam")
-albedo_texture = ExtResource("1_water_texture")
+shader = ExtResource("3_water_fade")
+shader_parameter/albedo_texture = ExtResource("1_water_texture")
+shader_parameter/underwater_fade_strength = 1.0

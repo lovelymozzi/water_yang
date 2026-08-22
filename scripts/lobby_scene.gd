@@ -2,7 +2,7 @@
 extends Node3D
 
 const LOBBY_GROUND_LAND_MATERIAL: ShaderMaterial = preload("res://resources/lobby_ground_land_material.tres")
-const LOBBY_GROUND_WATER_MATERIAL: StandardMaterial3D = preload("res://resources/lobby_ground_water_material.tres")
+const LOBBY_GROUND_WATER_MATERIAL: ShaderMaterial = preload("res://resources/lobby_ground_water_material.tres")
 const LOBBY_WATER_MATERIAL: ShaderMaterial = preload("res://resources/lobby_water_material.tres")
 
 @export_group("Lobby Flower Glow")
@@ -11,6 +11,10 @@ const LOBBY_WATER_MATERIAL: ShaderMaterial = preload("res://resources/lobby_wate
 
 
 func _ready() -> void:
+	_apply_lobby_materials()
+
+
+func _apply_lobby_materials() -> void:
 	var ground_mesh := get_node("LobbyGround/LobbyGround") as MeshInstance3D
 	var water_mesh := get_node("LobbyGround/Water/water1") as MeshInstance3D
 	ground_mesh.set_surface_override_material(0, LOBBY_GROUND_LAND_MATERIAL)
@@ -20,6 +24,8 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		_apply_lobby_materials()
 	for node in find_children("FlowerGlow", "OmniLight3D", true, false):
 		var flower_glow := node as OmniLight3D
 		flower_glow.light_energy = minf(flower_glow.light_energy, flower_glow_energy_cap)
