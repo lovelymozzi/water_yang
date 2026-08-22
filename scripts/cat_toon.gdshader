@@ -1,19 +1,19 @@
 shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_burley, specular_schlick_ggx;
 
-uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D albedo_tex : source_color, filter_linear, repeat_enable;
 // Optional hand-painted line layer. Transparent pixels preserve the base
 // texture; opaque pixels become ink after tinting and toon lighting.
-uniform sampler2D line_art_tex : source_color, filter_linear_mipmap, repeat_enable, hint_default_white;
+uniform sampler2D line_art_tex : source_color, filter_linear, repeat_enable, hint_default_white;
 uniform float line_art_enabled : hint_range(0.0, 1.0) = 0.0;
 // cat1_mask.jpg: black is unaffected, white is the eye region.
-uniform sampler2D line_art_eye_mask : filter_linear_mipmap, repeat_enable;
+uniform sampler2D line_art_eye_mask : filter_linear, repeat_enable;
 uniform float line_art_eyes_hidden : hint_range(0.0, 1.0) = 0.0;
 uniform vec4 line_art_color : source_color = vec4(0.32, 0.24, 0.20, 1.0);
 uniform float line_art_strength : hint_range(0.0, 1.0) = 0.82;
 // White pixels preserve the original texture color; black pixels receive tint.
 // This is data, not a color texture: 0 = full tint, 1 = no tint.
-uniform sampler2D tint_exclusion_mask : filter_linear_mipmap, repeat_enable;
+uniform sampler2D tint_exclusion_mask : filter_linear, repeat_enable;
 uniform float tint_exclusion_enabled : hint_range(0.0, 1.0) = 1.0;
 uniform vec4 tint_color : source_color = vec4(1.0);
 uniform int shadow_steps = 3;

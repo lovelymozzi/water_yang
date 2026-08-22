@@ -55,6 +55,15 @@ func _ready() -> void:
 	runtime_environment.glow_intensity = 0.85
 	runtime_environment.glow_strength = 0.72
 	runtime_environment.glow_bloom = 0.18
+	# WebGL Compatibility renders glow through lower-resolution buffers than
+	# the native Forward+ renderer. Keeping the native values there spreads
+	# the glow into the cat silhouettes, so restrict it to the brightest FX.
+	if OS.has_feature("web"):
+		runtime_environment.tonemap_exposure = 1.0
+		runtime_environment.glow_hdr_threshold = 0.65
+		runtime_environment.glow_intensity = 0.35
+		runtime_environment.glow_strength = 0.25
+		runtime_environment.glow_bloom = 0.0
 	var world_environment := WorldEnvironment.new()
 	world_environment.name = "RuntimeWorldEnvironment"
 	world_environment.environment = runtime_environment
