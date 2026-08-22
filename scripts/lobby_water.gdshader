@@ -1,7 +1,12 @@
 shader_type spatial;
 render_mode blend_mix, depth_prepass_alpha, cull_disabled, diffuse_burley, specular_schlick_ggx;
 
+// Web exports use the Compatibility renderer. It cannot provide the scene
+// depth texture used by the desktop water pass, so remove that sampler from
+// the Web variant at compile time instead of sampling an unavailable texture.
+#if CURRENT_RENDERER != RENDERER_COMPATIBILITY
 uniform sampler2D scene_depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+#endif
 
 group_uniforms water_color_and_depth;
 uniform vec4 shallow_color : source_color = vec4(0.12, 0.62, 0.82, 1.0);
@@ -13,6 +18,13 @@ uniform float depth_color_strength : hint_range(0.0, 1.0, 0.01) = 0.82;
 uniform float shallow_opacity : hint_range(0.0, 1.0, 0.01) = 0.42;
 uniform float deep_opacity : hint_range(0.0, 1.0, 0.01) = 0.96;
 uniform float depth_opacity_strength : hint_range(0.0, 1.0, 0.01) = 1.0;
+group_uniforms;
+
+group_uniforms compatibility_renderer;
+// Web fallback controls. These preserve the same palette, waves, gloss, and
+// alpha model while replacing only the unavailable per-pixel scene-depth read.
+uniform float compatibility_depth_mix : hint_range(0.0, 1.0, 0.01) = 0.58;
+uniform float compatibility_foam : hint_range(0.0, 1.0, 0.01) = 0.0;
 group_uniforms;
 
 group_uniforms waves;
@@ -68,6 +80,15 @@ void fragment() {
 	float sparkle_pattern = sin(UV.x * sparkle_density * 2.8 - TIME * wave_speed_a * 1.7) * sin(UV.y * sparkle_density * 3.6 + TIME * wave_speed_b);
 	float sparkle = smoothstep(0.84, 0.98, sparkle_pattern * 0.5 + 0.5) * sparkle_strength;
 
+	float raw_depth_mix;
+	float foam;
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+	// Compatibility/WebGL has no scene depth texture. Keep the artistic water
+	// response deterministic and tunable rather than relying on undefined depth
+	// samples; the material owns the fallback value for Web exports.
+	raw_depth_mix = compatibility_depth_mix;
+	foam = compatibility_foam * foam_strength;
+#else
 	float raw_scene_depth = texture(scene_depth_texture, SCREEN_UV).r;
 	vec3 scene_ndc = vec3(SCREEN_UV * 2.0 - 1.0, raw_scene_depth);
 	vec4 scene_view_position = INV_PROJECTION_MATRIX * vec4(scene_ndc, 1.0);
@@ -77,13 +98,14 @@ void fragment() {
 	float depth_gap = max(scene_depth - water_depth, 0.0);
 	// Keep the visual color blend independent from visibility.  Reducing the
 	// color effect must not make deep, submerged geometry visible again.
-	float raw_depth_mix = smoothstep(shallow_depth, deep_depth, depth_gap);
-	float depth_mix = raw_depth_mix * depth_color_strength;
-	float depth_opacity = mix(shallow_opacity, deep_opacity, clamp(raw_depth_mix * depth_opacity_strength, 0.0, 1.0));
+	raw_depth_mix = smoothstep(shallow_depth, deep_depth, depth_gap);
 	float shore_foam = 1.0 - smoothstep(shore_foam_width, shore_foam_width + shore_foam_softness, depth_gap);
 	float moving_foam = sin((UV.x - UV.y) * foam_pattern_scale + TIME * foam_speed) * 0.5 + 0.5;
 	float foam_coverage = mix(1.0, smoothstep(0.28, 0.76, moving_foam), foam_breakup);
-	float foam = shore_foam * foam_coverage * foam_strength;
+	foam = shore_foam * foam_coverage * foam_strength;
+#endif
+	float depth_mix = raw_depth_mix * depth_color_strength;
+	float depth_opacity = mix(shallow_opacity, deep_opacity, clamp(raw_depth_mix * depth_opacity_strength, 0.0, 1.0));
 
 	ALBEDO = mix(shallow_color.rgb, deep_color.rgb, clamp(depth_mix, 0.0, 1.0));
 	ALBEDO = clamp(ALBEDO + vec3(surface_wave * wave_brightness), 0.0, 1.0);
