@@ -17,6 +17,7 @@
 - sceneUuid: `0ad51a82-1069-4948-ad6f-e97422300c6d`
 - 이벤트: `home-btn-setting-png-87:click` · `home-btn-plus-png-94:click` · `home-btn-plus-png-95:click` · `home-btn-stage-normal-png-145:click`
 - 텍스트 바인딩: `heart.timer` · `heart.current` · `coin.current` · `stage.current`
+- 이미지 바인딩: `event.heart.active`
 - GameField 레이어 있음
 <!-- SCENE:Lobby END -->
 
@@ -36,7 +37,7 @@
 <!-- SCENE:pop_BuyCoins BEGIN -->
 #### `pop_BuyCoins`  ·  contract: `./web/ui/pop_BuyCoins.contract.json`
 - sceneUuid: `b11144cd-f2c6-4f82-a4a8-c76b3496cd70`
-- 이벤트: `common-btn-top-x-blue-png-2186:click`
+- 이벤트: `860` · `480` · `320` · `common-btn-top-x-blue-png-2186:click`
 <!-- SCENE:pop_BuyCoins END -->
 
 <!-- SCENE:pop_BuyLives_1 BEGIN -->

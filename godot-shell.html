@@ -16,6 +16,17 @@ const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_UI_SCENE = 'Lobby';
 const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
+const INITIAL_COINS = 500;
+const MAX_HEARTS = 10;
+const UNLIMITED_HEARTS_DURATION_MS = 60 * 60 * 1000;
+const UNLIMITED_HEARTS_STORAGE_KEY = STORAGE_PREFIX + 'unlimited_hearts_until';
+const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
+const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp';
+const STAGE_CLEAR_REWARD = 150;
+const PERFECT_CLEAR_REWARD = 200;
+const CLEAR_STREAK_BONUS = 300;
+const CLEAR_STREAK_INTERVAL = 5;
+const CLEAR_STREAK_STORAGE_KEY = STORAGE_PREFIX + 'clear_streak';
 const BUTTON_CLICK_SFX = '../src/sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
 const CAT_MOUTH_SFX = '../src/sound/stu9-cute-cat-352656_optimized.mp3';
 const LOBBY_BGM = '../src/sound/geoffharvey-fat-cat-374614_optimized.mp3';
@@ -48,7 +59,7 @@ import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
 
-const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX });
+const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX, initialCoins: INITIAL_COINS, maxHearts: MAX_HEARTS });
 const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX });
 const sound = new SoundManager({ storagePrefix: STORAGE_PREFIX });
 const flow = new FlowDriver({
@@ -62,6 +73,39 @@ let lobbyBgmEnabled = true;
 let ingameBgmEnabled = true;
 let buttonSfxEnabled = true;
 let hapticsEnabled = true;
+let unlimitedHeartsTimeoutId = null;
+
+function hasUnlimitedHearts() {
+  return Number(localStorage.getItem(UNLIMITED_HEARTS_STORAGE_KEY)) > Date.now();
+}
+
+function syncUnlimitedHearts() {
+  const unlimitedHeartsActive = hasUnlimitedHearts();
+  flow.update({
+    event: { heart: { active: unlimitedHeartsActive ? EVENT_HEART_ICON : DEFAULT_HEART_ICON } },
+  });
+  if (unlimitedHeartsTimeoutId != null) clearTimeout(unlimitedHeartsTimeoutId);
+  if (unlimitedHeartsActive) {
+    unlimitedHeartsTimeoutId = setTimeout(syncUnlimitedHearts, Number(localStorage.getItem(UNLIMITED_HEARTS_STORAGE_KEY)) - Date.now() + 1);
+  }
+  return unlimitedHeartsActive;
+}
+
+function activateUnlimitedHearts() {
+  localStorage.setItem(UNLIMITED_HEARTS_STORAGE_KEY, String(Date.now() + UNLIMITED_HEARTS_DURATION_MS));
+  syncUnlimitedHearts();
+}
+
+function recordClearStreak() {
+  const streak = Math.max(0, Math.floor(Number(localStorage.getItem(CLEAR_STREAK_STORAGE_KEY)) || 0)) + 1;
+  localStorage.setItem(CLEAR_STREAK_STORAGE_KEY, String(streak));
+  return streak;
+}
+
+function resetClearStreak() {
+  localStorage.removeItem(CLEAR_STREAK_STORAGE_KEY);
+}
+
 sound.unlockOnFirstGesture(() => {
   // 비동기 Godot progress 이벤트의 SFX도 재생되도록, 사용자 제스처 안에서
   // 무음 SFX를 한 번 재생해 브라우저의 미디어 권한을 해제한다.
@@ -75,17 +119,17 @@ document.addEventListener('click', event => {
     splashRenderer?.getElement('loading-out-png-11')?.click();
     return;
   }
-  if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) {
+  if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('[data-stable-id], [data-nav-tab]')) {
     sound.playSfx(BUTTON_CLICK_SFX);
   }
   if (hapticsEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) navigator.vibrate?.(12);
-});
+}, { capture: true });
 
 let loadingReady = false;
 flow.defineCondition('로딩', () => loadingReady);
 flow.defineCondition('current stage>4', () => progress.getCurrentStage() > 4);
 flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
-flow.defineCondition('no_heart', () => economy.getHearts() === 0);
+flow.defineCondition('no_heart', () => economy.getHearts() === 0 && !hasUnlimitedHearts());
 // UI editor가 설정 팝업의 닫기 버튼에 기록한 제어문자 포함 조건 키.
 // 이 분기는 현재 Ingame으로 복귀하면서 열린 팝업을 닫고, 아래 scene:enter 훅에서 게임을 재개한다.
 flow.defineCondition('\bpopup close', async () => {
@@ -123,6 +167,12 @@ const handleGodotSfx = ({ sfx }) => {
 const handleMainGameEnd = async (result) => {
   if (result.outcome === 'clear') {
     await economy.grantHearts(1);
+    const reward = result.stats?.stars === 3 ? PERFECT_CLEAR_REWARD : STAGE_CLEAR_REWARD;
+    const clearStreak = recordClearStreak();
+    await economy.grantCoins(reward, result.stats?.stars === 3 ? 'perfect-stage-clear' : 'stage-clear');
+    if (clearStreak % CLEAR_STREAK_INTERVAL === 0) {
+      await economy.grantCoins(CLEAR_STREAK_BONUS, 'clear-streak-bonus');
+    }
     await progress.recordClear(progress.getCurrentStage(), {
       stars: result.stats?.stars || 0,
       score: result.score,
@@ -130,6 +180,7 @@ const handleMainGameEnd = async (result) => {
     });
     await flow.fire('스테이지 클리어시');
   } else if (result.outcome === 'fail') {
+    resetClearStreak();
     await flow.fire('스테이지 시간이 다되어 게임패배시');
   }
 };
@@ -149,6 +200,7 @@ flow.update({
   continue: { coin: String(COIN_COST) },
   stage: { timer: '01:00' },
 });
+syncUnlimitedHearts();
 // pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
 
 flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
@@ -158,6 +210,17 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   if (sceneName === INGAME_UI_SCENE) {
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
+  }
+  if (sceneName === 'pop_BuyCoins') {
+    renderer.on('860', async () => {
+      await economy.grantCoins(5000, 'shop-860');
+      activateUnlimitedHearts();
+    });
+    renderer.on('480', async () => {
+      await economy.grantCoins(2500, 'shop-480');
+      await economy.grantHearts(10, Date.now(), 'shop-480');
+    });
+    renderer.on('320', () => economy.grantCoins(1000, 'shop-320'));
   }
   if ((sceneName === 'pop_Settings_1' || sceneName === 'pop_Settings') && popup) {
     if (activeGame?.state === 'running') activeGame.pause('settings');
@@ -323,7 +386,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   }
   const sessionToken = ++sceneSessionToken;
 
-  if (godotScene === 'main' && !continueWithoutHeart) {
+  if (godotScene === 'main' && !continueWithoutHeart && !hasUnlimitedHearts()) {
     const consumedHeart = await economy.consumeHeart();
     if (sessionToken !== sceneSessionToken) return;
     if (!consumedHeart) {

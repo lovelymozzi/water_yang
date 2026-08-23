@@ -896,6 +896,24 @@
           ]
         }
       ]
+    },
+    {
+      "stableId": "icon-heart-png-2285",
+      "layerType": "image",
+      "displayName": "icon_heart.png",
+      "x": 207,
+      "y": 51,
+      "scale": 0.8737373737373737,
+      "zIndex": 19,
+      "visual": {
+        "exportPath": "src/assets/event_icon_skkycupheart.webp",
+        "width": 44,
+        "height": 44
+      },
+      "image": {
+        "exportPath": "src/assets/event_icon_skkycupheart.webp",
+        "imageKey": "event.heart.active"
+      }
     }
   ],
   "hostedBy": [

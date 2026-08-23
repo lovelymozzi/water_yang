@@ -1024,6 +1024,47 @@
           ]
         }
       ]
+    },
+    {
+      "id": 2285,
+      "stableId": "icon-heart-png-2285",
+      "type": "image",
+      "name": "icon_heart.png",
+      "exportPath": "src/assets/event_icon_skkycupheart.webp",
+      "x": 207,
+      "y": 51,
+      "scale": 0.8737373737373737,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 19,
+      "visible": true,
+      "width": 44,
+      "height": 44,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1,
+      "imageKey": "event.heart.active"
     }
   ],
   "zLayers": [

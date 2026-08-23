@@ -31,5 +31,9 @@
   ],
   "Icon_WhiteIcon_Exit.webp": [
     "picto"
+  ],
+  "src/assets/event_icon_skkycupheart.webp": [
+    "match",
+    "heart"
   ]
 }

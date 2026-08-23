@@ -1445,7 +1445,13 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-176",
-      "fxGroupId": "fx-177"
+      "fxGroupId": "fx-177",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "860"
+        }
+      ]
     },
     {
       "id": 173,
@@ -1657,7 +1663,13 @@
         }
       },
       "groupId": "grp-176",
-      "fxGroupId": "fx-177"
+      "fxGroupId": "fx-177",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "860"
+        }
+      ]
     },
     {
       "id": 178,
@@ -1706,7 +1718,13 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-178",
-      "fxGroupId": "fx-180"
+      "fxGroupId": "fx-180",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "480"
+        }
+      ]
     },
     {
       "id": 180,
@@ -1812,7 +1830,13 @@
         }
       },
       "groupId": "grp-178",
-      "fxGroupId": "fx-180"
+      "fxGroupId": "fx-180",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "480"
+        }
+      ]
     },
     {
       "id": 182,
@@ -1861,7 +1885,13 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-182",
-      "fxGroupId": "fx-184"
+      "fxGroupId": "fx-184",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "320"
+        }
+      ]
     },
     {
       "id": 184,
@@ -1967,7 +1997,13 @@
         }
       },
       "groupId": "grp-182",
-      "fxGroupId": "fx-184"
+      "fxGroupId": "fx-184",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "320"
+        }
+      ]
     },
     {
       "id": 185,
