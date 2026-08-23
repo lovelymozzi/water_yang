@@ -425,8 +425,8 @@
       "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
       "toSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
       "trigger": {
-        "stableId": "entry-box-normal-png-383",
-        "eventName": "entry-box-normal-png-383:click"
+        "stableId": "entry-box-normal-png-300",
+        "eventName": "entry-box-normal-png-300:click"
       },
       "transitionOut": null,
       "transitionIn": null,
@@ -481,32 +481,6 @@
       "toSceneName": "Ingame"
     },
     {
-      "id": "edge-mt2s5zm58kw7",
-      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
-      "toSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662",
-      "trigger": {
-        "stableId": "setting-btn-option-png-2243",
-        "eventName": "setting-btn-option-png-2243:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_Settings_1",
-      "toSceneName": "pop_Give_up"
-    },
-    {
-      "id": "edge-mt2s61yid7xb",
-      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
-      "toSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
-      "trigger": {
-        "stableId": "setting-btn-option-png-2244",
-        "eventName": "setting-btn-option-png-2244:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_Settings_1",
-      "toSceneName": "pop_LevelFail"
-    },
-    {
       "id": "edge-mt2xs3kqkdvy",
       "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
       "toSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
@@ -518,33 +492,6 @@
       "transitionIn": null,
       "fromSceneName": "pop_Settings_1",
       "toSceneName": "pop_Fail"
-    },
-    {
-      "id": "edge-mt444sfi54ch",
-      "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
-      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "trigger": {
-        "stableId": "entry-box-normal-png-2287",
-        "eventName": "entry-box-normal-png-2287:click",
-        "condition": "\bpopup close"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_Settings_1",
-      "toSceneName": "Ingame"
-    },
-    {
-      "id": "edge-mt4465xo1rfz",
-      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "toSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
-      "trigger": {
-        "stableId": "entry-box-normal-png-383",
-        "eventName": "entry-box-normal-png-383:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "Ingame",
-      "toSceneName": "pop_Settings_1"
     }
   ],
   "entrySceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",

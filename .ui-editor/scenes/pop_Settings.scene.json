@@ -8,6 +8,8 @@
   "bgGradientAngle": 180,
   "bgImagePath": "common_bg_pt_2.png",
   "bgTileSize": 86,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
   "bgStretchMode": "cover",
   "bgScrollEnabled": true,
   "bgScrollDirection": "up-right",
@@ -170,21 +172,7 @@
       "sliceB": 68,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "assetId": "src/assets/common_box_teambox.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "sliceRepeat": "stretch"
     },
     {
       "id": 290,
@@ -225,20 +213,6 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "assetId": "src/assets/common_btn_top_x_blue.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      },
       "events": [
         {
           "trigger": "click",
@@ -393,21 +367,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-328",
-      "fxGroupId": "fx-329",
-      "assetId": "src/assets/setting_btn_option.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-329"
     },
     {
       "id": 293,
@@ -415,7 +375,7 @@
       "type": "image",
       "name": "setting_btn_option.png",
       "exportPath": "src/assets/setting_btn_option.png",
-      "x": 125,
+      "x": 162,
       "y": 149,
       "scale": 0.5,
       "scaleX": 1,
@@ -449,21 +409,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-330",
-      "fxGroupId": "fx-331",
-      "assetId": "src/assets/setting_btn_option.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-331"
     },
     {
       "id": 294,
@@ -471,7 +417,7 @@
       "type": "image",
       "name": "setting_btn_option.png",
       "exportPath": "src/assets/setting_btn_option.png",
-      "x": 205,
+      "x": 269,
       "y": 149,
       "scale": 0.5,
       "scaleX": 1,
@@ -505,21 +451,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-332",
-      "fxGroupId": "fx-333",
-      "assetId": "src/assets/setting_btn_option.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-333"
     },
     {
       "id": 295,
@@ -534,7 +466,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 8,
-      "visible": true,
+      "visible": false,
       "width": 118,
       "height": 126,
       "flipX": false,
@@ -561,21 +493,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-334",
-      "fxGroupId": "fx-335",
-      "assetId": "src/assets/setting_btn_option.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-335"
     },
     {
       "id": 297,
@@ -622,7 +540,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "Music",
+            "content": "VFX",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -691,7 +609,7 @@
       "source": "preset",
       "name": "text_sound",
       "exportPath": "",
-      "x": 119,
+      "x": 156,
       "y": 122,
       "scale": 1,
       "scaleX": 1,
@@ -729,7 +647,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "Sound",
+            "content": "BGM",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -798,7 +716,7 @@
       "source": "preset",
       "name": "text_Vibration",
       "exportPath": "",
-      "x": 199,
+      "x": 263,
       "y": 122,
       "scale": 1,
       "scaleX": 1,
@@ -836,7 +754,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "Vibration",
+            "content": "VIB",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -912,7 +830,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 12,
-      "visible": true,
+      "visible": false,
       "zLayerId": "zl-content",
       "componentState": {
         "name": "text_Hint",
@@ -1045,21 +963,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-328",
-      "fxGroupId": "fx-329",
-      "assetId": "src/assets/ingame_btn_pause_music.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-329"
     },
     {
       "id": 312,
@@ -1101,21 +1005,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-328",
-      "fxGroupId": "fx-329",
-      "assetId": "src/assets/ingame_btn_pause_music_off.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-329"
     },
     {
       "id": 315,
@@ -1123,7 +1013,7 @@
       "type": "image",
       "name": "ingame_btn_pause_sound.png",
       "exportPath": "src/assets/ingame_btn_pause_sound.png",
-      "x": 136,
+      "x": 173,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1157,21 +1047,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-330",
-      "fxGroupId": "fx-331",
-      "assetId": "src/assets/ingame_btn_pause_sound.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-331"
     },
     {
       "id": 316,
@@ -1179,7 +1055,7 @@
       "type": "image",
       "name": "ingame_btn_pause_sound_off.png",
       "exportPath": "src/assets/ingame_btn_pause_sound_off.png",
-      "x": 136,
+      "x": 173,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1213,21 +1089,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-330",
-      "fxGroupId": "fx-331",
-      "assetId": "src/assets/ingame_btn_pause_sound_off.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-331"
     },
     {
       "id": 319,
@@ -1235,7 +1097,7 @@
       "type": "image",
       "name": "ingame_btn_pause_vibration_off.png",
       "exportPath": "src/assets/ingame_btn_pause_vibration_off.png",
-      "x": 215,
+      "x": 279,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1269,21 +1131,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-332",
-      "fxGroupId": "fx-333",
-      "assetId": "src/assets/ingame_btn_pause_vibration_off.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-333"
     },
     {
       "id": 320,
@@ -1291,7 +1139,7 @@
       "type": "image",
       "name": "ingame_btn_pause_vibration2.png",
       "exportPath": "src/assets/ingame_btn_pause_vibration2.png",
-      "x": 212,
+      "x": 276,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1325,21 +1173,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-332",
-      "fxGroupId": "fx-333",
-      "assetId": "src/assets/ingame_btn_pause_vibration2.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-333"
     },
     {
       "id": 323,
@@ -1354,7 +1188,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 19,
-      "visible": true,
+      "visible": false,
       "width": 76,
       "height": 70,
       "flipX": false,
@@ -1381,21 +1215,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-334",
-      "fxGroupId": "fx-335",
-      "assetId": "src/assets/ingame_btn_pause_hint.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-335"
     },
     {
       "id": 324,
@@ -1437,21 +1257,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-334",
-      "fxGroupId": "fx-335",
-      "assetId": "src/assets/ingame_btn_pause_hint_off.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-335"
     },
     {
       "id": 325,
@@ -1521,21 +1327,7 @@
       "sliceEnabled": true,
       "sliceScale": 1,
       "sliceRepeat": "stretch",
-      "groupId": "grp-336",
-      "assetId": "src/assets/ingame_toggle_default.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-336"
     },
     {
       "id": 326,
@@ -1583,21 +1375,7 @@
       "sliceEnabled": true,
       "sliceScale": 1,
       "sliceRepeat": "stretch",
-      "groupId": "grp-336",
-      "assetId": "src/assets/ingame_toggle_off.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-336"
     },
     {
       "id": 340,
@@ -1668,21 +1446,7 @@
       "sliceEnabled": true,
       "sliceScale": 1,
       "sliceRepeat": "stretch",
-      "groupId": "grp-340",
-      "assetId": "src/assets/ingame_toggle_default.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-340"
     },
     {
       "id": 341,
@@ -1730,21 +1494,7 @@
       "sliceEnabled": true,
       "sliceScale": 1,
       "sliceRepeat": "stretch",
-      "groupId": "grp-340",
-      "assetId": "src/assets/ingame_toggle_on.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "groupId": "grp-340"
     },
     {
       "id": 345,
@@ -1897,21 +1647,7 @@
       "sliceB": 0,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "assetId": "src/assets/setting_box_slash.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "sliceRepeat": "stretch"
     },
     {
       "id": 348,
@@ -1960,21 +1696,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-352",
-      "fxGroupId": "fx-353",
-      "assetId": "src/assets/setting_btn_connect_line.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-353"
     },
     {
       "id": 350,
@@ -2130,21 +1852,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-354",
-      "fxGroupId": "fx-356",
-      "assetId": "src/assets/setting_btn_connect_line.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-356"
     },
     {
       "id": 356,
@@ -2300,21 +2008,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-358",
-      "fxGroupId": "fx-360",
-      "assetId": "src/assets/setting_btn_connect_line.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-360"
     },
     {
       "id": 360,
@@ -2470,21 +2164,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-362",
-      "fxGroupId": "fx-364",
-      "assetId": "src/assets/setting_btn_connect_line.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-364"
     },
     {
       "id": 364,
@@ -2638,21 +2318,7 @@
       "sliceB": 0,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "assetId": "src/assets/setting_box_slash.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "sliceRepeat": "stretch"
     },
     {
       "id": 366,
@@ -2701,21 +2367,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-369",
-      "fxGroupId": "fx-370",
-      "assetId": "src/assets/setting_btn_copy.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-370"
     },
     {
       "id": 367,
@@ -2972,21 +2624,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-379",
-      "fxGroupId": "fx-380",
-      "assetId": "src/assets/setting_btn_account.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-380"
     },
     {
       "id": 373,
@@ -3035,21 +2673,7 @@
       "sliceScale": 1,
       "sliceRepeat": "stretch",
       "groupId": "grp-382",
-      "fxGroupId": "fx-383",
-      "assetId": "src/assets/setting_btn_account.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-383"
     },
     {
       "id": 374,
@@ -3303,21 +2927,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-382",
-      "fxGroupId": "fx-383",
-      "assetId": "src/assets/common_icon_reddot.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "fxGroupId": "fx-383"
     },
     {
       "id": 383,
@@ -3570,21 +3180,7 @@
       "sliceB": 0,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "assetId": "src/assets/setting_btn_account.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "sliceRepeat": "stretch"
     },
     {
       "id": 391,
@@ -3738,15 +3334,51 @@
     },
     {
       "id": "grp-328",
-      "name": "Music"
+      "name": "Music",
+      "widget": {
+        "type": "toggle",
+        "key": "sound",
+        "off": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-music-off-png-312"
+        },
+        "on": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-music-png-311"
+        }
+      }
     },
     {
       "id": "grp-330",
-      "name": "Sound"
+      "name": "Sound",
+      "widget": {
+        "type": "toggle",
+        "key": "music",
+        "off": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-sound-off-png-316"
+        },
+        "on": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-sound-png-315"
+        }
+      }
     },
     {
       "id": "grp-332",
-      "name": "Vibration"
+      "name": "Vibration",
+      "widget": {
+        "type": "toggle",
+        "key": "vibration",
+        "on": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-vibration2-png-320"
+        },
+        "off": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-vibration-off-png-319"
+        }
+      }
     },
     {
       "id": "grp-334",
@@ -4149,6 +3781,5 @@
       207
     ]
   },
-  "uuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b",
-  "bgAssetId": "common_bg_pt.png"
+  "uuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b"
 }

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-22T10:53:02.886Z",
+  "generatedAt": "2026-08-23T09:51:07.207Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
   "errors": [
     {
@@ -9,6 +9,12 @@
       "where": "edge Ingame→pop_BuyCoins",
       "message": "연결의 트리거 오브젝트가 출발 씬에 없습니다 — 이 흐름은 발생하지 않습니다. 에디터 흐름도의 \"끊어진 연결\"에서 새 오브젝트로 재연결하거나 연결을 삭제하세요.",
       "detail": "오브젝트 bar1-png-2"
+    },
+    {
+      "code": "orphan-trigger",
+      "where": "edge Ingame→pop_Settings_1",
+      "message": "연결의 트리거 오브젝트가 출발 씬에 없습니다 — 이 흐름은 발생하지 않습니다. 에디터 흐름도의 \"끊어진 연결\"에서 새 오브젝트로 재연결하거나 연결을 삭제하세요.",
+      "detail": "오브젝트 entry-box-normal-png-300"
     }
   ],
   "warnings": [
@@ -17,6 +23,12 @@
       "where": "nav home_bottom 탭 \"Shop\"",
       "message": "팝업 씬이 탭에 연결되어 있습니다(해당 nav 씬을 열어 탭의 매칭 씬을 확인) — 팝업은 오버레이(__close__)로 열리는 규약이라 탭 상주 화면과 의미가 충돌합니다.",
       "detail": "pop_BuyCoins"
+    },
+    {
+      "code": "event-not-in-flow",
+      "where": "pop_Settings_1.setting",
+      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
+      "detail": "→ Ingame [\bpopup close]"
     },
     {
       "code": "event-not-in-flow",
@@ -35,12 +47,6 @@
       "where": "Ingame",
       "message": "표준 바인딩 키가 아닙니다 — 매니저 attachRenderer 자동 연동이 되지 않아 게임이 수동 매핑하게 됩니다.",
       "detail": "'stage.timer' (표준: stage.current/stage.next+1/stage.next+2/stage.next+3)"
-    },
-    {
-      "code": "game-unwired-condition",
-      "where": "edge pop_Settings_1→Ingame",
-      "message": "흐름도 조건 키의 술어가 게임 코드에 없습니다 — flow.defineCondition('\bpopup close', () => ...) 를 등록하지 않으면 해당 분기가 동작하지 않습니다.",
-      "detail": "'\bpopup close'"
     }
   ],
   "infos": [

@@ -42,14 +42,6 @@
 - 이벤트: 없음
 <!-- SCENE:home_bottom END -->
 
-<!-- SCENE:ingame BEGIN -->
-#### `ingame`  ·  contract: `./web/ui/ingame.contract.json`
-- sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
-- 이벤트: `bar1-png-374:click` · `gimmick-coinpurse-coin-png-375:click` · `bar1-png-376:click` · `home-btn-plus-png-377:click` · `bar1-png-378:click` · `entry-box-normal-png-300:click`
-- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer`
-- GameField 레이어 있음
-<!-- SCENE:ingame END -->
-
 <!-- SCENE:pop_BuyCoins BEGIN -->
 #### `pop_BuyCoins`  ·  contract: `./web/ui/pop_BuyCoins.contract.json`
 - sceneUuid: `b11144cd-f2c6-4f82-a4a8-c76b3496cd70`
@@ -78,7 +70,7 @@
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
 - sceneUuid: `2bce71e3-b626-4295-919d-e24cb07f1ae2`
-- 이벤트: `plain-text-563:click` · `shape-round-rect-568:click`
+- 이벤트: `plain-text-563:click` · `shape-round-rect-568:click` · `shape-round-rect-569:click`
 <!-- SCENE:pop_LevelFail END -->
 
 <!-- SCENE:pop_LevelWin BEGIN -->
@@ -98,12 +90,13 @@
 #### `pop_Settings`  ·  contract: `./web/ui/pop_Settings.contract.json`
 - sceneUuid: `8fc00305-7288-4b2a-90df-9ff83554cb5b`
 - 이벤트: `common-btn-top-x-blue-png-290:click`
+- 위젯: `sound`(toggle) · `music`(toggle) · `vibration`(toggle) — 입력 이벤트: `widget:sound` · `widget:music` · `widget:vibration`
 <!-- SCENE:pop_Settings END -->
 
 <!-- SCENE:pop_Settings_1 BEGIN -->
 #### `pop_Settings_1`  ·  contract: `./web/ui/pop_Settings_1.contract.json`
 - sceneUuid: `235b7eb7-c304-45b3-aa55-25f18050fd64`
-- 이벤트: `setting-btn-option-png-2243:click` · `setting-btn-option-png-2244:click` · `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click` · `entry-box-normal-png-2287:click`
+- 이벤트: `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click` · `entry-box-normal-png-2287:click`
 - 위젯: `music`(toggle) · `sound`(toggle) · `vibration`(toggle) · `lobby`(toggle) · `retry`(toggle) — 입력 이벤트: `widget:music` · `widget:sound` · `widget:vibration` · `widget:lobby` · `widget:retry`
 <!-- SCENE:pop_Settings_1 END -->
 

@@ -18,6 +18,8 @@ const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
 const BUTTON_CLICK_SFX = '../src/sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
 const CAT_MOUTH_SFX = '../src/sound/stu9-cute-cat-352656_optimized.mp3';
+const LOBBY_BGM = '../src/sound/geoffharvey-fat-cat-374614_optimized.mp3';
+const INGAME_BGM = '../src/sound/loswin23-bird-chirping-567995_optimized.mp3';
 const STAGE_TIME_LIMIT_SECONDS = 60;
 const SETTINGS_MENU_MOTION_MS = 240;
 const SETTINGS_MENU_STAGGER_MS = 60;
@@ -55,6 +57,10 @@ const flow = new FlowDriver({
 });
 
 let hasUserGesture = false;
+let lobbyBgmEnabled = true;
+let ingameBgmEnabled = true;
+let buttonSfxEnabled = true;
+let hapticsEnabled = true;
 sound.unlockOnFirstGesture(() => {
   // 비동기 Godot progress 이벤트의 SFX도 재생되도록, 사용자 제스처 안에서
   // 무음 SFX를 한 번 재생해 브라우저의 미디어 권한을 해제한다.
@@ -62,9 +68,10 @@ sound.unlockOnFirstGesture(() => {
   hasUserGesture = true;
 });
 document.addEventListener('click', event => {
-  if (event.target instanceof Element && event.target.closest('[data-stable-id]')) {
+  if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) {
     sound.playSfx(BUTTON_CLICK_SFX);
   }
+  if (hapticsEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) navigator.vibrate?.(12);
 });
 
 let loadingReady = false;
@@ -99,10 +106,9 @@ let activeGame = null;
 let activeSceneName = '';
 let continueWithoutHeart = false;
 let sceneSessionToken = 0;
-const settingsOpenWired = new WeakSet();
 
 const handleGodotSfx = ({ sfx }) => {
-  if (sfx === 'cat-mouth-open' && hasUserGesture) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
+  if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
 };
 
 const handleMainGameEnd = async (result) => {
@@ -138,14 +144,56 @@ flow.update({
 
 flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
   activeSceneName = sceneName;
-  if (sceneName === 'pop_Settings_1' && popup) {
+  if (sceneName === LOBBY_UI_SCENE && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+  if (sceneName === INGAME_UI_SCENE) {
+    if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
+    else sound.stopBgm();
+  }
+  if ((sceneName === 'pop_Settings_1' || sceneName === 'pop_Settings') && popup) {
     if (activeGame?.state === 'running') activeGame.pause('settings');
-    const menuMotionTargets = SETTINGS_MENU_GROUPS.map(({ name, offset, layerIds }) => ({
-      offset,
-      targets: layerIds
-        ? layerIds.map(stableId => renderer.getElement(stableId)).filter(Boolean)
-        : [renderer.getGroup(name)].filter(Boolean),
-    }));
+    renderer.update({
+      sound: sceneName === 'pop_Settings' ? buttonSfxEnabled : ingameBgmEnabled,
+      music: sceneName === 'pop_Settings' ? lobbyBgmEnabled : buttonSfxEnabled,
+      vibration: hapticsEnabled,
+    });
+    renderer.on('widget:sound', ({ value }) => {
+      if (sceneName === 'pop_Settings') {
+        buttonSfxEnabled = !!value;
+        if (!buttonSfxEnabled) sound.stopSfx('cat-mouth-open');
+        renderer.update({ sound: buttonSfxEnabled });
+      } else {
+        ingameBgmEnabled = !!value;
+        if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
+        else sound.stopBgm();
+        renderer.update({ sound: ingameBgmEnabled });
+      }
+    });
+    renderer.on('widget:music', ({ value }) => {
+      if (sceneName === 'pop_Settings') {
+        lobbyBgmEnabled = !!value;
+        if (lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+        else sound.stopBgm();
+        renderer.update({ music: lobbyBgmEnabled });
+      } else {
+        buttonSfxEnabled = !!value;
+        if (!buttonSfxEnabled) sound.stopSfx('cat-mouth-open');
+        renderer.update({ music: buttonSfxEnabled });
+      }
+    });
+    renderer.on('widget:vibration', ({ value }) => {
+      hapticsEnabled = !!value;
+      if (hapticsEnabled) navigator.vibrate?.(12);
+      else navigator.vibrate?.(0);
+      renderer.update({ vibration: hapticsEnabled });
+    });
+    const menuMotionTargets = sceneName === 'pop_Settings_1'
+      ? SETTINGS_MENU_GROUPS.map(({ name, offset, layerIds }) => ({
+          offset,
+          targets: layerIds
+            ? layerIds.map(stableId => renderer.getElement(stableId)).filter(Boolean)
+            : [renderer.getGroup(name)].filter(Boolean),
+        }))
+      : [];
     ['entry-box-normal-png-2287', 'home-btn-setting-webp-2288'].forEach(stableId => {
       const closeButton = renderer.getElement(stableId);
       if (!closeButton) return;
@@ -201,12 +249,6 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
   }
   if (sceneName === INGAME_UI_SCENE) {
     renderer.getGroup('setting')?.style.removeProperty('visibility');
-  }
-  if (sceneName === INGAME_UI_SCENE && !settingsOpenWired.has(renderer)) {
-    settingsOpenWired.add(renderer);
-    renderer.on('entry-box-normal-png-300:click', () => {
-      flow.goto('pop_Settings_1').catch(error => console.error('[Settings] 팝업 열기 오류:', error));
-    });
   }
   if (sceneName === SPLASH_UI_SCENE) {
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });

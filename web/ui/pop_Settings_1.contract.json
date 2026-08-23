@@ -570,14 +570,7 @@
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
         "height": 126
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "setting-btn-option-png-2243:click",
-          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
-        }
-      ]
+      }
     },
     {
       "stableId": "setting-btn-option-png-2244",
@@ -591,14 +584,7 @@
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
         "height": 126
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "setting-btn-option-png-2244:click",
-          "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
-        }
-      ]
+      }
     },
     {
       "stableId": "setting-btn-option-png-2245",
@@ -662,14 +648,7 @@
         "exportPath": "src/assets/ingame_btn_pause_sound.png",
         "width": 76,
         "height": 70
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "setting-btn-option-png-2243:click",
-          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
-        }
-      ]
+      }
     },
     {
       "stableId": "ingame-btn-pause-sound-off-png-2253",
@@ -683,14 +662,7 @@
         "exportPath": "src/assets/ingame_btn_pause_sound_off.png",
         "width": 76,
         "height": 70
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "setting-btn-option-png-2243:click",
-          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
-        }
-      ]
+      }
     },
     {
       "stableId": "ingame-btn-pause-vibration-off-png-2254",
@@ -704,14 +676,7 @@
         "exportPath": "src/assets/ingame_btn_pause_vibration_off.png",
         "width": 76,
         "height": 70
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "setting-btn-option-png-2244:click",
-          "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
-        }
-      ]
+      }
     },
     {
       "stableId": "ingame-btn-pause-vibration2-png-2255",
@@ -725,14 +690,7 @@
         "exportPath": "src/assets/ingame_btn_pause_vibration2.png",
         "width": 90,
         "height": 70
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "setting-btn-option-png-2244:click",
-          "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
-        }
-      ]
+      }
     },
     {
       "stableId": "back-off-png-2278",

@@ -8,6 +8,8 @@
   "bgGradientAngle": 180,
   "bgImagePath": "",
   "bgTileSize": 64,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
   "bgStretchMode": "cover",
   "bgScrollEnabled": false,
   "bgScrollDirection": "right",
@@ -308,8 +310,7 @@
             "sliceB": 0,
             "sliceScale": 1,
             "sliceRepeat": "stretch",
-            "zIndex": 1,
-            "assetId": "src/assets/button_green_4_1.png"
+            "zIndex": 1
           }
         ],
         "selectedImageIndex": 0,
@@ -502,21 +503,7 @@
       "texts": [],
       "selectedTextIndex": -1,
       "locked": true,
-      "zLayerId": "zl-content",
-      "assetId": "src/assets/heart_broken_1_1.png",
-      "cssAnimation": {
-        "enabled": false,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
-      },
-      "particleEffect": {
-        "enabled": false,
-        "presetId": "sparkle-burst"
-      }
+      "zLayerId": "zl-content"
     },
     {
       "id": 567,
@@ -654,8 +641,7 @@
             "shadowBlur": 8,
             "shadowColor": "#000000",
             "shadowOpacity": 50,
-            "zIndex": 2,
-            "assetId": "src/assets/Icon_Close02_2.png"
+            "zIndex": 2
           }
         ],
         "selectedImageIndex": 0,
@@ -739,8 +725,7 @@
             "shadowBlur": 8,
             "shadowColor": "#000000",
             "shadowOpacity": 50,
-            "zIndex": 2,
-            "assetId": "src/assets/Icon_Close02_2.png"
+            "zIndex": 2
           }
         ],
         "selectedImageIndex": 0,

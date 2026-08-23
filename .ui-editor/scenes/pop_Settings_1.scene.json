@@ -100,14 +100,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2236",
-      "fxGroupId": "fx-2240",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
-        }
-      ]
+      "fxGroupId": "fx-2240"
     },
     {
       "id": 2244,
@@ -149,14 +142,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2237",
-      "fxGroupId": "fx-2241",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
-        }
-      ]
+      "fxGroupId": "fx-2241"
     },
     {
       "id": 2245,
@@ -331,14 +317,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2236",
-      "fxGroupId": "fx-2240",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
-        }
-      ]
+      "fxGroupId": "fx-2240"
     },
     {
       "id": 2253,
@@ -380,14 +359,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2236",
-      "fxGroupId": "fx-2240",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
-        }
-      ]
+      "fxGroupId": "fx-2240"
     },
     {
       "id": 2254,
@@ -429,14 +401,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2237",
-      "fxGroupId": "fx-2241",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
-        }
-      ]
+      "fxGroupId": "fx-2241"
     },
     {
       "id": 2255,
@@ -478,14 +443,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2237",
-      "fxGroupId": "fx-2241",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2"
-        }
-      ]
+      "fxGroupId": "fx-2241"
     },
     {
       "id": 2278,

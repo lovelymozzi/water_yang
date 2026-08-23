@@ -605,6 +605,7 @@
       "y": 33,
       "scale": 0.75,
       "zIndex": 12,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/shop_package_time_blue_1.png",
         "width": 152,
@@ -679,6 +680,7 @@
       "x": 5,
       "y": 36,
       "zIndex": 13,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/gimmick_coinpurse_coin_4.png",
         "width": 39,
@@ -692,6 +694,7 @@
       "x": 92,
       "y": 41,
       "zIndex": 14,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/home_btn_plus_3.png",
         "width": 32,
