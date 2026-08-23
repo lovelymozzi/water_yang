@@ -70,6 +70,12 @@ sound.unlockOnFirstGesture(() => {
   hasUserGesture = true;
 });
 document.addEventListener('click', event => {
+  const isLoadingBar = event.target instanceof Element
+    && !!event.target.closest('[data-stable-id="loading-out-png-11"]');
+  if (loadingReady && activeSceneName === SPLASH_UI_SCENE && !isLoadingBar) {
+    splashRenderer?.getElement('loading-out-png-11')?.click();
+    return;
+  }
   if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) {
     sound.playSfx(BUTTON_CLICK_SFX);
   }
@@ -77,6 +83,7 @@ document.addEventListener('click', event => {
 });
 
 let loadingReady = false;
+let splashRenderer = null;
 flow.defineCondition('로딩', () => loadingReady);
 flow.defineCondition('current stage>4', () => progress.getCurrentStage() > 4);
 flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
@@ -253,6 +260,8 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
     renderer.getGroup('setting')?.style.removeProperty('visibility');
   }
   if (sceneName === SPLASH_UI_SCENE) {
+    loadingReady = false;
+    splashRenderer = renderer;
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
     await game.start(godotCartridge, {
@@ -276,8 +285,7 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
     if (!parking.isConnected) document.body.appendChild(parking);
     if (gameHost) parking.appendChild(gameHost);
     loadingReady = true;
-    flow.update({ loading: { prograss: 100 }, loadingMessage: 'Loading... 100%' });
-    setTimeout(() => renderer.getElement('loading-out-png-11')?.click());
+    flow.update({ loading: { prograss: 100 }, loadingMessage: 'Tap to screen' });
     return;
   }
   const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
