@@ -438,6 +438,15 @@
           "interval": 2,
           "direction": "right",
           "color": "#ffffff"
+        },
+        "cssAnimation": {
+          "enabled": true,
+          "presetId": "flash",
+          "duration": 1,
+          "delay": 0,
+          "repeat": 1,
+          "loop": true,
+          "loopDelay": 0
         }
       },
       "groupId": "grp-15",

@@ -383,6 +383,33 @@
           }
         }
       },
+      "effects": [
+        {
+          "type": "css-animation",
+          "source": {
+            "provider": "animate.css",
+            "name": "flash",
+            "className": "ui-blink-once"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "timing": {
+            "durationMs": 1000,
+            "delayMs": 0,
+            "iteration": 1,
+            "loopDelayMs": 0
+          },
+          "params": {
+            "presetId": "flash",
+            "group": "Cute / Attention",
+            "phase": "attention",
+            "className": "ui-blink-once",
+            "baseClass": "animate__animated",
+            "loop": true
+          }
+        }
+      ],
       "texts": [
         {
           "slotIndex": 0,

@@ -114,6 +114,7 @@
 - `shine` × 4
 - `css-animation:bounce-in` × 2
 - `spin` × 2
+- `css-animation:flash` × 1
 
 ## 씬별 배경
 
