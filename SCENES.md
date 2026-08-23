@@ -26,15 +26,6 @@
 - 이벤트: 없음
 <!-- SCENE:Ranking END -->
 
-<!-- SCENE:Splash BEGIN -->
-#### `Splash`  ·  contract: `./web/ui/splash.contract.json`
-- sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: `loading-out-png-11:click`
-- 텍스트 바인딩: `loadingMessage`
-- 위젯: `loading.prograss`(fill)
-- GameField 레이어 있음
-<!-- SCENE:Splash END -->
-
 <!-- SCENE:home_bottom BEGIN -->
 #### `home_bottom`  ·  contract: `./web/ui/home_bottom.contract.json`
 - sceneType: `navigation`
@@ -70,7 +61,7 @@
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
 - sceneUuid: `2bce71e3-b626-4295-919d-e24cb07f1ae2`
-- 이벤트: `plain-text-563:click` · `shape-round-rect-568:click` · `shape-round-rect-569:click`
+- 이벤트: `plain-text-563:click` · `shape-round-rect-568:click`
 <!-- SCENE:pop_LevelFail END -->
 
 <!-- SCENE:pop_LevelWin BEGIN -->
@@ -90,7 +81,6 @@
 #### `pop_Settings`  ·  contract: `./web/ui/pop_Settings.contract.json`
 - sceneUuid: `8fc00305-7288-4b2a-90df-9ff83554cb5b`
 - 이벤트: `common-btn-top-x-blue-png-290:click`
-- 위젯: `sound`(toggle) · `music`(toggle) · `vibration`(toggle) — 입력 이벤트: `widget:sound` · `widget:music` · `widget:vibration`
 <!-- SCENE:pop_Settings END -->
 
 <!-- SCENE:pop_Settings_1 BEGIN -->
@@ -105,5 +95,14 @@
 - sceneUuid: `87eb9dd6-588c-4b1d-9c70-2cd2df0a04fa`
 - 이벤트: 없음
 <!-- SCENE:pop_entry END -->
+
+<!-- SCENE:splash BEGIN -->
+#### `splash`  ·  contract: `./web/ui/splash.contract.json`
+- sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
+- 이벤트: `loading-out-png-11:click`
+- 텍스트 바인딩: `loadingMessage`
+- 위젯: `loading.prograss`(fill)
+- GameField 레이어 있음
+<!-- SCENE:splash END -->
 
 

@@ -50,18 +50,6 @@
     {
       "id": "grp-328",
       "name": "Music",
-      "widget": {
-        "type": "toggle",
-        "key": "sound",
-        "off": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-music-off-png-312"
-        },
-        "on": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-music-png-311"
-        }
-      },
       "layerStableIds": [
         "setting-btn-option-png-292",
         "text-music-297",
@@ -72,18 +60,6 @@
     {
       "id": "grp-330",
       "name": "Sound",
-      "widget": {
-        "type": "toggle",
-        "key": "music",
-        "off": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-sound-off-png-316"
-        },
-        "on": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-sound-png-315"
-        }
-      },
       "layerStableIds": [
         "setting-btn-option-png-293",
         "text-sound-306",
@@ -94,18 +70,6 @@
     {
       "id": "grp-332",
       "name": "Vibration",
-      "widget": {
-        "type": "toggle",
-        "key": "vibration",
-        "on": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-vibration2-png-320"
-        },
-        "off": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-vibration-off-png-319"
-        }
-      },
       "layerStableIds": [
         "setting-btn-option-png-294",
         "text-vibration-307",
@@ -948,7 +912,7 @@
       "stableId": "setting-btn-option-png-293",
       "layerType": "image",
       "displayName": "setting_btn_option.png",
-      "x": 162,
+      "x": 125,
       "y": 149,
       "scale": 0.5,
       "zIndex": 6,
@@ -962,7 +926,7 @@
       "stableId": "setting-btn-option-png-294",
       "layerType": "image",
       "displayName": "setting_btn_option.png",
-      "x": 269,
+      "x": 205,
       "y": 149,
       "scale": 0.5,
       "zIndex": 7,
@@ -980,7 +944,6 @@
       "y": 149,
       "scale": 0.5,
       "zIndex": 8,
-      "visible": false,
       "visual": {
         "exportPath": "src/assets/setting_btn_option.png",
         "width": 118,
@@ -1073,7 +1036,7 @@
       "texts": [
         {
           "slotIndex": 0,
-          "staticContent": "VFX",
+          "staticContent": "Music",
           "bindingKey": "",
           "fontSize": 20,
           "fontWeight": "normal",
@@ -1110,7 +1073,7 @@
       "stableId": "text-sound-306",
       "layerType": "component",
       "displayName": "text_sound",
-      "x": 156,
+      "x": 119,
       "y": 122,
       "zIndex": 10,
       "visual": {
@@ -1192,7 +1155,7 @@
       "texts": [
         {
           "slotIndex": 0,
-          "staticContent": "BGM",
+          "staticContent": "Sound",
           "bindingKey": "",
           "fontSize": 20,
           "fontWeight": "normal",
@@ -1229,7 +1192,7 @@
       "stableId": "text-vibration-307",
       "layerType": "component",
       "displayName": "text_Vibration",
-      "x": 263,
+      "x": 199,
       "y": 122,
       "zIndex": 11,
       "visual": {
@@ -1311,7 +1274,7 @@
       "texts": [
         {
           "slotIndex": 0,
-          "staticContent": "VIB",
+          "staticContent": "Vibration",
           "bindingKey": "",
           "fontSize": 20,
           "fontWeight": "normal",
@@ -1351,7 +1314,6 @@
       "x": 280,
       "y": 122,
       "zIndex": 12,
-      "visible": false,
       "visual": {
         "model": {
           "shape": {
@@ -1497,7 +1459,7 @@
       "stableId": "ingame-btn-pause-sound-png-315",
       "layerType": "image",
       "displayName": "ingame_btn_pause_sound.png",
-      "x": 173,
+      "x": 136,
       "y": 159,
       "scale": 0.5,
       "zIndex": 15,
@@ -1512,7 +1474,7 @@
       "stableId": "ingame-btn-pause-sound-off-png-316",
       "layerType": "image",
       "displayName": "ingame_btn_pause_sound_off.png",
-      "x": 173,
+      "x": 136,
       "y": 159,
       "scale": 0.5,
       "zIndex": 16,
@@ -1526,7 +1488,7 @@
       "stableId": "ingame-btn-pause-vibration-off-png-319",
       "layerType": "image",
       "displayName": "ingame_btn_pause_vibration_off.png",
-      "x": 279,
+      "x": 215,
       "y": 159,
       "scale": 0.5,
       "zIndex": 17,
@@ -1541,7 +1503,7 @@
       "stableId": "ingame-btn-pause-vibration2-png-320",
       "layerType": "image",
       "displayName": "ingame_btn_pause_vibration2.png",
-      "x": 276,
+      "x": 212,
       "y": 159,
       "scale": 0.5,
       "zIndex": 18,
@@ -1559,7 +1521,6 @@
       "y": 159,
       "scale": 0.5,
       "zIndex": 19,
-      "visible": false,
       "visual": {
         "exportPath": "src/assets/ingame_btn_pause_hint.png",
         "width": 76,

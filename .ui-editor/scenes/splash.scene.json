@@ -1,5 +1,5 @@
 {
-  "name": "Splash",
+  "name": "splash",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -294,7 +294,7 @@
       "rotation": 0,
       "zIndex": 6,
       "visible": true,
-      "width": 97,
+      "width": 207,
       "height": 26,
       "flipX": false,
       "flipY": false,
@@ -345,7 +345,14 @@
             }
           ]
         }
-      ]
+      ],
+      "sliceL": 107,
+      "sliceT": 0,
+      "sliceR": 107,
+      "sliceB": 0,
+      "sliceEnabled": true,
+      "sliceScale": 0.3,
+      "sliceRepeat": "stretch"
     },
     {
       "id": 15,

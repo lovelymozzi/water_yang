@@ -131,4 +131,4 @@
 - `pop_Settings` — 이미지 `common_bg_pt_2.png` (image-tile)
 - `pop_Settings_1` — 단색 `rgba(0,0,0,0.3)`
 - `Ranking` — 이미지 `common_bg_pt.png` (image-tile)
-- `Splash` — 단색 `#16213e`
+- `splash` — 단색 `#16213e`

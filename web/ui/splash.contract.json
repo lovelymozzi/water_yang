@@ -2,7 +2,7 @@
   "contractVersion": 1,
   "sceneId": "splash",
   "sceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
-  "sceneName": "Splash",
+  "sceneName": "splash",
   "canvas": {
     "width": 393,
     "height": 852
@@ -258,8 +258,33 @@
       "zIndex": 6,
       "visual": {
         "exportPath": "src/assets/loading_bar.png",
-        "width": 97,
-        "height": 26
+        "width": 207,
+        "height": 26,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 107,
+            "top": 0,
+            "right": 107,
+            "bottom": 0,
+            "scale": 0.3,
+            "repeat": "stretch"
+          }
+        }
       },
       "events": [
         {

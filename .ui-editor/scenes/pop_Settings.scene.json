@@ -375,7 +375,7 @@
       "type": "image",
       "name": "setting_btn_option.png",
       "exportPath": "src/assets/setting_btn_option.png",
-      "x": 162,
+      "x": 125,
       "y": 149,
       "scale": 0.5,
       "scaleX": 1,
@@ -417,7 +417,7 @@
       "type": "image",
       "name": "setting_btn_option.png",
       "exportPath": "src/assets/setting_btn_option.png",
-      "x": 269,
+      "x": 205,
       "y": 149,
       "scale": 0.5,
       "scaleX": 1,
@@ -466,7 +466,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 8,
-      "visible": false,
+      "visible": true,
       "width": 118,
       "height": 126,
       "flipX": false,
@@ -540,7 +540,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "VFX",
+            "content": "Music",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -609,7 +609,7 @@
       "source": "preset",
       "name": "text_sound",
       "exportPath": "",
-      "x": 156,
+      "x": 119,
       "y": 122,
       "scale": 1,
       "scaleX": 1,
@@ -647,7 +647,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "BGM",
+            "content": "Sound",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -716,7 +716,7 @@
       "source": "preset",
       "name": "text_Vibration",
       "exportPath": "",
-      "x": 263,
+      "x": 199,
       "y": 122,
       "scale": 1,
       "scaleX": 1,
@@ -754,7 +754,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "VIB",
+            "content": "Vibration",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -830,7 +830,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 12,
-      "visible": false,
+      "visible": true,
       "zLayerId": "zl-content",
       "componentState": {
         "name": "text_Hint",
@@ -1013,7 +1013,7 @@
       "type": "image",
       "name": "ingame_btn_pause_sound.png",
       "exportPath": "src/assets/ingame_btn_pause_sound.png",
-      "x": 173,
+      "x": 136,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1055,7 +1055,7 @@
       "type": "image",
       "name": "ingame_btn_pause_sound_off.png",
       "exportPath": "src/assets/ingame_btn_pause_sound_off.png",
-      "x": 173,
+      "x": 136,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1097,7 +1097,7 @@
       "type": "image",
       "name": "ingame_btn_pause_vibration_off.png",
       "exportPath": "src/assets/ingame_btn_pause_vibration_off.png",
-      "x": 279,
+      "x": 215,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1139,7 +1139,7 @@
       "type": "image",
       "name": "ingame_btn_pause_vibration2.png",
       "exportPath": "src/assets/ingame_btn_pause_vibration2.png",
-      "x": 276,
+      "x": 212,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1188,7 +1188,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 19,
-      "visible": false,
+      "visible": true,
       "width": 76,
       "height": 70,
       "flipX": false,
@@ -3337,48 +3337,16 @@
       "name": "Music",
       "widget": {
         "type": "toggle",
-        "key": "sound",
-        "off": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-music-off-png-312"
-        },
-        "on": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-music-png-311"
-        }
+        "key": "music"
       }
     },
     {
       "id": "grp-330",
-      "name": "Sound",
-      "widget": {
-        "type": "toggle",
-        "key": "music",
-        "off": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-sound-off-png-316"
-        },
-        "on": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-sound-png-315"
-        }
-      }
+      "name": "Sound"
     },
     {
       "id": "grp-332",
-      "name": "Vibration",
-      "widget": {
-        "type": "toggle",
-        "key": "vibration",
-        "on": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-vibration2-png-320"
-        },
-        "off": {
-          "kind": "layer",
-          "id": "ingame-btn-pause-vibration-off-png-319"
-        }
-      }
+      "name": "Vibration"
     },
     {
       "id": "grp-334",

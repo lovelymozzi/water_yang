@@ -14,7 +14,7 @@
 const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
-const SPLASH_UI_SCENE = 'Splash';
+const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_UI_SCENE = 'Lobby';
 const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
@@ -23,6 +23,7 @@ const CAT_MOUTH_SFX = '../src/sound/stu9-cute-cat-352656_optimized.mp3';
 const LOBBY_BGM = '../src/sound/geoffharvey-fat-cat-374614_optimized.mp3';
 const INGAME_BGM = '../src/sound/loswin23-bird-chirping-567995_optimized.mp3';
 const STAGE_TIME_LIMIT_SECONDS = 60;
+const SPLASH_LOAD_FILL_DURATION_MS = 700;
 const SETTINGS_MENU_MOTION_MS = 240;
 const SETTINGS_MENU_STAGGER_MS = 60;
 const SETTINGS_MENU_GROUPS = [
@@ -40,7 +41,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":32413132,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":32950508,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 
 import { FlowDriver } from './ui/flow-driver.js';
 import { EconomyManager } from './ui/economy-manager.js';
@@ -72,7 +73,7 @@ sound.unlockOnFirstGesture(() => {
 document.addEventListener('click', event => {
   const isLoadingBar = event.target instanceof Element
     && !!event.target.closest('[data-stable-id="loading-out-png-11"]');
-  if (loadingReady && activeSceneName === SPLASH_UI_SCENE && !isLoadingBar) {
+  if (loadingReady && activeSceneUuid === SPLASH_UI_SCENE_UUID && !isLoadingBar) {
     splashRenderer?.getElement('loading-out-png-11')?.click();
     return;
   }
@@ -83,7 +84,6 @@ document.addEventListener('click', event => {
 });
 
 let loadingReady = false;
-let splashRenderer = null;
 flow.defineCondition('로딩', () => loadingReady);
 flow.defineCondition('current stage>4', () => progress.getCurrentStage() > 4);
 flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
@@ -113,6 +113,8 @@ const godotCartridge = makeGodotCartridge({
 });
 let activeGame = null;
 let activeSceneName = '';
+let activeSceneUuid = '';
+let splashRenderer = null;
 let continueWithoutHeart = false;
 let sceneSessionToken = 0;
 
@@ -151,8 +153,9 @@ flow.update({
 });
 // pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
 
-flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
+flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   activeSceneName = sceneName;
+  activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   if (sceneName === INGAME_UI_SCENE) {
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
@@ -260,8 +263,7 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
   if (sceneName === INGAME_UI_SCENE) {
     renderer.getGroup('setting')?.style.removeProperty('visibility');
   }
-  if (sceneName === SPLASH_UI_SCENE) {
-    loadingReady = false;
+  if (sceneUuid === SPLASH_UI_SCENE_UUID) {
     splashRenderer = renderer;
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
@@ -286,7 +288,14 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
     if (!parking.isConnected) document.body.appendChild(parking);
     if (gameHost) parking.appendChild(gameHost);
     loadingReady = true;
-    flow.update({ loading: { prograss: 100 }, loadingMessage: 'Tap to screen' });
+    const fillStartedAt = performance.now();
+    while (true) {
+      const percent = Math.min(100, Math.round((performance.now() - fillStartedAt) / SPLASH_LOAD_FILL_DURATION_MS * 100));
+      flow.update({ loading: { prograss: percent }, loadingMessage: `Loading... ${percent}%` });
+      if (percent === 100) break;
+      await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+    flow.update({ loadingMessage: 'Tap to screen' });
     return;
   }
   const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
@@ -347,3 +356,4 @@ await flow.start();
 </script>
 </body>
 </html>
+
