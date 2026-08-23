@@ -20,7 +20,7 @@ const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
 const BLINK_CLOSED_DURATION := 0.11
 const OPEN_MOUTH_CHANCE := 0.22
-const OPEN_MOUTH_DURATION := 0.70
+const OPEN_MOUTH_DURATION := 0.95
 const EAR_BONE_PAIRS := [["Bone031", "Bone032"], ["Bone033", "Bone034"]]
 const EAR_TWITCH_INTERVAL_MIN := 3.8
 const EAR_TWITCH_INTERVAL_MAX := 7.6
@@ -405,6 +405,8 @@ func _process_blink(delta: float) -> void:
 			_open_mouth_tint_exclusion_mask = _get_open_mouth_tint_exclusion_mask()
 			if _open_mouth_texture == null or _open_mouth_tint_exclusion_mask == null:
 				_mouth_is_open = false
+			elif _is_inside_active_camera_view():
+				UiBridge.post_progress({"sfx": "cat-mouth-open"})
 	_eyes_are_closed = not _eyes_are_closed
 	if not _eyes_are_closed:
 		_mouth_is_open = false
@@ -1865,6 +1867,19 @@ func _get_active_tint_exclusion_mask() -> Texture2D:
 func _schedule_next_blink() -> void:
 	_eyes_are_closed = false
 	_blink_time_remaining = _blink_random.randf_range(BLINK_INTERVAL_MIN, BLINK_INTERVAL_MAX)
+
+
+func _is_inside_active_camera_view() -> bool:
+	if not is_visible_in_tree():
+		return false
+	var camera := get_viewport().get_camera_3d()
+	var mouth_position := global_position
+	if _skeleton != null and _head_bone_index >= 0:
+		mouth_position = _skeleton.global_transform * _skeleton.get_bone_global_pose(_head_bone_index).origin
+	if camera == null or camera.is_position_behind(mouth_position):
+		return false
+	var screen_position := camera.unproject_position(mouth_position)
+	return get_viewport().get_visible_rect().has_point(screen_position)
 
 
 func _schedule_next_ear_twitch() -> void:
