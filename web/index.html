@@ -162,7 +162,9 @@ let sceneSessionToken = 0;
 
 const handleGodotSfx = ({ sfx }) => {
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
-  if (sfx === 'cat-hole-absorb') sound.playSfx(CAT_HOLE_ABSORB_SFX);
+  if (sfx === 'cat-hole-absorb') {
+    if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
+  }
 };
 
 const handleMainGameEnd = async (result) => {
@@ -234,7 +236,10 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     renderer.on('widget:sound', ({ value }) => {
       if (sceneName === 'pop_Settings') {
         buttonSfxEnabled = !!value;
-        if (!buttonSfxEnabled) sound.stopSfx('cat-mouth-open');
+        if (!buttonSfxEnabled) {
+          sound.stopSfx('cat-mouth-open');
+          sound.stopSfx('cat-hole-absorb');
+        }
         renderer.update({ sound: buttonSfxEnabled });
       } else {
         ingameBgmEnabled = !!value;
