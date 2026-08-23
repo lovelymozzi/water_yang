@@ -243,56 +243,6 @@
       ]
     },
     {
-      "stableId": "icon-heart-png-83",
-      "layerType": "image",
-      "displayName": "icon_heart.png",
-      "x": 207,
-      "y": 51,
-      "scale": 0.8737373737373737,
-      "zIndex": 4,
-      "visual": {
-        "exportPath": "src/assets/icon_heart_2.png",
-        "width": 44,
-        "height": 44
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "5",
-          "bindingKey": "heart.current",
-          "fontSize": 20,
-          "fontWeight": "bold",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#ffffff",
-          "offsetX": 0,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 5,
-              "color": "#b13033"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 50
-            }
-          }
-        }
-      ]
-    },
-    {
       "stableId": "bar1-png-90",
       "layerType": "image",
       "displayName": "bar1.png",
@@ -904,7 +854,7 @@
       "x": 207,
       "y": 51,
       "scale": 0.8737373737373737,
-      "zIndex": 19,
+      "zIndex": 4,
       "visual": {
         "exportPath": "src/assets/event_icon_skkycupheart.webp",
         "width": 44,
@@ -913,7 +863,27 @@
       "image": {
         "exportPath": "src/assets/event_icon_skkycupheart.webp",
         "imageKey": "event.heart.active"
-      }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "5",
+          "bindingKey": "heart.current",
+          "fontSize": 20,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "zIndex": 10,
+          "style": {
+            "gradient": { "enabled": false, "color2": "#ffffff", "angle": 180 },
+            "stroke": { "width": 5, "color": "#b13033" },
+            "depth": { "size": 0, "color": "#000000" },
+            "shadow": { "x": 0, "y": 1, "blur": 2, "color": "#000000", "opacity": 50 }
+          }
+        }
+      ]
     }
   ],
   "hostedBy": [

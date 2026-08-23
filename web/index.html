@@ -19,16 +19,14 @@ const LOBBY_UI_SCENE = 'Lobby';
 const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
 const INITIAL_COINS = 500;
-const MAX_HEARTS = 10;
+const INITIAL_COIN_GRANT_STORAGE_KEY = STORAGE_PREFIX + 'initial_coin_grant_v1';
+const MAX_HEARTS = 5;
 const UNLIMITED_HEARTS_DURATION_MS = 60 * 60 * 1000;
 const UNLIMITED_HEARTS_STORAGE_KEY = STORAGE_PREFIX + 'unlimited_hearts_until';
 const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
-const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp';
-const STAGE_CLEAR_REWARD = 150;
-const PERFECT_CLEAR_REWARD = 200;
-const CLEAR_STREAK_BONUS = 300;
-const CLEAR_STREAK_INTERVAL = 5;
-const CLEAR_STREAK_STORAGE_KEY = STORAGE_PREFIX + 'clear_streak';
+const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimited-v2';
+const STAGE_CLEAR_REWARD = 40;
+const AD_STAGE_CLEAR_REWARD = 80;
 const BUTTON_CLICK_SFX = '../src/sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
 const CAT_MOUTH_SFX = '../src/sound/stu9-cute-cat-352656_optimized.mp3';
 const LOBBY_BGM = '../src/sound/geoffharvey-fat-cat-374614_optimized.mp3';
@@ -54,14 +52,18 @@ const SETTINGS_MENU_GROUPS = [
 const GODOT_ENGINE_URL = "index.js";
 const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":32950508,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 
-import { FlowDriver } from './ui/flow-driver.js';
-import { EconomyManager } from './ui/economy-manager.js';
+import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
+import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
 import { ProgressManager } from './ui/progress-manager.js';
 import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
 
 const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX, initialCoins: INITIAL_COINS, maxHearts: MAX_HEARTS });
+if (economy.getCoins() === 0 && localStorage.getItem(INITIAL_COIN_GRANT_STORAGE_KEY) == null) {
+  await economy.grantCoins(INITIAL_COINS, 'initial-coin-migration');
+  localStorage.setItem(INITIAL_COIN_GRANT_STORAGE_KEY, '1');
+}
 const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX });
 const sound = new SoundManager({ storagePrefix: STORAGE_PREFIX });
 const flow = new FlowDriver({
@@ -81,11 +83,16 @@ function hasUnlimitedHearts() {
   return Number(localStorage.getItem(UNLIMITED_HEARTS_STORAGE_KEY)) > Date.now();
 }
 
-function syncUnlimitedHearts() {
+function syncUnlimitedHearts(renderer = null) {
   const unlimitedHeartsActive = hasUnlimitedHearts();
-  flow.update({
+  const heartImage = {
     event: { heart: { active: unlimitedHeartsActive ? EVENT_HEART_ICON : DEFAULT_HEART_ICON } },
-  });
+  };
+  flow.update(heartImage);
+  const lobbyRenderer = renderer || flow.current?.renderer?.getActiveTabRenderer();
+  lobbyRenderer?.update(heartImage);
+  const heartCount = lobbyRenderer?.getElement('icon-heart-png-2285')?.querySelector('span');
+  if (heartCount) heartCount.style.visibility = unlimitedHeartsActive ? 'hidden' : '';
   if (unlimitedHeartsTimeoutId != null) clearTimeout(unlimitedHeartsTimeoutId);
   if (unlimitedHeartsActive) {
     unlimitedHeartsTimeoutId = setTimeout(syncUnlimitedHearts, Number(localStorage.getItem(UNLIMITED_HEARTS_STORAGE_KEY)) - Date.now() + 1);
@@ -96,16 +103,6 @@ function syncUnlimitedHearts() {
 function activateUnlimitedHearts() {
   localStorage.setItem(UNLIMITED_HEARTS_STORAGE_KEY, String(Date.now() + UNLIMITED_HEARTS_DURATION_MS));
   syncUnlimitedHearts();
-}
-
-function recordClearStreak() {
-  const streak = Math.max(0, Math.floor(Number(localStorage.getItem(CLEAR_STREAK_STORAGE_KEY)) || 0)) + 1;
-  localStorage.setItem(CLEAR_STREAK_STORAGE_KEY, String(streak));
-  return streak;
-}
-
-function resetClearStreak() {
-  localStorage.removeItem(CLEAR_STREAK_STORAGE_KEY);
 }
 
 sound.unlockOnFirstGesture(() => {
@@ -169,12 +166,7 @@ const handleGodotSfx = ({ sfx }) => {
 const handleMainGameEnd = async (result) => {
   if (result.outcome === 'clear') {
     await economy.grantHearts(1);
-    const reward = result.stats?.stars === 3 ? PERFECT_CLEAR_REWARD : STAGE_CLEAR_REWARD;
-    const clearStreak = recordClearStreak();
-    await economy.grantCoins(reward, result.stats?.stars === 3 ? 'perfect-stage-clear' : 'stage-clear');
-    if (clearStreak % CLEAR_STREAK_INTERVAL === 0) {
-      await economy.grantCoins(CLEAR_STREAK_BONUS, 'clear-streak-bonus');
-    }
+    await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
     await progress.recordClear(progress.getCurrentStage(), {
       stars: result.stats?.stars || 0,
       score: result.score,
@@ -182,7 +174,6 @@ const handleMainGameEnd = async (result) => {
     });
     await flow.fire('스테이지 클리어시');
   } else if (result.outcome === 'fail') {
-    resetClearStreak();
     await flow.fire('스테이지 시간이 다되어 게임패배시');
   }
 };
@@ -208,6 +199,7 @@ syncUnlimitedHearts();
 flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
+  if (sceneName === LOBBY_UI_SCENE) syncUnlimitedHearts(renderer);
   if (sceneName === LOBBY_UI_SCENE && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   if (sceneName === INGAME_UI_SCENE) {
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
@@ -216,13 +208,19 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   if (sceneName === 'pop_BuyCoins') {
     renderer.on('860', async () => {
       await economy.grantCoins(5000, 'shop-860');
+      await economy.refillHearts();
       activateUnlimitedHearts();
     });
     renderer.on('480', async () => {
       await economy.grantCoins(2500, 'shop-480');
-      await economy.grantHearts(10, Date.now(), 'shop-480');
+      await economy.grantHearts(10, Date.now(), 'shop-480', { overflowCap: 10 });
     });
     renderer.on('320', () => economy.grantCoins(1000, 'shop-320'));
+  }
+  if (sceneName === 'pop_LevelWin' && popup) {
+    renderer.on('button-yellow1-png-132:click', async () => {
+      await economy.grantCoins(AD_STAGE_CLEAR_REWARD, 'stage-clear-ad');
+    });
   }
   if ((sceneName === 'pop_Settings_1' || sceneName === 'pop_Settings') && popup) {
     if (activeGame?.state === 'running') activeGame.pause('settings');

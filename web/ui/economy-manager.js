@@ -3,7 +3,7 @@
 // 규칙:
 //   - 하트/재화는 호스트(아웃게임) 전유 — 인게임 카트리지는 이 파일을 import 하지 않는다 (GameSession 프로토콜).
 //   - 하트 재생은 anchor 방식: heartAnchorMs 기준 경과 시간으로 오프라인 경과분까지 일괄 지급.
-//   - 상태는 localStorage 에 단일 JSON({hearts, heartAnchorMs, coins})으로 영속화.
+//   - 상태는 localStorage 에 단일 JSON({hearts, heartCap, heartAnchorMs, coins})으로 영속화.
 //     키 충돌 방지를 위해 게임별 storagePrefix('cc_' 등)를 넣는다. 저장 키 = `${storagePrefix}economy_v1`.
 //   - 게임 특화 수치(최대 하트·재생 간격·보상액)는 전부 생성자 옵션 — 이 파일에 상수를 심지 말 것.
 //   - 씬 표시는 표준 bindingKey — `heart.current` / `heart.timer` / `coin.current` (attachRenderer 참조).
@@ -58,30 +58,45 @@ export class EconomyManager {
     const adopted = this._adoptAuthority(res);
     if (!res || res.ok !== true) { this._commit(); return false; }
     if (!adopted.hearts) { // 권위가 잔액을 안 줬으면 로컬 규칙 적용 (LOCAL_AUTHORITY 경로)
-      const wasFull = this._state.hearts >= this._maxHearts;
+      const wasFull = this._state.hearts >= this._state.heartCap;
       this._state.hearts -= 1;
+      if (this._state.hearts <= this._maxHearts) this._state.heartCap = this._maxHearts;
       if (wasFull) this._state.heartAnchorMs = now;
     }
     this._commit();
     return true;
   }
 
-  /** 하트 지급(클리어 보상·refill 구매·광고 보상). 최대치 초과분은 버린다. 거부 시 값 미변경. */
-  async grantHearts(n, now = Date.now(), reason = '') {
+  /**
+   * 하트 지급(클리어 보상·refill 구매·광고 보상). 기본은 최대치 초과분을 버린다.
+   * overflowCap을 주면 해당 지급에 한해 그 상한까지 초과 보유를 허용한다.
+   * 초과 보유분을 모두 소비해 기본 최대치 이하가 되면 일반 최대치로 복귀한다.
+   */
+  async grantHearts(n, now = Date.now(), reason = '', { overflowCap = null } = {}) {
     this._applyRegen(now);
     const amount = Math.max(0, Math.floor(n));
     const res = await this._authority.approve({ op: 'grantHearts', n: amount, now, reason });
     const adopted = this._adoptAuthority(res);
     if (res && res.ok === true && !adopted.hearts) {
-      this._state.hearts = Math.min(this._maxHearts, this._state.hearts + amount);
+      if (overflowCap == null) {
+        const normalGrant = Math.min(this._maxHearts, this._state.hearts + amount);
+        this._state.hearts = Math.max(this._state.hearts, normalGrant);
+        if (this._state.hearts <= this._maxHearts) this._state.heartCap = this._maxHearts;
+      } else {
+        const cap = Math.max(this._maxHearts, Math.floor(overflowCap));
+        this._state.heartCap = cap;
+        this._state.hearts = Math.min(cap, this._state.hearts + amount);
+      }
       if (this._state.hearts >= this._maxHearts) this._state.heartAnchorMs = now;
     }
     this._commit();
     return this._state.hearts;
   }
 
-  /** 하트를 최대치로 채운다(refill 상품). */
-  refillHearts(now = Date.now(), reason = 'refill') { return this.grantHearts(this._maxHearts, now, reason); }
+  /** 하트를 기본 최대치로 맞춘다(refill 상품). 초과 보유 상태도 기본 최대치로 복귀한다. */
+  refillHearts(now = Date.now(), reason = 'refill') {
+    return this.grantHearts(this._maxHearts, now, reason, { overflowCap: this._maxHearts });
+  }
 
   /** 다음 하트까지 남은 시간 문자열 — "M:SS", 만땅이면 "Max". */
   getHeartTimer(now = Date.now()) {
@@ -172,7 +187,8 @@ export class EconomyManager {
     const adopted = { hearts: false, coins: false };
     if (!res) return adopted;
     if (Number.isFinite(res.hearts)) {
-      this._state.hearts = Math.max(0, Math.min(this._maxHearts, Math.floor(res.hearts)));
+      this._state.hearts = Math.max(0, Math.floor(res.hearts));
+      this._state.heartCap = Math.max(this._maxHearts, this._state.hearts);
       adopted.hearts = true;
     }
     if (Number.isFinite(res.heartAnchorMs)) this._state.heartAnchorMs = res.heartAnchorMs;
@@ -217,7 +233,7 @@ export class EconomyManager {
 
   _load(legacyKey) {
     const now = Date.now();
-    const fallback = { hearts: this._maxHearts, heartAnchorMs: now, coins: this._initialCoins };
+    const fallback = { hearts: this._maxHearts, heartCap: this._maxHearts, heartAnchorMs: now, coins: this._initialCoins };
     let raw = localStorage.getItem(this._key);
     let fromLegacy = false;
     if (raw == null && legacyKey) {
@@ -233,10 +249,16 @@ export class EconomyManager {
       return fallback;
     }
     const state = {
-      hearts: Number.isFinite(parsed?.hearts) ? Math.max(0, Math.min(this._maxHearts, Math.floor(parsed.hearts))) : this._maxHearts,
+      heartCap: Number.isFinite(parsed?.heartCap)
+        ? Math.max(this._maxHearts, Math.floor(parsed.heartCap))
+        : this._maxHearts,
+      hearts: 0,
       heartAnchorMs: Number.isFinite(parsed?.heartAnchorMs) ? parsed.heartAnchorMs : now,
       coins: Number.isFinite(parsed?.coins) ? Math.max(0, Math.floor(parsed.coins)) : this._initialCoins,
     };
+    state.hearts = Number.isFinite(parsed?.hearts)
+      ? Math.max(0, Math.min(state.heartCap, Math.floor(parsed.hearts)))
+      : this._maxHearts;
     if (fromLegacy) {
       console.log('[EconomyManager] 구 저장 키에서 마이그레이션:', legacyKey, '→', this._key);
       localStorage.setItem(this._key, JSON.stringify(state));
