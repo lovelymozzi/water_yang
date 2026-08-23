@@ -10,8 +10,9 @@
     {
       "fromSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
       "stableId": "entry-box-normal-png-2287",
-      "toSceneUuid": "__close__",
-      "note": "설정 팝업 안에 추가된 설정 버튼을 누르면 팝업 닫기"
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "condition": "\bpopup close",
+      "note": "인게임 설정 팝업 하단 톱니 버튼: 메뉴 접힘 애니메이션 후 Ingame으로 복귀하며 PopupManager가 딤드를 정리하도록 흐름도에 반영"
     }
   ]
 }

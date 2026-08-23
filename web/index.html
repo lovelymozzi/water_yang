@@ -253,6 +253,7 @@ flow.on('scene:enter', async ({ sceneName, renderer, popup }) => {
         });
         popupSettingsGroup?.style.setProperty('visibility', 'hidden');
       }, SETTINGS_MENU_MOTION_MS + SETTINGS_MENU_STAGGER_MS * (SETTINGS_MENU_GROUPS.length - 1));
+      setTimeout(() => flow.goto(INGAME_UI_SCENE), SETTINGS_MENU_MOTION_MS + SETTINGS_MENU_STAGGER_MS * SETTINGS_MENU_GROUPS.length + 20);
     });
     return;
   }
