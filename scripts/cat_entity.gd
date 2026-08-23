@@ -13,6 +13,7 @@ const OPEN_MOUTH_TEXTURE_PATH := "res://water_yang/cat1_2.jpeg"
 const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
+const ABSORB_SOUND := preload("res://src/sound/gargamel10-teleport-game-sound-effect-379236_optimized.mp3")
 const FLOATING_WATER_OUTLINE_COLOR := Color("f8ffff")
 const FLOATING_WATER_OUTLINE_WIDTH := 0.020
 const REFERENCE_TILE_SIZE := 2.0
@@ -330,6 +331,7 @@ var _inserted_mid_bones: Array[int] = []
 # 앞뒤가 4배 차이나므로 이걸 무시하면 꼬리쪽 셀이 0.4칸 비어 보인다.
 var _head_mesh_overhang := 0.0
 var _tail_mesh_overhang := 0.0
+var _absorb_sound_player: AudioStreamPlayer
 
 
 func _ready() -> void:
@@ -340,6 +342,9 @@ func _ready() -> void:
 	if body_cells.is_empty():
 		_reset_initial_body()
 	_ensure_visual_root()
+	_absorb_sound_player = AudioStreamPlayer.new()
+	_absorb_sound_player.stream = ABSORB_SOUND
+	add_child(_absorb_sound_player)
 
 	if Engine.is_editor_hint():
 		refresh_editor_preview()
@@ -846,6 +851,10 @@ func _begin_absorb(hole_cell: Vector2i, from_lead: bool) -> void:
 	_transition_t = 0.0
 	_is_blocked = false
 	_rail = body_cells.duplicate()
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"sfx": "cat-hole-absorb"})
+	else:
+		_absorb_sound_player.play()
 	# 빨려 들어가기 시작한 순간부터 점유를 놓는다. 다른 고양이가 곧바로 지나갈 수 있다.
 	level_manager.release_cat_cell(self)
 	_notify_path_preview_changed()

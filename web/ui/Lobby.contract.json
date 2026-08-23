@@ -860,10 +860,6 @@
         "width": 44,
         "height": 44
       },
-      "image": {
-        "exportPath": "src/assets/event_icon_skkycupheart.webp",
-        "imageKey": "event.heart.active"
-      },
       "texts": [
         {
           "slotIndex": 0,
@@ -877,13 +873,33 @@
           "offsetY": 0,
           "zIndex": 10,
           "style": {
-            "gradient": { "enabled": false, "color2": "#ffffff", "angle": 180 },
-            "stroke": { "width": 5, "color": "#b13033" },
-            "depth": { "size": 0, "color": "#000000" },
-            "shadow": { "x": 0, "y": 1, "blur": 2, "color": "#000000", "opacity": 50 }
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 5,
+              "color": "#b13033"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
           }
         }
-      ]
+      ],
+      "image": {
+        "exportPath": "src/assets/event_icon_skkycupheart.webp",
+        "imageKey": "event.heart.active"
+      }
     }
   ],
   "hostedBy": [

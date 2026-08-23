@@ -375,7 +375,7 @@
       "type": "image",
       "name": "setting_btn_option.png",
       "exportPath": "src/assets/setting_btn_option.png",
-      "x": 125,
+      "x": 167,
       "y": 149,
       "scale": 0.5,
       "scaleX": 1,
@@ -417,7 +417,7 @@
       "type": "image",
       "name": "setting_btn_option.png",
       "exportPath": "src/assets/setting_btn_option.png",
-      "x": 205,
+      "x": 284,
       "y": 149,
       "scale": 0.5,
       "scaleX": 1,
@@ -466,7 +466,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 8,
-      "visible": true,
+      "visible": false,
       "width": 118,
       "height": 126,
       "flipX": false,
@@ -540,7 +540,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "Music",
+            "content": "VFX",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -609,7 +609,7 @@
       "source": "preset",
       "name": "text_sound",
       "exportPath": "",
-      "x": 119,
+      "x": 161,
       "y": 122,
       "scale": 1,
       "scaleX": 1,
@@ -647,7 +647,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "Sound",
+            "content": "BGM",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -716,7 +716,7 @@
       "source": "preset",
       "name": "text_Vibration",
       "exportPath": "",
-      "x": 199,
+      "x": 278,
       "y": 122,
       "scale": 1,
       "scaleX": 1,
@@ -754,7 +754,7 @@
         "innerShadowOpacity": 15,
         "texts": [
           {
-            "content": "Vibration",
+            "content": "VIB",
             "fontSize": 20,
             "fontWeight": "normal",
             "fontFamily": "\"Lilita One\", cursive",
@@ -830,7 +830,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 12,
-      "visible": true,
+      "visible": false,
       "zLayerId": "zl-content",
       "componentState": {
         "name": "text_Hint",
@@ -1013,7 +1013,7 @@
       "type": "image",
       "name": "ingame_btn_pause_sound.png",
       "exportPath": "src/assets/ingame_btn_pause_sound.png",
-      "x": 136,
+      "x": 178,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1055,7 +1055,7 @@
       "type": "image",
       "name": "ingame_btn_pause_sound_off.png",
       "exportPath": "src/assets/ingame_btn_pause_sound_off.png",
-      "x": 136,
+      "x": 178,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1097,7 +1097,7 @@
       "type": "image",
       "name": "ingame_btn_pause_vibration_off.png",
       "exportPath": "src/assets/ingame_btn_pause_vibration_off.png",
-      "x": 215,
+      "x": 294,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1139,7 +1139,7 @@
       "type": "image",
       "name": "ingame_btn_pause_vibration2.png",
       "exportPath": "src/assets/ingame_btn_pause_vibration2.png",
-      "x": 212,
+      "x": 291,
       "y": 159,
       "scale": 0.5,
       "scaleX": 1,
@@ -1188,7 +1188,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 19,
-      "visible": true,
+      "visible": false,
       "width": 76,
       "height": 70,
       "flipX": false,
@@ -3334,19 +3334,51 @@
     },
     {
       "id": "grp-328",
-      "name": "Music",
+      "name": "VFX",
       "widget": {
         "type": "toggle",
-        "key": "music"
+        "key": "sound",
+        "off": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-music-off-png-312"
+        },
+        "on": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-music-png-311"
+        }
       }
     },
     {
       "id": "grp-330",
-      "name": "Sound"
+      "name": "BGM",
+      "widget": {
+        "type": "toggle",
+        "key": "music",
+        "off": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-sound-off-png-316"
+        },
+        "on": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-sound-png-315"
+        }
+      }
     },
     {
       "id": "grp-332",
-      "name": "Vibration"
+      "name": "VIB",
+      "widget": {
+        "type": "toggle",
+        "key": "vibration",
+        "on": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-vibration2-png-320"
+        },
+        "off": {
+          "kind": "layer",
+          "id": "ingame-btn-pause-vibration-off-png-319"
+        }
+      }
     },
     {
       "id": "grp-334",

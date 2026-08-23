@@ -27,6 +27,7 @@ const STAGE_CLEAR_REWARD = 40;
 const AD_STAGE_CLEAR_REWARD = 80;
 const BUTTON_CLICK_SFX = '../src/sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
 const CAT_MOUTH_SFX = '../src/sound/stu9-cute-cat-352656_optimized.mp3';
+const CAT_HOLE_ABSORB_SFX = '../src/sound/gargamel10-teleport-game-sound-effect-379236_optimized.mp3';
 const LOBBY_BGM = '../src/sound/geoffharvey-fat-cat-374614_optimized.mp3';
 const INGAME_BGM = '../src/sound/loswin23-bird-chirping-567995_optimized.mp3';
 const STAGE_TIME_LIMIT_SECONDS = 60;
@@ -159,6 +160,7 @@ let sceneSessionToken = 0;
 
 const handleGodotSfx = ({ sfx }) => {
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
+  if (sfx === 'cat-hole-absorb') sound.playSfx(CAT_HOLE_ABSORB_SFX);
 };
 
 const handleMainGameEnd = async (result) => {

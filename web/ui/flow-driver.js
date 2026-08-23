@@ -79,8 +79,8 @@ export class FlowDriver {
   /** scenes-index.json + scene-flow.json 로드 → 시작 씬(entrySceneUuid) 표시. */
   async start() {
     const [idxRes, flowRes] = await Promise.all([
-      fetch(this._base + 'scenes-index.json', { cache: 'no-store' }),
-      fetch(this._base + 'scene-flow.json', { cache: 'no-store' }),
+      fetch(this._base + 'scenes-index.json'),
+      fetch(this._base + 'scene-flow.json'),
     ]);
     if (!idxRes.ok) throw new Error('[FlowDriver] scenes-index.json 로드 실패(HTTP ' + idxRes.status + ') — dataPath 확인: ' + this._base);
     if (!flowRes.ok) throw new Error('[FlowDriver] scene-flow.json 로드 실패(HTTP ' + flowRes.status + ') — dataPath 확인: ' + this._base);

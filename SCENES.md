@@ -16,7 +16,7 @@
 #### `Lobby`  ·  contract: `./web/ui/Lobby.contract.json`
 - sceneUuid: `0ad51a82-1069-4948-ad6f-e97422300c6d`
 - 이벤트: `home-btn-setting-png-87:click` · `home-btn-plus-png-94:click` · `home-btn-plus-png-95:click` · `home-btn-stage-normal-png-145:click`
-- 텍스트 바인딩: `heart.timer` · `heart.current` · `coin.current` · `stage.current`
+- 텍스트 바인딩: `heart.timer` · `coin.current` · `stage.current` · `heart.current`
 - 이미지 바인딩: `event.heart.active`
 - GameField 레이어 있음
 <!-- SCENE:Lobby END -->

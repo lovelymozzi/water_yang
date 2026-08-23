@@ -17,7 +17,7 @@
     {
       "uuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
       "name": "Lobby",
-      "contract": "Lobby.contract.json?v=heart-count-v10",
+      "contract": "Lobby.contract.json",
       "sceneType": "scene"
     },
     {
@@ -71,7 +71,7 @@
     {
       "uuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b",
       "name": "pop_Settings",
-      "contract": "pop_Settings.contract.json",
+      "contract": "pop_Settings.contract.json?v=settings-vfx-bgm-vib-3",
       "sceneType": "scene"
     },
     {

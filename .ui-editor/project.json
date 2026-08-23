@@ -43,7 +43,7 @@
       "Social": true,
       "Events": true,
       "Pass": true,
-      "System": false
+      "System": true
     },
     "groupMap": {
       "Splash": "Core",
@@ -277,7 +277,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "Lobby"
+    "lastScene": "pop_Settings"
   },
   "globalViewport": {
     "width": 393,
