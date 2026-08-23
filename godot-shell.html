@@ -13,6 +13,7 @@ const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
+const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
 const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
@@ -25,11 +26,11 @@ const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
 const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimited-v2';
 const STAGE_CLEAR_REWARD = 40;
 const AD_STAGE_CLEAR_REWARD = 80;
-const BUTTON_CLICK_SFX = '../src/sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
-const CAT_MOUTH_SFX = '../src/sound/stu9-cute-cat-352656_optimized.mp3';
-const CAT_HOLE_ABSORB_SFX = '../src/sound/gargamel10-teleport-game-sound-effect-379236_optimized.mp3';
-const LOBBY_BGM = '../src/sound/geoffharvey-fat-cat-374614_optimized.mp3';
-const INGAME_BGM = '../src/sound/loswin23-bird-chirping-567995_optimized.mp3';
+const BUTTON_CLICK_SFX = './sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
+const CAT_MOUTH_SFX = './sound/stu9-cute-cat-352656_optimized.mp3';
+const CAT_HOLE_ABSORB_SFX = './sound/gargamel10-teleport-game-sound-effect-379236_optimized.mp3';
+const LOBBY_BGM = './sound/geoffharvey-fat-cat-374614_optimized.mp3';
+const INGAME_BGM = './sound/loswin23-bird-chirping-567995_optimized.mp3';
 const STAGE_TIME_LIMIT_SECONDS = 60;
 const SPLASH_LOAD_FILL_DURATION_MS = 700;
 const SETTINGS_MENU_MOTION_MS = 240;
@@ -105,6 +106,9 @@ function activateUnlimitedHearts() {
 }
 
 sound.unlockOnFirstGesture(() => {
+  // 첫 터치 안에서 BGM을 시작해야 브라우저의 자동 재생 차단을 피할 수 있다.
+  // 로비 진입은 navigation 호스트를 거치므로 scene:enter 시점까지 기다리지 않는다.
+  if (lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   // 비동기 Godot progress 이벤트의 SFX도 재생되도록, 사용자 제스처 안에서
   // 무음 SFX를 한 번 재생해 브라우저의 미디어 권한을 해제한다.
   sound.playKeyedSfx('audio-unlock', BUTTON_CLICK_SFX, 0);
@@ -201,8 +205,8 @@ syncUnlimitedHearts();
 flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
-  if (sceneName === LOBBY_UI_SCENE) syncUnlimitedHearts(renderer);
-  if (sceneName === LOBBY_UI_SCENE && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+  if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
+  if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   if (sceneName === INGAME_UI_SCENE) {
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
