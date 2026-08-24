@@ -2317,6 +2317,80 @@
           "targetSceneUuid": "__close__"
         }
       ]
+    },
+    {
+      "stableId": "common-box-toast-png-2187",
+      "layerType": "image",
+      "displayName": "common_box_toast.png",
+      "x": -3,
+      "y": 406,
+      "zIndex": 38,
+      "visual": {
+        "exportPath": "src/assets/common_box_toast.png",
+        "width": 400,
+        "height": 68,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 6,
+            "top": 13,
+            "right": 6,
+            "bottom": 23,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "The purchase has been completed.",
+          "bindingKey": "",
+          "fontSize": 21,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": -4,
+          "zIndex": 1,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 1,
+              "blur": 2,
+              "color": "#000000",
+              "opacity": 50
+            }
+          }
+        }
+      ]
     }
   ],
   "hostedBy": [

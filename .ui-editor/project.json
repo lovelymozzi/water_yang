@@ -3,7 +3,7 @@
   "name": "water_yang",
   "createdAt": "2026-08-12T07:56:05.702Z",
   "editorVersion": "2.0",
-  "assetRoot": "",
+  "assetRoot": "src/assets",
   "rendererPath": "web/ui",
   "engine": "godot",
   "sceneMeta": {

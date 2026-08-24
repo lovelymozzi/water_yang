@@ -214,16 +214,30 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     else sound.stopBgm();
   }
   if (sceneName === 'pop_BuyCoins') {
+    const purchaseToast = renderer.getElement('common-box-toast-png-2187');
+    let purchaseToastTimer;
+    if (purchaseToast) purchaseToast.style.visibility = 'hidden';
+    const showPurchaseToast = () => {
+      if (!purchaseToast) return;
+      clearTimeout(purchaseToastTimer);
+      purchaseToast.style.visibility = '';
+      purchaseToastTimer = setTimeout(() => { purchaseToast.style.visibility = 'hidden'; }, 2500);
+    };
     renderer.on('860', async () => {
       await economy.grantCoins(5000, 'shop-860');
       await economy.refillHearts();
       activateUnlimitedHearts();
+      showPurchaseToast();
     });
     renderer.on('480', async () => {
       await economy.grantCoins(2500, 'shop-480');
       await economy.grantHearts(10, Date.now(), 'shop-480', { overflowCap: 10 });
+      showPurchaseToast();
     });
-    renderer.on('320', () => economy.grantCoins(1000, 'shop-320'));
+    renderer.on('320', async () => {
+      await economy.grantCoins(1000, 'shop-320');
+      showPurchaseToast();
+    });
   }
   if (sceneName === 'pop_LevelWin' && popup) {
     renderer.on('button-yellow1-png-132:click', async () => {

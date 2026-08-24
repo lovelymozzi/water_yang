@@ -74,7 +74,7 @@
 <!-- SCENE:pop_LevelWin BEGIN -->
 #### `pop_LevelWin`  ·  contract: `./web/ui/pop_LevelWin.contract.json`
 - sceneUuid: `af666955-071f-412b-832b-02370af5062f`
-- 이벤트: `common-popup-box-copy-png-2402:click` · `common-btn-green-sales-png-2411:click` · `common-btn-green-sales-png-2404:click` · `plain-text-2405:click` · `plain-text-135:click` · `itemicon-coins-l-png-136:click` · `plain-text-137:click` · `video-png-134:click` · `confetti-148:click`
+- 이벤트: `common-popup-box-copy-png-2402:click` · `common-btn-green-sales-png-2411:click` · `common-btn-green-sales-png-2404:click` · `confetti-148:click`
 <!-- SCENE:pop_LevelWin END -->
 
 <!-- SCENE:pop_OutOfMoves BEGIN -->
@@ -107,7 +107,7 @@
 <!-- SCENE:splash BEGIN -->
 #### `splash`  ·  contract: `./web/ui/splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: `loading-out-png-11:click`
+- 이벤트: `loading-out-png-11:click` · `loading-inner-png-12:click` · `loading-bar-png-13:click` · `text-loading-15:click`
 - 텍스트 바인딩: `loadingMessage`
 - 위젯: `loading.prograss`(fill)
 - GameField 레이어 있음
