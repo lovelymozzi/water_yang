@@ -161,6 +161,9 @@ let activeSceneUuid = '';
 let splashRenderer = null;
 let continueWithoutHeart = false;
 let sceneSessionToken = 0;
+let preloadingLobbyUi = true;
+let resolveLobbyPreload;
+const lobbyPreloaded = new Promise(resolve => { resolveLobbyPreload = resolve; });
 
 const handleGodotSfx = ({ sfx }) => {
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
@@ -207,6 +210,10 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+  if (preloadingLobbyUi && sceneName === LOBBY_UI_SCENE) {
+    resolveLobbyPreload();
+    return;
+  }
   if (sceneName === INGAME_UI_SCENE) {
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
@@ -358,6 +365,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     parking.style.cssText = 'display:none;';
     if (!parking.isConnected) document.body.appendChild(parking);
     if (gameHost) parking.appendChild(gameHost);
+    await lobbyPreloaded;
     loadingReady = true;
     const fillStartedAt = performance.now();
     while (true) {
@@ -423,6 +431,10 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   if (game.state === 'ready') game.startGame();
 });
 
+await flow.goto(LOBBY_NAV_SCENE_UUID);
+flow.current.renderer.hide();
+await lobbyPreloaded;
+preloadingLobbyUi = false;
 await flow.start();
 </script>
 </body>
