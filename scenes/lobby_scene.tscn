@@ -233,7 +233,7 @@ outline_color = Color(0.32201546, 0.72333336, 0.798938, 1)
 outline_width = 0.004
 
 [node name="TreeShadowDecor" parent="LevelManager/TileVisuals" unique_id=35423290 instance=ExtResource("5_1uvfp")]
-transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, -6.479742, 1.0393701, -6.3031855)
+transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, -6.479742, 0.64867926, -6.3031855)
 
 [node name="TreeDecor4" parent="LevelManager/TileVisuals" unique_id=336948251 instance=ExtResource("2_4tn4g")]
 transform = Transform3D(5.854678, 0.22081338, -1.2938244, 0.668489, 4.588242, 3.8080375, 1.1295415, -3.8599577, 4.452513, -2.9919102, -0.34438372, -7.010687)
@@ -638,7 +638,7 @@ outline_color = Color(0.45882353, 0.5372549, 0.27058825, 1)
 outline_width = 0.0
 
 [node name="GrassDecor20" parent="LevelManager/TileVisuals" unique_id=2070568593 instance=ExtResource("9_onm0k")]
-transform = Transform3D(-2.8030698, -0.38135803, -14.73083, 11.385862, 9.462904, -2.4115493, 9.354406, -11.632197, -1.4788725, -2.868833, -0.24172878, -4.9071636)
+transform = Transform3D(-2.8030698, -0.38135803, -14.73083, 11.385862, 9.462904, -2.4115493, 9.354406, -11.632197, -1.4788725, -2.6945524, -0.24172878, -4.458394)
 tint_color = Color(0.53700006, 0.6, 0.42000002, 1)
 toon_steps = 2
 shadow_darkness = 0.0
@@ -647,13 +647,59 @@ outline_color = Color(0.45882353, 0.5372549, 0.27058825, 1)
 outline_width = 0.001
 
 [node name="GrassDecor21" parent="LevelManager/TileVisuals" unique_id=3315573 instance=ExtResource("9_onm0k")]
-transform = Transform3D(-5.8899474, 2.2498946, -18.98016, 15.18115, 12.617206, -3.2153997, 11.612114, -15.35396, -5.4235334, -2.5260444, -0.24172878, -4.87866)
-tint_color = Color(0.53700006, 0.6, 0.42000002, 1)
-toon_steps = 2
+transform = Transform3D(-7.3624344, 2.8123686, -23.7252, 18.976439, 15.771506, -4.0192494, 14.515142, -19.19245, -6.7794166, -2.9834247, -0.09918368, -4.412525)
+tint_color = Color(0.6617573, 0.7260055, 0.5448698, 1)
+toon_steps = 5
 shadow_darkness = 0.0
 rim_strength = 0.0
-outline_color = Color(0.45882353, 0.5372549, 0.27058825, 1)
-outline_width = 0.001
+outline_color = Color(0.6252801, 0.72027236, 0.40582627, 1)
+outline_width = 0.0
+top_outline_scale = 0.4
+bottom_outline_scale = 0.8
+
+[node name="GrassDecor26" parent="LevelManager/TileVisuals" unique_id=55191296 instance=ExtResource("9_onm0k")]
+transform = Transform3D(-9.139085, 1.2950478, -23.233599, 18.187576, 15.967866, -6.264145, 14.515143, -19.19245, -6.7794175, 3.5473561, -0.09918368, -4.3838863)
+tint_color = Color(0.6617573, 0.7260055, 0.5448698, 1)
+toon_steps = 5
+shadow_darkness = 0.0
+rim_strength = 0.0
+outline_color = Color(0.6252801, 0.72027236, 0.40582627, 1)
+outline_width = 0.0
+top_outline_scale = 0.4
+bottom_outline_scale = 0.8
+
+[node name="GrassDecor27" parent="LevelManager/TileVisuals" unique_id=1114913314 instance=ExtResource("9_onm0k")]
+transform = Transform3D(-4.194502, 5.327546, -24.062908, 19.917755, 15.108511, -0.12690812, 14.515143, -19.19245, -6.779418, 4.098143, -0.09918368, -4.362528)
+tint_color = Color(0.6617573, 0.7260055, 0.5448698, 1)
+toon_steps = 5
+shadow_darkness = 0.0
+rim_strength = 0.0
+outline_color = Color(0.6252801, 0.72027236, 0.40582627, 1)
+outline_width = 0.0
+top_outline_scale = 0.4
+bottom_outline_scale = 0.8
+
+[node name="GrassDecor28" parent="LevelManager/TileVisuals" unique_id=1105421870 instance=ExtResource("9_onm0k")]
+transform = Transform3D(-12.852576, -2.1853054, -21.331572, 15.783602, 15.870546, -11.135698, 14.515142, -19.19245, -6.779418, 3.2573686, -0.09918368, -4.081812)
+tint_color = Color(0.6617573, 0.7260055, 0.5448698, 1)
+toon_steps = 5
+shadow_darkness = 0.0
+rim_strength = 0.0
+outline_color = Color(0.6252801, 0.72027236, 0.40582627, 1)
+outline_width = 0.0
+top_outline_scale = 0.4
+bottom_outline_scale = 0.8
+
+[node name="GrassDecor24" parent="LevelManager/TileVisuals" unique_id=1184062436 instance=ExtResource("9_onm0k")]
+transform = Transform3D(-1.1202242, -3.6550114, -19.63125, 15.181151, 12.617205, -3.2153997, 12.972192, -15.081348, 2.0676591, -3.3391833, -0.09918368, -4.412525)
+tint_color = Color(0.6617573, 0.7260055, 0.5448698, 1)
+toon_steps = 5
+shadow_darkness = 0.0
+rim_strength = 0.0
+outline_color = Color(0.6252801, 0.72027236, 0.40582627, 1)
+outline_width = 0.0
+top_outline_scale = 0.4
+bottom_outline_scale = 0.8
 
 [node name="GrassDecor22" parent="LevelManager/TileVisuals" unique_id=505480835 instance=ExtResource("9_onm0k")]
 transform = Transform3D(-5.8899474, 2.2498946, -18.98016, 15.18115, 12.617206, -3.2153997, 11.612114, -15.35396, -5.4235334, 4.1651382, -0.41927242, -5.5569143)
@@ -788,10 +834,10 @@ body_length_max = 8
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.18
-offset_left = 432.00006
-offset_top = 216.0
-offset_right = 500.00006
-offset_bottom = 287.59998
+offset_left = 431.66724
+offset_top = 245.11555
+offset_right = 499.66724
+offset_bottom = 375.08417
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -3.130162
@@ -808,13 +854,13 @@ fog_color = Color(0.07338134, 0.24427584, 0.58293784, 1)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.25
-offset_left = -27.999998
-offset_top = 1312.0
-offset_right = 580.47424
-offset_bottom = 1041.0509
+offset_left = 405.053
+offset_top = 860.45435
+offset_right = 432.555
+offset_bottom = 954.2461
 grow_horizontal = 2
 grow_vertical = 2
-rotation = -1.5669663
+rotation = -3.138199
 mouse_filter = 2
 texture = SubResource("GradientTexture2D_38fwc")
 expand_mode = 1
@@ -947,7 +993,7 @@ offset_bottom = 648.0
 environment = SubResource("Environment_lobby")
 
 [node name="LobbyGround" parent="." unique_id=755407211 instance=ExtResource("3_lobby_ground")]
-transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0, 0, 1.0139494)
+transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0.02885437, 0.0069229603, 1.0072665)
 
 [node name="Water" parent="LobbyGround" unique_id=2138602713 instance=ExtResource("20_water")]
 transform = Transform3D(0.9999995, 0, 0, 0, 0.9999995, 0, 0, 0, 0.9999995, 0, -0.055519108, 0)

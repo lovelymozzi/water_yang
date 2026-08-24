@@ -495,6 +495,90 @@
       ]
     },
     {
+      "id": "edge-ingame-coin-bar-374",
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "bar1-png-374",
+        "eventName": "bar1-png-374:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "ingame",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
+      "id": "edge-ingame-coin-purse-375",
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "gimmick-coinpurse-coin-png-375",
+        "eventName": "gimmick-coinpurse-coin-png-375:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "ingame",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
+      "id": "edge-ingame-coin-stage-376",
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "bar1-png-376",
+        "eventName": "bar1-png-376:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "ingame",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
+      "id": "edge-ingame-coin-timer-378",
+      "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "bar1-png-378",
+        "eventName": "bar1-png-378:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "ingame",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
       "id": "edge-mt6t2os3zlqz",
       "fromSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
       "toSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",

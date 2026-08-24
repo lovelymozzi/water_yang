@@ -15,7 +15,7 @@ const STORAGE_PREFIX = 'leonout_';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
-const INGAME_UI_SCENE = 'Ingame';
+const INGAME_UI_SCENE = 'ingame';
 const COIN_COST = 900;
 const INITIAL_COINS = 500;
 const INITIAL_COIN_GRANT_STORAGE_KEY = STORAGE_PREFIX + 'initial_coin_grant_v1';
@@ -161,9 +161,6 @@ let activeSceneUuid = '';
 let splashRenderer = null;
 let continueWithoutHeart = false;
 let sceneSessionToken = 0;
-let preloadingLobbyUi = true;
-let resolveLobbyPreload;
-const lobbyPreloaded = new Promise(resolve => { resolveLobbyPreload = resolve; });
 
 const handleGodotSfx = ({ sfx }) => {
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
@@ -210,10 +207,6 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
-  if (preloadingLobbyUi && sceneName === LOBBY_UI_SCENE) {
-    resolveLobbyPreload();
-    return;
-  }
   if (sceneName === INGAME_UI_SCENE) {
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
@@ -348,9 +341,8 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     await game.start(godotCartridge, {
       stage: progress.getCurrentStage(),
       config: { godotScene: 'lobby', preloadGodotScenes: ['lobby', 'main'] },
-      onProgress: ({ sceneReady, sfx }) => {
+      onProgress: ({ sfx }) => {
         handleGodotSfx({ sfx });
-        if (sceneReady === 'main' && activeSceneName === INGAME_UI_SCENE && activeGame === game && game.state === 'ready') game.startGame();
       },
       onHud: ({ timeLeft }) => flow.update({ stage: { timer: timeLeft } }),
       onEnd: handleMainGameEnd,
@@ -365,7 +357,6 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     parking.style.cssText = 'display:none;';
     if (!parking.isConnected) document.body.appendChild(parking);
     if (gameHost) parking.appendChild(gameHost);
-    await lobbyPreloaded;
     loadingReady = true;
     const fillStartedAt = performance.now();
     while (true) {
@@ -400,6 +391,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
       stage: progress.getCurrentStage(),
       config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
     });
+    activeGame.startGame();
     return;
   }
   const sessionToken = ++sceneSessionToken;
@@ -431,10 +423,6 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   if (game.state === 'ready') game.startGame();
 });
 
-await flow.goto(LOBBY_NAV_SCENE_UUID);
-flow.current.renderer.hide();
-await lobbyPreloaded;
-preloadingLobbyUi = false;
 await flow.start();
 </script>
 </body>

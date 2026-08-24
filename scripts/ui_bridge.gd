@@ -22,6 +22,8 @@ var standalone_stage := {"stage": 1, "seed": 0, "config": {"godotScene": "lobby"
 
 var _iface = null
 var _cb = null
+var _host_scene_loading := false
+var _start_after_scene_ready := false
 
 
 func _ready() -> void:
@@ -53,7 +55,10 @@ func _on_command(args: Array) -> void:
 		"initialize":
 			_initialize_host_scene(payload)
 		"startGame":
-			emit_signal("host_start")
+			if _host_scene_loading:
+				_start_after_scene_ready = true
+			else:
+				emit_signal("host_start")
 		"pauseGame":
 			if auto_pause:
 				get_tree().paused = true
@@ -63,6 +68,7 @@ func _on_command(args: Array) -> void:
 				get_tree().paused = false
 			emit_signal("host_resume")
 		"forceQuit":
+			_start_after_scene_ready = false
 			emit_signal("host_force_quit", str(payload.get("reason", "")))
 		"message":
 			var topic := str(payload.get("topic", ""))
@@ -76,34 +82,43 @@ func _on_command(args: Array) -> void:
 
 
 func _initialize_host_scene(stage_data: Dictionary) -> void:
+	_host_scene_loading = true
 	var config: Dictionary = stage_data.get("config", {})
 	var scene_key := str(config.get("godotScene", ""))
 	var scene_path: String = HOST_SCENES.get(scene_key, "")
 	if scene_path.is_empty():
+		_host_scene_loading = false
 		post_error("Unknown host scene: %s" % scene_key)
 		return
 	var preload_scenes: Array = config.get("preloadGodotScenes", [])
 	for preload_key in preload_scenes:
 		var preload_path: String = HOST_SCENES.get(str(preload_key), "")
 		if preload_path.is_empty():
+			_host_scene_loading = false
 			post_error("Unknown preload scene: %s" % preload_key)
 			return
 		if get_tree().current_scene == null or get_tree().current_scene.scene_file_path != preload_path:
 			var preload_error := get_tree().change_scene_to_file(preload_path)
 			if preload_error != OK:
+				_host_scene_loading = false
 				post_error("Could not preload host scene: %s" % preload_path)
 				return
 			await get_tree().process_frame
 	if get_tree().current_scene == null or get_tree().current_scene.scene_file_path != scene_path:
 		var error := get_tree().change_scene_to_file(scene_path)
 		if error != OK:
+			_host_scene_loading = false
 			post_error("Could not load host scene: %s" % scene_path)
 			return
 		await get_tree().process_frame
 	emit_signal("host_initialize", stage_data)
+	_host_scene_loading = false
 	notify_initialized()
 	await get_tree().process_frame
 	post_progress({"sceneReady": scene_key})
+	if _start_after_scene_ready:
+		_start_after_scene_ready = false
+		emit_signal("host_start")
 
 
 func notify_initialized() -> void:

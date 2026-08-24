@@ -17,7 +17,7 @@ const STORAGE_PREFIX = 'leonout_';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
-const INGAME_UI_SCENE = 'Ingame';
+const INGAME_UI_SCENE = 'ingame';
 const COIN_COST = 900;
 const INITIAL_COINS = 500;
 const INITIAL_COIN_GRANT_STORAGE_KEY = STORAGE_PREFIX + 'initial_coin_grant_v1';
@@ -52,7 +52,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":33980548,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":29512044,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -337,14 +337,14 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   }
   if (sceneUuid === SPLASH_UI_SCENE_UUID) {
     splashRenderer = renderer;
+    renderer.getElementByName('GameField')?.style.setProperty('visibility', 'hidden');
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
     await game.start(godotCartridge, {
       stage: progress.getCurrentStage(),
       config: { godotScene: 'lobby', preloadGodotScenes: ['lobby', 'main'] },
-      onProgress: ({ sceneReady, sfx }) => {
+      onProgress: ({ sfx }) => {
         handleGodotSfx({ sfx });
-        if (sceneReady === 'main' && activeSceneName === INGAME_UI_SCENE && activeGame === game && game.state === 'ready') game.startGame();
       },
       onHud: ({ timeLeft }) => flow.update({ stage: { timer: timeLeft } }),
       onEnd: handleMainGameEnd,
@@ -393,6 +393,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
       stage: progress.getCurrentStage(),
       config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
     });
+    activeGame.startGame();
     return;
   }
   const sessionToken = ++sceneSessionToken;

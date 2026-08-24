@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-24T05:39:41.538Z",
+  "generatedAt": "2026-08-24T07:00:41.086Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
   "errors": [],
   "warnings": [
@@ -10,30 +10,6 @@
       "where": "nav home_bottom 탭 \"Shop\"",
       "message": "팝업 씬이 탭에 연결되어 있습니다(해당 nav 씬을 열어 탭의 매칭 씬을 확인) — 팝업은 오버레이(__close__)로 열리는 규약이라 탭 상주 화면과 의미가 충돌합니다.",
       "detail": "pop_BuyCoins"
-    },
-    {
-      "code": "event-not-in-flow",
-      "where": "ingame.bar1-png-374",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ pop_BuyCoins"
-    },
-    {
-      "code": "event-not-in-flow",
-      "where": "ingame.gimmick-coinpurse-coin-png-375",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ pop_BuyCoins"
-    },
-    {
-      "code": "event-not-in-flow",
-      "where": "ingame.bar1-png-376",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ pop_BuyCoins"
-    },
-    {
-      "code": "event-not-in-flow",
-      "where": "ingame.bar1-png-378",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ pop_BuyCoins"
     },
     {
       "code": "event-not-in-flow",
