@@ -21,11 +21,13 @@ extends Node3D
 		color_id = value
 		_request_editor_refresh()
 
-# cat_hole1 위를 ice 블록으로 덮는 시각 기믹. 구멍의 흡입 판정과는 분리되어 있으며,
-# 해제 규칙이 정해지면 그 규칙이 이 값만 변경하도록 연결한다.
-@export var ice_cover := false:
+# 얼음 기믹. 0 이면 얼음 없음. N 이면 이 구멍은 얼음으로 덮여 있고, 판에서 고양이가 N 마리
+# 빠져나갈 때까지 잠긴다(그동안 이 구멍으로는 흡입되지 않는다). 한 마리 나갈 때마다 1씩 줄고
+# 0 이 되는 순간 얼음이 깨져 구멍이 열린다. 얼음 위에는 Lilita One 폰트로 남은 수가 적힌다.
+# 잠금 판정과 표시는 전부 LevelManager 가 한다.
+@export_range(0, 32, 1) var ice_count: int = 0:
 	set(value):
-		ice_cover = value
+		ice_count = maxi(value, 0)
 		_request_editor_refresh()
 
 

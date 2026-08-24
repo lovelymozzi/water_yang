@@ -151,6 +151,8 @@ static func generate_stage(
 			config.squeeze_free_cells = int(params.get("squeeze", 1)) != 0
 			config.min_dependent_cats = maxi(cat_count - int(params.get("dep_slack", 2)), 0)
 			config.max_attempts = int(params.get("attempts", 120))
+			config.ice_chance = float(params.get("ice", 0.0))
+			config.ice_number_max = int(params.get("ice_max", 0))
 
 			var level: Dictionary = generator.generate(config)
 			if bool(level["ok"]):

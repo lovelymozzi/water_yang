@@ -27,6 +27,10 @@ extends Node
 @export_range(1, 8, 1) var min_chain_depth: int = 3
 @export_range(0.0, 1.0, 0.05) var obstacle_fill_ratio: float = 0.55
 @export_range(1, 400, 1) var max_attempts: int = 80
+# 얼음 기믹. 첫 탈출 구멍을 뺀 구멍마다 이 확률로 얼음을 덮는다. 0 = 얼음 없음.
+@export_range(0.0, 1.0, 0.05) var ice_chance: float = 0.0
+# 얼음 숫자 상한. 0 = 풀이상 안전한 최댓값(그 구멍이 쓰이기 전까지 빠지는 고양이 수)을 쓴다.
+@export_range(0, 8, 1) var ice_number_max: int = 0
 
 @export_group("Output")
 @export_dir var json_directory: String = "res://resources/levels"
@@ -74,6 +78,8 @@ func generate_level() -> void:
 	config.min_chain_depth = min_chain_depth
 	config.obstacle_fill_ratio = obstacle_fill_ratio
 	config.max_attempts = max_attempts
+	config.ice_chance = ice_chance
+	config.ice_number_max = ice_number_max
 
 	var generator := MapGenerator.new()
 	var level: Dictionary = generator.generate(config)

@@ -37,6 +37,7 @@ static func apply_to_manager(manager: LevelManager, level: Dictionary) -> void:
 		holes_root.add_child(marker)
 		marker.set("grid_pos", cell)
 		marker.set("color_id", int(entry["color_id"]))
+		marker.set("ice_count", int(entry.get("ice_count", 0)))
 		_claim(marker, scene_owner)
 
 	for entry in level["obstacles"]:
@@ -150,6 +151,7 @@ static func to_json(level: Dictionary) -> Dictionary:
 		data["holes"].append({
 			"grid_pos": _pack_cell(entry["grid_pos"]),
 			"color_id": int(entry["color_id"]),
+			"ice_count": int(entry.get("ice_count", 0)),
 		})
 	for entry in level["obstacles"]:
 		data["obstacles"].append({
@@ -191,6 +193,7 @@ static func from_json(data: Dictionary) -> Dictionary:
 		level["holes"].append({
 			"grid_pos": _unpack_cell(entry["grid_pos"]),
 			"color_id": int(entry["color_id"]),
+			"ice_count": int(entry.get("ice_count", 0)),
 		})
 	for entry in data["obstacles"]:
 		level["obstacles"].append({

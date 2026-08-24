@@ -104,6 +104,12 @@ class Config:
 	var straight_bias: float = 2.0
 	var probe_tries: int = 4
 	var probe_moves: int = 8
+	# 얼음 기믹. 첫 탈출 구멍(앞서 나가는 고양이가 없는 구멍)을 뺀 나머지 구멍마다 이 확률로
+	# 얼음을 덮는다. 0 = 얼음 없음.
+	var ice_chance: float = 0.0
+	# 얼음 숫자의 상한. 0 = "이 구멍이 풀이에서 쓰이기 전까지 빠지는 고양이 수"를 상한으로
+	# 쓴다. 그 수를 넘으면 기록된 풀이에서 얼음이 제때 안 열려 맵이 안 풀린다.
+	var ice_number_max: int = 0
 
 
 static func default_config() -> Config:
@@ -235,8 +241,15 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 			"early_clearing": verdict["early_clearing"],
 		},
 	}
+	# 얼음은 풀이가 확정된 뒤에 배치한다. "이 구멍이 처음 쓰이기 전까지 빠지는 고양이 수"를
+	# 상한으로 삼으므로 최종 풀이(스퀴즈·벽 삽입까지 반영된)를 기준으로 재야 한다.
+	var ice: Dictionary = _assign_ice(config, rng, board, solution)
 	for hole in holes:
-		level["holes"].append({"grid_pos": hole["cell"], "color_id": int(hole["color"])})
+		level["holes"].append({
+			"grid_pos": hole["cell"],
+			"color_id": int(hole["color"]),
+			"ice_count": int(ice.get(hole["cell"], 0)),
+		})
 	for k in config.cat_count:
 		level["cats"].append({
 			"body_cells": plans[k]["start_body"],
@@ -849,6 +862,51 @@ func _commit_wall(
 	spliced.append_array(solution)
 	return spliced
 
+
+
+# ---------------------------------------------------------------- 얼음 사후 주입
+
+# 얼음을 사후에 꽂아도 안전한 이유 (장애물과 같은 논증의 변형):
+#
+# 얼음은 "고양이 N 마리가 빠질 때까지 이 구멍의 흡입을 막는" 상태 기믹이다. 기록된 풀이는
+# 얼음 없는 모델에서 뽑혔으므로, 각 구멍은 **그 짝 고양이가 처음 구멍에 인접하는 수**에서
+# 정확히 흡입된다(인접하면 강제 흡입이니 그보다 늦게 인접해 대기하는 상태가 없다). 그러니
+# 그 구멍의 얼음 숫자를 "그 흡입 이전까지 빠진 고양이 수" 이하로 두면, 그 수에 도달했을 때
+# 얼음이 이미 깨져 있어 같은 수에서 그대로 흡입된다. 즉 얼음을 켜도 기록된 풀이의 모든 흡입이
+# 같은 순간에 일어나 재생이 바뀌지 않는다. 첫 구멍(이전 흡입 0)은 얼음을 못 씌운다.
+func _assign_ice(
+	config: Config, rng: RandomNumberGenerator, board: PuzzleState, solution: Array[Dictionary]
+) -> Dictionary:
+	var result: Dictionary = {}
+	if config.ice_chance <= 0.0:
+		return result
+	var before: Dictionary = _escaped_before(board, solution)
+	for hole_cell in before:
+		var cap: int = int(before[hole_cell])
+		if cap < 1:
+			continue
+		if rng.randf() >= config.ice_chance:
+			continue
+		var high: int = cap if config.ice_number_max <= 0 else mini(cap, config.ice_number_max)
+		result[hole_cell] = rng.randi_range(1, high)
+	return result
+
+
+# 각 구멍이 처음 흡입에 쓰이기 직전까지 빠진 고양이 수. 최종 풀이를 재생하며 흡입마다 카운트를
+# 올린다. 구멍은 흡입될 때 `holes` 에서 지워지므로, 지워진 구멍을 그 순간 카운트로 기록한다.
+func _escaped_before(start_state: PuzzleState, solution: Array[Dictionary]) -> Dictionary:
+	var work: PuzzleState = start_state.clone()
+	var escaped: int = 0
+	var before: Dictionary = {}
+	for move in solution:
+		var holes_before: Array = work.holes.keys()
+		var result: Dictionary = work.apply_move(move)
+		if bool(result["absorbed"]):
+			for hole_cell in holes_before:
+				if not work.holes.has(hole_cell):
+					before[hole_cell] = escaped
+			escaped += 1
+	return before
 
 
 # ---------------------------------------------------------------- 장애물 사후 주입

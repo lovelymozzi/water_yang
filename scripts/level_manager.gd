@@ -11,6 +11,10 @@ const BOARD_VISUAL_TEXTURE = preload("res://water_yang/bg_tile1_1.jpg")
 const FLOOR_TILE_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const PATH_PREVIEW_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const ICE_BLOCK_SCENE = preload("res://scenes/ice_block.tscn")
+const ICE_NUMBER_FONT = preload("res://web/ui/vendor/fonts/lilita-one-1.woff2")
+# 얼음 위 숫자 색. 얼음 틴트(하늘색)와 대비되는 진한 남색.
+const ICE_NUMBER_COLOR := Color(0.09, 0.28, 0.44, 1.0)
+const ICE_NUMBER_OUTLINE_COLOR := Color(1.0, 1.0, 1.0, 0.9)
 const TILE_HEIGHT := 0.12
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
@@ -196,7 +200,12 @@ var _hole_cells: Array[Vector2i] = []
 var _obstacle_cells: Array[Vector2i] = []
 # _hole_cells 와 같은 순서의 색 인덱스. -1 은 아무 색이나 받는 와일드카드다.
 var _hole_color_ids: Array[int] = []
-var _hole_ice_covers: Array[bool] = []
+# _hole_cells 와 같은 순서. 0 = 얼음 없음, N = 고양이 N 마리가 빠질 때까지 잠금.
+var _hole_ice_counts: Array[int] = []
+# 지금까지 판에서 빠져나간 고양이 수. 얼음 잠금 해제의 단일 기준이다.
+var _escaped_count: int = 0
+# hole cell -> {"node": Node3D, "label": Label3D, "count": int}. 살아 있는 얼음 덮개만 담는다.
+var _ice_covers: Dictionary = {}
 var _preview_refresh_queued: bool = false
 
 var _board_root: Node3D
@@ -403,8 +412,48 @@ func get_escape_result(cat: CatEntity) -> Dictionary:
 func on_cat_escaped(cat: CatEntity, hole_cell: Vector2i) -> void:
 	_cats.erase(cat)
 	_close_hole(hole_cell)
+	# 고양이가 한 마리 빠질 때마다 모든 얼음의 남은 수가 1씩 준다. 0 이 되면 깨진다.
+	_escaped_count += 1
+	_refresh_ice_covers()
 	if _cats.is_empty():
 		level_cleared.emit()
+
+
+# 이 구멍이 아직 얼음으로 잠겨 있는지. 흡입 판정(`adjacent_hole`)이 이 함수로 잠긴 구멍을
+# 건너뛰므로, 잠긴 구멍으로는 고양이가 들어가지 않는다.
+func is_hole_locked(cell: Vector2i) -> bool:
+	var index: int = _hole_cells.find(cell)
+	return index >= 0 and _hole_ice_counts[index] > _escaped_count
+
+
+# 얼음 남은 수를 다시 계산한다. 남은 수 = 임계값 - 지금까지 빠진 수. 0 이하가 되면 얼음을
+# 깨서 구멍을 노출한다(`_escaped_count` 는 단조 증가하므로 한 번 깨진 얼음은 되살아나지 않는다).
+func _refresh_ice_covers() -> void:
+	for cell in _ice_covers.keys():
+		var entry: Dictionary = _ice_covers[cell]
+		var remaining: int = int(entry["count"]) - _escaped_count
+		if remaining > 0:
+			var label: Label3D = entry["label"]
+			if is_instance_valid(label):
+				label.text = str(remaining)
+			continue
+		_break_ice_cover(cell)
+
+
+func _break_ice_cover(cell: Vector2i) -> void:
+	var entry: Dictionary = _ice_covers.get(cell, {})
+	_ice_covers.erase(cell)
+	if entry.is_empty():
+		return
+	var label: Label3D = entry.get("label")
+	if is_instance_valid(label):
+		label.queue_free()
+	var node: Node3D = entry.get("node")
+	if is_instance_valid(node):
+		var tween: Tween = create_tween()
+		tween.tween_property(node, "scale", node.scale * 0.001, 0.25) \
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+		tween.tween_callback(node.queue_free)
 
 
 # 고양이를 다 삼킨 구멍은 함께 수축해 사라진다. 닫힌 자리는 평범한 빈 칸이 되어 다른
@@ -416,7 +465,8 @@ func _close_hole(cell: Vector2i) -> void:
 		return
 	_hole_cells.remove_at(index)
 	_hole_color_ids.remove_at(index)
-	_hole_ice_covers.remove_at(index)
+	_hole_ice_counts.remove_at(index)
+	_ice_covers.erase(cell)
 	if is_inside_grid(cell):
 		_set_cell_state(cell, CellState.EMPTY)
 
@@ -483,7 +533,9 @@ func _clear_generated_nodes() -> void:
 	_highlight_tiles.clear()
 	_hole_cells.clear()
 	_hole_color_ids.clear()
-	_hole_ice_covers.clear()
+	_hole_ice_counts.clear()
+	_ice_covers.clear()
+	_escaped_count = 0
 	_obstacle_cells.clear()
 	_cats.clear()
 
@@ -625,7 +677,7 @@ func _sync_hole_layout() -> void:
 
 		_hole_cells.append(marker_grid_pos)
 		_hole_color_ids.append(int(child.get("color_id")))
-		_hole_ice_covers.append(bool(child.get("ice_cover")))
+		_hole_ice_counts.append(int(child.get("ice_count")))
 		_set_cell_state(marker_grid_pos, CellState.HOLE)
 
 
@@ -657,7 +709,10 @@ func _build_hole_visuals() -> void:
 			get_hole_rim_color(color_id),
 			get_hole_pit_color(color_id)
 		)
-		if _hole_ice_covers[index]:
+		var ice_count: int = _hole_ice_counts[index]
+		# 에디터 미리보기에서는 배치한 그대로(잠금 상태)를 보여 준다. 실행 중에는 이미
+		# 임계값을 넘긴 얼음이면 아예 만들지 않는다(예: 저장된 씬을 중간부터 재개하는 경우).
+		if ice_count > _escaped_count:
 			var ice_cover := ICE_BLOCK_SCENE.instantiate() as Node3D
 			if ice_cover != null:
 				ice_cover.name = "IceCover"
@@ -668,6 +723,35 @@ func _build_hole_visuals() -> void:
 				ice_cover.scale = Vector3.ONE / visual.scale
 				ice_cover.position = Vector3(0.0, TILE_HEIGHT / visual.scale.y, 0.0)
 				ice_cover.call("apply_cell_style", cell, Color.WHITE, obstacle_fbx_height)
+				# 숫자는 스케일 보정이 필요 없게 홀 루트(월드 스케일)에 직접 얹는다.
+				var label := _make_ice_number_label(ice_count - _escaped_count)
+				label.position = grid_to_world(
+					cell, floor_height + hole_visual_height + obstacle_fbx_height + 0.35
+				)
+				_holes_root.add_child(label)
+				_ice_covers[cell] = {
+					"node": ice_cover, "label": label, "count": ice_count,
+				}
+
+
+# 얼음 위에 뜨는 남은 수 라벨. Lilita One, 카메라를 향하는 빌보드로 어느 각도에서도 읽힌다.
+func _make_ice_number_label(remaining: int) -> Label3D:
+	var label := Label3D.new()
+	label.name = "IceNumber"
+	label.font = ICE_NUMBER_FONT
+	label.text = str(remaining)
+	label.font_size = 128
+	label.pixel_size = 0.006
+	label.modulate = ICE_NUMBER_COLOR
+	label.outline_size = 24
+	label.outline_modulate = ICE_NUMBER_OUTLINE_COLOR
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	# 빌보드는 프레임마다 셰이더가 바뀌므로 그림자를 끄고, 얼음에 살짝 겹쳐도 가려지지 않게 한다.
+	label.shaded = false
+	label.no_depth_test = false
+	label.render_priority = 1
+	label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return label
 
 
 # 잠긴 칸을 눈에 보이게 그린다. 에셋(`obstacle_scene`)이 있으면 그것을 붙이고, 없으면 타일과
@@ -803,6 +887,9 @@ func adjacent_hole(cell: Vector2i, color_id: int = -1) -> Variant:
 	for dir in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
 		var neighbour: Vector2i = cell + dir
 		if not is_hole(neighbour):
+			continue
+		# 얼음으로 잠긴 구멍은 흡입하지 않는다. 얼음이 깨져야 비로소 열린다.
+		if is_hole_locked(neighbour):
 			continue
 		if not color_ids_pair(color_id, get_hole_color_id(neighbour)):
 			continue
