@@ -35,5 +35,17 @@
   "src/assets/event_icon_skkycupheart.webp": [
     "match",
     "heart"
+  ],
+  "src/assets/gacha_title_ribbon_default.webp": [
+    "match",
+    "ribbon"
+  ],
+  "src/assets/decoshop_toptext_base.png": [
+    "match",
+    "ribbon"
+  ],
+  "src/assets/img_heart_fail.webp": [
+    "match",
+    "heart"
   ]
 }

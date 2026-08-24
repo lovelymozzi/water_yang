@@ -206,8 +206,10 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
+  if (sceneName === LOBBY_UI_SCENE) renderer.update({ stage: { current: `LEVEL ${progress.getCurrentStage()}` } });
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   if (sceneName === INGAME_UI_SCENE) {
+    renderer.update({ stage: { current: `Level${String(progress.getCurrentStage()).padStart(2, '0')}` } });
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
   }
@@ -340,7 +342,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     activeGame = game;
     await game.start(godotCartridge, {
       stage: progress.getCurrentStage(),
-      config: { godotScene: 'lobby', preloadGodotScenes: ['lobby', 'main'] },
+      config: { godotScene: 'lobby' },
       onProgress: ({ sfx }) => {
         handleGodotSfx({ sfx });
       },

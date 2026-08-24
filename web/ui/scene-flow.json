@@ -262,20 +262,6 @@
       "toSceneName": "pop_BuyLives_1"
     },
     {
-      "id": "edge-mt1ei00jp5mc",
-      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
-      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "trigger": {
-        "stableId": "home-btn-stage-normal-png-145",
-        "eventName": "home-btn-stage-normal-png-145:click",
-        "condition": "no_heart"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "Lobby",
-      "toSceneName": "pop_BuyLives_1"
-    },
-    {
       "id": "edge-mt1eigfwpmco",
       "fromSceneUuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
       "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
