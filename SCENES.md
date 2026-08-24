@@ -40,6 +40,12 @@
 - GameField 레이어 있음
 <!-- SCENE:ingame END -->
 
+<!-- SCENE:loading BEGIN -->
+#### `loading`  ·  contract: `./web/ui/loading.contract.json`
+- sceneUuid: `b7f311a8-09d4-4bd0-9c26-4ef9ce1f045b`
+- 이벤트: 없음
+<!-- SCENE:loading END -->
+
 <!-- SCENE:pop_BuyCoins BEGIN -->
 #### `pop_BuyCoins`  ·  contract: `./web/ui/pop_BuyCoins.contract.json`
 - sceneUuid: `b11144cd-f2c6-4f82-a4a8-c76b3496cd70`
@@ -107,7 +113,7 @@
 <!-- SCENE:splash BEGIN -->
 #### `splash`  ·  contract: `./web/ui/splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: `loading-out-png-11:click` · `loading-inner-png-12:click` · `loading-bar-png-13:click` · `text-loading-15:click`
+- 이벤트: `loading-out-png-11:click`
 - 텍스트 바인딩: `loadingMessage`
 - 위젯: `loading.prograss`(fill)
 - GameField 레이어 있음

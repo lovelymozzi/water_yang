@@ -356,7 +356,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     activeGame = game;
     await game.start(godotCartridge, {
       stage: progress.getCurrentStage(),
-      config: { godotScene: 'lobby' },
+      config: { godotScene: 'lobby', preloadGodotScenes: ['main'] },
       onProgress: ({ sfx }) => {
         handleGodotSfx({ sfx });
       },

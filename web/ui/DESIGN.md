@@ -119,6 +119,7 @@
 - `home_bottom` — navigation · 바 배경 `#1d58a8`
 - `ingame` — 단색 `#16213e`
 - `LevelFail_1` — 단색 `rgba(0,0,0,0.3)`
+- `loading` — 이미지 `loading.jpg` (image-stretch)
 - `Lobby` — 이미지 `-` (image-stretch)
 - `pop_BuyCoins` — 이미지 `common_bg_pt_3.png` (image-tile)
 - `pop_BuyLives_1` — 단색 `rgba(0,0,0,0.3)`

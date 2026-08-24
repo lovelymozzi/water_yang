@@ -1,0 +1,120 @@
+{
+  "name": "loading",
+  "sceneType": "scene",
+  "canvasHeight": 844,
+  "bgType": "image-stretch",
+  "bgColor": "#16213e",
+  "bgColor2": "#0e4a8c",
+  "bgGradientAngle": 180,
+  "bgImagePath": "loading.jpg",
+  "bgTileSize": 86,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
+  "bgStretchMode": "cover",
+  "bgScrollEnabled": true,
+  "bgScrollDirection": "up-right",
+  "bgScrollDuration": 18,
+  "refImagePath": "",
+  "refVisible": true,
+  "refDim": 0,
+  "layers": [],
+  "zLayers": [
+    {
+      "id": "zl-bg",
+      "name": "Background",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-content",
+      "name": "Content",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-ui",
+      "name": "UI",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-overlay",
+      "name": "Overlay",
+      "locked": false,
+      "hidden": false
+    }
+  ],
+  "activeZLayerId": "zl-content",
+  "groups": [
+    {
+      "id": "grp-32",
+      "name": "Group"
+    }
+  ],
+  "fxGroups": [
+    {
+      "id": "fx-177",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-180",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-184",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    }
+  ],
+  "sceneAnimations": [],
+  "guides": {
+    "v": [
+      -233,
+      380,
+      247
+    ],
+    "h": []
+  },
+  "uuid": "b7f311a8-09d4-4bd0-9c26-4ef9ce1f045b"
+}

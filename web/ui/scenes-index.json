@@ -21,6 +21,12 @@
       "sceneType": "scene"
     },
     {
+      "uuid": "b7f311a8-09d4-4bd0-9c26-4ef9ce1f045b",
+      "name": "loading",
+      "contract": "loading.contract.json",
+      "sceneType": "scene"
+    },
+    {
       "uuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
       "name": "Lobby",
       "contract": "Lobby.contract.json",
