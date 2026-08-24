@@ -38,14 +38,6 @@
       "layerStableIds": []
     },
     {
-      "id": "grp-282",
-      "name": "button_close",
-      "layerStableIds": [
-        "shape-round-rect-1765",
-        "shape-round-rect-1766"
-      ]
-    },
-    {
       "id": "grp-1773",
       "name": "Group",
       "layerStableIds": []
@@ -53,12 +45,25 @@
     {
       "id": "grp-1799",
       "name": "Group",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-2386",
+      "name": "Group",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-2397",
+      "name": "Group",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-2398",
+      "name": "Group",
       "layerStableIds": [
-        "shape-round-rect-1769",
-        "shape-round-rect-1770",
-        "shape-pill-1771",
-        "itemicon-money-coin-png-1773",
-        "plain-text-1774"
+        "common-btn-green-sales-png-2390",
+        "plain-text-1774",
+        "itemicon-money-coin-png-1773"
       ]
     }
   ],
@@ -80,10 +85,7 @@
         "loop": false,
         "repeat": 1
       },
-      "layerStableIds": [
-        "shape-round-rect-1765",
-        "shape-round-rect-1766"
-      ]
+      "layerStableIds": []
     },
     {
       "id": "fx-142",
@@ -159,10 +161,7 @@
         "loop": false,
         "repeat": 1
       },
-      "layerStableIds": [
-        "button-yellow1-png-1759",
-        "plain-text-1760"
-      ]
+      "layerStableIds": []
     },
     {
       "id": "fx-1779",
@@ -181,1390 +180,181 @@
         "loop": false,
         "repeat": 1
       },
+      "layerStableIds": []
+    },
+    {
+      "id": "fx-2387",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": []
+    },
+    {
+      "id": "fx-2399",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
       "layerStableIds": [
-        "shape-round-rect-1769",
-        "shape-round-rect-1770",
-        "shape-pill-1771",
-        "itemicon-money-coin-png-1773",
-        "plain-text-1774"
+        "common-btn-green-sales-png-2390",
+        "plain-text-1774",
+        "itemicon-money-coin-png-1773"
       ]
     }
   ],
   "sceneAnimations": [],
   "layers": [
     {
-      "stableId": "-1756",
-      "layerType": "component",
-      "displayName": "팝업_라인",
-      "x": 22,
+      "stableId": "common-popup-box-copy-png-2387",
+      "layerType": "image",
+      "displayName": "common_popup_box copy.png",
+      "x": 27,
       "y": 258,
+      "scale": 0.7,
       "zIndex": 1,
       "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 349,
-            "height": 335,
-            "radius": 16,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "#000000",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
+        "exportPath": "src/assets/common_popup_box copy.png",
+        "width": 480,
+        "height": 480,
+        "style": {
+          "shadow": {
             "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
             "color": "#000000",
-            "softness": 6
+            "opacity": 50
           },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 7,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": true,
-              "x": 0,
-              "y": 2,
-              "blur": 0,
-              "color": "#000000",
-              "opacity": 100
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 86,
+            "top": 73,
+            "right": 86,
+            "bottom": 73,
+            "scale": 1,
+            "repeat": "stretch"
           }
         }
       }
     },
     {
-      "stableId": "-1757",
-      "layerType": "component",
-      "displayName": "팝업",
-      "x": 23,
-      "y": 307,
+      "stableId": "entry-box-normal-png-2388",
+      "layerType": "image",
+      "displayName": "entry_box_normal.png",
+      "x": 46,
+      "y": 310,
+      "scale": 0.5681599024362575,
       "zIndex": 2,
       "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 347,
-            "height": 278,
-            "radius": 16,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "linear-gradient",
-            "color1": "#44bdfe",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "rgba(107,181,255,0)",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
+        "exportPath": "src/assets/entry_box_normal_1.png",
+        "width": 530,
+        "height": 261,
+        "style": {
+          "shadow": {
             "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#44bdfe",
-            "softness": 6
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
           },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": true,
-              "size": 7,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": true,
-              "x": 0,
-              "y": 2,
-              "blur": 0,
-              "color": "#00e7ff",
-              "opacity": 100
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      }
-    },
-    {
-      "stableId": "plain-text-1758",
-      "layerType": "component",
-      "displayName": "Plain Text",
-      "x": 117,
-      "y": 271,
-      "zIndex": 3,
-      "visible": false,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 160,
-            "height": 40,
-            "radius": 12,
-            "notch": 20,
-            "hollowThickness": 8
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
           },
-          "fill": {
-            "type": "none",
-            "color1": "#4a90d9",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#4a90d9",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "Stage Clear",
-          "bindingKey": "",
-          "fontSize": 35,
-          "fontWeight": "bold",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#ffffff",
-          "offsetX": 0,
-          "offsetY": 0,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 4,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 4,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 2,
-              "blur": 4,
-              "color": "#000000",
-              "opacity": 60
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "button-yellow1-png-1759",
-      "layerType": "image",
-      "displayName": "button_yellow1.png",
-      "x": 116,
-      "y": 494,
-      "zIndex": 4,
-      "visible": false,
-      "visual": {
-        "exportPath": "src/assets/button_green_8.png",
-        "width": 162,
-        "height": 77
-      }
-    },
-    {
-      "stableId": "plain-text-1760",
-      "layerType": "component",
-      "displayName": "Plain Text",
-      "x": 117,
-      "y": 512,
-      "zIndex": 5,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 160,
-            "height": 40,
-            "radius": 12,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "none",
-            "color1": "#4a90d9",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#4a90d9",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "ReTry",
-          "bindingKey": "",
-          "fontSize": 36,
-          "fontWeight": "bold",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#ffffff",
-          "offsetX": 0,
-          "offsetY": 0,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 4,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 4,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 2,
-              "blur": 4,
-              "color": "#000000",
-              "opacity": 60
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "shape-top-round-1761",
-      "layerType": "component",
-      "displayName": "상단 라운드",
-      "x": 23,
-      "y": 260,
-      "zIndex": 6,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "top-round-rect",
-            "width": 347,
-            "height": 58,
-            "radius": 16,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "#1f86f3",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#1f86f3",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": true,
-              "size": 3,
-              "color": "#3163b8"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      }
-    },
-    {
-      "stableId": "gold-glow-1762",
-      "layerType": "component",
-      "displayName": "Gold Glow",
-      "x": 93,
-      "y": 307,
-      "zIndex": 7,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "circle",
-            "width": 207,
-            "height": 191,
-            "radius": 115,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "radial-gradient",
-            "color1": "#ffc17a",
-            "color2": "rgba(225,255,0,0.2)",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#ffc17a",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 3,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
+          "stretch": false,
+          "slice": {
             "enabled": true,
-            "innerPct": 28,
-            "outerPct": 76
+            "left": 37,
+            "top": 38,
+            "right": 37,
+            "bottom": 40,
+            "scale": 1,
+            "repeat": "stretch"
           }
         }
       }
     },
     {
-      "stableId": "time-03-png-1776",
+      "stableId": "common-btn-green-sales-png-2390",
       "layerType": "image",
-      "displayName": "time_03.png",
-      "x": 82,
-      "y": 337,
-      "zIndex": 8,
+      "displayName": "common_btn_green_sales.png",
+      "x": 100,
+      "y": 473,
+      "scale": 0.6470588235294117,
+      "zIndex": 3,
       "visual": {
-        "exportPath": "src/assets/time_03_1.png",
-        "width": 227,
-        "height": 148
-      }
-    },
-    {
-      "stableId": "plain-text-1764",
-      "layerType": "component",
-      "displayName": "Plain Text",
-      "x": 218,
-      "y": 435,
-      "zIndex": 9,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 72,
-            "height": 40,
-            "radius": 12,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "none",
-            "color1": "#4a90d9",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
+        "exportPath": "src/assets/common_btn_green_sales.png",
+        "width": 295,
+        "height": 140,
+        "style": {
+          "shadow": {
             "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#4a90d9",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "+20s",
-          "bindingKey": "",
-          "fontSize": 51,
-          "fontWeight": "bold",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#ffffff",
-          "offsetX": 0,
-          "offsetY": 0,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 4,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 4,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 2,
-              "blur": 4,
-              "color": "#000000",
-              "opacity": 60
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "shape-round-rect-1765",
-      "layerType": "component",
-      "displayName": "둥근 사각형",
-      "x": 316,
-      "y": 266,
-      "scale": 0.8,
-      "zIndex": 10,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 52,
-            "height": 57,
-            "radius": 16,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "#000000",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 19,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
             "color": "#000000",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
+            "opacity": 50
           },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#000000",
-            "softness": 6
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
           },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        },
-        "images": [
-          {
-            "exportPath": "src/assets/Icon_Close02_8.png",
-            "width": 8,
-            "height": 8,
-            "offsetX": 0,
-            "offsetY": 0,
-            "zIndex": 2
-          }
-        ]
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "shape-round-rect-1765:click",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
-        }
-      ]
-    },
-    {
-      "stableId": "shape-round-rect-1766",
-      "layerType": "component",
-      "displayName": "둥근 사각형",
-      "x": 317,
-      "y": 267,
-      "scale": 0.8,
-      "zIndex": 11,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 50,
-            "height": 50,
-            "radius": 16,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "#ff4040",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#ff4040",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": true,
-              "size": 4,
-              "color": "#a72a2a"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": true,
-              "x": 0,
-              "y": 3,
-              "blur": 0,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        },
-        "images": [
-          {
-            "exportPath": "src/assets/Icon_Close02_8.png",
-            "width": 32,
-            "height": 32,
-            "offsetX": 0,
-            "offsetY": 0,
-            "zIndex": 2
-          }
-        ]
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "shape-round-rect-1765:click",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
-        }
-      ]
-    },
-    {
-      "stableId": "text-fail-1767",
-      "layerType": "component",
-      "displayName": "text_fail",
-      "x": 115,
-      "y": 271,
-      "zIndex": 12,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 160,
-            "height": 40,
-            "radius": 12,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "none",
-            "color1": "#4a90d9",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#4a90d9",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "Time Out",
-          "bindingKey": "",
-          "fontSize": 43,
-          "fontWeight": "bold",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#ffffff",
-          "offsetX": 0,
-          "offsetY": 0,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 4.5,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 4,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 2,
-              "blur": 4,
-              "color": "#000000",
-              "opacity": 60
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "shape-round-rect-1769",
-      "layerType": "component",
-      "displayName": "둥근 사각형",
-      "x": 122,
-      "y": 500,
-      "scaleX": 0.9264901477832513,
-      "zIndex": 13,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 160,
-            "height": 65,
-            "radius": 16,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "#11f055",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 3,
-            "color": "#000000",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#11f055",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 4,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": true,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": true,
-              "x": 0,
-              "y": -5,
-              "blur": 0,
-              "color": "#05aa62",
-              "opacity": 100
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 52,
+            "top": 55,
+            "right": 53,
+            "bottom": 60,
+            "scale": 1,
+            "repeat": "stretch"
           }
         }
       },
       "events": [
         {
           "trigger": "click",
-          "eventName": "shape-round-rect-1769:click",
+          "eventName": "common-btn-green-sales-png-2390:click",
           "branches": [
             {
-              "condition": "not enough coin",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "pop_BuyLives_1"
             },
             {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "stableId": "shape-round-rect-1770",
-      "layerType": "component",
-      "displayName": "둥근 사각형",
-      "x": 126,
-      "y": 507,
-      "scaleX": 0.9264901477832513,
-      "zIndex": 14,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "rectangle",
-            "width": 149,
-            "height": 26,
-            "radius": 8,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "#8bfa98",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#8bfa98",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "shape-round-rect-1769:click",
-          "branches": [
-            {
-              "condition": "not enough coin",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "stableId": "shape-pill-1771",
-      "layerType": "component",
-      "displayName": "알약",
-      "x": 129,
-      "y": 507,
-      "scaleX": 0.9264901477832513,
-      "zIndex": 15,
-      "visual": {
-        "model": {
-          "shape": {
-            "type": "pill",
-            "width": 8,
-            "height": 7,
-            "radius": 12,
-            "notch": 20,
-            "hollowThickness": 8
-          },
-          "fill": {
-            "type": "solid",
-            "color1": "#e7ffcc",
-            "color2": "#2e6ab4",
-            "angle": 180,
-            "depthIntensity": 50,
-            "rayCount": 8,
-            "texture": "wood",
-            "textureScale": 120
-          },
-          "border": {
-            "width": 0,
-            "color": "#6bb5ff",
-            "outlineWidth": 0,
-            "outlineColor": "#1e4a80"
-          },
-          "bevel": {
-            "enabled": false,
-            "top": 7,
-            "side": 8,
-            "bottom": 12,
-            "color": "#e7ffcc",
-            "softness": 6
-          },
-          "shadows": [
-            {
-              "type": "depth-edge",
-              "enabled": false,
-              "size": 0,
-              "color": "#1e4a80"
-            },
-            {
-              "type": "outer",
-              "enabled": false,
-              "x": 0,
-              "y": 4,
-              "blur": 8,
-              "color": "#000000",
-              "opacity": 30
-            },
-            {
-              "type": "inner",
-              "enabled": false,
-              "x": 0,
-              "y": 1,
-              "blur": 4,
-              "color": "#ffffff",
-              "opacity": 15
-            },
-            {
-              "type": "gloss",
-              "enabled": false,
-              "size": 10,
-              "blur": 8,
-              "color": "#ffffff",
-              "opacity": 45
-            }
-          ],
-          "mask": {
-            "type": "ring-fade",
-            "enabled": false,
-            "innerPct": 28,
-            "outerPct": 76
-          }
-        }
-      },
-      "rotation": -31,
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "shape-round-rect-1769:click",
-          "branches": [
-            {
-              "condition": "not enough coin",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "stableId": "itemicon-money-coin-png-1773",
-      "layerType": "image",
-      "displayName": "ItemIcon_Money_Coin.Png",
-      "x": 122,
-      "y": 506,
-      "zIndex": 16,
-      "visual": {
-        "exportPath": "src/assets/ItemIcon_Money_Coin_4.png",
-        "width": 60,
-        "height": 46
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "shape-round-rect-1769:click",
-          "branches": [
-            {
-              "condition": "not enough coin",
+              "condition": "재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동",
               "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
               "targetSceneName": "pop_BuyCoins"
             },
@@ -1582,8 +372,8 @@
       "layerType": "component",
       "displayName": "Plain Text",
       "x": 182,
-      "y": 506,
-      "zIndex": 17,
+      "y": 494,
+      "zIndex": 4,
       "visual": {
         "model": {
           "shape": {
@@ -1698,10 +488,15 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "shape-round-rect-1769:click",
+          "eventName": "common-btn-green-sales-png-2390:click",
           "branches": [
             {
               "condition": "not enough coin",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
+            },
+            {
+              "condition": "재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동",
               "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
               "targetSceneName": "pop_BuyCoins"
             },
@@ -1713,6 +508,354 @@
           ]
         }
       ]
+    },
+    {
+      "stableId": "itemicon-money-coin-png-1773",
+      "layerType": "image",
+      "displayName": "ItemIcon_Money_Coin.Png",
+      "x": 122,
+      "y": 495,
+      "zIndex": 5,
+      "visual": {
+        "exportPath": "src/assets/ItemIcon_Money_Coin_4.png",
+        "width": 60,
+        "height": 46
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "common-btn-green-sales-png-2390:click",
+          "branches": [
+            {
+              "condition": "not enough coin",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
+            },
+            {
+              "condition": "재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
+            },
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "ingame"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "entry-popup2-textbase-normal-png-2392",
+      "layerType": "image",
+      "displayName": "entry_popup2_textbase_normal.png",
+      "x": 15,
+      "y": 218,
+      "scale": 0.5,
+      "zIndex": 6,
+      "visual": {
+        "exportPath": "src/assets/entry_popup2_textbase_normal_1.png",
+        "width": 720,
+        "height": 190
+      }
+    },
+    {
+      "stableId": "plain-text-2393",
+      "layerType": "component",
+      "displayName": "Plain Text",
+      "x": 128,
+      "y": 224,
+      "zIndex": 7,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 134,
+            "height": 42,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "TimeOut",
+          "bindingKey": "",
+          "fontSize": 32,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 5,
+              "color": "#1e5685"
+            },
+            "depth": {
+              "size": 4,
+              "color": "#153879"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 0
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "plain-text-2393:click",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
+    },
+    {
+      "stableId": "plain-text-2394",
+      "layerType": "component",
+      "displayName": "Plain Text",
+      "x": 82,
+      "y": 319,
+      "zIndex": 8,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 229,
+            "height": 18,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "Add 20 seconds.",
+          "bindingKey": "",
+          "fontSize": 22,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#396fa9",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "common-btn-top-x-red-png-2395",
+      "layerType": "image",
+      "displayName": "common_btn_top_x_red.png",
+      "x": 324,
+      "y": 242,
+      "scale": 0.5854037267080746,
+      "zIndex": 9,
+      "visual": {
+        "exportPath": "src/assets/common_btn_top_x_red_1.png",
+        "width": 86,
+        "height": 92
+      },
+      "effects": [
+        {
+          "type": "press",
+          "source": {
+            "provider": "internal",
+            "name": "press"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "pointer",
+          "params": {
+            "transitionMs": 100,
+            "brightness": 95,
+            "scale": 95,
+            "useDepthOffset": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "common-btn-top-x-red-png-2395:click",
+          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+        }
+      ]
+    },
+    {
+      "stableId": "sandglass-png-2399",
+      "layerType": "image",
+      "displayName": "sandglass.png",
+      "x": 154,
+      "y": 345,
+      "scale": 0.85,
+      "zIndex": 10,
+      "visual": {
+        "exportPath": "src/assets/sandglass.png",
+        "width": 100,
+        "height": 113
+      }
     }
   ]
 }

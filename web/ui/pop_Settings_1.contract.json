@@ -603,7 +603,7 @@
         {
           "trigger": "click",
           "eventName": "setting-btn-option-png-2245:click",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
       ]
     },
@@ -700,6 +700,7 @@
       "y": 381,
       "scale": 0.65,
       "zIndex": 11,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/back_off.png",
         "width": 59,
@@ -709,7 +710,7 @@
         {
           "trigger": "click",
           "eventName": "setting-btn-option-png-2245:click",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
       ]
     },
@@ -730,7 +731,7 @@
         {
           "trigger": "click",
           "eventName": "setting-btn-option-png-2245:click",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
       ]
     },
@@ -784,6 +785,7 @@
       "y": 311,
       "scale": 0.5,
       "zIndex": 15,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/return_off.png",
         "width": 76,

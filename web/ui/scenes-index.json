@@ -15,6 +15,12 @@
       "sceneType": "scene"
     },
     {
+      "uuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
+      "name": "LevelFail_1",
+      "contract": "LevelFail_1.contract.json",
+      "sceneType": "scene"
+    },
+    {
       "uuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
       "name": "Lobby",
       "contract": "Lobby.contract.json",
@@ -51,15 +57,9 @@
       "sceneType": "scene"
     },
     {
-      "uuid": "2bce71e3-b626-4295-919d-e24cb07f1ae2",
+      "uuid": "cf13fce2-4ff9-40d1-a47a-9680167f65f7",
       "name": "pop_LevelFail",
       "contract": "pop_LevelFail.contract.json",
-      "sceneType": "scene"
-    },
-    {
-      "uuid": "cf13fce2-4ff9-40d1-a47a-9680167f65f7",
-      "name": "pop_LevelFail1",
-      "contract": "pop_LevelFail1.contract.json",
       "sceneType": "scene"
     },
     {

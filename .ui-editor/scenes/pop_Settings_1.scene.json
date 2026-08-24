@@ -189,7 +189,7 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
       ]
     },
@@ -458,7 +458,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 11,
-      "visible": true,
+      "visible": false,
       "width": 59,
       "height": 64,
       "flipX": false,
@@ -490,7 +490,7 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
       ]
     },
@@ -539,7 +539,7 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
+          "targetSceneUuid": "afd468ee-25ac-4e8c-b452-dbf5a3548662"
         }
       ]
     },
@@ -654,7 +654,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 15,
-      "visible": true,
+      "visible": false,
       "width": 76,
       "height": 70,
       "flipX": false,

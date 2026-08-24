@@ -4,6 +4,12 @@
 > 금지 규칙은 [`./AGENTS.md`](./AGENTS.md), `SceneRenderer` API·통합 절차는 `.claude/skills/ui-editor-game/SKILL.md` 참조.
 > **표기 규약(전 씬 공통 — 씬 섹션은 데이터만)**: 이벤트=`renderer.on(name, fn)` 구독(여기 있는 이름만 사용, 기본 트리거 click — 다르면 괄호 표기) · 바인딩=`renderer.update({...})` 주입 · sceneUuid=불변(씬 연결은 이 값 기준) · sceneType 표기 없음=일반 씬 · 위젯=visibility/toggle:boolean, slider:0~1, fill:0~100(표시 전용) — 입력은 `widget:<key>` 이벤트로 오고 게임이 update 로 에코해야 UI가 움직임 · GameField=GameSession 인게임 카트리지 마운트 지점.
 
+<!-- SCENE:LevelFail_1 BEGIN -->
+#### `LevelFail_1`  ·  contract: `./web/ui/LevelFail_1.contract.json`
+- sceneUuid: `2bce71e3-b626-4295-919d-e24cb07f1ae2`
+- 이벤트: `plain-text-563:click`
+<!-- SCENE:LevelFail_1 END -->
+
 <!-- SCENE:Lobby BEGIN -->
 #### `Lobby`  ·  contract: `./web/ui/Lobby.contract.json`
 - sceneUuid: `0ad51a82-1069-4948-ad6f-e97422300c6d`
@@ -50,37 +56,31 @@
 <!-- SCENE:pop_Fail BEGIN -->
 #### `pop_Fail`  ·  contract: `./web/ui/pop_Fail.contract.json`
 - sceneUuid: `ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd`
-- 이벤트: `plain-text-515:click` · `shape-round-rect-520:click`
+- 이벤트: `common-btn-green-sales-png-2367:click` · `plain-text-2370:click` · `common-btn-top-x-red-png-2372:click`
 <!-- SCENE:pop_Fail END -->
 
 <!-- SCENE:pop_Give_up BEGIN -->
 #### `pop_Give_up`  ·  contract: `./web/ui/pop_Give_up.contract.json`
 - sceneUuid: `afd468ee-25ac-4e8c-b452-dbf5a3548662`
-- 이벤트: `plain-text-346:click` · `shape-round-rect-350:click`
+- 이벤트: `common-btn-green-sales-png-2379:click` · `plain-text-2382:click` · `common-btn-top-x-red-png-2384:click`
 <!-- SCENE:pop_Give_up END -->
 
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
-- sceneUuid: `2bce71e3-b626-4295-919d-e24cb07f1ae2`
-- 이벤트: `plain-text-563:click` · `shape-round-rect-568:click`
-<!-- SCENE:pop_LevelFail END -->
-
-<!-- SCENE:pop_LevelFail1 BEGIN -->
-#### `pop_LevelFail1`  ·  contract: `./web/ui/pop_LevelFail1.contract.json`
 - sceneUuid: `cf13fce2-4ff9-40d1-a47a-9680167f65f7`
-- 이벤트: 없음
-<!-- SCENE:pop_LevelFail1 END -->
+- 이벤트: `common-btn-green-sales-png-2318:click` · `common-btn-top-x-red-png-2350:click`
+<!-- SCENE:pop_LevelFail END -->
 
 <!-- SCENE:pop_LevelWin BEGIN -->
 #### `pop_LevelWin`  ·  contract: `./web/ui/pop_LevelWin.contract.json`
 - sceneUuid: `af666955-071f-412b-832b-02370af5062f`
-- 이벤트: `button-green-png-133:click` · `button-yellow1-png-132:click`
+- 이벤트: `common-popup-box-copy-png-2402:click` · `common-btn-green-sales-png-2411:click` · `common-btn-green-sales-png-2404:click` · `plain-text-2405:click` · `plain-text-135:click` · `itemicon-coins-l-png-136:click` · `plain-text-137:click` · `video-png-134:click` · `confetti-148:click`
 <!-- SCENE:pop_LevelWin END -->
 
 <!-- SCENE:pop_OutOfMoves BEGIN -->
 #### `pop_OutOfMoves`  ·  contract: `./web/ui/pop_OutOfMoves.contract.json`
 - sceneUuid: `26578336-5751-476b-b24d-f144818b21ce`
-- 이벤트: `shape-round-rect-1765:click` · `shape-round-rect-1769:click`
+- 이벤트: `common-btn-green-sales-png-2390:click` · `plain-text-2393:click` · `common-btn-top-x-red-png-2395:click`
 - 텍스트 바인딩: `continue.coin`
 <!-- SCENE:pop_OutOfMoves END -->
 

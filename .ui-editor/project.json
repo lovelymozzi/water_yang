@@ -87,7 +87,8 @@
       "New Scene": "Shop",
       "race_started": "Race_Started",
       "home_bottom": "Home",
-      "Splash": "splash"
+      "Splash": "splash",
+      "pop_OutOfMoves": "TimeOut"
     },
     "customGroups": [],
     "activePreset": "Puzzle",
@@ -165,8 +166,8 @@
         "y": 71.8881
       },
       "af666955-071f-412b-832b-02370af5062f": {
-        "x": 413.468,
-        "y": -647.94
+        "x": 416.463,
+        "y": -615.246
       },
       "26578336-5751-476b-b24d-f144818b21ce": {
         "x": 778.14,
@@ -177,8 +178,8 @@
         "y": -471.154
       },
       "afd468ee-25ac-4e8c-b452-dbf5a3548662": {
-        "x": 846.937,
-        "y": 1094.25
+        "x": 921.517,
+        "y": 900.1
       },
       "c7984bd5-a727-468c-91eb-65d6b3d37c57": {
         "x": 1741.95,
@@ -189,12 +190,12 @@
         "y": 1084.04
       },
       "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be": {
-        "x": 1181.87,
-        "y": 373.128
+        "x": 1202.44,
+        "y": 416.688
       },
       "2bce71e3-b626-4295-919d-e24cb07f1ae2": {
-        "x": 386.28,
-        "y": 894.673
+        "x": -1117.42,
+        "y": 553.673
       },
       "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd": {
         "x": 1145.59,
@@ -219,11 +220,15 @@
       "90273ac1-a04e-4ec2-876f-ae4d16671774": {
         "x": 2087.1,
         "y": 411.3
+      },
+      "cf13fce2-4ff9-40d1-a47a-9680167f65f7": {
+        "x": 500.17,
+        "y": 1012.78
       }
     },
     "sceneOrder": [
       "Lobby",
-      "pop_LevelFail",
+      "LevelFail_1",
       "Ingame_1",
       "Splash_1",
       "pop_LevelWin",
@@ -277,7 +282,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "pop_LevelFail1"
+    "lastScene": "pop_BuyCoins"
   },
   "globalViewport": {
     "width": 393,

@@ -16,6 +16,7 @@ const DEFAULT_STAGE_TIME_SECONDS := 60.0
 
 @onready var level_manager: LevelManager = $LevelManager
 @onready var clear_label: Label = $CanvasLayer/ClearLabel
+@onready var ice_overlay: ColorRect = $CanvasLayer/IceOverlay
 
 var _stall_reports := 0
 var _stage_paths: PackedStringArray = PackedStringArray()
@@ -32,6 +33,7 @@ var _replay_button: Button
 var _replay_index := -1
 # 지금 수를 이미 눌렀는지. 누른 뒤에는 커밋될 때까지 프레임을 넘겨 줘야 한다.
 var _replay_issued := false
+var _ice_overlay_tween: Tween
 
 
 func _ready() -> void:
@@ -87,6 +89,7 @@ func _ready() -> void:
 	UiBridge.host_initialize.connect(_on_host_initialize)
 	UiBridge.host_start.connect(_on_host_start)
 	UiBridge.host_force_quit.connect(_on_host_force_quit)
+	UiBridge.host_message.connect(_on_host_message)
 
 	# 드래그 입력은 별도 노드가 전담한다. 헤드리스 검증에서 이벤트를 직접 주입하기 쉽다.
 	var drag_controller: Node = DRAG_CONTROLLER_SCRIPT.new()
@@ -175,6 +178,25 @@ func _on_host_start() -> void:
 
 func _on_host_force_quit(_reason: String) -> void:
 	_stage_timer_running = false
+
+
+func _on_host_message(topic: String, _payload) -> void:
+	if topic != "use_ice":
+		return
+	if _ice_overlay_tween != null:
+		_ice_overlay_tween.kill()
+	var material := ice_overlay.material as ShaderMaterial
+	if material == null:
+		push_error("IceOverlay requires a ShaderMaterial")
+		return
+	ice_overlay.show()
+	material.set_shader_parameter("dissolve_value", 0.0)
+	_ice_overlay_tween = create_tween()
+	_ice_overlay_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_value", 1.0, 0.25)
+	_ice_overlay_tween.tween_interval(0.45)
+	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_value", 0.0, 0.7)
+	_ice_overlay_tween.tween_callback(ice_overlay.hide)
 
 
 func _format_stage_timer(seconds: int) -> String:

@@ -1,5 +1,5 @@
 {
-  "name": "pop_LevelFail",
+  "name": "LevelFail_1",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -76,7 +76,8 @@
         "maskInnerPct": 28,
         "maskOuterPct": 76
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "events": []
     },
     {
       "id": 560,
@@ -147,7 +148,8 @@
           "color": "#ffffff"
         }
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "events": []
     },
     {
       "id": 561,
@@ -226,7 +228,8 @@
         "maskInnerPct": 28,
         "maskOuterPct": 76
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "events": []
     },
     {
       "id": 563,
@@ -310,7 +313,8 @@
             "sliceB": 0,
             "sliceScale": 1,
             "sliceRepeat": "stretch",
-            "zIndex": 1
+            "zIndex": 1,
+            "assetId": "src/assets/button_green_4_1.png"
           }
         ],
         "selectedImageIndex": 0,
@@ -343,14 +347,7 @@
           "trigger": "click",
           "eventName": "",
           "targetSceneUuid": null,
-          "memo": "하트가 있으면 인게임을 초기화 하고 바로 인게임을 다시 시작함",
-          "branches": [
-            {
-              "condition": "no_heart",
-              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "BuyLives_1"
-            }
-          ]
+          "memo": "하트가 있으면 인게임을 초기화 하고 바로 인게임을 다시 시작함"
         }
       ]
     },
@@ -412,7 +409,8 @@
         "maskInnerPct": 28,
         "maskOuterPct": 76
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "events": []
     },
     {
       "id": 565,
@@ -473,7 +471,8 @@
         "maskOuterPct": 76
       },
       "locked": true,
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "events": []
     },
     {
       "id": 566,
@@ -503,7 +502,22 @@
       "texts": [],
       "selectedTextIndex": -1,
       "locked": true,
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "assetId": "src/assets/heart_broken_1_1.png",
+      "events": [],
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
+      }
     },
     {
       "id": 567,
@@ -582,7 +596,8 @@
         "maskInnerPct": 28,
         "maskOuterPct": 76
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "events": []
     },
     {
       "id": 568,
@@ -641,7 +656,8 @@
             "shadowBlur": 8,
             "shadowColor": "#000000",
             "shadowOpacity": 50,
-            "zIndex": 2
+            "zIndex": 2,
+            "assetId": "src/assets/Icon_Close02_2.png"
           }
         ],
         "selectedImageIndex": 0,
@@ -659,14 +675,7 @@
       },
       "fxGroupId": "fx-139",
       "groupId": "grp-282",
-      "zLayerId": "zl-content",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "__close__"
-        }
-      ]
+      "zLayerId": "zl-content"
     },
     {
       "id": 569,
@@ -712,8 +721,24 @@
         "innerShadowOpacity": 15,
         "texts": [],
         "selectedTextIndex": 0,
-        "images": [],
-        "selectedImageIndex": -1,
+        "images": [
+          {
+            "exportPath": "src/assets/Icon_Close02_2.png",
+            "width": 32,
+            "height": 32,
+            "offsetX": 0,
+            "offsetY": 0,
+            "shadowEnabled": false,
+            "shadowX": 0,
+            "shadowY": 4,
+            "shadowBlur": 8,
+            "shadowColor": "#000000",
+            "shadowOpacity": 50,
+            "zIndex": 2,
+            "assetId": "src/assets/Icon_Close02_2.png"
+          }
+        ],
+        "selectedImageIndex": 0,
         "pressEnabled": false,
         "pressTransition": 100,
         "pressBrightness": 95,
@@ -724,29 +749,11 @@
         "bgTextureScale": 120,
         "maskEnabled": false,
         "maskInnerPct": 28,
-        "maskOuterPct": 76,
-        "shine": {
-          "enabled": false,
-          "angle": -20,
-          "width": 28,
-          "opacity": 65,
-          "softness": 70,
-          "duration": 0.9,
-          "interval": 2,
-          "direction": "right",
-          "color": "#ffffff"
-        }
+        "maskOuterPct": 76
       },
       "fxGroupId": "fx-139",
       "groupId": "grp-282",
-      "zLayerId": "zl-content",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "__close__"
-        }
-      ]
+      "zLayerId": "zl-content"
     },
     {
       "id": 570,
@@ -823,20 +830,10 @@
         "bgTextureScale": 120,
         "maskEnabled": false,
         "maskInnerPct": 28,
-        "maskOuterPct": 76,
-        "shine": {
-          "enabled": false,
-          "angle": -20,
-          "width": 28,
-          "opacity": 65,
-          "softness": 70,
-          "duration": 0.9,
-          "interval": 2,
-          "direction": "right",
-          "color": "#ffffff"
-        }
+        "maskOuterPct": 76
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "events": []
     }
   ],
   "zLayers": [

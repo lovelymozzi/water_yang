@@ -47,5 +47,14 @@
   "src/assets/img_heart_fail.webp": [
     "match",
     "heart"
+  ],
+  "src/assets/icon_race_event_step_1.png": [
+    "match",
+    "icon",
+    "rank"
+  ],
+  "src/assets/gacha_title_ribbon_collabo.webp": [
+    "match",
+    "ribbon"
   ]
 }

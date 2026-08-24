@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b8awtp3vw87yq"]
 
 [ext_resource type="Script" uid="uid://nthjajr4o682" path="res://scripts/main_scene.gd" id="1_q0f23"]
+[ext_resource type="Shader" path="res://scripts/ice_screen_overlay.gdshader" id="2_ice_screen"]
 [ext_resource type="Script" uid="uid://kc76tu4jlnus" path="res://scripts/level_manager.gd" id="2_5srec"]
 [ext_resource type="PackedScene" path="res://scenes/tree_shadow_decor.tscn" id="3_c1pb6"]
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
@@ -99,6 +100,9 @@ width = 4
 height = 256
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ice_screen"]
+shader = ExtResource("2_ice_screen")
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
 script = ExtResource("1_q0f23")
@@ -1018,3 +1022,14 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
+
+[node name="IceOverlay" type="ColorRect" parent="CanvasLayer"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+material = SubResource("ShaderMaterial_ice_screen")
+color = Color(1, 1, 1, 1)

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-24T07:41:39.581Z",
+  "generatedAt": "2026-08-24T08:53:32.745Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
   "errors": [],
   "warnings": [
@@ -10,6 +10,30 @@
       "where": "nav home_bottom 탭 \"Shop\"",
       "message": "팝업 씬이 탭에 연결되어 있습니다(해당 nav 씬을 열어 탭의 매칭 씬을 확인) — 팝업은 오버레이(__close__)로 열리는 규약이라 탭 상주 화면과 의미가 충돌합니다.",
       "detail": "pop_BuyCoins"
+    },
+    {
+      "code": "event-not-in-flow",
+      "where": "pop_LevelWin.Group",
+      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
+      "detail": "→ pop_BuyLives_1 [no_heart]"
+    },
+    {
+      "code": "event-not-in-flow",
+      "where": "pop_LevelWin.Group",
+      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
+      "detail": "→ ingame [else]"
+    },
+    {
+      "code": "event-not-in-flow",
+      "where": "pop_LevelWin.Group",
+      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
+      "detail": "→ Lobby [current stage>4]"
+    },
+    {
+      "code": "event-not-in-flow",
+      "where": "pop_OutOfMoves.Group",
+      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
+      "detail": "→ pop_BuyLives_1 [no_heart]"
     },
     {
       "code": "event-not-in-flow",
@@ -28,6 +52,12 @@
       "where": "ingame",
       "message": "표준 바인딩 키가 아닙니다 — 매니저 attachRenderer 자동 연동이 되지 않아 게임이 수동 매핑하게 됩니다.",
       "detail": "'stage.timer' (표준: stage.current/stage.next+1/stage.next+2/stage.next+3)"
+    },
+    {
+      "code": "game-unwired-condition",
+      "where": "edge pop_OutOfMoves→pop_BuyCoins",
+      "message": "흐름도 조건 키의 술어가 게임 코드에 없습니다 — flow.defineCondition('재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동', () => ...) 를 등록하지 않으면 해당 분기가 동작하지 않습니다.",
+      "detail": "'재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동'"
     }
   ],
   "infos": [
