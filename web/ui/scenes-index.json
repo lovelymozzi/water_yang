@@ -10,7 +10,7 @@
     },
     {
       "uuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "name": "Ingame",
+      "name": "ingame",
       "contract": "ingame.contract.json",
       "sceneType": "scene"
     },
@@ -71,7 +71,7 @@
     {
       "uuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b",
       "name": "pop_Settings",
-      "contract": "pop_Settings.contract.json?v=settings-vfx-bgm-vib-3",
+      "contract": "pop_Settings.contract.json",
       "sceneType": "scene"
     },
     {

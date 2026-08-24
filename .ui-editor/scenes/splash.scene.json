@@ -2,11 +2,11 @@
   "name": "splash",
   "sceneType": "scene",
   "canvasHeight": 844,
-  "bgType": "solid",
+  "bgType": "image-stretch",
   "bgColor": "#16213e",
   "bgColor2": "#0e4a8c",
   "bgGradientAngle": 180,
-  "bgImagePath": "",
+  "bgImagePath": "title_bg.png",
   "bgTileSize": 64,
   "bgTilePad": 0,
   "bgImageAlpha": 100,
@@ -16,7 +16,7 @@
   "bgScrollDuration": 4,
   "refImagePath": "",
   "refVisible": true,
-  "refDim": 70,
+  "refDim": 0,
   "layers": [
     {
       "id": 2284,
@@ -104,21 +104,21 @@
       "locked": true
     },
     {
-      "id": 3,
-      "stableId": "title1-png-3",
+      "id": 2287,
+      "stableId": "title-bg-png-2287",
       "type": "image",
-      "name": "Title1.png",
-      "exportPath": "src/assets/Title1.png",
-      "x": -46,
-      "y": 0,
-      "scale": 1,
+      "name": "title_bg.png",
+      "exportPath": "src/assets/title_bg.png",
+      "x": -10,
+      "y": -21,
+      "scale": 1.05,
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 2,
       "visible": true,
-      "width": 487,
-      "height": 861,
+      "width": 393,
+      "height": 852,
       "flipX": false,
       "flipY": false,
       "tintMode": "off",
@@ -127,9 +127,57 @@
       "pressEnabled": false,
       "pressTransition": 100,
       "pressBrightness": 95,
-      "pressScale": 100,
+      "pressScale": 95,
       "texts": [],
-      "selectedTextIndex": -1,
+      "zLayerId": "zl-bg",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1
+    },
+    {
+      "id": 2286,
+      "stableId": "title-text-png-2286",
+      "type": "image",
+      "name": "title_text.png",
+      "exportPath": "src/assets/title_text.png",
+      "x": 28,
+      "y": -9,
+      "scale": 0.28499156829679595,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 3,
+      "visible": true,
+      "width": 1186,
+      "height": 1240,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "cssAnimation": {
+        "enabled": true,
+        "presetId": "bounce-in",
+        "duration": 0.85,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "texts": [],
       "zLayerId": "zl-content",
       "shine": {
         "enabled": false,
@@ -141,45 +189,8 @@
         "interval": 2,
         "direction": "right",
         "color": "#ffffff"
-      }
-    },
-    {
-      "id": 5,
-      "stableId": "title1-text1-png-5",
-      "type": "image",
-      "name": "Title1_text1.png",
-      "exportPath": "src/assets/Title1_text1.png",
-      "x": 41,
-      "y": 64,
-      "scale": 1,
-      "scaleX": 1,
-      "scaleY": 1,
-      "rotation": 0,
-      "zIndex": 3,
-      "visible": true,
-      "width": 309,
-      "height": 295,
-      "flipX": false,
-      "flipY": false,
-      "tintMode": "off",
-      "tintColor": "#ff3b30",
-      "tintStrength": 100,
-      "pressEnabled": false,
-      "pressTransition": 100,
-      "pressBrightness": 95,
-      "pressScale": 100,
-      "cssAnimation": {
-        "enabled": true,
-        "presetId": "bounce-in",
-        "duration": 0.8,
-        "delay": 0,
-        "repeat": 1,
-        "loop": false,
-        "loopDelay": 0.6
       },
-      "texts": [],
-      "selectedTextIndex": -1,
-      "zLayerId": "zl-content"
+      "selectedTextIndex": -1
     },
     {
       "id": 11,
@@ -223,7 +234,18 @@
             }
           ]
         }
-      ]
+      ],
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      }
     },
     {
       "id": 12,
@@ -493,7 +515,7 @@
       "hidden": false
     }
   ],
-  "activeZLayerId": "zl-content",
+  "activeZLayerId": "zl-bg",
   "groups": [
     {
       "id": "grp-7",

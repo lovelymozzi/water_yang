@@ -2,7 +2,7 @@
   "contractVersion": 1,
   "sceneId": "ingame",
   "sceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-  "sceneName": "Ingame",
+  "sceneName": "ingame",
   "canvas": {
     "width": 393,
     "height": 852
@@ -46,17 +46,6 @@
       "id": "grp-20",
       "name": "Group",
       "layerStableIds": []
-    },
-    {
-      "id": "grp-296",
-      "name": "Group",
-      "layerStableIds": [
-        "bar1-png-374",
-        "gimmick-coinpurse-coin-png-375",
-        "bar1-png-376",
-        "home-btn-plus-png-377",
-        "bar1-png-378"
-      ]
     },
     {
       "id": "grp-304",
@@ -358,7 +347,7 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "gimmick-coinpurse-coin-png-375:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
@@ -417,7 +406,7 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "bar1-png-376:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
@@ -456,7 +445,7 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "home-btn-plus-png-377:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
@@ -515,7 +504,7 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "bar1-png-378:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
@@ -608,7 +597,14 @@
         "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "entry-box-normal-png-383:click",
+          "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
+        }
+      ]
     },
     {
       "stableId": "anniversarypack-time-webp-384",
@@ -871,7 +867,8 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-300:click"
+          "eventName": "entry-box-normal-png-383:click",
+          "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
         }
       ]
     }

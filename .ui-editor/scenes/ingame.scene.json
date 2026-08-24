@@ -1,19 +1,22 @@
 {
-  "name": "Ingame",
+  "name": "ingame",
   "sceneType": "scene",
-  "canvasWidth": 390,
   "canvasHeight": 844,
-  "viewportHeight": 844,
   "bgType": "solid",
   "bgColor": "#16213e",
   "bgColor2": "#0e4a8c",
   "bgGradientAngle": 180,
   "bgImagePath": "",
   "bgTileSize": 64,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
   "bgStretchMode": "cover",
   "bgScrollEnabled": false,
   "bgScrollDirection": "right",
   "bgScrollDuration": 4,
+  "refImagePath": "",
+  "refVisible": true,
+  "refDim": 70,
   "layers": [
     {
       "id": 373,
@@ -160,7 +163,6 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": 0,
-      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -208,7 +210,6 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -277,7 +278,6 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": 0,
-      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -325,7 +325,6 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
-      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -394,7 +393,6 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": 0,
-      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -616,7 +614,14 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-314",
-      "fxGroupId": "fx-2289"
+      "fxGroupId": "fx-2289",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "",
+          "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
+        }
+      ]
     },
     {
       "id": 384,
@@ -1058,61 +1063,13 @@
         {
           "trigger": "click",
           "eventName": "entry-box-normal-png-300:click",
-          "targetSceneUuid": null
+          "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
         }
       ],
       "groupId": "grp-314",
       "fxGroupId": "fx-2289"
     }
   ],
-  "groups": [
-    {
-      "id": "grp-5",
-      "name": "Group"
-    },
-    {
-      "id": "grp-10",
-      "name": "Group"
-    },
-    {
-      "id": "grp-15",
-      "name": "Group"
-    },
-    {
-      "id": "grp-20",
-      "name": "Group"
-    },
-    {
-      "id": "grp-296",
-      "name": "Group"
-    },
-    {
-      "id": "grp-304",
-      "name": "time"
-    },
-    {
-      "id": "grp-314",
-      "name": "setting"
-    },
-    {
-      "id": "grp-315",
-      "name": "item3"
-    },
-    {
-      "id": "grp-316",
-      "name": "item_2"
-    },
-    {
-      "id": "grp-317",
-      "name": "item1"
-    }
-  ],
-  "sceneAnimations": [],
-  "bgTilePad": 0,
-  "bgImageAlpha": 100,
-  "refImagePath": "",
-  "refVisible": true,
-  "refDim": 70,
   "zLayers": [
     {
       "id": "zl-bg",
@@ -1140,6 +1097,44 @@
     }
   ],
   "activeZLayerId": "zl-content",
+  "groups": [
+    {
+      "id": "grp-5",
+      "name": "Group"
+    },
+    {
+      "id": "grp-10",
+      "name": "Group"
+    },
+    {
+      "id": "grp-15",
+      "name": "Group"
+    },
+    {
+      "id": "grp-20",
+      "name": "Group"
+    },
+    {
+      "id": "grp-304",
+      "name": "time"
+    },
+    {
+      "id": "grp-314",
+      "name": "setting"
+    },
+    {
+      "id": "grp-315",
+      "name": "item3"
+    },
+    {
+      "id": "grp-316",
+      "name": "item_2"
+    },
+    {
+      "id": "grp-317",
+      "name": "item1"
+    }
+  ],
   "fxGroups": [
     {
       "id": "fx-2286",
@@ -1214,6 +1209,7 @@
       }
     }
   ],
+  "sceneAnimations": [],
   "guides": {
     "v": [
       -174

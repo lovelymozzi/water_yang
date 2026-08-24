@@ -704,7 +704,7 @@
             {
               "condition": "else",
               "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "Ingame"
+              "targetSceneName": "ingame"
             }
           ]
         }
@@ -841,7 +841,7 @@
             {
               "condition": "else",
               "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "Ingame"
+              "targetSceneName": "ingame"
             }
           ]
         }

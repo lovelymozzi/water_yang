@@ -39,7 +39,6 @@
 | `#FF7A8E` | 3 | 컴포넌트 채움 |
 | `rgba(255,48,77,0.2)` | 3 | 컴포넌트 채움 |
 | `#0150AB` | 2 | 텍스트 외곽선 |
-| `#16213E` | 2 | 씬 배경 |
 | `#1A3390` | 2 | 텍스트 외곽선 |
 | `#206603` | 2 | 텍스트 외곽선, 텍스트 입체 |
 | `#213C98` | 2 | 텍스트 입체 |
@@ -53,6 +52,7 @@
 | `#106E9C` | 1 | 텍스트 외곽선 |
 | `#11F055` | 1 | 컴포넌트 채움 |
 | `#153879` | 1 | 텍스트 입체 |
+| `#16213E` | 1 | 씬 배경 |
 | `#18498F` | 1 | 텍스트 외곽선 |
 | `#1984D6` | 1 | 컴포넌트 채움 |
 | `#1D58A8` | 1 | 내비게이션 바 |
@@ -119,7 +119,7 @@
 ## 씬별 배경
 
 - `home_bottom` — navigation · 바 배경 `#1d58a8`
-- `Ingame` — 단색 `#16213e`
+- `ingame` — 단색 `#16213e`
 - `Lobby` — 이미지 `-` (image-stretch)
 - `pop_BuyCoins` — 이미지 `common_bg_pt_3.png` (image-tile)
 - `pop_BuyLives_1` — 단색 `rgba(0,0,0,0.3)`
@@ -132,4 +132,4 @@
 - `pop_Settings` — 이미지 `common_bg_pt_2.png` (image-tile)
 - `pop_Settings_1` — 단색 `rgba(0,0,0,0.3)`
 - `Ranking` — 이미지 `common_bg_pt.png` (image-tile)
-- `splash` — 단색 `#16213e`
+- `splash` — 이미지 `title_bg.png` (image-stretch)

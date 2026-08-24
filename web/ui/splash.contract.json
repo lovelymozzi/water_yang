@@ -12,11 +12,11 @@
     "height": 852
   },
   "background": {
-    "type": "solid",
+    "type": "image-stretch",
     "color": "#16213e",
     "color2": "#0e4a8c",
     "gradientAngle": 180,
-    "imagePath": "",
+    "imagePath": "title_bg.png",
     "imagePaths": [],
     "tileSize": 64,
     "tilePad": 0,
@@ -145,29 +145,31 @@
       }
     },
     {
-      "stableId": "title1-png-3",
+      "stableId": "title-bg-png-2287",
       "layerType": "image",
-      "displayName": "Title1.png",
-      "x": -46,
-      "y": 0,
+      "displayName": "title_bg.png",
+      "x": -10,
+      "y": -21,
+      "scale": 1.05,
       "zIndex": 2,
       "visual": {
-        "exportPath": "src/assets/Title1.png",
-        "width": 487,
-        "height": 861
+        "exportPath": "src/assets/title_bg.png",
+        "width": 393,
+        "height": 852
       }
     },
     {
-      "stableId": "title1-text1-png-5",
+      "stableId": "title-text-png-2286",
       "layerType": "image",
-      "displayName": "Title1_text1.png",
-      "x": 41,
-      "y": 64,
+      "displayName": "title_text.png",
+      "x": 28,
+      "y": -9,
+      "scale": 0.28499156829679595,
       "zIndex": 3,
       "visual": {
-        "exportPath": "src/assets/Title1_text1.png",
-        "width": 309,
-        "height": 295
+        "exportPath": "src/assets/title_text.png",
+        "width": 1186,
+        "height": 1240
       },
       "effects": [
         {
@@ -181,7 +183,7 @@
           "target": "self",
           "trigger": "mount",
           "timing": {
-            "durationMs": 800,
+            "durationMs": 850,
             "delayMs": 0,
             "iteration": 1,
             "loopDelayMs": 600

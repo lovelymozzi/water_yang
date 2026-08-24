@@ -125,8 +125,8 @@
         "y": 87.4215
       },
       "321eb56d-18f3-4c27-baa9-8e48c6f38541": {
-        "x": 344,
-        "y": -63
+        "x": 320,
+        "y": 17
       },
       "33babcc6-19bd-4418-bb3e-ba255b06bac7": {
         "x": 334,
@@ -277,7 +277,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "pop_Settings"
+    "lastScene": "Lobby"
   },
   "globalViewport": {
     "width": 393,

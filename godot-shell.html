@@ -335,6 +335,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   }
   if (sceneUuid === SPLASH_UI_SCENE_UUID) {
     splashRenderer = renderer;
+    renderer.getElementByName('GameField')?.style.setProperty('visibility', 'hidden');
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
     await game.start(godotCartridge, {

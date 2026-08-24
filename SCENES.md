@@ -4,14 +4,6 @@
 > 금지 규칙은 [`./AGENTS.md`](./AGENTS.md), `SceneRenderer` API·통합 절차는 `.claude/skills/ui-editor-game/SKILL.md` 참조.
 > **표기 규약(전 씬 공통 — 씬 섹션은 데이터만)**: 이벤트=`renderer.on(name, fn)` 구독(여기 있는 이름만 사용, 기본 트리거 click — 다르면 괄호 표기) · 바인딩=`renderer.update({...})` 주입 · sceneUuid=불변(씬 연결은 이 값 기준) · sceneType 표기 없음=일반 씬 · 위젯=visibility/toggle:boolean, slider:0~1, fill:0~100(표시 전용) — 입력은 `widget:<key>` 이벤트로 오고 게임이 update 로 에코해야 UI가 움직임 · GameField=GameSession 인게임 카트리지 마운트 지점.
 
-<!-- SCENE:Ingame BEGIN -->
-#### `Ingame`  ·  contract: `./web/ui/ingame.contract.json`
-- sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
-- 이벤트: `bar1-png-374:click` · `entry-box-normal-png-300:click`
-- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer`
-- GameField 레이어 있음
-<!-- SCENE:Ingame END -->
-
 <!-- SCENE:Lobby BEGIN -->
 #### `Lobby`  ·  contract: `./web/ui/Lobby.contract.json`
 - sceneUuid: `0ad51a82-1069-4948-ad6f-e97422300c6d`
@@ -33,6 +25,14 @@
 - sceneUuid: `37f376d8-4e32-4340-9bbd-4ed17767e148`
 - 이벤트: 없음
 <!-- SCENE:home_bottom END -->
+
+<!-- SCENE:ingame BEGIN -->
+#### `ingame`  ·  contract: `./web/ui/ingame.contract.json`
+- sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
+- 이벤트: `bar1-png-374:click` · `gimmick-coinpurse-coin-png-375:click` · `bar1-png-376:click` · `home-btn-plus-png-377:click` · `bar1-png-378:click` · `entry-box-normal-png-383:click`
+- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer`
+- GameField 레이어 있음
+<!-- SCENE:ingame END -->
 
 <!-- SCENE:pop_BuyCoins BEGIN -->
 #### `pop_BuyCoins`  ·  contract: `./web/ui/pop_BuyCoins.contract.json`
@@ -82,6 +82,7 @@
 #### `pop_Settings`  ·  contract: `./web/ui/pop_Settings.contract.json`
 - sceneUuid: `8fc00305-7288-4b2a-90df-9ff83554cb5b`
 - 이벤트: `common-btn-top-x-blue-png-290:click`
+- 위젯: `sound`(toggle) · `music`(toggle) · `vibration`(toggle) — 입력 이벤트: `widget:sound` · `widget:music` · `widget:vibration`
 <!-- SCENE:pop_Settings END -->
 
 <!-- SCENE:pop_Settings_1 BEGIN -->
@@ -100,7 +101,7 @@
 <!-- SCENE:splash BEGIN -->
 #### `splash`  ·  contract: `./web/ui/splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: `loading-out-png-11:click`
+- 이벤트: `loading-out-png-11:click` · `loading-inner-png-12:click` · `loading-bar-png-13:click` · `text-loading-15:click`
 - 텍스트 바인딩: `loadingMessage`
 - 위젯: `loading.prograss`(fill)
 - GameField 레이어 있음

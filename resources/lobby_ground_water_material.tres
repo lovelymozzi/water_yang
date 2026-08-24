@@ -1,18 +1,28 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://bqgt33f4c1otr"]
 
 [ext_resource type="Texture2D" uid="uid://voml2p150fee" path="res://water_yang/wall.jpg" id="1_water_texture"]
-[ext_resource type="Shader" path="res://scripts/lobby_ground_foam.gdshader" id="2_foam_shader"]
-[ext_resource type="Shader" path="res://scripts/lobby_ground_water_fade.gdshader" id="3_water_fade"]
+[ext_resource type="Shader" uid="uid://dgmfpi64ok5gf" path="res://scripts/lobby_ground_foam.gdshader" id="2_foam_shader"]
+[ext_resource type="Shader" uid="uid://nom8twrrlyo0" path="res://scripts/lobby_ground_water_fade.gdshader" id="3_water_fade"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_foam"]
 render_priority = 1
 shader = ExtResource("2_foam_shader")
-shader_parameter/foam_color = Color(0.5568628, 0.8627451, 0.8941177, 1)
+shader_parameter/foam_color = Color(0.5568628, 0.8627451, 0.89411765, 1)
 shader_parameter/foam_uv_center = 0.08
+shader_parameter/foam_uv_half_width = 0.011
+shader_parameter/wave_amplitude = 0.0045
+shader_parameter/wave_scale_a = 11.0
+shader_parameter/wave_speed_a = 0.7
+shader_parameter/wave_scale_b = 17.0
+shader_parameter/wave_speed_b = 0.44
 
 [resource]
 resource_name = "Lobby Ground Water"
+render_priority = 0
 next_pass = SubResource("ShaderMaterial_foam")
 shader = ExtResource("3_water_fade")
 shader_parameter/albedo_texture = ExtResource("1_water_texture")
+shader_parameter/underwater_color = Color(0.1, 0.65, 0.78, 1)
+shader_parameter/underwater_fade_start = 0.11
+shader_parameter/underwater_fade_end = 0.280073
 shader_parameter/underwater_fade_strength = 1.0
