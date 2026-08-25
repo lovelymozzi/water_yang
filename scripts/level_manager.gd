@@ -465,19 +465,16 @@ func _break_ice_cover(cell: Vector2i) -> void:
 	tween.tween_callback(node.queue_free)
 
 
-# 얼음이 깨질 때 튀는 파편. 새 에셋 없이 얼음색 조각을 한 번만 터뜨린다.
-func _spawn_ice_shards(world_position: Vector3) -> void:
-	var particles := GPUParticles3D.new()
-	particles.name = "IceShards"
-	particles.position = world_position
-	particles.amount = 16
-	particles.lifetime = SHARD_LIFETIME
-	particles.one_shot = true
-	particles.explosiveness = 1.0
-	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	# 조각이 타일 밖으로 날아가므로 넉넉히 잡는다. 좁으면 카메라 각도에 따라 통째로 컬링된다.
-	particles.visibility_aabb = AABB(Vector3(-3.0, -1.0, -3.0), Vector3(6.0, 5.0, 6.0))
+# 파편용 공유 리소스. **파괴할 때마다 새로 만들면 안 된다** — Material 을 새로 만들면
+# 그 조합의 셰이더가 처음 그려지는 순간 컴파일되면서 프레임이 눈에 띄게 끊긴다.
+# 파라미터가 고정이므로 인스턴스 하나를 모든 파편이 돌려 쓴다(셰이더 컴파일도 한 번뿐).
+static var _shard_process_material: ParticleProcessMaterial = null
+static var _shard_mesh: BoxMesh = null
 
+
+static func _ensure_shard_resources() -> void:
+	if _shard_process_material != null:
+		return
 	var process := ParticleProcessMaterial.new()
 	process.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
 	process.emission_box_extents = Vector3(0.45, 0.15, 0.45)
@@ -490,7 +487,7 @@ func _spawn_ice_shards(world_position: Vector3) -> void:
 	process.angular_velocity_max = 720.0
 	process.scale_min = 0.5
 	process.scale_max = 1.3
-	particles.process_material = process
+	_shard_process_material = process
 
 	var shard := BoxMesh.new()
 	shard.size = Vector3(0.2, 0.2, 0.2)
@@ -499,12 +496,47 @@ func _spawn_ice_shards(world_position: Vector3) -> void:
 	material.roughness = 0.25
 	material.metallic = 0.0
 	shard.material = material
-	particles.draw_pass_1 = shard
+	_shard_mesh = shard
 
+
+func _make_shard_emitter() -> GPUParticles3D:
+	_ensure_shard_resources()
+	var particles := GPUParticles3D.new()
+	particles.amount = 16
+	particles.lifetime = SHARD_LIFETIME
+	particles.one_shot = true
+	particles.explosiveness = 1.0
+	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# 조각이 타일 밖으로 날아가므로 넉넉히 잡는다. 좁으면 카메라 각도에 따라 통째로 컬링된다.
+	particles.visibility_aabb = AABB(Vector3(-3.0, -1.0, -3.0), Vector3(6.0, 5.0, 6.0))
+	particles.process_material = _shard_process_material
+	particles.draw_pass_1 = _shard_mesh
+	return particles
+
+
+# 얼음이 깨질 때 튀는 파편. 새 에셋 없이 얼음색 조각을 한 번만 터뜨린다.
+func _spawn_ice_shards(world_position: Vector3) -> void:
+	var particles := _make_shard_emitter()
+	particles.name = "IceShards"
+	particles.position = world_position
 	_holes_root.add_child(particles)
 	particles.emitting = true
 	# one_shot 파티클은 스스로 사라지지 않는다. 수명이 끝나면 정리한다.
 	get_tree().create_timer(SHARD_LIFETIME + 0.5).timeout.connect(particles.queue_free)
+
+
+# 얼음이 있는 판에서는 파편 셰이더를 **레벨 로딩 프레임에** 미리 컴파일해 둔다. 리소스를
+# 공유해도 "처음 화면에 그려지는 순간"의 컴파일 비용은 남으므로, 그 순간을 이미 무거운
+# 로딩 프레임으로 옮기는 것이다. 보드 아래에서 터뜨리므로 화면에는 보이지 않는다
+# (카메라가 위에서 내려다보고 보드가 가린다). 컬링되면 컴파일이 안 되므로 화면 밖이
+# 아니라 "가려진 자리"여야 한다.
+func _warm_up_ice_shards(near_cell: Vector2i) -> void:
+	var warm := _make_shard_emitter()
+	warm.name = "IceShardWarmup"
+	warm.position = grid_to_world(near_cell, -2.5)
+	_holes_root.add_child(warm)
+	warm.emitting = true
+	get_tree().create_timer(SHARD_LIFETIME + 0.5).timeout.connect(warm.queue_free)
 
 
 # 고양이를 다 삼킨 구멍은 함께 수축해 사라진다. 닫힌 자리는 평범한 빈 칸이 되어 다른
@@ -785,6 +817,11 @@ func _build_hole_visuals() -> void:
 				_ice_covers[cell] = {
 					"node": ice_cover, "label": label, "count": ice_count,
 				}
+
+	# 얼음이 하나라도 있으면 파편 셰이더를 지금(로딩 중) 컴파일해 둔다. 에디터 미리보기에는
+	# 필요 없다 — 거기서는 얼음이 깨지지 않는다.
+	if not Engine.is_editor_hint() and not _ice_covers.is_empty():
+		_warm_up_ice_shards(_ice_covers.keys()[0])
 
 
 # 얼음 위에 뜨는 남은 수 라벨. Lilita One, 카메라를 향하는 빌보드로 어느 각도에서도 읽힌다.
