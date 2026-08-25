@@ -293,33 +293,6 @@
       "toSceneName": "ingame"
     },
     {
-      "id": "edge-mt6xwlgyi55j",
-      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "trigger": {
-        "stableId": "plain-text-2368",
-        "eventName": "common-btn-green-sales-png-2367:click",
-        "condition": "no_heart"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_Fail",
-      "toSceneName": "pop_BuyLives_1"
-    },
-    {
-      "id": "edge-mt6xx7nbk4yc",
-      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "trigger": {
-        "stableId": "common-btn-top-x-red-png-2372",
-        "eventName": "common-btn-top-x-red-png-2372:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_Fail",
-      "toSceneName": "ingame"
-    },
-    {
       "id": "edge-mt6xxgk57cyx",
       "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
       "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
@@ -588,12 +561,26 @@
       "toSceneName": "ingame"
     },
     {
-      "id": "edge-mt873shz1t7i",
+      "id": "edge-mt87ghr1s5sw",
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "trigger": {
+        "stableId": "home-btn-stage-normal-png-145",
+        "eventName": "home-btn-stage-normal-png-145:click",
+        "condition": "no_heart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Lobby",
+      "toSceneName": "pop_BuyLives_1"
+    },
+    {
+      "id": "edge-mt8838hg6ywk",
       "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
       "toSceneUuid": "__close__",
       "trigger": {
-        "stableId": "common-btn-green-sales-png-2420",
-        "eventName": "common-btn-green-sales-png-2420:click",
+        "stableId": "common-btn-green-sales-png-2424",
+        "eventName": "common-btn-green-sales-png-2424:click",
         "condition": "900코인 소모 후 하트풀충전"
       },
       "transitionOut": null,
@@ -602,12 +589,12 @@
       "toSceneName": "✕ 팝업 닫기"
     },
     {
-      "id": "edge-mt873si6xfte",
+      "id": "edge-mt8838hnszyn",
       "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
       "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
       "trigger": {
-        "stableId": "common-btn-green-sales-png-2420",
-        "eventName": "common-btn-green-sales-png-2420:click",
+        "stableId": "common-btn-green-sales-png-2424",
+        "eventName": "common-btn-green-sales-png-2424:click",
         "condition": "not enough coin"
       },
       "transitionOut": null,
@@ -624,26 +611,12 @@
       ]
     },
     {
-      "id": "edge-mt878cor64m7",
-      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "trigger": {
-        "stableId": "common-btn-green-sales-png-2425",
-        "eventName": "common-btn-green-sales-png-2425:click",
-        "condition": "하트 +1 이후 인게임진입"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_BuyLives_1",
-      "toSceneName": "ingame"
-    },
-    {
-      "id": "edge-mt879eozhrhn",
+      "id": "edge-mt8838i1n4nd",
       "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
       "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
       "trigger": {
-        "stableId": "common-btn-green-sales-png-2425",
-        "eventName": "common-btn-green-sales-png-2425:click",
+        "stableId": "common-btn-green-sales-png-2424",
+        "eventName": "common-btn-green-sales-png-2424:click",
         "condition": "로비에서 하트가 0일때 띄워주는 팝업"
       },
       "transitionOut": null,
@@ -660,18 +633,79 @@
       ]
     },
     {
-      "id": "edge-mt87ghr1s5sw",
-      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "id": "edge-mt885wz6bwv3",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "common-btn-top-x-red-png-2434",
+        "eventName": "common-btn-top-x-red-png-2434:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_BuyLives_1",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt889620hj2s",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2419",
+        "eventName": "common-btn-green-sales-png-2419:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_BuyLives_1",
+      "toSceneName": "ingame"
+    },
+    {
+      "id": "edge-mt8aq3h47nhk",
+      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "common-btn-top-x-red-png-2372",
+        "eventName": "common-btn-top-x-red-png-2372:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_Fail",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt8atc44xfyg",
+      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
       "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
       "trigger": {
-        "stableId": "home-btn-stage-normal-png-145",
-        "eventName": "home-btn-stage-normal-png-145:click",
+        "stableId": "common-btn-green-sales-png-2367",
+        "eventName": "common-btn-green-sales-png-2367:click",
         "condition": "no_heart"
       },
       "transitionOut": null,
       "transitionIn": null,
-      "fromSceneName": "Lobby",
+      "fromSceneName": "pop_Fail",
       "toSceneName": "pop_BuyLives_1"
+    },
+    {
+      "id": "edge-mt8bmb387v94",
+      "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2390",
+        "eventName": "common-btn-green-sales-png-2390:click",
+        "condition": "else"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_OutOfMoves",
+      "toSceneName": "ingame"
     }
   ],
   "entrySceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",

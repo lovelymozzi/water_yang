@@ -190,8 +190,8 @@
         "y": 1084.04
       },
       "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be": {
-        "x": 1307.94,
-        "y": 427.188
+        "x": 1488.06,
+        "y": 337.011
       },
       "2bce71e3-b626-4295-919d-e24cb07f1ae2": {
         "x": -1117.42,
@@ -286,7 +286,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "pop_BuyLives_1"
+    "lastScene": "loading"
   },
   "globalViewport": {
     "width": 393,

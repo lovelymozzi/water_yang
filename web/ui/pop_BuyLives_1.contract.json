@@ -363,7 +363,14 @@
             "repeat": "stretch"
           }
         }
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "common-btn-green-sales-png-2419:click",
+          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+        }
+      ]
     },
     {
       "stableId": "common-btn-green-sales-png-2424",
@@ -402,7 +409,30 @@
             "repeat": "stretch"
           }
         }
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "common-btn-green-sales-png-2424:click",
+          "branches": [
+            {
+              "condition": "900코인 소모 후 하트풀충전",
+              "targetSceneUuid": "__close__",
+              "targetSceneName": "✕ 팝업 닫기"
+            },
+            {
+              "condition": "not enough coin",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
+            },
+            {
+              "condition": "로비에서 하트가 0일때 띄워주는 팝업",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ]
     },
     {
       "stableId": "video-png-312",
@@ -419,13 +449,28 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "video-png-312:click",
+          "eventName": "common-btn-green-sales-png-2424:click",
           "memo": "클릭시 광고보여주고 하트+1 (광고미구현시 2초 대기후 하트 1개 증정)",
           "branches": [
             {
               "condition": "광고호출 후 하트1개 충전",
               "targetSceneUuid": "__close__",
               "targetSceneName": "✕ 팝업 닫기"
+            },
+            {
+              "condition": "900코인 소모 후 하트풀충전",
+              "targetSceneUuid": "__close__",
+              "targetSceneName": "✕ 팝업 닫기"
+            },
+            {
+              "condition": "not enough coin",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
+            },
+            {
+              "condition": "로비에서 하트가 0일때 띄워주는 팝업",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
             }
           ]
         }
@@ -552,13 +597,28 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "plain-text-313:click",
+          "eventName": "common-btn-green-sales-png-2424:click",
           "memo": "클릭시 광고보여주고 하트+1 (광고미구현시 2초 대기후 하트 1개 증정)",
           "branches": [
             {
               "condition": "광고호출 후 하트1개 충전",
               "targetSceneUuid": "__close__",
               "targetSceneName": "✕ 팝업 닫기"
+            },
+            {
+              "condition": "900코인 소모 후 하트풀충전",
+              "targetSceneUuid": "__close__",
+              "targetSceneName": "✕ 팝업 닫기"
+            },
+            {
+              "condition": "not enough coin",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
+            },
+            {
+              "condition": "로비에서 하트가 0일때 띄워주는 팝업",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
             }
           ]
         }
@@ -615,13 +675,28 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "itemicon-heart-red-png-322:click",
+          "eventName": "common-btn-green-sales-png-2424:click",
           "memo": "클릭시 광고보여주고 하트+1 (광고미구현시 2초 대기후 하트 1개 증정)",
           "branches": [
             {
               "condition": "광고호출 후 하트1개 충전",
               "targetSceneUuid": "__close__",
               "targetSceneName": "✕ 팝업 닫기"
+            },
+            {
+              "condition": "900코인 소모 후 하트풀충전",
+              "targetSceneUuid": "__close__",
+              "targetSceneName": "✕ 팝업 닫기"
+            },
+            {
+              "condition": "not enough coin",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
+            },
+            {
+              "condition": "로비에서 하트가 0일때 띄워주는 팝업",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
             }
           ]
         }
@@ -998,20 +1073,9 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "continue-989:click",
+          "eventName": "common-btn-green-sales-png-2419:click",
           "memo": "900코인 소모하고 하트max 로 리필",
-          "branches": [
-            {
-              "condition": "900코인 소모 후 하트풀충전",
-              "targetSceneUuid": "__close__",
-              "targetSceneName": "✕ 팝업 닫기"
-            },
-            {
-              "condition": "not enough coin",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            }
-          ]
+          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ]
     },
@@ -1030,20 +1094,9 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "itemicon-money-coin-1-png-990:click",
+          "eventName": "common-btn-green-sales-png-2419:click",
           "memo": "900코인 소모하고 하트max 로 리필",
-          "branches": [
-            {
-              "condition": "900코인 소모 후 하트풀충전",
-              "targetSceneUuid": "__close__",
-              "targetSceneName": "✕ 팝업 닫기"
-            },
-            {
-              "condition": "not enough coin",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            }
-          ]
+          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ]
     },
@@ -1195,6 +1248,13 @@
             "scale": 95,
             "useDepthOffset": false
           }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "common-btn-top-x-red-png-2434:click",
+          "targetSceneUuid": "__close__"
         }
       ]
     },

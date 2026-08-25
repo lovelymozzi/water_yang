@@ -55,14 +55,14 @@
 <!-- SCENE:pop_BuyLives_1 BEGIN -->
 #### `pop_BuyLives_1`  ·  contract: `./web/ui/pop_BuyLives_1.contract.json`
 - sceneUuid: `f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be`
-- 이벤트: `video-png-312:click` · `plain-text-313:click` · `itemicon-heart-red-png-322:click` · `continue-989:click` · `itemicon-money-coin-1-png-990:click`
+- 이벤트: `common-btn-green-sales-png-2419:click` · `common-btn-green-sales-png-2424:click` · `common-btn-top-x-red-png-2434:click`
 - 텍스트 바인딩: `heart.timer` · `heart.current` · `cost.refill`
 <!-- SCENE:pop_BuyLives_1 END -->
 
 <!-- SCENE:pop_Fail BEGIN -->
 #### `pop_Fail`  ·  contract: `./web/ui/pop_Fail.contract.json`
 - sceneUuid: `ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd`
-- 이벤트: `common-btn-green-sales-png-2367:click` · `plain-text-2370:click` · `common-btn-top-x-red-png-2372:click`
+- 이벤트: `common-btn-green-sales-png-2367:click` · `plain-text-2368:click` · `plain-text-2370:click` · `common-btn-top-x-red-png-2372:click`
 <!-- SCENE:pop_Fail END -->
 
 <!-- SCENE:pop_Give_up BEGIN -->
@@ -86,7 +86,7 @@
 <!-- SCENE:pop_OutOfMoves BEGIN -->
 #### `pop_OutOfMoves`  ·  contract: `./web/ui/pop_OutOfMoves.contract.json`
 - sceneUuid: `26578336-5751-476b-b24d-f144818b21ce`
-- 이벤트: `common-btn-green-sales-png-2390:click` · `plain-text-2393:click` · `common-btn-top-x-red-png-2395:click`
+- 이벤트: `common-btn-green-sales-png-2390:click` · `common-btn-top-x-red-png-2395:click`
 - 텍스트 바인딩: `continue.coin`
 <!-- SCENE:pop_OutOfMoves END -->
 

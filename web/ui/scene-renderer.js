@@ -348,6 +348,10 @@ const CSS_ANIMATION_PRESETS = [
     // squash-jump 2단 분리 — crouch(눌린 자세로 끝, fill 유지)→[이미지 교체]→launch(눌린 자세에서 점프 착지)
     { id: 'squash-crouch', label: 'Squash Crouch (움츠리기)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-crouch', phase: 'attention', durationMs: 600 },
     { id: 'squash-launch', label: 'Squash Launch (점프 착지)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-launch', phase: 'attention', durationMs: 900 },
+    // 제자리 360° 회전 — 컴포넌트 전용이던 spinAnimation(ui-spin)을 이펙트로도 노출(이미지/스프라이트 포함).
+    // 끊김 없이 돌리려면 Loop 켜고 Loop delay 를 0 으로.
+    { id: 'spin-360', label: 'Spin 360 (제자리 회전)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-spin-cw', phase: 'attention', durationMs: 2000, defaultLoop: true },
+    { id: 'spin-360-ccw', label: 'Spin 360 ◀ (역방향)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-spin-ccw', phase: 'attention', durationMs: 2000, defaultLoop: true },
 ];
 
 function getCssAnimationPreset(presetId) {
@@ -1440,6 +1444,7 @@ function ensureCssEffectProvider(provider) {
 // 지속시간/fill-mode 는 animate__animated(baseClass)가 --animate-duration 으로 그대로 처리한다.
 function ensureLocalCssAnimationKeyframes() {
     if (typeof document === 'undefined') return;
+    ensureSpinKeyframes();   // spin-360 프리셋이 ui-spin/ui-spin-rev 키프레임을 공유한다
     if (document.getElementById('ui-css-animation-keyframes')) return;
     const st = document.createElement('style');
     st.id = 'ui-css-animation-keyframes';
@@ -1498,7 +1503,9 @@ function ensureLocalCssAnimationKeyframes() {
         '89%{transform:translateY(-4%) scale(1,1.01)}' +
         '100%{transform:translateY(0) scale(1,1)}' +
         '}' +
-        '.ui-squash-launch{animation-name:ui-squash-launch;transform-origin:50% 100%}';
+        '.ui-squash-launch{animation-name:ui-squash-launch;transform-origin:50% 100%}' +
+        '.ui-spin-cw{animation-name:ui-spin;animation-timing-function:linear}' +
+        '.ui-spin-ccw{animation-name:ui-spin-rev;animation-timing-function:linear}';
     document.head.appendChild(st);
 }
 
@@ -4289,6 +4296,9 @@ export class SceneRenderer {
             if (_sliceCss && this._sliceBitmap && !layer.image?.imageKey) applySliceBitmapUpgrade(img, imageStyle, _imgSrc, _sx, _sy, _imgW, _imgH);
             const iw = _imgW + 'px';
             const ih = _imgH + 'px';
+            // inline 이미지의 베이스라인 여백(폰트 line-height 의존)이 회전 래퍼 높이에 섞이면
+            // 에디터/게임 페이지의 폰트 차이만큼 회전 중심 y 가 어긋난다 → 블록으로 고정.
+            img.style.display = 'block';
             img.style.width = iw;
             img.style.height = ih;
             // 비율 토글: 기본=contain(원본 비율 고정), stretch=fill(width/height 대로 늘리기). slice 는 항상 박스를 채움
@@ -4565,6 +4575,7 @@ export class SceneRenderer {
 
         const canvas = document.createElement('canvas');
         canvas.width = dispW; canvas.height = dispH;
+        canvas.style.display = 'block';   // inline 베이스라인 여백 제거 — 회전 중심 y 어긋남 방지
         canvas.style.width = dispW + 'px';
         canvas.style.height = dispH + 'px';
         canvas.style.objectFit = 'contain';
@@ -4723,6 +4734,9 @@ export class SceneRenderer {
             const rotWrap = document.createElement('div');
             rotWrap.style.transform = `rotate(${layer.rotation}deg)`;
             rotWrap.style.transformOrigin = '50% 50%';
+            // 배율 시 wrap 이 명시 폭(배율 포함)을 가져 블록 래퍼가 늘어난다 → 회전 중심 x 가
+            // 에디터(.free-item = shrink-to-fit)와 달라짐. 콘텐츠 폭에 맞춰 동일 중심 유지.
+            rotWrap.style.width = 'fit-content';
             rotWrap.appendChild(inner);
             inner = rotWrap;
         }

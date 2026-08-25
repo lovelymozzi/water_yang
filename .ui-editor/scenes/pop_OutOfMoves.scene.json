@@ -63,7 +63,22 @@
       "sliceB": 73,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch"
+      "sliceRepeat": "stretch",
+      "assetId": "src/assets/common_popup_box copy.png",
+      "events": [],
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
+      }
     },
     {
       "id": 2388,
@@ -110,7 +125,22 @@
       "sliceB": 40,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch"
+      "sliceRepeat": "stretch",
+      "assetId": "src/assets/entry_box_normal_1.png",
+      "events": [],
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
+      }
     },
     {
       "id": 2390,
@@ -182,7 +212,21 @@
             }
           ]
         }
-      ]
+      ],
+      "assetId": "src/assets/common_btn_green_sales.png",
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
+      }
     },
     {
       "id": 1774,
@@ -364,6 +408,20 @@
         "interval": 2,
         "direction": "right",
         "color": "#ffffff"
+      },
+      "assetId": "src/assets/ItemIcon_Money_Coin_4.png",
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
       }
     },
     {
@@ -404,7 +462,22 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1
+      "selectedTextIndex": -1,
+      "assetId": "src/assets/entry_popup2_textbase_normal_1.png",
+      "events": [],
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
+      }
     },
     {
       "id": 2393,
@@ -509,14 +582,7 @@
           "direction": "right",
           "color": "#ffffff"
         }
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
-        }
-      ]
+      }
     },
     {
       "id": 2394,
@@ -619,7 +685,8 @@
           "direction": "right",
           "color": "#ffffff"
         }
-      }
+      },
+      "events": []
     },
     {
       "id": 2395,
@@ -666,7 +733,21 @@
           "eventName": "",
           "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
         }
-      ]
+      ],
+      "assetId": "src/assets/common_btn_top_x_red_1.png",
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
+      }
     },
     {
       "id": 2399,
@@ -706,7 +787,22 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1
+      "selectedTextIndex": -1,
+      "assetId": "src/assets/sandglass.png",
+      "events": [],
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "repeat": 1,
+        "loop": false,
+        "loopDelay": 0.6
+      },
+      "particleEffect": {
+        "enabled": false,
+        "presetId": "sparkle-burst"
+      }
     }
   ],
   "zLayers": [

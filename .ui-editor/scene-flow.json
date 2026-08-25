@@ -237,33 +237,6 @@
       "toSceneName": "Ingame"
     },
     {
-      "id": "edge-mt6xwlgyi55j",
-      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "trigger": {
-        "stableId": "plain-text-2368",
-        "eventName": "plain-text-2368:click",
-        "condition": "no_heart"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_Fail",
-      "toSceneName": "pop_BuyLives_1"
-    },
-    {
-      "id": "edge-mt6xx7nbk4yc",
-      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "trigger": {
-        "stableId": "common-btn-top-x-red-png-2372",
-        "eventName": "common-btn-top-x-red-png-2372:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_Fail",
-      "toSceneName": "ingame"
-    },
-    {
       "id": "edge-mt6xxgk57cyx",
       "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
       "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
@@ -548,19 +521,6 @@
       "toSceneName": "Lobby"
     },
     {
-      "id": "edge-mt8838icrq99",
-      "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
-      "toSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "trigger": {
-        "stableId": "plain-text-2393",
-        "eventName": "plain-text-2393:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_OutOfMoves",
-      "toSceneName": "pop_Fail"
-    },
-    {
       "id": "edge-mt885wz6bwv3",
       "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
       "toSceneUuid": "__close__",
@@ -584,6 +544,47 @@
       "transitionOut": null,
       "transitionIn": null,
       "fromSceneName": "pop_BuyLives_1",
+      "toSceneName": "ingame"
+    },
+    {
+      "id": "edge-mt8aq3h47nhk",
+      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "common-btn-top-x-red-png-2372",
+        "eventName": "common-btn-top-x-red-png-2372:click"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_Fail",
+      "toSceneName": "Lobby"
+    },
+    {
+      "id": "edge-mt8atc44xfyg",
+      "fromSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2367",
+        "eventName": "common-btn-green-sales-png-2367:click",
+        "condition": "no_heart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_Fail",
+      "toSceneName": "pop_BuyLives_1"
+    },
+    {
+      "id": "edge-mt8bmb387v94",
+      "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2390",
+        "eventName": "common-btn-green-sales-png-2390:click",
+        "condition": "else"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_OutOfMoves",
       "toSceneName": "ingame"
     }
   ],

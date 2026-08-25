@@ -1,34 +1,9 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-25T05:26:43.505Z",
+  "generatedAt": "2026-08-25T07:11:58.308Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
-  "errors": [
-    {
-      "code": "orphan-trigger",
-      "where": "edge pop_BuyLives_1→__close__",
-      "message": "연결의 트리거 오브젝트가 출발 씬에 없습니다 — 이 흐름은 발생하지 않습니다. 에디터 흐름도의 \"끊어진 연결\"에서 새 오브젝트로 재연결하거나 연결을 삭제하세요.",
-      "detail": "오브젝트 common-btn-green-sales-png-2420"
-    },
-    {
-      "code": "orphan-trigger",
-      "where": "edge pop_BuyLives_1→pop_BuyCoins",
-      "message": "연결의 트리거 오브젝트가 출발 씬에 없습니다 — 이 흐름은 발생하지 않습니다. 에디터 흐름도의 \"끊어진 연결\"에서 새 오브젝트로 재연결하거나 연결을 삭제하세요.",
-      "detail": "오브젝트 common-btn-green-sales-png-2420"
-    },
-    {
-      "code": "orphan-trigger",
-      "where": "edge pop_BuyLives_1→ingame",
-      "message": "연결의 트리거 오브젝트가 출발 씬에 없습니다 — 이 흐름은 발생하지 않습니다. 에디터 흐름도의 \"끊어진 연결\"에서 새 오브젝트로 재연결하거나 연결을 삭제하세요.",
-      "detail": "오브젝트 common-btn-green-sales-png-2425"
-    },
-    {
-      "code": "orphan-trigger",
-      "where": "edge pop_BuyLives_1→Lobby",
-      "message": "연결의 트리거 오브젝트가 출발 씬에 없습니다 — 이 흐름은 발생하지 않습니다. 에디터 흐름도의 \"끊어진 연결\"에서 새 오브젝트로 재연결하거나 연결을 삭제하세요.",
-      "detail": "오브젝트 common-btn-green-sales-png-2425"
-    }
-  ],
+  "errors": [],
   "warnings": [
     {
       "code": "popup-in-nav-tab",
@@ -41,18 +16,6 @@
       "where": "pop_BuyLives_1.Group",
       "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
       "detail": "→ __close__ [광고호출 후 하트1개 충전]"
-    },
-    {
-      "code": "event-not-in-flow",
-      "where": "pop_BuyLives_1.Group",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ __close__ [900코인 소모 후 하트풀충전]"
-    },
-    {
-      "code": "event-not-in-flow",
-      "where": "pop_BuyLives_1.Group",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ pop_BuyCoins [not enough coin]"
     },
     {
       "code": "event-not-in-flow",
@@ -80,12 +43,6 @@
     },
     {
       "code": "event-not-in-flow",
-      "where": "pop_OutOfMoves.plain-text-2393",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ pop_Fail"
-    },
-    {
-      "code": "event-not-in-flow",
       "where": "pop_Settings_1.setting",
       "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
       "detail": "→ ingame [\bpopup close]"
@@ -107,12 +64,6 @@
       "where": "edge pop_OutOfMoves→pop_BuyCoins",
       "message": "흐름도 조건 키의 술어가 게임 코드에 없습니다 — flow.defineCondition('재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동', () => ...) 를 등록하지 않으면 해당 분기가 동작하지 않습니다.",
       "detail": "'재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동'"
-    },
-    {
-      "code": "game-unwired-condition",
-      "where": "edge pop_BuyLives_1→ingame",
-      "message": "흐름도 조건 키의 술어가 게임 코드에 없습니다 — flow.defineCondition('하트 +1 이후 인게임진입', () => ...) 를 등록하지 않으면 해당 분기가 동작하지 않습니다.",
-      "detail": "'하트 +1 이후 인게임진입'"
     },
     {
       "code": "game-unwired-condition",
