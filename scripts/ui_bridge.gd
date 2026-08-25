@@ -66,7 +66,10 @@ func _on_command(args: Array) -> void:
 		"resumeGame":
 			if auto_pause:
 				get_tree().paused = false
-			emit_signal("host_resume")
+			if _host_scene_loading:
+				_start_after_scene_ready = true
+			else:
+				emit_signal("host_resume")
 		"forceQuit":
 			_start_after_scene_ready = false
 			emit_signal("host_force_quit", str(payload.get("reason", "")))

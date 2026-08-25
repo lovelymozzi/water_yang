@@ -93,5 +93,277 @@
     }
   ],
   "sceneAnimations": [],
-  "layers": []
+  "layers": [
+    {
+      "stableId": "shape-rect-2",
+      "layerType": "component",
+      "displayName": "사각형",
+      "x": 0,
+      "y": 721,
+      "zIndex": 1,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 393,
+            "height": 59,
+            "radius": 0,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "solid",
+            "color1": "rgba(0,0,0,0.44)",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      }
+    },
+    {
+      "stableId": "plain-text-3",
+      "layerType": "component",
+      "displayName": "Plain Text",
+      "x": 117,
+      "y": 721,
+      "zIndex": 2,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 165,
+            "height": 55,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "css-animation",
+          "source": {
+            "provider": "animate.css",
+            "name": "flash",
+            "className": "ui-blink-once"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "timing": {
+            "durationMs": 1850,
+            "delayMs": 0,
+            "iteration": 1,
+            "loopDelayMs": 0
+          },
+          "params": {
+            "presetId": "flash",
+            "group": "Cute / Attention",
+            "phase": "attention",
+            "className": "ui-blink-once",
+            "baseClass": "animate__animated",
+            "loop": true
+          }
+        }
+      ],
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "Loading....",
+          "bindingKey": "",
+          "fontSize": 26,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 60
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "loading-cat-png-5",
+      "layerType": "image",
+      "displayName": "loading_cat.png",
+      "x": 75,
+      "y": 316,
+      "scale": 0.2898690895436624,
+      "zIndex": 3,
+      "visual": {
+        "exportPath": "loading_cat.png",
+        "width": 841,
+        "height": 836
+      },
+      "effects": [
+        {
+          "type": "css-animation",
+          "source": {
+            "provider": "animate.css",
+            "name": "rotate-in",
+            "className": "animate__rotateIn"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "timing": {
+            "durationMs": 3000,
+            "delayMs": 0,
+            "iteration": 1,
+            "loopDelayMs": 0
+          },
+          "params": {
+            "presetId": "rotate-in",
+            "group": "Appear",
+            "phase": "enter",
+            "className": "animate__rotateIn",
+            "baseClass": "animate__animated",
+            "loop": true
+          }
+        }
+      ]
+    }
+  ]
 }

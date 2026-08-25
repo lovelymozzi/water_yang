@@ -99,7 +99,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_elapsed += delta
 	for index in _cats.size():
+		if index >= _cat_wakes.size():
+			continue
 		var cat := _cats[index]
+		var wake := _cat_wakes[index]
+		if not is_instance_valid(cat) or not cat.is_inside_tree() or not is_instance_valid(wake) or not wake.is_inside_tree():
+			continue
 		var phase := float(index) / float(_cats.size())
 		var wave := _elapsed * bob_speed + phase * TAU
 		var leg_wave := sin(_elapsed * 2.1 + phase * TAU)
@@ -131,7 +136,6 @@ func _process(delta: float) -> void:
 		cat.global_position.x = _route_x_min + travel_distance
 		cat.global_position.y = _water_bounds.position.y + water_surface_offset + sin(wave) * bob_height
 		cat.global_position.z = _cat_lanes[index] + flow_wave
-		var wake := _cat_wakes[index]
 		wake.global_position = Vector3(
 			cat.global_position.x - 1.4,
 			_water_bounds.position.y + 0.06,

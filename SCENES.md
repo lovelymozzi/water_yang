@@ -55,7 +55,7 @@
 <!-- SCENE:pop_BuyLives_1 BEGIN -->
 #### `pop_BuyLives_1`  ·  contract: `./web/ui/pop_BuyLives_1.contract.json`
 - sceneUuid: `f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be`
-- 이벤트: `button-green-png-309:click` · `button-yellow1-png-311:click` · `icon-close01-png-2233:click`
+- 이벤트: `video-png-312:click` · `plain-text-313:click` · `itemicon-heart-red-png-322:click` · `continue-989:click` · `itemicon-money-coin-1-png-990:click`
 - 텍스트 바인딩: `heart.timer` · `heart.current` · `cost.refill`
 <!-- SCENE:pop_BuyLives_1 END -->
 
@@ -119,4 +119,16 @@
 - GameField 레이어 있음
 <!-- SCENE:splash END -->
 
+<!-- CHARACTERS BEGIN -->
+## 캐릭터 (Character Maker)
 
+> 정의 `characters/<id>.character.json` · 목록 `characters/index.json` · **개별 사용법 `characters/<id>.md`**(좌표 규약·재생 시맨틱·호출 예시 — 직접 파싱한다면 반드시 읽을 것).
+> 조작은 엘리먼트의 `__uiCharacter` 핸들: `equip(socketId, partId)` · `play(clipId, {loop})` · `stop()` · `getEquip()`. **클립은 표시 이름이 아니라 clipId 로 호출**(이름은 바뀔 수 있음).
+> 씬 안이면 `renderer.el(stableId).__uiCharacter`, 씬 밖 인게임이면 `SceneRenderer.mountCharacter(host, id, {defBase, basePath, equip})`.
+> 정의 경로 기준(`defBase`=publish 출력 폴더)과 이미지 경로 기준(`basePath`=프로젝트 루트)은 **서로 다른 값**이다 — 하나로 합치면 이미지가 깨진다.
+> 슬롯·파츠·클립을 코드로 만들지 말 것 — 없으면 ui-editor 캐릭터 메이커에 추가 요청.
+
+| id | 이름 | 슬롯(파츠) | 클립 |
+|---|---|---|---|
+| `new-character` | New Character | 없음 | 없음 |
+<!-- CHARACTERS END -->

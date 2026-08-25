@@ -88,6 +88,7 @@ func _ready() -> void:
 	level_manager.level_cleared.connect(_on_level_cleared)
 	UiBridge.host_initialize.connect(_on_host_initialize)
 	UiBridge.host_start.connect(_on_host_start)
+	UiBridge.host_resume.connect(_on_host_start)
 	UiBridge.host_force_quit.connect(_on_host_force_quit)
 	UiBridge.host_message.connect(_on_host_message)
 
@@ -123,7 +124,7 @@ func _process(delta: float) -> void:
 		if seconds_left == 0:
 			_stage_timer_running = false
 			if UiBridge.is_hosted:
-				UiBridge.post_end("fail", 0)
+				UiBridge.post_progress({"outcome": "fail", "score": 0})
 
 	# 멈춘 프레임을 그 시점의 상태와 함께 기록한다. 로그가 없으면 원인을 좁힐 수 없다.
 	if delta < FRAME_STALL_WARNING_SECONDS or _stall_reports >= 40:
@@ -135,7 +136,7 @@ func _process(delta: float) -> void:
 func _on_level_cleared() -> void:
 	_stage_timer_running = false
 	if UiBridge.is_hosted:
-		UiBridge.post_end("clear", 0)
+		UiBridge.post_progress({"outcome": "clear", "score": 0})
 	var has_next: bool = _stage_index >= 0 and _stage_index + 1 < _stage_paths.size()
 	if _stage_index < 0:
 		clear_label.text = "LEVEL CLEAR!"
@@ -180,7 +181,12 @@ func _on_host_force_quit(_reason: String) -> void:
 	_stage_timer_running = false
 
 
-func _on_host_message(topic: String, _payload) -> void:
+func _on_host_message(topic: String, payload) -> void:
+	if topic == "continue_stage":
+		_stage_time_left = maxf(1.0, float(payload.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
+		_last_reported_seconds = -1
+		UiBridge.post_hud({"timeLeft": _format_stage_timer(ceili(_stage_time_left))})
+		return
 	if topic != "use_ice":
 		return
 	if _ice_overlay_tween != null:
@@ -256,6 +262,8 @@ func _load_stage(index: int) -> void:
 	# 정답이 함께 저장된 스테이지에서만 재현 버튼을 띄운다.
 	_replay_button.visible = not _stage_solution.is_empty()
 	_replay_button.text = "정답 재현 (%d수)" % _stage_solution.size()
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"stage": index + 1})
 	print("[스테이지] %d/%d 시작 (%s)" % [index + 1, _stage_paths.size(), path])
 
 

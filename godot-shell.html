@@ -26,11 +26,11 @@ const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
 const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimited-v2';
 const STAGE_CLEAR_REWARD = 40;
 const AD_STAGE_CLEAR_REWARD = 80;
-const BUTTON_CLICK_SFX = './sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
-const CAT_MOUTH_SFX = './sound/stu9-cute-cat-352656_optimized.mp3';
-const CAT_HOLE_ABSORB_SFX = './sound/gargamel10-teleport-game-sound-effect-379236_optimized.mp3';
-const LOBBY_BGM = './sound/geoffharvey-fat-cat-374614_optimized.mp3';
-const INGAME_BGM = './sound/loswin23-bird-chirping-567995_optimized.mp3';
+const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
+const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
+const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
+const LOBBY_BGM = './sound/Lobby_Bgm.mp3';
+const INGAME_BGM = './sound/Ingame_BGM.mp3';
 const STAGE_TIME_LIMIT_SECONDS = 60;
 const SPLASH_LOAD_FILL_DURATION_MS = 700;
 const SETTINGS_MENU_MOTION_MS = 240;
@@ -121,6 +121,14 @@ document.addEventListener('click', event => {
     splashRenderer?.getElement('loading-out-png-11')?.click();
     return;
   }
+  const isLobbyStageButton = event.target instanceof Element
+    && !!event.target.closest('[data-stable-id="home-btn-stage-normal-png-145"]');
+  if (isLobbyStageButton && economy.getHearts() === 0 && !hasUnlimitedHearts()) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    flow.current?.renderer?.getActiveTabRenderer()?.getElement('home-btn-plus-png-94')?.click();
+    return;
+  }
   if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('[data-stable-id], [data-nav-tab]')) {
     sound.playSfx(BUTTON_CLICK_SFX);
   }
@@ -140,13 +148,10 @@ flow.defineCondition('\bpopup close', async () => {
   return true;
 });
 flow.defineCondition('900코인 소모 후 하트풀충전', async () => {
-  if (!(await economy.spendCoins(COIN_COST, 'heart-refill'))) return false;
-  await economy.refillHearts();
+  await economy.grantCoins(COIN_COST, 'buy-lives-900');
   return true;
 });
 flow.defineCondition('광고호출 후 하트1개 충전', async () => {
-  // TODO(ad-sdk): reward verification callback must replace this local fallback before release.
-  alert('ad complete');
   await economy.grantHearts(1);
   return true;
 });
@@ -161,19 +166,25 @@ let activeSceneUuid = '';
 let splashRenderer = null;
 let continueWithoutHeart = false;
 let sceneSessionToken = 0;
+let currentMapStage = progress.getCurrentStage();
 
-const handleGodotSfx = ({ sfx }) => {
+const handleGodotSfx = ({ sfx, outcome, score, stage }) => {
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
   if (sfx === 'cat-hole-absorb') {
     if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
   }
+  if (Number.isInteger(stage) && stage > 0) {
+    currentMapStage = stage;
+    flow.update({ stage: { current: `Level${stage}` } });
+  }
+  if (outcome === 'clear' || outcome === 'fail') void handleMainGameEnd({ outcome, score, stats: {} }).catch(error => console.error('[Godot] stage-end 처리 실패', error));
 };
 
 const handleMainGameEnd = async (result) => {
   if (result.outcome === 'clear') {
     await economy.grantHearts(1);
     await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
-    await progress.recordClear(progress.getCurrentStage(), {
+    await progress.recordClear(currentMapStage, {
       stars: result.stats?.stars || 0,
       score: result.score,
       ticket: result.ticket,
@@ -206,10 +217,10 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
-  if (sceneName === LOBBY_UI_SCENE) renderer.update({ stage: { current: `LEVEL ${progress.getCurrentStage()}` } });
+  if (sceneName === LOBBY_UI_SCENE) renderer.update({ stage: { current: `Level${currentMapStage}` } });
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   if (sceneName === INGAME_UI_SCENE) {
-    renderer.update({ stage: { current: `Level${String(progress.getCurrentStage()).padStart(2, '0')}` } });
+    renderer.update({ stage: { current: `Level${currentMapStage}` } });
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
   }
@@ -240,10 +251,15 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     });
   }
   if (sceneName === 'pop_LevelWin' && popup) {
-    renderer.on('button-yellow1-png-132:click', async () => {
-      await economy.grantCoins(AD_STAGE_CLEAR_REWARD, 'stage-clear-ad');
+    renderer.getElement('confetti-148')?.style.setProperty('pointer-events', 'none');
+    renderer.getElement('confetti-148')?.closest('.sr-fit')?.style.setProperty('z-index', '9001');
+    if (activeGame?.state === 'running') activeGame.pause('level-win');
+    activeGame?.message('load_scene', {
+      stage: progress.getCurrentStage(),
+      config: { godotScene: 'main', timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
     });
   }
+  if (sceneName === 'pop_OutOfMoves' && popup && activeGame?.state === 'running') activeGame.pause('out-of-moves');
   if ((sceneName === 'pop_Settings_1' || sceneName === 'pop_Settings') && popup) {
     if (activeGame?.state === 'running') activeGame.pause('settings');
     renderer.update({
@@ -357,9 +373,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     await game.start(godotCartridge, {
       stage: progress.getCurrentStage(),
       config: { godotScene: 'lobby', preloadGodotScenes: ['main'] },
-      onProgress: ({ sfx }) => {
-        handleGodotSfx({ sfx });
-      },
+      onProgress: handleGodotSfx,
       onHud: ({ timeLeft }) => flow.update({ stage: { timer: timeLeft } }),
       onEnd: handleMainGameEnd,
       onError: (error) => console.error('[Godot preload] session error', error),
@@ -397,18 +411,34 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     gameHost.style.cssText = 'position:absolute;inset:0;overflow:hidden;display:block;';
     gameField.appendChild(gameHost);
   }
-  if (godotScene === 'main' && activeGame?.state === 'paused') {
+  if (activeGame?.state === 'paused') {
+    if (godotScene === 'main' && continueWithoutHeart) {
+      activeGame.message('continue_stage', { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS });
+      continueWithoutHeart = false;
+    }
+    if (godotScene === 'lobby') {
+      activeGame.message('load_scene', {
+        stage: progress.getCurrentStage(),
+        config: { godotScene },
+      });
+    }
     activeGame.resume();
     return;
   }
   if (activeGame?.state === 'ready') {
     if (godotScene === 'lobby') return;
-    activeGame.message('load_scene', {
-      stage: progress.getCurrentStage(),
-      config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
-    });
-    activeGame.startGame();
-    return;
+    if (godotScene === 'main') {
+      if (!continueWithoutHeart && !hasUnlimitedHearts() && !(await economy.consumeHeart())) {
+        throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
+      }
+      continueWithoutHeart = false;
+      activeGame.message('load_scene', {
+        stage: progress.getCurrentStage(),
+        config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
+      });
+      activeGame.startGame();
+      return;
+    }
   }
   const sessionToken = ++sceneSessionToken;
 

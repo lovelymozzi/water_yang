@@ -101,69 +101,6 @@
       "toSceneName": "pop_BuyLives_1"
     },
     {
-      "id": "edge-mt1ej5stg65s",
-      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "toSceneUuid": "__close__",
-      "trigger": {
-        "stableId": "button-yellow1-png-311",
-        "eventName": "button-yellow1-png-311:click",
-        "condition": "광고호출 후 하트1개 충전"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_BuyLives_1",
-      "toSceneName": "✕ 팝업 닫기"
-    },
-    {
-      "id": "edge-mt1ejaozfy4d",
-      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "toSceneUuid": "__close__",
-      "trigger": {
-        "stableId": "button-green-png-309",
-        "eventName": "button-green-png-309:click",
-        "condition": "900코인 소모 후 하트풀충전"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_BuyLives_1",
-      "toSceneName": "✕ 팝업 닫기"
-    },
-    {
-      "id": "edge-mt1ek4ip3o5w",
-      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "toSceneUuid": "__close__",
-      "trigger": {
-        "stableId": "icon-close01-png-2233",
-        "eventName": "icon-close01-png-2233:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_BuyLives_1",
-      "toSceneName": "✕ 팝업 닫기"
-    },
-    {
-      "id": "edge-mt1elmm0miew",
-      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-      "trigger": {
-        "stableId": "button-green-png-309",
-        "eventName": "button-green-png-309:click",
-        "condition": "not enough coin"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_BuyLives_1",
-      "toSceneName": "pop_BuyCoins",
-      "toHostedBy": [
-        {
-          "navScene": "home_bottom",
-          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
-          "navContract": "home_bottom.contract.json",
-          "tabId": "t0"
-        }
-      ]
-    },
-    {
       "id": "edge-mt1emkmeqhmv",
       "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
       "toSceneUuid": "8fc00305-7288-4b2a-90df-9ff83554cb5b",
@@ -588,19 +525,6 @@
       ]
     },
     {
-      "id": "edge-mt6zyov49jpi",
-      "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
-      "toSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-      "trigger": {
-        "stableId": "plain-text-2393",
-        "eventName": "plain-text-2393:click"
-      },
-      "transitionOut": null,
-      "transitionIn": null,
-      "fromSceneName": "pop_OutOfMoves",
-      "toSceneName": "pop_Fail"
-    },
-    {
       "id": "edge-mt6zyovbblqy",
       "fromSceneUuid": "af666955-071f-412b-832b-02370af5062f",
       "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
@@ -662,6 +586,92 @@
       "transitionIn": null,
       "fromSceneName": "pop_LevelWin",
       "toSceneName": "ingame"
+    },
+    {
+      "id": "edge-mt873shz1t7i",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "__close__",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2420",
+        "eventName": "common-btn-green-sales-png-2420:click",
+        "condition": "900코인 소모 후 하트풀충전"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_BuyLives_1",
+      "toSceneName": "✕ 팝업 닫기"
+    },
+    {
+      "id": "edge-mt873si6xfte",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2420",
+        "eventName": "common-btn-green-sales-png-2420:click",
+        "condition": "not enough coin"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_BuyLives_1",
+      "toSceneName": "pop_BuyCoins",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t0"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt878cor64m7",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2425",
+        "eventName": "common-btn-green-sales-png-2425:click",
+        "condition": "하트 +1 이후 인게임진입"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_BuyLives_1",
+      "toSceneName": "ingame"
+    },
+    {
+      "id": "edge-mt879eozhrhn",
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "common-btn-green-sales-png-2425",
+        "eventName": "common-btn-green-sales-png-2425:click",
+        "condition": "로비에서 하트가 0일때 띄워주는 팝업"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "pop_BuyLives_1",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
+    },
+    {
+      "id": "edge-mt87ghr1s5sw",
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "trigger": {
+        "stableId": "home-btn-stage-normal-png-145",
+        "eventName": "home-btn-stage-normal-png-145:click",
+        "condition": "no_heart"
+      },
+      "transitionOut": null,
+      "transitionIn": null,
+      "fromSceneName": "Lobby",
+      "toSceneName": "pop_BuyLives_1"
     }
   ],
   "entrySceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",

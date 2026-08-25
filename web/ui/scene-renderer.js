@@ -3707,7 +3707,7 @@ export class SceneRenderer {
         const pinnedSids = new Set((c.groups || []).flatMap(g => g.scrollFixed ? g.layerStableIds : []));
         let maxBottom = 0;
         (c.layers || []).forEach(l => {
-            if (l.visible === false || pinnedSids.has(l.stableId)) return;
+            if (l.visible === false || l.scrollFixed || pinnedSids.has(l.stableId)) return;
             const baseH = l.visual?.height
                        || l.visual?.model?.shape?.height
                        || 0;
@@ -3725,6 +3725,18 @@ export class SceneRenderer {
         root.id = c.sceneId;
         root.style.cssText = `position:relative;width:${w}px;height:${contentH}px;overflow:hidden;opacity:0;transition:opacity 0.3s ease;z-index:5;`;
         this._applyBackground(root, c.background);
+
+        // 핀(스크롤 고정) 래퍼 모음 — 그룹 핀과 개별 오브젝트 핀이 같은 통로로 outerWrap 에 붙는다
+        const pinnedGDivs = [];
+        let loosePinDiv = null;
+        const pinWrap = () => {
+            if (!loosePinDiv) {
+                loosePinDiv = document.createElement('div');
+                loosePinDiv.style.cssText = `position:absolute;top:0;left:0;width:${w}px;height:${contentH}px;pointer-events:none;`;
+                pinnedGDivs.push(loosePinDiv);
+            }
+            return loosePinDiv;
+        };
 
         // 그룹 래퍼 생성 (편집/AI 단위 — getGroup show/hide 용. 효과는 아래 fx번들이 담당한다.)
         const layerGroupMap = {};
@@ -3801,6 +3813,9 @@ export class SceneRenderer {
             } else if (gIdx !== undefined && groupList[gIdx]) {
                 layerEl.style.pointerEvents = 'auto';
                 groupList[gIdx].gDiv.appendChild(layerEl);
+            } else if (isScrollable && l.scrollFixed) {
+                layerEl.style.pointerEvents = 'auto';
+                pinWrap().appendChild(layerEl);
             } else {
                 target.appendChild(layerEl);
             }
@@ -3900,6 +3915,11 @@ export class SceneRenderer {
         // fx번들 래퍼 배치: 멤버가 한 그룹에 속하면 그 그룹 래퍼 안에(중첩), 아니면 root 직속.
         fxList.forEach(({ fxDiv, memberSids }) => {
             if (fxDiv.children.length === 0) return;
+            // 멤버 중 하나라도 핀이면 번들째 핀 — 번들 래퍼가 배치를 독점하므로 개별 핀이 묻히지 않게 한다
+            if (isScrollable && (c.layers || []).some(l => l.scrollFixed && memberSids.has(l.stableId))) {
+                pinnedGDivs.push(fxDiv);
+                return;
+            }
             let parent = root;
             const gIdxs = new Set([...memberSids].map(sid => layerGroupMap[sid]).filter(v => v !== undefined));
             if (gIdxs.size === 1) {
@@ -3914,7 +3934,6 @@ export class SceneRenderer {
         placeMaskChildren();
 
         // 그룹 래퍼 배치 — scrollFixed(핀) 그룹은 스크롤 씬에서 root 밖(outerWrap)에 붙여 스크롤 제외
-        const pinnedGDivs = [];
         groupList.forEach(({ g, gDiv }) => {
             if (gDiv.children.length === 0) return;
             if (isScrollable && g.scrollFixed) pinnedGDivs.push(gDiv);
@@ -5332,6 +5351,8 @@ SceneRenderer.utils = {
                 ...(t.textAlign ? { textAlign: t.textAlign } : {}),
             })),
             image: layer.type === 'image' ? { exportPath: layer.exportPath || '', imageKey: layer.imageKey || '', style: normalizedImageStyle } : null,
+            // 스크롤 고정(핀) — 스크롤 씬에서 스크롤 밖에 붙어 화면에 고정 (그룹 scrollFixed 와 같은 규약)
+            ...(layer.scrollFixed ? { scrollFixed: true } : {}),
             // 오브젝트 마스크 — 자식: 부모 stableId 참조 / 부모: 스텐실 전용(그래픽 숨김) 플래그 / 자식 흐름 설정
             ...(layer.maskParentId ? { maskParentId: layer.maskParentId } : {}),
             ...(layer.maskShowGraphic === false ? { maskShowGraphic: false } : {}),

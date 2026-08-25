@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-24T09:51:51.107Z",
+  "generatedAt": "2026-08-25T05:26:43.274Z",
   "note": "흐름도 변경 통지 — 각 항목을 게임 배선 코드와 대조·반영한 뒤 이 파일을 삭제(소비)하세요. baseline 은 게임이 마지막으로 반영한 시점의 흐름도(비교 기준)라 직접 읽을 필요 없습니다.",
   "changes": [
     {
@@ -105,20 +105,6 @@
     {
       "type": "added",
       "edge": {
-        "fromSceneUuid": "26578336-5751-476b-b24d-f144818b21ce",
-        "fromSceneName": "pop_OutOfMoves",
-        "toSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd",
-        "toSceneName": "pop_Fail",
-        "trigger": {
-          "stableId": "plain-text-2393",
-          "eventName": "plain-text-2393:click",
-          "condition": null
-        }
-      }
-    },
-    {
-      "type": "added",
-      "edge": {
         "fromSceneUuid": "af666955-071f-412b-832b-02370af5062f",
         "fromSceneName": "pop_LevelWin",
         "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
@@ -169,6 +155,76 @@
           "stableId": "common-btn-green-sales-png-2404",
           "eventName": "common-btn-green-sales-png-2404:click",
           "condition": "else"
+        }
+      }
+    },
+    {
+      "type": "added",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "__close__",
+        "toSceneName": "✕ 팝업 닫기",
+        "trigger": {
+          "stableId": "common-btn-green-sales-png-2420",
+          "eventName": "common-btn-green-sales-png-2420:click",
+          "condition": "900코인 소모 후 하트풀충전"
+        }
+      }
+    },
+    {
+      "type": "added",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+        "toSceneName": "pop_BuyCoins",
+        "trigger": {
+          "stableId": "common-btn-green-sales-png-2420",
+          "eventName": "common-btn-green-sales-png-2420:click",
+          "condition": "not enough coin"
+        }
+      }
+    },
+    {
+      "type": "added",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+        "toSceneName": "ingame",
+        "trigger": {
+          "stableId": "common-btn-green-sales-png-2425",
+          "eventName": "common-btn-green-sales-png-2425:click",
+          "condition": "하트 +1 이후 인게임진입"
+        }
+      }
+    },
+    {
+      "type": "added",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+        "toSceneName": "Lobby",
+        "trigger": {
+          "stableId": "common-btn-green-sales-png-2425",
+          "eventName": "common-btn-green-sales-png-2425:click",
+          "condition": "로비에서 하트가 0일때 띄워주는 팝업"
+        }
+      }
+    },
+    {
+      "type": "added",
+      "edge": {
+        "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+        "fromSceneName": "Lobby",
+        "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "toSceneName": "pop_BuyLives_1",
+        "trigger": {
+          "stableId": "home-btn-stage-normal-png-145",
+          "eventName": "home-btn-stage-normal-png-145:click",
+          "condition": "no_heart"
         }
       }
     },
@@ -267,6 +323,62 @@
           "stableId": "shape-round-rect-1765",
           "eventName": "shape-round-rect-1765:click",
           "condition": null
+        }
+      }
+    },
+    {
+      "type": "removed",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "__close__",
+        "toSceneName": "✕ 팝업 닫기",
+        "trigger": {
+          "stableId": "button-yellow1-png-311",
+          "eventName": "button-yellow1-png-311:click",
+          "condition": "광고호출 후 하트1개 충전"
+        }
+      }
+    },
+    {
+      "type": "removed",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "__close__",
+        "toSceneName": "✕ 팝업 닫기",
+        "trigger": {
+          "stableId": "button-green-png-309",
+          "eventName": "button-green-png-309:click",
+          "condition": "900코인 소모 후 하트풀충전"
+        }
+      }
+    },
+    {
+      "type": "removed",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "__close__",
+        "toSceneName": "✕ 팝업 닫기",
+        "trigger": {
+          "stableId": "icon-close01-png-2233",
+          "eventName": "icon-close01-png-2233:click",
+          "condition": null
+        }
+      }
+    },
+    {
+      "type": "removed",
+      "edge": {
+        "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+        "fromSceneName": "pop_BuyLives_1",
+        "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+        "toSceneName": "pop_BuyCoins",
+        "trigger": {
+          "stableId": "button-green-png-309",
+          "eventName": "button-green-png-309:click",
+          "condition": "not enough coin"
         }
       }
     }
