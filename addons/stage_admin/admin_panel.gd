@@ -93,10 +93,15 @@ func _build_ui() -> void:
 	_preview.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	center.add_child(_preview)
 
-	# ---- 우: 파라미터 + 버튼
+	# ---- 우: 파라미터 + 버튼 (항목이 많아 세로로 넘치므로 스크롤 컨테이너에 넣는다)
+	var right_scroll := ScrollContainer.new()
+	right_scroll.custom_minimum_size.x = 300
+	right_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	split.add_child(right_scroll)
+
 	var right := VBoxContainer.new()
-	right.custom_minimum_size.x = 280
-	split.add_child(right)
+	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_scroll.add_child(right)
 
 	var params_grid := GridContainer.new()
 	params_grid.columns = 2
@@ -108,8 +113,6 @@ func _build_ui() -> void:
 	_add_spin(params_grid, "grid_h", "보드 세로", 3, 16, 1, 9)
 	_add_spin(params_grid, "cats_min", "고양이 (1스테이지)", 2, 8, 1, 3)
 	_add_spin(params_grid, "cats_max", "고양이 (마지막)", 2, 8, 1, 6)
-	_add_spin(params_grid, "chain_min", "사슬 깊이 (1스테이지)", 1, 8, 1, 2)
-	_add_spin(params_grid, "chain_max", "사슬 깊이 (마지막)", 1, 8, 1, 4)
 	_add_spin(params_grid, "len_min", "몸 길이 하한", 2, 16, 1, 5)
 	_add_spin(params_grid, "len_max", "몸 길이 상한", 2, 16, 1, 12)
 	_add_spin(params_grid, "pack", "몸이 채우는 비율", 0.2, 0.8, 0.05, 0.65,
@@ -209,10 +212,9 @@ func _refresh() -> void:
 		_levels.append(level)
 		var score: float = difficulty_of(level)
 		difficulties.append(score)
-		_list.add_item("%s   고양이%d 사슬%d 난이도 %.0f" % [
+		_list.add_item("%s   고양이%d 난이도 %.0f" % [
 			path.get_file().get_basename(),
 			(level.get("cats", []) as Array).size(),
-			int((level.get("dependency", {}) as Dictionary).get("chain_depth", 0)),
 			score,
 		])
 	_curve.values = difficulties
@@ -241,11 +243,9 @@ func _select_stage(index: int) -> void:
 
 	var level: Dictionary = _levels[index]
 	var stats: Dictionary = level.get("stats", {})
-	var dependency: Dictionary = level.get("dependency", {})
-	_info.text = "%s · 고양이 %d · 사슬 %d · 풀이 %d수 · 장애물 %d칸 · 난이도 %.0f · 시드 %d" % [
+	_info.text = "%s · 고양이 %d · 풀이 %d수 · 장애물 %d칸 · 난이도 %.0f · 시드 %d" % [
 		_stage_paths[index].get_file().get_basename(),
 		(level.get("cats", []) as Array).size(),
-		int(dependency.get("chain_depth", 0)),
 		int(stats.get("solution_length", 0)),
 		int(stats.get("obstacle_cells", 0)),
 		difficulty_of(level),
@@ -289,7 +289,6 @@ func _on_batch_generate() -> void:
 	var count: int = int(_spins["count"].value)
 	var base_seed: int = int(_spins["seed"].value)
 	var cats_range := Vector2i(int(_spins["cats_min"].value), int(_spins["cats_max"].value))
-	var chain_range := Vector2i(int(_spins["chain_min"].value), int(_spins["chain_max"].value))
 	var grid: Vector2i = _grid_size()
 	var start_number: int = StageBatch.next_stage_number(LEVELS_DIR)
 
@@ -301,7 +300,9 @@ func _on_batch_generate() -> void:
 		_status.text = "생성 중 stage_%03d (%d / %d) ..." % [stage_number, index + 1, count]
 		await get_tree().process_frame
 		var cat_count: int = StageBatch.ramp(cats_range, index, count)
-		var chain_depth: int = mini(StageBatch.ramp(chain_range, index, count), cat_count)
+		# 사슬 깊이는 난이도 채점에 안 쓴다. 그래도 의존 자체는 있는 편이 좋으니 "가능한 한
+		# 깊게(=고양이 수)"로 시작해 안 나오면 1까지 자동으로 낮춘다(generate_stage 가 처리).
+		var chain_depth: int = cat_count
 		# 시드 보폭은 전역 순번을 쓴다. 같은 시드로 이어 돌려도 이전 배치와 같은 맵이 안 나온다.
 		var level: Dictionary = StageBatch.generate_stage(
 			generator, _params_dict(index, count), base_seed, grid,
@@ -357,9 +358,8 @@ func _on_regenerate_selected() -> void:
 	var index: int = _selected
 	var count: int = maxi(_stage_paths.size(), 1)
 	var cats_range := Vector2i(int(_spins["cats_min"].value), int(_spins["cats_max"].value))
-	var chain_range := Vector2i(int(_spins["chain_min"].value), int(_spins["chain_max"].value))
 	var cat_count: int = StageBatch.ramp(cats_range, index, count)
-	var chain_depth: int = mini(StageBatch.ramp(chain_range, index, count), cat_count)
+	var chain_depth: int = cat_count
 
 	_reroll += 1
 	_status.text = "스테이지 %d 재생성 중 (변형 %d)..." % [index + 1, _reroll]
