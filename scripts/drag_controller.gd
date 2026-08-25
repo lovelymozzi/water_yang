@@ -1,6 +1,8 @@
 class_name DragController
 extends Node
 
+signal input_received
+
 # 1_움직임고찰.md 2절. 두 끝의 로직은 완전히 동일하고, 잡은 쪽이 리드가 된다.
 
 # 끝 셀 중심에서 이 거리 안이면 잡힌다. 드래그 실패를 줄이려고 넉넉하게 둔다.
@@ -93,6 +95,7 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 	if best_cat == null:
 		return
 
+	input_received.emit()
 	_cat = best_cat
 	_pointer_index = pointer_index
 	_has_pointer = true

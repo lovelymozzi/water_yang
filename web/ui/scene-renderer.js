@@ -345,9 +345,19 @@ const CSS_ANIMATION_PRESETS = [
     // 자체 키프레임(ensureLocalCssAnimationKeyframes) — 수축+떨림 후 터지는 연출 2종
     { id: 'charge-pop', label: 'Charge Pop (모았다 빵)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-charge-pop', phase: 'attention', durationMs: 1300 },
     { id: 'squash-jump', label: 'Squash Jump (움츠렸다 점프)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-jump', phase: 'attention', durationMs: 1400 },
+    // charge-pop 2단 분리 — hold(수축+떨림, 모은 자세로 끝·fill 유지)→[이미지 교체]→burst(모은 자세에서 터짐)
+    { id: 'charge-hold', label: 'Charge Hold (모으기)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-charge-hold', phase: 'attention', durationMs: 650 },
+    { id: 'charge-burst', label: 'Charge Burst (빵 터짐)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-charge-burst', phase: 'attention', durationMs: 650 },
     // squash-jump 2단 분리 — crouch(눌린 자세로 끝, fill 유지)→[이미지 교체]→launch(눌린 자세에서 점프 착지)
     { id: 'squash-crouch', label: 'Squash Crouch (움츠리기)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-crouch', phase: 'attention', durationMs: 600 },
     { id: 'squash-launch', label: 'Squash Launch (점프 착지)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-squash-launch', phase: 'attention', durationMs: 900 },
+    // 부들부들만(움츠러들기 없음). 1사이클 = 5왕복이라 Duration 이 "떨림 속도(진폭 주기)",
+    // 지속 시간은 Repeat 횟수 / Loop(Rest 0) 로 늘린다 — 둘이 분리돼 있어 느려지지 않는다.
+    { id: 'shake', label: 'Shake (부들부들)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-shake', phase: 'attention', durationMs: 800, defaultLoop: true },
+    // 위와 같은 떨림을 squash-crouch 가 남긴 눌린 자세로 이어서 떤다 — crouch(짧게)→shake-crouched(원하는 만큼)→launch.
+    { id: 'shake-crouched', label: 'Shake Crouched (움츠린 채 부들부들)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-shake-crouched', phase: 'attention', durationMs: 800, defaultLoop: true },
+    // charge-hold 가 남긴 모은 자세(scale .8)로 이어서 떤다 — charge-hold→shake-charged(원하는 만큼)→charge-burst.
+    { id: 'shake-charged', label: 'Shake Charged (모은 채 부들부들)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-shake-charged', phase: 'attention', durationMs: 800, defaultLoop: true },
     // 제자리 360° 회전 — 컴포넌트 전용이던 spinAnimation(ui-spin)을 이펙트로도 노출(이미지/스프라이트 포함).
     // 끊김 없이 돌리려면 Loop 켜고 Loop delay 를 0 으로.
     { id: 'spin-360', label: 'Spin 360 (제자리 회전)', group: 'Cute / Attention', provider: 'animate.css', className: 'ui-spin-cw', phase: 'attention', durationMs: 2000, defaultLoop: true },
@@ -1462,6 +1472,22 @@ function ensureLocalCssAnimationKeyframes() {
         '90%{transform:scale(.97)}100%{transform:scale(1)}' +
         '}' +
         '.ui-charge-pop{animation-name:ui-charge-pop}' +
+        // ui-charge-hold / ui-charge-burst — charge-pop 을 둘로 쪼갠 것(0~50% / 50~100% 재매핑).
+        // hold 는 모은 자세(scale .8)로 "끝나고"(fill both 로 유지), burst 는 그 자세에서 시작.
+        '@keyframes ui-charge-hold{' +
+        '0%{transform:scale(1)}' +
+        '16%{transform:scale(.86) rotate(-2deg)}28%{transform:scale(.85) rotate(2deg)}' +
+        '40%{transform:scale(.84) rotate(-2.5deg)}52%{transform:scale(.85) rotate(2.5deg)}' +
+        '64%{transform:scale(.83) rotate(-3deg)}76%{transform:scale(.84) rotate(3deg)}' +
+        '88%{transform:scale(.82) rotate(-3deg)}100%{transform:scale(.8)}' +
+        '}' +
+        '.ui-charge-hold{animation-name:ui-charge-hold;animation-fill-mode:both}' +
+        '@keyframes ui-charge-burst{' +
+        '0%{transform:scale(.8)}' +
+        '20%{transform:scale(1.32)}44%{transform:scale(.93)}64%{transform:scale(1.1)}' +
+        '80%{transform:scale(.97)}100%{transform:scale(1)}' +
+        '}' +
+        '.ui-charge-burst{animation-name:ui-charge-burst}' +
         // ui-squash-jump: 바닥 기준(origin 50% 100%) — 상단이 아래로 눌리며 떨다가 점프 후 착지 바운스
         '@keyframes ui-squash-jump{' +
         '0%{transform:translateY(0) scale(1,1)}' +
@@ -1504,6 +1530,13 @@ function ensureLocalCssAnimationKeyframes() {
         '100%{transform:translateY(0) scale(1,1)}' +
         '}' +
         '.ui-squash-launch{animation-name:ui-squash-launch;transform-origin:50% 100%}' +
+        // 부들부들 — 1사이클에 5왕복(진폭 고정). ui-shake-crouched 는 squash-crouch 의 눌린 자세를 유지한 채 떤다.
+        '@keyframes ui-shake{0%,100%{transform:rotate(0deg)}10%,30%,50%,70%{transform:rotate(-2.5deg)}20%,40%,60%,80%{transform:rotate(2.5deg)}90%{transform:rotate(-1.5deg)}}' +
+        '.ui-shake{animation-name:ui-shake}' +
+        '@keyframes ui-shake-crouched{0%,100%{transform:scale(1.08,.72) rotate(0deg)}10%,30%,50%,70%{transform:scale(1.08,.72) rotate(-2.5deg)}20%,40%,60%,80%{transform:scale(1.08,.72) rotate(2.5deg)}90%{transform:scale(1.08,.72) rotate(-1.5deg)}}' +
+        '.ui-shake-crouched{animation-name:ui-shake-crouched;transform-origin:50% 100%;animation-fill-mode:both}' +
+        '@keyframes ui-shake-charged{0%,100%{transform:scale(.8) rotate(0deg)}10%,30%,50%,70%{transform:scale(.8) rotate(-3deg)}20%,40%,60%,80%{transform:scale(.8) rotate(3deg)}90%{transform:scale(.8) rotate(-2deg)}}' +
+        '.ui-shake-charged{animation-name:ui-shake-charged;animation-fill-mode:both}' +
         '.ui-spin-cw{animation-name:ui-spin;animation-timing-function:linear}' +
         '.ui-spin-ccw{animation-name:ui-spin-rev;animation-timing-function:linear}';
     document.head.appendChild(st);

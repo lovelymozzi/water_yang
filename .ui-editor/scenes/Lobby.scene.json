@@ -398,9 +398,9 @@
           "targetSceneUuid": null,
           "branches": [
             {
-              "condition": "not max_heart",
-              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "BuyLives_1"
+              "condition": "heart.current>0",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
             }
           ]
         }
@@ -717,7 +717,7 @@
         "direction": "right",
         "color": "#ffffff"
       },
-      "selectedTextIndex": -1,
+      "selectedTextIndex": 0,
       "imageKey": "event.heart.active"
     },
     {

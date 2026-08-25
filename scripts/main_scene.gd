@@ -25,6 +25,7 @@ var _stage_index: int = -1
 var _stage_label: Label
 var _stage_time_left := DEFAULT_STAGE_TIME_SECONDS
 var _stage_timer_running := false
+var _stage_timer_waiting_for_touch := false
 var _last_reported_seconds := -1
 var _requested_stage_index := 0
 # 재현용. 스테이지 파일에 함께 저장된 정답 수순과 그 재생 상태다.
@@ -88,7 +89,7 @@ func _ready() -> void:
 	level_manager.level_cleared.connect(_on_level_cleared)
 	UiBridge.host_initialize.connect(_on_host_initialize)
 	UiBridge.host_start.connect(_on_host_start)
-	UiBridge.host_resume.connect(_on_host_start)
+	UiBridge.host_resume.connect(func(): _stage_timer_running = not _stage_timer_waiting_for_touch)
 	UiBridge.host_force_quit.connect(_on_host_force_quit)
 	UiBridge.host_message.connect(_on_host_message)
 
@@ -96,6 +97,11 @@ func _ready() -> void:
 	var drag_controller: Node = DRAG_CONTROLLER_SCRIPT.new()
 	drag_controller.name = "DragController"
 	drag_controller.level_manager = level_manager
+	drag_controller.input_received.connect(func():
+		if _stage_timer_waiting_for_touch:
+			_stage_timer_waiting_for_touch = false
+			_stage_timer_running = true
+	)
 	add_child(drag_controller)
 
 	print("[boot] 로그 파일 위치: ", ProjectSettings.globalize_path("user://logs/"))
@@ -167,6 +173,7 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 	_requested_stage_index = max(0, requested - 1)
 	_stage_time_left = maxf(1.0, float(config.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 	_stage_timer_running = false
+	_stage_timer_waiting_for_touch = false
 	_last_reported_seconds = -1
 	UiBridge.post_hud({"timeLeft": _format_stage_timer(ceili(_stage_time_left))})
 	if not _stage_paths.is_empty():
@@ -174,16 +181,20 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 
 
 func _on_host_start() -> void:
-	_stage_timer_running = true
+	_stage_timer_running = false
+	_stage_timer_waiting_for_touch = true
 
 
 func _on_host_force_quit(_reason: String) -> void:
 	_stage_timer_running = false
+	_stage_timer_waiting_for_touch = false
 
 
 func _on_host_message(topic: String, payload) -> void:
 	if topic == "continue_stage":
 		_stage_time_left = maxf(1.0, float(payload.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
+		_stage_timer_running = false
+		_stage_timer_waiting_for_touch = true
 		_last_reported_seconds = -1
 		UiBridge.post_hud({"timeLeft": _format_stage_timer(ceili(_stage_time_left))})
 		return

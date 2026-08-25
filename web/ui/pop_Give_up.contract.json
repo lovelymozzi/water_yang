@@ -706,7 +706,7 @@
         {
           "trigger": "click",
           "eventName": "common-btn-top-x-red-png-2384:click",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+          "targetSceneUuid": "__close__"
         }
       ]
     }

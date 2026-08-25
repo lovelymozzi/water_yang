@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hgstxuhw7kx2"
-path="res://.godot/imported/Video_1.png-05912e892def07d1ccf7bfb124a46326.ctex"
+uid="uid://bfoqnwdpq4t58"
+path="res://.godot/imported/gimmick_coinpurse_coin.png-d537fec4e7c25127b456d6be746b63e4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/assets/Video_1.png"
-dest_files=["res://.godot/imported/Video_1.png-05912e892def07d1ccf7bfb124a46326.ctex"]
+source_file="res://gimmick_coinpurse_coin.png"
+dest_files=["res://.godot/imported/gimmick_coinpurse_coin.png-d537fec4e7c25127b456d6be746b63e4.ctex"]
 
 [params]
 

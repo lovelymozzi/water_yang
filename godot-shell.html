@@ -161,25 +161,8 @@ document.addEventListener('click', event => {
 
 let loadingReady = false;
 flow.defineCondition('로딩', () => loadingReady);
-flow.defineCondition('current stage>4', () => progress.getCurrentStage() > 4);
 flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
 flow.defineCondition('no_heart', () => economy.getHearts() === 0 && !hasUnlimitedHearts());
-// UI editor가 설정 팝업의 닫기 버튼에 기록한 제어문자 포함 조건 키.
-// 이 분기는 현재 Ingame으로 복귀하면서 열린 팝업을 닫고, 아래 scene:enter 훅에서 게임을 재개한다.
-flow.defineCondition('\bpopup close', async () => {
-  // 설정 메뉴가 버튼 안으로 모두 접힌 뒤 팝업 자체를 정리한다.
-  await new Promise(resolve => setTimeout(resolve, SETTINGS_MENU_MOTION_MS + SETTINGS_MENU_STAGGER_MS * SETTINGS_MENU_GROUPS.length + 20));
-  return true;
-});
-flow.defineCondition('900코인 소모 후 하트풀충전', async () => {
-  await economy.grantCoins(COIN_COST, 'buy-lives-900');
-  return true;
-});
-flow.defineCondition('광고호출 후 하트1개 충전', async () => {
-  await economy.grantHearts(1);
-  return true;
-});
-
 const godotCartridge = makeGodotCartridge({
   engineUrl: GODOT_ENGINE_URL,
   engineConfig: GODOT_CONFIG,
@@ -221,11 +204,16 @@ const handleMainGameEnd = async (result) => {
   }
 };
 
-flow.defineCondition('not enough coin', async () => {
+flow.defineCondition('재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동', async () => {
   if (economy.getCoins() < COIN_COST) return true;
-  if (activeSceneName !== 'pop_OutOfMoves') return false;
   if (!(await economy.spendCoins(COIN_COST, 'out-of-moves-continue'))) return true;
   continueWithoutHeart = true;
+  return false;
+});
+flow.defineCondition('not enough coin', async () => {
+  if (economy.getCoins() < COIN_COST) return true;
+  if (!(await economy.spendCoins(COIN_COST, 'buy-lives-900'))) return true;
+  await economy.grantHearts(1);
   return false;
 });
 

@@ -487,14 +487,7 @@
           "direction": "right",
           "color": "#ffffff"
         }
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
-        }
-      ]
+      }
     },
     {
       "id": 2371,

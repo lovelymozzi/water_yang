@@ -603,13 +603,6 @@
             }
           }
         }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "plain-text-2370:click",
-          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
-        }
       ]
     },
     {

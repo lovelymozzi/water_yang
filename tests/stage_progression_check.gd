@@ -32,6 +32,23 @@ func _process(_delta: float) -> bool:
 func _run_checks() -> void:
 	_expect(_main._format_stage_timer(60) == "01:00", "1분 타이머 표시가 01:00이 아니다")
 	_expect(_main._format_stage_timer(0) == "00:00", "0초 타이머 표시가 00:00이 아니다")
+	_main._on_host_start()
+	_expect(not _main._stage_timer_running, "첫 터치 전 타이머가 시작됐다")
+	var first_touch := InputEventScreenTouch.new()
+	first_touch.pressed = true
+	(_main.get_node("DragController") as Node)._unhandled_input(first_touch)
+	_expect(not _main._stage_timer_running, "빈 곳 터치가 타이머를 시작했다")
+	var manager: LevelManager = _main.level_manager
+	var camera: Camera3D = _main.get_viewport().get_camera_3d()
+	_expect(not manager.get_cats().is_empty() and camera != null, "타이머 입력 검사용 고양이 또는 카메라가 없다")
+	if not manager.get_cats().is_empty() and camera != null:
+		var cat: CatEntity = manager.get_cats()[0]
+		first_touch.position = camera.unproject_position(
+			manager.grid_to_world(cat.get_lead_cell(), manager.cat_world_y)
+		)
+		(_main.get_node("DragController") as Node)._unhandled_input(first_touch)
+		_expect(_main._stage_timer_running, "첫 보드 조작 뒤 타이머가 시작되지 않았다")
+	_main._on_host_force_quit("")
 	var paths: PackedStringArray = _main._list_stage_files()
 	_expect(paths.size() > 0, "스테이지 파일이 하나도 없다")
 	if paths.size() > 1:

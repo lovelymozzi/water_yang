@@ -23,6 +23,8 @@
 #### `Ranking`  ·  contract: `./web/ui/Ranking.contract.json`
 - sceneUuid: `3db24195-9465-47f6-be12-e9aeeebf74e6`
 - 이벤트: 없음
+- 텍스트 바인딩: `player.stage1` · `player.name1`
+- 이미지 바인딩: `rank.background`
 <!-- SCENE:Ranking END -->
 
 <!-- SCENE:home_bottom BEGIN -->
@@ -62,7 +64,7 @@
 <!-- SCENE:pop_Fail BEGIN -->
 #### `pop_Fail`  ·  contract: `./web/ui/pop_Fail.contract.json`
 - sceneUuid: `ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd`
-- 이벤트: `common-btn-green-sales-png-2367:click` · `plain-text-2370:click` · `common-btn-top-x-red-png-2372:click`
+- 이벤트: `common-btn-green-sales-png-2367:click` · `common-btn-top-x-red-png-2372:click`
 <!-- SCENE:pop_Fail END -->
 
 <!-- SCENE:pop_Give_up BEGIN -->
@@ -74,19 +76,19 @@
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
 - sceneUuid: `cf13fce2-4ff9-40d1-a47a-9680167f65f7`
-- 이벤트: `common-btn-green-sales-png-2318:click` · `common-btn-top-x-red-png-2350:click`
+- 이벤트: `common-btn-green-sales-png-2318:click` · `plain-text-2319:click` · `common-btn-top-x-red-png-2350:click`
 <!-- SCENE:pop_LevelFail END -->
 
 <!-- SCENE:pop_LevelWin BEGIN -->
 #### `pop_LevelWin`  ·  contract: `./web/ui/pop_LevelWin.contract.json`
 - sceneUuid: `af666955-071f-412b-832b-02370af5062f`
-- 이벤트: `common-popup-box-copy-png-2402:click` · `common-btn-green-sales-png-2411:click` · `common-btn-green-sales-png-2404:click` · `confetti-148:click`
+- 이벤트: `common-btn-green-sales-png-2411:click` · `common-btn-green-sales-png-2404:click`
 <!-- SCENE:pop_LevelWin END -->
 
 <!-- SCENE:pop_OutOfMoves BEGIN -->
 #### `pop_OutOfMoves`  ·  contract: `./web/ui/pop_OutOfMoves.contract.json`
 - sceneUuid: `26578336-5751-476b-b24d-f144818b21ce`
-- 이벤트: `common-btn-green-sales-png-2390:click` · `plain-text-1774:click` · `itemicon-money-coin-png-1773:click` · `common-btn-top-x-red-png-2395:click`
+- 이벤트: `common-btn-green-sales-png-2390:click` · `common-btn-top-x-red-png-2395:click`
 - 텍스트 바인딩: `continue.coin`
 <!-- SCENE:pop_OutOfMoves END -->
 
