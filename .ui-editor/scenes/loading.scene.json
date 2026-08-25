@@ -241,8 +241,8 @@
       "pressScale": 95,
       "cssAnimation": {
         "enabled": true,
-        "presetId": "rotate-in",
-        "duration": 3,
+        "presetId": "spin-360-ccw",
+        "duration": 11,
         "delay": 0,
         "repeat": 1,
         "loop": true,
