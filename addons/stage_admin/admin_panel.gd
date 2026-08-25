@@ -48,6 +48,12 @@ static func difficulty_of(level: Dictionary) -> float:
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	# 에디터 메인스크린은 VBoxContainer 다. 컨테이너 안에서는 앵커가 무시되고 자식이
+	# **최소 크기**로만 잡히므로, EXPAND 를 안 주면 패널 높이가 0 이 된다. 예전에는 우측
+	# 파라미터 VBox 의 최소 높이(스핀 20여 개 ≈860px)가 우연히 패널을 벌려 주고 있었는데,
+	# 그 자리에 ScrollContainer(최소 높이 0)를 넣으면서 높이가 통째로 무너졌다.
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_palette = _load_palette()
 	_build_ui()
 	_refresh()
@@ -94,7 +100,9 @@ func _build_ui() -> void:
 	_preview.palette = _palette
 	_preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_preview.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_preview.custom_minimum_size = Vector2(360, 360)
+	# 보드는 세로가 길어 그리는 크기가 높이로 결정된다(cell = min(w/열, h/행)).
+	# 그래서 폭이 아니라 높이가 실제 보이는 크기를 좌우한다.
+	_preview.custom_minimum_size = Vector2(360, 420)
 	center.add_child(_preview)
 
 	# ---- 우: 파라미터 + 버튼 (항목이 많아 세로로 넘치므로 스크롤 컨테이너에 넣는다)
