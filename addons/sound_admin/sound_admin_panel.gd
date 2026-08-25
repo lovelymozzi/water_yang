@@ -4,16 +4,28 @@ extends Control
 const SOUND_DIR := "res://src/sound"
 const EXTENSIONS := ["mp3", "ogg", "wav", "flac"]
 const SOUND_ROLES := {
-	"floraphonic-casual-click-pop-ui-3-262120_optimized.mp3": "웹 UI 버튼 클릭 / 첫 입력 오디오 권한 해제",
-	"stu9-cute-cat-352656_optimized.mp3": "고양이 입 열기 효과음",
-	"gargamel10-teleport-game-sound-effect-379236_optimized.mp3": "고양이가 짝 구멍에 흡수될 때",
-	"geoffharvey-fat-cat-374614_optimized.mp3": "로비 진입·복귀 BGM",
-	"loswin23-bird-chirping-567995_optimized.mp3": "인게임 진입·설정에서 켤 때 BGM",
+	"Ui_button_sound.mp3": "UI 버튼 또는 내비게이션 탭을 누를 때",
+	"Cat_meow.mp3": "고양이가 입을 열 때",
+	"cat_Hole_sound.mp3": "고양이가 짝 구멍에 흡수될 때",
+	"cat_move.mp3": "고양이가 타일 한 칸을 이동 완료할 때",
+	"ice_breake.mp3": "얼음 블록이 사라질 때",
+	"stage_clear1.mp3": "레벨 클리어 팝업이 열릴 때",
+	"stage_clear2.mp3": "stage_clear1 종료 직전에 이어 재생",
+	"time_out1.mp3": "타임아웃 팝업이 열릴 때",
+	"ui_pop.mp3": "레벨 클리어·타임아웃을 제외한 팝업이 열릴 때",
+	"Lobby_Bgm.mp3": "로비 진입·복귀 BGM",
+	"Ingame_BGM.mp3": "인게임 진입 또는 설정에서 켤 때 BGM",
 }
 const BINDINGS := [
-	{"id": "button", "label": "UI 버튼 클릭", "when": "모든 UI 버튼 터치", "targets": [{"path": "res://godot-shell.html", "marker": "const BUTTON_CLICK_SFX =", "prefix": "./sound/"}]},
+	{"id": "button", "label": "UI 버튼 클릭", "when": "모든 UI 버튼 또는 내비게이션 탭 터치", "targets": [{"path": "res://godot-shell.html", "marker": "const BUTTON_CLICK_SFX =", "prefix": "./sound/"}]},
 	{"id": "mouth", "label": "고양이 입 열기", "when": "고양이가 입을 열 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOUTH_SFX =", "prefix": "./sound/"}]},
 	{"id": "absorb", "label": "고양이 구멍 흡수", "when": "짝 구멍으로 들어갈 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_HOLE_ABSORB_SFX =", "prefix": "./sound/"}, {"path": "res://scripts/cat_entity.gd", "marker": "const ABSORB_SOUND := preload(", "prefix": "res://src/sound/"}]},
+	{"id": "cat_move", "label": "고양이 한 칸 이동", "when": "path tile 한 칸 이동 완료", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOVE_SFX =", "prefix": "./sound/"}]},
+	{"id": "ice_break", "label": "얼음 블록 파괴", "when": "ice block 이 사라질 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ICE_BREAK_SFX =", "prefix": "./sound/"}]},
+	{"id": "stage_clear1", "label": "레벨 클리어 시작", "when": "pop_LevelWin 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const STAGE_CLEAR1_SFX =", "prefix": "./sound/"}]},
+	{"id": "stage_clear2", "label": "레벨 클리어 이어짐", "when": "stage_clear1 종료 직전", "targets": [{"path": "res://godot-shell.html", "marker": "const STAGE_CLEAR2_SFX =", "prefix": "./sound/"}]},
+	{"id": "time_out", "label": "타임아웃", "when": "pop_OutOfMoves 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const TIME_OUT_SFX =", "prefix": "./sound/"}]},
+	{"id": "popup_open", "label": "일반 팝업 열기", "when": "레벨 클리어·타임아웃 외 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const POPUP_OPEN_SFX =", "prefix": "./sound/"}]},
 	{"id": "lobby_bgm", "label": "로비 BGM", "when": "로비 진입·복귀", "targets": [{"path": "res://godot-shell.html", "marker": "const LOBBY_BGM =", "prefix": "./sound/"}]},
 	{"id": "ingame_bgm", "label": "인게임 BGM", "when": "인게임 진입 또는 설정에서 활성화", "targets": [{"path": "res://godot-shell.html", "marker": "const INGAME_BGM =", "prefix": "./sound/"}]},
 ]

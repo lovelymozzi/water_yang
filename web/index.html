@@ -28,11 +28,18 @@ const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
 const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimited-v2';
 const STAGE_CLEAR_REWARD = 40;
 const AD_STAGE_CLEAR_REWARD = 80;
-const BUTTON_CLICK_SFX = './sound/floraphonic-casual-click-pop-ui-3-262120_optimized.mp3';
-const CAT_MOUTH_SFX = './sound/stu9-cute-cat-352656_optimized.mp3';
-const CAT_HOLE_ABSORB_SFX = './sound/gargamel10-teleport-game-sound-effect-379236_optimized.mp3';
-const LOBBY_BGM = './sound/geoffharvey-fat-cat-374614_optimized.mp3';
-const INGAME_BGM = './sound/loswin23-bird-chirping-567995_optimized.mp3';
+const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
+const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
+const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
+const CAT_MOVE_SFX = './sound/cat_move.mp3';
+const ICE_BREAK_SFX = './sound/ice_breake.mp3';
+const STAGE_CLEAR1_SFX = './sound/stage_clear1.mp3';
+const STAGE_CLEAR2_SFX = './sound/stage_clear2.mp3';
+const TIME_OUT_SFX = './sound/time_out1.mp3';
+const POPUP_OPEN_SFX = './sound/ui_pop.mp3';
+const STAGE_CLEAR2_DELAY_MS = 750;
+const LOBBY_BGM = './sound/Lobby_Bgm.mp3';
+const INGAME_BGM = './sound/Ingame_BGM.mp3';
 const STAGE_TIME_LIMIT_SECONDS = 60;
 const SPLASH_LOAD_FILL_DURATION_MS = 700;
 const SETTINGS_MENU_MOTION_MS = 240;
@@ -52,7 +59,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":14754156,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":15071272,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -131,7 +138,7 @@ document.addEventListener('click', event => {
     flow.current?.renderer?.getActiveTabRenderer()?.getElement('home-btn-plus-png-94')?.click();
     return;
   }
-  if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('[data-stable-id], [data-nav-tab]')) {
+  if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('button, [role="button"], [data-nav-tab], [data-stable-id*="btn"]')) {
     sound.playSfx(BUTTON_CLICK_SFX);
   }
   if (hapticsEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) navigator.vibrate?.(12);
@@ -172,6 +179,8 @@ let currentMapStage = progress.getCurrentStage();
 
 const handleGodotSfx = ({ sfx, outcome, score, stage }) => {
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
+  if (sfx === 'cat-move' && buttonSfxEnabled) sound.playSfx(CAT_MOVE_SFX);
+  if (sfx === 'ice-break' && buttonSfxEnabled) sound.playSfx(ICE_BREAK_SFX);
   if (sfx === 'cat-hole-absorb') {
     if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
   }
@@ -253,6 +262,10 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     });
   }
   if (sceneName === 'pop_LevelWin' && popup) {
+    if (buttonSfxEnabled) {
+      sound.playSfx(STAGE_CLEAR1_SFX);
+      setTimeout(() => sound.playSfx(STAGE_CLEAR2_SFX), STAGE_CLEAR2_DELAY_MS);
+    }
     renderer.getElement('confetti-148')?.style.setProperty('pointer-events', 'none');
     renderer.getElement('confetti-148')?.closest('.sr-fit')?.style.setProperty('z-index', '9001');
     if (activeGame?.state === 'running') activeGame.pause('level-win');
@@ -261,7 +274,12 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
       config: { godotScene: 'main', timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
     });
   }
-  if (sceneName === 'pop_OutOfMoves' && popup && activeGame?.state === 'running') activeGame.pause('out-of-moves');
+  if (sceneName === 'pop_OutOfMoves' && popup) {
+    if (buttonSfxEnabled) sound.playSfx(TIME_OUT_SFX);
+    if (activeGame?.state === 'running') activeGame.pause('out-of-moves');
+  } else if (popup && buttonSfxEnabled) {
+    sound.playSfx(POPUP_OPEN_SFX);
+  }
   if ((sceneName === 'pop_Settings_1' || sceneName === 'pop_Settings') && popup) {
     if (activeGame?.state === 'running') activeGame.pause('settings');
     renderer.update({
@@ -475,4 +493,3 @@ await flow.start();
 </script>
 </body>
 </html>
-

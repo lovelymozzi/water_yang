@@ -811,6 +811,8 @@ func _finish_step() -> void:
 	_is_reversing = false
 	_update_facing()
 	level_manager.update_cat_occupancy(self)
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"sfx": "cat-move"})
 	if _pending_lead_flip:
 		_pending_lead_flip = false
 		_flip_lead()

@@ -450,6 +450,8 @@ func _break_ice_cover(cell: Vector2i) -> void:
 		label.queue_free()
 	var node: Node3D = entry.get("node")
 	if is_instance_valid(node):
+		if UiBridge.is_hosted:
+			UiBridge.post_progress({"sfx": "ice-break"})
 		var tween: Tween = create_tween()
 		tween.tween_property(node, "scale", node.scale * 0.001, 0.25) \
 			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
