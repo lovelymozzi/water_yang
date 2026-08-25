@@ -66,6 +66,15 @@ import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
 
+const CLICK_EVENT_STABLE_IDS = new Set();
+const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
+await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
+  const sceneContract = await (await fetch(UI_DIR + contract)).json();
+  (sceneContract.layers || []).forEach(({ stableId, events = [] }) => {
+    if (events.some(({ trigger }) => trigger === 'click')) CLICK_EVENT_STABLE_IDS.add(stableId);
+  });
+}));
+
 const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX, initialCoins: INITIAL_COINS, maxHearts: MAX_HEARTS });
 if (economy.getCoins() === 0 && localStorage.getItem(INITIAL_COIN_GRANT_STORAGE_KEY) == null) {
   await economy.grantCoins(INITIAL_COINS, 'initial-coin-migration');
@@ -130,14 +139,22 @@ document.addEventListener('click', event => {
   }
   const isLobbyStageButton = event.target instanceof Element
     && !!event.target.closest('[data-stable-id="home-btn-stage-normal-png-145"]');
+  if (buttonSfxEnabled && isLobbyStageButton) sound.playSfx(BUTTON_CLICK_SFX);
   if (isLobbyStageButton && economy.getHearts() === 0 && !hasUnlimitedHearts()) {
     event.preventDefault();
     event.stopImmediatePropagation();
     flow.current?.renderer?.getActiveTabRenderer()?.getElement('home-btn-plus-png-94')?.click();
     return;
   }
-  if (buttonSfxEnabled && event.target instanceof Element && event.target.closest('button, [role="button"], [data-nav-tab], [data-stable-id*="btn"]')) {
-    sound.playSfx(BUTTON_CLICK_SFX);
+  if (buttonSfxEnabled && !isLobbyStageButton && event.target instanceof Element) {
+    let clickEventElement = event.target;
+    while (clickEventElement != null) {
+      if (CLICK_EVENT_STABLE_IDS.has(clickEventElement.dataset.stableId)) {
+        sound.playSfx(BUTTON_CLICK_SFX);
+        break;
+      }
+      clickEventElement = clickEventElement.parentElement;
+    }
   }
   if (hapticsEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) navigator.vibrate?.(12);
 }, { capture: true });
