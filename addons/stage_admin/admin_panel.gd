@@ -12,6 +12,8 @@ extends Control
 # 를 그대로 호출한다. 파라미터 의미와 램프 규칙은 stage_batch_generator.gd 머리 주석 참조.
 
 const StageBatch := preload("res://scripts/stage_batch_generator.gd")
+# 인계 파일 경로의 단일 기준. 문자열을 두 곳에 적어 두면 조용히 어긋난다.
+const MainSceneScript := preload("res://scripts/main_scene.gd")
 const LEVELS_DIR := "res://resources/levels"
 # 스테이지로 쓰지 않을 맵의 격리 폴더. main_scene 은 LEVELS_DIR 만 읽으므로 여기 있는
 # 파일은 플레이에 안 나온다. 삭제·복원은 파일을 지우거나 되옮기는 것으로 한다.
@@ -25,6 +27,7 @@ var _reroll: int = 0
 var _palette: PackedColorArray = PackedColorArray()
 
 var _list: ItemList
+var _context_menu: PopupMenu
 var _info: Label
 var _status: Label
 var _preview: StagePreview
@@ -83,7 +86,15 @@ func _build_ui() -> void:
 	_list = ItemList.new()
 	_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_list.item_selected.connect(_on_stage_selected)
+	# 우클릭 = 그 스테이지로 바로 실행. 더블클릭도 같은 동작으로 묶어 둔다.
+	_list.item_clicked.connect(_on_item_clicked)
+	_list.item_activated.connect(_play_stage)
 	left.add_child(_list)
+
+	_context_menu = PopupMenu.new()
+	_context_menu.add_item("▶  이 스테이지 플레이", 0)
+	_context_menu.id_pressed.connect(_on_context_menu_pressed)
+	add_child(_context_menu)
 
 	# ---- 중: 미리보기. 스크롤 컨테이너(우)가 폭을 요구해도 미리보기가 1px 로 짜부라지지
 	# 않게 최소 크기를 못 박는다. HSplit 은 이 최소값 아래로는 못 줄인다.
@@ -243,6 +254,41 @@ func _refresh() -> void:
 
 func _on_stage_selected(index: int) -> void:
 	_select_stage(index)
+
+
+func _on_item_clicked(index: int, _at_position: Vector2, mouse_button_index: int) -> void:
+	if mouse_button_index != MOUSE_BUTTON_RIGHT:
+		return
+	_select_stage(index)
+	_context_menu.position = DisplayServer.mouse_get_position()
+	_context_menu.reset_size()
+	_context_menu.popup()
+
+
+func _on_context_menu_pressed(id: int) -> void:
+	if id == 0:
+		_play_stage(_selected)
+
+
+# 그 스테이지부터 게임을 실행한다. 에디터 플러그인은 실행에 인자를 넘길 수 없으므로
+# 시작 스테이지를 1회용 파일로 건넨다 (`main_scene._consume_dev_stage_handoff()`).
+#
+# **파일 번호가 아니라 목록 순번을 넘긴다** — main_scene 은 폴더의 stage_*.json 을 정렬해
+# 순번으로 읽으므로, 중간 번호가 비어 있으면 stage_051.json 이 45번째일 수 있다.
+func _play_stage(index: int) -> void:
+	if index < 0 or index >= _stage_paths.size():
+		_status.text = "실행할 스테이지를 먼저 선택"
+		return
+	var file: FileAccess = FileAccess.open(MainSceneScript.DEV_STAGE_HANDOFF_PATH, FileAccess.WRITE)
+	if file == null:
+		_status.text = "실행 인계 파일을 쓰지 못했다 (%d)" % FileAccess.get_open_error()
+		return
+	file.store_string(str(index + 1))
+	file.close()
+	_status.text = "%s 실행 중 (목록 %d번째)" % [
+		_stage_paths[index].get_file().get_basename(), index + 1,
+	]
+	EditorInterface.play_main_scene()
 
 
 func _select_stage(index: int) -> void:
