@@ -79,9 +79,11 @@ func _build_ui() -> void:
 	_list.item_selected.connect(_on_stage_selected)
 	left.add_child(_list)
 
-	# ---- 중: 미리보기
+	# ---- 중: 미리보기. 스크롤 컨테이너(우)가 폭을 요구해도 미리보기가 1px 로 짜부라지지
+	# 않게 최소 크기를 못 박는다. HSplit 은 이 최소값 아래로는 못 줄인다.
 	var center := VBoxContainer.new()
 	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.custom_minimum_size.x = 380
 	split.add_child(center)
 
 	_info = Label.new()
@@ -90,7 +92,9 @@ func _build_ui() -> void:
 
 	_preview = StagePreview.new()
 	_preview.palette = _palette
+	_preview.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_preview.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_preview.custom_minimum_size = Vector2(360, 360)
 	center.add_child(_preview)
 
 	# ---- 우: 파라미터 + 버튼 (항목이 많아 세로로 넘치므로 스크롤 컨테이너에 넣는다)
