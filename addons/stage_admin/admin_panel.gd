@@ -132,6 +132,10 @@ func _build_ui() -> void:
 		"막아도 여전히 풀리는 빈 칸을 전부 장애물로 채운다.\n빈 공간이 사라져 '앞 고양이가 비운 자리'를 여유 없이 써야만 뒤 고양이가 나갈 수 있다.\n칸마다 오토솔버를 한 번 돌리므로 생성이 몇 배 느려진다.")
 	_add_spin(params_grid, "later_min", "2번째 이후 탈출 치우는 수", 0, 6, 1, 0,
 		"두 번째·세 번째 탈출 전에 '다른 고양이'를 최소 몇 번 움직여야 하는가.\n여유 칸 제거와 짝. 2~3 이면 '1번이 나간 공간을 100% 써야 2번이 나가는' 맵만 통과한다.\n첫 탈출은 위의 '첫 탈출까지 치우는 수'가 따로 본다. 올릴수록 생성 실패가 가파르다.")
+	_add_spin(params_grid, "ice", "얼음 확률", 0.0, 1.0, 0.05, 0.0,
+		"첫 탈출 구멍을 뺀 구멍마다 이 확률로 얼음을 덮는다.\n얼음 구멍은 고양이 N마리가 빠질 때까지 잠기고, N은 '그 구멍이 풀이에서\n쓰이기 전까지 빠지는 고양이 수' 이하로만 잡혀 풀이가 그대로 성립한다.\n1.0 = 자격 있는 모든 구멍에 얼음. 0 = 얼음 없음.")
+	_add_spin(params_grid, "ice_max", "얼음 숫자 상한", 0, 8, 1, 0,
+		"얼음 위 숫자의 상한. 0 = 풀이상 안전한 최댓값(그 구멍이 쓰이기 전까지 빠지는\n고양이 수)을 그대로 쓴다. 작게 잡으면 얼음이 더 빨리 깨진다.")
 	_add_spin(params_grid, "attempts", "재시도 상한", 1, 400, 1, 120)
 
 	var batch := Button.new()
@@ -270,6 +274,8 @@ func _params_dict(index: int, count: int) -> Dictionary:
 			"later_min": int(_spins["later_min"].value),
 		"dep_slack": int(_spins["dep_slack"].value),
 		"attempts": int(_spins["attempts"].value),
+		"ice": float(_spins["ice"].value),
+		"ice_max": int(_spins["ice_max"].value),
 	}
 
 
@@ -437,6 +443,19 @@ class StagePreview:
 			var center: Vector2 = origin + (Vector2(entry["grid_pos"] as Vector2i) + Vector2(0.5, 0.5)) * cell
 			draw_circle(center, cell * 0.38, Color(0.05, 0.05, 0.06))
 			draw_arc(center, cell * 0.38, 0.0, TAU, 24, _color_of(int(entry["color_id"])), cell * 0.08)
+			# 얼음 구멍은 하늘색 사각형 + 숫자로 표시한다.
+			var ice_count: int = int(entry.get("ice_count", 0))
+			if ice_count > 0:
+				var box: float = cell * 0.72
+				draw_rect(
+					Rect2(center - Vector2(box, box) * 0.5, Vector2(box, box)),
+					Color(0.55, 0.85, 0.95, 0.85)
+				)
+				draw_string(
+					get_theme_default_font(), center + Vector2(-cell * 0.16, cell * 0.18),
+					str(ice_count), HORIZONTAL_ALIGNMENT_LEFT, -1, int(cell * 0.5),
+					Color(0.09, 0.28, 0.44)
+				)
 
 		for entry in level.get("cats", []):
 			var body: Array = entry["body_cells"]
