@@ -312,7 +312,7 @@ func _show_cat_item_targets() -> bool:
 		arrow.no_depth_test = true
 		arrow.position = level_manager.grid_to_world(
 			cat.get_head_cell() + Vector2i.UP, level_manager.cat_world_y + 0.35
-		) + Vector3(0.0, 0.0, level_manager.tile_size * 0.25)
+		) + Vector3(0.0, 0.0, level_manager.fitted_tile_size() * 0.25)
 		_cat_item_targets.add_child(arrow)
 	return not _cat_item_targets.get_children().is_empty()
 

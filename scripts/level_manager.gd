@@ -12,9 +12,19 @@ const FLOOR_TILE_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const PATH_PREVIEW_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const ICE_BLOCK_SCENE = preload("res://scenes/ice_block.tscn")
 const ICE_NUMBER_FONT = preload("res://web/ui/vendor/fonts/lilita-one-1.woff2")
-# 얼음 위 숫자 색. 얼음 틴트(하늘색)와 대비되는 진한 남색.
-const ICE_NUMBER_COLOR := Color(0.09, 0.28, 0.44, 1.0)
-const ICE_NUMBER_OUTLINE_COLOR := Color(1.0, 1.0, 1.0, 0.9)
+# 하얀 글씨 + 검정 외곽선.
+# 이 크기까지는 타일을 줄이지 않는다. 이보다 큰 판만 비율대로 축소해 같은 자리에 담는다.
+# 화면에 들어가는 한계가 가로 7칸 / 세로 10칸이다. 생성기는 가로 9칸까지 뽑으므로
+# 가로 8·9칸 판은 7칸 폭으로 줄어든다.
+const FIT_REFERENCE_GRID := Vector2i(7, 10)
+
+const ICE_NUMBER_COLOR := Color(1.0, 1.0, 1.0, 1.0)
+const ICE_NUMBER_OUTLINE_COLOR := Color(0.0, 0.0, 0.0, 1.0)
+# Lilita One 은 굵기가 하나뿐이라 볼드 파일이 없다. FontVariation 의 합성 볼드로 굵힌다.
+const ICE_NUMBER_EMBOLDEN := 0.28
+# 얼음 파편 색. 얼음 블록 틴트와 같은 계열로 맞춘다.
+const ICE_SHARD_COLOR := Color(0.35, 0.78, 0.9, 1.0)
+const SHARD_LIFETIME := 0.9
 const TILE_HEIGHT := 0.12
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
@@ -267,13 +277,29 @@ func is_inside_grid(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.x < grid_size.x and cell.y >= 0 and cell.y < grid_size.y
 
 
+# 이 판에 실제로 쓰는 타일 한 변. **`tile_size` 를 직접 쓰는 곳은 여기뿐이어야 한다** —
+# 칸 위치·타일·고양이·장애물·보드 베이스·화면→칸 역산이 전부 이 값에서 파생되므로 여기서
+# 줄이면 그리드만 균일하게 줄어든다.
+#
+# 카메라를 빼는 방법은 못 쓴다: 보드에 맞춰 세운 나무들이 같이 딸려 나와 판을 가린다.
+# 기준(`FIT_REFERENCE_GRID`) 이하인 판은 1.0 이라 손대지 않으므로 기존 스테이지의 보임새는
+# 그대로다. 세로 11칸이면 10/11, 가로 9칸이면 7/9 로 줄어 기준 판과 같은 자리를 차지한다.
+# 가로·세로가 둘 다 넘치면 `minf` 가 더 센 쪽 하나만 고른다(둘을 곱하면 과축소).
+func fitted_tile_size() -> float:
+	var shrink: float = minf(
+		float(FIT_REFERENCE_GRID.x) / float(maxi(grid_size.x, 1)),
+		float(FIT_REFERENCE_GRID.y) / float(maxi(grid_size.y, 1))
+	)
+	return tile_size * minf(shrink, 1.0)
+
+
 func grid_to_world(cell: Vector2i, y: float = 0.0) -> Vector3:
 	var board_origin: Vector3 = Vector3(
-		-((grid_size.x - 1) * tile_size) * 0.5,
+		-((grid_size.x - 1) * fitted_tile_size()) * 0.5,
 		y,
-		-((grid_size.y - 1) * tile_size) * 0.5
+		-((grid_size.y - 1) * fitted_tile_size()) * 0.5
 	)
-	return board_origin + Vector3(cell.x * tile_size, 0.0, cell.y * tile_size)
+	return board_origin + Vector3(cell.x * fitted_tile_size(), 0.0, cell.y * fitted_tile_size())
 
 
 func grid_dir_to_world(dir: Vector2i) -> Vector3:
@@ -339,7 +365,7 @@ func _build_occupancy_highlight() -> void:
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	var mesh := PlaneMesh.new()
-	mesh.size = Vector2(tile_size - tile_gap, tile_size - tile_gap)
+	mesh.size = Vector2(fitted_tile_size() - tile_gap, fitted_tile_size() - tile_gap)
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var tile := MeshInstance3D.new()
@@ -405,7 +431,7 @@ func get_escape_result(cat: CatEntity) -> Dictionary:
 
 	return {
 		"is_path_clear": true,
-		"exit_world_position": grid_to_world(furthest_cell, cat_world_y) + grid_dir_to_world(cat.facing_dir) * tile_size * 1.4,
+		"exit_world_position": grid_to_world(furthest_cell, cat_world_y) + grid_dir_to_world(cat.facing_dir) * fitted_tile_size() * 1.4,
 	}
 
 
@@ -449,13 +475,91 @@ func _break_ice_cover(cell: Vector2i) -> void:
 	if is_instance_valid(label):
 		label.queue_free()
 	var node: Node3D = entry.get("node")
-	if is_instance_valid(node):
-		if UiBridge.is_hosted:
-			UiBridge.post_progress({"sfx": "ice-break"})
-		var tween: Tween = create_tween()
-		tween.tween_property(node, "scale", node.scale * 0.001, 0.25) \
-			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-		tween.tween_callback(node.queue_free)
+	if not is_instance_valid(node):
+		return
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"sfx": "ice-break"})
+	# 파편은 얼음이 서 있던 자리에서 터진다. 블록 자체는 짧게 오므라들며 사라져
+	# "깨져서 흩어졌다"로 읽히게 한다.
+	_spawn_ice_shards(node.position)
+	var tween: Tween = create_tween()
+	tween.tween_property(node, "scale", node.scale * 0.001, 0.12) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.tween_callback(node.queue_free)
+
+
+# 파편용 공유 리소스. **파괴할 때마다 새로 만들면 안 된다** — Material 을 새로 만들면
+# 그 조합의 셰이더가 처음 그려지는 순간 컴파일되면서 프레임이 눈에 띄게 끊긴다.
+# 파라미터가 고정이므로 인스턴스 하나를 모든 파편이 돌려 쓴다(셰이더 컴파일도 한 번뿐).
+static var _shard_process_material: ParticleProcessMaterial = null
+static var _shard_mesh: BoxMesh = null
+
+
+static func _ensure_shard_resources() -> void:
+	if _shard_process_material != null:
+		return
+	var process := ParticleProcessMaterial.new()
+	process.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_BOX
+	process.emission_box_extents = Vector3(0.45, 0.15, 0.45)
+	process.direction = Vector3(0.0, 1.0, 0.0)
+	process.spread = 70.0
+	process.initial_velocity_min = 2.0
+	process.initial_velocity_max = 4.5
+	process.gravity = Vector3(0.0, -9.8, 0.0)
+	process.angular_velocity_min = -720.0
+	process.angular_velocity_max = 720.0
+	process.scale_min = 0.5
+	process.scale_max = 1.3
+	_shard_process_material = process
+
+	var shard := BoxMesh.new()
+	shard.size = Vector3(0.2, 0.2, 0.2)
+	var material := StandardMaterial3D.new()
+	material.albedo_color = ICE_SHARD_COLOR
+	material.roughness = 0.25
+	material.metallic = 0.0
+	shard.material = material
+	_shard_mesh = shard
+
+
+func _make_shard_emitter() -> GPUParticles3D:
+	_ensure_shard_resources()
+	var particles := GPUParticles3D.new()
+	particles.amount = 16
+	particles.lifetime = SHARD_LIFETIME
+	particles.one_shot = true
+	particles.explosiveness = 1.0
+	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# 조각이 타일 밖으로 날아가므로 넉넉히 잡는다. 좁으면 카메라 각도에 따라 통째로 컬링된다.
+	particles.visibility_aabb = AABB(Vector3(-3.0, -1.0, -3.0), Vector3(6.0, 5.0, 6.0))
+	particles.process_material = _shard_process_material
+	particles.draw_pass_1 = _shard_mesh
+	return particles
+
+
+# 얼음이 깨질 때 튀는 파편. 새 에셋 없이 얼음색 조각을 한 번만 터뜨린다.
+func _spawn_ice_shards(world_position: Vector3) -> void:
+	var particles := _make_shard_emitter()
+	particles.name = "IceShards"
+	particles.position = world_position
+	_holes_root.add_child(particles)
+	particles.emitting = true
+	# one_shot 파티클은 스스로 사라지지 않는다. 수명이 끝나면 정리한다.
+	get_tree().create_timer(SHARD_LIFETIME + 0.5).timeout.connect(particles.queue_free)
+
+
+# 얼음이 있는 판에서는 파편 셰이더를 **레벨 로딩 프레임에** 미리 컴파일해 둔다. 리소스를
+# 공유해도 "처음 화면에 그려지는 순간"의 컴파일 비용은 남으므로, 그 순간을 이미 무거운
+# 로딩 프레임으로 옮기는 것이다. 보드 아래에서 터뜨리므로 화면에는 보이지 않는다
+# (카메라가 위에서 내려다보고 보드가 가린다). 컬링되면 컴파일이 안 되므로 화면 밖이
+# 아니라 "가려진 자리"여야 한다.
+func _warm_up_ice_shards(near_cell: Vector2i) -> void:
+	var warm := _make_shard_emitter()
+	warm.name = "IceShardWarmup"
+	warm.position = grid_to_world(near_cell, -2.5)
+	_holes_root.add_child(warm)
+	warm.emitting = true
+	get_tree().create_timer(SHARD_LIFETIME + 0.5).timeout.connect(warm.queue_free)
 
 
 # 고양이를 다 삼킨 구멍은 함께 수축해 사라진다. 닫힌 자리는 평범한 빈 칸이 되어 다른
@@ -468,12 +572,14 @@ func _close_hole(cell: Vector2i) -> void:
 	_hole_cells.remove_at(index)
 	_hole_color_ids.remove_at(index)
 	_hole_ice_counts.remove_at(index)
-	_ice_covers.erase(cell)
+	# 얼음은 이제 CatHole 의 자식이 아니라 형제다. 구멍만 지우면 얼음과 숫자가 미아로 남는다.
+	# (잠긴 구멍으로는 흡입이 안 되므로 실제로는 이미 깨진 뒤지만, 남으면 눈에 보이는 버그다.)
+	_break_ice_cover(cell)
 	if is_inside_grid(cell):
 		_set_cell_state(cell, CellState.EMPTY)
 
-	var visual: Node = _holes_root.get_node_or_null("CatHole_%d_%d" % [cell.x, cell.y])
-	if visual is Node3D:
+	var visual := _get_hole_visual(cell)
+	if visual != null:
 		var tween: Tween = create_tween()
 		tween.tween_property(
 			visual, "scale", Vector3(0.001, 0.001, 0.001), 0.25
@@ -570,9 +676,9 @@ func _initialize_grid_arrays() -> void:
 func _build_board_base() -> void:
 	# 세로 화면에서 보드가 또렷하게 보이도록 바닥 베이스를 먼저 깐다.
 	var board_size := Vector3(
-		grid_size.x * tile_size + board_side_margin * 2.0,
+		grid_size.x * fitted_tile_size() + board_side_margin * 2.0,
 		0.36,
-		grid_size.y * tile_size + board_vertical_margin * 2.0
+		grid_size.y * fitted_tile_size() + board_vertical_margin * 2.0
 	)
 	var board := _create_rounded_prism(
 		"BoardBase", board_size, BOARD_CORNER_RADIUS,
@@ -598,7 +704,7 @@ func _build_grid_tiles() -> void:
 						visual.call("apply_cell_style", cell, _tile_color_for(cell), floor_tile_height)
 					_tiles_root.add_child(visual)
 					continue
-			var tile_side := maxf(tile_size - tile_gap, 0.01)
+			var tile_side := maxf(fitted_tile_size() - tile_gap, 0.01)
 			var tile := _create_rounded_prism(
 				"Tile_%d_%d" % [x, y],
 				Vector3(tile_side, TILE_HEIGHT, tile_side),
@@ -687,7 +793,7 @@ func _build_hole_visuals() -> void:
 	if not show_hole_visuals or hole_scene == null:
 		return
 
-	var tile_side := maxf(tile_size - tile_gap, 0.01)
+	var tile_side := maxf(fitted_tile_size() - tile_gap, 0.01)
 	for index in _hole_cells.size():
 		var cell: Vector2i = _hole_cells[index]
 		var color_id: int = _hole_color_ids[index]
@@ -717,15 +823,15 @@ func _build_hole_visuals() -> void:
 		if ice_count > _escaped_count:
 			var ice_cover := ICE_BLOCK_SCENE.instantiate() as Node3D
 			if ice_cover != null:
-				ice_cover.name = "IceCover"
-				visual.add_child(ice_cover)
-				# CatHole은 fit_to_tile()에서 원본 FBX 크기만큼 스케일된다. ice도 그
-				# 자식이므로 그 스케일을 상쇄해야 obstacle_tile_1x1.fbx의 1.88폭이
-				# 정확히 한 타일(기본 1.88)에 머문다.
-				ice_cover.scale = Vector3.ONE / visual.scale
-				ice_cover.position = Vector3(0.0, TILE_HEIGHT / visual.scale.y, 0.0)
+				ice_cover.name = "IceCover_%d_%d" % [cell.x, cell.y]
+				# **CatHole 의 자식으로 두지 않는다.** CatHole 은 HoleSpinPlayer 가
+				# `.:rotation` 을 계속 돌리므로, 자식으로 붙이면 얼음이 꽃 테두리와 함께
+				# 회전한다. 홀 루트에 형제로 두면 회전도 스케일 보정도 필요 없다.
+				ice_cover.position = grid_to_world(
+					cell, floor_height + hole_visual_height + TILE_HEIGHT
+				)
+				_holes_root.add_child(ice_cover)
 				ice_cover.call("apply_cell_style", cell, Color.WHITE, obstacle_fbx_height)
-				# 숫자는 스케일 보정이 필요 없게 홀 루트(월드 스케일)에 직접 얹는다.
 				var label := _make_ice_number_label(ice_count - _escaped_count)
 				label.position = grid_to_world(
 					cell, floor_height + hole_visual_height + obstacle_fbx_height + 0.35
@@ -735,17 +841,25 @@ func _build_hole_visuals() -> void:
 					"node": ice_cover, "label": label, "count": ice_count,
 				}
 
+	# 얼음이 하나라도 있으면 파편 셰이더를 지금(로딩 중) 컴파일해 둔다. 에디터 미리보기에는
+	# 필요 없다 — 거기서는 얼음이 깨지지 않는다.
+	if not Engine.is_editor_hint() and not _ice_covers.is_empty():
+		_warm_up_ice_shards(_ice_covers.keys()[0])
+
 
 # 얼음 위에 뜨는 남은 수 라벨. Lilita One, 카메라를 향하는 빌보드로 어느 각도에서도 읽힌다.
 func _make_ice_number_label(remaining: int) -> Label3D:
 	var label := Label3D.new()
 	label.name = "IceNumber"
-	label.font = ICE_NUMBER_FONT
+	var bold := FontVariation.new()
+	bold.base_font = ICE_NUMBER_FONT
+	bold.variation_embolden = ICE_NUMBER_EMBOLDEN
+	label.font = bold
 	label.text = str(remaining)
 	label.font_size = 128
 	label.pixel_size = 0.006
 	label.modulate = ICE_NUMBER_COLOR
-	label.outline_size = 24
+	label.outline_size = 32
 	label.outline_modulate = ICE_NUMBER_OUTLINE_COLOR
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	# 빌보드는 프레임마다 셰이더가 바뀌므로 그림자를 끄고, 얼음에 살짝 겹쳐도 가려지지 않게 한다.
@@ -760,7 +874,7 @@ func _make_ice_number_label(remaining: int) -> Label3D:
 # 같은 둥근 덩어리를 타일 위에 얹는다. 높이는 고양이(`cat_world_y`)보다 낮게 두어 고양이를
 # 가리지 않는다.
 func _build_obstacle_visuals() -> void:
-	var block_side := maxf(tile_size - tile_gap, 0.01)
+	var block_side := maxf(fitted_tile_size() - tile_gap, 0.01)
 	for cell in _obstacle_cells:
 		if obstacle_scene != null:
 			var visual := obstacle_scene.instantiate() as Node3D
@@ -779,6 +893,12 @@ func _build_obstacle_visuals() -> void:
 		)
 		block.position = grid_to_world(cell, TILE_HEIGHT + obstacle_fbx_height * 0.5)
 		_obstacles_root.add_child(block)
+
+
+# _holes_root 에는 캣홀 말고도 얼음 숫자 라벨이 섞여 있다. 자식 순서로 찾지 말고 항상
+# 칸 이름으로 찾는다(라벨에 apply_cat_visual_style 을 부르면 그대로 죽는다).
+func _get_hole_visual(cell: Vector2i) -> Node3D:
+	return _holes_root.get_node_or_null("CatHole_%d_%d" % [cell.x, cell.y]) as Node3D
 
 
 func _get_hole_cat_visual_style(color_id: int) -> Dictionary:
@@ -805,9 +925,10 @@ func _get_hole_cat_visual_style(color_id: int) -> Dictionary:
 func _sync_hole_visual_styles() -> void:
 	if _holes_root == null:
 		return
-	var visuals := _holes_root.get_children()
-	for index in mini(visuals.size(), _hole_color_ids.size()):
-		visuals[index].call("apply_cat_visual_style", _get_hole_cat_visual_style(_hole_color_ids[index]))
+	for index in _hole_cells.size():
+		var visual := _get_hole_visual(_hole_cells[index])
+		if visual != null:
+			visual.call("apply_cat_visual_style", _get_hole_cat_visual_style(_hole_color_ids[index]))
 
 
 # Called directly by CatEntity after an Inspector shader edit. This keeps the
@@ -816,10 +937,12 @@ func _sync_hole_visual_styles() -> void:
 func sync_hole_visual_style_for_color(color_id: int) -> void:
 	if _holes_root == null or color_id < 0:
 		return
-	var visuals := _holes_root.get_children()
-	for index in mini(visuals.size(), _hole_color_ids.size()):
-		if _hole_color_ids[index] == color_id:
-			visuals[index].call("apply_cat_visual_style", _get_hole_cat_visual_style(color_id))
+	for index in _hole_cells.size():
+		if _hole_color_ids[index] != color_id:
+			continue
+		var visual := _get_hole_visual(_hole_cells[index])
+		if visual != null:
+			visual.call("apply_cat_visual_style", _get_hole_cat_visual_style(color_id))
 
 
 # Runs after the palette Inspector changes a shared shader control.  Editing a
@@ -847,6 +970,7 @@ func get_hole_cells() -> Array[Vector2i]:
 	return _hole_cells
 
 
+# 아이템이 쓸 목적지. 잠기지 않고 색이 맞는 첫 구멍만 돌려준다.
 func get_open_hole_for_color(color_id: int) -> Variant:
 	for cell in _hole_cells:
 		if not is_hole_locked(cell) and color_ids_pair(color_id, get_hole_color_id(cell)):
@@ -945,8 +1069,8 @@ func _make_board_material(board_size: Vector3) -> StandardMaterial3D:
 		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		material.texture_repeat = true
 		material.uv1_scale = Vector3(
-			maxf(board_size.x / tile_size, 0.01) * board_texture_tiling.x,
-			maxf(board_size.z / tile_size, 0.01) * board_texture_tiling.y,
+			maxf(board_size.x / fitted_tile_size(), 0.01) * board_texture_tiling.x,
+			maxf(board_size.z / fitted_tile_size(), 0.01) * board_texture_tiling.y,
 			1.0
 		)
 	return material
@@ -968,6 +1092,7 @@ func get_obstacle_cells() -> Array[Vector2i]:
 	return _obstacle_cells.duplicate()
 
 
+# 아이템으로 장애물 한 칸을 치운다. 상태·참조·비주얼을 같이 지워야 칸이 진짜 빈다.
 func remove_obstacle(cell: Vector2i) -> bool:
 	if not _obstacle_cells.has(cell):
 		return false
@@ -988,8 +1113,8 @@ func get_cats() -> Array[CatEntity]:
 func board_point_to_grid_cell(board_point: Vector3) -> Variant:
 	var grid_origin := grid_to_world(Vector2i.ZERO)
 	return Vector2i(
-		roundi((board_point.x - grid_origin.x) / tile_size),
-		roundi((board_point.z - grid_origin.z) / tile_size)
+		roundi((board_point.x - grid_origin.x) / fitted_tile_size()),
+		roundi((board_point.z - grid_origin.z) / fitted_tile_size())
 	)
 
 
