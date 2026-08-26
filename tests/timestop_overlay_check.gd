@@ -18,7 +18,11 @@ func _process(_delta: float) -> bool:
 	_scene._on_host_message("item.timestop", {})
 	_scene._on_host_message("item.timestop", {})
 	assert(_scene._stage_timer_stop_until_msec >= now + 19900)
-	assert(_scene.get_node("CanvasLayer/IceOverlay").visible)
+	var overlay = _scene.get_node("CanvasLayer/IceOverlay") as ColorRect
+	assert(overlay.visible)
+	var material := overlay.material as ShaderMaterial
+	assert(is_equal_approx(float(material.get_shader_parameter("side_edge_size")), 0.22))
+	assert(is_equal_approx(float(material.get_shader_parameter("vertical_edge_size")), 0.22))
 	var time_before: float = _scene._stage_time_left
 	_scene._process(10.0)
 	assert(is_equal_approx(_scene._stage_time_left, time_before))
