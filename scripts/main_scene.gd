@@ -262,6 +262,7 @@ func _on_host_message(topic: String, payload) -> void:
 			UiBridge.post_progress({"itemRejected": "timestop"})
 			return
 		_stage_timer_stop_remaining += 10.0
+		_on_host_message("use_ice", {"duration": _stage_timer_stop_remaining})
 		UiBridge.post_progress({"itemUsed": "timestop"})
 		return
 	if topic == "item.move":
@@ -278,12 +279,13 @@ func _on_host_message(topic: String, payload) -> void:
 	if material == null:
 		push_error("IceOverlay requires a ShaderMaterial")
 		return
+	var duration := maxf(0.95, float(payload.get("duration", 1.4)))
 	ice_overlay.show()
 	material.set_shader_parameter("dissolve_value", 0.0)
 	_ice_overlay_tween = create_tween()
 	_ice_overlay_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_value", 1.0, 0.25)
-	_ice_overlay_tween.tween_interval(0.45)
+	_ice_overlay_tween.tween_interval(duration - 0.95)
 	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_value", 0.0, 0.7)
 	_ice_overlay_tween.tween_callback(ice_overlay.hide)
 
