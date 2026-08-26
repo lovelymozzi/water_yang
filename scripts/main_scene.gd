@@ -9,6 +9,8 @@ const ITEM_MOVE_ARROW_TEXTURE = preload("res://src/assets/arrow.png")
 # `stage_batch_generator.gd` 가 stage_001.json 부터 순번으로 저장하는 폴더.
 # 파일이 하나라도 있으면 플레이는 1스테이지부터 차례로 진행한다.
 const STAGE_LEVELS_DIR := "res://resources/levels"
+# StageAdmin 이 "이 스테이지 플레이"로 시작 스테이지를 건네는 1회용 파일.
+const DEV_STAGE_HANDOFF_PATH := "user://dev_start_stage.txt"
 const STAGE_ADVANCE_DELAY_SECONDS := 1.4
 const DEFAULT_STAGE_TIME_SECONDS := 60.0
 
@@ -31,6 +33,8 @@ var _stage_timer_waiting_for_touch := false
 var _stage_timer_stop_remaining := 0.0
 var _last_reported_seconds := -1
 var _requested_stage_index := 0
+# 어드민 인계 파일에서 읽은 시작 스테이지 (1부터). 0 = 인계 없음.
+var _dev_stage_handoff: int = 0
 # 재현용. 스테이지 파일에 함께 저장된 정답 수순과 그 재생 상태다.
 var _stage_solution: Array = []
 var _replay_button: Button
@@ -120,6 +124,10 @@ func _ready() -> void:
 
 	print("[boot] 로그 파일 위치: ", ProjectSettings.globalize_path("user://logs/"))
 
+	# 인계 파일은 스테이지 모드 여부와 **무관하게** 여기서 먼저 먹어 치운다. 조건 안에서만
+	# 읽으면 generate_on_play 가 켜져 있을 때 파일이 남아, 다음 평범한 실행이 엉뚱한
+	# 스테이지에서 시작한다.
+	_dev_stage_handoff = _consume_dev_stage_handoff()
 	_setup_stage_label()
 	_setup_replay_button()
 	if _stage_mode_allowed():
@@ -334,13 +342,30 @@ func _format_stage_timer(seconds: int) -> String:
 
 # 스테이지 모드를 켜면 안 되는 경우 둘: `--script` 는 검증 하네스라 손 배치를 전제하고,
 # MapGenerator 의 generate_on_play 는 시드 테스트 플레이라 그쪽이 판을 가져야 한다.
-# 개발용 시작 스테이지 (1부터). Inspector 의 start_stage 를 실행 인자 `-- stage=N` 이 덮는다.
+# 개발용 시작 스테이지 (1부터). 우선순위는 어드민 인계 > 실행 인자 `-- stage=N` > Inspector.
 func _dev_start_stage() -> int:
+	if _dev_stage_handoff > 0:
+		return _dev_stage_handoff
 	var requested: int = start_stage
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("stage="):
 			requested = int(arg.substr(6))
 	return requested
+
+
+# StageAdmin 의 "이 스테이지 플레이"가 남긴 1회용 인계 파일. 에디터 플러그인은 실행에
+# 인자를 넘길 수 없어서 파일로 건넨다. **읽는 즉시 지운다** — 남으면 다음 실행이 계속
+# 그 스테이지에서 시작해 버린다. 없으면 0.
+func _consume_dev_stage_handoff() -> int:
+	if not FileAccess.file_exists(DEV_STAGE_HANDOFF_PATH):
+		return 0
+	var file: FileAccess = FileAccess.open(DEV_STAGE_HANDOFF_PATH, FileAccess.READ)
+	var value: int = 0
+	if file != null:
+		value = int(file.get_as_text().strip_edges())
+		file.close()
+	DirAccess.remove_absolute(DEV_STAGE_HANDOFF_PATH)
+	return value
 
 
 func _stage_mode_allowed() -> bool:

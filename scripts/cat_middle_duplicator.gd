@@ -119,6 +119,9 @@ static func _duplicate_rings(
 	var skin: Skin = mesh_instance.skin
 	if skin == null:
 		return false
+	# 메시와 스킨은 FBX 리소스를 다른 고양이와 공유한다. 편집 전에 반드시 사본을 만든다.
+	skin = skin.duplicate()
+	mesh_instance.skin = skin
 
 	var cut_bind: int = _find_bind(skeleton, skin, CUT_BONE_NAME)
 	var next_bind: int = _find_bind(skeleton, skin, NEXT_BONE_NAME)
