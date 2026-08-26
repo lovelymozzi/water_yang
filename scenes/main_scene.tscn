@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://nthjajr4o682" path="res://scripts/main_scene.gd" id="1_q0f23"]
 [ext_resource type="Script" uid="uid://kc76tu4jlnus" path="res://scripts/level_manager.gd" id="2_5srec"]
 [ext_resource type="Shader" uid="uid://bopfqab6dr0e1" path="res://scripts/ice_dissolve_mesh.gdshader" id="2_ice_mesh"]
+[ext_resource type="Texture2D" uid="uid://ioh41rsw4l8a" path="res://water_yang/snow.png" id="2_ice_snow"]
 [ext_resource type="Shader" uid="uid://cs8vmjmkdp6c" path="res://scripts/timeout_warning_overlay.gdshader" id="2_timeout_warning"]
 [ext_resource type="PackedScene" path="res://scenes/tree_shadow_decor.tscn" id="3_c1pb6"]
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
@@ -24,6 +25,8 @@ shader_parameter/noise_scale = 26.0
 shader_parameter/noise_strength = 0.6830000324425
 shader_parameter/noise_speed = 0.7970000378575
 shader_parameter/vertex_offset = 0.1270000060325
+shader_parameter/edge_gap = 0.14
+shader_parameter/cartoon_edge_sharpness = 12.0
 shader_parameter/outer_edge_color = Color(6.160736e-06, 0.55289745, 0.75899845, 1)
 shader_parameter/inner_edge_color = Color(0.069384165, 0.6456922, 0.7749192, 1)
 
@@ -32,6 +35,41 @@ material = SubResource("ShaderMaterial_ice_mesh")
 size = Vector2(40, 40)
 subdivide_width = 32
 subdivide_depth = 32
+
+[sub_resource type="Gradient" id="Gradient_ice_dissolve_snow"]
+offsets = PackedFloat32Array(0, 0.16, 0.72, 1)
+colors = PackedColorArray(0.7, 0.92, 1, 0, 0.7, 0.92, 1, 0.9, 0.7, 0.92, 1, 0.45, 0.7, 0.92, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ice_dissolve_snow"]
+gradient = SubResource("Gradient_ice_dissolve_snow")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ice_dissolve_snow"]
+emission_shape = 3
+emission_box_extents = Vector3(6.8, 13, 0.02)
+angle_min = 0.0
+angle_max = 360.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+angular_velocity_min = -180.0
+angular_velocity_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.35
+scale_max = 1.4
+color_ramp = SubResource("GradientTexture1D_ice_dissolve_snow")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ice_dissolve_snow"]
+transparency = 1
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("2_ice_snow")
+billboard_mode = 3
+no_depth_test = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_ice_dissolve_snow"]
+material = SubResource("StandardMaterial3D_ice_dissolve_snow")
+size = Vector2(0.42, 0.42)
 
 [sub_resource type="Gradient" id="Gradient_4w45t"]
 offsets = PackedFloat32Array(0, 0.58, 1)
@@ -141,6 +179,17 @@ near = 10.0
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -10.2)
 extra_cull_margin = 5.0
 mesh = SubResource("PlaneMesh_ice_dissolve")
+
+[node name="IceDissolveSnow" type="GPUParticles3D" parent="Camera3D"]
+visible = false
+position = Vector3(0, 0, -10.3)
+amount = 48
+lifetime = 2.8
+preprocess = 1.4
+randomness = 0.7
+visibility_aabb = AABB(-7.5, -14, -0.5, 15, 28, 1)
+process_material = SubResource("ParticleProcessMaterial_ice_dissolve_snow")
+draw_pass_1 = SubResource("QuadMesh_ice_dissolve_snow")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)

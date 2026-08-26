@@ -8,6 +8,8 @@ uniform float noise_scale : hint_range(1.0, 32.0, 1.0) = 8.0;
 uniform float noise_strength : hint_range(0.0, 1.0) = 0.55;
 uniform float noise_speed : hint_range(0.0, 1.0) = 0.08;
 uniform float vertex_offset : hint_range(0.0, 0.2) = 0.06;
+uniform float edge_gap : hint_range(0.0, 0.35, 0.005) = 0.14;
+uniform float cartoon_edge_sharpness : hint_range(1.0, 20.0, 0.5) = 12.0;
 uniform vec4 outer_edge_color : source_color = vec4(0.12, 0.48, 1.0, 1.0);
 uniform vec4 inner_edge_color : source_color = vec4(1.0, 0.88, 0.52, 1.0);
 
@@ -46,6 +48,12 @@ float seamless_noise(vec3 p) {
 	return clamp(value, 0.0, 1.0);
 }
 
+float cartoon_band(float value, float center, float width, float softness) {
+	float half_width = width * 0.5;
+	return smoothstep(center - half_width - softness, center - half_width + softness, value)
+		* (1.0 - smoothstep(center + half_width - softness, center + half_width + softness, value));
+}
+
 void vertex() {
 	float mesh_noise = seamless_noise(vec3(UV * noise_scale, TIME * noise_speed));
 	VERTEX += NORMAL * vertex_offset * dissolve_amount * mix(0.45, 1.0, mesh_noise);
@@ -60,9 +68,10 @@ void fragment() {
 	float side_progress = min(side_distance / max(dissolve_amount * side_edge_size * edge_noise, 0.0001), 2.0);
 	float vertical_progress = min(vertical_distance / max(dissolve_amount * vertical_edge_size * edge_noise, 0.0001), 2.0);
 	float edge_progress = -log(exp(-8.0 * side_progress) + exp(-8.0 * vertical_progress)) / 8.0;
-	float body = 1.0 - smoothstep(0.88, 1.08, edge_progress);
-	float inner_edge = smoothstep(0.72, 0.90, edge_progress) * (1.0 - smoothstep(0.96, 1.04, edge_progress));
-	float outer_edge = smoothstep(0.98, 1.05, edge_progress) * (1.0 - smoothstep(1.12, 1.20, edge_progress));
+	float edge_softness = 0.12 / cartoon_edge_sharpness;
+	float inner_edge = cartoon_band(edge_progress, 1.0 - edge_gap, 0.17, edge_softness);
+	float outer_edge = cartoon_band(edge_progress, 1.0 + edge_gap, 0.14, edge_softness);
+	float body = 1.0 - smoothstep(1.0 + edge_gap + 0.05, 1.0 + edge_gap + 0.15, edge_progress);
 	float coverage = max(body, outer_edge);
 	if (coverage < 0.01) {
 		discard;

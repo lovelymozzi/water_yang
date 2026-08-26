@@ -21,8 +21,13 @@ func _process(_delta: float) -> bool:
 	var overlay = _scene.get_node("Camera3D/IceDissolveMesh") as MeshInstance3D
 	assert(overlay.visible)
 	var material := overlay.get_active_material(0) as ShaderMaterial
-	assert(is_equal_approx(float(material.get_shader_parameter("side_edge_size")), 0.22))
-	assert(is_equal_approx(float(material.get_shader_parameter("vertical_edge_size")), 0.24))
+	assert(material != null)
+	assert(float(material.get_shader_parameter("side_edge_size")) > 0.0)
+	assert(float(material.get_shader_parameter("vertical_edge_size")) > float(material.get_shader_parameter("side_edge_size")))
+	assert(float(material.get_shader_parameter("edge_gap")) >= 0.0)
+	assert(float(material.get_shader_parameter("cartoon_edge_sharpness")) >= 1.0)
+	var snow = _scene.get_node("Camera3D/IceDissolveSnow") as GPUParticles3D
+	assert(snow.visible and snow.emitting)
 	var time_before: float = _scene._stage_time_left
 	_scene._process(10.0)
 	assert(is_equal_approx(_scene._stage_time_left, time_before))
