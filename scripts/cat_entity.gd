@@ -902,7 +902,13 @@ func _spawn_inner_cat() -> void:
 	inner.color_id = nested_color_ids[0]
 	inner.nested_color_ids.assign(nested_color_ids.slice(1))
 	inner.tint_from_pair_color = true
-	inner.initial_body_cells = body_cells.duplicate()
+	# body_cells 는 리드가 앞이라, 꼬리를 잡아 뺀 상태(_lead_is_tail)면 모델 머리가
+	# 배열 뒤끝에 있다. 새 고양이는 항상 배열 앞을 머리로 삼으므로 그대로 넘기면
+	# 남는 고양이가 반대 방향을 본다. 모델 머리가 앞에 오도록 되돌려 넘긴다.
+	var inherited_cells: Array[Vector2i] = body_cells.duplicate()
+	if _lead_is_tail:
+		inherited_cells.reverse()
+	inner.initial_body_cells = inherited_cells
 	inner.move_speed_cells = move_speed_cells
 	inner.absorb_speed_cells = absorb_speed_cells
 	inner.nest_inner_shrink = nest_inner_shrink

@@ -62,10 +62,14 @@ func _start() -> void:
 	# 3중첩으로 만든다: 겉(원래 색) + 안쪽 1, 2.
 	_outer.nested_color_ids = [1, 2] as Array[int]
 	_outer_cells = (_outer.body_cells as Array[Vector2i]).duplicate()
-	# 겉껍질 색과 짝인 잠기지 않은 구멍을 찾아 강제로 빼낸다.
-	var hole := _find_pair_hole(_outer.color_id)
-	assert(hole != Vector2i(-9999, -9999), "FAIL: 짝 구멍 없음")
-	assert(_outer.clear_with_item(hole), "FAIL: 흡입 시작 실패")
+	# 꼬리를 잡아 리드를 반전시킨다(다리부터 빠지는 케이스). 남는 고양이의
+	# 몸 순서가 원래 머리 방향(_outer_cells)과 같아야 회귀가 없는 것이다.
+	_outer.begin_drag(_outer.body_cells.back())
+	if not _outer.is_absorbing():
+		# 겉껍질 색과 짝인 잠기지 않은 구멍을 찾아 강제로 빼낸다.
+		var hole := _find_pair_hole(_outer.color_id)
+		assert(hole != Vector2i(-9999, -9999), "FAIL: 짝 구멍 없음")
+		assert(_outer.clear_with_item(hole), "FAIL: 흡입 시작 실패")
 
 
 func _check_spawn() -> void:
