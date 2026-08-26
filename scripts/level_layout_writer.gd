@@ -55,6 +55,10 @@ static func apply_to_manager(manager: LevelManager, level: Dictionary) -> void:
 		cat.name = "Cat_%d" % index
 		cats_root.add_child(cat)
 		cat.set("color_id", int(cats[index]["color_id"]))
+		# 중첩고양이(3_기믹.md 2). 없으면 빈 배열 = 일반 고양이.
+		var nested: Array[int] = []
+		nested.assign(cats[index].get("nested_color_ids", []))
+		cat.set("nested_color_ids", nested)
 		# 꺾인 몸을 그대로 심는다. 세터가 grid_pos / facing_name / initial_length 를 파생시킨다.
 		var body: Array[Vector2i] = []
 		body.assign(cats[index]["body_cells"])
@@ -162,7 +166,10 @@ static func to_json(level: Dictionary) -> Dictionary:
 		var body: Array = []
 		for cell in entry["body_cells"]:
 			body.append(_pack_cell(cell))
-		data["cats"].append({"body_cells": body, "color_id": int(entry["color_id"])})
+		var cat_data: Dictionary = {"body_cells": body, "color_id": int(entry["color_id"])}
+		if not (entry.get("nested_color_ids", []) as Array).is_empty():
+			cat_data["nested_color_ids"] = entry["nested_color_ids"]
+		data["cats"].append(cat_data)
 	for move in level["solution"]:
 		data["solution"].append({
 			"cat_id": int(move["cat_id"]),
@@ -204,7 +211,14 @@ static func from_json(data: Dictionary) -> Dictionary:
 		var body: Array[Vector2i] = []
 		for cell in entry["body_cells"]:
 			body.append(_unpack_cell(cell))
-		level["cats"].append({"body_cells": body, "color_id": int(entry["color_id"])})
+		var nested: Array[int] = []
+		for value in entry.get("nested_color_ids", []):
+			nested.append(int(value))
+		level["cats"].append({
+			"body_cells": body,
+			"color_id": int(entry["color_id"]),
+			"nested_color_ids": nested,
+		})
 	for move in data["solution"]:
 		level["solution"].append({
 			"cat_id": int(move["cat_id"]),
