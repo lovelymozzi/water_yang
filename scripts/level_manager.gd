@@ -293,6 +293,13 @@ func fitted_tile_size() -> float:
 	return tile_size * minf(shrink, 1.0)
 
 
+# 축소 배율(1.0 = 축소 없음). 칸에 맞춰 스스로 크기를 재는 에셋(캣홀의 `fit_to_tile`)은 이미
+# 따라오지만, 타일·장애물·얼음 에셋은 tile_size 기준으로 만들어져 있어 위치만 줄면 서로
+# 겹친다. 그 에셋들의 노드 스케일에 이 값을 곱해 **정비율로** 줄인다.
+func fit_scale() -> float:
+	return fitted_tile_size() / maxf(tile_size, 0.0001)
+
+
 func grid_to_world(cell: Vector2i, y: float = 0.0) -> Vector3:
 	var board_origin: Vector3 = Vector3(
 		-((grid_size.x - 1) * fitted_tile_size()) * 0.5,
@@ -404,6 +411,7 @@ func _refresh_path_preview() -> void:
 				continue
 			visual.name = "Path_%d_%d" % [cell.x, cell.y]
 			visual.position = grid_to_world(cell, TILE_HEIGHT)
+			visual.scale *= fit_scale()
 			for property_info in visual.get_property_list():
 				if property_info.get("name") == "cast_shadow":
 					visual.set("cast_shadow", false)
@@ -700,6 +708,7 @@ func _build_grid_tiles() -> void:
 				if visual != null:
 					visual.name = "Tile_%d_%d" % [x, y]
 					visual.position = grid_to_world(cell, 0.0)
+					visual.scale *= fit_scale()
 					if visual.has_method("apply_cell_style"):
 						visual.call("apply_cell_style", cell, _tile_color_for(cell), floor_tile_height)
 					_tiles_root.add_child(visual)
@@ -831,8 +840,10 @@ func _build_hole_visuals() -> void:
 					cell, floor_height + hole_visual_height + TILE_HEIGHT
 				)
 				_holes_root.add_child(ice_cover)
+				ice_cover.scale *= fit_scale()
 				ice_cover.call("apply_cell_style", cell, Color.WHITE, obstacle_fbx_height)
 				var label := _make_ice_number_label(ice_count - _escaped_count)
+				label.pixel_size *= fit_scale()
 				label.position = grid_to_world(
 					cell, floor_height + hole_visual_height + obstacle_fbx_height + 0.35
 				)
@@ -881,6 +892,7 @@ func _build_obstacle_visuals() -> void:
 			if visual != null:
 				visual.name = "Obstacle_%d_%d" % [cell.x, cell.y]
 				visual.position = grid_to_world(cell, TILE_HEIGHT)
+				visual.scale *= fit_scale()
 				if visual.has_method("apply_cell_style"):
 					visual.call("apply_cell_style", cell, get_obstacle_color(cell), obstacle_fbx_height)
 				_obstacles_root.add_child(visual)
