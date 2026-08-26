@@ -862,7 +862,7 @@ func _begin_absorb(hole_cell: Vector2i, from_lead: bool) -> void:
 
 
 func _advance_absorb(delta: float) -> void:
-	_swallowed_arc += delta * absorb_speed_cells * level_manager.tile_size
+	_swallowed_arc += delta * absorb_speed_cells * level_manager.fitted_tile_size()
 	_update_visual_pose()
 	if _absorb_required_arc > 0.0 and _swallowed_arc >= _absorb_required_arc:
 		_finish_absorb()
@@ -922,7 +922,7 @@ func _absorb_arc_to_finish(
 	return (
 		total_length
 		+ entry_point.distance_to(hole_point)
-		+ level_manager.tile_size * ABSORB_SINK_CELLS
+		+ level_manager.fitted_tile_size() * ABSORB_SINK_CELLS
 	)
 
 
@@ -1524,7 +1524,7 @@ func _grid_fitted_model_scale() -> float:
 		return fbx_scale_per_tile
 	# 자동 체인 길이 보정(약 6.0)은 기준 모델(7.65)보다 작아 상체가 축소되어 보였다.
 	# 에디터 기준과 동일한 FBX 균일 스케일을 고정 사용한다.
-	return fbx_scale_per_tile * level_manager.tile_size / REFERENCE_TILE_SIZE
+	return fbx_scale_per_tile * level_manager.fitted_tile_size() / REFERENCE_TILE_SIZE
 
 
 func _is_stretchable_chain_bone(chain_index: int) -> bool:
@@ -1573,14 +1573,14 @@ func _baseline_stretch_scale() -> float:
 func _target_chain_world_length() -> float:
 	if level_manager == null:
 		return 1.0
-	var path := float(maxi(body_cells.size() - 1, 1)) * level_manager.tile_size
+	var path := float(maxi(body_cells.size() - 1, 1)) * level_manager.fitted_tile_size()
 	return path + _end_extension(_head_mesh_overhang) + _end_extension(_tail_mesh_overhang)
 
 
 # 폴리라인 양끝을 끝 셀 중심에서 밖으로 내미는 양. 메시가 그만큼 더 나가므로
 # 오버행이 큰 머리쪽은 거의 내밀지 않는다. 음수면 경로가 접히므로 0으로 묶는다.
 func _end_extension(overhang_model: float) -> float:
-	var to_edge := level_manager.tile_size * (0.5 - footprint_margin_cells)
+	var to_edge := level_manager.fitted_tile_size() * (0.5 - footprint_margin_cells)
 	return maxf(to_edge - overhang_model * _grid_fitted_model_scale(), 0.0)
 
 func _fbx_basis_for_direction(direction: Vector3) -> Basis:
@@ -1767,7 +1767,7 @@ func _apply_shader_parameters(
 
 	# 흡입 중에만 바닥 면 아래로 내려간 부분을 지운다. 본체와 아웃라인이 같은 기준을
 	# 써야 껍데기만 남는 일이 없다.
-	var tile: float = level_manager.tile_size if level_manager != null else 2.0
+	var tile: float = level_manager.fitted_tile_size() if level_manager != null else 2.0
 	for sink_material in [_cat_material, _material_id_2, _outline_material, _material_id_2_outline]:
 		if sink_material == null:
 			continue

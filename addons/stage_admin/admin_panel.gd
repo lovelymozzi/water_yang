@@ -363,7 +363,9 @@ func _on_batch_generate() -> void:
 		var chain_depth: int = cat_count
 		# 시드 보폭은 전역 순번을 쓴다. 같은 시드로 이어 돌려도 이전 배치와 같은 맵이 안 나온다.
 		var level: Dictionary = StageBatch.generate_stage(
-			generator, _params_dict(index, count), base_seed, grid,
+			generator, _params_dict(index, count), base_seed,
+			# 보드 크기는 입력값을 중심으로 ±2 흔들린다 (세로 ≥ 가로+1 보정은 생성기가 건다).
+			StageBatch.jitter_grid(grid, base_seed + stage_number * StageBatch.GRID_SEED_STRIDE),
 			stage_number - 1, cat_count, chain_depth
 		)
 		if level.is_empty():
@@ -426,7 +428,8 @@ func _on_regenerate_selected() -> void:
 	var level: Dictionary = StageBatch.generate_stage(
 		MapGenerator.new(), _params_dict(index, count),
 		int(_spins["seed"].value) + _reroll * 1009,
-		_grid_size(), index, cat_count, chain_depth
+		StageBatch.jitter_grid(_grid_size(), int(_spins["seed"].value) + _reroll * 1009 + index),
+		index, cat_count, chain_depth
 	)
 	if level.is_empty():
 		_status.text = "스테이지 %d 재생성 실패 — 파라미터를 완화해 보세요" % (index + 1)

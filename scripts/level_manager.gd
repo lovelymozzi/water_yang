@@ -13,6 +13,10 @@ const PATH_PREVIEW_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const ICE_BLOCK_SCENE = preload("res://scenes/ice_block.tscn")
 const ICE_NUMBER_FONT = preload("res://web/ui/vendor/fonts/lilita-one-1.woff2")
 # 하얀 글씨 + 검정 외곽선.
+# 이 크기까지는 타일을 줄이지 않는다. 이보다 큰 판만 비율대로 축소해 같은 자리에 담는다.
+# 세로 10칸이 화면에 들어가는 한계고, 그라운드 룰(세로 ≥ 가로+1)상 가로는 9가 상한이다.
+const FIT_REFERENCE_GRID := Vector2i(9, 10)
+
 const ICE_NUMBER_COLOR := Color(1.0, 1.0, 1.0, 1.0)
 const ICE_NUMBER_OUTLINE_COLOR := Color(0.0, 0.0, 0.0, 1.0)
 # Lilita One 은 굵기가 하나뿐이라 볼드 파일이 없다. FontVariation 의 합성 볼드로 굵힌다.
@@ -272,13 +276,28 @@ func is_inside_grid(cell: Vector2i) -> bool:
 	return cell.x >= 0 and cell.x < grid_size.x and cell.y >= 0 and cell.y < grid_size.y
 
 
+# 이 판에 실제로 쓰는 타일 한 변. **`tile_size` 를 직접 쓰는 곳은 여기뿐이어야 한다** —
+# 칸 위치·타일·고양이·장애물·보드 베이스·화면→칸 역산이 전부 이 값에서 파생되므로 여기서
+# 줄이면 그리드만 균일하게 줄어든다.
+#
+# 카메라를 빼는 방법은 못 쓴다: 보드에 맞춰 세운 나무들이 같이 딸려 나와 판을 가린다.
+# 기준(`FIT_REFERENCE_GRID`) 이하인 판은 1.0 이라 손대지 않으므로 기존 스테이지의 보임새는
+# 그대로다. 세로 11칸이면 10/11 로 줄어 기준 판과 같은 세로 길이를 차지한다.
+func fitted_tile_size() -> float:
+	var shrink: float = minf(
+		float(FIT_REFERENCE_GRID.x) / float(maxi(grid_size.x, 1)),
+		float(FIT_REFERENCE_GRID.y) / float(maxi(grid_size.y, 1))
+	)
+	return tile_size * minf(shrink, 1.0)
+
+
 func grid_to_world(cell: Vector2i, y: float = 0.0) -> Vector3:
 	var board_origin: Vector3 = Vector3(
-		-((grid_size.x - 1) * tile_size) * 0.5,
+		-((grid_size.x - 1) * fitted_tile_size()) * 0.5,
 		y,
-		-((grid_size.y - 1) * tile_size) * 0.5
+		-((grid_size.y - 1) * fitted_tile_size()) * 0.5
 	)
-	return board_origin + Vector3(cell.x * tile_size, 0.0, cell.y * tile_size)
+	return board_origin + Vector3(cell.x * fitted_tile_size(), 0.0, cell.y * fitted_tile_size())
 
 
 func grid_dir_to_world(dir: Vector2i) -> Vector3:
@@ -344,7 +363,7 @@ func _build_occupancy_highlight() -> void:
 	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	var mesh := PlaneMesh.new()
-	mesh.size = Vector2(tile_size - tile_gap, tile_size - tile_gap)
+	mesh.size = Vector2(fitted_tile_size() - tile_gap, fitted_tile_size() - tile_gap)
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var tile := MeshInstance3D.new()
@@ -410,7 +429,7 @@ func get_escape_result(cat: CatEntity) -> Dictionary:
 
 	return {
 		"is_path_clear": true,
-		"exit_world_position": grid_to_world(furthest_cell, cat_world_y) + grid_dir_to_world(cat.facing_dir) * tile_size * 1.4,
+		"exit_world_position": grid_to_world(furthest_cell, cat_world_y) + grid_dir_to_world(cat.facing_dir) * fitted_tile_size() * 1.4,
 	}
 
 
@@ -653,9 +672,9 @@ func _initialize_grid_arrays() -> void:
 func _build_board_base() -> void:
 	# 세로 화면에서 보드가 또렷하게 보이도록 바닥 베이스를 먼저 깐다.
 	var board_size := Vector3(
-		grid_size.x * tile_size + board_side_margin * 2.0,
+		grid_size.x * fitted_tile_size() + board_side_margin * 2.0,
 		0.36,
-		grid_size.y * tile_size + board_vertical_margin * 2.0
+		grid_size.y * fitted_tile_size() + board_vertical_margin * 2.0
 	)
 	var board := _create_rounded_prism(
 		"BoardBase", board_size, BOARD_CORNER_RADIUS,
@@ -681,7 +700,7 @@ func _build_grid_tiles() -> void:
 						visual.call("apply_cell_style", cell, _tile_color_for(cell), floor_tile_height)
 					_tiles_root.add_child(visual)
 					continue
-			var tile_side := maxf(tile_size - tile_gap, 0.01)
+			var tile_side := maxf(fitted_tile_size() - tile_gap, 0.01)
 			var tile := _create_rounded_prism(
 				"Tile_%d_%d" % [x, y],
 				Vector3(tile_side, TILE_HEIGHT, tile_side),
@@ -770,7 +789,7 @@ func _build_hole_visuals() -> void:
 	if not show_hole_visuals or hole_scene == null:
 		return
 
-	var tile_side := maxf(tile_size - tile_gap, 0.01)
+	var tile_side := maxf(fitted_tile_size() - tile_gap, 0.01)
 	for index in _hole_cells.size():
 		var cell: Vector2i = _hole_cells[index]
 		var color_id: int = _hole_color_ids[index]
@@ -851,7 +870,7 @@ func _make_ice_number_label(remaining: int) -> Label3D:
 # 같은 둥근 덩어리를 타일 위에 얹는다. 높이는 고양이(`cat_world_y`)보다 낮게 두어 고양이를
 # 가리지 않는다.
 func _build_obstacle_visuals() -> void:
-	var block_side := maxf(tile_size - tile_gap, 0.01)
+	var block_side := maxf(fitted_tile_size() - tile_gap, 0.01)
 	for cell in _obstacle_cells:
 		if obstacle_scene != null:
 			var visual := obstacle_scene.instantiate() as Node3D
@@ -1038,8 +1057,8 @@ func _make_board_material(board_size: Vector3) -> StandardMaterial3D:
 		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 		material.texture_repeat = true
 		material.uv1_scale = Vector3(
-			maxf(board_size.x / tile_size, 0.01) * board_texture_tiling.x,
-			maxf(board_size.z / tile_size, 0.01) * board_texture_tiling.y,
+			maxf(board_size.x / fitted_tile_size(), 0.01) * board_texture_tiling.x,
+			maxf(board_size.z / fitted_tile_size(), 0.01) * board_texture_tiling.y,
 			1.0
 		)
 	return material
@@ -1064,8 +1083,8 @@ func get_cats() -> Array[CatEntity]:
 func board_point_to_grid_cell(board_point: Vector3) -> Variant:
 	var grid_origin := grid_to_world(Vector2i.ZERO)
 	return Vector2i(
-		roundi((board_point.x - grid_origin.x) / tile_size),
-		roundi((board_point.z - grid_origin.z) / tile_size)
+		roundi((board_point.x - grid_origin.x) / fitted_tile_size()),
+		roundi((board_point.z - grid_origin.z) / fitted_tile_size())
 	)
 
 

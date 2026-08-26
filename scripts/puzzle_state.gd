@@ -38,6 +38,17 @@ var cats: Dictionary = {}
 # 기록된 수순이 그대로 유효하기 때문이다. 상태를 바꾸는 기믹에는 그 논증이 성립하지 않는다.
 var gimmicks: Dictionary = {}
 
+# 얼음 기믹. cell -> 이 구멍이 열리기까지 필요한 누적 탈출 수. 잠긴 구멍에는 흡입이 걸리지
+# 않는다. (`LevelManager._hole_ice_counts` / `is_hole_locked()` 대응)
+#
+# 얼음은 위 경고의 예외다. 잠금은 **탈출 수에 대해 단조로만 풀리므로**(`escaped_count` 는
+# 단조 증가, 잠금은 한 번 풀리면 다시 안 잠긴다) 흡입과 마찬가지로 "칸을 여는 순수 감산"이고,
+# 따라서 솔버의 데드락 없음 논증이 그대로 성립한다. 사후 주입이 안전한 조건은 하나뿐이다:
+# **숫자 ≤ 그 구멍이 기록된 풀이에서 쓰이기 직전까지의 탈출 수**. `MapGenerator._assign_ice()`.
+var ice: Dictionary = {}
+# 지금까지 빠진 고양이 수. 얼음 해제 판정에만 쓴다 (`LevelManager._escaped_count`).
+var escaped_count: int = 0
+
 # 점유 역인덱스. Vector2i -> cat_id. 매 이동마다 전체 순회를 하지 않기 위한 캐시다.
 var _occupancy: Dictionary = {}
 
@@ -56,6 +67,11 @@ func add_obstacle(cell: Vector2i) -> void:
 
 func add_hole(cell: Vector2i, color_id: int) -> void:
 	holes[cell] = color_id
+
+
+func add_ice(cell: Vector2i, count: int) -> void:
+	if count > 0:
+		ice[cell] = count
 
 
 func add_cat(cat_id: int, color_id: int, cells: Array[Vector2i]) -> void:
@@ -153,11 +169,19 @@ static func color_ids_pair(cat_color_id: int, hole_color_id: int) -> bool:
 	return cat_color_id == hole_color_id
 
 
+# 얼음으로 아직 잠겨 있는 구멍인지. `LevelManager.is_hole_locked()`.
+func is_hole_locked(cell: Vector2i) -> bool:
+	return int(ice.get(cell, 0)) > escaped_count
+
+
 # `LevelManager.adjacent_hole()`. 4방향만 본다. 대각선은 걸리지 않는다.
+# 얼음으로 잠긴 구멍은 없는 것으로 본다 — 실제 게임의 `adjacent_hole()` 과 같은 규칙이다.
 func adjacent_paired_hole(cell: Vector2i, color_id: int) -> Variant:
 	for dir in DIRS:
 		var neighbour: Vector2i = cell + dir
 		if not is_hole(neighbour):
+			continue
+		if is_hole_locked(neighbour):
 			continue
 		if not color_ids_pair(color_id, hole_color(neighbour)):
 			continue
@@ -208,6 +232,9 @@ func body_touches_paired_hole(cells: Array, color_id: int) -> bool:
 
 # 이 몸이 짝 구멍 옆칸까지 가야 하는 남은 칸 수. 흡입은 인접하면 걸리므로 맨해튼 거리 - 1 이다.
 # 짝 구멍이 없으면 나갈 수 없으므로 큰 값을 낸다(솔버 휴리스틱이 그쪽을 피한다).
+# **얼음은 일부러 무시한다** — 잠긴 구멍까지 1000 으로 치면 얼음이 풀리기 전 모든 상태의 h 가
+# 같아져 A* 가 방향을 잃는다. 낙관적으로 재는 편이 탐색에 낫고, 목표 판정은 어차피 실제 흡입
+# 규칙(`adjacent_paired_hole`)이 한다.
 func escape_distance(cells: Array, color_id: int) -> int:
 	var best: int = UNREACHABLE_DISTANCE
 	for hole_cell in holes:
@@ -310,6 +337,8 @@ func _resolve_absorption(cat_id: int, moved_end_cell: Vector2i) -> bool:
 	var hole_cell: Variant = adjacent_paired_hole(moved_end_cell, int(cats[cat_id]["color"]))
 	if hole_cell != null:
 		remove_cat(cat_id)
+		# 한 마리 빠질 때마다 모든 얼음의 남은 수가 1 준다 (`LevelManager.on_cat_escaped()`).
+		escaped_count += 1
 		# 고양이를 다 삼킨 구멍은 함께 닫힌다. 닫힌 자리는 평범한 빈 칸이 되어 다른
 		# 고양이가 지나갈 수 있다. `LevelManager._close_hole()` 와 같은 규칙이어야 한다.
 		holes.erase(hole_cell)
@@ -351,6 +380,8 @@ func clone() -> PuzzleState:
 	copy.obstacles = obstacles.duplicate()
 	copy.holes = holes.duplicate()
 	copy.gimmicks = gimmicks.duplicate()
+	copy.ice = ice.duplicate()
+	copy.escaped_count = escaped_count
 	copy.cats = {}
 	for cat_id in cats:
 		copy.cats[cat_id] = {
@@ -372,7 +403,8 @@ static func body_key(cells: Array) -> String:
 	return forward if forward <= backward else backward
 
 
-# 판 전체의 정규 키.
+# 판 전체의 정규 키. 얼음 상태는 넣지 않는다 — 같은 뿌리에서 뻗은 상태끼리는 남은 고양이
+# 집합이 곧 탈출 수라 `escaped_count` 가 여기서 유도된다.
 func key() -> String:
 	var parts: Array[String] = []
 	for cat_id in cat_ids():

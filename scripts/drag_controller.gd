@@ -6,7 +6,7 @@ extends Node
 # 끝 셀 중심에서 이 거리 안이면 잡힌다. 드래그 실패를 줄이려고 넉넉하게 둔다.
 @export_range(0.5, 3.0, 0.1) var grab_radius_cells: float = 1.2
 # 막힌 상태에서 손가락이 리드 셀에서 이만큼 멀어지면 조용히 터치를 끝낸다.
-@export_range(1, 6, 1) var release_distance_cells: int = 2
+@export_range(1, 6, 1) var release_distance_cells: int = 5
 
 const MOUSE_POINTER := -1
 
@@ -61,7 +61,7 @@ func _process(_delta: float) -> void:
 		return
 	if not _cat.is_blocked():
 		return
-	# 막힌 방향으로 계속 끌어 손가락이 2칸 이상 벌어지면 별도 알림 없이 종료한다.
+	# 막힌 방향으로 계속 끌어 손가락이 5칸 이상 벌어지면 별도 알림 없이 종료한다.
 	var lead: Vector2i = _cat.get_lead_cell()
 	var gap: int = maxi(absi(_pointer_cell.x - lead.x), absi(_pointer_cell.y - lead.y))
 	if gap >= release_distance_cells:
@@ -79,7 +79,7 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 
 	var best_cat: CatEntity = null
 	var best_cell := Vector2i.ZERO
-	var best_distance := grab_radius_cells * level_manager.tile_size
+	var best_distance := grab_radius_cells * level_manager.fitted_tile_size()
 	for cat in level_manager.get_cats():
 		if cat.is_absorbing():
 			continue

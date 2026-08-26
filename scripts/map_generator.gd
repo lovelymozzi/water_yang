@@ -216,6 +216,25 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 		if not bool(verdict["ok"]):
 			return verdict
 
+	# 얼음은 풀이가 확정된 뒤에 배치한다 — 상한이 "이 구멍이 처음 쓰이기 전까지 빠지는 고양이
+	# 수"라 스퀴즈·벽 삽입까지 반영된 최종 풀이를 기준으로 재야 한다. 배치한 다음에는 **판에
+	# 실제로 얹고 다시 검증한다**: 얼음이 만드는 의존("N마리 빠질 때까지 이 구멍은 안 열린다")은
+	# 그래야만 지표에 잡힌다. 얹기 전 지표로 스테이지를 채점하면 얼음은 난이도에 기여하지 않는
+	# 장식이 되고, 숫자는 탈출 순서를 알려 주는 힌트로만 남는다.
+	var ice: Dictionary = _assign_ice(config, rng, board, solution, holes, verdict["graph"])
+	if not ice.is_empty():
+		for cell in ice:
+			board.add_ice(cell, int(ice[cell]))
+		var iced: Dictionary = _verify(config, rng, board, solution, not config.squeeze_free_cells)
+		if bool(iced["ok"]):
+			verdict = iced
+		else:
+			# 얼음을 얹었더니 검증이 깨졌다면 위 상한 논증의 반례다. 맵 전체를 버리지 말고
+			# 얼음만 빼서 얼음 없는 판으로 낸다(그 판은 방금 검증을 통과한 판이다).
+			push_warning("얼음을 얹자 검증이 깨져 얼음을 뺐다: %s" % iced["reason"])
+			board.ice.clear()
+			ice.clear()
+
 	var level: Dictionary = {
 		"ok": true,
 		"reason": "",
@@ -226,7 +245,7 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 		"obstacles": _group_rectangles(board.obstacles),
 		"cats": [],
 		"solution": solution,
-		"escape_order": _escape_order(config.cat_count),
+		"escape_order": verdict["escape_order"],
 		"dependency": {
 			"edges": (verdict["graph"] as LevelDependencyGraph).edge_list(),
 			"chain_depth": (verdict["graph"] as LevelDependencyGraph).longest_chain_depth(),
@@ -241,9 +260,6 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 			"early_clearing": verdict["early_clearing"],
 		},
 	}
-	# 얼음은 풀이가 확정된 뒤에 배치한다. "이 구멍이 처음 쓰이기 전까지 빠지는 고양이 수"를
-	# 상한으로 삼으므로 최종 풀이(스퀴즈·벽 삽입까지 반영된)를 기준으로 재야 한다.
-	var ice: Dictionary = _assign_ice(config, rng, board, solution)
 	for hole in holes:
 		level["holes"].append({
 			"grid_pos": hole["cell"],
@@ -302,13 +318,6 @@ static func _sum(values: Array[int]) -> int:
 	for value in values:
 		total += value
 	return total
-
-
-func _escape_order(count: int) -> Array[int]:
-	var order: Array[int] = []
-	for index in count:
-		order.append(index)
-	return order
 
 
 # ---------------------------------------------------------------- 구멍 배치
@@ -874,21 +883,51 @@ func _commit_wall(
 # 그 구멍의 얼음 숫자를 "그 흡입 이전까지 빠진 고양이 수" 이하로 두면, 그 수에 도달했을 때
 # 얼음이 이미 깨져 있어 같은 수에서 그대로 흡입된다. 즉 얼음을 켜도 기록된 풀이의 모든 흡입이
 # 같은 순간에 일어나 재생이 바뀌지 않는다. 첫 구멍(이전 흡입 0)은 얼음을 못 씌운다.
+#
+# 이 논증은 **기록된 풀이가 살아남는다**만 말한다. 얼음이 난이도를 올리는 것은 그 반대편,
+# 기록되지 않은 지름길들을 막는 쪽이다: 숫자 v 인 구멍은 "v 마리가 빠지기 전에 이 고양이를
+# 넣는" 모든 대안 수순을 지운다. 그래서 얼음은 `PuzzleState` 안에 규칙으로 들어가 있고
+# (`ice`/`escaped_count`), 배치 직후 판에 얹어 의존 그래프를 다시 잰다. 얹지 않고 JSON 에만
+# 적으면 생성기는 얼음 없는 판을 채점하게 되고, 얼음은 순서를 알려 주는 장식으로 전락한다.
 func _assign_ice(
-	config: Config, rng: RandomNumberGenerator, board: PuzzleState, solution: Array[Dictionary]
+	config: Config,
+	rng: RandomNumberGenerator,
+	board: PuzzleState,
+	solution: Array[Dictionary],
+	holes: Array,
+	graph: LevelDependencyGraph
 ) -> Dictionary:
 	var result: Dictionary = {}
 	if config.ice_chance <= 0.0:
 		return result
 	var before: Dictionary = _escaped_before(board, solution)
-	for hole_cell in before:
-		var cap: int = int(before[hole_cell])
+	# 뒤 순번 구멍(cap 이 큰 = 늦게 쓰이는 구멍)부터 고른다. 큰 숫자를 먼저 선점해야 앞쪽
+	# 구멍이 큰 숫자를 집어가 뒤쪽이 굶는 일이 없다. 고양이 k 의 짝 구멍이 holes[k] 다.
+	var order: Array[int] = []
+	for k in holes.size():
+		order.append(k)
+	order.sort_custom(
+		func(a, b): return int(before.get(holes[a]["cell"], 0)) > int(before.get(holes[b]["cell"], 0))
+	)
+	var used: Dictionary = {}
+	for k in order:
+		var hole_cell: Vector2i = holes[k]["cell"]
+		var cap: int = int(before.get(hole_cell, 0))
 		if cap < 1:
 			continue
 		if rng.randf() >= config.ice_chance:
 			continue
 		var high: int = cap if config.ice_number_max <= 0 else mini(cap, config.ice_number_max)
-		result[hole_cell] = rng.randi_range(1, high)
+		# 같은 숫자는 판에 하나만 둔다. 이미 쓴 숫자면 한 칸씩 내린다.
+		while high >= 1 and used.has(high):
+			high -= 1
+		# **얼음이 실제로 막는 게 있어야 한다.** 이 고양이가 이미 d 마리에게 의존한다면 그
+		# d 마리는 어차피 먼저 나가므로, 숫자가 d 이하인 얼음은 아무것도 못 막고 탈출 순서만
+		# 숫자로 노출한다. 그런 얼음은 난이도를 못 올리므로 아예 씌우지 않는다.
+		if high <= graph.dependencies_of(k).size():
+			continue
+		used[high] = true
+		result[hole_cell] = high
 	return result
 
 
@@ -1067,10 +1106,17 @@ func _verify(
 		return {"ok": false, "reason": "시작 배치 위반: %s" % [problems]}
 
 	# 기록된 풀이가 장애물을 넣은 뒤에도 그대로 재생되는지. 사후 주입의 안전성 확인이다.
+	# 재생하면서 **실제 탈출 순서**를 함께 받아 적는다. 계획 순서(0,1,2,…)를 그대로 믿으면
+	# 안 된다 — 첫 탈출 가로막이가 수순을 끼워 넣으면서 순서가 바뀌는 판이 있고, 그때
+	# 의존 그래프를 계획 순서로 재면 없는 의존을 재게 된다.
 	var replay: PuzzleState = state.clone()
+	var order: Array[int] = []
 	for move in solution:
-		if not bool(replay.apply_move(move)["moved"]):
+		var step: Dictionary = replay.apply_move(move)
+		if not bool(step["moved"]):
 			return {"ok": false, "reason": "장애물 주입 후 풀이 재생이 %s 에서 끊겼다" % [move]}
+		if bool(step["absorbed"]):
+			order.append(int(move["cat_id"]))
 	if not replay.is_solved():
 		return {"ok": false, "reason": "풀이를 다 재생했는데 고양이가 남았다"}
 
@@ -1080,7 +1126,6 @@ func _verify(
 	if not bool(solved["found"]):
 		return {"ok": false, "reason": "오토솔버가 풀지 못했다: %s" % solved["reason"]}
 
-	var order: Array[int] = _escape_order(state.cat_ids().size())
 	var graph: LevelDependencyGraph = solver.build_dependency_graph(state, order)
 	if graph.has_cycle():
 		return {"ok": false, "reason": "의존성에 순환이 있다 = 아무도 먼저 나갈 수 없다"}
@@ -1140,6 +1185,7 @@ func _verify(
 	return {
 		"ok": true,
 		"graph": graph,
+		"escape_order": order,
 		"solver_moves": (solved["moves"] as Array).size(),
 		"solver_nodes": int(solved["nodes"]),
 		"early_clearing": early_clearing,

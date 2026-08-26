@@ -15,7 +15,10 @@ extends SceneTree
 #
 #   count=10          만들 스테이지 수
 #   seed=1            기본 시드 (스테이지마다 큰 소수 보폭으로 흩어진다)
-#   grid=7x9          보드 크기
+#   grid=7x9          보드 크기의 **중심값**. 스테이지마다 가로·세로를 각각 ±2 에서 흔든다
+#                     (7x9 → 5..9 x 7..11). 그 뒤 그라운드 룰로 세로 ≥ 가로+1 이 되게
+#                     보정하므로, 흔들린 결과가 6x6 이면 6x7 로 올라간다. 기준(9x10)보다
+#                     큰 판은 게임에서 타일을 줄여 담으므로 칸 수 상한은 없다.
 #   cats=3..6         고양이 수 (범위 가능)
 #   chain=2..4        의존 사슬 깊이 최소치 (범위 가능, 고양이 수를 넘지 않게 잘린다)
 #   len_min=5         몸 길이 하한
@@ -38,11 +41,18 @@ extends SceneTree
 #                     생성기가 이 조건을 만들어 내지는 못한다(map_generator.gd 의
 #                     `_plant_first_escape_walls()` 주석 참조). 1 로 걸면 수율이 10%쯤으로
 #                     떨어지므로 attempts 를 크게 잡아야 한다.
+#   ice=0.0           구멍마다 얼음을 씌워 볼 확률. 얼음은 "N마리 빠질 때까지 이 구멍은 안
+#                     열린다"는 진짜 제약이라 의존 사슬을 늘린다. 다만 이미 그만큼 의존이
+#                     실측된 구멍에는 아무것도 못 막으므로 자동으로 건너뛴다.
+#   ice_max=0         얼음 숫자 상한 (0 = 그 구멍이 쓰이기 직전까지의 탈출 수를 상한으로).
+#                     같은 숫자는 판에 하나만 나오고, 늦게 쓰이는 구멍이 큰 숫자를 가져간다.
 #   colors=20         색 팔레트 크기 (LevelManager.pair_colors 와 맞춘다)
 #   attempts=120      스테이지당 생성 재시도 상한
 #   out=res://resources/levels   저장 폴더 (기존 파일은 건드리지 않고 뒤 순번으로 추가)
 
 const STAGE_SEED_STRIDE := 100003
+# 보드 크기 흔들기용 별도 보폭. 맵 시드와 섞이면 크기와 배치가 같이 움직여 규칙성이 생긴다.
+const GRID_SEED_STRIDE := 7919
 # 같은 스테이지가 첫 시드로 실패했을 때 흔들어 보는 횟수. 그래도 안 되면 사슬 깊이를 낮춘다.
 const SEED_RETRIES := 6
 
@@ -78,11 +88,12 @@ func _initialize() -> void:
 		# 장애물 비율은 실수 램프라 여기서 풀어서 스테이지별 값으로 넘긴다.
 		var stage_params: Dictionary = params.duplicate()
 		stage_params["obstacle"] = rampf(obstacle_range, index, count)
+		var stage_grid: Vector2i = jitter_grid(grid, base_seed + stage_number * GRID_SEED_STRIDE)
 
 		# 시드 보폭은 배치 내 순번이 아니라 **전역 스테이지 순번**을 쓴다. 같은 시드로
 		# 이어서 돌려도 이전 배치와 같은 맵을 다시 만들지 않게 하기 위해서다.
 		var level: Dictionary = generate_stage(
-			generator, stage_params, base_seed, grid, stage_number - 1, cat_count, chain_depth
+			generator, stage_params, base_seed, stage_grid, stage_number - 1, cat_count, chain_depth
 		)
 		if level.is_empty():
 			push_error("스테이지 %d 생성 실패 — 여기서 중단한다" % stage_number)
@@ -96,8 +107,10 @@ func _initialize() -> void:
 			quit(1)
 			return
 		made += 1
-		print("  stage_%03d: 고양이 %d / 사슬 %d / 풀이 %d수 / 시드 %d" % [
+		print("  stage_%03d: 보드 %dx%d / 고양이 %d / 사슬 %d / 풀이 %d수 / 시드 %d" % [
 			stage_number,
+			int(level["grid_size"].x),
+			int(level["grid_size"].y),
 			cat_count,
 			int(level["dependency"]["chain_depth"]),
 			int(level["stats"]["solution_length"]),
@@ -112,6 +125,25 @@ func _initialize() -> void:
 static func ramp(value_range: Vector2i, index: int, count: int) -> int:
 	var t: float = float(index) / float(count - 1) if count > 1 else 0.0
 	return int(round(lerp(float(value_range.x), float(value_range.y), t)))
+
+
+# 보드 크기 흔들기. 배치 안이 전부 같은 크기면 판이 단조로워진다. 가로·세로를 각각 ±2 에서
+# 흔든다. 시드는 스테이지 순번에서 뽑으므로 같은 시드로 다시 돌리면 같은 크기가 나온다.
+# 그라운드 룰(`shape_grid`)은 여기서 안 건다 — 수동 입력에도 걸려야 하므로 생성 직전에 건다.
+static func jitter_grid(grid: Vector2i, seed_value: int) -> Vector2i:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	return Vector2i(grid.x + rng.randi_range(-2, 2), grid.y + rng.randi_range(-2, 2))
+
+
+# 그라운드 룰: **세로는 항상 가로보다 최소 1 크다.** 세로가 더 길어야 화면 비율에 맞는다.
+# 흔들기든 수동 입력이든 모든 경로가 생성 직전에 이 보정을 거친다.
+#
+# 칸 수 상한은 여기서 안 건다 — 기준(9x10)보다 큰 판은 `LevelManager.fitted_tile_size()` 가
+# 타일을 줄여 같은 자리에 담는다. 판을 잘라 내는 대신 그리드만 축소하는 쪽이다.
+static func shape_grid(grid: Vector2i) -> Vector2i:
+	var width: int = maxi(grid.x, 3)
+	return Vector2i(width, maxi(grid.y, width + 1))
 
 
 static func rampf(value_range: Vector2, index: int, count: int) -> float:
@@ -135,7 +167,7 @@ static func generate_stage(
 		for retry in SEED_RETRIES:
 			var config := MapGenerator.default_config()
 			config.base_seed = base_seed + index * STAGE_SEED_STRIDE + retry * 37
-			config.grid_size = grid
+			config.grid_size = shape_grid(grid)
 			config.cat_count = cat_count
 			config.color_count = int(params.get("colors", 20))
 			config.body_length_min = int(params.get("len_min", 5))
