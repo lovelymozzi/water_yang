@@ -37,8 +37,9 @@
 <!-- SCENE:ingame BEGIN -->
 #### `ingame`  ·  contract: `./web/ui/ingame.contract.json`
 - sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
-- 이벤트: `bar1-png-374:click` · `gimmick-coinpurse-coin-png-375:click` · `bar1-png-376:click` · `home-btn-plus-png-377:click` · `bar1-png-378:click` · `entry-box-normal-png-383:click`
-- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer`
+- 이벤트: `bar1-png-374:click` · `gimmick-coinpurse-coin-png-375:click` · `bar1-png-376:click` · `home-btn-plus-png-377:click` · `bar1-png-378:click` · `entry-box-normal-png-380:click` · `entry-box-normal-png-381:click` · `entry-box-normal-png-382:click` · `entry-box-normal-png-383:click` · `item2-png-386:click` · `item1-png-387:click` · `common-icon-greendot2-webp-388:click` · `common-icon-greendot2-webp-389:click` · `common-icon-greendot2-webp-390:click` · `itme3-1-png-391:click` · `entry-box-normal-png-300:click` · `entry-box-normal-png-397:click` · `item1-png-399:click` · `entry-item-num-png-395:click` · `entry-box-normal-png-404:click` · `common-icon-greendot2-webp-406:click` · `itme3-1-png-407:click` · `entry-item-num-png-408:click`
+- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer` · `item.move.current` · `item.timestop.current` · `item.remove.current` · `item.cancle`
+- 위젯: `item1`(toggle) · `itme3`(toggle) — 입력 이벤트: `widget:item1` · `widget:itme3`
 - GameField 레이어 있음
 <!-- SCENE:ingame END -->
 
@@ -76,7 +77,7 @@
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
 - sceneUuid: `cf13fce2-4ff9-40d1-a47a-9680167f65f7`
-- 이벤트: `common-btn-green-sales-png-2318:click` · `plain-text-2319:click` · `common-btn-top-x-red-png-2350:click`
+- 이벤트: `common-btn-green-sales-png-2318:click` · `common-btn-top-x-red-png-2350:click`
 <!-- SCENE:pop_LevelFail END -->
 
 <!-- SCENE:pop_LevelWin BEGIN -->

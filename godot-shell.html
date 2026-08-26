@@ -26,6 +26,7 @@ const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
 const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimited-v2';
 const STAGE_CLEAR_REWARD = 40;
 const AD_STAGE_CLEAR_REWARD = 80;
+const ITEM_START_COUNT = 3;
 const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
 const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
@@ -76,8 +77,19 @@ await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
 }));
 
 const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX, initialCoins: INITIAL_COINS, maxHearts: MAX_HEARTS });
+let economyTransactionTail = Promise.resolve();
+const economyTransactions = new Map();
+const runEconomyTransaction = (key, work) => {
+  const existing = economyTransactions.get(key);
+  if (existing) return existing;
+  const transaction = economyTransactionTail.then(work);
+  economyTransactionTail = transaction.catch(() => {});
+  const settled = transaction.finally(() => economyTransactions.delete(key));
+  economyTransactions.set(key, settled);
+  return settled;
+};
 if (economy.getCoins() === 0 && localStorage.getItem(INITIAL_COIN_GRANT_STORAGE_KEY) == null) {
-  await economy.grantCoins(INITIAL_COINS, 'initial-coin-migration');
+  await runEconomyTransaction('initial-coin-migration', () => economy.grantCoins(INITIAL_COINS, 'initial-coin-migration'));
   localStorage.setItem(INITIAL_COIN_GRANT_STORAGE_KEY, '1');
 }
 const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX });
@@ -94,6 +106,7 @@ let ingameBgmEnabled = true;
 let buttonSfxEnabled = true;
 let hapticsEnabled = true;
 let unlimitedHeartsTimeoutId = null;
+let shopPurchasePending = false;
 
 function hasUnlimitedHearts() {
   return Number(localStorage.getItem(UNLIMITED_HEARTS_STORAGE_KEY)) > Date.now();
@@ -172,10 +185,46 @@ let activeSceneName = '';
 let activeSceneUuid = '';
 let splashRenderer = null;
 let continueWithoutHeart = false;
+let endedGame = null;
 let sceneSessionToken = 0;
 let currentMapStage = progress.getCurrentStage();
+const itemCounts = { remove: ITEM_START_COUNT, timestop: ITEM_START_COUNT, move: ITEM_START_COUNT };
+const itemPending = { remove: 0, timestop: 0, move: 0 };
+let selectedTargetItem = null;
 
-const handleGodotSfx = ({ sfx, outcome, score, stage }) => {
+function syncItemCounts() {
+  flow.update({
+    item1: selectedTargetItem === 'remove',
+    itme3: selectedTargetItem === 'move',
+    item: {
+      remove: { current: itemCounts.remove },
+      timestop: { current: itemCounts.timestop },
+      move: { current: itemCounts.move },
+      cancle: selectedTargetItem ? 'X' : '',
+    },
+  });
+}
+
+function resetItemCounts() {
+  Object.keys(itemCounts).forEach(item => { itemCounts[item] = ITEM_START_COUNT; itemPending[item] = 0; });
+  selectedTargetItem = null;
+  syncItemCounts();
+}
+
+function requestItem(item) {
+  if (activeGame?.state !== 'running' || itemCounts[item] <= itemPending[item] || (item !== 'timestop' && selectedTargetItem)) return;
+  itemPending[item] += 1;
+  if (item !== 'timestop') selectedTargetItem = item;
+  syncItemCounts();
+  activeGame.message(`item.${item}`, {});
+}
+
+function cancelItemSelection() {
+  if (!selectedTargetItem || activeGame?.state !== 'running') return;
+  activeGame.message('item.cancel', { item: selectedTargetItem });
+}
+
+const handleGodotSfx = ({ sfx, outcome, score, stage, itemUsed, itemRejected }) => {
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
   if (sfx === 'cat-move' && buttonSfxEnabled) sound.playSfx(CAT_MOVE_SFX);
   if (sfx === 'ice-break' && buttonSfxEnabled) sound.playSfx(ICE_BREAK_SFX);
@@ -184,15 +233,31 @@ const handleGodotSfx = ({ sfx, outcome, score, stage }) => {
   }
   if (Number.isInteger(stage) && stage > 0) {
     currentMapStage = stage;
+    resetItemCounts();
     flow.update({ stage: { current: `Level${stage}` } });
+  }
+  if (itemUsed) {
+    itemPending[itemUsed] = Math.max(0, itemPending[itemUsed] - 1);
+    itemCounts[itemUsed] = Math.max(0, itemCounts[itemUsed] - 1);
+    if (selectedTargetItem === itemUsed) selectedTargetItem = null;
+    syncItemCounts();
+  }
+  if (itemRejected) {
+    itemPending[itemRejected] = Math.max(0, itemPending[itemRejected] - 1);
+    if (selectedTargetItem === itemRejected) selectedTargetItem = null;
+    syncItemCounts();
   }
   if (outcome === 'clear' || outcome === 'fail') void handleMainGameEnd({ outcome, score, stats: {} }).catch(error => console.error('[Godot] stage-end 처리 실패', error));
 };
 
 const handleMainGameEnd = async (result) => {
+  if (endedGame === activeGame) return;
+  endedGame = activeGame;
   if (result.outcome === 'clear') {
-    await economy.grantHearts(1);
-    await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
+    await runEconomyTransaction('stage-clear', async () => {
+      await economy.grantHearts(1);
+      await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
+    });
     await progress.recordClear(currentMapStage, {
       stars: result.stats?.stars || 0,
       score: result.score,
@@ -204,18 +269,18 @@ const handleMainGameEnd = async (result) => {
   }
 };
 
-flow.defineCondition('재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동', async () => {
+flow.defineCondition('재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동', () => runEconomyTransaction('out-of-moves-continue', async () => {
   if (economy.getCoins() < COIN_COST) return true;
   if (!(await economy.spendCoins(COIN_COST, 'out-of-moves-continue'))) return true;
   continueWithoutHeart = true;
   return false;
-});
-flow.defineCondition('not enough coin', async () => {
+}));
+flow.defineCondition('not enough coin', () => runEconomyTransaction('buy-lives-900', async () => {
   if (economy.getCoins() < COIN_COST) return true;
   if (!(await economy.spendCoins(COIN_COST, 'buy-lives-900'))) return true;
   await economy.grantHearts(1);
   return false;
-});
+}));
 
 flow.update({
   loading: { prograss: 0 },
@@ -224,6 +289,7 @@ flow.update({
   continue: { coin: String(COIN_COST) },
   stage: { timer: '01:00' },
 });
+syncItemCounts();
 syncUnlimitedHearts();
 // pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
 
@@ -235,6 +301,12 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   if (sceneName === INGAME_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
+    syncItemCounts();
+    renderer.on('entry-box-normal-png-380:click', () => requestItem('remove'));
+    renderer.on('entry-box-normal-png-381:click', () => requestItem('timestop'));
+    renderer.on('entry-box-normal-png-382:click', () => requestItem('move'));
+    renderer.on('entry-box-normal-png-397:click', cancelItemSelection);
+    renderer.on('entry-box-normal-png-404:click', cancelItemSelection);
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
   }
@@ -249,19 +321,41 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
       purchaseToastTimer = setTimeout(() => { purchaseToast.style.visibility = 'hidden'; }, 2500);
     };
     renderer.on('860', async () => {
-      await economy.grantCoins(5000, 'shop-860');
-      await economy.refillHearts();
-      activateUnlimitedHearts();
-      showPurchaseToast();
+      if (shopPurchasePending) return;
+      shopPurchasePending = true;
+      try {
+        await runEconomyTransaction('shop-purchase', async () => {
+          await economy.grantCoins(5000, 'shop-860');
+          await economy.refillHearts();
+          activateUnlimitedHearts();
+        });
+        showPurchaseToast();
+      } finally {
+        shopPurchasePending = false;
+      }
     });
     renderer.on('480', async () => {
-      await economy.grantCoins(2500, 'shop-480');
-      await economy.grantHearts(10, Date.now(), 'shop-480', { overflowCap: 10 });
-      showPurchaseToast();
+      if (shopPurchasePending) return;
+      shopPurchasePending = true;
+      try {
+        await runEconomyTransaction('shop-purchase', async () => {
+          await economy.grantCoins(2500, 'shop-480');
+          await economy.grantHearts(10, Date.now(), 'shop-480', { overflowCap: 10 });
+        });
+        showPurchaseToast();
+      } finally {
+        shopPurchasePending = false;
+      }
     });
     renderer.on('320', async () => {
-      await economy.grantCoins(1000, 'shop-320');
-      showPurchaseToast();
+      if (shopPurchasePending) return;
+      shopPurchasePending = true;
+      try {
+        await runEconomyTransaction('shop-purchase', () => economy.grantCoins(1000, 'shop-320'));
+        showPurchaseToast();
+      } finally {
+        shopPurchasePending = false;
+      }
     });
   }
   if (sceneName === 'pop_LevelWin' && popup) {
@@ -435,6 +529,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     gameField.appendChild(gameHost);
   }
   if (activeGame?.state === 'paused') {
+    if (godotScene === 'main') endedGame = null;
     if (godotScene === 'main' && continueWithoutHeart) {
       activeGame.message('continue_stage', { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS });
       continueWithoutHeart = false;
@@ -451,7 +546,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   if (activeGame?.state === 'ready') {
     if (godotScene === 'lobby') return;
     if (godotScene === 'main') {
-      if (!continueWithoutHeart && !hasUnlimitedHearts() && !(await economy.consumeHeart())) {
+      if (!continueWithoutHeart && !hasUnlimitedHearts() && !(await runEconomyTransaction('game-entry-heart', () => economy.consumeHeart()))) {
         throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
       }
       continueWithoutHeart = false;
@@ -466,7 +561,7 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   const sessionToken = ++sceneSessionToken;
 
   if (godotScene === 'main' && !continueWithoutHeart && !hasUnlimitedHearts()) {
-    const consumedHeart = await economy.consumeHeart();
+    const consumedHeart = await runEconomyTransaction('game-entry-heart', () => economy.consumeHeart());
     if (sessionToken !== sceneSessionToken) return;
     if (!consumedHeart) {
       throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');

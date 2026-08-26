@@ -3,14 +3,14 @@ extends Node3D
 # 이 시간을 넘긴 프레임은 로그에 상태와 함께 남긴다. 프리즈 원인을 좁히기 위한 계측이다.
 const FRAME_STALL_WARNING_SECONDS := 0.25
 const DRAG_CONTROLLER_SCRIPT = preload("res://scripts/drag_controller.gd")
+const ITEM_REMOVE_TEXTURE = preload("res://water_yang/item_over.png")
+const ITEM_MOVE_ARROW_TEXTURE = preload("res://src/assets/arrow.png")
 
 # `stage_batch_generator.gd` 가 stage_001.json 부터 순번으로 저장하는 폴더.
 # 파일이 하나라도 있으면 플레이는 1스테이지부터 차례로 진행한다.
 const STAGE_LEVELS_DIR := "res://resources/levels"
 const STAGE_ADVANCE_DELAY_SECONDS := 1.4
 const DEFAULT_STAGE_TIME_SECONDS := 60.0
-# StageAdmin 이 "이 스테이지 플레이"로 시작 스테이지를 건네는 1회용 파일.
-const DEV_STAGE_HANDOFF_PATH := "user://dev_start_stage.txt"
 
 # 개발용 시작 스테이지 (1부터). Inspector 에서 바꾸거나 실행 인자 `-- stage=10` 으로
 # 덮어쓴다. 특정 스테이지만 다시 플레이해 볼 때 쓴다. 범위를 넘으면 마지막 스테이지다.
@@ -28,10 +28,9 @@ var _stage_label: Label
 var _stage_time_left := DEFAULT_STAGE_TIME_SECONDS
 var _stage_timer_running := false
 var _stage_timer_waiting_for_touch := false
+var _stage_timer_stop_remaining := 0.0
 var _last_reported_seconds := -1
 var _requested_stage_index := 0
-# 어드민 인계 파일에서 읽은 시작 스테이지 (1부터). 0 = 인계 없음.
-var _dev_stage_handoff: int = 0
 # 재현용. 스테이지 파일에 함께 저장된 정답 수순과 그 재생 상태다.
 var _stage_solution: Array = []
 var _replay_button: Button
@@ -39,6 +38,9 @@ var _replay_index := -1
 # 지금 수를 이미 눌렀는지. 누른 뒤에는 커밋될 때까지 프레임을 넘겨 줘야 한다.
 var _replay_issued := false
 var _ice_overlay_tween: Tween
+var _drag_controller: DragController
+var _obstacle_item_targets: Node3D
+var _cat_item_targets: Node3D
 
 
 func _ready() -> void:
@@ -98,24 +100,28 @@ func _ready() -> void:
 	UiBridge.host_message.connect(_on_host_message)
 
 	# 드래그 입력은 별도 노드가 전담한다. 헤드리스 검증에서 이벤트를 직접 주입하기 쉽다.
-	var drag_controller: Node = DRAG_CONTROLLER_SCRIPT.new()
-	drag_controller.name = "DragController"
-	drag_controller.level_manager = level_manager
-	drag_controller.input_received.connect(func():
+	_drag_controller = DRAG_CONTROLLER_SCRIPT.new()
+	_drag_controller.name = "DragController"
+	_drag_controller.level_manager = level_manager
+	_drag_controller.input_received.connect(func():
 		if _stage_timer_waiting_for_touch:
 			_stage_timer_waiting_for_touch = false
 			_stage_timer_running = true
 	)
-	add_child(drag_controller)
+	_drag_controller.obstacle_selected.connect(_on_obstacle_selected)
+	_drag_controller.cat_selected.connect(_on_cat_selected)
+	add_child(_drag_controller)
+	_obstacle_item_targets = Node3D.new()
+	_obstacle_item_targets.name = "ObstacleItemTargets"
+	add_child(_obstacle_item_targets)
+	_cat_item_targets = Node3D.new()
+	_cat_item_targets.name = "CatItemTargets"
+	add_child(_cat_item_targets)
 
 	print("[boot] 로그 파일 위치: ", ProjectSettings.globalize_path("user://logs/"))
 
 	_setup_stage_label()
 	_setup_replay_button()
-	# 인계 파일은 스테이지 모드 여부와 **무관하게** 여기서 먼저 먹어 치운다. 조건 안에서만
-	# 읽으면 generate_on_play 가 켜져 있을 때 파일이 남아, 다음 평범한 실행이 엉뚱한
-	# 스테이지에서 시작한다.
-	_dev_stage_handoff = _consume_dev_stage_handoff()
 	if _stage_mode_allowed():
 		_stage_paths = _list_stage_files()
 		if not _stage_paths.is_empty():
@@ -129,7 +135,9 @@ func _process(delta: float) -> void:
 	if _replay_index >= 0:
 		_advance_replay()
 
-	if _stage_timer_running:
+	if _stage_timer_running and _stage_timer_stop_remaining > 0.0:
+		_stage_timer_stop_remaining = maxf(0.0, _stage_timer_stop_remaining - delta)
+	elif _stage_timer_running:
 		_stage_time_left = maxf(0.0, _stage_time_left - delta)
 		var seconds_left := ceili(_stage_time_left)
 		if seconds_left != _last_reported_seconds:
@@ -182,7 +190,11 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 	_stage_time_left = maxf(1.0, float(config.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 	_stage_timer_running = false
 	_stage_timer_waiting_for_touch = false
+	_stage_timer_stop_remaining = 0.0
 	_last_reported_seconds = -1
+	_clear_item_targets(_obstacle_item_targets)
+	_clear_item_targets(_cat_item_targets)
+	_drag_controller.cancel_item_selection()
 	UiBridge.post_hud({"timeLeft": _format_stage_timer(ceili(_stage_time_left))})
 	if not _stage_paths.is_empty():
 		call_deferred("_load_stage", min(_requested_stage_index, _stage_paths.size() - 1))
@@ -191,11 +203,16 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 func _on_host_start() -> void:
 	_stage_timer_running = false
 	_stage_timer_waiting_for_touch = true
+	_stage_timer_stop_remaining = 0.0
 
 
 func _on_host_force_quit(_reason: String) -> void:
 	_stage_timer_running = false
 	_stage_timer_waiting_for_touch = false
+	_stage_timer_stop_remaining = 0.0
+	_clear_item_targets(_obstacle_item_targets)
+	_clear_item_targets(_cat_item_targets)
+	_drag_controller.cancel_item_selection()
 
 
 func _on_host_message(topic: String, payload) -> void:
@@ -203,8 +220,39 @@ func _on_host_message(topic: String, payload) -> void:
 		_stage_time_left = maxf(1.0, float(payload.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 		_stage_timer_running = false
 		_stage_timer_waiting_for_touch = true
+		_stage_timer_stop_remaining = 0.0
 		_last_reported_seconds = -1
+		_clear_item_targets(_obstacle_item_targets)
+		_clear_item_targets(_cat_item_targets)
 		UiBridge.post_hud({"timeLeft": _format_stage_timer(ceili(_stage_time_left))})
+		return
+	if topic == "item.cancel":
+		var cancelled_item := str(payload.get("item", ""))
+		_clear_item_targets(_obstacle_item_targets)
+		_clear_item_targets(_cat_item_targets)
+		_drag_controller.cancel_item_selection()
+		if cancelled_item == "remove" or cancelled_item == "move":
+			UiBridge.post_progress({"itemRejected": cancelled_item})
+		return
+	if topic == "item.remove":
+		if level_manager.get_obstacle_cells().is_empty():
+			UiBridge.post_progress({"itemRejected": "remove"})
+			return
+		_show_obstacle_item_targets()
+		_drag_controller.begin_obstacle_selection()
+		return
+	if topic == "item.timestop":
+		if not _stage_timer_running:
+			UiBridge.post_progress({"itemRejected": "timestop"})
+			return
+		_stage_timer_stop_remaining += 10.0
+		UiBridge.post_progress({"itemUsed": "timestop"})
+		return
+	if topic == "item.move":
+		if not _show_cat_item_targets():
+			UiBridge.post_progress({"itemRejected": "move"})
+			return
+		_drag_controller.begin_cat_selection()
 		return
 	if topic != "use_ice":
 		return
@@ -224,6 +272,60 @@ func _on_host_message(topic: String, payload) -> void:
 	_ice_overlay_tween.tween_callback(ice_overlay.hide)
 
 
+func _show_obstacle_item_targets() -> void:
+	_clear_item_targets(_obstacle_item_targets)
+	for cell in level_manager.get_obstacle_cells():
+		var target := Sprite3D.new()
+		target.texture = ITEM_REMOVE_TEXTURE
+		target.pixel_size = 0.0056
+		target.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		target.no_depth_test = true
+		target.position = level_manager.grid_to_world(
+			cell, LevelManager.TILE_HEIGHT + level_manager.obstacle_fbx_height + 0.35
+		)
+		_obstacle_item_targets.add_child(target)
+
+
+func _clear_item_targets(targets: Node3D) -> void:
+	if targets == null:
+		return
+	for target in targets.get_children():
+		targets.remove_child(target)
+		target.queue_free()
+
+
+func _on_obstacle_selected(cell: Vector2i) -> void:
+	if level_manager.remove_obstacle(cell):
+		UiBridge.post_progress({"itemUsed": "remove"})
+	_clear_item_targets(_obstacle_item_targets)
+
+
+func _show_cat_item_targets() -> bool:
+	_clear_item_targets(_cat_item_targets)
+	for cat in level_manager.get_cats():
+		if cat.is_absorbing() or level_manager.get_open_hole_for_color(cat.color_id) == null:
+			continue
+		var arrow := Sprite3D.new()
+		arrow.texture = ITEM_MOVE_ARROW_TEXTURE
+		arrow.pixel_size = 0.008
+		arrow.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		arrow.no_depth_test = true
+		arrow.position = level_manager.grid_to_world(
+			cat.get_head_cell() + Vector2i.UP, level_manager.cat_world_y + 0.35
+		) + Vector3(0.0, 0.0, level_manager.tile_size * 0.25)
+		_cat_item_targets.add_child(arrow)
+	return not _cat_item_targets.get_children().is_empty()
+
+
+func _on_cat_selected(cat: CatEntity) -> void:
+	var hole: Variant = level_manager.get_open_hole_for_color(cat.color_id)
+	if hole != null and cat.clear_with_item(hole as Vector2i):
+		UiBridge.post_progress({"itemUsed": "move"})
+	else:
+		UiBridge.post_progress({"itemRejected": "move"})
+	_clear_item_targets(_cat_item_targets)
+
+
 func _format_stage_timer(seconds: int) -> String:
 	return "%02d:%02d" % [seconds / 60, seconds % 60]
 
@@ -232,30 +334,13 @@ func _format_stage_timer(seconds: int) -> String:
 
 # 스테이지 모드를 켜면 안 되는 경우 둘: `--script` 는 검증 하네스라 손 배치를 전제하고,
 # MapGenerator 의 generate_on_play 는 시드 테스트 플레이라 그쪽이 판을 가져야 한다.
-# 개발용 시작 스테이지 (1부터). 우선순위는 어드민 인계 > 실행 인자 `-- stage=N` > Inspector.
+# 개발용 시작 스테이지 (1부터). Inspector 의 start_stage 를 실행 인자 `-- stage=N` 이 덮는다.
 func _dev_start_stage() -> int:
-	if _dev_stage_handoff > 0:
-		return _dev_stage_handoff
 	var requested: int = start_stage
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("stage="):
 			requested = int(arg.substr(6))
 	return requested
-
-
-# StageAdmin 의 "이 스테이지 플레이"가 남긴 1회용 인계 파일. 에디터 플러그인은 실행에
-# 인자를 넘길 수 없어서 파일로 건넨다. **읽는 즉시 지운다** — 남으면 다음 실행이 계속
-# 그 스테이지에서 시작해 버린다. 없으면 0.
-func _consume_dev_stage_handoff() -> int:
-	if not FileAccess.file_exists(DEV_STAGE_HANDOFF_PATH):
-		return 0
-	var file: FileAccess = FileAccess.open(DEV_STAGE_HANDOFF_PATH, FileAccess.READ)
-	var value: int = 0
-	if file != null:
-		value = int(file.get_as_text().strip_edges())
-		file.close()
-	DirAccess.remove_absolute(DEV_STAGE_HANDOFF_PATH)
-	return value
 
 
 func _stage_mode_allowed() -> bool:

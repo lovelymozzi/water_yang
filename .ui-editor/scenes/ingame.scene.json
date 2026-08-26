@@ -163,6 +163,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": 0,
+      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -210,6 +211,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
+      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -278,6 +280,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": 0,
+      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -325,6 +328,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": -1,
+      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -393,6 +397,7 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": 0,
+      "groupId": "grp-296",
       "events": [
         {
           "trigger": "click",
@@ -488,7 +493,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-317",
-      "fxGroupId": "fx-2286"
+      "fxGroupId": "fx-2286",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
     },
     {
       "id": 381,
@@ -530,7 +541,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-316",
-      "fxGroupId": "fx-2287"
+      "fxGroupId": "fx-2287",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
     },
     {
       "id": 382,
@@ -572,7 +589,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-315",
-      "fxGroupId": "fx-2288"
+      "fxGroupId": "fx-2288",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
     },
     {
       "id": 383,
@@ -670,8 +693,8 @@
       "type": "image",
       "name": "common_time_needle.webp",
       "exportPath": "src/assets/common_time_needle.webp",
-      "x": 151,
-      "y": 94,
+      "x": 150,
+      "y": 95,
       "scale": 0.75,
       "scaleX": 1,
       "scaleY": 1,
@@ -745,7 +768,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-316",
-      "fxGroupId": "fx-2287"
+      "fxGroupId": "fx-2287",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
     },
     {
       "id": 387,
@@ -787,7 +816,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-317",
-      "fxGroupId": "fx-2286"
+      "fxGroupId": "fx-2286",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
     },
     {
       "id": 388,
@@ -832,7 +867,7 @@
           "textDepthColor": "#000000",
           "offsetX": 0,
           "offsetY": -1,
-          "bindingKey": "",
+          "bindingKey": "item.move.current",
           "zIndex": 1
         }
       ],
@@ -850,7 +885,14 @@
       },
       "selectedTextIndex": 0,
       "groupId": "grp-315",
-      "fxGroupId": "fx-2288"
+      "fxGroupId": "fx-2288",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ],
+      "imageKey": ""
     },
     {
       "id": 389,
@@ -895,7 +937,7 @@
           "textDepthColor": "#000000",
           "offsetX": 0,
           "offsetY": -1,
-          "bindingKey": "",
+          "bindingKey": "item.timestop.current",
           "zIndex": 1
         }
       ],
@@ -913,7 +955,14 @@
       },
       "selectedTextIndex": 0,
       "groupId": "grp-316",
-      "fxGroupId": "fx-2287"
+      "fxGroupId": "fx-2287",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ],
+      "imageKey": ""
     },
     {
       "id": 390,
@@ -958,7 +1007,7 @@
           "textDepthColor": "#000000",
           "offsetX": 0,
           "offsetY": -1,
-          "bindingKey": "",
+          "bindingKey": "item.remove.current",
           "zIndex": 1
         }
       ],
@@ -976,7 +1025,14 @@
       },
       "selectedTextIndex": 0,
       "groupId": "grp-317",
-      "fxGroupId": "fx-2286"
+      "fxGroupId": "fx-2286",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ],
+      "imageKey": ""
     },
     {
       "id": 391,
@@ -1018,7 +1074,13 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-315",
-      "fxGroupId": "fx-2288"
+      "fxGroupId": "fx-2288",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
     },
     {
       "id": 392,
@@ -1068,6 +1130,450 @@
       ],
       "groupId": "grp-314",
       "fxGroupId": "fx-2289"
+    },
+    {
+      "id": 397,
+      "stableId": "entry-box-normal-png-397",
+      "type": "image",
+      "name": "entry_box_normal.png",
+      "exportPath": "src/assets/ingame_item_bg.png",
+      "x": 17,
+      "y": 662,
+      "scale": 1,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 21,
+      "visible": true,
+      "width": 92,
+      "height": 94,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1,
+      "groupId": "grp-402",
+      "fxGroupId": "fx-414",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
+    },
+    {
+      "id": 399,
+      "stableId": "item1-png-399",
+      "type": "image",
+      "name": "item1.png",
+      "exportPath": "water_yang/item1.png",
+      "x": 30,
+      "y": 672,
+      "scale": 0.25,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 22,
+      "visible": true,
+      "width": 254,
+      "height": 254,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1,
+      "groupId": "grp-402",
+      "fxGroupId": "fx-414",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
+    },
+    {
+      "id": 395,
+      "stableId": "entry-item-num-png-395",
+      "type": "image",
+      "name": "entry_item_num.png",
+      "exportPath": "src/assets/entry_item_num.png",
+      "x": 78,
+      "y": 718,
+      "scale": 0.4474789915966387,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 23,
+      "visible": true,
+      "width": 68,
+      "height": 70,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [
+        {
+          "content": "",
+          "fontSize": 37,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "textStrokeWidth": 0,
+          "textStrokeColor": "#000000",
+          "textShadowX": 0,
+          "textShadowY": 1,
+          "textShadowBlur": 2,
+          "textShadowColor": "#000000",
+          "textShadowOpacity": 50,
+          "textDepthSize": 0,
+          "textDepthColor": "#000000",
+          "offsetX": 0,
+          "offsetY": 0,
+          "bindingKey": "",
+          "zIndex": 1
+        },
+        {
+          "content": "X",
+          "fontSize": 32,
+          "fontWeight": "bold",
+          "fontFamily": "\"Fredoka One\", cursive",
+          "color": "#ffffff",
+          "textStrokeWidth": 5.5,
+          "textStrokeColor": "#a40b09",
+          "textShadowX": 0,
+          "textShadowY": 1,
+          "textShadowBlur": 2,
+          "textShadowColor": "rgba(0,0,0,0)",
+          "textShadowOpacity": 50,
+          "textDepthSize": 0,
+          "textDepthColor": "rgba(0,0,0,0)",
+          "offsetX": 0,
+          "offsetY": -3,
+          "bindingKey": "item.cancle",
+          "zIndex": 2,
+          "textStrokeColorRole": "fixed",
+          "textShadowColorRole": "fixed"
+        }
+      ],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": 1,
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ],
+      "fxGroupId": "fx-414",
+      "groupId": "grp-402"
+    },
+    {
+      "id": 404,
+      "stableId": "entry-box-normal-png-404",
+      "type": "image",
+      "name": "entry_box_normal.png",
+      "exportPath": "src/assets/ingame_item_bg.png",
+      "x": 200,
+      "y": 662,
+      "scale": 1,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 24,
+      "visible": true,
+      "width": 92,
+      "height": 94,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1,
+      "groupId": "grp-411",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ],
+      "fxGroupId": "fx-413"
+    },
+    {
+      "id": 406,
+      "stableId": "common-icon-greendot2-webp-406",
+      "type": "image",
+      "name": "common_icon_greendot2.webp",
+      "exportPath": "src/assets/common_icon_greendot2.webp",
+      "x": 262,
+      "y": 718,
+      "scale": 0.6630434782608695,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 25,
+      "visible": true,
+      "width": 46,
+      "height": 46,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [
+        {
+          "content": "5",
+          "fontSize": 28,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "textStrokeWidth": 0,
+          "textStrokeColor": "#000000",
+          "textShadowX": 0,
+          "textShadowY": 1,
+          "textShadowBlur": 2,
+          "textShadowColor": "#000000",
+          "textShadowOpacity": 50,
+          "textDepthSize": 0,
+          "textDepthColor": "#000000",
+          "offsetX": 0,
+          "offsetY": -1,
+          "bindingKey": "item.move.current",
+          "zIndex": 1
+        }
+      ],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": 0,
+      "groupId": "grp-411",
+      "imageKey": "",
+      "fxGroupId": "fx-413",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
+    },
+    {
+      "id": 407,
+      "stableId": "itme3-1-png-407",
+      "type": "image",
+      "name": "itme3_1.png",
+      "exportPath": "water_yang/itme3_1.png",
+      "x": 214,
+      "y": 672,
+      "scale": 0.4147058823529412,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 26,
+      "visible": true,
+      "width": 155,
+      "height": 170,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": -1,
+      "groupId": "grp-411",
+      "fxGroupId": "fx-413",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ]
+    },
+    {
+      "id": 408,
+      "stableId": "entry-item-num-png-408",
+      "type": "image",
+      "name": "entry_item_num.png",
+      "exportPath": "src/assets/entry_item_num.png",
+      "x": 262,
+      "y": 718,
+      "scale": 0.4474789915966387,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "zIndex": 27,
+      "visible": true,
+      "width": 68,
+      "height": 70,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "tintColor": "#ff3b30",
+      "tintStrength": 100,
+      "pressEnabled": false,
+      "pressTransition": 100,
+      "pressBrightness": 95,
+      "pressScale": 95,
+      "texts": [
+        {
+          "content": "",
+          "fontSize": 37,
+          "fontWeight": "bold",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "textStrokeWidth": 0,
+          "textStrokeColor": "#000000",
+          "textShadowX": 0,
+          "textShadowY": 1,
+          "textShadowBlur": 2,
+          "textShadowColor": "#000000",
+          "textShadowOpacity": 50,
+          "textDepthSize": 0,
+          "textDepthColor": "#000000",
+          "offsetX": 0,
+          "offsetY": 0,
+          "bindingKey": "",
+          "zIndex": 1
+        },
+        {
+          "content": "X",
+          "fontSize": 32,
+          "fontWeight": "bold",
+          "fontFamily": "\"Fredoka One\", cursive",
+          "color": "#ffffff",
+          "textStrokeWidth": 5.5,
+          "textStrokeColor": "#a40b09",
+          "textShadowX": 0,
+          "textShadowY": 1,
+          "textShadowBlur": 2,
+          "textShadowColor": "rgba(0,0,0,0)",
+          "textShadowOpacity": 50,
+          "textDepthSize": 0,
+          "textDepthColor": "rgba(0,0,0,0)",
+          "offsetX": 0,
+          "offsetY": -3,
+          "bindingKey": "item.cancle",
+          "zIndex": 2,
+          "textStrokeColorRole": "fixed",
+          "textShadowColorRole": "fixed"
+        }
+      ],
+      "zLayerId": "zl-content",
+      "shine": {
+        "enabled": false,
+        "angle": -20,
+        "width": 28,
+        "opacity": 65,
+        "softness": 70,
+        "duration": 0.9,
+        "interval": 2,
+        "direction": "right",
+        "color": "#ffffff"
+      },
+      "selectedTextIndex": 1,
+      "groupId": "grp-411",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": ""
+        }
+      ],
+      "fxGroupId": "fx-413"
     }
   ],
   "zLayers": [
@@ -1115,6 +1621,10 @@
       "name": "Group"
     },
     {
+      "id": "grp-296",
+      "name": "Group"
+    },
+    {
       "id": "grp-304",
       "name": "time"
     },
@@ -1128,11 +1638,51 @@
     },
     {
       "id": "grp-316",
-      "name": "item_2"
+      "name": "item2"
     },
     {
       "id": "grp-317",
       "name": "item1"
+    },
+    {
+      "id": "grp-397",
+      "name": "item1"
+    },
+    {
+      "id": "grp-402",
+      "name": "itme1_cancle",
+      "widget": {
+        "type": "toggle",
+        "key": "item1",
+        "on": {
+          "kind": "group",
+          "id": "grp-402"
+        },
+        "off": {
+          "kind": "group",
+          "id": "grp-317"
+        }
+      }
+    },
+    {
+      "id": "grp-404",
+      "name": "item3"
+    },
+    {
+      "id": "grp-411",
+      "name": "item3_cancle",
+      "widget": {
+        "type": "toggle",
+        "key": "itme3",
+        "on": {
+          "kind": "group",
+          "id": "grp-411"
+        },
+        "off": {
+          "kind": "group",
+          "id": "grp-315"
+        }
+      }
     }
   ],
   "fxGroups": [
@@ -1207,12 +1757,121 @@
         "loop": false,
         "repeat": 1
       }
+    },
+    {
+      "id": "fx-396",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-399",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-406",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-410",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-413",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
+    },
+    {
+      "id": "fx-414",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      }
     }
   ],
   "sceneAnimations": [],
   "guides": {
     "v": [
-      -174
+      -174,
+      -13
     ],
     "h": []
   },

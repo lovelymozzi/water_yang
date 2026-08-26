@@ -2,13 +2,15 @@ class_name DragController
 extends Node
 
 signal input_received
+signal obstacle_selected(cell: Vector2i)
+signal cat_selected(cat: CatEntity)
 
 # 1_움직임고찰.md 2절. 두 끝의 로직은 완전히 동일하고, 잡은 쪽이 리드가 된다.
 
 # 끝 셀 중심에서 이 거리 안이면 잡힌다. 드래그 실패를 줄이려고 넉넉하게 둔다.
 @export_range(0.5, 3.0, 0.1) var grab_radius_cells: float = 1.2
 # 막힌 상태에서 손가락이 리드 셀에서 이만큼 멀어지면 조용히 터치를 끝낸다.
-@export_range(1, 6, 1) var release_distance_cells: int = 5
+@export_range(1, 6, 1) var release_distance_cells: int = 2
 
 const MOUSE_POINTER := -1
 
@@ -20,6 +22,8 @@ var _has_pointer := false
 # 잡는 순간 포인터가 끝 셀 중심에서 빗겨 있던 양. 이후 좌표에서 계속 빼 준다.
 var _grab_offset := Vector3.ZERO
 var _pointer_cell := Vector2i.ZERO
+var _selecting_obstacle := false
+var _selecting_cat := false
 
 
 func _ready() -> void:
@@ -63,7 +67,7 @@ func _process(_delta: float) -> void:
 		return
 	if not _cat.is_blocked():
 		return
-	# 막힌 방향으로 계속 끌어 손가락이 5칸 이상 벌어지면 별도 알림 없이 종료한다.
+	# 막힌 방향으로 계속 끌어 손가락이 2칸 이상 벌어지면 별도 알림 없이 종료한다.
 	var lead: Vector2i = _cat.get_lead_cell()
 	var gap: int = maxi(absi(_pointer_cell.x - lead.x), absi(_pointer_cell.y - lead.y))
 	if gap >= release_distance_cells:
@@ -71,6 +75,38 @@ func _process(_delta: float) -> void:
 
 
 func _press(pointer_index: int, screen_position: Vector2) -> void:
+	if _selecting_obstacle:
+		var target: Variant = level_manager.screen_to_grid_cell(screen_position)
+		if target == null or not level_manager.get_obstacle_cells().has(target as Vector2i):
+			return
+		_selecting_obstacle = false
+		input_received.emit()
+		obstacle_selected.emit(target as Vector2i)
+		return
+	if _selecting_cat:
+		var point: Variant = level_manager.screen_to_board_point(screen_position)
+		if point == null:
+			return
+		var board_point: Vector3 = point
+		var best_cat: CatEntity = null
+		var best_distance := grab_radius_cells * level_manager.tile_size
+		for cat in level_manager.get_cats():
+			if cat.is_absorbing() or level_manager.get_open_hole_for_color(cat.color_id) == null:
+				continue
+			var selection_cells: Array[Vector2i] = cat.get_occupied_cells()
+			selection_cells.append(cat.get_head_cell() + Vector2i.UP)
+			for cell in selection_cells:
+				var center := level_manager.grid_to_world(cell, level_manager.cat_world_y)
+				var distance: float = Vector2(center.x - board_point.x, center.z - board_point.z).length()
+				if distance <= best_distance:
+					best_distance = distance
+					best_cat = cat
+		if best_cat == null:
+			return
+		_selecting_cat = false
+		input_received.emit()
+		cat_selected.emit(best_cat)
+		return
 	# 이미 잡고 있으면 새 포인터를 받지 않는다. 터치가 끝나야 새 입력을 받는다.
 	if _has_pointer or level_manager == null:
 		return
@@ -81,7 +117,7 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 
 	var best_cat: CatEntity = null
 	var best_cell := Vector2i.ZERO
-	var best_distance := grab_radius_cells * level_manager.fitted_tile_size()
+	var best_distance := grab_radius_cells * level_manager.tile_size
 	for cat in level_manager.get_cats():
 		if cat.is_absorbing():
 			continue
@@ -132,3 +168,21 @@ func _release_pointer(pointer_index: int) -> void:
 func _release() -> void:
 	_cat = null
 	_has_pointer = false
+
+
+func begin_obstacle_selection() -> void:
+	_release()
+	_selecting_cat = false
+	_selecting_obstacle = true
+
+
+func begin_cat_selection() -> void:
+	_release()
+	_selecting_obstacle = false
+	_selecting_cat = true
+
+
+func cancel_item_selection() -> void:
+	_release()
+	_selecting_obstacle = false
+	_selecting_cat = false

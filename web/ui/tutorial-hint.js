@@ -29,6 +29,7 @@ const cfg = {
     feather: 14,   // 구멍 경계 그라데이션 폭(px)
     msgGap: 20,    // 구멍과 문구 사이 최소 간격(px)
     typeMs: 26,    // 글자 하나 타이핑 간격(ms)
+    tapSlack: 30,  // 탭 판정 여유(px) — 구멍 반경보다 이만큼 바깥까지 탭을 인정(시각적 구멍 크기는 그대로)
 };
 
 /** 튜닝 오버라이드. CSS 는 첫 show/step 때 한 번 생성되므로 그 전에 호출한다. */
@@ -150,7 +151,7 @@ function ensureDim() {
         if (!cur) return;
         if (typer) { finishText(); return; }   // 타이핑 중 탭 = 문구 즉시 완성(진행은 아님)
         const p = point(cur.el);
-        if (Math.hypot(ev.clientX - p.x, ev.clientY - p.y) > radiusOf(cur)) return;
+        if (Math.hypot(ev.clientX - p.x, ev.clientY - p.y) > radiusOf(cur) + cfg.tapSlack) return;
         const el = cur.el;
         hide();                                // 대기 promise 도 여기서 함께 풀린다
         if (el.click) el.click();              // 게임의 원래 핸들러가 돌아야 다음 단계가 진행된다
@@ -210,10 +211,20 @@ function place() {
             dim.style.setProperty('--tx', `${hx}px`);
             dim.style.setProperty('--ty', `${hy}px`);
             dim.style.setProperty('--r', `${r}px`);
-            // 기본은 상단. 구멍과 겹치면 하단으로 내린다. 양쪽 다 모자라면 넓은 쪽에 붙인다.
+            // 기본은 화면 중앙. 구멍(탭 타깃·드래그 동선을 덮는 원)과 겹칠 때만 위/아래로 밀어낸다 —
+            // 중앙에서 덜 밀리는 쪽 우선, 양쪽 다 안 들어가면 여유가 넓은 쪽 화면 끝에 붙인다.
             const vh = window.innerHeight, h = msg.offsetHeight;
-            const top = hy - r - cfg.msgGap - h, bot = vh - (hy + r + cfg.msgGap) - h;
-            msg.style.top = (top >= cfg.msgGap || top >= bot ? cfg.msgGap : vh - cfg.msgGap - h) + 'px';
+            const mid = (vh - h) / 2;
+            const above = hy - r - cfg.msgGap - h;   // 구멍 위에 붙는 top
+            const below = hy + r + cfg.msgGap;       // 구멍 아래에 붙는 top
+            let yPos = mid;
+            if (mid < below && mid + h > hy - r - cfg.msgGap) { // 중앙 배치가 구멍과 겹침
+                const fitA = above >= cfg.msgGap, fitB = below + h <= vh - cfg.msgGap;
+                yPos = fitA && (!fitB || Math.abs(above - mid) <= Math.abs(below - mid)) ? above
+                    : fitB ? below
+                    : (hy - r >= vh - (hy + r) ? cfg.msgGap : vh - cfg.msgGap - h);
+            }
+            msg.style.top = Math.round(yPos) + 'px';
         }
     }
     // 좌표({x,y})만 받은 경우는 움직일 일이 없어 루프를 멈춘다 — 출발·도착 중 하나라도 요소면 계속 따라간다.

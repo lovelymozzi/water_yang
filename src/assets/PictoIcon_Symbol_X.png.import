@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkv2dahtnu4y"
-path="res://.godot/imported/butterfly.webp-1196d3f291c8468c51393b52bf8490ad.ctex"
+uid="uid://bbvv1nyk2jhmp"
+path="res://.godot/imported/PictoIcon_Symbol_X.png-bf3c4f80e254eed21ea959d67a1c97a8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://src/assets/butterfly.webp"
-dest_files=["res://.godot/imported/butterfly.webp-1196d3f291c8468c51393b52bf8490ad.ctex"]
+source_file="res://src/assets/PictoIcon_Symbol_X.png"
+dest_files=["res://.godot/imported/PictoIcon_Symbol_X.png-bf3c4f80e254eed21ea959d67a1c97a8.ctex"]
 
 [params]
 

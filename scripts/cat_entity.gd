@@ -287,6 +287,7 @@ var _is_absorbing := false
 var _absorb_cell := INVALID_CELL
 # 구멍으로 먼저 들어가는 끝이 리드쪽인지. 후진 중에는 후미가 먼저 닿을 수 있다.
 var _absorb_from_lead := true
+var _item_clear := false
 # 몸이 자기 경로를 따라 구멍 쪽으로 밀려 들어간 길이(월드 단위).
 var _swallowed_arc := 0.0
 # 흡입이 끝나는 _swallowed_arc 값. 폴리라인 계산을 두 번 하지 않으려고
@@ -496,7 +497,9 @@ func initialize_runtime(manager: LevelManager) -> void:
 
 
 func get_head_cell() -> Vector2i:
-	return body_cells.front() if not body_cells.is_empty() else grid_pos
+	if body_cells.is_empty():
+		return grid_pos
+	return body_cells.back() if _lead_is_tail else body_cells.front()
 
 
 func get_tail_cell() -> Vector2i:
@@ -724,16 +727,19 @@ func advance(delta: float) -> void:
 	if _is_absorbing:
 		_advance_absorb(delta)
 		return
+	var pose_changed := _is_moving
 	var remaining: float = delta * move_speed_cells
 	while remaining > 0.0:
 		if not _is_moving and not _begin_step():
 			break
+		pose_changed = true
 		var step: float = minf(remaining, 1.0 - _transition_t)
 		_transition_t += step
 		remaining -= step
 		if _transition_t >= 1.0 - 0.000001:
 			_finish_step()
-	_update_visual_pose()
+	if pose_changed:
+		_update_visual_pose()
 
 
 func _begin_step() -> bool:
@@ -839,10 +845,11 @@ func _try_begin_absorb() -> bool:
 	return false
 
 
-func _begin_absorb(hole_cell: Vector2i, from_lead: bool) -> void:
+func _begin_absorb(hole_cell: Vector2i, from_lead: bool, item_clear := false) -> void:
 	_is_absorbing = true
 	_absorb_cell = hole_cell
 	_absorb_from_lead = from_lead
+	_item_clear = item_clear
 	_swallowed_arc = 0.0
 	_absorb_required_arc = 0.0
 	path_queue.clear()
@@ -864,7 +871,7 @@ func _begin_absorb(hole_cell: Vector2i, from_lead: bool) -> void:
 
 
 func _advance_absorb(delta: float) -> void:
-	_swallowed_arc += delta * absorb_speed_cells * level_manager.fitted_tile_size()
+	_swallowed_arc += delta * absorb_speed_cells * level_manager.tile_size
 	_update_visual_pose()
 	if _absorb_required_arc > 0.0 and _swallowed_arc >= _absorb_required_arc:
 		_finish_absorb()
@@ -879,6 +886,17 @@ func _finish_absorb() -> void:
 	manager.release_cat_cell(self)
 	manager.on_cat_escaped(self, _absorb_cell)
 	queue_free()
+
+
+func clear_with_item(hole_cell: Vector2i) -> bool:
+	if _is_absorbing or level_manager == null:
+		return false
+	if not level_manager.is_hole(hole_cell) or level_manager.is_hole_locked(hole_cell):
+		return false
+	if not level_manager.color_ids_pair(color_id, level_manager.get_hole_color_id(hole_cell)):
+		return false
+	_begin_absorb(hole_cell, not _lead_is_tail, true)
+	return true
 
 
 # 흡입 중 이 호 위치의 본이 놓일 자리와 머리 축 방향. 몸은 자기 경로를 따라 구멍 쪽으로
@@ -910,7 +928,8 @@ func _absorb_pose_at(
 		var head_on_entry: bool = _absorb_from_lead != _lead_is_tail
 		direction = to_hole.normalized() * (1.0 if head_on_entry else -1.0)
 	if span > 0.000001 and overshoot <= span:
-		return [entry_point.lerp(hole_point, overshoot / span), direction]
+		var position := entry_point.lerp(hole_point, overshoot / span)
+		return [position, direction]
 	return [hole_point + Vector3.DOWN * (overshoot - span), direction]
 
 
@@ -924,7 +943,7 @@ func _absorb_arc_to_finish(
 	return (
 		total_length
 		+ entry_point.distance_to(hole_point)
-		+ level_manager.fitted_tile_size() * ABSORB_SINK_CELLS
+		+ level_manager.tile_size * ABSORB_SINK_CELLS
 	)
 
 
@@ -1146,8 +1165,17 @@ func _update_visual_pose() -> void:
 		_absorb_required_arc = _absorb_arc_to_finish(polyline, cumulative, total_length)
 	var head_pose: Array = _pose_at(polyline, cumulative, total_length, head_arc)
 	var head_dir: Vector3 = head_pose[1]
+	var item_lift := 0.0
+	if _is_absorbing and _item_clear:
+		var entry_arc: float = 0.0 if _absorb_from_lead else total_length
+		var entry_point: Vector3 = _sample_polyline(polyline, cumulative, entry_arc)
+		var hole_point: Vector3 = level_manager.grid_to_world(_absorb_cell, level_manager.cat_world_y)
+		var span: float = entry_point.distance_to(hole_point)
+		if span > 0.000001:
+			item_lift = sin(PI * minf(_swallowed_arc / span, 1.0)) * level_manager.tile_size * 0.25
+	var item_lift_offset := Vector3.UP * item_lift
 
-	position = head_pose[0]
+	position = head_pose[0] + item_lift_offset
 	rotation = Vector3.ZERO
 	scale = Vector3.ONE
 	# FBX 로컬 +Y 는 머리가 바라보는 방향이다. 상체 비율 보존을 위해 균일 스케일만 쓴다.
@@ -1156,7 +1184,7 @@ func _update_visual_pose() -> void:
 	# 노드 원점이 머리 본 위치이므로, 머리 본이 원점에 오도록 모델을 밀어 준다.
 	_cat_model.position = _cat_model.basis * (-_head_bone_rest_global.origin)
 
-	if not is_inside_tree() or not _skeleton.is_inside_tree():
+	if not is_inside_tree() or not is_instance_valid(_skeleton) or not _skeleton.is_inside_tree():
 		return
 	var cat_to_skeleton: Transform3D = global_transform.affine_inverse() * _skeleton.global_transform
 	var skeleton_rotation: Basis = cat_to_skeleton.basis.orthonormalized()
@@ -1168,7 +1196,7 @@ func _update_visual_pose() -> void:
 		var arc: float = chain_distances[chain_index] * model_scale
 		var arc_from_lead: float = (total_length - arc) if _lead_is_tail else arc
 		var pose: Array = _pose_at(polyline, cumulative, total_length, arc_from_lead)
-		var point: Vector3 = pose[0]
+		var point: Vector3 = pose[0] + item_lift_offset
 		var direction: Vector3 = pose[1]
 		var bone_index: int = _bone_chain[chain_index]
 		var rest_basis: Basis = _skeleton.get_bone_global_rest(bone_index).basis
@@ -1526,7 +1554,7 @@ func _grid_fitted_model_scale() -> float:
 		return fbx_scale_per_tile
 	# 자동 체인 길이 보정(약 6.0)은 기준 모델(7.65)보다 작아 상체가 축소되어 보였다.
 	# 에디터 기준과 동일한 FBX 균일 스케일을 고정 사용한다.
-	return fbx_scale_per_tile * level_manager.fitted_tile_size() / REFERENCE_TILE_SIZE
+	return fbx_scale_per_tile * level_manager.tile_size / REFERENCE_TILE_SIZE
 
 
 func _is_stretchable_chain_bone(chain_index: int) -> bool:
@@ -1575,14 +1603,14 @@ func _baseline_stretch_scale() -> float:
 func _target_chain_world_length() -> float:
 	if level_manager == null:
 		return 1.0
-	var path := float(maxi(body_cells.size() - 1, 1)) * level_manager.fitted_tile_size()
+	var path := float(maxi(body_cells.size() - 1, 1)) * level_manager.tile_size
 	return path + _end_extension(_head_mesh_overhang) + _end_extension(_tail_mesh_overhang)
 
 
 # 폴리라인 양끝을 끝 셀 중심에서 밖으로 내미는 양. 메시가 그만큼 더 나가므로
 # 오버행이 큰 머리쪽은 거의 내밀지 않는다. 음수면 경로가 접히므로 0으로 묶는다.
 func _end_extension(overhang_model: float) -> float:
-	var to_edge := level_manager.fitted_tile_size() * (0.5 - footprint_margin_cells)
+	var to_edge := level_manager.tile_size * (0.5 - footprint_margin_cells)
 	return maxf(to_edge - overhang_model * _grid_fitted_model_scale(), 0.0)
 
 func _fbx_basis_for_direction(direction: Vector3) -> Basis:
@@ -1598,6 +1626,10 @@ func _fbx_basis_for_direction(direction: Vector3) -> Basis:
 func load_model_with_texture() -> Node3D:
 	var packed_scene := load(MODEL_SCENE_PATH) as PackedScene
 	var model_root := packed_scene.instantiate() as Node3D if packed_scene != null else Node3D.new()
+	# 길이별 본 확장은 Skin 바인드를 바꾸므로, FBX 원본을 다른 고양이와 공유하면 안 된다.
+	for mesh_instance in _skinned_meshes(model_root):
+		if mesh_instance.skin != null:
+			mesh_instance.skin = mesh_instance.skin.duplicate(true)
 	_build_cat_material()
 	_apply_material_recursive(model_root)
 	# Lobby actors mount the model directly rather than through board setup.
@@ -1769,7 +1801,7 @@ func _apply_shader_parameters(
 
 	# 흡입 중에만 바닥 면 아래로 내려간 부분을 지운다. 본체와 아웃라인이 같은 기준을
 	# 써야 껍데기만 남는 일이 없다.
-	var tile: float = level_manager.fitted_tile_size() if level_manager != null else 2.0
+	var tile: float = level_manager.tile_size if level_manager != null else 2.0
 	for sink_material in [_cat_material, _material_id_2, _outline_material, _material_id_2_outline]:
 		if sink_material == null:
 			continue

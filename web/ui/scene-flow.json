@@ -153,7 +153,7 @@
       "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
       "trigger": {
         "stableId": "home-btn-plus-png-377",
-        "eventName": "home-btn-plus-png-377:click"
+        "eventName": "bar1-png-374:click"
       },
       "transitionOut": null,
       "transitionIn": null,
@@ -195,7 +195,7 @@
       "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
       "trigger": {
         "stableId": "gimmick-coinpurse-coin-png-375",
-        "eventName": "gimmick-coinpurse-coin-png-375:click"
+        "eventName": "bar1-png-374:click"
       },
       "transitionOut": null,
       "transitionIn": null,
@@ -216,7 +216,7 @@
       "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
       "trigger": {
         "stableId": "bar1-png-376",
-        "eventName": "bar1-png-376:click"
+        "eventName": "bar1-png-374:click"
       },
       "transitionOut": null,
       "transitionIn": null,
@@ -237,7 +237,7 @@
       "toSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
       "trigger": {
         "stableId": "bar1-png-378",
-        "eventName": "bar1-png-378:click"
+        "eventName": "bar1-png-374:click"
       },
       "transitionOut": null,
       "transitionIn": null,
