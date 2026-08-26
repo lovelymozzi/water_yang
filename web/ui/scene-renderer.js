@@ -1807,15 +1807,18 @@ function applyTreasureGlow(el, effect) {
             p.style.setProperty('--d', duration + 'ms');
             p.style.setProperty('--delay', -(i * 310 % duration) + 'ms');
         } else {
-            // 상승 반짝임 — 밑동은 광선 밑동과 동일 폭, 상승하며 방사각을 따라 바깥으로 드리프트(윗면 = 광선 윗면)
+            // 상승 반짝임 — 밑동은 광선 밑동과 동일 폭, 방사각(극좌표)을 따라 정확히 rise 거리만큼만
+            // 이동 후 페이드아웃. (구 tan 투영은 총 이동거리 = rise/cosθ 라 spread 가 90°를 넘으면
+            // 발산해 구슬이 끝없이 날아갔다 — 광선의 rotate(θ)와 동일한 극좌표로 일치시킴)
             p.className = 'ui-tg-mote';
             const duration = 1800 + (i % 7) * 260;
             const xNorm = (((i * 53) % 100) / 100) - 0.5;
             const rise = Math.round(auraHeight * (0.55 + (i % 4) * 0.15));
+            const rad = xNorm * spread * Math.PI / 180;   // 0°=위
             p.style.setProperty('--x', `calc(50% + ${Math.round(xNorm * auraWidth * 0.7)}px)`);
             p.style.setProperty('--b', ((i * 29) % 12) + 'px');
-            p.style.setProperty('--rise', -rise + 'px');
-            p.style.setProperty('--dx', Math.round(Math.tan(xNorm * spread * Math.PI / 180) * rise) + 'px');
+            p.style.setProperty('--rise', -Math.round(Math.cos(rad) * rise) + 'px');
+            p.style.setProperty('--dx', Math.round(Math.sin(rad) * rise) + 'px');
             p.style.setProperty('--d', duration + 'ms');
             p.style.setProperty('--delay', -(i * 230 % duration) + 'ms');
             p.style.setProperty('--s', Math.round(size * 5) + 'px');
@@ -3375,6 +3378,8 @@ export class SceneRenderer {
      * scene-flow.json 엣지의 transitionOut/transitionIn 스펙을 이 씬 위에 재생.
      * 게임 코드의 씬 전환 절차: from.playTransition(edge.transitionOut) → await → from.hide()
      * → to.show() → to.playTransition(edge.transitionIn).
+     * 단, In 이 image-curtain 이면 FlowDriver 는 이 절차 대신 curtainCover(스팬 전환: 덮고 →
+     * 씬 교체·로딩 대기 → 걷힘)를 쓴다 — 이 메서드의 image-curtain 재생은 자기완결 왕복(타임라인/프리뷰용).
      * spec: { type:'screen-transition', color, fromOpacity, toOpacity, durationMs }
      *     | { type:'image-curtain', gatherMs, holdMs, scatterMs, curtainLayers, curtainAutoAll }
      * 재생 종료 시점에 resolve 되는 Promise 반환 (spec 이 없으면 즉시 resolve — 분기 없이 await 가능).
@@ -3652,24 +3657,48 @@ export class SceneRenderer {
      * @param {number} start 스케줄 시작 시각(ms) — 각 target delayMs 는 여기에 더해짐
      */
     _runImageCurtain(item, start) {
-        if (!this._el) return;
-        const cls = Array.isArray(item.curtainLayers) ? item.curtainLayers : [];
-        if (!cls.length) return;
-        const boxW = this._designW || this._contract?.viewport?.width || this._contract?.canvas?.width || 390;
-        const boxH = this._designH || this._contract?.viewport?.height || this._contract?.canvas?.height || 844;
         const gatherMs = Math.max(0, item.gatherMs ?? 500);
         const holdMs = Math.max(0, item.holdMs ?? 0);
         const scatterMs = Math.max(0, item.scatterMs ?? 500);
         const total = gatherMs + holdMs + scatterMs;
         if (total <= 0) return;
+        const built = this._buildCurtainTargets(item);
+        if (!built) return;
+        this._el.appendChild(built.overlay);
 
-        // 커튼 오브젝트 전용 overlay(씬 위 z최상단). 커튼 레이어는 씬 레이어가 아니라
-        // item.curtainLayers(별도 배치)이므로 기존 _buildLayerEl 로 빌드해 얹는다(씬 미간섭).
+        built.targets.forEach(({ el, homeX, homeY, spin, delay }) => {
+            setTimeout(() => {
+                if (!el.isConnected) return;
+                el.style.visibility = '';
+                if (typeof el.animate !== 'function') { el.style.translate = '0px 0px'; el.style.rotate = '0deg'; return; }
+                el.animate([
+                    { offset: 0, translate: `${homeX}px ${homeY}px`, rotate: `${spin}deg`, easing: 'ease-out' },
+                    { offset: gatherMs / total, translate: '0px 0px', rotate: '0deg', easing: 'linear' },
+                    { offset: (gatherMs + holdMs) / total, translate: '0px 0px', rotate: '0deg', easing: 'ease-in' },
+                    { offset: 1, translate: `${homeX}px ${homeY}px`, rotate: `${spin}deg` },
+                ], { duration: total, fill: 'both' });
+            }, start + delay);
+        });
+
+        setTimeout(() => { if (built.overlay.parentNode) built.overlay.parentNode.removeChild(built.overlay); }, start + built.maxDelay + total + 80);
+    }
+
+    /**
+     * 커튼 오브젝트 빌드 + 기하 계산 공통부 — overlay(씬 위 z최상단)와 target(요소·집 좌표·스핀·딜레이)
+     * 목록을 만든다. 자기완결 재생(_runImageCurtain)과 2단계 스팬 전환(curtainCover)의 단일 소스.
+     * 커튼 레이어는 씬 레이어가 아니라 item.curtainLayers(별도 배치) — 기존 _buildLayerEl 로 빌드(씬 미간섭).
+     * 요소는 visibility:hidden + 집 위치로 초기화. 레이어가 없으면 null.
+     */
+    _buildCurtainTargets(item) {
+        if (!this._el) return null;
+        const cls = Array.isArray(item.curtainLayers) ? item.curtainLayers : [];
+        if (!cls.length) return null;
+        const boxW = this._designW || this._contract?.viewport?.width || this._contract?.canvas?.width || 390;
+        const boxH = this._designH || this._contract?.viewport?.height || this._contract?.canvas?.height || 844;
         const overlay = document.createElement('div');
         overlay.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:99999;';
-        this._el.appendChild(overlay);
 
-        cls.forEach((layer) => {
+        const targets = cls.map((layer) => {
             const el = this._buildLayerEl(layer);   // 컴포넌트·회전·스케일·이미지 모두 지원(재사용)
             el.style.visibility = 'hidden';
             overlay.appendChild(el);
@@ -3702,22 +3731,59 @@ export class SceneRenderer {
             // translate/rotate 독립 속성 → _buildLayerEl 의 transform(회전·스케일) 보존.
             el.style.translate = `${homeX}px ${homeY}px`;
             el.style.rotate = `${spin}deg`;
+            return { el, homeX, homeY, spin, delay };
+        });
 
+        const maxDelay = targets.reduce((m, t) => Math.max(m, t.delay), 0);
+        return { overlay, targets, maxDelay };
+    }
+
+    /**
+     * 커튼 2단계 스팬 전환 — 씬 전환의 "로딩 마스크". gather 만 재생해 이 씬(출발)을 덮고 멈춘다.
+     * FlowDriver._swap 이 사용: covered 대기 → 씬 교체 → adopt(도착 renderer)로 덮개 이관(출발 hide 가
+     * DOM 을 지워도 유지, 전역 뷰포트 규약이라 두 씬의 디자인 좌표계 동일) → 로딩 완료 후 uncover(scatter).
+     * @param {object} item image-curtain 항목
+     * @returns {null | { covered: Promise, adopt(to: SceneRenderer): void, uncover(): Promise }}
+     */
+    curtainCover(item) {
+        const built = this._buildCurtainTargets(item);
+        if (!built) return null;
+        const gatherMs = Math.max(0, item.gatherMs ?? 500);
+        const scatterMs = Math.max(0, item.scatterMs ?? 500);
+        this._el.appendChild(built.overlay);
+
+        built.targets.forEach(({ el, homeX, homeY, spin, delay }) => {
             setTimeout(() => {
                 if (!el.isConnected) return;
                 el.style.visibility = '';
                 if (typeof el.animate !== 'function') { el.style.translate = '0px 0px'; el.style.rotate = '0deg'; return; }
                 el.animate([
-                    { offset: 0, translate: `${homeX}px ${homeY}px`, rotate: `${spin}deg`, easing: 'ease-out' },
-                    { offset: gatherMs / total, translate: '0px 0px', rotate: '0deg', easing: 'linear' },
-                    { offset: (gatherMs + holdMs) / total, translate: '0px 0px', rotate: '0deg', easing: 'ease-in' },
-                    { offset: 1, translate: `${homeX}px ${homeY}px`, rotate: `${spin}deg` },
-                ], { duration: total, fill: 'both' });
-            }, start + delay);
+                    { translate: `${homeX}px ${homeY}px`, rotate: `${spin}deg` },
+                    { translate: '0px 0px', rotate: '0deg' },
+                ], { duration: gatherMs, easing: 'ease-out', fill: 'both' });
+            }, delay);
         });
 
-        const maxDelay = cls.reduce((m, l) => Math.max(m, l.curtainDelayMs || 0), 0);
-        setTimeout(() => { if (overlay.parentNode) overlay.parentNode.removeChild(overlay); }, start + maxDelay + total + 80);
+        return {
+            covered: new Promise(res => setTimeout(res, gatherMs + built.maxDelay)),
+            adopt(to) { if (to && to._el && built.overlay.parentNode !== to._el) to._el.appendChild(built.overlay); },
+            uncover() {
+                built.targets.forEach(({ el, homeX, homeY, spin, delay }) => {
+                    setTimeout(() => {
+                        if (!el.isConnected) return;
+                        if (typeof el.animate !== 'function') { el.style.translate = `${homeX}px ${homeY}px`; return; }
+                        el.animate([
+                            { translate: '0px 0px', rotate: '0deg' },
+                            { translate: `${homeX}px ${homeY}px`, rotate: `${spin}deg` },
+                        ], { duration: scatterMs, easing: 'ease-in', fill: 'both' });
+                    }, delay);
+                });
+                return new Promise(res => setTimeout(() => {
+                    if (built.overlay.parentNode) built.overlay.parentNode.removeChild(built.overlay);
+                    res();
+                }, scatterMs + built.maxDelay + 80));
+            },
+        };
     }
 
     _buildDOM() {

@@ -228,17 +228,47 @@ export class FlowDriver {
     }
   }
 
-  /** 전환 시퀀스 공통부 — Out 재생 → hide → show → In 재생 → 이력/현재/통지 갱신. */
+  /**
+   * 전환 시퀀스 공통부 — Out 재생 → hide → show → In 재생 → 이력/현재/통지 갱신.
+   * In 이 image-curtain 이면 "로딩 마스크" 스팬 전환으로 분기: gather 로 출발 씬을 덮고 →
+   * 덮인 채 씬 교체·로딩(도착 씬 렌더 리소스 + scene:enter 의 waitUntil 프라미스 + holdMs) 대기 →
+   * scatter 로 걷힘. 이 경로에선 Out 슬롯은 재생하지 않는다(gather 가 Out 역할).
+   * 게임은 무거운 로딩을 scene:enter 에서 e.waitUntil(promise) 로 등록하면 커튼이 걷히기 전까지 가려진다.
+   */
   async _swap(from, toR, target, edge, pushHistory) {
-    if (from && from.renderer !== toR) {
-      await from.renderer.playTransition((edge && edge.transitionOut) || null);
-      from.renderer.hide();
+    const tin = (edge && edge.transitionIn) || null;
+    const leaving = !!(from && from.renderer !== toR);
+    const cover = (tin && tin.type === 'image-curtain' && leaving) ? from.renderer.curtainCover(tin) : null;
+    if (leaving) {
+      if (cover) await cover.covered;   // 화면이 완전히 덮인 뒤에만 씬을 갈아끼움
+      else {
+        await from.renderer.playTransition((edge && edge.transitionOut) || null);
+        from.renderer.hide();
+      }
     }
     toR.show();
-    toR.playTransition((edge && edge.transitionIn) || null);
+    if (cover) {
+      cover.adopt(toR);                 // 덮개를 도착 씬으로 이관 — 출발 씬 hide 가 DOM 을 지워도 유지
+      if (leaving) from.renderer.hide();
+    } else {
+      toR.playTransition(tin);
+    }
     if (pushHistory && from && from.uuid !== target.uuid) this._history.push(from.uuid);
     this._current = { uuid: target.uuid, name: target.name, renderer: toR };
-    this._emit('scene:enter', { sceneUuid: target.uuid, sceneName: target.name, renderer: toR, popup: false });
+    const waits = [];
+    this._emit('scene:enter', {
+      sceneUuid: target.uuid, sceneName: target.name, renderer: toR, popup: false,
+      // 커튼 스팬 전환에서만 대기 — 게임이 로딩 promise 를 등록하는 opt-in 훅
+      waitUntil: (p) => { if (p && typeof p.then === 'function') waits.push(p); },
+    });
+    if (cover) {
+      await Promise.all([
+        toR._whenRenderResourcesReady(),
+        Promise.all(waits),
+        new Promise((res) => setTimeout(res, Math.max(0, tin.holdMs ?? 0))),
+      ]);
+      cover.uncover();
+    }
   }
 
   /** renderer 캐시 — 최초 1회 load + 엣지 배선 + 매니저 attach + 버퍼 시드. 구독은 인스턴스에 유지된다. */

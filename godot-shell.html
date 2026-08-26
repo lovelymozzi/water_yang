@@ -224,7 +224,9 @@ function cancelItemSelection() {
   activeGame.message('item.cancel', { item: selectedTargetItem });
 }
 
-const handleGodotSfx = ({ sfx, outcome, score, stage, itemUsed, itemRejected }) => {
+let pendingSceneReady = null;
+const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, itemRejected }) => {
+  if (sceneReady && pendingSceneReady?.scene === sceneReady) pendingSceneReady.resolve();
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
   if (sfx === 'cat-move' && buttonSfxEnabled) sound.playSfx(CAT_MOVE_SFX);
   if (sfx === 'ice-break' && buttonSfxEnabled) sound.playSfx(ICE_BREAK_SFX);
@@ -269,16 +271,12 @@ const handleMainGameEnd = async (result) => {
   }
 };
 
-flow.defineCondition('재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동', () => runEconomyTransaction('out-of-moves-continue', async () => {
+flow.defineCondition('not enough coin', () => runEconomyTransaction('coin-gated-action', async () => {
   if (economy.getCoins() < COIN_COST) return true;
-  if (!(await economy.spendCoins(COIN_COST, 'out-of-moves-continue'))) return true;
-  continueWithoutHeart = true;
-  return false;
-}));
-flow.defineCondition('not enough coin', () => runEconomyTransaction('buy-lives-900', async () => {
-  if (economy.getCoins() < COIN_COST) return true;
-  if (!(await economy.spendCoins(COIN_COST, 'buy-lives-900'))) return true;
-  await economy.grantHearts(1);
+  const reason = activeSceneName === 'pop_OutOfMoves' ? 'out-of-moves-continue' : 'buy-lives-900';
+  if (!(await economy.spendCoins(COIN_COST, reason))) return true;
+  if (activeSceneName === 'pop_OutOfMoves') continueWithoutHeart = true;
+  else await economy.grantHearts(1);
   return false;
 }));
 
@@ -293,7 +291,8 @@ syncItemCounts();
 syncUnlimitedHearts();
 // pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
 
-flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
+flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) => {
+  const enterWork = (async () => {
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
@@ -550,11 +549,15 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
         throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
       }
       continueWithoutHeart = false;
+      const sceneReadyPromise = new Promise(resolve => {
+        pendingSceneReady = { scene: godotScene, resolve: () => { pendingSceneReady = null; resolve(); } };
+      });
       activeGame.message('load_scene', {
         stage: progress.getCurrentStage(),
         config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
       });
       activeGame.startGame();
+      await sceneReadyPromise;
       return;
     }
   }
@@ -585,6 +588,8 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
     return;
   }
   if (game.state === 'ready') game.startGame();
+  })();
+  waitUntil?.(enterWork);
 });
 
 await flow.start();

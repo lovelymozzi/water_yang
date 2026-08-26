@@ -14,6 +14,7 @@ const DEV_STAGE_HANDOFF_PATH := "user://dev_start_stage.txt"
 const STAGE_ADVANCE_DELAY_SECONDS := 1.4
 const DEFAULT_STAGE_TIME_SECONDS := 60.0
 const TIMEOUT_WARNING_SECONDS := 10.0
+const ICE_DISSOLVE_PEAK := 0.522
 
 # 개발용 시작 스테이지 (1부터). Inspector 에서 바꾸거나 실행 인자 `-- stage=10` 으로
 # 덮어쓴다. 특정 스테이지만 다시 플레이해 볼 때 쓴다. 범위를 넘으면 마지막 스테이지다.
@@ -85,6 +86,15 @@ func _ready() -> void:
 	world_environment.name = "RuntimeWorldEnvironment"
 	world_environment.environment = runtime_environment
 	add_child(world_environment)
+
+	ice_overlay.hide()
+	ice_snow_top.hide()
+	ice_snow_bottom.hide()
+	var ice_material := ice_overlay.get_active_material(0) as ShaderMaterial
+	if ice_material == null:
+		push_error("IceOverlay requires a ShaderMaterial")
+	else:
+		ice_material.set_shader_parameter("dissolve_amount", 0.0)
 
 	clear_label.visible = false
 	clear_label.text = ""
@@ -250,6 +260,9 @@ func _on_host_message(topic: String, payload) -> void:
 		if cancelled_item == "remove" or cancelled_item == "move":
 			UiBridge.post_progress({"itemRejected": cancelled_item})
 		return
+	if topic.begins_with("item.") and _stage_timer_waiting_for_touch:
+		_stage_timer_waiting_for_touch = false
+		_stage_timer_running = true
 	if topic == "item.remove":
 		if level_manager.get_obstacle_cells().is_empty():
 			UiBridge.post_progress({"itemRejected": "remove"})
@@ -289,7 +302,7 @@ func _on_host_message(topic: String, payload) -> void:
 	material.set_shader_parameter("dissolve_amount", 0.0)
 	_ice_overlay_tween = create_tween()
 	_ice_overlay_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_amount", 1.0, 0.25)
+	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_amount", ICE_DISSOLVE_PEAK, 0.25)
 	_ice_overlay_tween.tween_interval(duration - 0.95)
 	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_amount", 0.0, 0.7)
 	_ice_overlay_tween.tween_callback(ice_overlay.hide)

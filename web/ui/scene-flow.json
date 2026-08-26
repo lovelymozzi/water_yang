@@ -50,11 +50,231 @@
       "transitionIn": {
         "presetId": "image-curtain",
         "type": "image-curtain",
-        "durationMs": 1000,
-        "gatherMs": 500,
-        "holdMs": 0,
-        "scatterMs": 500,
-        "curtainLayers": [],
+        "durationMs": 2100,
+        "gatherMs": 300,
+        "holdMs": 1000,
+        "scatterMs": 800,
+        "curtainLayers": [
+          {
+            "stableId": "cat-hand11-png-2477",
+            "layerType": "image",
+            "displayName": "cat_hand11.png",
+            "x": 70,
+            "y": -51,
+            "zIndex": 1,
+            "visual": {
+              "exportPath": "src/assets/cat_hand11.png",
+              "width": 270,
+              "height": 479
+            },
+            "rotation": 180,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand2-png-2479",
+            "layerType": "image",
+            "displayName": "cat_hand2.png",
+            "x": -151,
+            "y": 178,
+            "zIndex": 2,
+            "visual": {
+              "exportPath": "src/assets/cat_hand2.png",
+              "width": 265,
+              "height": 497
+            },
+            "rotation": 90,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand3-png-2480",
+            "layerType": "image",
+            "displayName": "cat_hand3.png",
+            "x": -137,
+            "y": 22,
+            "zIndex": 3,
+            "visual": {
+              "exportPath": "src/assets/cat_hand3.png",
+              "width": 363,
+              "height": 497
+            },
+            "rotation": 137,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand4-png-2481",
+            "layerType": "image",
+            "displayName": "cat_hand4.png",
+            "x": 271,
+            "y": 265,
+            "zIndex": 4,
+            "visual": {
+              "exportPath": "src/assets/cat_hand4.png",
+              "width": 218,
+              "height": 470
+            },
+            "rotation": -71,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand5-png-2482",
+            "layerType": "image",
+            "displayName": "cat_hand5.png",
+            "x": 218,
+            "y": -43,
+            "zIndex": 5,
+            "visual": {
+              "exportPath": "src/assets/cat_hand5.png",
+              "width": 252,
+              "height": 483
+            },
+            "rotation": 212,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand7-png-2483",
+            "layerType": "image",
+            "displayName": "cat_hand7.png",
+            "x": 217,
+            "y": 87,
+            "scale": 1.1,
+            "zIndex": 6,
+            "visual": {
+              "exportPath": "src/assets/cat_hand7.png",
+              "width": 223,
+              "height": 493
+            },
+            "rotation": 244,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand9-png-2484",
+            "layerType": "image",
+            "displayName": "cat_hand9.png",
+            "x": 154,
+            "y": -41,
+            "zIndex": 7,
+            "visual": {
+              "exportPath": "src/assets/cat_hand9.png",
+              "width": 233,
+              "height": 467
+            },
+            "rotation": 190,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand12-png-2478",
+            "layerType": "image",
+            "displayName": "cat_hand12.png",
+            "x": -151,
+            "y": 245,
+            "zIndex": 8,
+            "visual": {
+              "exportPath": "src/assets/cat_hand12.png",
+              "width": 262,
+              "height": 509
+            },
+            "rotation": 60,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand8-png-2486",
+            "layerType": "image",
+            "displayName": "cat_hand8.png",
+            "x": 78,
+            "y": 440,
+            "zIndex": 9,
+            "visual": {
+              "exportPath": "src/assets/cat_hand8.png",
+              "width": 255,
+              "height": 494
+            },
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand6-png-2485",
+            "layerType": "image",
+            "displayName": "cat_hand6.png",
+            "x": -70,
+            "y": 390,
+            "scale": 1.2,
+            "zIndex": 10,
+            "visual": {
+              "exportPath": "src/assets/cat_hand6.png",
+              "width": 247,
+              "height": 453
+            },
+            "rotation": 25,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand10-png-2475",
+            "layerType": "image",
+            "displayName": "cat_hand10.png",
+            "x": 154,
+            "y": 319,
+            "scale": 1.2,
+            "zIndex": 11,
+            "visual": {
+              "exportPath": "src/assets/cat_hand10.png",
+              "width": 237,
+              "height": 482
+            },
+            "rotation": -31,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          },
+          {
+            "stableId": "cat-hand1-png-2476",
+            "layerType": "image",
+            "displayName": "cat_hand1.png",
+            "x": -41,
+            "y": -43,
+            "scale": 1.1,
+            "zIndex": 12,
+            "visual": {
+              "exportPath": "src/assets/cat_hand1.png",
+              "width": 202,
+              "height": 451
+            },
+            "rotation": 161,
+            "curtainAngleDeg": 0,
+            "curtainAuto": false,
+            "curtainSpinDeg": 0,
+            "curtainDelayMs": 0
+          }
+        ],
         "curtainAutoAll": true
       },
       "fromSceneName": "Lobby",
