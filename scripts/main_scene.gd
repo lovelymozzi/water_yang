@@ -285,7 +285,7 @@ func _show_obstacle_item_targets() -> void:
 	for cell in level_manager.get_obstacle_cells():
 		var target := Sprite3D.new()
 		target.texture = ITEM_REMOVE_TEXTURE
-		target.pixel_size = 0.0056
+		target.pixel_size = 0.00392
 		target.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		target.no_depth_test = true
 		target.position = level_manager.grid_to_world(
