@@ -45,20 +45,21 @@ gradient = SubResource("Gradient_ice_dissolve_snow")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ice_dissolve_snow"]
 emission_shape = 3
-emission_box_extents = Vector3(6.8, 13, 0.02)
+emission_box_extents = Vector3(1.3, 2.3, 0.005)
 angle_max = 360.0
 direction = Vector3(0, 1, 0)
 spread = 180.0
 angular_velocity_min = -180.0
 angular_velocity_max = 180.0
 gravity = Vector3(0, 0, 0)
-scale_min = 0.35
-scale_max = 1.4
+scale_min = 0.45
+scale_max = 1.3
 color_ramp = SubResource("GradientTexture1D_ice_dissolve_snow")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ice_dissolve_snow"]
 transparency = 1
 blend_mode = 1
+render_priority = 1
 cull_mode = 2
 no_depth_test = true
 shading_mode = 0
@@ -183,12 +184,12 @@ extra_cull_margin = 5.0
 mesh = SubResource("PlaneMesh_ice_dissolve")
 
 [node name="IceDissolveSnow" type="GPUParticles3D" parent="Camera3D" unique_id=1497523730]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.3)
-amount = 48
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.08)
+amount = 64
 lifetime = 2.8
 preprocess = 1.4
 randomness = 0.7
-visibility_aabb = AABB(-7.5, -14, -0.5, 15, 28, 1)
+visibility_aabb = AABB(-1.6, -2.6, -0.2, 3.2, 5.2, 0.4)
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_ice_dissolve_snow")
 draw_pass_1 = SubResource("QuadMesh_ice_dissolve_snow")
