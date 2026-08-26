@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://nthjajr4o682" path="res://scripts/main_scene.gd" id="1_q0f23"]
 [ext_resource type="Script" uid="uid://kc76tu4jlnus" path="res://scripts/level_manager.gd" id="2_5srec"]
-[ext_resource type="Shader" uid="uid://bo1ktccmbkqeh" path="res://scripts/ice_screen_overlay.gdshader" id="2_ice_screen"]
+[ext_resource type="Shader" path="res://scripts/ice_dissolve_mesh.gdshader" id="2_ice_mesh"]
 [ext_resource type="Shader" uid="uid://cs8vmjmkdp6c" path="res://scripts/timeout_warning_overlay.gdshader" id="2_timeout_warning"]
 [ext_resource type="PackedScene" path="res://scenes/tree_shadow_decor.tscn" id="3_c1pb6"]
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
@@ -102,15 +102,23 @@ height = 256
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ice_screen"]
-shader = ExtResource("2_ice_screen")
-shader_parameter/dissolve_value = 0.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ice_mesh"]
+shader = ExtResource("2_ice_mesh")
+shader_parameter/dissolve_amount = 0.0
 shader_parameter/side_edge_size = 0.22
-shader_parameter/vertical_edge_size = 0.22
-shader_parameter/noise_scale = 18.0
-shader_parameter/noise_strength = 1.0
-shader_parameter/ice_color = Color(0.32, 0.78, 1, 1)
-shader_parameter/glow_color = Color(0.9, 0.98, 1, 1)
+shader_parameter/vertical_edge_size = 0.24
+shader_parameter/noise_scale = 8.0
+shader_parameter/noise_strength = 0.55
+shader_parameter/noise_speed = 0.08
+shader_parameter/vertex_offset = 0.06
+shader_parameter/outer_edge_color = Color(0.12, 0.48, 1, 1)
+shader_parameter/inner_edge_color = Color(1, 0.88, 0.52, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ice_dissolve"]
+material = SubResource("ShaderMaterial_ice_mesh")
+size = Vector2(40, 40)
+subdivide_width = 32
+subdivide_depth = 32
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_timeout_warning"]
 shader = ExtResource("2_timeout_warning")
@@ -127,6 +135,11 @@ current = true
 fov = 23.0
 size = 25.321
 near = 10.0
+
+[node name="IceDissolveMesh" type="MeshInstance3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -10.2)
+mesh = SubResource("PlaneMesh_ice_dissolve")
+extra_cull_margin = 5.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)
@@ -1034,15 +1047,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
-
-[node name="IceOverlay" type="ColorRect" parent="CanvasLayer" unique_id=1890042150]
-material = SubResource("ShaderMaterial_ice_screen")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
 
 [node name="TimeoutWarningOverlay" type="ColorRect" parent="CanvasLayer" unique_id=1948883077]
 material = SubResource("ShaderMaterial_timeout_warning")
