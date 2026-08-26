@@ -19,8 +19,11 @@ uniform float self_overlap_depth_scale : hint_range(1.0, 3.0, 0.01) = 2.0;
 uniform float water_wave_time = 0.0;
 uniform float water_wave_phase = 0.0;
 uniform float water_wave_amplitude : hint_range(0.0, 0.08, 0.001) = 0.0;
+// 본체(cat_toon)와 같은 값으로 줄어든다. 값이 다르면 얇은 몸에 두꺼운 외곽선이 남는다.
+uniform float body_shrink = 0.0;
 
 void vertex() {
+	VERTEX -= NORMAL * body_shrink;
 	if (water_wave_amplitude > 0.0) {
 		float wave = VERTEX.y * 3.2 + water_wave_time * 2.1 + water_wave_phase;
 		VERTEX.z += sin(wave) * water_wave_amplitude;

@@ -1122,6 +1122,13 @@ func get_cats() -> Array[CatEntity]:
 	return _cats
 
 
+# 중첩고양이 해제로 런타임에 생기는 안쪽 고양이를 보드에 등록한다(3_기믹.md 2).
+# 겉껍질의 _begin_absorb 가 점유를 놓은 직후 불리므로 자리 충돌이 없다.
+func register_runtime_cat(cat: CatEntity) -> void:
+	update_cat_occupancy(cat)
+	_cats.append(cat)
+
+
 func board_point_to_grid_cell(board_point: Vector3) -> Variant:
 	var grid_origin := grid_to_world(Vector2i.ZERO)
 	return Vector2i(

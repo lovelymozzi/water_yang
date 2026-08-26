@@ -8,6 +8,10 @@ const KEY_TOON_MATERIAL := preload("res://resources/key_toon_material.tres")
 const ORANGE_CAT_COLOR_ID := 0
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
 const TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat1_mask.jpg"
+# 중첩고양이 색 영역 마스크(3_기믹.md 2). 아직 아트가 없으면 셰이더가 임시 줄무늬로 폴백한다.
+const COLOR_MASK1_PATH := "res://water_yang/color_mask1.jpg"
+const COLOR_MASK2_PATH := "res://water_yang/color_mask2.jpg"
+const NEST_REVEAL_TWEEN_SECONDS := 0.35
 const CLOSED_EYES_TEXTURE_PATH := "res://water_yang/cat1_1.jpeg"
 const OPEN_MOUTH_TEXTURE_PATH := "res://water_yang/cat1_2.jpeg"
 const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
@@ -147,6 +151,17 @@ const ABSORB_SINK_CELLS := 0.9
 	set(value):
 		tint_from_pair_color = value
 		_refresh_shader_material()
+
+@export_group("Nested Cat (3_기믹.md 2)")
+# 겉에서 안쪽 순서의 안쪽 색 color_id. 1개면 2중첩, 2개면 3중첩. 비면 일반 고양이.
+# 겉껍질이 구멍으로 빠지기 시작하면 첫 색의 고양이가 같은 자리에 남는다.
+@export var nested_color_ids: Array[int] = []:
+	set(value):
+		nested_color_ids = value
+		_refresh_shader_material()
+
+# 아직 드러나지 않은 안쪽 고양이의 얇기(모델 단위, 법선 방향 수축).
+@export_range(0.0, 0.08, 0.001) var nest_inner_shrink := 0.03
 
 @export_group("Orange Cat Key (key1.fbx)")
 # These fields drive only color_id 0, the orange cat. They remain editable in
@@ -333,6 +348,11 @@ var _inserted_mid_bones: Array[int] = []
 var _head_mesh_overhang := 0.0
 var _tail_mesh_overhang := 0.0
 var _absorb_sound_player: AudioStreamPlayer
+# 중첩고양이. 겉껍질(this)이 빠지는 동안 자리에 남은 안쪽 고양이와 현재 수축량.
+var _inner_cat: CatEntity
+var _nest_shrink := 0.0
+var _nest_mask1: Texture2D
+var _nest_mask2: Texture2D
 
 
 func _ready() -> void:
@@ -866,18 +886,66 @@ func _begin_absorb(hole_cell: Vector2i, from_lead: bool, item_clear := false) ->
 		_absorb_sound_player.play()
 	# 빨려 들어가기 시작한 순간부터 점유를 놓는다. 다른 고양이가 곧바로 지나갈 수 있다.
 	level_manager.release_cat_cell(self)
+	# 중첩고양이면 겉껍질이 빠지는 이 순간 안쪽 고양이를 같은 자리에 남긴다.
+	if not nested_color_ids.is_empty():
+		_spawn_inner_cat()
 	_notify_path_preview_changed()
 	_apply_current_shader_parameters()
+
+
+# 안쪽 고양이를 얇은 상태로 현재 몸 자리에 실체화한다(3_기믹.md 2).
+# 점유를 곧바로 넘겨받으므로 다른 고양이가 이 자리를 지나가지 못한다.
+func _spawn_inner_cat() -> void:
+	var inner := CatEntity.new()
+	inner.name = String(name) + "Inner"
+	inner.color_id = nested_color_ids[0]
+	inner.nested_color_ids.assign(nested_color_ids.slice(1))
+	inner.tint_from_pair_color = true
+	inner.initial_body_cells = body_cells.duplicate()
+	inner.move_speed_cells = move_speed_cells
+	inner.absorb_speed_cells = absorb_speed_cells
+	inner.nest_inner_shrink = nest_inner_shrink
+	inner._nest_shrink = nest_inner_shrink
+	get_parent().add_child(inner)
+	inner.initialize_runtime(level_manager)
+	level_manager.register_runtime_cat(inner)
+	_inner_cat = inner
+
+
+# 겉껍질이 거의 다 빠진 순간(마지막 1칸) 원래 굵기로 되돌아오는 연출.
+func reveal_full_thickness() -> void:
+	if _nest_shrink <= 0.0:
+		return
+	var tween := create_tween()
+	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tween.tween_method(_set_nest_shrink, _nest_shrink, 0.0, NEST_REVEAL_TWEEN_SECONDS)
+
+
+func _set_nest_shrink(value: float) -> void:
+	_nest_shrink = value
+	for material in [_cat_material, _material_id_2, _outline_material, _material_id_2_outline]:
+		if material != null:
+			material.set_shader_parameter("body_shrink", value)
 
 
 func _advance_absorb(delta: float) -> void:
 	_swallowed_arc += delta * absorb_speed_cells * level_manager.fitted_tile_size()
 	_update_visual_pose()
+	# 겉껍질의 남은 진행이 마지막 1칸(+ 구멍 낙하 구간)으로 줄면 안쪽 고양이를 원복한다.
+	if _inner_cat != null and _absorb_required_arc > 0.0:
+		var remaining: float = _absorb_required_arc - _swallowed_arc
+		if remaining <= level_manager.fitted_tile_size() * (1.0 + ABSORB_SINK_CELLS):
+			_inner_cat.reveal_full_thickness()
+			_inner_cat = null
 	if _absorb_required_arc > 0.0 and _swallowed_arc >= _absorb_required_arc:
 		_finish_absorb()
 
 
 func _finish_absorb() -> void:
+	# 프레임 순서가 어긋나 원복 트리거를 건너뛴 경우의 안전망.
+	if _inner_cat != null:
+		_inner_cat.reveal_full_thickness()
+		_inner_cat = null
 	_is_absorbing = false
 	visible = false
 	var manager: LevelManager = level_manager
@@ -1799,6 +1867,19 @@ func _apply_shader_parameters(
 		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
 
+	# 중첩고양이 색 영역. 마스크 텍스처가 아직 없으면 셰이더의 임시 줄무늬로 폴백한다.
+	var mask1 := _get_nest_mask1()
+	for body_material in [_cat_material, _material_id_2]:
+		if body_material == null:
+			continue
+		body_material.set_shader_parameter("nest1_enabled", 1.0 if nested_color_ids.size() >= 1 else 0.0)
+		body_material.set_shader_parameter("nest2_enabled", 1.0 if nested_color_ids.size() >= 2 else 0.0)
+		body_material.set_shader_parameter("nest_color1", _nest_color(0))
+		body_material.set_shader_parameter("nest_color2", _nest_color(1))
+		body_material.set_shader_parameter("nest_mask1", mask1)
+		body_material.set_shader_parameter("nest_mask2", _get_nest_mask2())
+		body_material.set_shader_parameter("nest_procedural", 0.0 if mask1 != null else 1.0)
+
 	# 흡입 중에만 바닥 면 아래로 내려간 부분을 지운다. 본체와 아웃라인이 같은 기준을
 	# 써야 껍데기만 남는 일이 없다.
 	var tile: float = level_manager.fitted_tile_size() if level_manager != null else 2.0
@@ -1808,6 +1889,26 @@ func _apply_shader_parameters(
 		sink_material.set_shader_parameter("sink_clip_enabled", 1.0 if _is_absorbing else 0.0)
 		sink_material.set_shader_parameter("sink_clip_plane_y", LevelManager.TILE_HEIGHT)
 		sink_material.set_shader_parameter("sink_clip_span", tile * ABSORB_SINK_CELLS)
+		sink_material.set_shader_parameter("body_shrink", _nest_shrink)
+
+
+# 안쪽 i번째 색. 팔레트에서 뽑아 겉껍질 위 마스크 영역에 그대로 보여 준다.
+func _nest_color(index: int) -> Color:
+	if index >= nested_color_ids.size() or level_manager == null:
+		return Color.WHITE
+	return level_manager.get_pair_color(nested_color_ids[index])
+
+
+func _get_nest_mask1() -> Texture2D:
+	if _nest_mask1 == null and ResourceLoader.exists(COLOR_MASK1_PATH):
+		_nest_mask1 = load(COLOR_MASK1_PATH) as Texture2D
+	return _nest_mask1
+
+
+func _get_nest_mask2() -> Texture2D:
+	if _nest_mask2 == null and ResourceLoader.exists(COLOR_MASK2_PATH):
+		_nest_mask2 = load(COLOR_MASK2_PATH) as Texture2D
+	return _nest_mask2
 
 
 func _get_open_eyes_texture() -> Texture2D:

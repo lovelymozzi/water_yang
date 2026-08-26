@@ -39,8 +39,20 @@ uniform float sink_clip_span = 1.0;
 uniform float water_wave_time = 0.0;
 uniform float water_wave_phase = 0.0;
 uniform float water_wave_amplitude : hint_range(0.0, 0.08, 0.001) = 0.0;
+// 중첩고양이(3_기믹.md 2). 마스크의 흰 영역을 안쪽 고양이 색으로 덧칠한다.
+uniform sampler2D nest_mask1 : filter_linear, repeat_enable, hint_default_black;
+uniform sampler2D nest_mask2 : filter_linear, repeat_enable, hint_default_black;
+uniform vec4 nest_color1 : source_color = vec4(1.0);
+uniform vec4 nest_color2 : source_color = vec4(1.0);
+uniform float nest1_enabled : hint_range(0.0, 1.0) = 0.0;
+uniform float nest2_enabled : hint_range(0.0, 1.0) = 0.0;
+// color_mask1/2 텍스처가 아직 없을 때 쓰는 임시 사선 줄무늬. 텍스처가 오면 자동 대체.
+uniform float nest_procedural : hint_range(0.0, 1.0) = 0.0;
+// 안쪽 고양이의 얇은 상태(모델 단위). 겉껍질이 다 빠지면 0으로 원복한다.
+uniform float body_shrink = 0.0;
 
 void vertex() {
+	VERTEX -= NORMAL * body_shrink;
 	if (water_wave_amplitude > 0.0) {
 		float wave = VERTEX.y * 3.2 + water_wave_time * 2.1 + water_wave_phase;
 		VERTEX.z += sin(wave) * water_wave_amplitude;
@@ -69,6 +81,19 @@ void fragment() {
 		eye_mask = texture(tint_exclusion_mask, mapped_uv).r;
 	}
 	vec3 base_color = tex.rgb * mix(tint_color.rgb, vec3(1.0), eye_mask);
+	// 중첩 색은 눈 영역을 피해서 얹고, mask2 가 mask1 보다 우선한다.
+	if (nest1_enabled > 0.5) {
+		float m1 = nest_procedural > 0.5
+			? step(0.62, fract((mapped_uv.x + mapped_uv.y) * 5.0))
+			: texture(nest_mask1, mapped_uv).r;
+		base_color = mix(base_color, tex.rgb * nest_color1.rgb, m1 * (1.0 - eye_mask));
+	}
+	if (nest2_enabled > 0.5) {
+		float m2 = nest_procedural > 0.5
+			? step(0.78, fract((mapped_uv.x + mapped_uv.y) * 5.0 + 0.45))
+			: texture(nest_mask2, mapped_uv).r;
+		base_color = mix(base_color, tex.rgb * nest_color2.rgb, m2 * (1.0 - eye_mask));
+	}
 	vec4 line_art = texture(line_art_tex, mapped_uv);
 	float line_alpha = line_art.a * line_art_enabled * line_art_strength;
 	// The eye outlines in Cat_Line extend past the white eye areas of
