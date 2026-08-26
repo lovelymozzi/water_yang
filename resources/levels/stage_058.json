@@ -2,19 +2,27 @@
   "seed": 0,
   "grid_size": [7, 9],
   "holes": [
-    {"grid_pos": [3, 1], "color_id": 0, "ice_count": 0},
-    {"grid_pos": [3, 8], "color_id": 1, "ice_count": 0}
+    {"grid_pos": [2, 1], "color_id": 0, "ice_count": 0},
+    {"grid_pos": [2, 8], "color_id": 1, "ice_count": 0},
+    {"grid_pos": [4, 1], "color_id": 2, "ice_count": 0},
+    {"grid_pos": [4, 8], "color_id": 3, "ice_count": 0},
+    {"grid_pos": [0, 4], "color_id": 4, "ice_count": 0}
   ],
   "obstacles": [],
   "cats": [
     {
-      "body_cells": [[3, 3], [3, 4], [3, 5], [3, 6]],
+      "body_cells": [[2, 3], [2, 4], [2, 5], [2, 6]],
       "color_id": 0,
       "nested_color_ids": [1]
+    },
+    {
+      "body_cells": [[4, 3], [4, 4], [4, 5], [4, 6]],
+      "color_id": 2,
+      "nested_color_ids": [3, 4]
     }
   ],
   "solution": [],
   "escape_order": [],
-  "dependency": {"edges": [], "chain_depth": 1, "chain": [0]},
+  "dependency": {"edges": [], "chain_depth": 1, "chain": [0, 1]},
   "stats": {}
 }
