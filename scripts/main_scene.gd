@@ -32,7 +32,7 @@ var _stage_label: Label
 var _stage_time_left := DEFAULT_STAGE_TIME_SECONDS
 var _stage_timer_running := false
 var _stage_timer_waiting_for_touch := false
-var _stage_timer_stop_remaining := 0.0
+var _stage_timer_stop_until_msec := 0
 var _last_reported_seconds := -1
 var _requested_stage_index := 0
 # 어드민 인계 파일에서 읽은 시작 스테이지 (1부터). 0 = 인계 없음.
@@ -145,9 +145,7 @@ func _process(delta: float) -> void:
 	if _replay_index >= 0:
 		_advance_replay()
 
-	if _stage_timer_running and _stage_timer_stop_remaining > 0.0:
-		_stage_timer_stop_remaining = maxf(0.0, _stage_timer_stop_remaining - delta)
-	elif _stage_timer_running:
+	if _stage_timer_running and Time.get_ticks_msec() >= _stage_timer_stop_until_msec:
 		_stage_time_left = maxf(0.0, _stage_time_left - delta)
 		var seconds_left := ceili(_stage_time_left)
 		if seconds_left != _last_reported_seconds:
@@ -206,7 +204,7 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 	_stage_time_left = maxf(1.0, float(config.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 	_stage_timer_running = false
 	_stage_timer_waiting_for_touch = false
-	_stage_timer_stop_remaining = 0.0
+	_stage_timer_stop_until_msec = 0
 	_last_reported_seconds = -1
 	_clear_item_targets(_obstacle_item_targets)
 	_clear_item_targets(_cat_item_targets)
@@ -219,13 +217,13 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 func _on_host_start() -> void:
 	_stage_timer_running = false
 	_stage_timer_waiting_for_touch = true
-	_stage_timer_stop_remaining = 0.0
+	_stage_timer_stop_until_msec = 0
 
 
 func _on_host_force_quit(_reason: String) -> void:
 	_stage_timer_running = false
 	_stage_timer_waiting_for_touch = false
-	_stage_timer_stop_remaining = 0.0
+	_stage_timer_stop_until_msec = 0
 	_clear_item_targets(_obstacle_item_targets)
 	_clear_item_targets(_cat_item_targets)
 	_drag_controller.cancel_item_selection()
@@ -236,7 +234,7 @@ func _on_host_message(topic: String, payload) -> void:
 		_stage_time_left = maxf(1.0, float(payload.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 		_stage_timer_running = false
 		_stage_timer_waiting_for_touch = true
-		_stage_timer_stop_remaining = 0.0
+		_stage_timer_stop_until_msec = 0
 		_last_reported_seconds = -1
 		_clear_item_targets(_obstacle_item_targets)
 		_clear_item_targets(_cat_item_targets)
@@ -261,8 +259,9 @@ func _on_host_message(topic: String, payload) -> void:
 		if not _stage_timer_running:
 			UiBridge.post_progress({"itemRejected": "timestop"})
 			return
-		_stage_timer_stop_remaining += 10.0
-		_on_host_message("use_ice", {"duration": _stage_timer_stop_remaining})
+		var now := Time.get_ticks_msec()
+		_stage_timer_stop_until_msec = maxi(_stage_timer_stop_until_msec, now) + 10000
+		_on_host_message("use_ice", {"duration": float(_stage_timer_stop_until_msec - now) / 1000.0})
 		UiBridge.post_progress({"itemUsed": "timestop"})
 		return
 	if topic == "item.move":
