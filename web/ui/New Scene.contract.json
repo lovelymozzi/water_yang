@@ -1,0 +1,33 @@
+{
+  "contractVersion": 1,
+  "sceneId": "new-scene",
+  "sceneUuid": "3ec73e6b-f881-43ef-ae98-f9dd9f90342d",
+  "sceneName": "New Scene",
+  "canvas": {
+    "width": 393,
+    "height": 852
+  },
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "background": {
+    "type": "solid",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "",
+    "imagePaths": [],
+    "tileSize": 64,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": false,
+    "scrollDirection": "right",
+    "scrollDuration": 4
+  },
+  "groups": [],
+  "fxGroups": [],
+  "sceneAnimations": [],
+  "layers": []
+}

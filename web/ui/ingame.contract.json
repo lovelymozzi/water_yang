@@ -1,8 +1,8 @@
 {
   "contractVersion": 1,
   "sceneId": "ingame",
-  "sceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-  "sceneName": "ingame",
+  "sceneUuid": "c0356bcc-a972-4ff9-b115-d91b31c3e8be",
+  "sceneName": "Ingame",
   "canvas": {
     "width": 393,
     "height": 852
@@ -51,54 +51,54 @@
       "id": "grp-296",
       "name": "Group",
       "layerStableIds": [
-        "bar1-png-374",
-        "gimmick-coinpurse-coin-png-375",
-        "bar1-png-376",
-        "home-btn-plus-png-377",
-        "bar1-png-378"
+        "bar1-png-2449",
+        "gimmick-coinpurse-coin-png-2450",
+        "bar1-png-2451",
+        "home-btn-plus-png-2452",
+        "bar1-png-2453"
       ]
     },
     {
       "id": "grp-304",
       "name": "time",
       "layerStableIds": [
-        "anniversarypack-time-webp-384",
-        "common-time-needle-webp-385"
+        "anniversarypack-time-webp-2459",
+        "common-time-needle-webp-2460"
       ]
     },
     {
       "id": "grp-314",
       "name": "setting",
       "layerStableIds": [
-        "entry-box-normal-png-383",
-        "home-btn-setting-webp-392"
+        "entry-box-normal-png-2458",
+        "home-btn-setting-webp-2467"
       ]
     },
     {
       "id": "grp-315",
       "name": "item3",
       "layerStableIds": [
-        "entry-box-normal-png-382",
-        "common-icon-greendot2-webp-388",
-        "itme3-1-png-391"
+        "entry-box-normal-png-2457",
+        "common-icon-greendot2-webp-2463",
+        "itme3-1-png-2466"
       ]
     },
     {
       "id": "grp-316",
       "name": "item2",
       "layerStableIds": [
-        "entry-box-normal-png-381",
-        "item2-png-386",
-        "common-icon-greendot2-webp-389"
+        "entry-box-normal-png-2456",
+        "item2-png-2461",
+        "common-icon-greendot2-webp-2464"
       ]
     },
     {
       "id": "grp-317",
       "name": "item1",
       "layerStableIds": [
-        "entry-box-normal-png-380",
-        "item1-png-387",
-        "common-icon-greendot2-webp-390"
+        "entry-box-normal-png-2455",
+        "item1-png-2462",
+        "common-icon-greendot2-webp-2465"
       ]
     },
     {
@@ -122,9 +122,9 @@
         }
       },
       "layerStableIds": [
-        "entry-box-normal-png-397",
-        "item1-png-399",
-        "entry-item-num-png-395"
+        "entry-box-normal-png-2468",
+        "item1-png-2469",
+        "entry-item-num-png-2470"
       ]
     },
     {
@@ -148,10 +148,10 @@
         }
       },
       "layerStableIds": [
-        "entry-box-normal-png-404",
-        "common-icon-greendot2-webp-406",
-        "itme3-1-png-407",
-        "entry-item-num-png-408"
+        "entry-box-normal-png-2471",
+        "common-icon-greendot2-webp-2472",
+        "itme3-1-png-2473",
+        "entry-item-num-png-2474"
       ]
     }
   ],
@@ -174,9 +174,9 @@
         "repeat": 1
       },
       "layerStableIds": [
-        "entry-box-normal-png-380",
-        "item1-png-387",
-        "common-icon-greendot2-webp-390"
+        "entry-box-normal-png-2455",
+        "item1-png-2462",
+        "common-icon-greendot2-webp-2465"
       ]
     },
     {
@@ -197,9 +197,9 @@
         "repeat": 1
       },
       "layerStableIds": [
-        "entry-box-normal-png-381",
-        "item2-png-386",
-        "common-icon-greendot2-webp-389"
+        "entry-box-normal-png-2456",
+        "item2-png-2461",
+        "common-icon-greendot2-webp-2464"
       ]
     },
     {
@@ -220,9 +220,9 @@
         "repeat": 1
       },
       "layerStableIds": [
-        "entry-box-normal-png-382",
-        "common-icon-greendot2-webp-388",
-        "itme3-1-png-391"
+        "entry-box-normal-png-2457",
+        "common-icon-greendot2-webp-2463",
+        "itme3-1-png-2466"
       ]
     },
     {
@@ -243,8 +243,8 @@
         "repeat": 1
       },
       "layerStableIds": [
-        "entry-box-normal-png-383",
-        "home-btn-setting-webp-392"
+        "entry-box-normal-png-2458",
+        "home-btn-setting-webp-2467"
       ]
     },
     {
@@ -341,10 +341,10 @@
         "repeat": 1
       },
       "layerStableIds": [
-        "entry-box-normal-png-404",
-        "common-icon-greendot2-webp-406",
-        "itme3-1-png-407",
-        "entry-item-num-png-408"
+        "entry-box-normal-png-2471",
+        "common-icon-greendot2-webp-2472",
+        "itme3-1-png-2473",
+        "entry-item-num-png-2474"
       ]
     },
     {
@@ -365,16 +365,16 @@
         "repeat": 1
       },
       "layerStableIds": [
-        "entry-box-normal-png-397",
-        "item1-png-399",
-        "entry-item-num-png-395"
+        "entry-box-normal-png-2468",
+        "item1-png-2469",
+        "entry-item-num-png-2470"
       ]
     }
   ],
   "sceneAnimations": [],
   "layers": [
     {
-      "stableId": "gamefield-373",
+      "stableId": "gamefield-2448",
       "layerType": "component",
       "displayName": "GameField",
       "x": 0,
@@ -459,7 +459,7 @@
       }
     },
     {
-      "stableId": "bar1-png-374",
+      "stableId": "bar1-png-2449",
       "layerType": "image",
       "displayName": "bar1.png",
       "x": 268,
@@ -512,13 +512,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "bar1-png-2449:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
     },
     {
-      "stableId": "gimmick-coinpurse-coin-png-375",
+      "stableId": "gimmick-coinpurse-coin-png-2450",
       "layerType": "image",
       "displayName": "gimmick_coinpurse_coin.png",
       "x": 265,
@@ -534,13 +534,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "bar1-png-2449:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
     },
     {
-      "stableId": "bar1-png-376",
+      "stableId": "bar1-png-2451",
       "layerType": "image",
       "displayName": "bar1.png",
       "x": 10,
@@ -593,13 +593,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "bar1-png-2449:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
     },
     {
-      "stableId": "home-btn-plus-png-377",
+      "stableId": "home-btn-plus-png-2452",
       "layerType": "image",
       "displayName": "home_btn_plus.png",
       "x": 353,
@@ -632,13 +632,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "bar1-png-2449:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
     },
     {
-      "stableId": "bar1-png-378",
+      "stableId": "bar1-png-2453",
       "layerType": "image",
       "displayName": "bar1.png",
       "x": 136,
@@ -691,13 +691,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "bar1-png-374:click",
+          "eventName": "bar1-png-2449:click",
           "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70"
         }
       ]
     },
     {
-      "stableId": "home-bottom-png-379",
+      "stableId": "home-bottom-png-2454",
       "layerType": "image",
       "displayName": "home_bottom.png",
       "x": -5,
@@ -735,7 +735,7 @@
       }
     },
     {
-      "stableId": "entry-box-normal-png-380",
+      "stableId": "entry-box-normal-png-2455",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
       "x": 17,
@@ -749,12 +749,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-380:click"
+          "eventName": "entry-box-normal-png-2455:click"
         }
       ]
     },
     {
-      "stableId": "entry-box-normal-png-381",
+      "stableId": "entry-box-normal-png-2456",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
       "x": 104,
@@ -768,12 +768,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-381:click"
+          "eventName": "entry-box-normal-png-2456:click"
         }
       ]
     },
     {
-      "stableId": "entry-box-normal-png-382",
+      "stableId": "entry-box-normal-png-2457",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
       "x": 200,
@@ -787,12 +787,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-382:click"
+          "eventName": "entry-box-normal-png-2457:click"
         }
       ]
     },
     {
-      "stableId": "entry-box-normal-png-383",
+      "stableId": "entry-box-normal-png-2458",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
       "x": 293,
@@ -806,13 +806,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-383:click",
+          "eventName": "entry-box-normal-png-2458:click",
           "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
         }
       ]
     },
     {
-      "stableId": "anniversarypack-time-webp-384",
+      "stableId": "anniversarypack-time-webp-2459",
       "layerType": "image",
       "displayName": "anniversaryPack_time.webp",
       "x": 136,
@@ -826,7 +826,7 @@
       }
     },
     {
-      "stableId": "common-time-needle-webp-385",
+      "stableId": "common-time-needle-webp-2460",
       "layerType": "image",
       "displayName": "common_time_needle.webp",
       "x": 150,
@@ -840,7 +840,7 @@
       }
     },
     {
-      "stableId": "item2-png-386",
+      "stableId": "item2-png-2461",
       "layerType": "image",
       "displayName": "item2.png",
       "x": 118,
@@ -855,12 +855,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-381:click"
+          "eventName": "entry-box-normal-png-2456:click"
         }
       ]
     },
     {
-      "stableId": "item1-png-387",
+      "stableId": "item1-png-2462",
       "layerType": "image",
       "displayName": "item1.png",
       "x": 30,
@@ -875,12 +875,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-380:click"
+          "eventName": "entry-box-normal-png-2455:click"
         }
       ]
     },
     {
-      "stableId": "common-icon-greendot2-webp-388",
+      "stableId": "common-icon-greendot2-webp-2463",
       "layerType": "image",
       "displayName": "common_icon_greendot2.webp",
       "x": 262,
@@ -931,12 +931,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-382:click"
+          "eventName": "entry-box-normal-png-2457:click"
         }
       ]
     },
     {
-      "stableId": "common-icon-greendot2-webp-389",
+      "stableId": "common-icon-greendot2-webp-2464",
       "layerType": "image",
       "displayName": "common_icon_greendot2.webp",
       "x": 168,
@@ -987,12 +987,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-381:click"
+          "eventName": "entry-box-normal-png-2456:click"
         }
       ]
     },
     {
-      "stableId": "common-icon-greendot2-webp-390",
+      "stableId": "common-icon-greendot2-webp-2465",
       "layerType": "image",
       "displayName": "common_icon_greendot2.webp",
       "x": 75,
@@ -1043,12 +1043,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-380:click"
+          "eventName": "entry-box-normal-png-2455:click"
         }
       ]
     },
     {
-      "stableId": "itme3-1-png-391",
+      "stableId": "itme3-1-png-2466",
       "layerType": "image",
       "displayName": "itme3_1.png",
       "x": 214,
@@ -1063,12 +1063,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-382:click"
+          "eventName": "entry-box-normal-png-2457:click"
         }
       ]
     },
     {
-      "stableId": "home-btn-setting-webp-392",
+      "stableId": "home-btn-setting-webp-2467",
       "layerType": "image",
       "displayName": "home_btn_setting.webp",
       "x": 318,
@@ -1108,13 +1108,13 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-383:click",
+          "eventName": "entry-box-normal-png-2458:click",
           "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64"
         }
       ]
     },
     {
-      "stableId": "entry-box-normal-png-397",
+      "stableId": "entry-box-normal-png-2468",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
       "x": 17,
@@ -1128,12 +1128,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-397:click"
+          "eventName": "entry-box-normal-png-2468:click"
         }
       ]
     },
     {
-      "stableId": "item1-png-399",
+      "stableId": "item1-png-2469",
       "layerType": "image",
       "displayName": "item1.png",
       "x": 30,
@@ -1148,12 +1148,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-397:click"
+          "eventName": "entry-box-normal-png-2468:click"
         }
       ]
     },
     {
-      "stableId": "entry-item-num-png-395",
+      "stableId": "entry-item-num-png-2470",
       "layerType": "image",
       "displayName": "entry_item_num.png",
       "x": 78,
@@ -1238,12 +1238,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-397:click"
+          "eventName": "entry-box-normal-png-2468:click"
         }
       ]
     },
     {
-      "stableId": "entry-box-normal-png-404",
+      "stableId": "entry-box-normal-png-2471",
       "layerType": "image",
       "displayName": "entry_box_normal.png",
       "x": 200,
@@ -1257,12 +1257,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-404:click"
+          "eventName": "entry-box-normal-png-2471:click"
         }
       ]
     },
     {
-      "stableId": "common-icon-greendot2-webp-406",
+      "stableId": "common-icon-greendot2-webp-2472",
       "layerType": "image",
       "displayName": "common_icon_greendot2.webp",
       "x": 262,
@@ -1313,12 +1313,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-404:click"
+          "eventName": "entry-box-normal-png-2471:click"
         }
       ]
     },
     {
-      "stableId": "itme3-1-png-407",
+      "stableId": "itme3-1-png-2473",
       "layerType": "image",
       "displayName": "itme3_1.png",
       "x": 214,
@@ -1333,12 +1333,12 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-404:click"
+          "eventName": "entry-box-normal-png-2471:click"
         }
       ]
     },
     {
-      "stableId": "entry-item-num-png-408",
+      "stableId": "entry-item-num-png-2474",
       "layerType": "image",
       "displayName": "entry_item_num.png",
       "x": 262,
@@ -1423,7 +1423,7 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "entry-box-normal-png-404:click"
+          "eventName": "entry-box-normal-png-2471:click"
         }
       ]
     }

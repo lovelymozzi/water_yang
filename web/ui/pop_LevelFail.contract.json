@@ -378,11 +378,6 @@
           "eventName": "common-btn-green-sales-png-2318:click",
           "branches": [
             {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            },
-            {
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
               "targetSceneName": "pop_BuyLives_1"
@@ -514,11 +509,6 @@
           "trigger": "click",
           "eventName": "common-btn-green-sales-png-2318:click",
           "branches": [
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            },
             {
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
@@ -809,13 +799,6 @@
             "scale": 95,
             "useDepthOffset": false
           }
-        }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "common-btn-top-x-red-png-2350:click",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ]
     }

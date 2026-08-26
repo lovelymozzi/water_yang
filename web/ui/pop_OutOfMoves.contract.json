@@ -352,16 +352,6 @@
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
               "targetSceneName": "pop_BuyLives_1"
-            },
-            {
-              "condition": "재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }
@@ -484,29 +474,6 @@
             }
           }
         }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "common-btn-green-sales-png-2390:click",
-          "branches": [
-            {
-              "condition": "not enough coin",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            },
-            {
-              "condition": "재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            }
-          ]
-        }
       ]
     },
     {
@@ -520,30 +487,7 @@
         "exportPath": "gimmick_coinpurse_coin.png",
         "width": 60,
         "height": 46
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "common-btn-green-sales-png-2390:click",
-          "branches": [
-            {
-              "condition": "not enough coin",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            },
-            {
-              "condition": "재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동",
-              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
-              "targetSceneName": "pop_BuyCoins"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            }
-          ]
-        }
-      ]
+      }
     },
     {
       "stableId": "entry-popup2-textbase-normal-png-2392",

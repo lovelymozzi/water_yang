@@ -277,11 +277,6 @@
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
               "targetSceneName": "pop_BuyLives_1"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }
@@ -854,11 +849,6 @@
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
               "targetSceneName": "pop_BuyLives_1"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }
@@ -992,11 +982,6 @@
               "condition": "no_heart",
               "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
               "targetSceneName": "pop_BuyLives_1"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }
@@ -1263,11 +1248,6 @@
               "condition": "current stage>4",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
               "targetSceneName": "Lobby"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }
@@ -1294,11 +1274,6 @@
               "condition": "current stage>4",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
               "targetSceneName": "Lobby"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }
@@ -1431,11 +1406,6 @@
               "condition": "current stage>4",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
               "targetSceneName": "Lobby"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }
@@ -1462,11 +1432,6 @@
               "condition": "current stage>4",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
               "targetSceneName": "Lobby"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
             }
           ]
         }

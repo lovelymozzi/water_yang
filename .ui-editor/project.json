@@ -43,7 +43,8 @@
       "Social": true,
       "Events": true,
       "Pass": true,
-      "System": true
+      "System": true,
+      "Navigation": true
     },
     "groupMap": {
       "Splash": "Core",
@@ -142,8 +143,8 @@
         "y": 1327.73
       },
       "0ad51a82-1069-4948-ad6f-e97422300c6d": {
-        "x": -9.5,
-        "y": -87.9
+        "x": 269.198,
+        "y": -44.3364
       },
       "b11144cd-f2c6-4f82-a4a8-c76b3496cd70": {
         "x": 1099.73,
@@ -228,6 +229,14 @@
       "b7f311a8-09d4-4bd0-9c26-4ef9ce1f045b": {
         "x": -1464.83,
         "y": 188.466
+      },
+      "c0356bcc-a972-4ff9-b115-d91b31c3e8be": {
+        "x": 576.342,
+        "y": 56.2335
+      },
+      "182e3c58-e3e3-42ac-8489-ec493129f4e3": {
+        "x": 728.264,
+        "y": -186.446
       }
     },
     "sceneOrder": [
@@ -286,7 +295,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "ingame"
+    "lastScene": "Ingame"
   },
   "globalViewport": {
     "width": 393,

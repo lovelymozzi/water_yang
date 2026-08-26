@@ -15,7 +15,7 @@ const STORAGE_PREFIX = 'leonout_';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
-const INGAME_UI_SCENE = 'ingame';
+const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
 const INITIAL_COINS = 500;
 const INITIAL_COIN_GRANT_STORAGE_KEY = STORAGE_PREFIX + 'initial_coin_grant_v1';
@@ -302,11 +302,11 @@ flow.on('scene:enter', async ({ sceneUuid, sceneName, renderer, popup }) => {
   if (sceneName === INGAME_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
     syncItemCounts();
-    renderer.on('entry-box-normal-png-380:click', () => requestItem('remove'));
-    renderer.on('entry-box-normal-png-381:click', () => requestItem('timestop'));
-    renderer.on('entry-box-normal-png-382:click', () => requestItem('move'));
-    renderer.on('entry-box-normal-png-397:click', cancelItemSelection);
-    renderer.on('entry-box-normal-png-404:click', cancelItemSelection);
+    renderer.on('entry-box-normal-png-2455:click', () => requestItem('remove'));
+    renderer.on('entry-box-normal-png-2456:click', () => requestItem('timestop'));
+    renderer.on('entry-box-normal-png-2457:click', () => requestItem('move'));
+    renderer.on('entry-box-normal-png-2468:click', cancelItemSelection);
+    renderer.on('entry-box-normal-png-2471:click', cancelItemSelection);
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
   }

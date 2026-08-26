@@ -1,0 +1,56 @@
+{
+  "name": "New Scene",
+  "sceneType": "scene",
+  "canvasHeight": 844,
+  "bgType": "solid",
+  "bgColor": "#16213e",
+  "bgColor2": "#0e4a8c",
+  "bgGradientAngle": 180,
+  "bgImagePath": "",
+  "bgTileSize": 64,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
+  "bgStretchMode": "cover",
+  "bgScrollEnabled": false,
+  "bgScrollDirection": "right",
+  "bgScrollDuration": 4,
+  "refImagePath": "",
+  "refVisible": true,
+  "refDim": 70,
+  "layers": [],
+  "zLayers": [
+    {
+      "id": "zl-bg",
+      "name": "Background",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-content",
+      "name": "Content",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-ui",
+      "name": "UI",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-overlay",
+      "name": "Overlay",
+      "locked": false,
+      "hidden": false
+    }
+  ],
+  "activeZLayerId": "zl-content",
+  "groups": [],
+  "fxGroups": [],
+  "sceneAnimations": [],
+  "guides": {
+    "v": [],
+    "h": []
+  },
+  "uuid": "3ec73e6b-f881-43ef-ae98-f9dd9f90342d"
+}

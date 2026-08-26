@@ -9,9 +9,9 @@
       "sceneType": "navigation"
     },
     {
-      "uuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-      "name": "ingame",
-      "contract": "ingame.contract.json",
+      "uuid": "c0356bcc-a972-4ff9-b115-d91b31c3e8be",
+      "name": "Ingame",
+      "contract": "Ingame.contract.json",
       "sceneType": "scene"
     },
     {
@@ -30,6 +30,12 @@
       "uuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
       "name": "Lobby",
       "contract": "Lobby.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "3ec73e6b-f881-43ef-ae98-f9dd9f90342d",
+      "name": "New Scene",
+      "contract": "New Scene.contract.json",
       "sceneType": "scene"
     },
     {

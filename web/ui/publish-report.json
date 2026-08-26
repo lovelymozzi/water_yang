@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-26T05:53:04.679Z",
+  "generatedAt": "2026-08-26T11:29:56.924Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
   "errors": [],
   "warnings": [
@@ -39,17 +39,11 @@
       "code": "event-not-in-flow",
       "where": "pop_Settings_1.setting",
       "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ ingame [\bpopup close]"
-    },
-    {
-      "code": "event-not-in-flow",
-      "where": "pop_Settings_1.setting",
-      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
       "detail": "→ pop_Settings_1 [else]"
     },
     {
       "code": "binding-nonstandard",
-      "where": "ingame",
+      "where": "Ingame",
       "message": "표준 바인딩 키가 아닙니다 — 매니저 attachRenderer 자동 연동이 되지 않아 게임이 수동 매핑하게 됩니다.",
       "detail": "'stage.timer' (표준: stage.current/stage.next+1/stage.next+2/stage.next+3)"
     }

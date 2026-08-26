@@ -4,6 +4,15 @@
 > 금지 규칙은 [`./AGENTS.md`](./AGENTS.md), `SceneRenderer` API·통합 절차는 `.claude/skills/ui-editor-game/SKILL.md` 참조.
 > **표기 규약(전 씬 공통 — 씬 섹션은 데이터만)**: 이벤트=`renderer.on(name, fn)` 구독(여기 있는 이름만 사용, 기본 트리거 click — 다르면 괄호 표기) · 바인딩=`renderer.update({...})` 주입 · sceneUuid=불변(씬 연결은 이 값 기준) · sceneType 표기 없음=일반 씬 · 위젯=visibility/toggle:boolean, slider:0~1, fill:0~100(표시 전용) — 입력은 `widget:<key>` 이벤트로 오고 게임이 update 로 에코해야 UI가 움직임 · GameField=GameSession 인게임 카트리지 마운트 지점.
 
+<!-- SCENE:Ingame BEGIN -->
+#### `Ingame`  ·  contract: `./web/ui/Ingame.contract.json`
+- sceneUuid: `c0356bcc-a972-4ff9-b115-d91b31c3e8be`
+- 이벤트: `bar1-png-2449:click` · `entry-box-normal-png-2455:click` · `entry-box-normal-png-2456:click` · `entry-box-normal-png-2457:click` · `entry-box-normal-png-2458:click` · `entry-box-normal-png-2468:click` · `entry-box-normal-png-2471:click`
+- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer` · `item.move.current` · `item.timestop.current` · `item.remove.current` · `item.cancle`
+- 위젯: `item1`(toggle) · `itme3`(toggle) — 입력 이벤트: `widget:item1` · `widget:itme3`
+- GameField 레이어 있음
+<!-- SCENE:Ingame END -->
+
 <!-- SCENE:LevelFail_1 BEGIN -->
 #### `LevelFail_1`  ·  contract: `./web/ui/LevelFail_1.contract.json`
 - sceneUuid: `2bce71e3-b626-4295-919d-e24cb07f1ae2`
@@ -19,6 +28,12 @@
 - GameField 레이어 있음
 <!-- SCENE:Lobby END -->
 
+<!-- SCENE:New Scene BEGIN -->
+#### `New Scene`  ·  contract: `./web/ui/New Scene.contract.json`
+- sceneUuid: `3ec73e6b-f881-43ef-ae98-f9dd9f90342d`
+- 이벤트: 없음
+<!-- SCENE:New Scene END -->
+
 <!-- SCENE:Ranking BEGIN -->
 #### `Ranking`  ·  contract: `./web/ui/Ranking.contract.json`
 - sceneUuid: `3db24195-9465-47f6-be12-e9aeeebf74e6`
@@ -33,15 +48,6 @@
 - sceneUuid: `37f376d8-4e32-4340-9bbd-4ed17767e148`
 - 이벤트: 없음
 <!-- SCENE:home_bottom END -->
-
-<!-- SCENE:ingame BEGIN -->
-#### `ingame`  ·  contract: `./web/ui/ingame.contract.json`
-- sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
-- 이벤트: `bar1-png-374:click` · `entry-box-normal-png-380:click` · `entry-box-normal-png-381:click` · `entry-box-normal-png-382:click` · `entry-box-normal-png-383:click` · `entry-box-normal-png-397:click` · `entry-box-normal-png-404:click`
-- 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer` · `item.move.current` · `item.timestop.current` · `item.remove.current` · `item.cancle`
-- 위젯: `item1`(toggle) · `itme3`(toggle) — 입력 이벤트: `widget:item1` · `widget:itme3`
-- GameField 레이어 있음
-<!-- SCENE:ingame END -->
 
 <!-- SCENE:loading BEGIN -->
 #### `loading`  ·  contract: `./web/ui/loading.contract.json`
@@ -77,7 +83,7 @@
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
 - sceneUuid: `cf13fce2-4ff9-40d1-a47a-9680167f65f7`
-- 이벤트: `common-btn-green-sales-png-2318:click` · `common-btn-top-x-red-png-2350:click`
+- 이벤트: `common-btn-green-sales-png-2318:click`
 <!-- SCENE:pop_LevelFail END -->
 
 <!-- SCENE:pop_LevelWin BEGIN -->
@@ -103,7 +109,7 @@
 <!-- SCENE:pop_Settings_1 BEGIN -->
 #### `pop_Settings_1`  ·  contract: `./web/ui/pop_Settings_1.contract.json`
 - sceneUuid: `235b7eb7-c304-45b3-aa55-25f18050fd64`
-- 이벤트: `setting-btn-option-png-2245:click` · `back-off-png-2278:click` · `back-on-png-2277:click` · `setting-btn-option-png-2278:click` · `return-on-png-2282:click` · `return-off-png-2277:click` · `entry-box-normal-png-2287:click` · `home-btn-setting-webp-2288:click`
+- 이벤트: `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click` · `entry-box-normal-png-2287:click`
 - 위젯: `music`(toggle) · `sound`(toggle) · `vibration`(toggle) · `lobby`(toggle) · `retry`(toggle) — 입력 이벤트: `widget:music` · `widget:sound` · `widget:vibration` · `widget:lobby` · `widget:retry`
 <!-- SCENE:pop_Settings_1 END -->
 

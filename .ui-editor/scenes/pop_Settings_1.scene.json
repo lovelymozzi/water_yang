@@ -736,11 +736,6 @@
           "targetSceneUuid": null,
           "branches": [
             {
-              "condition": "\bpopup close",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            },
-            {
               "condition": "else",
               "targetSceneUuid": "235b7eb7-c304-45b3-aa55-25f18050fd64",
               "targetSceneName": "pop_Settings_1"
@@ -791,20 +786,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2286",
-      "fxGroupId": "fx-2287",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "branches": [
-            {
-              "condition": "\bpopup close",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            }
-          ]
-        }
-      ]
+      "fxGroupId": "fx-2287"
     }
   ],
   "zLayers": [

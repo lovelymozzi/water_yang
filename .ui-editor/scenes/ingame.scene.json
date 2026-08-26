@@ -1,5 +1,5 @@
 {
-  "name": "ingame",
+  "name": "Ingame",
   "sceneType": "scene",
   "canvasHeight": 844,
   "bgType": "solid",
@@ -19,8 +19,8 @@
   "refDim": 70,
   "layers": [
     {
-      "id": 373,
-      "stableId": "gamefield-373",
+      "id": 2448,
+      "stableId": "gamefield-2448",
       "type": "component",
       "source": "preset",
       "name": "GameField",
@@ -104,8 +104,8 @@
       "locked": true
     },
     {
-      "id": 374,
-      "stableId": "bar1-png-374",
+      "id": 2449,
+      "stableId": "bar1-png-2449",
       "type": "image",
       "name": "bar1.png",
       "exportPath": "src/assets/bar1_2.png",
@@ -173,8 +173,8 @@
       ]
     },
     {
-      "id": 375,
-      "stableId": "gimmick-coinpurse-coin-png-375",
+      "id": 2450,
+      "stableId": "gimmick-coinpurse-coin-png-2450",
       "type": "image",
       "name": "gimmick_coinpurse_coin.png",
       "exportPath": "src/assets/gimmick_coinpurse_coin_2.png",
@@ -221,8 +221,8 @@
       ]
     },
     {
-      "id": 376,
-      "stableId": "bar1-png-376",
+      "id": 2451,
+      "stableId": "bar1-png-2451",
       "type": "image",
       "name": "bar1.png",
       "exportPath": "src/assets/bar1_2.png",
@@ -290,8 +290,8 @@
       ]
     },
     {
-      "id": 377,
-      "stableId": "home-btn-plus-png-377",
+      "id": 2452,
+      "stableId": "home-btn-plus-png-2452",
       "type": "image",
       "name": "home_btn_plus.png",
       "exportPath": "src/assets/home_btn_plus_1.png",
@@ -338,8 +338,8 @@
       ]
     },
     {
-      "id": 378,
-      "stableId": "bar1-png-378",
+      "id": 2453,
+      "stableId": "bar1-png-2453",
       "type": "image",
       "name": "bar1.png",
       "exportPath": "src/assets/bar1_2.png",
@@ -407,8 +407,8 @@
       ]
     },
     {
-      "id": 379,
-      "stableId": "home-bottom-png-379",
+      "id": 2454,
+      "stableId": "home-bottom-png-2454",
       "type": "image",
       "name": "home_bottom.png",
       "exportPath": "src/assets/home_bottom.png",
@@ -454,8 +454,8 @@
       "sliceRepeat": "stretch"
     },
     {
-      "id": 380,
-      "stableId": "entry-box-normal-png-380",
+      "id": 2455,
+      "stableId": "entry-box-normal-png-2455",
       "type": "image",
       "name": "entry_box_normal.png",
       "exportPath": "src/assets/ingame_item_bg.png",
@@ -502,8 +502,8 @@
       ]
     },
     {
-      "id": 381,
-      "stableId": "entry-box-normal-png-381",
+      "id": 2456,
+      "stableId": "entry-box-normal-png-2456",
       "type": "image",
       "name": "entry_box_normal.png",
       "exportPath": "src/assets/ingame_item_bg.png",
@@ -550,8 +550,8 @@
       ]
     },
     {
-      "id": 382,
-      "stableId": "entry-box-normal-png-382",
+      "id": 2457,
+      "stableId": "entry-box-normal-png-2457",
       "type": "image",
       "name": "entry_box_normal.png",
       "exportPath": "src/assets/ingame_item_bg.png",
@@ -598,8 +598,8 @@
       ]
     },
     {
-      "id": 383,
-      "stableId": "entry-box-normal-png-383",
+      "id": 2458,
+      "stableId": "entry-box-normal-png-2458",
       "type": "image",
       "name": "entry_box_normal.png",
       "exportPath": "src/assets/ingame_item_bg.png",
@@ -647,8 +647,8 @@
       ]
     },
     {
-      "id": 384,
-      "stableId": "anniversarypack-time-webp-384",
+      "id": 2459,
+      "stableId": "anniversarypack-time-webp-2459",
       "type": "image",
       "name": "anniversaryPack_time.webp",
       "exportPath": "src/assets/anniversaryPack_time.webp",
@@ -688,8 +688,8 @@
       "groupId": "grp-304"
     },
     {
-      "id": 385,
-      "stableId": "common-time-needle-webp-385",
+      "id": 2460,
+      "stableId": "common-time-needle-webp-2460",
       "type": "image",
       "name": "common_time_needle.webp",
       "exportPath": "src/assets/common_time_needle.webp",
@@ -729,8 +729,8 @@
       "groupId": "grp-304"
     },
     {
-      "id": 386,
-      "stableId": "item2-png-386",
+      "id": 2461,
+      "stableId": "item2-png-2461",
       "type": "image",
       "name": "item2.png",
       "exportPath": "water_yang/item2.png",
@@ -777,8 +777,8 @@
       ]
     },
     {
-      "id": 387,
-      "stableId": "item1-png-387",
+      "id": 2462,
+      "stableId": "item1-png-2462",
       "type": "image",
       "name": "item1.png",
       "exportPath": "water_yang/item1.png",
@@ -825,8 +825,8 @@
       ]
     },
     {
-      "id": 388,
-      "stableId": "common-icon-greendot2-webp-388",
+      "id": 2463,
+      "stableId": "common-icon-greendot2-webp-2463",
       "type": "image",
       "name": "common_icon_greendot2.webp",
       "exportPath": "src/assets/common_icon_greendot2.webp",
@@ -895,8 +895,8 @@
       "imageKey": ""
     },
     {
-      "id": 389,
-      "stableId": "common-icon-greendot2-webp-389",
+      "id": 2464,
+      "stableId": "common-icon-greendot2-webp-2464",
       "type": "image",
       "name": "common_icon_greendot2.webp",
       "exportPath": "src/assets/common_icon_greendot2.webp",
@@ -965,8 +965,8 @@
       "imageKey": ""
     },
     {
-      "id": 390,
-      "stableId": "common-icon-greendot2-webp-390",
+      "id": 2465,
+      "stableId": "common-icon-greendot2-webp-2465",
       "type": "image",
       "name": "common_icon_greendot2.webp",
       "exportPath": "src/assets/common_icon_greendot2.webp",
@@ -1035,8 +1035,8 @@
       "imageKey": ""
     },
     {
-      "id": 391,
-      "stableId": "itme3-1-png-391",
+      "id": 2466,
+      "stableId": "itme3-1-png-2466",
       "type": "image",
       "name": "itme3_1.png",
       "exportPath": "water_yang/itme3_1.png",
@@ -1083,8 +1083,8 @@
       ]
     },
     {
-      "id": 392,
-      "stableId": "home-btn-setting-webp-392",
+      "id": 2467,
+      "stableId": "home-btn-setting-webp-2467",
       "type": "image",
       "name": "home_btn_setting.webp",
       "exportPath": "src/assets/home_btn_setting.webp",
@@ -1132,8 +1132,8 @@
       "fxGroupId": "fx-2289"
     },
     {
-      "id": 397,
-      "stableId": "entry-box-normal-png-397",
+      "id": 2468,
+      "stableId": "entry-box-normal-png-2468",
       "type": "image",
       "name": "entry_box_normal.png",
       "exportPath": "src/assets/ingame_item_bg.png",
@@ -1180,8 +1180,8 @@
       ]
     },
     {
-      "id": 399,
-      "stableId": "item1-png-399",
+      "id": 2469,
+      "stableId": "item1-png-2469",
       "type": "image",
       "name": "item1.png",
       "exportPath": "water_yang/item1.png",
@@ -1228,8 +1228,8 @@
       ]
     },
     {
-      "id": 395,
-      "stableId": "entry-item-num-png-395",
+      "id": 2470,
+      "stableId": "entry-item-num-png-2470",
       "type": "image",
       "name": "entry_item_num.png",
       "exportPath": "src/assets/entry_item_num.png",
@@ -1319,8 +1319,8 @@
       "groupId": "grp-402"
     },
     {
-      "id": 404,
-      "stableId": "entry-box-normal-png-404",
+      "id": 2471,
+      "stableId": "entry-box-normal-png-2471",
       "type": "image",
       "name": "entry_box_normal.png",
       "exportPath": "src/assets/ingame_item_bg.png",
@@ -1367,8 +1367,8 @@
       "fxGroupId": "fx-413"
     },
     {
-      "id": 406,
-      "stableId": "common-icon-greendot2-webp-406",
+      "id": 2472,
+      "stableId": "common-icon-greendot2-webp-2472",
       "type": "image",
       "name": "common_icon_greendot2.webp",
       "exportPath": "src/assets/common_icon_greendot2.webp",
@@ -1437,8 +1437,8 @@
       ]
     },
     {
-      "id": 407,
-      "stableId": "itme3-1-png-407",
+      "id": 2473,
+      "stableId": "itme3-1-png-2473",
       "type": "image",
       "name": "itme3_1.png",
       "exportPath": "water_yang/itme3_1.png",
@@ -1485,8 +1485,8 @@
       ]
     },
     {
-      "id": 408,
-      "stableId": "entry-item-num-png-408",
+      "id": 2474,
+      "stableId": "entry-item-num-png-2474",
       "type": "image",
       "name": "entry_item_num.png",
       "exportPath": "src/assets/entry_item_num.png",
@@ -1875,5 +1875,5 @@
     ],
     "h": []
   },
-  "uuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+  "uuid": "c0356bcc-a972-4ff9-b115-d91b31c3e8be"
 }
