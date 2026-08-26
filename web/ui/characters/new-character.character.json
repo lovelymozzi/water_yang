@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "id": "new-character",
+  "uuid": "4b71a6ed-1dcf-4967-87cf-d3dbd47e6dde",
+  "name": "New Character",
+  "width": 390,
+  "height": 390,
+  "contentBounds": null,
+  "base": [],
+  "sockets": [],
+  "parts": [],
+  "equip": {},
+  "clips": []
+}

@@ -345,9 +345,9 @@
           "eventName": "home-btn-plus-png-94:click",
           "branches": [
             {
-              "condition": "not max_heart",
-              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
-              "targetSceneName": "pop_BuyLives_1"
+              "condition": "heart.current>0",
+              "targetSceneUuid": "b11144cd-f2c6-4f82-a4a8-c76b3496cd70",
+              "targetSceneName": "pop_BuyCoins"
             }
           ]
         }
@@ -498,6 +498,11 @@
           "eventName": "home-btn-stage-normal-png-145:click",
           "branches": [
             {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "pop_BuyLives_1"
+            },
+            {
               "condition": "else",
               "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
               "targetSceneName": "ingame"
@@ -629,6 +634,11 @@
           "trigger": "click",
           "eventName": "home-btn-stage-normal-png-145:click",
           "branches": [
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "pop_BuyLives_1"
+            },
             {
               "condition": "else",
               "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",

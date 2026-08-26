@@ -13,6 +13,45 @@
       "toSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
       "condition": "\bpopup close",
       "note": "인게임 설정 팝업 하단 톱니 버튼: 메뉴 접힘 애니메이션 후 Ingame으로 복귀하며 PopupManager가 딤드를 정리하도록 흐름도에 반영"
+    },
+    {
+      "fromSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "stableId": "home-btn-stage-normal-png-145",
+      "toSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "condition": "no_heart",
+      "note": "하트가 0개일 때 로비 스테이지 버튼 → 하트 구매 팝업"
+    },
+    {
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "stableId": "common-btn-green-sales-png-2425",
+      "toSceneUuid": "__close__",
+      "toSceneName": "✕ 팝업 닫기",
+      "condition": "광고호출 후 하트1개 충전",
+      "note": "GET 버튼: 하트 +1 후 팝업 닫기"
+    },
+    {
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "stableId": "itemicon-heart-red-png-322",
+      "toSceneUuid": "__close__",
+      "toSceneName": "✕ 팝업 닫기",
+      "condition": "광고호출 후 하트1개 충전",
+      "note": "GET 하트 아이콘: 하트 +1 후 팝업 닫기"
+    },
+    {
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "stableId": "video-png-312",
+      "toSceneUuid": "__close__",
+      "toSceneName": "✕ 팝업 닫기",
+      "condition": "광고호출 후 하트1개 충전",
+      "note": "GET 비디오 아이콘: 하트 +1 후 팝업 닫기"
+    },
+    {
+      "fromSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+      "stableId": "itemicon-money-coin-1-png-990",
+      "toSceneUuid": "__close__",
+      "toSceneName": "✕ 팝업 닫기",
+      "condition": "900코인 소모 후 하트풀충전",
+      "note": "900 버튼 코인 아이콘: 코인 900 지급 후 팝업 닫기"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-24T09:51:51.464Z",
+  "generatedAt": "2026-08-25T11:30:55.702Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
   "errors": [],
   "warnings": [
@@ -13,15 +13,15 @@
     },
     {
       "code": "event-not-in-flow",
-      "where": "pop_LevelWin.Group",
+      "where": "Lobby.home-btn-plus-png-94",
       "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ pop_BuyLives_1 [no_heart]"
+      "detail": "→ pop_BuyCoins [heart.current>0]"
     },
     {
       "code": "event-not-in-flow",
       "where": "pop_LevelWin.Group",
       "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
-      "detail": "→ ingame [else]"
+      "detail": "→ pop_BuyLives_1 [no_heart]"
     },
     {
       "code": "event-not-in-flow",
@@ -52,12 +52,6 @@
       "where": "ingame",
       "message": "표준 바인딩 키가 아닙니다 — 매니저 attachRenderer 자동 연동이 되지 않아 게임이 수동 매핑하게 됩니다.",
       "detail": "'stage.timer' (표준: stage.current/stage.next+1/stage.next+2/stage.next+3)"
-    },
-    {
-      "code": "game-unwired-condition",
-      "where": "edge pop_OutOfMoves→pop_BuyCoins",
-      "message": "흐름도 조건 키의 술어가 게임 코드에 없습니다 — flow.defineCondition('재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동', () => ...) 를 등록하지 않으면 해당 분기가 동작하지 않습니다.",
-      "detail": "'재화를 보유 하고 있을경우는 재화를 소비하고, 재화가 없을 경우 shop으로 이동'"
     }
   ],
   "infos": [

@@ -124,7 +124,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 8,
-      "zIndex": 4,
+      "zIndex": 3,
       "visible": true,
       "width": 112,
       "height": 114,
@@ -165,7 +165,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 5,
+      "zIndex": 4,
       "visible": true,
       "width": 295,
       "height": 140,
@@ -233,7 +233,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 6,
+      "zIndex": 5,
       "visible": true,
       "zLayerId": "zl-content",
       "componentState": {
@@ -356,7 +356,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 7,
+      "zIndex": 6,
       "visible": true,
       "width": 720,
       "height": 190,
@@ -397,7 +397,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 8,
+      "zIndex": 7,
       "visible": true,
       "zLayerId": "zl-content",
       "componentState": {
@@ -487,14 +487,7 @@
           "direction": "right",
           "color": "#ffffff"
         }
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
-        }
-      ]
+      }
     },
     {
       "id": 2371,
@@ -509,7 +502,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 9,
+      "zIndex": 8,
       "visible": true,
       "zLayerId": "zl-content",
       "componentState": {
@@ -611,7 +604,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 10,
+      "zIndex": 9,
       "visible": true,
       "width": 86,
       "height": 92,
@@ -642,7 +635,7 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+          "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d"
         }
       ]
     }

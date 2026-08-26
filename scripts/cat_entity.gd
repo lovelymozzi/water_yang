@@ -13,7 +13,7 @@ const OPEN_MOUTH_TEXTURE_PATH := "res://water_yang/cat1_2.jpeg"
 const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
-const ABSORB_SOUND := preload("res://src/sound/gargamel10-teleport-game-sound-effect-379236_optimized.mp3")
+const ABSORB_SOUND := preload("res://src/sound/cat_Hole_sound.mp3")
 const FLOATING_WATER_OUTLINE_COLOR := Color("f8ffff")
 const FLOATING_WATER_OUTLINE_WIDTH := 0.020
 const REFERENCE_TILE_SIZE := 2.0
@@ -811,6 +811,8 @@ func _finish_step() -> void:
 	_is_reversing = false
 	_update_facing()
 	level_manager.update_cat_occupancy(self)
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"sfx": "cat-move"})
 	if _pending_lead_flip:
 		_pending_lead_flip = false
 		_flip_lead()
@@ -1883,7 +1885,7 @@ func _is_inside_active_camera_view() -> bool:
 		return false
 	var camera := get_viewport().get_camera_3d()
 	var mouth_position := global_position
-	if _skeleton != null and _head_bone_index >= 0:
+	if is_instance_valid(_skeleton) and _skeleton.is_inside_tree() and _head_bone_index >= 0:
 		mouth_position = _skeleton.global_transform * _skeleton.get_bone_global_pose(_head_bone_index).origin
 	if camera == null or camera.is_position_behind(mouth_position):
 		return false

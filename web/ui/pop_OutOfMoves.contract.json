@@ -469,17 +469,17 @@
             },
             "stroke": {
               "width": 3,
-              "color": "#000000"
+              "color": "#257109"
             },
             "depth": {
               "size": 2,
-              "color": "#000000"
+              "color": "rgba(0,0,0,0)"
             },
             "shadow": {
               "x": 0,
               "y": 2,
               "blur": 4,
-              "color": "#000000",
+              "color": "rgba(0,0,0,0)",
               "opacity": 60
             }
           }
@@ -517,7 +517,7 @@
       "y": 495,
       "zIndex": 5,
       "visual": {
-        "exportPath": "src/assets/ItemIcon_Money_Coin_4.png",
+        "exportPath": "gimmick_coinpurse_coin.png",
         "width": 60,
         "height": 46
       },
@@ -675,13 +675,6 @@
               "opacity": 0
             }
           }
-        }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "plain-text-2393:click",
-          "targetSceneUuid": "ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd"
         }
       ]
     },

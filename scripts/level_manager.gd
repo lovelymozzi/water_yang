@@ -475,6 +475,8 @@ func _break_ice_cover(cell: Vector2i) -> void:
 	var node: Node3D = entry.get("node")
 	if not is_instance_valid(node):
 		return
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"sfx": "ice-break"})
 	# 파편은 얼음이 서 있던 자리에서 터진다. 블록 자체는 짧게 오므라들며 사라져
 	# "깨져서 흩어졌다"로 읽히게 한다.
 	_spawn_ice_shards(node.position)

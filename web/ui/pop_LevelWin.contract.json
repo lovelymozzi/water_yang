@@ -189,25 +189,7 @@
             "repeat": "stretch"
           }
         }
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "common-popup-box-copy-png-2402:click",
-          "branches": [
-            {
-              "condition": "current stage>4",
-              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
-              "targetSceneName": "Lobby"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "ingame"
-            }
-          ]
-        }
-      ]
+      }
     },
     {
       "stableId": "entry-box-normal-png-2403",
@@ -1715,13 +1697,6 @@
             "loopDelay": 0.2,
             "triggerKey": ""
           }
-        }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "confetti-148:click",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ]
     }

@@ -376,7 +376,18 @@
         {
           "trigger": "click",
           "eventName": "common-btn-green-sales-png-2318:click",
-          "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be"
+          "branches": [
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "ingame"
+            },
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "pop_BuyLives_1"
+            }
+          ]
         }
       ]
     },
@@ -502,7 +513,18 @@
         {
           "trigger": "click",
           "eventName": "common-btn-green-sales-png-2318:click",
-          "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be"
+          "branches": [
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "ingame"
+            },
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "pop_BuyLives_1"
+            }
+          ]
         }
       ]
     },
@@ -513,7 +535,7 @@
       "x": 15,
       "y": 218,
       "scale": 0.5,
-      "zIndex": 8,
+      "zIndex": 7,
       "visual": {
         "exportPath": "src/assets/entry_popup2_textbase_normal_1.png",
         "width": 720,
@@ -526,7 +548,7 @@
       "displayName": "Plain Text",
       "x": 128,
       "y": 224,
-      "zIndex": 9,
+      "zIndex": 8,
       "visual": {
         "model": {
           "shape": {
@@ -645,7 +667,7 @@
       "displayName": "Plain Text",
       "x": 82,
       "y": 319,
-      "zIndex": 10,
+      "zIndex": 9,
       "visual": {
         "model": {
           "shape": {
@@ -765,7 +787,7 @@
       "x": 324,
       "y": 242,
       "scale": 0.5854037267080746,
-      "zIndex": 11,
+      "zIndex": 10,
       "visual": {
         "exportPath": "src/assets/common_btn_top_x_red_1.png",
         "width": 86,
@@ -793,7 +815,7 @@
         {
           "trigger": "click",
           "eventName": "common-btn-top-x-red-png-2350:click",
-          "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be"
+          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ]
     }

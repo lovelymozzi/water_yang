@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "characters": [
+    {
+      "id": "new-character",
+      "name": "New Character",
+      "uuid": "4b71a6ed-1dcf-4967-87cf-d3dbd47e6dde",
+      "file": "new-character.character.json",
+      "doc": "new-character.md"
+    }
+  ]
+}

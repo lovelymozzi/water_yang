@@ -55,15 +55,13 @@
     },
     {
       "id": "grp-221",
-      "name": "1",
+      "name": "ramk1",
       "layerStableIds": [
         "ranking-box-list-png-205",
         "profile-avatar-dummy-22-png-208",
         "profile-frame-default-1-png-207",
         "ranking-icon-1st-png-212",
         "team-normal-01-png-213",
-        "ranking-box-num-png-215",
-        "team-icon-token-png-214",
         "plain-text-217",
         "plain-text-218",
         "plain-text-219"
@@ -78,8 +76,6 @@
         "profile-frame-default-1-png-224",
         "ranking-icon-1st-png-225",
         "team-normal-01-png-226",
-        "ranking-box-num-png-227",
-        "team-icon-token-png-228",
         "plain-text-229",
         "plain-text-230",
         "plain-text-231"
@@ -94,8 +90,6 @@
         "profile-frame-default-1-png-235",
         "ranking-icon-1st-png-236",
         "team-normal-01-png-237",
-        "ranking-box-num-png-238",
-        "team-icon-token-png-239",
         "plain-text-240",
         "plain-text-241",
         "plain-text-242"
@@ -109,8 +103,6 @@
         "profile-avatar-dummy-22-png-245",
         "profile-frame-default-1-png-246",
         "team-normal-01-png-248",
-        "ranking-box-num-png-249",
-        "team-icon-token-png-250",
         "plain-text-251",
         "plain-text-252",
         "plain-text-253",
@@ -125,8 +117,6 @@
         "profile-avatar-dummy-22-png-257",
         "profile-frame-default-1-png-258",
         "team-normal-01-png-260",
-        "ranking-box-num-png-261",
-        "team-icon-token-png-262",
         "plain-text-263",
         "plain-text-264",
         "plain-text-265",
@@ -141,8 +131,6 @@
         "profile-avatar-dummy-22-png-269",
         "profile-frame-default-1-png-270",
         "team-normal-01-png-271",
-        "ranking-box-num-png-272",
-        "team-icon-token-png-273",
         "plain-text-274",
         "plain-text-275",
         "plain-text-276",
@@ -157,8 +145,6 @@
         "profile-avatar-dummy-22-png-280",
         "profile-frame-default-1-png-281",
         "team-normal-01-png-282",
-        "ranking-box-num-png-283",
-        "team-icon-token-png-284",
         "plain-text-285",
         "plain-text-286",
         "plain-text-287",
@@ -829,6 +815,35 @@
             "repeat": "stretch"
           }
         }
+      },
+      "image": {
+        "exportPath": "src/assets/ranking_box_list.png",
+        "imageKey": "rank.background",
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 21,
+            "top": 0,
+            "right": 21,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
       }
     },
     {
@@ -913,95 +928,6 @@
         "exportPath": "src/assets/team_normal_01.png",
         "width": 110,
         "height": 124
-      }
-    },
-    {
-      "stableId": "ranking-box-num-png-215",
-      "layerType": "image",
-      "displayName": "ranking_box_num.png",
-      "x": 258,
-      "y": 221,
-      "scale": 0.65675057208238,
-      "zIndex": 13,
-      "visual": {
-        "exportPath": "src/assets/ranking_box_num.png",
-        "width": 102,
-        "height": 46,
-        "style": {
-          "shadow": {
-            "enabled": false,
-            "x": 0,
-            "y": 4,
-            "blur": 8,
-            "color": "#000000",
-            "opacity": 50
-          },
-          "tint": {
-            "mode": "off",
-            "color": "#ff3b30",
-            "strength": 100
-          },
-          "stretch": false,
-          "slice": {
-            "enabled": true,
-            "left": 21,
-            "top": 0,
-            "right": 23,
-            "bottom": 0,
-            "scale": 1,
-            "repeat": "stretch"
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "9999",
-          "bindingKey": "",
-          "fontSize": 25,
-          "fontWeight": "normal",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#853818",
-          "offsetX": 8,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "team-icon-token-png-214",
-      "layerType": "image",
-      "displayName": "team_icon_token.png",
-      "x": 238,
-      "y": 218,
-      "scale": 0.48026315789473684,
-      "zIndex": 14,
-      "visual": {
-        "exportPath": "src/assets/team_icon_token.png",
-        "width": 80,
-        "height": 80
       }
     },
     {
@@ -1210,7 +1136,7 @@
         {
           "slotIndex": 0,
           "staticContent": "9999",
-          "bindingKey": "",
+          "bindingKey": "player.stage1",
           "fontSize": 18,
           "fontWeight": "normal",
           "fontFamily": "\"Lilita One\", cursive",
@@ -1329,7 +1255,7 @@
         {
           "slotIndex": 0,
           "staticContent": "Mozzi",
-          "bindingKey": "",
+          "bindingKey": "player.name1",
           "fontSize": 25,
           "fontWeight": "bold",
           "fontFamily": "\"Lilita One\", cursive",
@@ -1482,95 +1408,6 @@
         "exportPath": "src/assets/team_normal_02.png",
         "width": 110,
         "height": 124
-      }
-    },
-    {
-      "stableId": "ranking-box-num-png-227",
-      "layerType": "image",
-      "displayName": "ranking_box_num.png",
-      "x": 258,
-      "y": 312,
-      "scale": 0.65675057208238,
-      "zIndex": 23,
-      "visual": {
-        "exportPath": "src/assets/ranking_box_num.png",
-        "width": 102,
-        "height": 46,
-        "style": {
-          "shadow": {
-            "enabled": false,
-            "x": 0,
-            "y": 4,
-            "blur": 8,
-            "color": "#000000",
-            "opacity": 50
-          },
-          "tint": {
-            "mode": "off",
-            "color": "#ff3b30",
-            "strength": 100
-          },
-          "stretch": false,
-          "slice": {
-            "enabled": true,
-            "left": 21,
-            "top": 0,
-            "right": 23,
-            "bottom": 0,
-            "scale": 1,
-            "repeat": "stretch"
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "9999",
-          "bindingKey": "",
-          "fontSize": 25,
-          "fontWeight": "normal",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#853818",
-          "offsetX": 8,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "team-icon-token-png-228",
-      "layerType": "image",
-      "displayName": "team_icon_token.png",
-      "x": 238,
-      "y": 309,
-      "scale": 0.48026315789473684,
-      "zIndex": 24,
-      "visual": {
-        "exportPath": "src/assets/team_icon_token.png",
-        "width": 80,
-        "height": 80
       }
     },
     {
@@ -2054,95 +1891,6 @@
       }
     },
     {
-      "stableId": "ranking-box-num-png-238",
-      "layerType": "image",
-      "displayName": "ranking_box_num.png",
-      "x": 258,
-      "y": 403,
-      "scale": 0.65675057208238,
-      "zIndex": 33,
-      "visual": {
-        "exportPath": "src/assets/ranking_box_num.png",
-        "width": 102,
-        "height": 46,
-        "style": {
-          "shadow": {
-            "enabled": false,
-            "x": 0,
-            "y": 4,
-            "blur": 8,
-            "color": "#000000",
-            "opacity": 50
-          },
-          "tint": {
-            "mode": "off",
-            "color": "#ff3b30",
-            "strength": 100
-          },
-          "stretch": false,
-          "slice": {
-            "enabled": true,
-            "left": 21,
-            "top": 0,
-            "right": 23,
-            "bottom": 0,
-            "scale": 1,
-            "repeat": "stretch"
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "9999",
-          "bindingKey": "",
-          "fontSize": 25,
-          "fontWeight": "normal",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#853818",
-          "offsetX": 8,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "team-icon-token-png-239",
-      "layerType": "image",
-      "displayName": "team_icon_token.png",
-      "x": 238,
-      "y": 400,
-      "scale": 0.48026315789473684,
-      "zIndex": 34,
-      "visual": {
-        "exportPath": "src/assets/team_icon_token.png",
-        "width": 80,
-        "height": 80
-      }
-    },
-    {
       "stableId": "plain-text-240",
       "layerType": "component",
       "displayName": "Plain Text",
@@ -2606,95 +2354,6 @@
         "exportPath": "src/assets/team_normal_08.png",
         "width": 110,
         "height": 124
-      }
-    },
-    {
-      "stableId": "ranking-box-num-png-249",
-      "layerType": "image",
-      "displayName": "ranking_box_num.png",
-      "x": 258,
-      "y": 495,
-      "scale": 0.65675057208238,
-      "zIndex": 42,
-      "visual": {
-        "exportPath": "src/assets/ranking_box_num.png",
-        "width": 102,
-        "height": 46,
-        "style": {
-          "shadow": {
-            "enabled": false,
-            "x": 0,
-            "y": 4,
-            "blur": 8,
-            "color": "#000000",
-            "opacity": 50
-          },
-          "tint": {
-            "mode": "off",
-            "color": "#ff3b30",
-            "strength": 100
-          },
-          "stretch": false,
-          "slice": {
-            "enabled": true,
-            "left": 21,
-            "top": 0,
-            "right": 23,
-            "bottom": 0,
-            "scale": 1,
-            "repeat": "stretch"
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "9999",
-          "bindingKey": "",
-          "fontSize": 25,
-          "fontWeight": "normal",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#853818",
-          "offsetX": 8,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "team-icon-token-png-250",
-      "layerType": "image",
-      "displayName": "team_icon_token.png",
-      "x": 238,
-      "y": 492,
-      "scale": 0.48026315789473684,
-      "zIndex": 43,
-      "visual": {
-        "exportPath": "src/assets/team_icon_token.png",
-        "width": 80,
-        "height": 80
       }
     },
     {
@@ -3283,95 +2942,6 @@
       }
     },
     {
-      "stableId": "ranking-box-num-png-261",
-      "layerType": "image",
-      "displayName": "ranking_box_num.png",
-      "x": 258,
-      "y": 586,
-      "scale": 0.65675057208238,
-      "zIndex": 52,
-      "visual": {
-        "exportPath": "src/assets/ranking_box_num.png",
-        "width": 102,
-        "height": 46,
-        "style": {
-          "shadow": {
-            "enabled": false,
-            "x": 0,
-            "y": 4,
-            "blur": 8,
-            "color": "#000000",
-            "opacity": 50
-          },
-          "tint": {
-            "mode": "off",
-            "color": "#ff3b30",
-            "strength": 100
-          },
-          "stretch": false,
-          "slice": {
-            "enabled": true,
-            "left": 21,
-            "top": 0,
-            "right": 23,
-            "bottom": 0,
-            "scale": 1,
-            "repeat": "stretch"
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "9999",
-          "bindingKey": "",
-          "fontSize": 25,
-          "fontWeight": "normal",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#853818",
-          "offsetX": 8,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "team-icon-token-png-262",
-      "layerType": "image",
-      "displayName": "team_icon_token.png",
-      "x": 238,
-      "y": 583,
-      "scale": 0.48026315789473684,
-      "zIndex": 53,
-      "visual": {
-        "exportPath": "src/assets/team_icon_token.png",
-        "width": 80,
-        "height": 80
-      }
-    },
-    {
       "stableId": "plain-text-263",
       "layerType": "component",
       "displayName": "Plain Text",
@@ -3957,95 +3527,6 @@
       }
     },
     {
-      "stableId": "ranking-box-num-png-272",
-      "layerType": "image",
-      "displayName": "ranking_box_num.png",
-      "x": 258,
-      "y": 677,
-      "scale": 0.65675057208238,
-      "zIndex": 62,
-      "visual": {
-        "exportPath": "src/assets/ranking_box_num.png",
-        "width": 102,
-        "height": 46,
-        "style": {
-          "shadow": {
-            "enabled": false,
-            "x": 0,
-            "y": 4,
-            "blur": 8,
-            "color": "#000000",
-            "opacity": 50
-          },
-          "tint": {
-            "mode": "off",
-            "color": "#ff3b30",
-            "strength": 100
-          },
-          "stretch": false,
-          "slice": {
-            "enabled": true,
-            "left": 21,
-            "top": 0,
-            "right": 23,
-            "bottom": 0,
-            "scale": 1,
-            "repeat": "stretch"
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "9999",
-          "bindingKey": "",
-          "fontSize": 25,
-          "fontWeight": "normal",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#853818",
-          "offsetX": 8,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "team-icon-token-png-273",
-      "layerType": "image",
-      "displayName": "team_icon_token.png",
-      "x": 238,
-      "y": 674,
-      "scale": 0.48026315789473684,
-      "zIndex": 63,
-      "visual": {
-        "exportPath": "src/assets/team_icon_token.png",
-        "width": 80,
-        "height": 80
-      }
-    },
-    {
       "stableId": "plain-text-274",
       "layerType": "component",
       "displayName": "Plain Text",
@@ -4628,95 +4109,6 @@
         "exportPath": "src/assets/team_normal_12.png",
         "width": 110,
         "height": 124
-      }
-    },
-    {
-      "stableId": "ranking-box-num-png-283",
-      "layerType": "image",
-      "displayName": "ranking_box_num.png",
-      "x": 258,
-      "y": 768,
-      "scale": 0.65675057208238,
-      "zIndex": 72,
-      "visual": {
-        "exportPath": "src/assets/ranking_box_num.png",
-        "width": 102,
-        "height": 46,
-        "style": {
-          "shadow": {
-            "enabled": false,
-            "x": 0,
-            "y": 4,
-            "blur": 8,
-            "color": "#000000",
-            "opacity": 50
-          },
-          "tint": {
-            "mode": "off",
-            "color": "#ff3b30",
-            "strength": 100
-          },
-          "stretch": false,
-          "slice": {
-            "enabled": true,
-            "left": 21,
-            "top": 0,
-            "right": 23,
-            "bottom": 0,
-            "scale": 1,
-            "repeat": "stretch"
-          }
-        }
-      },
-      "texts": [
-        {
-          "slotIndex": 0,
-          "staticContent": "9999",
-          "bindingKey": "",
-          "fontSize": 25,
-          "fontWeight": "normal",
-          "fontFamily": "\"Lilita One\", cursive",
-          "color": "#853818",
-          "offsetX": 8,
-          "offsetY": 0,
-          "zIndex": 1,
-          "style": {
-            "gradient": {
-              "enabled": false,
-              "color2": "#ffffff",
-              "angle": 180
-            },
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
-            },
-            "depth": {
-              "size": 0,
-              "color": "#000000"
-            },
-            "shadow": {
-              "x": 0,
-              "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 0
-            }
-          }
-        }
-      ]
-    },
-    {
-      "stableId": "team-icon-token-png-284",
-      "layerType": "image",
-      "displayName": "team_icon_token.png",
-      "x": 238,
-      "y": 765,
-      "scale": 0.48026315789473684,
-      "zIndex": 73,
-      "visual": {
-        "exportPath": "src/assets/team_icon_token.png",
-        "width": 80,
-        "height": 80
       }
     },
     {

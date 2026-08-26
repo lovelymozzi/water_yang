@@ -277,7 +277,19 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be"
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "ingame"
+            },
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "pop_BuyLives_1"
+            }
+          ]
         }
       ]
     },
@@ -390,7 +402,19 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be"
+          "targetSceneUuid": null,
+          "branches": [
+            {
+              "condition": "else",
+              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
+              "targetSceneName": "ingame"
+            },
+            {
+              "condition": "no_heart",
+              "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be",
+              "targetSceneName": "pop_BuyLives_1"
+            }
+          ]
         }
       ]
     },
@@ -406,7 +430,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 8,
+      "zIndex": 7,
       "visible": true,
       "width": 720,
       "height": 190,
@@ -447,7 +471,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 9,
+      "zIndex": 8,
       "visible": true,
       "zLayerId": "zl-content",
       "componentState": {
@@ -552,7 +576,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 10,
+      "zIndex": 9,
       "visible": true,
       "zLayerId": "zl-content",
       "componentState": {
@@ -654,7 +678,7 @@
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
-      "zIndex": 11,
+      "zIndex": 10,
       "visible": true,
       "width": 86,
       "height": 92,
@@ -685,7 +709,7 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be"
+          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
         }
       ]
     }

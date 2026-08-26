@@ -63,25 +63,7 @@
       "sliceB": 73,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "branches": [
-            {
-              "condition": "current stage>4",
-              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
-              "targetSceneName": "Lobby"
-            },
-            {
-              "condition": "else",
-              "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541",
-              "targetSceneName": "Ingame"
-            }
-          ]
-        }
-      ]
+      "sliceRepeat": "stretch"
     },
     {
       "id": 2403,
@@ -1517,13 +1499,6 @@
       "rotation": 0,
       "zIndex": 21,
       "visible": true,
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
-        }
-      ],
       "width": 415,
       "height": 1000,
       "confettiPattern": "glitter-fall",

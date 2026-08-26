@@ -270,7 +270,7 @@
       "displayName": "heart_broken.png",
       "x": 139,
       "y": 335,
-      "zIndex": 4,
+      "zIndex": 3,
       "visual": {
         "exportPath": "src/assets/img_heart_fail.webp",
         "width": 112,
@@ -285,7 +285,7 @@
       "x": 100,
       "y": 473,
       "scale": 0.6470588235294117,
-      "zIndex": 5,
+      "zIndex": 4,
       "visual": {
         "exportPath": "src/assets/common_btn_green_sales.png",
         "width": 295,
@@ -341,7 +341,7 @@
       "displayName": "Plain Text",
       "x": 115,
       "y": 498,
-      "zIndex": 6,
+      "zIndex": 5,
       "visual": {
         "model": {
           "shape": {
@@ -479,7 +479,7 @@
       "x": 15,
       "y": 218,
       "scale": 0.5,
-      "zIndex": 7,
+      "zIndex": 6,
       "visual": {
         "exportPath": "src/assets/entry_popup2_textbase_normal_1.png",
         "width": 720,
@@ -492,7 +492,7 @@
       "displayName": "Plain Text",
       "x": 128,
       "y": 224,
-      "zIndex": 8,
+      "zIndex": 7,
       "visual": {
         "model": {
           "shape": {
@@ -603,13 +603,6 @@
             }
           }
         }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "plain-text-2370:click",
-          "targetSceneUuid": "26578336-5751-476b-b24d-f144818b21ce"
-        }
       ]
     },
     {
@@ -618,7 +611,7 @@
       "displayName": "Plain Text",
       "x": 82,
       "y": 319,
-      "zIndex": 9,
+      "zIndex": 8,
       "visual": {
         "model": {
           "shape": {
@@ -738,7 +731,7 @@
       "x": 324,
       "y": 242,
       "scale": 0.5854037267080746,
-      "zIndex": 10,
+      "zIndex": 9,
       "visual": {
         "exportPath": "src/assets/common_btn_top_x_red_1.png",
         "width": 86,
@@ -766,7 +759,7 @@
         {
           "trigger": "click",
           "eventName": "common-btn-top-x-red-png-2372:click",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+          "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d"
         }
       ]
     }

@@ -588,7 +588,7 @@
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+          "targetSceneUuid": "cf13fce2-4ff9-40d1-a47a-9680167f65f7"
         }
       ]
     },
@@ -632,14 +632,14 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2279",
+      "fxGroupId": "fx-2284",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+          "targetSceneUuid": "cf13fce2-4ff9-40d1-a47a-9680167f65f7"
         }
-      ],
-      "fxGroupId": "fx-2284"
+      ]
     },
     {
       "id": 2277,
@@ -681,14 +681,14 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-2279",
+      "fxGroupId": "fx-2284",
       "events": [
         {
           "trigger": "click",
           "eventName": "",
-          "targetSceneUuid": "321eb56d-18f3-4c27-baa9-8e48c6f38541"
+          "targetSceneUuid": "cf13fce2-4ff9-40d1-a47a-9680167f65f7"
         }
-      ],
-      "fxGroupId": "fx-2284"
+      ]
     },
     {
       "id": 2287,

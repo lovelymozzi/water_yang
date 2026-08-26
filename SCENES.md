@@ -23,6 +23,8 @@
 #### `Ranking`  ·  contract: `./web/ui/Ranking.contract.json`
 - sceneUuid: `3db24195-9465-47f6-be12-e9aeeebf74e6`
 - 이벤트: 없음
+- 텍스트 바인딩: `player.stage1` · `player.name1`
+- 이미지 바인딩: `rank.background`
 <!-- SCENE:Ranking END -->
 
 <!-- SCENE:home_bottom BEGIN -->
@@ -55,14 +57,14 @@
 <!-- SCENE:pop_BuyLives_1 BEGIN -->
 #### `pop_BuyLives_1`  ·  contract: `./web/ui/pop_BuyLives_1.contract.json`
 - sceneUuid: `f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be`
-- 이벤트: `button-green-png-309:click` · `button-yellow1-png-311:click` · `icon-close01-png-2233:click`
+- 이벤트: `common-btn-green-sales-png-2419:click` · `common-btn-green-sales-png-2424:click` · `common-btn-top-x-red-png-2434:click`
 - 텍스트 바인딩: `heart.timer` · `heart.current` · `cost.refill`
 <!-- SCENE:pop_BuyLives_1 END -->
 
 <!-- SCENE:pop_Fail BEGIN -->
 #### `pop_Fail`  ·  contract: `./web/ui/pop_Fail.contract.json`
 - sceneUuid: `ab1ddf44-eda7-4e00-b5c8-98dc7d3040dd`
-- 이벤트: `common-btn-green-sales-png-2367:click` · `plain-text-2370:click` · `common-btn-top-x-red-png-2372:click`
+- 이벤트: `common-btn-green-sales-png-2367:click` · `common-btn-top-x-red-png-2372:click`
 <!-- SCENE:pop_Fail END -->
 
 <!-- SCENE:pop_Give_up BEGIN -->
@@ -74,19 +76,19 @@
 <!-- SCENE:pop_LevelFail BEGIN -->
 #### `pop_LevelFail`  ·  contract: `./web/ui/pop_LevelFail.contract.json`
 - sceneUuid: `cf13fce2-4ff9-40d1-a47a-9680167f65f7`
-- 이벤트: `common-btn-green-sales-png-2318:click` · `common-btn-top-x-red-png-2350:click`
+- 이벤트: `common-btn-green-sales-png-2318:click` · `plain-text-2319:click` · `common-btn-top-x-red-png-2350:click`
 <!-- SCENE:pop_LevelFail END -->
 
 <!-- SCENE:pop_LevelWin BEGIN -->
 #### `pop_LevelWin`  ·  contract: `./web/ui/pop_LevelWin.contract.json`
 - sceneUuid: `af666955-071f-412b-832b-02370af5062f`
-- 이벤트: `common-popup-box-copy-png-2402:click` · `common-btn-green-sales-png-2411:click` · `common-btn-green-sales-png-2404:click` · `confetti-148:click`
+- 이벤트: `common-btn-green-sales-png-2411:click` · `common-btn-green-sales-png-2404:click`
 <!-- SCENE:pop_LevelWin END -->
 
 <!-- SCENE:pop_OutOfMoves BEGIN -->
 #### `pop_OutOfMoves`  ·  contract: `./web/ui/pop_OutOfMoves.contract.json`
 - sceneUuid: `26578336-5751-476b-b24d-f144818b21ce`
-- 이벤트: `common-btn-green-sales-png-2390:click` · `plain-text-2393:click` · `common-btn-top-x-red-png-2395:click`
+- 이벤트: `common-btn-green-sales-png-2390:click` · `common-btn-top-x-red-png-2395:click`
 - 텍스트 바인딩: `continue.coin`
 <!-- SCENE:pop_OutOfMoves END -->
 
@@ -119,4 +121,16 @@
 - GameField 레이어 있음
 <!-- SCENE:splash END -->
 
+<!-- CHARACTERS BEGIN -->
+## 캐릭터 (Character Maker)
 
+> 정의 `characters/<id>.character.json` · 목록 `characters/index.json` · **개별 사용법 `characters/<id>.md`**(좌표 규약·재생 시맨틱·호출 예시 — 직접 파싱한다면 반드시 읽을 것).
+> 조작은 엘리먼트의 `__uiCharacter` 핸들: `equip(socketId, partId)` · `play(clipId, {loop})` · `stop()` · `getEquip()`. **클립은 표시 이름이 아니라 clipId 로 호출**(이름은 바뀔 수 있음).
+> 씬 안이면 `renderer.el(stableId).__uiCharacter`, 씬 밖 인게임이면 `SceneRenderer.mountCharacter(host, id, {defBase, basePath, equip})`.
+> 정의 경로 기준(`defBase`=publish 출력 폴더)과 이미지 경로 기준(`basePath`=프로젝트 루트)은 **서로 다른 값**이다 — 하나로 합치면 이미지가 깨진다.
+> 슬롯·파츠·클립을 코드로 만들지 말 것 — 없으면 ui-editor 캐릭터 메이커에 추가 요청.
+
+| id | 이름 | 슬롯(파츠) | 클립 |
+|---|---|---|---|
+| `new-character` | New Character | 없음 | 없음 |
+<!-- CHARACTERS END -->
