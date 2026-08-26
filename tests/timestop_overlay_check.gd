@@ -26,9 +26,9 @@ func _process(_delta: float) -> bool:
 	assert(float(material.get_shader_parameter("vertical_edge_size")) > float(material.get_shader_parameter("side_edge_size")))
 	assert(float(material.get_shader_parameter("edge_gap")) >= 0.0)
 	assert(float(material.get_shader_parameter("cartoon_edge_sharpness")) >= 1.0)
-	var snow = _scene.get_node("Camera3D/IceDissolveSnow") as GPUParticles3D
-	assert(snow.visible and snow.emitting)
-	assert(snow.local_coords)
+	for snow_name in ["IceDissolveSnowTop", "IceDissolveSnowBottom"]:
+		var snow = _scene.get_node("Camera3D/%s" % snow_name) as GPUParticles3D
+		assert(snow.visible and snow.emitting and snow.local_coords)
 	var time_before: float = _scene._stage_time_left
 	_scene._process(10.0)
 	assert(is_equal_approx(_scene._stage_time_left, time_before))

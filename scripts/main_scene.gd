@@ -22,7 +22,8 @@ const TIMEOUT_WARNING_SECONDS := 10.0
 @onready var level_manager: LevelManager = $LevelManager
 @onready var clear_label: Label = $CanvasLayer/ClearLabel
 @onready var ice_overlay: MeshInstance3D = $Camera3D/IceDissolveMesh
-@onready var ice_snow: GPUParticles3D = $Camera3D/IceDissolveSnow
+@onready var ice_snow_top: GPUParticles3D = $Camera3D/IceDissolveSnowTop
+@onready var ice_snow_bottom: GPUParticles3D = $Camera3D/IceDissolveSnowBottom
 @onready var timeout_warning_material := $CanvasLayer/TimeoutWarningOverlay.material as ShaderMaterial
 
 var _stall_reports := 0
@@ -281,9 +282,10 @@ func _on_host_message(topic: String, payload) -> void:
 		return
 	var duration := maxf(0.95, float(payload.get("duration", 1.4)))
 	ice_overlay.visible = true
-	ice_snow.visible = true
-	ice_snow.emitting = true
-	ice_snow.restart()
+	for snow in [ice_snow_top, ice_snow_bottom]:
+		snow.show()
+		snow.emitting = true
+		snow.restart()
 	material.set_shader_parameter("dissolve_amount", 0.0)
 	_ice_overlay_tween = create_tween()
 	_ice_overlay_tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -291,7 +293,8 @@ func _on_host_message(topic: String, payload) -> void:
 	_ice_overlay_tween.tween_interval(duration - 0.95)
 	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_amount", 0.0, 0.7)
 	_ice_overlay_tween.tween_callback(ice_overlay.hide)
-	_ice_overlay_tween.tween_callback(ice_snow.hide)
+	_ice_overlay_tween.tween_callback(ice_snow_top.hide)
+	_ice_overlay_tween.tween_callback(ice_snow_bottom.hide)
 
 
 func _show_obstacle_item_targets() -> void:
