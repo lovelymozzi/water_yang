@@ -8,9 +8,10 @@ const KEY_TOON_MATERIAL := preload("res://resources/key_toon_material.tres")
 const ORANGE_CAT_COLOR_ID := 0
 const MODEL_TEXTURE_PATH := "res://water_yang/cat1.jpeg"
 const TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat1_mask.jpg"
-# 중첩고양이 색 영역 마스크(3_기믹.md 2). 아직 아트가 없으면 셰이더가 임시 줄무늬로 폴백한다.
-const COLOR_MASK1_PATH := "res://water_yang/color_mask1.jpg"
-const COLOR_MASK2_PATH := "res://water_yang/color_mask2.jpg"
+# 중첩고양이 색 영역 마스크(3_기믹.md 2). 흰 영역(배)만 안쪽 색으로 칠해진다.
+# 텍스처를 못 찾으면 셰이더가 임시 줄무늬로 폴백한다.
+const COLOR_MASK1_PATH := "res://src/assets/color_mask1.jpg"
+const COLOR_MASK2_PATH := "res://src/assets/color_mask2.jpg"
 const NEST_REVEAL_TWEEN_SECONDS := 0.35
 const CLOSED_EYES_TEXTURE_PATH := "res://water_yang/cat1_1.jpeg"
 const OPEN_MOUTH_TEXTURE_PATH := "res://water_yang/cat1_2.jpeg"
