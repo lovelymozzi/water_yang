@@ -28,16 +28,13 @@ void fragment() {
 	float aspect = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
 	float side_distance = min(UV.x * aspect, (1.0 - UV.x) * aspect);
 	float vertical_distance = min(UV.y, 1.0 - UV.y);
-	float noise_value = floor(frost_noise(UV * noise_scale) * 4.0) / 3.0;
-	float edge_noise = mix(1.0, mix(0.72, 1.22, noise_value), noise_strength);
-	float side_edge = dissolve_value * side_edge_size * edge_noise;
-	float vertical_edge = dissolve_value * vertical_edge_size * edge_noise;
-	float side_ice = step(side_distance, side_edge);
-	float vertical_ice = step(vertical_distance, vertical_edge);
-	float ice = max(side_ice, vertical_ice);
-	float side_glow = 1.0 - step(0.018, abs(side_distance - side_edge));
-	float vertical_glow = 1.0 - step(0.018, abs(vertical_distance - vertical_edge));
-	float glow = max(side_glow, vertical_glow);
-	vec3 color = mix(ice_color.rgb, glow_color.rgb, glow);
+	float noise_value = frost_noise(UV * noise_scale + vec2(0.0, TIME * 0.08));
+	float edge_noise = mix(1.0, mix(0.88, 1.12, noise_value), noise_strength);
+	float side_progress = min(side_distance / max(dissolve_value * side_edge_size * edge_noise, 0.0001), 2.0);
+	float vertical_progress = min(vertical_distance / max(dissolve_value * vertical_edge_size * edge_noise, 0.0001), 2.0);
+	float edge_progress = -log(exp(-8.0 * side_progress) + exp(-8.0 * vertical_progress)) / 8.0;
+	float ice = 1.0 - smoothstep(0.92, 1.08, edge_progress);
+	float glow = 1.0 - smoothstep(0.0, 0.12, abs(edge_progress - 1.0));
+	vec3 color = mix(ice_color.rgb, glow_color.rgb, glow * 0.8);
 	COLOR = vec4(color, ice * mix(0.75, 0.92, noise_value * noise_strength));
 }
