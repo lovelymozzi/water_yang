@@ -32,6 +32,26 @@ func _process(_delta: float) -> bool:
 func _run_checks() -> void:
 	_expect(_main._format_stage_timer(60) == "01:00", "1분 타이머 표시가 01:00이 아니다")
 	_expect(_main._format_stage_timer(0) == "00:00", "0초 타이머 표시가 00:00이 아니다")
+	_expect(
+		_main.get_node_or_null("CanvasLayer/TimeoutWarningOverlay") != null,
+		"타임아웃 경고 오버레이가 없다"
+	)
+	var warning_material: ShaderMaterial = _main.get_node(
+		"CanvasLayer/TimeoutWarningOverlay"
+	).material
+	_main._stage_time_left = 5.0
+	_main._stage_timer_running = true
+	_main._process(0.0)
+	_expect(
+		float(warning_material.get_shader_parameter("strength")) > 0.0,
+		"5초 남았을 때 타임아웃 경고가 켜지지 않았다"
+	)
+	_main._stage_timer_running = false
+	_main._process(0.0)
+	_expect(
+		is_zero_approx(float(warning_material.get_shader_parameter("strength"))),
+		"타이머가 멈췄는데 타임아웃 경고가 남아 있다"
+	)
 	_main._on_host_start()
 	_expect(not _main._stage_timer_running, "첫 터치 전 타이머가 시작됐다")
 	var first_touch := InputEventScreenTouch.new()
@@ -68,7 +88,7 @@ func _run_checks() -> void:
 	_main._load_stage(0)
 	_stage_loaded = true
 
-	var manager: LevelManager = _main.level_manager
+	manager = _main.level_manager
 	var expected_cats: int = (level["cats"] as Array).size()
 	var expected_holes: int = (level["holes"] as Array).size()
 	_expect(

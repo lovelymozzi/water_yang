@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://nthjajr4o682" path="res://scripts/main_scene.gd" id="1_q0f23"]
 [ext_resource type="Script" uid="uid://kc76tu4jlnus" path="res://scripts/level_manager.gd" id="2_5srec"]
 [ext_resource type="Shader" uid="uid://bo1ktccmbkqeh" path="res://scripts/ice_screen_overlay.gdshader" id="2_ice_screen"]
+[ext_resource type="Shader" uid="uid://cs8vmjmkdp6c" path="res://scripts/timeout_warning_overlay.gdshader" id="2_timeout_warning"]
 [ext_resource type="PackedScene" path="res://scenes/tree_shadow_decor.tscn" id="3_c1pb6"]
 [ext_resource type="Script" uid="uid://cilxgik6gxfo4" path="res://scripts/cat_entity.gd" id="3_cat"]
 [ext_resource type="PackedScene" path="res://scenes/tree_decor.tscn" id="3_rt2n2"]
@@ -107,6 +108,10 @@ shader_parameter/dissolve_value = 0.0
 shader_parameter/edge_size = 0.22
 shader_parameter/ice_color = Color(0.32, 0.78, 1, 1)
 shader_parameter/glow_color = Color(0.9, 0.98, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_timeout_warning"]
+shader = ExtResource("2_timeout_warning")
+shader_parameter/strength = 0.0
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
 script = ExtResource("1_q0f23")
@@ -1030,6 +1035,15 @@ expand_mode = 1
 [node name="IceOverlay" type="ColorRect" parent="CanvasLayer" unique_id=1890042150]
 visible = false
 material = SubResource("ShaderMaterial_ice_screen")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TimeoutWarningOverlay" type="ColorRect" parent="CanvasLayer" unique_id=1948883077]
+material = SubResource("ShaderMaterial_timeout_warning")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

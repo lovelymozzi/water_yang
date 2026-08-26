@@ -13,6 +13,7 @@ const STAGE_LEVELS_DIR := "res://resources/levels"
 const DEV_STAGE_HANDOFF_PATH := "user://dev_start_stage.txt"
 const STAGE_ADVANCE_DELAY_SECONDS := 1.4
 const DEFAULT_STAGE_TIME_SECONDS := 60.0
+const TIMEOUT_WARNING_SECONDS := 10.0
 
 # 개발용 시작 스테이지 (1부터). Inspector 에서 바꾸거나 실행 인자 `-- stage=10` 으로
 # 덮어쓴다. 특정 스테이지만 다시 플레이해 볼 때 쓴다. 범위를 넘으면 마지막 스테이지다.
@@ -21,6 +22,7 @@ const DEFAULT_STAGE_TIME_SECONDS := 60.0
 @onready var level_manager: LevelManager = $LevelManager
 @onready var clear_label: Label = $CanvasLayer/ClearLabel
 @onready var ice_overlay: ColorRect = $CanvasLayer/IceOverlay
+@onready var timeout_warning_material := $CanvasLayer/TimeoutWarningOverlay.material as ShaderMaterial
 
 var _stall_reports := 0
 var _stage_paths: PackedStringArray = PackedStringArray()
@@ -155,6 +157,12 @@ func _process(delta: float) -> void:
 			_stage_timer_running = false
 			if UiBridge.is_hosted:
 				UiBridge.post_progress({"outcome": "fail", "score": 0})
+
+	var warning_strength := 0.0
+	if _stage_timer_running:
+		var urgency := clampf((TIMEOUT_WARNING_SECONDS - _stage_time_left) / TIMEOUT_WARNING_SECONDS, 0.0, 1.0)
+		warning_strength = urgency * (0.75 + 0.25 * sin(Time.get_ticks_msec() * 0.012))
+	timeout_warning_material.set_shader_parameter("strength", warning_strength)
 
 	# 멈춘 프레임을 그 시점의 상태와 함께 기록한다. 로그가 없으면 원인을 좁힐 수 없다.
 	if delta < FRAME_STALL_WARNING_SECONDS or _stall_reports >= 40:

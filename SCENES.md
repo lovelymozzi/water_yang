@@ -37,7 +37,7 @@
 <!-- SCENE:ingame BEGIN -->
 #### `ingame`  ·  contract: `./web/ui/ingame.contract.json`
 - sceneUuid: `321eb56d-18f3-4c27-baa9-8e48c6f38541`
-- 이벤트: `bar1-png-374:click` · `gimmick-coinpurse-coin-png-375:click` · `bar1-png-376:click` · `home-btn-plus-png-377:click` · `bar1-png-378:click` · `entry-box-normal-png-380:click` · `entry-box-normal-png-381:click` · `entry-box-normal-png-382:click` · `entry-box-normal-png-383:click` · `item2-png-386:click` · `item1-png-387:click` · `common-icon-greendot2-webp-388:click` · `common-icon-greendot2-webp-389:click` · `common-icon-greendot2-webp-390:click` · `itme3-1-png-391:click` · `entry-box-normal-png-300:click` · `entry-box-normal-png-397:click` · `item1-png-399:click` · `entry-item-num-png-395:click` · `entry-box-normal-png-404:click` · `common-icon-greendot2-webp-406:click` · `itme3-1-png-407:click` · `entry-item-num-png-408:click`
+- 이벤트: `bar1-png-374:click` · `entry-box-normal-png-380:click` · `entry-box-normal-png-381:click` · `entry-box-normal-png-382:click` · `entry-box-normal-png-383:click` · `entry-box-normal-png-397:click` · `entry-box-normal-png-404:click`
 - 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer` · `item.move.current` · `item.timestop.current` · `item.remove.current` · `item.cancle`
 - 위젯: `item1`(toggle) · `itme3`(toggle) — 입력 이벤트: `widget:item1` · `widget:itme3`
 - GameField 레이어 있음
@@ -103,7 +103,7 @@
 <!-- SCENE:pop_Settings_1 BEGIN -->
 #### `pop_Settings_1`  ·  contract: `./web/ui/pop_Settings_1.contract.json`
 - sceneUuid: `235b7eb7-c304-45b3-aa55-25f18050fd64`
-- 이벤트: `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click` · `entry-box-normal-png-2287:click`
+- 이벤트: `setting-btn-option-png-2245:click` · `back-off-png-2278:click` · `back-on-png-2277:click` · `setting-btn-option-png-2278:click` · `return-on-png-2282:click` · `return-off-png-2277:click` · `entry-box-normal-png-2287:click` · `home-btn-setting-webp-2288:click`
 - 위젯: `music`(toggle) · `sound`(toggle) · `vibration`(toggle) · `lobby`(toggle) · `retry`(toggle) — 입력 이벤트: `widget:music` · `widget:sound` · `widget:vibration` · `widget:lobby` · `widget:retry`
 <!-- SCENE:pop_Settings_1 END -->
 

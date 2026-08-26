@@ -7,7 +7,7 @@
 <link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 
-<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}</style>
+<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}</style>
 </head>
 <body>
 <script type="module">
@@ -60,7 +60,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":15703760,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":15786404,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
