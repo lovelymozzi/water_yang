@@ -32,6 +32,7 @@ const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
 const CAT_MOVE_SFX = './sound/cat_move.mp3';
 const ICE_BREAK_SFX = './sound/ice_breake.mp3';
+const DIGGING_SFX = './sound/diggingt_optimized.mp3';
 const STAGE_CLEAR1_SFX = './sound/stage_clear1.mp3';
 const STAGE_CLEAR2_SFX = './sound/stage_clear2.mp3';
 const TIME_OUT_SFX = './sound/time_out1.mp3';
@@ -58,7 +59,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "$GODOT_URL";
-const GODOT_CONFIG = $GODOT_CONFIG;
+const GODOT_CONFIG = { ...$GODOT_CONFIG, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -66,6 +67,27 @@ import { ProgressManager } from './ui/progress-manager.js';
 import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
+
+const splashCache = 'caches' in window ? await caches.open(STORAGE_PREFIX + 'splash_load_v1') : null;
+const nativeFetch = window.fetch.bind(window);
+const splashCacheablePath = /\.(pck|wasm|js|json|png|jpe?g|webp|mp3|ogg|wav|woff2)$/i;
+if (splashCache) {
+  await navigator.storage?.persist?.();
+  window.fetch = async (input, init) => {
+    const request = new Request(input, init);
+    const url = new URL(request.url);
+    if (request.method !== 'GET' || request.headers.has('range') || url.origin !== location.origin || !splashCacheablePath.test(url.pathname)) {
+      return nativeFetch(input, init);
+    }
+    const cached = await splashCache.match(request);
+    if (cached) return cached;
+    const response = await nativeFetch(request);
+    if (response.ok) await splashCache.put(request, response.clone());
+    return response;
+  };
+} else {
+  console.warn('[Splash cache] Cache API를 사용할 수 없어 splash 로딩 데이터를 기기에 저장하지 못합니다.');
+}
 
 const CLICK_EVENT_STABLE_IDS = new Set();
 const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
@@ -230,6 +252,7 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
   if (sfx === 'cat-move' && buttonSfxEnabled) sound.playSfx(CAT_MOVE_SFX);
   if (sfx === 'ice-break' && buttonSfxEnabled) sound.playSfx(ICE_BREAK_SFX);
+  if (sfx === 'digging' && buttonSfxEnabled) sound.playSfx(DIGGING_SFX);
   if (sfx === 'cat-hole-absorb') {
     if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
   }
@@ -484,6 +507,13 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneUuid === SPLASH_UI_SCENE_UUID) {
     splashRenderer = renderer;
     renderer.getElementByName('GameField')?.style.setProperty('visibility', 'hidden');
+    if (splashCache) {
+      await Promise.all([
+        fetch(GODOT_ENGINE_URL),
+        fetch(`${GODOT_CONFIG.executable}.wasm`),
+        fetch(GODOT_CONFIG.mainPack || `${GODOT_CONFIG.executable}.pck`),
+      ]);
+    }
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
     await game.start(godotCartridge, {

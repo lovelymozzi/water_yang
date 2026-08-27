@@ -5,6 +5,9 @@ const FRAME_STALL_WARNING_SECONDS := 0.25
 const DRAG_CONTROLLER_SCRIPT = preload("res://scripts/drag_controller.gd")
 const ITEM_REMOVE_TEXTURE = preload("res://water_yang/item_over.png")
 const ITEM_MOVE_ARROW_TEXTURE = preload("res://src/assets/arrow.png")
+const ITEM_TARGET_BOB_HEIGHT := 0.18
+const ITEM_TARGET_BOB_SECONDS := 0.46
+const ITEM_TARGET_SCALE := 1.13
 
 # `stage_batch_generator.gd` 가 stage_001.json 부터 순번으로 저장하는 폴더.
 # 파일이 하나라도 있으면 플레이는 1스테이지부터 차례로 진행한다.
@@ -294,6 +297,8 @@ func _on_host_message(topic: String, payload) -> void:
 		push_error("IceOverlay requires a ShaderMaterial")
 		return
 	var duration := maxf(0.95, float(payload.get("duration", 1.4)))
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"sfx": "ice-break"})
 	ice_overlay.visible = true
 	for snow in [ice_snow_top, ice_snow_bottom]:
 		snow.show()
@@ -305,6 +310,10 @@ func _on_host_message(topic: String, payload) -> void:
 	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_amount", ICE_DISSOLVE_PEAK, 0.25)
 	_ice_overlay_tween.tween_interval(duration - 0.95)
 	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_amount", 0.0, 0.7)
+	_ice_overlay_tween.tween_callback(func():
+		if UiBridge.is_hosted:
+			UiBridge.post_progress({"sfx": "ice-break"})
+	)
 	_ice_overlay_tween.tween_callback(ice_overlay.hide)
 	_ice_overlay_tween.tween_callback(ice_snow_top.hide)
 	_ice_overlay_tween.tween_callback(ice_snow_bottom.hide)
@@ -323,6 +332,7 @@ func _show_obstacle_item_targets() -> void:
 			cell, LevelManager.TILE_HEIGHT + level_manager.obstacle_fbx_height + 0.35
 		)
 		_obstacle_item_targets.add_child(target)
+		_animate_item_target(target)
 
 
 func _clear_item_targets(targets: Node3D) -> void:
@@ -333,9 +343,26 @@ func _clear_item_targets(targets: Node3D) -> void:
 		target.queue_free()
 
 
+func _animate_item_target(target: Node3D) -> void:
+	var base_y := target.position.y
+	var base_scale := target.scale
+	var bob := create_tween().bind_node(target).set_loops()
+	bob.tween_property(target, "position:y", base_y + ITEM_TARGET_BOB_HEIGHT, ITEM_TARGET_BOB_SECONDS) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	bob.tween_property(target, "position:y", base_y - ITEM_TARGET_BOB_HEIGHT * 0.45, ITEM_TARGET_BOB_SECONDS) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	bob.tween_property(target, "position:y", base_y, ITEM_TARGET_BOB_SECONDS * 0.6) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	var squash := create_tween().bind_node(target).set_loops()
+	squash.tween_property(target, "scale", base_scale * ITEM_TARGET_SCALE, ITEM_TARGET_BOB_SECONDS * 0.6) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	squash.tween_property(target, "scale", base_scale, ITEM_TARGET_BOB_SECONDS * 0.7) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
 func _on_obstacle_selected(cell: Vector2i) -> void:
 	if level_manager.remove_obstacle(cell):
-		UiBridge.post_progress({"itemUsed": "remove"})
+		UiBridge.post_progress({"itemUsed": "remove", "sfx": "digging"})
 	_clear_item_targets(_obstacle_item_targets)
 
 
@@ -353,6 +380,7 @@ func _show_cat_item_targets() -> bool:
 			cat.get_head_cell() + Vector2i.UP, level_manager.cat_world_y + 0.35
 		) + Vector3(0.0, 0.0, level_manager.fitted_tile_size() * 0.25)
 		_cat_item_targets.add_child(arrow)
+		_animate_item_target(arrow)
 	return not _cat_item_targets.get_children().is_empty()
 
 

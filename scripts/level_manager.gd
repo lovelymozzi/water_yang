@@ -24,6 +24,7 @@ const ICE_NUMBER_OUTLINE_COLOR := Color(0.0, 0.0, 0.0, 1.0)
 const ICE_NUMBER_EMBOLDEN := 0.28
 # 얼음 파편 색. 얼음 블록 틴트와 같은 계열로 맞춘다.
 const ICE_SHARD_COLOR := Color(0.35, 0.78, 0.9, 1.0)
+const ITEM_REMOVE_SHARD_COLOR := Color(0.25, 1.0, 0.34, 1.0)
 const SHARD_LIFETIME := 0.9
 const TILE_HEIGHT := 0.12
 const TILE_CORNER_RADIUS := 0.14
@@ -501,6 +502,8 @@ func _break_ice_cover(cell: Vector2i) -> void:
 # 파라미터가 고정이므로 인스턴스 하나를 모든 파편이 돌려 쓴다(셰이더 컴파일도 한 번뿐).
 static var _shard_process_material: ParticleProcessMaterial = null
 static var _shard_mesh: BoxMesh = null
+static var _item_remove_process_material: ParticleProcessMaterial = null
+static var _item_remove_mesh: BoxMesh = null
 
 
 static func _ensure_shard_resources() -> void:
@@ -553,6 +556,52 @@ func _spawn_ice_shards(world_position: Vector3) -> void:
 	_holes_root.add_child(particles)
 	particles.emitting = true
 	# one_shot 파티클은 스스로 사라지지 않는다. 수명이 끝나면 정리한다.
+	get_tree().create_timer(SHARD_LIFETIME + 0.5).timeout.connect(particles.queue_free)
+
+
+static func _ensure_item_remove_resources() -> void:
+	if _item_remove_process_material != null:
+		return
+	var process := ParticleProcessMaterial.new()
+	process.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	process.emission_sphere_radius = 0.28
+	process.direction = Vector3(0.0, 1.0, 0.0)
+	process.spread = 120.0
+	process.initial_velocity_min = 1.8
+	process.initial_velocity_max = 4.2
+	process.gravity = Vector3(0.0, -4.5, 0.0)
+	process.angular_velocity_min = -360.0
+	process.angular_velocity_max = 360.0
+	process.scale_min = 0.35
+	process.scale_max = 0.9
+	_item_remove_process_material = process
+
+	var shard := BoxMesh.new()
+	shard.size = Vector3(0.14, 0.14, 0.14)
+	var material := StandardMaterial3D.new()
+	material.albedo_color = ITEM_REMOVE_SHARD_COLOR
+	material.emission_enabled = true
+	material.emission = ITEM_REMOVE_SHARD_COLOR
+	material.emission_energy_multiplier = 0.65
+	shard.material = material
+	_item_remove_mesh = shard
+
+
+func _spawn_item_remove_shards(world_position: Vector3) -> void:
+	_ensure_item_remove_resources()
+	var particles := GPUParticles3D.new()
+	particles.name = "ItemRemoveShards"
+	particles.amount = 24
+	particles.lifetime = SHARD_LIFETIME
+	particles.one_shot = true
+	particles.explosiveness = 1.0
+	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	particles.visibility_aabb = AABB(Vector3(-3.0, -1.0, -3.0), Vector3(6.0, 5.0, 6.0))
+	particles.process_material = _item_remove_process_material
+	particles.draw_pass_1 = _item_remove_mesh
+	particles.position = world_position
+	_obstacles_root.add_child(particles)
+	particles.emitting = true
 	get_tree().create_timer(SHARD_LIFETIME + 0.5).timeout.connect(particles.queue_free)
 
 
@@ -1112,9 +1161,12 @@ func remove_obstacle(cell: Vector2i) -> bool:
 	_set_cell_state(cell, CellState.EMPTY)
 	_set_cell_ref(cell, null)
 	var visual := _obstacles_root.get_node_or_null("Obstacle_%d_%d" % [cell.x, cell.y])
+	var effect_position := grid_to_world(cell, TILE_HEIGHT + obstacle_fbx_height * 0.5)
 	if visual != null:
+		effect_position = visual.position
 		_obstacles_root.remove_child(visual)
 		visual.queue_free()
+	_spawn_item_remove_shards(effect_position)
 	return true
 
 
