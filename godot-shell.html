@@ -176,14 +176,16 @@ document.addEventListener('click', event => {
   }
   const isLobbyStageButton = event.target instanceof Element
     && !!event.target.closest('[data-stable-id="home-btn-stage-normal-png-145"]');
-  if (buttonSfxEnabled && isLobbyStageButton) sound.playSfx(BUTTON_CLICK_SFX);
+  const isNavTab = event.target instanceof Element
+    && !!event.target.closest('[data-nav-tab]');
+  if (buttonSfxEnabled && (isLobbyStageButton || isNavTab)) sound.playSfx(BUTTON_CLICK_SFX);
   if (isLobbyStageButton && economy.getHearts() === 0 && !hasUnlimitedHearts()) {
     event.preventDefault();
     event.stopImmediatePropagation();
     flow.current?.renderer?.getActiveTabRenderer()?.getElement('home-btn-plus-png-94')?.click();
     return;
   }
-  if (buttonSfxEnabled && !isLobbyStageButton && event.target instanceof Element) {
+  if (buttonSfxEnabled && !isLobbyStageButton && !isNavTab && event.target instanceof Element) {
     let clickEventElement = event.target;
     while (clickEventElement != null) {
       if (CLICK_EVENT_STABLE_IDS.has(clickEventElement.dataset.stableId)) {

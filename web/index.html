@@ -62,7 +62,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":18898048,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":18899872,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -178,14 +178,16 @@ document.addEventListener('click', event => {
   }
   const isLobbyStageButton = event.target instanceof Element
     && !!event.target.closest('[data-stable-id="home-btn-stage-normal-png-145"]');
-  if (buttonSfxEnabled && isLobbyStageButton) sound.playSfx(BUTTON_CLICK_SFX);
+  const isNavTab = event.target instanceof Element
+    && !!event.target.closest('[data-nav-tab]');
+  if (buttonSfxEnabled && (isLobbyStageButton || isNavTab)) sound.playSfx(BUTTON_CLICK_SFX);
   if (isLobbyStageButton && economy.getHearts() === 0 && !hasUnlimitedHearts()) {
     event.preventDefault();
     event.stopImmediatePropagation();
     flow.current?.renderer?.getActiveTabRenderer()?.getElement('home-btn-plus-png-94')?.click();
     return;
   }
-  if (buttonSfxEnabled && !isLobbyStageButton && event.target instanceof Element) {
+  if (buttonSfxEnabled && !isLobbyStageButton && !isNavTab && event.target instanceof Element) {
     let clickEventElement = event.target;
     while (clickEventElement != null) {
       if (CLICK_EVENT_STABLE_IDS.has(clickEventElement.dataset.stableId)) {
