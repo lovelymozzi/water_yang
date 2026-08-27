@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://bge6jl45lrd5k"]
 
 [ext_resource type="Shader" uid="uid://233xbuxhkcfd" path="res://scripts/ice_block.gdshader" id="1_ice_shader"]
-[ext_resource type="Texture2D" uid="uid://bkokswf8h1eiw" path="res://water_yang/ice1.png" id="2_ice_texture"]
+[ext_resource type="Texture2D" uid="uid://bkokswf8h1eiw" path="res://src/assets/ice1.png" id="2_ice_texture"]
 [ext_resource type="Shader" uid="uid://bcaldpdcsidgr" path="res://scripts/obstacle_outline.gdshader" id="3_outline"]
 
 [sub_resource type="ShaderMaterial" id="IceOutline"]

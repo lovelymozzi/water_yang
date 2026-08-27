@@ -1060,7 +1060,7 @@
       "displayName": "Plain Text",
       "x": 82,
       "y": 319,
-      "zIndex": 15,
+      "zIndex": 13,
       "visual": {
         "model": {
           "shape": {
@@ -1180,7 +1180,7 @@
       "x": 324,
       "y": 242,
       "scale": 0.5854037267080746,
-      "zIndex": 16,
+      "zIndex": 14,
       "visual": {
         "exportPath": "src/assets/common_btn_top_x_red_1.png",
         "width": 86,
@@ -1218,7 +1218,7 @@
       "displayName": "Plain Text",
       "x": 128,
       "y": 234,
-      "zIndex": 17,
+      "zIndex": 15,
       "visual": {
         "model": {
           "shape": {

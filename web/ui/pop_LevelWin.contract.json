@@ -29,7 +29,7 @@
   "groups": [
     {
       "id": "grp-2401",
-      "name": "Group",
+      "name": "btn_continue",
       "layerStableIds": [
         "common-btn-green-sales-png-2404",
         "plain-text-2405"
@@ -59,6 +59,24 @@
         "itemicon-coins-l-png-136",
         "plain-text-137",
         "video-png-134"
+      ]
+    },
+    {
+      "id": "grp-2488",
+      "name": "fx",
+      "layerStableIds": [
+        "rays-burst-3",
+        "gold-glow-4",
+        "gold-glow-12",
+        "rays-burst-10"
+      ]
+    },
+    {
+      "id": "grp-2489",
+      "name": "보상",
+      "layerStableIds": [
+        "itemicon-coins-l-png-8",
+        "plain-text-9"
       ]
     }
   ],
@@ -289,6 +307,7 @@
       "x": 69,
       "y": 14,
       "zIndex": 4,
+      "visible": false,
       "visual": {
         "model": {
           "shape": {
@@ -392,6 +411,7 @@
       "x": 83,
       "y": 30,
       "zIndex": 5,
+      "visible": false,
       "visual": {
         "model": {
           "shape": {
@@ -476,6 +496,7 @@
       "x": 117,
       "y": 293,
       "zIndex": 6,
+      "visible": false,
       "visual": {
         "model": {
           "shape": {
@@ -560,6 +581,7 @@
       "x": 136,
       "y": 306,
       "zIndex": 7,
+      "visible": false,
       "visual": {
         "model": {
           "shape": {
@@ -674,8 +696,9 @@
       "stableId": "itemicon-coins-l-png-8",
       "layerType": "image",
       "displayName": "ItemIcon_Coins_l.png",
-      "x": 141,
-      "y": 336,
+      "x": 193,
+      "y": 349,
+      "scale": 0.8724489795918366,
       "zIndex": 9,
       "visual": {
         "exportPath": "src/assets/icon_coin_1.png",
@@ -687,7 +710,7 @@
       "stableId": "plain-text-9",
       "layerType": "component",
       "displayName": "Plain Text",
-      "x": 217,
+      "x": 255,
       "y": 387,
       "zIndex": 10,
       "visual": {
@@ -771,7 +794,7 @@
           "slotIndex": 0,
           "staticContent": "40",
           "bindingKey": "",
-          "fontSize": 51,
+          "fontSize": 38,
           "fontWeight": "bold",
           "fontFamily": "\"Lilita One\", cursive",
           "color": "#ffffff",
@@ -1599,8 +1622,8 @@
       "stableId": "confetti-148",
       "layerType": "confetti",
       "displayName": "Confetti",
-      "x": -11,
-      "y": -200,
+      "x": -13,
+      "y": -201,
       "zIndex": 21,
       "visual": {
         "width": 415,

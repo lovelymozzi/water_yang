@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "ui-editor",
-  "generatedAt": "2026-08-26T13:06:22.197Z",
+  "generatedAt": "2026-08-27T05:38:50.469Z",
   "note": "publish 정합성 검진 리포트 — 게임 통합(흐름 배선) 전과 셀프체크 때 확인. publish마다 재생성(직접 수정 금지).",
   "errors": [],
   "warnings": [
@@ -20,6 +20,12 @@
     {
       "code": "event-not-in-flow",
       "where": "pop_LevelWin.Group",
+      "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
+      "detail": "→ pop_BuyLives_1 [no_heart]"
+    },
+    {
+      "code": "event-not-in-flow",
+      "where": "pop_LevelWin.btn_continue",
       "message": "이벤트의 씬 연결이 흐름도에 없습니다 — 흐름도에 반영하거나 이벤트 연결을 정리하세요.",
       "detail": "→ pop_BuyLives_1 [no_heart]"
     },

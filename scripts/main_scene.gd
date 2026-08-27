@@ -3,7 +3,7 @@ extends Node3D
 # 이 시간을 넘긴 프레임은 로그에 상태와 함께 남긴다. 프리즈 원인을 좁히기 위한 계측이다.
 const FRAME_STALL_WARNING_SECONDS := 0.25
 const DRAG_CONTROLLER_SCRIPT = preload("res://scripts/drag_controller.gd")
-const ITEM_REMOVE_TEXTURE = preload("res://water_yang/item_over.png")
+const ITEM_REMOVE_TEXTURE = preload("res://src/assets/item_over.png")
 const ITEM_MOVE_ARROW_TEXTURE = preload("res://src/assets/arrow.png")
 const ITEM_TARGET_BOB_HEIGHT := 0.18
 const ITEM_TARGET_BOB_SECONDS := 0.46
@@ -210,6 +210,8 @@ func _on_level_cleared() -> void:
 
 
 func _on_host_initialize(stage_data: Dictionary) -> void:
+	if not visible:
+		return
 	var config: Dictionary = stage_data.get("config", {})
 	var requested: int = int(stage_data.get("stage", 1))
 	if not UiBridge.is_hosted:

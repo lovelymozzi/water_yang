@@ -43,7 +43,7 @@
     },
     {
       "id": "grp-50",
-      "name": "time",
+      "name": "860_timer",
       "layerStableIds": [
         "shop-package-time-blue2-png-160",
         "shop-package-time-png-47",
@@ -61,7 +61,7 @@
     },
     {
       "id": "grp-178",
-      "name": "button_860 JPY",
+      "name": "button_480 JPY",
       "layerStableIds": [
         "ingame-toggle-on-png-178",
         "text-860jpy-180"
@@ -69,10 +69,59 @@
     },
     {
       "id": "grp-182",
-      "name": "button_860 JPY",
+      "name": "button_320 JPY",
       "layerStableIds": [
         "ingame-toggle-on-png-182",
         "text-860jpy-184"
+      ]
+    },
+    {
+      "id": "grp-2478",
+      "name": "button_860 JPY",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-2483",
+      "name": "button_860 JPY_off",
+      "layerStableIds": [
+        "ingame-toggle-on-png-2483",
+        "text-860jpy-2485"
+      ]
+    },
+    {
+      "id": "grp-2487",
+      "name": "button_480 JPY_off",
+      "layerStableIds": [
+        "ingame-toggle-on-png-2487",
+        "text-860jpy-2489"
+      ]
+    },
+    {
+      "id": "grp-2496",
+      "name": "480_timer",
+      "layerStableIds": [
+        "shop-package-time-blue2-png-2496",
+        "shop-package-time-png-2497",
+        "common-time-needle-png-2498",
+        "plain-text-2499"
+      ]
+    },
+    {
+      "id": "grp-2501",
+      "name": "320_timer",
+      "layerStableIds": [
+        "shop-package-time-blue2-png-2501",
+        "shop-package-time-png-2502",
+        "common-time-needle-png-2503",
+        "plain-text-2504"
+      ]
+    },
+    {
+      "id": "grp-2506",
+      "name": "button_320 JPY_off",
+      "layerStableIds": [
+        "ingame-toggle-on-png-2506",
+        "text-860jpy-2508"
       ]
     }
   ],
@@ -141,6 +190,110 @@
       "layerStableIds": [
         "ingame-toggle-on-png-182",
         "text-860jpy-184"
+      ]
+    },
+    {
+      "id": "fx-2479",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": []
+    },
+    {
+      "id": "fx-2482",
+      "name": "FxBundle",
+      "press": {
+        "enabled": false,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": []
+    },
+    {
+      "id": "fx-2485",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "ingame-toggle-on-png-2483",
+        "text-860jpy-2485"
+      ]
+    },
+    {
+      "id": "fx-2489",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "ingame-toggle-on-png-2487",
+        "text-860jpy-2489"
+      ]
+    },
+    {
+      "id": "fx-2508",
+      "name": "FxBundle",
+      "press": {
+        "enabled": true,
+        "scale": 95,
+        "brightness": 95,
+        "transitionMs": 100
+      },
+      "cssAnimation": {
+        "enabled": false,
+        "presetId": "bounce-in",
+        "duration": 0.8,
+        "delay": 0,
+        "loop": false,
+        "repeat": 1
+      },
+      "layerStableIds": [
+        "ingame-toggle-on-png-2506",
+        "text-860jpy-2508"
       ]
     }
   ],
@@ -299,6 +452,7 @@
       "x": 188,
       "y": 294,
       "zIndex": 3,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/shop_teampackage_dot_off_1.png",
         "width": 15,
@@ -312,6 +466,7 @@
       "x": 209,
       "y": 294,
       "zIndex": 4,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/shop_teampackage_dot_on_1.png",
         "width": 15,
@@ -325,6 +480,7 @@
       "x": 168,
       "y": 294,
       "zIndex": 5,
+      "visible": false,
       "visual": {
         "exportPath": "src/assets/shop_teampackage_dot_off_1.png",
         "width": 15,
@@ -429,7 +585,7 @@
       "layerType": "image",
       "displayName": "shop_box_01.png",
       "x": 10,
-      "y": 525,
+      "y": 567,
       "scale": 1.0212445308701992,
       "zIndex": 9,
       "visual": {
@@ -738,7 +894,13 @@
             "repeat": "stretch"
           }
         }
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "shop-package-time-blue2-png-160:click"
+        }
+      ]
     },
     {
       "stableId": "shop-package-time-png-47",
@@ -752,21 +914,33 @@
         "exportPath": "src/assets/shop_package_time_2.png",
         "width": 25,
         "height": 27
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "shop-package-time-blue2-png-160:click"
+        }
+      ]
     },
     {
       "stableId": "common-time-needle-png-48",
       "layerType": "image",
       "displayName": "common_time_needle.png",
       "x": 161,
-      "y": 267,
+      "y": 272,
       "scale": 0.7,
       "zIndex": 17,
       "visual": {
         "exportPath": "src/assets/common_time_needle_1.png",
         "width": 12,
         "height": 10
-      }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "shop-package-time-blue2-png-160:click"
+        }
+      ]
     },
     {
       "stableId": "shop-package-step-01-png-156",
@@ -884,7 +1058,7 @@
       "layerType": "image",
       "displayName": "icon_coin_1.png",
       "x": 29,
-      "y": 544,
+      "y": 586,
       "scale": 0.2256410256410256,
       "zIndex": 21,
       "visual": {
@@ -1003,13 +1177,14 @@
         {
           "slotIndex": 0,
           "staticContent": "00:00:00",
-          "bindingKey": "",
+          "bindingKey": "shop.timer",
           "fontSize": 19,
           "fontWeight": "normal",
           "fontFamily": "\"Lilita One\", cursive",
           "color": "#ffffff",
           "offsetX": 0,
           "offsetY": 0,
+          "zIndex": 2,
           "style": {
             "gradient": {
               "enabled": false,
@@ -1032,6 +1207,12 @@
               "opacity": 0
             }
           }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "shop-package-time-blue2-png-160:click"
         }
       ]
     },
@@ -1323,7 +1504,7 @@
       "layerType": "component",
       "displayName": "Plain Text",
       "x": 88,
-      "y": 555,
+      "y": 597,
       "zIndex": 26,
       "visual": {
         "model": {
@@ -1737,7 +1918,7 @@
       "layerType": "image",
       "displayName": "ingame_toggle_on.png",
       "x": 247,
-      "y": 555,
+      "y": 597,
       "scale": 0.5578231292517007,
       "zIndex": 30,
       "visual": {
@@ -1782,7 +1963,7 @@
       "layerType": "component",
       "displayName": "text_860JPY",
       "x": 251,
-      "y": 555,
+      "y": 597,
       "zIndex": 31,
       "visual": {
         "model": {
@@ -1907,7 +2088,7 @@
       "layerType": "image",
       "displayName": "shop_box_bonus.png",
       "x": 85,
-      "y": 587,
+      "y": 629,
       "scale": 0.4652411760297754,
       "zIndex": 32,
       "visual": {
@@ -2389,6 +2570,892 @@
               "opacity": 50
             }
           }
+        }
+      ]
+    },
+    {
+      "stableId": "ingame-toggle-on-png-2483",
+      "layerType": "image",
+      "displayName": "ingame_toggle_on.png",
+      "x": 247,
+      "y": 220,
+      "scale": 0.5578231292517007,
+      "zIndex": 39,
+      "visual": {
+        "exportPath": "ingame_toggle_off.png",
+        "width": 211,
+        "height": 84,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 32,
+            "top": 0,
+            "right": 30,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "860"
+        }
+      ]
+    },
+    {
+      "stableId": "text-860jpy-2485",
+      "layerType": "component",
+      "displayName": "text_860JPY",
+      "x": 251,
+      "y": 220,
+      "zIndex": 40,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 109,
+            "height": 43,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "860 JPY",
+          "bindingKey": "",
+          "fontSize": 18,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 4,
+              "color": "#7a7a7a"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "rgba(0,0,0,0)",
+              "opacity": 60
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "860"
+        }
+      ]
+    },
+    {
+      "stableId": "ingame-toggle-on-png-2487",
+      "layerType": "image",
+      "displayName": "ingame_toggle_on.png",
+      "x": 246,
+      "y": 459,
+      "scale": 0.5578231292517007,
+      "zIndex": 41,
+      "visual": {
+        "exportPath": "ingame_toggle_off.png",
+        "width": 211,
+        "height": 84,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 32,
+            "top": 0,
+            "right": 30,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "480"
+        }
+      ]
+    },
+    {
+      "stableId": "text-860jpy-2489",
+      "layerType": "component",
+      "displayName": "text_860JPY",
+      "x": 250,
+      "y": 459,
+      "zIndex": 42,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 109,
+            "height": 43,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "480 JPY",
+          "bindingKey": "",
+          "fontSize": 18,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 4,
+              "color": "#7a7a7a"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "rgba(0,0,0,0)",
+              "opacity": 60
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "480"
+        }
+      ]
+    },
+    {
+      "stableId": "shop-package-time-blue2-png-2496",
+      "layerType": "image",
+      "displayName": "shop_package_time_blue2.png",
+      "x": 146,
+      "y": 499,
+      "scale": 0.6339285714285714,
+      "zIndex": 43,
+      "visual": {
+        "exportPath": "src/assets/shop_package_time_blue2_1.png",
+        "width": 151,
+        "height": 56,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 28,
+            "top": 0,
+            "right": 32,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      }
+    },
+    {
+      "stableId": "shop-package-time-png-2497",
+      "layerType": "image",
+      "displayName": "shop_package_time.png",
+      "x": 153,
+      "y": 506,
+      "scale": 0.85,
+      "zIndex": 44,
+      "visual": {
+        "exportPath": "src/assets/shop_package_time_2.png",
+        "width": 25,
+        "height": 27
+      }
+    },
+    {
+      "stableId": "common-time-needle-png-2498",
+      "layerType": "image",
+      "displayName": "common_time_needle.png",
+      "x": 160,
+      "y": 512,
+      "scale": 0.7,
+      "zIndex": 45,
+      "visual": {
+        "exportPath": "src/assets/common_time_needle_1.png",
+        "width": 12,
+        "height": 10
+      }
+    },
+    {
+      "stableId": "plain-text-2499",
+      "layerType": "component",
+      "displayName": "Plain Text",
+      "x": 175,
+      "y": 506,
+      "scale": 0.6,
+      "zIndex": 46,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 83,
+            "height": 38,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "00:00:00",
+          "bindingKey": "shop.timer",
+          "fontSize": 19,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "zIndex": 2,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 2,
+              "color": "#0f3578"
+            },
+            "depth": {
+              "size": 0,
+              "color": "rgba(0,0,0,0)"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "shop-package-time-blue2-png-2501",
+      "layerType": "image",
+      "displayName": "shop_package_time_blue2.png",
+      "x": 148,
+      "y": 655,
+      "scale": 0.6339285714285714,
+      "zIndex": 47,
+      "visual": {
+        "exportPath": "src/assets/shop_package_time_blue2_1.png",
+        "width": 151,
+        "height": 56,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 28,
+            "top": 0,
+            "right": 32,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      }
+    },
+    {
+      "stableId": "shop-package-time-png-2502",
+      "layerType": "image",
+      "displayName": "shop_package_time.png",
+      "x": 155,
+      "y": 662,
+      "scale": 0.85,
+      "zIndex": 48,
+      "visual": {
+        "exportPath": "src/assets/shop_package_time_2.png",
+        "width": 25,
+        "height": 27
+      }
+    },
+    {
+      "stableId": "common-time-needle-png-2503",
+      "layerType": "image",
+      "displayName": "common_time_needle.png",
+      "x": 162,
+      "y": 669,
+      "scale": 0.7,
+      "zIndex": 49,
+      "visual": {
+        "exportPath": "src/assets/common_time_needle_1.png",
+        "width": 12,
+        "height": 10
+      }
+    },
+    {
+      "stableId": "plain-text-2504",
+      "layerType": "component",
+      "displayName": "Plain Text",
+      "x": 177,
+      "y": 662,
+      "scale": 0.6,
+      "zIndex": 50,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 83,
+            "height": 38,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "00:00:00",
+          "bindingKey": "shop.timer",
+          "fontSize": 19,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "zIndex": 2,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 2,
+              "color": "#0f3578"
+            },
+            "depth": {
+              "size": 0,
+              "color": "rgba(0,0,0,0)"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "ingame-toggle-on-png-2506",
+      "layerType": "image",
+      "displayName": "ingame_toggle_on.png",
+      "x": 247,
+      "y": 597,
+      "scale": 0.5578231292517007,
+      "zIndex": 51,
+      "visual": {
+        "exportPath": "ingame_toggle_off.png",
+        "width": 211,
+        "height": 84,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 32,
+            "top": 0,
+            "right": 30,
+            "bottom": 0,
+            "scale": 1,
+            "repeat": "stretch"
+          }
+        }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "320"
+        }
+      ]
+    },
+    {
+      "stableId": "text-860jpy-2508",
+      "layerType": "component",
+      "displayName": "text_860JPY",
+      "x": 251,
+      "y": 597,
+      "zIndex": 52,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 109,
+            "height": 43,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "320 JPY",
+          "bindingKey": "",
+          "fontSize": 18,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 4,
+              "color": "#7a7a7a"
+            },
+            "depth": {
+              "size": 0,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "rgba(0,0,0,0)",
+              "opacity": 60
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "320"
         }
       ]
     }

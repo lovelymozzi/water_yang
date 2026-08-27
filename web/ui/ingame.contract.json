@@ -745,13 +745,7 @@
         "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2455:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "entry-box-normal-png-2456",
@@ -764,13 +758,7 @@
         "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2456:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "entry-box-normal-png-2457",
@@ -783,13 +771,7 @@
         "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2457:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "entry-box-normal-png-2458",
@@ -848,16 +830,10 @@
       "scale": 0.26078431372549016,
       "zIndex": 14,
       "visual": {
-        "exportPath": "water_yang/item2.png",
+        "exportPath": "src/assets/item2.png",
         "width": 253,
         "height": 255
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2456:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "item1-png-2462",
@@ -868,16 +844,10 @@
       "scale": 0.25,
       "zIndex": 15,
       "visual": {
-        "exportPath": "water_yang/item1.png",
+        "exportPath": "src/assets/item1.png",
         "width": 254,
         "height": 254
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2455:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "common-icon-greendot2-webp-2463",
@@ -926,12 +896,6 @@
               "opacity": 50
             }
           }
-        }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2457:click"
         }
       ]
     },
@@ -983,12 +947,6 @@
             }
           }
         }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2456:click"
-        }
       ]
     },
     {
@@ -1039,12 +997,6 @@
             }
           }
         }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2455:click"
-        }
       ]
     },
     {
@@ -1056,16 +1008,10 @@
       "scale": 0.4147058823529412,
       "zIndex": 19,
       "visual": {
-        "exportPath": "water_yang/itme3_1.png",
+        "exportPath": "src/assets/itme3_1.png",
         "width": 155,
         "height": 170
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2457:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "home-btn-setting-webp-2467",
@@ -1124,13 +1070,7 @@
         "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2468:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "item1-png-2469",
@@ -1141,16 +1081,10 @@
       "scale": 0.25,
       "zIndex": 22,
       "visual": {
-        "exportPath": "water_yang/item1.png",
+        "exportPath": "src/assets/item1.png",
         "width": 254,
         "height": 254
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2468:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "entry-item-num-png-2470",
@@ -1234,12 +1168,6 @@
             }
           }
         }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2468:click"
-        }
       ]
     },
     {
@@ -1253,13 +1181,7 @@
         "exportPath": "src/assets/ingame_item_bg.png",
         "width": 92,
         "height": 94
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2471:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "common-icon-greendot2-webp-2472",
@@ -1309,12 +1231,6 @@
             }
           }
         }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2471:click"
-        }
       ]
     },
     {
@@ -1326,16 +1242,10 @@
       "scale": 0.4147058823529412,
       "zIndex": 26,
       "visual": {
-        "exportPath": "water_yang/itme3_1.png",
+        "exportPath": "src/assets/itme3_1.png",
         "width": 155,
         "height": 170
-      },
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2471:click"
-        }
-      ]
+      }
     },
     {
       "stableId": "entry-item-num-png-2474",
@@ -1418,12 +1328,6 @@
               "opacity": 50
             }
           }
-        }
-      ],
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "entry-box-normal-png-2471:click"
         }
       ]
     }

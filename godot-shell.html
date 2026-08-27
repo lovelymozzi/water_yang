@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <title>$GODOT_PROJECT_NAME</title>
 $GODOT_HEAD_INCLUDE
-<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}</style>
+<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}body.instant-lobby-home-return .sr-nav-host-inner,body.instant-lobby-home-return .sr-nav-fg-inner{transition:none!important;transform:none!important}body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr-nav-tabbar *{transition:none!important}</style>
 </head>
 <body>
 <script type="module">
@@ -92,12 +92,36 @@ if (splashCache) {
 }
 
 const CLICK_EVENT_STABLE_IDS = new Set();
+const UI_FONT_SPECS = new Set();
+const uiRenderStylesReady = Promise.all([
+  ['scene-renderer-editor-fonts', `${UI_DIR}vendor/fonts/fonts.css`],
+  ['ui-css-effect-provider-animate-css', `${UI_DIR}vendor/animate.min.css`],
+].map(([id, href]) => new Promise(resolve => {
+  const link = document.getElementById(id) || document.createElement('link');
+  link.id = id;
+  link.rel = 'stylesheet';
+  link.addEventListener('load', resolve, { once: true });
+  link.addEventListener('error', resolve, { once: true });
+  if (!link.isConnected) {
+    link.href = href;
+    document.head.appendChild(link);
+  } else if (link.sheet) {
+    resolve();
+  }
+})));
 const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
 await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
   const sceneContract = await (await fetch(UI_DIR + contract)).json();
-  (sceneContract.layers || []).forEach(({ stableId, events = [] }) => {
+  (sceneContract.layers || []).forEach(({ stableId, events = [], texts = [] }) => {
     if (events.some(({ trigger }) => trigger === 'click')) CLICK_EVENT_STABLE_IDS.add(stableId);
+    texts.forEach(({ fontFamily, fontWeight }) => {
+      if (fontFamily) UI_FONT_SPECS.add(`${fontWeight || 'bold'} 16px ${fontFamily}`);
+    });
   });
+  const navLabel = sceneContract.navTabBar?.label;
+  if (navLabel?.fontFamily && navLabel.fontFamily !== 'inherit') {
+    UI_FONT_SPECS.add(`${navLabel.fontWeight || 'bold'} 16px ${navLabel.fontFamily}`);
+  }
 }));
 
 const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX, initialCoins: INITIAL_COINS, maxHearts: MAX_HEARTS });
@@ -213,6 +237,8 @@ let splashRenderer = null;
 let continueWithoutHeart = false;
 let endedGame = null;
 let sceneSessionToken = 0;
+let instantLobbyHomeReturnTimeoutId = null;
+let activeGodotScene = 'lobby';
 let currentMapStage = progress.getCurrentStage();
 const itemCounts = { remove: ITEM_START_COUNT, timestop: ITEM_START_COUNT, move: ITEM_START_COUNT };
 const itemPending = { remove: 0, timestop: 0, move: 0 };
@@ -321,6 +347,19 @@ syncUnlimitedHearts();
 
 flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) => {
   const enterWork = (async () => {
+  if (!popup && sceneUuid === LOBBY_NAV_SCENE_UUID) {
+    document.body.classList.add('instant-lobby-home-return');
+    clearTimeout(instantLobbyHomeReturnTimeoutId);
+    document.addEventListener('pointerdown', () => {
+      document.body.classList.remove('instant-lobby-home-return');
+      clearTimeout(instantLobbyHomeReturnTimeoutId);
+      instantLobbyHomeReturnTimeoutId = null;
+    }, { capture: true, once: true });
+    instantLobbyHomeReturnTimeoutId = setTimeout(() => {
+      document.body.classList.remove('instant-lobby-home-return');
+      instantLobbyHomeReturnTimeoutId = null;
+    }, 10000);
+  }
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
@@ -401,6 +440,11 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneName === 'pop_OutOfMoves' && popup) {
     if (buttonSfxEnabled) sound.playSfx(TIME_OUT_SFX);
     if (activeGame?.state === 'running') activeGame.pause('out-of-moves');
+  } else if (sceneName === 'pop_Give_up' && popup) {
+    if (activeGame?.state === 'running') activeGame.pause('give-up');
+    ['plain-text-2382:click', 'common-btn-top-x-red-png-2384:click'].forEach(eventName => {
+      renderer.on(eventName, () => activeGame?.resume());
+    });
   } else if (popup && buttonSfxEnabled) {
     sound.playSfx(POPUP_OPEN_SFX);
   }
@@ -512,12 +556,16 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneUuid === SPLASH_UI_SCENE_UUID) {
     splashRenderer = renderer;
     renderer.getElementByName('GameField')?.style.setProperty('visibility', 'hidden');
+    await uiRenderStylesReady;
     if (splashCache) {
       await Promise.all([
         fetch(GODOT_ENGINE_URL),
         fetch(`${GODOT_CONFIG.executable}.wasm`),
         fetch(GODOT_CONFIG.mainPack || `${GODOT_CONFIG.executable}.pck`),
       ]);
+    }
+    if (document.fonts?.load && UI_FONT_SPECS.size) {
+      await Promise.all([...UI_FONT_SPECS].map(spec => document.fonts.load(spec).catch(() => null)));
     }
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
@@ -562,23 +610,26 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     gameHost.style.cssText = 'position:absolute;inset:0;overflow:hidden;display:block;';
     gameField.appendChild(gameHost);
   }
+  if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
+  if (activeGame?.state === 'running') activeGame.pause('scene-switch');
   if (activeGame?.state === 'paused') {
     if (godotScene === 'main') endedGame = null;
     if (godotScene === 'main' && continueWithoutHeart) {
       activeGame.message('continue_stage', { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS });
       continueWithoutHeart = false;
     }
-    if (godotScene === 'lobby') {
+    if (godotScene !== activeGodotScene) {
+      activeGodotScene = godotScene;
       activeGame.message('load_scene', {
         stage: progress.getCurrentStage(),
-        config: { godotScene },
+        config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS } : {}) },
       });
     }
     activeGame.resume();
     return;
   }
   if (activeGame?.state === 'ready') {
-    if (godotScene === 'lobby') return;
+    if (godotScene === activeGodotScene) return;
     if (godotScene === 'main') {
       if (!continueWithoutHeart && !hasUnlimitedHearts() && !(await runEconomyTransaction('game-entry-heart', () => economy.consumeHeart()))) {
         throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
@@ -591,6 +642,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
         stage: currentMapStage,
         config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
       });
+      activeGodotScene = godotScene;
       activeGame.startGame();
       await sceneReadyPromise;
       return;
@@ -611,6 +663,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (activeGame) activeGame.abort('scene-change');
   const game = new GameSession({ renderer, initTimeoutMs: 30000, hudMap: { timeLeft: 'stage.timer' } });
   activeGame = game;
+  activeGodotScene = godotScene;
   await game.start(godotCartridge, {
     stage: currentMapStage,
     config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS } : {}) },

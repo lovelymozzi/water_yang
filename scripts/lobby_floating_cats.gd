@@ -60,6 +60,8 @@ func _ready() -> void:
 	_route_x_max = right_origin.x + right_direction.x * right_distance + route_padding
 	_create_cats()
 	UiBridge.host_initialize.connect(func(stage_data: Dictionary) -> void:
+		if not visible:
+			return
 		var stage_paths: Array[String] = []
 		var levels_dir := DirAccess.open("res://resources/levels")
 		if levels_dir == null:

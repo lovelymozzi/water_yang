@@ -493,13 +493,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-317",
-      "fxGroupId": "fx-2286",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-2286"
     },
     {
       "id": 2456,
@@ -541,13 +535,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-316",
-      "fxGroupId": "fx-2287",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-2287"
     },
     {
       "id": 2457,
@@ -589,13 +577,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-315",
-      "fxGroupId": "fx-2288",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-2288"
     },
     {
       "id": 2458,
@@ -733,7 +715,7 @@
       "stableId": "item2-png-2461",
       "type": "image",
       "name": "item2.png",
-      "exportPath": "water_yang/item2.png",
+      "exportPath": "src/assets/item2.png",
       "x": 118,
       "y": 669,
       "scale": 0.26078431372549016,
@@ -768,20 +750,14 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-316",
-      "fxGroupId": "fx-2287",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-2287"
     },
     {
       "id": 2462,
       "stableId": "item1-png-2462",
       "type": "image",
       "name": "item1.png",
-      "exportPath": "water_yang/item1.png",
+      "exportPath": "src/assets/item1.png",
       "x": 30,
       "y": 672,
       "scale": 0.25,
@@ -816,13 +792,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-317",
-      "fxGroupId": "fx-2286",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-2286"
     },
     {
       "id": 2463,
@@ -886,12 +856,6 @@
       "selectedTextIndex": 0,
       "groupId": "grp-315",
       "fxGroupId": "fx-2288",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ],
       "imageKey": ""
     },
     {
@@ -956,12 +920,6 @@
       "selectedTextIndex": 0,
       "groupId": "grp-316",
       "fxGroupId": "fx-2287",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ],
       "imageKey": ""
     },
     {
@@ -1026,12 +984,6 @@
       "selectedTextIndex": 0,
       "groupId": "grp-317",
       "fxGroupId": "fx-2286",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ],
       "imageKey": ""
     },
     {
@@ -1039,7 +991,7 @@
       "stableId": "itme3-1-png-2466",
       "type": "image",
       "name": "itme3_1.png",
-      "exportPath": "water_yang/itme3_1.png",
+      "exportPath": "src/assets/itme3_1.png",
       "x": 214,
       "y": 672,
       "scale": 0.4147058823529412,
@@ -1074,13 +1026,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-315",
-      "fxGroupId": "fx-2288",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-2288"
     },
     {
       "id": 2467,
@@ -1171,20 +1117,14 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-402",
-      "fxGroupId": "fx-414",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-414"
     },
     {
       "id": 2469,
       "stableId": "item1-png-2469",
       "type": "image",
       "name": "item1.png",
-      "exportPath": "water_yang/item1.png",
+      "exportPath": "src/assets/item1.png",
       "x": 30,
       "y": 672,
       "scale": 0.25,
@@ -1219,13 +1159,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-402",
-      "fxGroupId": "fx-414",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-414"
     },
     {
       "id": 2470,
@@ -1309,12 +1243,6 @@
         "color": "#ffffff"
       },
       "selectedTextIndex": 1,
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ],
       "fxGroupId": "fx-414",
       "groupId": "grp-402"
     },
@@ -1358,12 +1286,6 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-411",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ],
       "fxGroupId": "fx-413"
     },
     {
@@ -1428,20 +1350,14 @@
       "selectedTextIndex": 0,
       "groupId": "grp-411",
       "imageKey": "",
-      "fxGroupId": "fx-413",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-413"
     },
     {
       "id": 2473,
       "stableId": "itme3-1-png-2473",
       "type": "image",
       "name": "itme3_1.png",
-      "exportPath": "water_yang/itme3_1.png",
+      "exportPath": "src/assets/itme3_1.png",
       "x": 214,
       "y": 672,
       "scale": 0.4147058823529412,
@@ -1476,13 +1392,7 @@
       },
       "selectedTextIndex": -1,
       "groupId": "grp-411",
-      "fxGroupId": "fx-413",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ]
+      "fxGroupId": "fx-413"
     },
     {
       "id": 2474,
@@ -1567,12 +1477,6 @@
       },
       "selectedTextIndex": 1,
       "groupId": "grp-411",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": ""
-        }
-      ],
       "fxGroupId": "fx-413"
     }
   ],

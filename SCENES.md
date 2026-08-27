@@ -7,17 +7,11 @@
 <!-- SCENE:Ingame BEGIN -->
 #### `Ingame`  ·  contract: `./web/ui/Ingame.contract.json`
 - sceneUuid: `c0356bcc-a972-4ff9-b115-d91b31c3e8be`
-- 이벤트: `bar1-png-2449:click` · `entry-box-normal-png-2455:click` · `entry-box-normal-png-2456:click` · `entry-box-normal-png-2457:click` · `entry-box-normal-png-2458:click` · `entry-box-normal-png-2468:click` · `entry-box-normal-png-2471:click`
+- 이벤트: `bar1-png-2449:click` · `entry-box-normal-png-2458:click`
 - 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer` · `item.move.current` · `item.timestop.current` · `item.remove.current` · `item.cancle`
 - 위젯: `item1`(toggle) · `itme3`(toggle) — 입력 이벤트: `widget:item1` · `widget:itme3`
 - GameField 레이어 있음
 <!-- SCENE:Ingame END -->
-
-<!-- SCENE:LevelFail_1 BEGIN -->
-#### `LevelFail_1`  ·  contract: `./web/ui/LevelFail_1.contract.json`
-- sceneUuid: `2bce71e3-b626-4295-919d-e24cb07f1ae2`
-- 이벤트: `plain-text-563:click`
-<!-- SCENE:LevelFail_1 END -->
 
 <!-- SCENE:Lobby BEGIN -->
 #### `Lobby`  ·  contract: `./web/ui/Lobby.contract.json`
@@ -58,7 +52,8 @@
 <!-- SCENE:pop_BuyCoins BEGIN -->
 #### `pop_BuyCoins`  ·  contract: `./web/ui/pop_BuyCoins.contract.json`
 - sceneUuid: `b11144cd-f2c6-4f82-a4a8-c76b3496cd70`
-- 이벤트: `860` · `480` · `320` · `common-btn-top-x-blue-png-2186:click`
+- 이벤트: `shop-package-time-blue2-png-160:click` · `shop-package-time-png-47:click` · `common-time-needle-png-48:click` · `plain-text-50:click` · `860` · `480` · `320` · `common-btn-top-x-blue-png-2186:click`
+- 텍스트 바인딩: `shop.timer`
 <!-- SCENE:pop_BuyCoins END -->
 
 <!-- SCENE:pop_BuyLives_1 BEGIN -->
@@ -109,7 +104,7 @@
 <!-- SCENE:pop_Settings_1 BEGIN -->
 #### `pop_Settings_1`  ·  contract: `./web/ui/pop_Settings_1.contract.json`
 - sceneUuid: `235b7eb7-c304-45b3-aa55-25f18050fd64`
-- 이벤트: `setting-btn-option-png-2245:click` · `back-off-png-2278:click` · `back-on-png-2277:click` · `setting-btn-option-png-2278:click` · `return-on-png-2282:click` · `return-off-png-2277:click` · `entry-box-normal-png-2287:click`
+- 이벤트: `setting-btn-option-png-2245:click` · `setting-btn-option-png-2278:click` · `entry-box-normal-png-2287:click`
 - 위젯: `music`(toggle) · `sound`(toggle) · `vibration`(toggle) · `lobby`(toggle) · `retry`(toggle) — 입력 이벤트: `widget:music` · `widget:sound` · `widget:vibration` · `widget:lobby` · `widget:retry`
 <!-- SCENE:pop_Settings_1 END -->
 

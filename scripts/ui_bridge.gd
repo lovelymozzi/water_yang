@@ -25,6 +25,8 @@ var _cb = null
 var _host_scene_loading := false
 var _start_after_scene_ready := false
 var _host_scene_cache := {}
+var _host_scene_instances := {}
+var _active_host_scene: Node = null
 
 
 func _ready() -> void:
@@ -108,20 +110,38 @@ func _initialize_host_scene(stage_data: Dictionary) -> void:
 				post_error("Could not preload host scene: %s" % preload_path)
 				return
 			_host_scene_cache[preload_path] = preload_scene
-	if get_tree().current_scene == null or get_tree().current_scene.scene_file_path != scene_path:
-		var scene := _host_scene_cache.get(scene_path) as PackedScene
-		if scene == null:
-			scene = ResourceLoader.load(scene_path) as PackedScene
-			if scene == null:
+	var scene := _host_scene_instances.get(scene_path) as Node
+	if scene == null:
+		var packed_scene := _host_scene_cache.get(scene_path) as PackedScene
+		if packed_scene == null:
+			packed_scene = ResourceLoader.load(scene_path) as PackedScene
+			if packed_scene == null:
 				_host_scene_loading = false
 				post_error("Could not load host scene: %s" % scene_path)
 				return
-			_host_scene_cache[scene_path] = scene
-		var error := get_tree().change_scene_to_packed(scene)
-		if error != OK:
-			_host_scene_loading = false
-			post_error("Could not load host scene: %s" % scene_path)
-			return
+			_host_scene_cache[scene_path] = packed_scene
+		scene = packed_scene.instantiate()
+		_host_scene_instances[scene_path] = scene
+	if scene != _active_host_scene:
+		if _active_host_scene != null:
+			_active_host_scene.process_mode = Node.PROCESS_MODE_DISABLED
+			var previous_scene := _active_host_scene as Node3D
+			if previous_scene != null:
+				previous_scene.hide()
+		if scene.get_parent() != self:
+			scene.process_mode = Node.PROCESS_MODE_DISABLED
+			var scene_3d := scene as Node3D
+			if scene_3d != null:
+				scene_3d.hide()
+			add_child(scene)
+		scene.process_mode = Node.PROCESS_MODE_INHERIT
+		var active_scene := scene as Node3D
+		if active_scene != null:
+			active_scene.show()
+			var camera := active_scene.get_node_or_null("Camera3D") as Camera3D
+			if camera != null:
+				camera.make_current()
+		_active_host_scene = scene
 		await get_tree().process_frame
 	emit_signal("host_initialize", stage_data)
 	_host_scene_loading = false

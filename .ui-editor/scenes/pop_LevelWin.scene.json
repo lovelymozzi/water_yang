@@ -110,7 +110,8 @@
       "sliceB": 40,
       "sliceEnabled": true,
       "sliceScale": 1,
-      "sliceRepeat": "stretch"
+      "sliceRepeat": "stretch",
+      "locked": true
     },
     {
       "id": 2411,
@@ -188,7 +189,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 4,
-      "visible": true,
+      "visible": false,
       "componentState": {
         "name": "Rays Burst",
         "shapeType": "circle",
@@ -248,7 +249,8 @@
           "color": "#ffffff"
         }
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "groupId": "grp-2488"
     },
     {
       "id": 4,
@@ -264,7 +266,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 5,
-      "visible": true,
+      "visible": false,
       "componentState": {
         "name": "Gold Glow",
         "shapeType": "circle",
@@ -319,7 +321,8 @@
           "color": "#ffffff"
         }
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "groupId": "grp-2488"
     },
     {
       "id": 12,
@@ -335,7 +338,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 6,
-      "visible": true,
+      "visible": false,
       "componentState": {
         "name": "Gold Glow",
         "shapeType": "circle",
@@ -392,7 +395,8 @@
         "bgColor1Role": "fixed",
         "bgColor2Role": "fixed"
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "groupId": "grp-2488"
     },
     {
       "id": 10,
@@ -408,7 +412,7 @@
       "scaleY": 1,
       "rotation": 0,
       "zIndex": 7,
-      "visible": true,
+      "visible": false,
       "componentState": {
         "name": "Rays Burst",
         "shapeType": "circle",
@@ -470,7 +474,8 @@
         "bgColor1Role": "fixed",
         "bgColor2Role": "fixed"
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "groupId": "grp-2488"
     },
     {
       "id": 2,
@@ -519,9 +524,9 @@
       "type": "image",
       "name": "ItemIcon_Coins_l.png",
       "exportPath": "src/assets/icon_coin_1.png",
-      "x": 141,
-      "y": 336,
-      "scale": 1,
+      "x": 193,
+      "y": 349,
+      "scale": 0.8724489795918366,
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
@@ -551,7 +556,8 @@
         "interval": 2,
         "direction": "right",
         "color": "#ffffff"
-      }
+      },
+      "groupId": "grp-2489"
     },
     {
       "id": 9,
@@ -560,7 +566,7 @@
       "source": "preset",
       "name": "plain-text",
       "exportPath": "",
-      "x": 217,
+      "x": 255,
       "y": 387,
       "scale": 1,
       "scaleX": 1,
@@ -598,7 +604,7 @@
         "texts": [
           {
             "content": "40",
-            "fontSize": 51,
+            "fontSize": 38,
             "fontWeight": "bold",
             "fontFamily": "\"Lilita One\", cursive",
             "color": "#ffffff",
@@ -644,7 +650,8 @@
           "color": "#ffffff"
         }
       },
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "groupId": "grp-2489"
     },
     {
       "id": 2404,
@@ -1456,8 +1463,8 @@
       "type": "confetti",
       "name": "Confetti",
       "exportPath": "",
-      "x": -11,
-      "y": -200,
+      "x": -13,
+      "y": -201,
       "scale": 1,
       "scaleX": 1,
       "scaleY": 1,
@@ -1487,7 +1494,8 @@
       "repeat": 1,
       "loopDelay": 0.2,
       "triggerKey": "",
-      "zLayerId": "zl-content"
+      "zLayerId": "zl-content",
+      "locked": true
     }
   ],
   "zLayers": [
@@ -1520,7 +1528,7 @@
   "groups": [
     {
       "id": "grp-2401",
-      "name": "Group"
+      "name": "btn_continue"
     },
     {
       "id": "grp-2411",
@@ -1537,6 +1545,14 @@
     {
       "id": "grp-147",
       "name": "Group"
+    },
+    {
+      "id": "grp-2488",
+      "name": "fx"
+    },
+    {
+      "id": "grp-2489",
+      "name": "보상"
     }
   ],
   "fxGroups": [

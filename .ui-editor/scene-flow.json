@@ -42,10 +42,10 @@
       "transitionIn": {
         "presetId": "image-curtain",
         "type": "image-curtain",
-        "durationMs": 2100,
+        "durationMs": 1900,
         "gatherMs": 300,
         "holdMs": 1000,
-        "scatterMs": 800,
+        "scatterMs": 600,
         "curtainLayers": [
           {
             "id": 2477,
@@ -53,7 +53,7 @@
             "type": "image",
             "name": "cat_hand11.png",
             "assetId": "cat_hand11.png",
-            "exportPath": "src/assets/cat_hand11.png",
+            "exportPath": "cat_hand11.png",
             "x": 70,
             "y": -51,
             "scale": 1,
@@ -109,7 +109,7 @@
             "type": "image",
             "name": "cat_hand2.png",
             "assetId": "cat_hand2.png",
-            "exportPath": "src/assets/cat_hand2.png",
+            "exportPath": "cat_hand2.png",
             "x": -151,
             "y": 178,
             "scale": 1,
@@ -165,7 +165,7 @@
             "type": "image",
             "name": "cat_hand3.png",
             "assetId": "cat_hand3.png",
-            "exportPath": "src/assets/cat_hand3.png",
+            "exportPath": "cat_hand3.png",
             "x": -137,
             "y": 22,
             "scale": 1,
@@ -221,7 +221,7 @@
             "type": "image",
             "name": "cat_hand4.png",
             "assetId": "cat_hand4.png",
-            "exportPath": "src/assets/cat_hand4.png",
+            "exportPath": "cat_hand4.png",
             "x": 271,
             "y": 265,
             "scale": 1,
@@ -277,7 +277,7 @@
             "type": "image",
             "name": "cat_hand5.png",
             "assetId": "cat_hand5.png",
-            "exportPath": "src/assets/cat_hand5.png",
+            "exportPath": "cat_hand5.png",
             "x": 218,
             "y": -43,
             "scale": 1,
@@ -333,7 +333,7 @@
             "type": "image",
             "name": "cat_hand7.png",
             "assetId": "cat_hand7.png",
-            "exportPath": "src/assets/cat_hand7.png",
+            "exportPath": "cat_hand7.png",
             "x": 217,
             "y": 87,
             "scale": 1.1,
@@ -389,7 +389,7 @@
             "type": "image",
             "name": "cat_hand9.png",
             "assetId": "cat_hand9.png",
-            "exportPath": "src/assets/cat_hand9.png",
+            "exportPath": "cat_hand9.png",
             "x": 154,
             "y": -41,
             "scale": 1,
@@ -445,7 +445,7 @@
             "type": "image",
             "name": "cat_hand12.png",
             "assetId": "cat_hand12.png",
-            "exportPath": "src/assets/cat_hand12.png",
+            "exportPath": "cat_hand12.png",
             "x": -151,
             "y": 245,
             "scale": 1,
@@ -501,7 +501,7 @@
             "type": "image",
             "name": "cat_hand8.png",
             "assetId": "cat_hand8.png",
-            "exportPath": "src/assets/cat_hand8.png",
+            "exportPath": "cat_hand8.png",
             "x": 78,
             "y": 440,
             "scale": 1,
@@ -557,13 +557,13 @@
             "type": "image",
             "name": "cat_hand6.png",
             "assetId": "cat_hand6.png",
-            "exportPath": "src/assets/cat_hand6.png",
+            "exportPath": "cat_hand6.png",
             "x": -70,
             "y": 390,
             "scale": 1.2,
             "scaleX": 1,
             "scaleY": 1,
-            "rotation": 25,
+            "rotation": 19,
             "zIndex": 10,
             "visible": true,
             "locked": false,
@@ -613,7 +613,7 @@
             "type": "image",
             "name": "cat_hand10.png",
             "assetId": "cat_hand10.png",
-            "exportPath": "src/assets/cat_hand10.png",
+            "exportPath": "cat_hand10.png",
             "x": 154,
             "y": 319,
             "scale": 1.2,
@@ -669,7 +669,7 @@
             "type": "image",
             "name": "cat_hand1.png",
             "assetId": "cat_hand1.png",
-            "exportPath": "src/assets/cat_hand1.png",
+            "exportPath": "cat_hand1.png",
             "x": -41,
             "y": -43,
             "scale": 1.1,
@@ -730,7 +730,7 @@
             "y": -51,
             "zIndex": 1,
             "visual": {
-              "exportPath": "src/assets/cat_hand11.png",
+              "exportPath": "cat_hand11.png",
               "width": 270,
               "height": 479
             },
@@ -748,7 +748,7 @@
             "y": 178,
             "zIndex": 2,
             "visual": {
-              "exportPath": "src/assets/cat_hand2.png",
+              "exportPath": "cat_hand2.png",
               "width": 265,
               "height": 497
             },
@@ -766,7 +766,7 @@
             "y": 22,
             "zIndex": 3,
             "visual": {
-              "exportPath": "src/assets/cat_hand3.png",
+              "exportPath": "cat_hand3.png",
               "width": 363,
               "height": 497
             },
@@ -784,7 +784,7 @@
             "y": 265,
             "zIndex": 4,
             "visual": {
-              "exportPath": "src/assets/cat_hand4.png",
+              "exportPath": "cat_hand4.png",
               "width": 218,
               "height": 470
             },
@@ -802,7 +802,7 @@
             "y": -43,
             "zIndex": 5,
             "visual": {
-              "exportPath": "src/assets/cat_hand5.png",
+              "exportPath": "cat_hand5.png",
               "width": 252,
               "height": 483
             },
@@ -821,7 +821,7 @@
             "scale": 1.1,
             "zIndex": 6,
             "visual": {
-              "exportPath": "src/assets/cat_hand7.png",
+              "exportPath": "cat_hand7.png",
               "width": 223,
               "height": 493
             },
@@ -839,7 +839,7 @@
             "y": -41,
             "zIndex": 7,
             "visual": {
-              "exportPath": "src/assets/cat_hand9.png",
+              "exportPath": "cat_hand9.png",
               "width": 233,
               "height": 467
             },
@@ -857,7 +857,7 @@
             "y": 245,
             "zIndex": 8,
             "visual": {
-              "exportPath": "src/assets/cat_hand12.png",
+              "exportPath": "cat_hand12.png",
               "width": 262,
               "height": 509
             },
@@ -875,7 +875,7 @@
             "y": 440,
             "zIndex": 9,
             "visual": {
-              "exportPath": "src/assets/cat_hand8.png",
+              "exportPath": "cat_hand8.png",
               "width": 255,
               "height": 494
             },
@@ -893,11 +893,11 @@
             "scale": 1.2,
             "zIndex": 10,
             "visual": {
-              "exportPath": "src/assets/cat_hand6.png",
+              "exportPath": "cat_hand6.png",
               "width": 247,
               "height": 453
             },
-            "rotation": 25,
+            "rotation": 19,
             "curtainAngleDeg": 0,
             "curtainAuto": false,
             "curtainSpinDeg": 0,
@@ -912,7 +912,7 @@
             "scale": 1.2,
             "zIndex": 11,
             "visual": {
-              "exportPath": "src/assets/cat_hand10.png",
+              "exportPath": "cat_hand10.png",
               "width": 237,
               "height": 482
             },
@@ -931,7 +931,7 @@
             "scale": 1.1,
             "zIndex": 12,
             "visual": {
-              "exportPath": "src/assets/cat_hand1.png",
+              "exportPath": "cat_hand1.png",
               "width": 202,
               "height": 451
             },

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c4djsccgrejue" path="res://scripts/obstacle_decor.gd" id="1_obstacle"]
 [ext_resource type="PackedScene" uid="uid://booeo6hufwyh1" path="res://water_yang/obstacle_tile_1x1.fbx" id="2_obstacle_fbx"]
 [ext_resource type="Material" uid="uid://bge6jl45lrd5k" path="res://resources/ice_block_material.tres" id="3_ice_material"]
-[ext_resource type="Texture2D" uid="uid://bkokswf8h1eiw" path="res://water_yang/ice1.png" id="4_ice_texture"]
+[ext_resource type="Texture2D" uid="uid://bkokswf8h1eiw" path="res://src/assets/ice1.png" id="4_ice_texture"]
 [ext_resource type="Texture2D" uid="uid://ioh41rsw4l8a" path="res://water_yang/snow.png" id="5_snow_texture"]
 
 [sub_resource type="Gradient" id="Gradient_snow_color"]
