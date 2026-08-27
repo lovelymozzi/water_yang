@@ -24,6 +24,7 @@ var _iface = null
 var _cb = null
 var _host_scene_loading := false
 var _start_after_scene_ready := false
+var _host_scene_cache := {}
 
 
 func _ready() -> void:
@@ -100,15 +101,23 @@ func _initialize_host_scene(stage_data: Dictionary) -> void:
 			_host_scene_loading = false
 			post_error("Unknown preload scene: %s" % preload_key)
 			return
-		if get_tree().current_scene == null or get_tree().current_scene.scene_file_path != preload_path:
-			var preload_error := get_tree().change_scene_to_file(preload_path)
-			if preload_error != OK:
+		if not _host_scene_cache.has(preload_path):
+			var preload_scene := ResourceLoader.load(preload_path) as PackedScene
+			if preload_scene == null:
 				_host_scene_loading = false
 				post_error("Could not preload host scene: %s" % preload_path)
 				return
-			await get_tree().process_frame
+			_host_scene_cache[preload_path] = preload_scene
 	if get_tree().current_scene == null or get_tree().current_scene.scene_file_path != scene_path:
-		var error := get_tree().change_scene_to_file(scene_path)
+		var scene := _host_scene_cache.get(scene_path) as PackedScene
+		if scene == null:
+			scene = ResourceLoader.load(scene_path) as PackedScene
+			if scene == null:
+				_host_scene_loading = false
+				post_error("Could not load host scene: %s" % scene_path)
+				return
+			_host_scene_cache[scene_path] = scene
+		var error := get_tree().change_scene_to_packed(scene)
 		if error != OK:
 			_host_scene_loading = false
 			post_error("Could not load host scene: %s" % scene_path)

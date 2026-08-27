@@ -298,7 +298,7 @@ func _on_host_message(topic: String, payload) -> void:
 		return
 	var duration := maxf(0.95, float(payload.get("duration", 1.4)))
 	if UiBridge.is_hosted:
-		UiBridge.post_progress({"sfx": "ice-break"})
+		UiBridge.post_progress({"sfx": "ice-freezing"})
 	ice_overlay.visible = true
 	for snow in [ice_snow_top, ice_snow_bottom]:
 		snow.show()
@@ -312,7 +312,7 @@ func _on_host_message(topic: String, payload) -> void:
 	_ice_overlay_tween.tween_property(material, "shader_parameter/dissolve_amount", 0.0, 0.7)
 	_ice_overlay_tween.tween_callback(func():
 		if UiBridge.is_hosted:
-			UiBridge.post_progress({"sfx": "ice-break"})
+			UiBridge.post_progress({"sfx": "ice-freezing"})
 	)
 	_ice_overlay_tween.tween_callback(ice_overlay.hide)
 	_ice_overlay_tween.tween_callback(ice_snow_top.hide)

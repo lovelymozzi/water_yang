@@ -32,6 +32,7 @@ const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
 const CAT_MOVE_SFX = './sound/cat_move.mp3';
 const ICE_BREAK_SFX = './sound/ice_breake.mp3';
+const ICE_FREEZING_SFX = './sound/ice-freezing.mp3';
 const DIGGING_SFX = './sound/diggingt_optimized.mp3';
 const STAGE_CLEAR1_SFX = './sound/stage_clear1.mp3';
 const STAGE_CLEAR2_SFX = './sound/stage_clear2.mp3';
@@ -68,7 +69,8 @@ import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
 
-const splashCache = 'caches' in window ? await caches.open(STORAGE_PREFIX + 'splash_load_v1') : null;
+const SPLASH_CACHE_NAME = `${STORAGE_PREFIX}splash_load_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.pck`] || 'v1'}`;
+const splashCache = 'caches' in window ? await caches.open(SPLASH_CACHE_NAME) : null;
 const nativeFetch = window.fetch.bind(window);
 const splashCacheablePath = /\.(pck|wasm|js|json|png|jpe?g|webp|mp3|ogg|wav|woff2)$/i;
 if (splashCache) {
@@ -252,11 +254,12 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
   if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
   if (sfx === 'cat-move' && buttonSfxEnabled) sound.playSfx(CAT_MOVE_SFX);
   if (sfx === 'ice-break' && buttonSfxEnabled) sound.playSfx(ICE_BREAK_SFX);
+  if (sfx === 'ice-freezing' && buttonSfxEnabled) sound.playSfx(ICE_FREEZING_SFX);
   if (sfx === 'digging' && buttonSfxEnabled) sound.playSfx(DIGGING_SFX);
   if (sfx === 'cat-hole-absorb') {
     if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
   }
-  if (Number.isInteger(stage) && stage > 0) {
+  if (activeSceneName === INGAME_UI_SCENE && Number.isInteger(stage) && stage > 0) {
     currentMapStage = stage;
     resetItemCounts();
     flow.update({ stage: { current: `Level${stage}` } });
@@ -583,7 +586,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
         pendingSceneReady = { scene: godotScene, resolve: () => { pendingSceneReady = null; resolve(); } };
       });
       activeGame.message('load_scene', {
-        stage: progress.getCurrentStage(),
+        stage: currentMapStage,
         config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
       });
       activeGame.startGame();
@@ -607,7 +610,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   const game = new GameSession({ renderer, initTimeoutMs: 30000, hudMap: { timeLeft: 'stage.timer' } });
   activeGame = game;
   await game.start(godotCartridge, {
-    stage: progress.getCurrentStage(),
+    stage: currentMapStage,
     config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS } : {}) },
     onEnd: handleMainGameEnd,
     onProgress: handleGodotSfx,

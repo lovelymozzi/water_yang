@@ -9,6 +9,8 @@ const SOUND_ROLES := {
 	"cat_Hole_sound.mp3": "고양이가 짝 구멍에 흡수될 때",
 	"cat_move.mp3": "고양이가 타일 한 칸을 이동 완료할 때",
 	"ice_breake.mp3": "얼음 블록이 사라질 때",
+	"ice-freezing.mp3": "얼음 기믹이 얼 때",
+	"diggingt_optimized.mp3": "삽 아이템으로 블록을 제거할 때",
 	"stage_clear1.mp3": "레벨 클리어 팝업이 열릴 때",
 	"stage_clear2.mp3": "stage_clear1 종료 직전에 이어 재생",
 	"time_out1.mp3": "타임아웃 팝업이 열릴 때",
@@ -17,23 +19,26 @@ const SOUND_ROLES := {
 	"Ingame_BGM.mp3": "인게임 진입 또는 설정에서 켤 때 BGM",
 }
 const BINDINGS := [
-	{"id": "button", "label": "UI 버튼 클릭", "when": "모든 UI 버튼 또는 내비게이션 탭 터치", "targets": [{"path": "res://godot-shell.html", "marker": "const BUTTON_CLICK_SFX =", "prefix": "./sound/"}]},
-	{"id": "mouth", "label": "고양이 입 열기", "when": "고양이가 입을 열 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOUTH_SFX =", "prefix": "./sound/"}]},
-	{"id": "absorb", "label": "고양이 구멍 흡수", "when": "짝 구멍으로 들어갈 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_HOLE_ABSORB_SFX =", "prefix": "./sound/"}, {"path": "res://scripts/cat_entity.gd", "marker": "const ABSORB_SOUND := preload(", "prefix": "res://src/sound/"}]},
-	{"id": "cat_move", "label": "고양이 한 칸 이동", "when": "path tile 한 칸 이동 완료", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOVE_SFX =", "prefix": "./sound/"}]},
-	{"id": "ice_break", "label": "얼음 블록 파괴", "when": "ice block 이 사라질 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ICE_BREAK_SFX =", "prefix": "./sound/"}]},
-	{"id": "stage_clear1", "label": "레벨 클리어 시작", "when": "pop_LevelWin 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const STAGE_CLEAR1_SFX =", "prefix": "./sound/"}]},
-	{"id": "stage_clear2", "label": "레벨 클리어 이어짐", "when": "stage_clear1 종료 직전", "targets": [{"path": "res://godot-shell.html", "marker": "const STAGE_CLEAR2_SFX =", "prefix": "./sound/"}]},
-	{"id": "time_out", "label": "타임아웃", "when": "pop_OutOfMoves 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const TIME_OUT_SFX =", "prefix": "./sound/"}]},
-	{"id": "popup_open", "label": "일반 팝업 열기", "when": "레벨 클리어·타임아웃 외 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const POPUP_OPEN_SFX =", "prefix": "./sound/"}]},
-	{"id": "lobby_bgm", "label": "로비 BGM", "when": "로비 진입·복귀", "targets": [{"path": "res://godot-shell.html", "marker": "const LOBBY_BGM =", "prefix": "./sound/"}]},
-	{"id": "ingame_bgm", "label": "인게임 BGM", "when": "인게임 진입 또는 설정에서 활성화", "targets": [{"path": "res://godot-shell.html", "marker": "const INGAME_BGM =", "prefix": "./sound/"}]},
+	{"id": "button", "kind": "VFX 버튼", "label": "UI 버튼 클릭", "when": "모든 UI 버튼 또는 내비게이션 탭 터치", "targets": [{"path": "res://godot-shell.html", "marker": "const BUTTON_CLICK_SFX =", "prefix": "./sound/"}]},
+	{"id": "mouth", "kind": "VFX 버튼", "label": "고양이 입 열기", "when": "고양이가 입을 열 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOUTH_SFX =", "prefix": "./sound/"}]},
+	{"id": "absorb", "kind": "VFX 버튼", "label": "고양이 구멍 흡수", "when": "짝 구멍으로 들어갈 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_HOLE_ABSORB_SFX =", "prefix": "./sound/"}, {"path": "res://scripts/cat_entity.gd", "marker": "const ABSORB_SOUND := preload(", "prefix": "res://src/sound/"}]},
+	{"id": "cat_move", "kind": "VFX 버튼", "label": "고양이 한 칸 이동", "when": "path tile 한 칸 이동 완료", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOVE_SFX =", "prefix": "./sound/"}]},
+	{"id": "ice_break", "kind": "VFX 버튼", "label": "얼음 블록 파괴", "when": "ice block 이 사라질 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ICE_BREAK_SFX =", "prefix": "./sound/"}]},
+	{"id": "ice_freezing", "kind": "VFX 버튼", "label": "얼음 생성", "when": "ice gimmick 이 얼 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ICE_FREEZING_SFX =", "prefix": "./sound/"}]},
+	{"id": "digging", "kind": "VFX 버튼", "label": "삽 아이템", "when": "remove item 으로 블록을 제거할 때", "targets": [{"path": "res://godot-shell.html", "marker": "const DIGGING_SFX =", "prefix": "./sound/"}]},
+	{"id": "stage_clear1", "kind": "VFX 버튼", "label": "레벨 클리어 시작", "when": "pop_LevelWin 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const STAGE_CLEAR1_SFX =", "prefix": "./sound/"}]},
+	{"id": "stage_clear2", "kind": "VFX 버튼", "label": "레벨 클리어 이어짐", "when": "stage_clear1 종료 직전", "targets": [{"path": "res://godot-shell.html", "marker": "const STAGE_CLEAR2_SFX =", "prefix": "./sound/"}]},
+	{"id": "time_out", "kind": "VFX 버튼", "label": "타임아웃", "when": "pop_OutOfMoves 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const TIME_OUT_SFX =", "prefix": "./sound/"}]},
+	{"id": "popup_open", "kind": "VFX 버튼", "label": "일반 팝업 열기", "when": "레벨 클리어·타임아웃 외 팝업이 열릴 때", "targets": [{"path": "res://godot-shell.html", "marker": "const POPUP_OPEN_SFX =", "prefix": "./sound/"}]},
+	{"id": "lobby_bgm", "kind": "BGM 버튼", "label": "로비 BGM", "when": "로비 진입·복귀", "targets": [{"path": "res://godot-shell.html", "marker": "const LOBBY_BGM =", "prefix": "./sound/"}]},
+	{"id": "ingame_bgm", "kind": "BGM 버튼", "label": "인게임 BGM", "when": "인게임 진입 또는 설정에서 활성화", "targets": [{"path": "res://godot-shell.html", "marker": "const INGAME_BGM =", "prefix": "./sound/"}]},
 ]
 
 var _paths := PackedStringArray()
 var _usages: Dictionary = {}
 var _selected := -1
 var _list: SoundList
+var _binding_list: BindingList
 var _info: RichTextLabel
 var _status: Label
 var _name: LineEdit
@@ -67,7 +72,7 @@ func _build_ui() -> void:
 	title.add_theme_font_size_override("font_size", 20)
 	root.add_child(title)
 	var hint := Label.new()
-	hint.text = "연결된 항목 제목 오른쪽의 파란 영역에 다른 사운드를 드롭하면 즉시 교체됩니다."
+	hint.text = "각 항목의 드롭다운에서 BGM 버튼 또는 VFX 버튼 연결을 선택합니다."
 	root.add_child(hint)
 
 	var split := HSplitContainer.new()
@@ -86,6 +91,7 @@ func _build_ui() -> void:
 	_list.sound_activated.connect(_preview_selected)
 	_list.files_dropped.connect(_add_files)
 	_list.sound_replacement_requested.connect(_request_file_replacement)
+	_list.binding_requested.connect(_request_binding_replacement)
 	_list.rename_requested.connect(_open_context_rename)
 	left.add_child(_list)
 	var add_drop := AddDropZone.new()
@@ -100,6 +106,15 @@ func _build_ui() -> void:
 	_info.fit_content = true
 	_info.custom_minimum_size.y = 220
 	right.add_child(_info)
+	var binding_title := Label.new()
+	binding_title.text = "연결 슬롯"
+	binding_title.add_theme_font_size_override("font_size", 16)
+	right.add_child(binding_title)
+	_binding_list = BindingList.new()
+	_binding_list.custom_minimum_size.y = 280
+	_binding_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_binding_list.binding_replacement_requested.connect(_request_binding_replacement)
+	right.add_child(_binding_list)
 	var add := Button.new()
 	add.text = "사운드 추가…"
 	add.tooltip_text = "파일을 src/sound/로 복사합니다."
@@ -185,8 +200,28 @@ func _refresh() -> void:
 	names.sort()
 	for file_name in names:
 		_paths.append(SOUND_DIR.path_join(file_name))
+	var binding_items: Array[Dictionary] = []
+	var bindings_by_file := {}
+	for binding in BINDINGS:
+		var targets: Array[String] = []
+		for target in binding["targets"]:
+			targets.append("%s / %s" % [str(target["path"]).trim_prefix("res://"), str(target["marker"])])
+		var file_name := _binding_file(binding)
+		binding_items.append({
+			"id": binding["id"],
+			"kind": binding["kind"],
+			"label": binding["label"],
+			"when": binding["when"],
+			"file": file_name,
+			"targets": "\n".join(targets),
+		})
+		if file_name != "연결 없음" and file_name != "연결 파일을 읽지 못함":
+			if not bindings_by_file.has(file_name):
+				bindings_by_file[file_name] = []
+			bindings_by_file[file_name].append("[%s] %s" % [binding["kind"], binding["label"]])
 	_usages = _scan_usages()
-	_list.set_sounds(_paths, _usages)
+	_list.set_sounds(_paths, _usages, bindings_by_file, binding_items)
+	_binding_list.set_bindings(binding_items)
 	_selected = -1
 	_name.text = ""
 	_info.text = "[b]%d개 사운드[/b]\n항목을 선택하면 사용 시점과 연결 위치를 보여 줍니다." % _paths.size()
@@ -200,8 +235,12 @@ func _select(index: int) -> void:
 	var file_name := path.get_file()
 	_name.text = file_name
 	var uses: Array = _usages.get(file_name, [])
+	var bindings := _bindings_for_file(file_name)
 	var role := str(SOUND_ROLES.get(file_name, "연결되지 않음 — 추가만 된 사운드입니다."))
-	var details := "[b]%s[/b]\n%s\n\n[b]언제 재생되나[/b]\n%s\n\n[b]현재 연결 위치 (%d)[/b]" % [file_name, _format_size(FileAccess.get_file_as_bytes(path).size()), role, uses.size()]
+	var details := "[b]%s[/b]\n%s\n\n[b]언제 재생되나[/b]\n%s\n\n[b]관리 슬롯 (%d)[/b]" % [file_name, _format_size(FileAccess.get_file_as_bytes(path).size()), role, bindings.size()]
+	for binding in bindings:
+		details += "\n• [%s] %s — %s" % [binding["kind"], binding["label"], binding["when"]]
+	details += "\n\n[b]현재 연결 위치 (%d)[/b]" % uses.size()
 	for use in uses:
 		details += "\n• %s" % use
 	_info.text = details
@@ -422,6 +461,14 @@ func _request_file_replacement(sound_path: String, target_path: String) -> void:
 	_request_confirmation("replace_file_bindings", {"bindings": bindings, "sound": sound_path}, "%s 이(가) 맡은 연결 %d개를 %s 로 교체할까요?" % [target_path.get_file(), bindings.size(), sound_path.get_file()])
 
 
+func _request_binding_replacement(binding_id: String, sound_path: String) -> void:
+	for binding in BINDINGS:
+		if binding["id"] == binding_id:
+			_request_confirmation("replace_file_bindings", {"bindings": [binding], "sound": sound_path}, "%s 연결을 %s 로 교체할까요?" % [binding["label"], sound_path.get_file()])
+			return
+	_status.text = "연결 슬롯을 찾지 못했습니다: %s" % binding_id
+
+
 func _bindings_for_file(file_name: String) -> Array:
 	var bindings: Array = []
 	for binding in BINDINGS:
@@ -502,6 +549,7 @@ static func _format_size(bytes: int) -> String:
 class SoundList extends ScrollContainer:
 	signal files_dropped(paths: PackedStringArray)
 	signal sound_replacement_requested(sound_path: String, target_path: String)
+	signal binding_requested(binding_id: String, sound_path: String)
 	signal sound_selected(index: int)
 	signal sound_activated(index: int)
 	signal rename_requested(index: int)
@@ -513,7 +561,7 @@ class SoundList extends ScrollContainer:
 		_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		add_child(_rows)
 
-	func set_sounds(paths: PackedStringArray, usages: Dictionary) -> void:
+	func set_sounds(paths: PackedStringArray, usages: Dictionary, bindings_by_file: Dictionary, binding_options: Array[Dictionary]) -> void:
 		for child in _rows.get_children():
 			child.queue_free()
 		for index in paths.size():
@@ -522,10 +570,11 @@ class SoundList extends ScrollContainer:
 			var row := SoundRow.new()
 			var bytes := FileAccess.get_file_as_bytes(path).size()
 			var size_text := "%.1f KB" % (float(bytes) / 1024.0) if bytes < 1024 * 1024 else "%.1f MB" % (float(bytes) / (1024.0 * 1024.0))
-			row.setup(index, path, size_text, (usages.get(file_name, []) as Array).size())
+			row.setup(index, path, size_text, (usages.get(file_name, []) as Array).size(), bindings_by_file.get(file_name, []), binding_options)
 			row.sound_selected.connect(sound_selected.emit)
 			row.sound_activated.connect(sound_activated.emit)
 			row.sound_replacement_requested.connect(sound_replacement_requested.emit)
+			row.binding_requested.connect(binding_requested.emit)
 			row.rename_requested.connect(rename_requested.emit)
 			_rows.add_child(row)
 
@@ -547,14 +596,17 @@ class SoundRow extends PanelContainer:
 	signal sound_selected(index: int)
 	signal sound_activated(index: int)
 	signal sound_replacement_requested(sound_path: String, target_path: String)
+	signal binding_requested(binding_id: String, sound_path: String)
 	signal rename_requested(index: int)
 
 	var _index := -1
 	var _path := ""
 	var _selected := false
 	var _menu: PopupMenu
+	var _binding_ids: Array[String] = []
+	var _binding_picker: OptionButton
 
-	func setup(index: int, path: String, size_text: String, connection_count: int) -> void:
+	func setup(index: int, path: String, size_text: String, connection_count: int, bindings: Array, binding_options: Array[Dictionary]) -> void:
 		_index = index
 		_path = path
 		var row := HBoxContainer.new()
@@ -570,12 +622,25 @@ class SoundRow extends PanelContainer:
 		title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		details.add_child(title)
 		var meta := Label.new()
-		meta.text = "%s  ·  %s" % [size_text, "연결 %d" % connection_count if connection_count else "미연결"]
+		meta.text = "%s  ·  %s%s" % [size_text, "연결 %d" % connection_count if connection_count else "미연결", "\n" + " / ".join(bindings) if not bindings.is_empty() else ""]
 		meta.add_theme_font_size_override("font_size", 12)
 		meta.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		details.add_child(meta)
+		_binding_picker = OptionButton.new()
+		_binding_picker.custom_minimum_size.x = 190
+		_binding_picker.add_item("연결 선택...", 0)
+		_binding_ids = [""]
+		var selected_binding := 0
+		for option in binding_options:
+			_binding_picker.add_item("[%s] %s" % [option["kind"], option["label"]])
+			_binding_ids.append(str(option["id"]))
+			if selected_binding == 0 and str(option.get("file", "")) == path.get_file():
+				selected_binding = _binding_ids.size() - 1
+		_binding_picker.select(selected_binding)
+		_binding_picker.item_selected.connect(_on_binding_selected)
+		row.add_child(_binding_picker)
 		var slot := InlineReplaceZone.new()
-		slot.custom_minimum_size = Vector2(150, 46)
+		slot.custom_minimum_size = Vector2(120, 46)
 		slot.sound_dropped.connect(sound_replacement_requested.emit)
 		row.add_child(slot)
 		slot.setup(path, connection_count > 0)
@@ -623,6 +688,75 @@ class SoundRow extends PanelContainer:
 	func _on_menu_selected(id: int) -> void:
 		if id == 0:
 			rename_requested.emit(_index)
+
+	func _on_binding_selected(selected: int) -> void:
+		if selected <= 0 or selected >= _binding_ids.size():
+			return
+		binding_requested.emit(_binding_ids[selected], _path)
+		_binding_picker.select(0)
+
+
+class BindingList extends ScrollContainer:
+	signal binding_replacement_requested(binding_id: String, sound_path: String)
+
+	var _rows: VBoxContainer
+
+	func _ready() -> void:
+		_rows = VBoxContainer.new()
+		_rows.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		add_child(_rows)
+
+	func set_bindings(items: Array[Dictionary]) -> void:
+		for child in _rows.get_children():
+			child.queue_free()
+		for item in items:
+			var row := BindingRow.new()
+			row.setup(item)
+			row.binding_replacement_requested.connect(binding_replacement_requested.emit)
+			_rows.add_child(row)
+
+
+class BindingRow extends PanelContainer:
+	signal binding_replacement_requested(binding_id: String, sound_path: String)
+
+	var _id := ""
+
+	func setup(item: Dictionary) -> void:
+		_id = str(item["id"])
+		var box := VBoxContainer.new()
+		box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(box)
+		var title := Label.new()
+		title.text = "[%s] %s" % [item["kind"], item["label"]]
+		title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		box.add_child(title)
+		var meta := Label.new()
+		meta.text = "현재: %s\n%s\n%s" % [item["file"], item["when"], item["targets"]]
+		meta.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		meta.add_theme_font_size_override("font_size", 12)
+		meta.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		box.add_child(meta)
+		var drop := Label.new()
+		drop.text = "여기로 사운드 드롭: 연결 변경"
+		drop.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		drop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		box.add_child(drop)
+		var style := StyleBoxFlat.new()
+		style.bg_color = Color("24313d")
+		style.border_color = Color("65c8ff")
+		style.set_border_width_all(1)
+		style.set_corner_radius_all(6)
+		style.content_margin_left = 8
+		style.content_margin_right = 8
+		style.content_margin_top = 6
+		style.content_margin_bottom = 6
+		add_theme_stylebox_override("panel", style)
+
+	func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+		return data is Dictionary and data.has("sound_admin_path")
+
+	func _drop_data(_at_position: Vector2, data: Variant) -> void:
+		binding_replacement_requested.emit(_id, str(data["sound_admin_path"]))
 
 
 class InlineReplaceZone extends PanelContainer:

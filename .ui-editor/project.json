@@ -187,7 +187,7 @@
         "y": 458.359
       },
       "235b7eb7-c304-45b3-aa55-25f18050fd64": {
-        "x": -95.2081,
+        "x": -94.5872,
         "y": 1084.04
       },
       "f3ba1a4a-f763-458d-9e7a-2a54bfe0c1be": {
@@ -299,7 +299,7 @@
       "Lobby_1",
       "home_bottom"
     ],
-    "lastScene": "Ingame"
+    "lastScene": "pop_Settings_1"
   },
   "globalViewport": {
     "width": 393,
