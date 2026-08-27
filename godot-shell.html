@@ -48,6 +48,67 @@ const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimite
 const STAGE_CLEAR_REWARD = 40;
 const AD_STAGE_CLEAR_REWARD = 80;
 const ITEM_START_COUNT = 3;
+const ITEM_STORAGE_KEY = STORAGE_PREFIX + 'items_v1';
+const LOBBY_ITEM_REWARD_STORAGE_KEY = STORAGE_PREFIX + 'lobby_item_rewards_v1';
+const ITEM_KEYS = ['remove', 'timestop', 'move'];
+const CLEAR_ITEM_REWARD_TABLE = [
+  { item: null, weight: 75 },
+  { item: 'timestop', weight: 12 },
+  { item: 'remove', weight: 8 },
+  { item: 'move', weight: 5 },
+];
+const LEVEL_WIN_COIN_REWARD_LAYER_OFFSETS = {
+  'gold-glow-12': [0, 0],
+  'rays-burst-10': [12, 13],
+  'itemicon-coins-l-png-8': [33, 44],
+  'plain-text-9': [95, 82],
+};
+const LEVEL_WIN_COIN_REWARD_POS = {
+  solo: { x: 160, y: 305, contentOffsetX: -67 },
+  item: { x: 156, y: 305 },
+};
+const ITEM_REWARD_UI = {
+  remove: {
+    levelWinLayers: ['gold-glow-2526', 'rays-burst-2527', 'item1-png-2511', 'plain-text-2516'],
+    levelWinPos: { x: 36, y: 307 },
+    levelWinLayerOffsets: {
+      'gold-glow-2526': [0, 0],
+      'rays-burst-2527': [12, 13],
+      'item1-png-2511': [52, 51],
+      'plain-text-2516': [79, 79],
+    },
+    lobbyLayers: ['gold-glow-2538', 'rays-burst-2543', 'item1-png-2544'],
+    lobbyFxLayers: ['gold-glow-2538', 'rays-burst-2543'],
+    lobbyIcon: 'item1-png-2544',
+  },
+  timestop: {
+    levelWinLayers: ['gold-glow-2531', 'rays-burst-2532', 'item2-png-2512', 'plain-text-2514'],
+    levelWinPos: { x: 42, y: 303 },
+    levelWinLayerOffsets: {
+      'gold-glow-2531': [0, 0],
+      'rays-burst-2532': [12, 13],
+      'item2-png-2512': [49, 49],
+      'plain-text-2514': [74, 83],
+    },
+    lobbyLayers: ['gold-glow-2546', 'rays-burst-2547', 'item2-png-2548'],
+    lobbyFxLayers: ['gold-glow-2546', 'rays-burst-2547'],
+    lobbyIcon: 'item2-png-2548',
+  },
+  move: {
+    levelWinLayers: ['gold-glow-2522', 'rays-burst-2523', 'itme3-1-png-2513', 'plain-text-2517'],
+    levelWinPos: { x: 43, y: 302 },
+    levelWinLayerOffsets: {
+      'gold-glow-2522': [0, 0],
+      'rays-burst-2523': [12, 13],
+      'itme3-1-png-2513': [57, 52],
+      'plain-text-2517': [73, 84],
+    },
+    lobbyLayers: ['gold-glow-2539', 'rays-burst-2540', 'itme3-1-png-2541'],
+    lobbyFxLayers: ['gold-glow-2539', 'rays-burst-2540'],
+    lobbyIcon: 'itme3-1-png-2541',
+  },
+};
+const LOBBY_REWARD_TRAIL_COUNT = 8;
 const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
 const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
@@ -305,9 +366,45 @@ let sceneSessionToken = 0;
 let instantLobbyHomeReturnTimeoutId = null;
 let activeGodotScene = 'lobby';
 let currentMapStage = progress.getCurrentStage();
-const itemCounts = { remove: ITEM_START_COUNT, timestop: ITEM_START_COUNT, move: ITEM_START_COUNT };
+const itemCounts = readItemCounts();
 const itemPending = { remove: 0, timestop: 0, move: 0 };
 let selectedTargetItem = null;
+let levelWinItemReward = null;
+let pendingLobbyItemRewards = readPendingLobbyItemRewards();
+
+function normalizeItemCounts(saved = {}) {
+  return Object.fromEntries(ITEM_KEYS.map(item => {
+    const count = Number(saved[item]);
+    return [item, Number.isFinite(count) ? Math.max(0, Math.floor(count)) : ITEM_START_COUNT];
+  }));
+}
+
+function readItemCounts() {
+  return normalizeItemCounts(JSON.parse(localStorage.getItem(ITEM_STORAGE_KEY) || '{}'));
+}
+
+function saveItemCounts() {
+  localStorage.setItem(ITEM_STORAGE_KEY, JSON.stringify(itemCounts));
+}
+
+function normalizeLobbyItemRewards(rewards = []) {
+  const seen = new Set();
+  return (Array.isArray(rewards) ? rewards : []).filter(reward => {
+    const item = reward?.item;
+    if (!ITEM_REWARD_UI[item] || seen.has(item)) return false;
+    seen.add(item);
+    return true;
+  }).map(reward => ({ item: reward.item, count: 1 }));
+}
+
+function readPendingLobbyItemRewards() {
+  return normalizeLobbyItemRewards(JSON.parse(localStorage.getItem(LOBBY_ITEM_REWARD_STORAGE_KEY) || '[]'));
+}
+
+function savePendingLobbyItemRewards() {
+  if (pendingLobbyItemRewards.length) localStorage.setItem(LOBBY_ITEM_REWARD_STORAGE_KEY, JSON.stringify(pendingLobbyItemRewards));
+  else localStorage.removeItem(LOBBY_ITEM_REWARD_STORAGE_KEY);
+}
 
 function syncItemCounts() {
   flow.update({
@@ -322,10 +419,167 @@ function syncItemCounts() {
   });
 }
 
-function resetItemCounts() {
-  Object.keys(itemCounts).forEach(item => { itemCounts[item] = ITEM_START_COUNT; itemPending[item] = 0; });
+function resetItemRuntimeState() {
+  Object.keys(itemPending).forEach(item => { itemPending[item] = 0; });
   selectedTargetItem = null;
   syncItemCounts();
+}
+
+function pickStageClearItemReward() {
+  let roll = Math.random() * CLEAR_ITEM_REWARD_TABLE.reduce((sum, entry) => sum + entry.weight, 0);
+  for (const entry of CLEAR_ITEM_REWARD_TABLE) {
+    roll -= entry.weight;
+    if (roll < 0) return entry.item;
+  }
+  return null;
+}
+
+function grantStageClearItemReward() {
+  const item = pickStageClearItemReward();
+  if (!item) return null;
+  itemCounts[item] += 1;
+  saveItemCounts();
+  syncItemCounts();
+  return { item, count: 1 };
+}
+
+function queueLobbyItemReward(reward) {
+  const item = reward?.item;
+  if (!ITEM_REWARD_UI[item] || pendingLobbyItemRewards.some(entry => entry.item === item)) return;
+  pendingLobbyItemRewards.push({ item, count: 1 });
+  savePendingLobbyItemRewards();
+}
+
+function setRewardLayers(renderer, layerIds, visible) {
+  layerIds.forEach(stableId => {
+    const el = renderer.getElement(stableId);
+    if (el) el.style.display = visible ? '' : 'none';
+  });
+}
+
+function getLevelWinCoinRewardGroup(renderer) {
+  const anchor = renderer.getElement('gold-glow-12');
+  return typeof anchor?.closest === 'function' ? anchor.closest('[data-group="coin_reward"]') : null;
+}
+
+function syncLevelWinItemReward(renderer, reward) {
+  const hasRewardItem = !!ITEM_REWARD_UI[reward?.item];
+  Object.entries(ITEM_REWARD_UI).forEach(([item, cfg]) => {
+    setRewardLayers(renderer, cfg.levelWinLayers, reward?.item === item);
+    const itemGroup = renderer.getElement(cfg.levelWinLayers[0])?.closest?.('[data-group]');
+    if (itemGroup) {
+      itemGroup.style.left = `${cfg.levelWinPos.x}px`;
+      itemGroup.style.top = `${cfg.levelWinPos.y}px`;
+    }
+    Object.entries(cfg.levelWinLayerOffsets).forEach(([stableId, [dx, dy]]) => {
+      const el = renderer.getElement(stableId);
+      if (!el) return;
+      el.style.left = `${itemGroup ? dx : cfg.levelWinPos.x + dx}px`;
+      el.style.top = `${itemGroup ? dy : cfg.levelWinPos.y + dy}px`;
+      el.style.transform = '';
+    });
+  });
+  const pos = hasRewardItem ? LEVEL_WIN_COIN_REWARD_POS.item : LEVEL_WIN_COIN_REWARD_POS.solo;
+  const group = getLevelWinCoinRewardGroup(renderer);
+  if (group) {
+    group.style.left = `${pos.x}px`;
+    group.style.top = `${pos.y}px`;
+  }
+  Object.entries(LEVEL_WIN_COIN_REWARD_LAYER_OFFSETS).forEach(([stableId, [dx, dy]]) => {
+    const el = renderer.getElement(stableId);
+    if (!el) return;
+    const x = dx + (pos.contentOffsetX || 0);
+    el.style.left = `${group ? x : pos.x + x}px`;
+    el.style.top = `${group ? dy : pos.y + dy}px`;
+    el.style.transform = '';
+  });
+}
+
+function clearLobbyItemRewardLayers(renderer) {
+  Object.values(ITEM_REWARD_UI).forEach(cfg => setRewardLayers(renderer, cfg.lobbyLayers, false));
+}
+
+function playLobbyItemReward(renderer, reward, onDone) {
+  const cfg = ITEM_REWARD_UI[reward?.item];
+  if (!cfg) return;
+  clearLobbyItemRewardLayers(renderer);
+  setRewardLayers(renderer, cfg.lobbyLayers, true);
+  const icon = renderer.getElement(cfg.lobbyIcon);
+  const levelButton = renderer.getElement('home-btn-stage-normal-png-145');
+  const iconImage = icon?.querySelector('img');
+  if (!icon || !levelButton || !iconImage) {
+    console.warn('[Item reward] Lobby reward layer not found:', reward.item);
+    onDone?.();
+    return;
+  }
+  icon.animate([
+    { transform: 'scale(.75)' },
+    { transform: 'scale(1.2)', offset: .55 },
+    { transform: 'scale(1)' },
+  ], { duration: 520, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+  setTimeout(() => {
+    setRewardLayers(renderer, cfg.lobbyFxLayers, false);
+    const start = icon.getBoundingClientRect();
+    const end = levelButton.getBoundingClientRect();
+    const startX = start.left + start.width / 2;
+    const startY = start.top + start.height / 2;
+    const endX = end.left + end.width / 2;
+    const endY = end.top + end.height / 2;
+    for (let i = 0; i < LOBBY_REWARD_TRAIL_COUNT; i += 1) {
+      const shard = document.createElement('img');
+      shard.src = iconImage.src;
+      shard.alt = '';
+      shard.style.cssText = `position:fixed;left:${startX}px;top:${startY}px;width:${start.width * 0.5}px;height:${start.height * 0.5}px;z-index:10000;pointer-events:none;object-fit:contain;`;
+      document.body.appendChild(shard);
+      const spread = (i - (LOBBY_REWARD_TRAIL_COUNT - 1) / 2) * 8;
+      const lift = i % 2 ? -34 : -20;
+      const curve = Array.from({ length: 7 }, (_, step) => {
+        const t = step / 6;
+        const x = (endX - startX) * t + spread * Math.sin(Math.PI * t);
+        const y = (endY - startY) * t + lift * 4 * t * (1 - t);
+        return {
+          transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${1 - 0.65 * t})`,
+          opacity: 1 - t,
+        };
+      });
+      const anim = shard.animate(curve, { duration: 720, delay: i * 55, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' });
+      anim.onfinish = () => shard.remove();
+    }
+    setTimeout(() => {
+      setRewardLayers(renderer, cfg.lobbyLayers, false);
+      onDone?.();
+    }, 900);
+  }, 800);
+}
+
+function playQueuedLobbyItemRewards(renderer) {
+  pendingLobbyItemRewards = normalizeLobbyItemRewards([...pendingLobbyItemRewards, ...readPendingLobbyItemRewards()]);
+  savePendingLobbyItemRewards();
+  if (!pendingLobbyItemRewards.length) return;
+  let attempts = 0;
+  const playWhenVisible = () => {
+    const levelButton = renderer.getElement('home-btn-stage-normal-png-145');
+    const rect = levelButton?.getBoundingClientRect();
+    let hidden = !levelButton?.isConnected || !rect?.width || !rect?.height;
+    let node = levelButton;
+    while (!hidden && node instanceof HTMLElement) {
+      const style = getComputedStyle(node);
+      hidden = style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) <= 0;
+      node = node.parentElement;
+    }
+    if (hidden) {
+      if (attempts++ < 30) setTimeout(playWhenVisible, 100);
+      return;
+    }
+    const rewards = pendingLobbyItemRewards.splice(0);
+    savePendingLobbyItemRewards();
+    const next = () => {
+      const reward = rewards.shift();
+      if (reward) playLobbyItemReward(renderer, reward, next);
+    };
+    next();
+  };
+  requestAnimationFrame(() => requestAnimationFrame(playWhenVisible));
 }
 
 function requestItem(item) {
@@ -355,12 +609,13 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
   if (sfx === 'item-move-hole-pop' && buttonSfxEnabled) sound.playSfx(ITEM_MOVE_HOLE_POP_SFX);
   if (activeSceneName === INGAME_UI_SCENE && Number.isInteger(stage) && stage > 0) {
     currentMapStage = stage;
-    resetItemCounts();
+    resetItemRuntimeState();
     flow.update({ stage: { current: `Level${stage}` } });
   }
   if (itemUsed) {
     itemPending[itemUsed] = Math.max(0, itemPending[itemUsed] - 1);
     itemCounts[itemUsed] = Math.max(0, itemCounts[itemUsed] - 1);
+    saveItemCounts();
     if (selectedTargetItem === itemUsed) selectedTargetItem = null;
     syncItemCounts();
   }
@@ -385,6 +640,8 @@ const handleMainGameEnd = async (result) => {
       score: result.score,
       ticket: result.ticket,
     });
+    levelWinItemReward = grantStageClearItemReward();
+    if (levelWinItemReward) queueLobbyItemReward(levelWinItemReward);
     await flow.fire('스테이지 클리어시');
   } else if (result.outcome === 'fail') {
     await flow.fire('스테이지 시간이 다되어 게임패배시');
@@ -429,7 +686,11 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
-  if (sceneName === LOBBY_UI_SCENE) renderer.update({ stage: { current: `Level${currentMapStage}` } });
+  if (sceneName === LOBBY_UI_SCENE) {
+    renderer.update({ stage: { current: `Level${currentMapStage}` } });
+    clearLobbyItemRewardLayers(renderer);
+    playQueuedLobbyItemRewards(renderer);
+  }
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
   if (sceneName === INGAME_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
@@ -512,6 +773,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     }
     renderer.getElement('confetti-148')?.style.setProperty('pointer-events', 'none');
     renderer.getElement('confetti-148')?.closest('.sr-fit')?.style.setProperty('z-index', '9001');
+    syncLevelWinItemReward(renderer, levelWinItemReward);
     if (activeGame?.state === 'running') activeGame.pause('level-win');
     activeGame?.message('load_scene', {
       stage: progress.getCurrentStage(),

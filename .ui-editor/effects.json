@@ -21,27 +21,6 @@
         "fps": 10,
         "playbackRate": 1
       }
-    },
-    "butterfly": {
-      "id": "butterfly",
-      "name": "butterfly",
-      "exportPath": "src/assets/butterfly.webp",
-      "clip": {
-        "cellW": 91,
-        "cellH": 61,
-        "cols": 2,
-        "rows": 2,
-        "count": 4,
-        "delays": [
-          100,
-          100,
-          100,
-          100
-        ],
-        "loop": 0,
-        "fps": 10,
-        "playbackRate": 1
-      }
     }
   }
 }
