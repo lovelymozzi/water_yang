@@ -52,7 +52,7 @@
 <!-- SCENE:pop_BuyCoins BEGIN -->
 #### `pop_BuyCoins`  ·  contract: `./web/ui/pop_BuyCoins.contract.json`
 - sceneUuid: `b11144cd-f2c6-4f82-a4a8-c76b3496cd70`
-- 이벤트: `shop-package-time-blue2-png-160:click` · `shop-package-time-png-47:click` · `common-time-needle-png-48:click` · `plain-text-50:click` · `860` · `480` · `320` · `common-btn-top-x-blue-png-2186:click`
+- 이벤트: `shop-package-time-blue2-png-160:click` · `860` · `480` · `320` · `common-btn-top-x-blue-png-2186:click`
 - 텍스트 바인딩: `shop.timer`
 <!-- SCENE:pop_BuyCoins END -->
 
@@ -117,7 +117,7 @@
 <!-- SCENE:splash BEGIN -->
 #### `splash`  ·  contract: `./web/ui/splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: `loading-out-png-11:click`
+- 이벤트: `loading-out-png-11:click` · `loading-inner-png-12:click` · `loading-bar-png-13:click` · `text-loading-15:click`
 - 텍스트 바인딩: `loadingMessage`
 - 위젯: `loading.prograss`(fill)
 - GameField 레이어 있음

@@ -19,6 +19,7 @@ const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const ABSORB_SOUND := preload("res://src/sound/cat_Hole_sound.mp3")
+const ITEM_MOVE_HOLE_POP_SOUND := preload("res://src/sound/bubble_pop.mp3")
 const FLOATING_WATER_OUTLINE_COLOR := Color("f8ffff")
 const FLOATING_WATER_OUTLINE_WIDTH := 0.020
 const REFERENCE_TILE_SIZE := 2.0
@@ -349,6 +350,7 @@ var _inserted_mid_bones: Array[int] = []
 var _head_mesh_overhang := 0.0
 var _tail_mesh_overhang := 0.0
 var _absorb_sound_player: AudioStreamPlayer
+var _item_move_hole_pop_player: AudioStreamPlayer
 # 중첩고양이. 겉껍질(this)이 빠지는 동안 자리에 남은 안쪽 고양이와 현재 수축량.
 var _inner_cat: CatEntity
 var _nest_shrink := 0.0
@@ -367,6 +369,9 @@ func _ready() -> void:
 	_absorb_sound_player = AudioStreamPlayer.new()
 	_absorb_sound_player.stream = ABSORB_SOUND
 	add_child(_absorb_sound_player)
+	_item_move_hole_pop_player = AudioStreamPlayer.new()
+	_item_move_hole_pop_player.stream = ITEM_MOVE_HOLE_POP_SOUND
+	add_child(_item_move_hole_pop_player)
 
 	if Engine.is_editor_hint():
 		refresh_editor_preview()
@@ -959,6 +964,15 @@ func _finish_absorb() -> void:
 	# 이후 프레임에서 이동/포즈 계산이 다시 돌지 않게 끊는다.
 	level_manager = null
 	manager.release_cat_cell(self)
+	if _item_clear:
+		if UiBridge.is_hosted:
+			UiBridge.post_progress({"sfx": "item-move-hole-pop"})
+		else:
+			remove_child(_item_move_hole_pop_player)
+			manager.add_child(_item_move_hole_pop_player)
+			_item_move_hole_pop_player.finished.connect(_item_move_hole_pop_player.queue_free)
+			_item_move_hole_pop_player.play()
+			_item_move_hole_pop_player = null
 	manager.on_cat_escaped(self, _absorb_cell)
 	queue_free()
 

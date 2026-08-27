@@ -24,6 +24,27 @@ const INITIAL_COIN_GRANT_STORAGE_KEY = STORAGE_PREFIX + 'initial_coin_grant_v1';
 const MAX_HEARTS = 5;
 const UNLIMITED_HEARTS_DURATION_MS = 60 * 60 * 1000;
 const UNLIMITED_HEARTS_STORAGE_KEY = STORAGE_PREFIX + 'unlimited_hearts_until';
+const SHOP_COOLDOWN_STORAGE_PREFIX = STORAGE_PREFIX + 'shop_cooldown_until_';
+const SHOP_PRODUCTS = {
+  860: {
+    cooldownMs: 24 * 60 * 60 * 1000,
+    active: ['ingame-toggle-on-png-167', 'text-860jpy-174'],
+    off: ['ingame-toggle-on-png-2483', 'text-860jpy-2485'],
+    timerText: 'plain-text-50',
+  },
+  480: {
+    cooldownMs: 24 * 60 * 60 * 1000,
+    active: ['ingame-toggle-on-png-178', 'text-860jpy-180'],
+    off: ['ingame-toggle-on-png-2487', 'text-860jpy-2489'],
+    timerText: 'plain-text-2499',
+  },
+  320: {
+    cooldownMs: 60 * 60 * 1000,
+    active: ['ingame-toggle-on-png-182', 'text-860jpy-184'],
+    off: ['ingame-toggle-on-png-2506', 'text-860jpy-2508'],
+    timerText: 'plain-text-2504',
+  },
+};
 const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
 const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimited-v2';
 const STAGE_CLEAR_REWARD = 40;
@@ -32,6 +53,7 @@ const ITEM_START_COUNT = 3;
 const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
 const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
+const ITEM_MOVE_HOLE_POP_SFX = './sound/bubble_pop.mp3';
 const CAT_MOVE_SFX = './sound/cat_move.mp3';
 const ICE_BREAK_SFX = './sound/ice_breake.mp3';
 const ICE_FREEZING_SFX = './sound/ice-freezing.mp3';
@@ -75,12 +97,20 @@ const SPLASH_CACHE_NAME = `${STORAGE_PREFIX}splash_load_${GODOT_CONFIG.fileSizes
 const splashCache = 'caches' in window ? await caches.open(SPLASH_CACHE_NAME) : null;
 const nativeFetch = window.fetch.bind(window);
 const splashCacheablePath = /\.(pck|wasm|js|json|png|jpe?g|webp|mp3|ogg|wav|woff2)$/i;
+const uiPublishPath = new URL(UI_DIR, location.href).pathname;
 if (splashCache) {
   await navigator.storage?.persist?.();
   window.fetch = async (input, init) => {
     const request = new Request(input, init);
     const url = new URL(request.url);
-    if (request.method !== 'GET' || request.headers.has('range') || url.origin !== location.origin || !splashCacheablePath.test(url.pathname)) {
+    if (
+      request.method !== 'GET'
+      || request.headers.has('range')
+      || url.origin !== location.origin
+      || url.pathname.startsWith(uiPublishPath)
+      || url.pathname.includes('/src/assets/')
+      || !splashCacheablePath.test(url.pathname)
+    ) {
       return nativeFetch(input, init);
     }
     const cached = await splashCache.match(request);
@@ -182,6 +212,41 @@ function syncUnlimitedHearts(renderer = null) {
 function activateUnlimitedHearts() {
   localStorage.setItem(UNLIMITED_HEARTS_STORAGE_KEY, String(Date.now() + UNLIMITED_HEARTS_DURATION_MS));
   syncUnlimitedHearts();
+}
+
+function formatShopCooldown(ms) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map(v => String(v).padStart(2, '0')).join(':');
+}
+
+function getShopCooldownRemaining(productKey) {
+  return Math.max(0, (Number(localStorage.getItem(SHOP_COOLDOWN_STORAGE_PREFIX + productKey)) || 0) - Date.now());
+}
+
+function setShopCooldown(productKey) {
+  localStorage.setItem(SHOP_COOLDOWN_STORAGE_PREFIX + productKey, String(Date.now() + SHOP_PRODUCTS[productKey].cooldownMs));
+}
+
+function syncShopCooldowns(renderer) {
+  Object.entries(SHOP_PRODUCTS).forEach(([productKey, product]) => {
+    const remaining = getShopCooldownRemaining(productKey);
+    product.active.forEach(stableId => {
+      const el = renderer.getElement(stableId);
+      if (el) el.style.display = remaining > 0 ? 'none' : '';
+    });
+    product.off.forEach(stableId => {
+      const el = renderer.getElement(stableId);
+      if (el) el.style.display = remaining > 0 ? '' : 'none';
+    });
+    const timer = renderer.getTextElement(product.timerText, 0);
+    if (timer) {
+      timer.textContent = formatShopCooldown(remaining);
+      if (timer.dataset.gradText !== undefined) timer.dataset.gradText = timer.textContent;
+    }
+  });
 }
 
 sound.unlockOnFirstGesture(() => {
@@ -289,6 +354,7 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
   if (sfx === 'cat-hole-absorb') {
     if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
   }
+  if (sfx === 'item-move-hole-pop' && buttonSfxEnabled) sound.playSfx(ITEM_MOVE_HOLE_POP_SFX);
   if (activeSceneName === INGAME_UI_SCENE && Number.isInteger(stage) && stage > 0) {
     currentMapStage = stage;
     resetItemCounts();
@@ -382,6 +448,15 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     const purchaseToast = renderer.getElement('common-box-toast-png-2187');
     let purchaseToastTimer;
     if (purchaseToast) purchaseToast.style.visibility = 'hidden';
+    syncShopCooldowns(renderer);
+    const shopCooldownAnchor = renderer.getElement('plain-text-50');
+    const shopCooldownTimer = setInterval(() => {
+      if (!shopCooldownAnchor?.isConnected) {
+        clearInterval(shopCooldownTimer);
+        return;
+      }
+      syncShopCooldowns(renderer);
+    }, 1000);
     const showPurchaseToast = () => {
       if (!purchaseToast) return;
       clearTimeout(purchaseToastTimer);
@@ -389,7 +464,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       purchaseToastTimer = setTimeout(() => { purchaseToast.style.visibility = 'hidden'; }, 2500);
     };
     renderer.on('860', async () => {
-      if (shopPurchasePending) return;
+      if (shopPurchasePending || getShopCooldownRemaining('860') > 0) return;
       shopPurchasePending = true;
       try {
         await runEconomyTransaction('shop-purchase', async () => {
@@ -397,29 +472,35 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
           await economy.refillHearts();
           activateUnlimitedHearts();
         });
+        setShopCooldown('860');
+        syncShopCooldowns(renderer);
         showPurchaseToast();
       } finally {
         shopPurchasePending = false;
       }
     });
     renderer.on('480', async () => {
-      if (shopPurchasePending) return;
+      if (shopPurchasePending || getShopCooldownRemaining('480') > 0) return;
       shopPurchasePending = true;
       try {
         await runEconomyTransaction('shop-purchase', async () => {
           await economy.grantCoins(2500, 'shop-480');
           await economy.grantHearts(10, Date.now(), 'shop-480', { overflowCap: 10 });
         });
+        setShopCooldown('480');
+        syncShopCooldowns(renderer);
         showPurchaseToast();
       } finally {
         shopPurchasePending = false;
       }
     });
     renderer.on('320', async () => {
-      if (shopPurchasePending) return;
+      if (shopPurchasePending || getShopCooldownRemaining('320') > 0) return;
       shopPurchasePending = true;
       try {
         await runEconomyTransaction('shop-purchase', () => economy.grantCoins(1000, 'shop-320'));
+        setShopCooldown('320');
+        syncShopCooldowns(renderer);
         showPurchaseToast();
       } finally {
         shopPurchasePending = false;
@@ -686,4 +767,3 @@ await flow.start();
 </script>
 </body>
 </html>
-
