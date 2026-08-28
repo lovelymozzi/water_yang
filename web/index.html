@@ -208,11 +208,16 @@ const uiRenderStylesReady = Promise.all([
 const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
 await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
   const sceneContract = await (await fetch(UI_DIR + contract)).json();
-  (sceneContract.layers || []).forEach(({ stableId, events = [], texts = [] }) => {
+  (sceneContract.layers || []).forEach(({ stableId, events = [], texts = [], widget = null }) => {
     if (events.some(({ trigger }) => trigger === 'click')) CLICK_EVENT_STABLE_IDS.add(stableId);
+    if (widget) CLICK_EVENT_STABLE_IDS.add(stableId);
     texts.forEach(({ fontFamily, fontWeight }) => {
       if (fontFamily) UI_FONT_SPECS.add(`${fontWeight || 'bold'} 16px ${fontFamily}`);
     });
+  });
+  (sceneContract.groups || []).forEach(({ layerStableIds = [], widget = null }) => {
+    if (!widget) return;
+    layerStableIds.forEach((stableId) => CLICK_EVENT_STABLE_IDS.add(stableId));
   });
   const navLabel = sceneContract.navTabBar?.label;
   if (navLabel?.fontFamily && navLabel.fontFamily !== 'inherit') {
@@ -768,11 +773,25 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneName === INGAME_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
     syncItemCounts();
-    renderer.on('entry-box-normal-png-2455:click', () => requestItem('remove'));
-    renderer.on('entry-box-normal-png-2456:click', () => requestItem('timestop'));
-    renderer.on('entry-box-normal-png-2457:click', () => requestItem('move'));
-    renderer.on('entry-box-normal-png-2468:click', cancelItemSelection);
-    renderer.on('entry-box-normal-png-2471:click', cancelItemSelection);
+    renderer.on('widget:item1', ({ value }) => {
+      if (value) requestItem('remove');
+      else cancelItemSelection();
+    });
+    renderer.on('widget:itme3', ({ value }) => {
+      if (value) requestItem('move');
+      else cancelItemSelection();
+    });
+    ['entry-box-normal-png-2456', 'item2-png-2461', 'common-icon-greendot2-webp-2464'].forEach((stableId) => {
+      const el = renderer.getElement(stableId);
+      if (!el || el.dataset.itemTimestopBound === '1') return;
+      el.dataset.itemTimestopBound = '1';
+      el.style.cursor = 'pointer';
+      el.style.pointerEvents = 'auto';
+      el.addEventListener('click', () => {
+        if (buttonSfxEnabled) sound.playSfx(BUTTON_CLICK_SFX);
+        requestItem('timestop');
+      });
+    });
     if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
     else sound.stopBgm();
   }
@@ -878,24 +897,17 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if ((sceneName === 'pop_Settings_1' || sceneName === 'pop_Settings') && popup) {
     if (activeGame?.state === 'running') activeGame.pause('settings');
     renderer.update({
-      sound: sceneName === 'pop_Settings' ? buttonSfxEnabled : ingameBgmEnabled,
-      music: sceneName === 'pop_Settings' ? lobbyBgmEnabled : buttonSfxEnabled,
+      sound: buttonSfxEnabled,
+      music: sceneName === 'pop_Settings' ? lobbyBgmEnabled : ingameBgmEnabled,
       vibration: hapticsEnabled,
     });
     renderer.on('widget:sound', ({ value }) => {
-      if (sceneName === 'pop_Settings') {
-        buttonSfxEnabled = !!value;
-        if (!buttonSfxEnabled) {
-          sound.stopSfx('cat-mouth-open');
-          sound.stopSfx('cat-hole-absorb');
-        }
-        renderer.update({ sound: buttonSfxEnabled });
-      } else {
-        ingameBgmEnabled = !!value;
-        if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
-        else sound.stopBgm();
-        renderer.update({ sound: ingameBgmEnabled });
+      buttonSfxEnabled = !!value;
+      if (!buttonSfxEnabled) {
+        sound.stopSfx('cat-mouth-open');
+        sound.stopSfx('cat-hole-absorb');
       }
+      renderer.update({ sound: buttonSfxEnabled });
     });
     renderer.on('widget:music', ({ value }) => {
       if (sceneName === 'pop_Settings') {
@@ -1111,4 +1123,3 @@ await flow.start();
 </script>
 </body>
 </html>
-
