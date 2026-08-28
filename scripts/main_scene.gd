@@ -116,6 +116,9 @@ func _ready() -> void:
 	level_manager.level_cleared.connect(_on_level_cleared)
 	UiBridge.host_initialize.connect(_on_host_initialize)
 	UiBridge.host_start.connect(_on_host_start)
+	UiBridge.host_pause.connect(func(_reason: String):
+		_stage_timer_running = false
+	)
 	UiBridge.host_resume.connect(func(): _stage_timer_running = not _stage_timer_waiting_for_touch)
 	UiBridge.host_force_quit.connect(_on_host_force_quit)
 	UiBridge.host_message.connect(_on_host_message)
