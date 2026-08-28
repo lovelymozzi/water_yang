@@ -744,7 +744,8 @@ flow.defineCondition('not enough coin', () => runEconomyTransaction('coin-gated-
   const reason = activeSceneName === 'pop_OutOfMoves' ? 'out-of-moves-continue' : 'buy-lives-900';
   if (!(await economy.spendCoins(COIN_COST, reason))) return true;
   if (activeSceneName === 'pop_OutOfMoves') continueWithoutHeart = true;
-  else await economy.grantHearts(1);
+  else if (activeSceneName === 'pop_BuyLives_1') await economy.grantHearts(5, Date.now(), reason);
+  else await economy.grantHearts(1, Date.now(), reason);
   return false;
 }));
 
@@ -904,6 +905,11 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       } finally {
         shopPurchasePending = false;
       }
+    });
+  }
+  if (sceneName === 'pop_BuyLives_1' && popup) {
+    renderer.on('common-btn-green-sales-png-2424:click', () => {
+      void runEconomyTransaction('buy-lives-get', () => economy.grantHearts(1, Date.now(), 'buy-lives-get'));
     });
   }
   if (sceneName === 'pop_LevelFail' && popup) {
