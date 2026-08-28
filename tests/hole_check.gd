@@ -119,6 +119,7 @@ func _check_no_trigger_when_far(manager: LevelManager) -> void:
 # 리드가 구멍 옆칸에 들어선 순간 흡입이 시작되고, 몸 전체가 구멍으로 들어가 사라진다.
 func _check_lead_absorb(manager: LevelManager) -> void:
 	var hole: Vector2i = manager.get_hole_cells()[0]
+	var hole_color: int = manager.get_hole_color_id(hole)
 	var cat: CatEntity = _fresh_cat(manager, hole + Vector2i(0, 2))
 	var length: int = cat.body_cells.size()
 
@@ -160,6 +161,27 @@ func _check_lead_absorb(manager: LevelManager) -> void:
 	_expect(sank, "머리가 구멍 아래로 내려가지 않았다")
 	_expect(not cat.is_absorbing(), "흡입이 끝나지 않았다 (%.2f초)" % elapsed)
 	_expect(not manager.get_cats().has(cat), "흡입이 끝났는데 고양이가 목록에 남았다")
+	var hole_shards := manager.get_node("HoleVisuals").get_node_or_null(
+		"HoleCloseShards_%d_%d" % [hole.x, hole.y]
+	) as GPUParticles3D
+	_expect(hole_shards != null, "구멍이 닫힐 때 짝 색 파티클이 생성되지 않았다")
+	if hole_shards != null:
+		var shard_mesh := hole_shards.draw_pass_1 as BoxMesh
+		var shard_material: StandardMaterial3D = null
+		if shard_mesh != null:
+			shard_material = shard_mesh.material as StandardMaterial3D
+		_expect(
+			shard_material != null
+			and shard_material.albedo_color == manager.get_hole_rim_color(hole_color),
+			"구멍 닫힘 파티클 색이 짝 색과 다르다"
+		)
+	var pop_players := manager.find_children("*", "AudioStreamPlayer", true, false)
+	var hole_pop_played := false
+	for player in pop_players:
+		if player.stream == preload("res://src/sound/bubble_pop.mp3"):
+			hole_pop_played = true
+			break
+	_expect(hole_pop_played, "구멍이 닫힐 때 연결된 팝 사운드가 재생되지 않았다")
 	print("[흡입] 리드가 %.3f초에 구멍 %s 로 사라졌다" % [elapsed, hole])
 
 

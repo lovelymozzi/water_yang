@@ -966,8 +966,8 @@ func _finish_absorb() -> void:
 	manager.release_cat_cell(self)
 	manager.on_cat_escaped(self, _absorb_cell)
 	print(
-		"[sound:item-move-hole-pop] emit hosted=%s hole=%s cat=%s" %
-		[str(UiBridge.is_hosted), str(_absorb_cell), name]
+		"[sound:item-move-hole-pop] emit hosted=%s hole=%s cat=%s item_clear=%s" %
+		[str(UiBridge.is_hosted), str(_absorb_cell), name, str(_item_clear)]
 	)
 	if UiBridge.is_hosted:
 		UiBridge.post_progress({"sfx": "item-move-hole-pop"})
