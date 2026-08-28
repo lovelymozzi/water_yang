@@ -12,6 +12,8 @@ const coinLayerOffsets = literal(shell.match(/const LEVEL_WIN_COIN_REWARD_LAYER_
 const coinRewardPos = literal(shell.match(/const LEVEL_WIN_COIN_REWARD_POS = (\{[\s\S]*?\n\});/)?.[1]);
 const normalizeSource = shell.match(/function normalizeItemCounts\(saved = \{\}\) \{[\s\S]*?\n\}/)?.[0];
 const normalizeItemCounts = Function('ITEM_KEYS', 'ITEM_START_COUNT', `${normalizeSource}\nreturn normalizeItemCounts;`)(itemKeys, startCount);
+const normalizeLobbyRewardSource = shell.match(/function normalizeLobbyItemRewards\(rewards = \[\]\) \{[\s\S]*?\n\}/)?.[0];
+const normalizeLobbyItemRewards = Function('ITEM_REWARD_UI', `${normalizeLobbyRewardSource}\nreturn normalizeLobbyItemRewards;`)(rewardUi);
 const levelWinRewardSource = shell.slice(
   shell.indexOf('function setRewardLayers'),
   shell.indexOf('function clearLobbyItemRewardLayers')
@@ -20,6 +22,14 @@ const queueRewardSource = shell.match(/function queueLobbyItemReward\(reward\) \
 const playQueuedSource = shell.slice(
   shell.indexOf('function playQueuedLobbyItemRewards'),
   shell.indexOf('function requestItem')
+);
+const playLobbySource = shell.slice(
+  shell.indexOf('function playLobbyItemReward'),
+  shell.indexOf('function playQueuedLobbyItemRewards')
+);
+const lobbySceneEnterSource = shell.slice(
+  shell.indexOf("if (sceneName === LOBBY_UI_SCENE) {"),
+  shell.indexOf("if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled)")
 );
 const syncLevelWinItemReward = Function(
   'ITEM_REWARD_UI',
@@ -92,6 +102,15 @@ assert.deepEqual(normalizeItemCounts({ remove: '7', timestop: -2, move: 'bad' })
   timestop: 0,
   move: 3,
 });
+assert.deepEqual(normalizeLobbyItemRewards([
+  { item: 'remove', count: 99 },
+  { item: 'remove', count: 1 },
+  { item: 'unknown', count: 1 },
+  { item: 'timestop', count: 3 },
+]), [
+  { item: 'remove', count: 1 },
+  { item: 'timestop', count: 1 },
+]);
 {
   const queue = makeQueueLobbyItemReward(rewardUi);
   queue.queueLobbyItemReward({ item: 'remove', count: 1 });
@@ -112,10 +131,22 @@ assert.match(playQueuedSource, /requestAnimationFrame/);
 assert.match(playQueuedSource, /pendingLobbyItemRewards\.length/);
 assert.match(playQueuedSource, /readPendingLobbyItemRewards/);
 assert.match(playQueuedSource, /savePendingLobbyItemRewards/);
+assert.match(playQueuedSource, /lobbyRewardPlaybackRenderer/);
+assert.match(playQueuedSource, /lobbyRewardPlaybackToken !== playbackToken/);
+assert.match(lobbySceneEnterSource, /lobbyRewardPlaybackRenderer && lobbyRewardPlaybackRenderer !== renderer/);
 assert.ok(
   playQueuedSource.indexOf('pendingLobbyItemRewards.splice(0)') > playQueuedSource.indexOf('if (hidden)'),
   'Lobby reward queue must be consumed only after the Lobby renderer is visible'
 );
+assert.match(playLobbySource, /requestAnimationFrame\(\(\) => launchTrail\(attempt \+ 1\)\)/);
+assert.match(playLobbySource, /Math\.max\(1, start\.width \* 0\.5\)/);
+assert.match(
+  playLobbySource,
+  /clearLobbyItemRewardLayers\(renderer\);\n      const startX = start\.left \+ start\.width \/ 2;/,
+  'Lobby reward icon must be hidden when the trail starts so rewards do not overlap on screen'
+);
+assert.match(playLobbySource, /720 \+ Math\.max\(0, \(LOBBY_REWARD_TRAIL_COUNT - 1\) \* 55\) \+ 40/);
+assert.match(playLobbySource, /console\.warn\('\[Item reward\] Lobby reward trail launch skipped:'/);
 assert.deepEqual(levelWinState(null).groups, {
   coin: { left: '160px', top: '305px' },
   remove: { left: '36px', top: '307px' },

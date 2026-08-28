@@ -373,6 +373,8 @@ const itemPending = { remove: 0, timestop: 0, move: 0 };
 let selectedTargetItem = null;
 let levelWinItemReward = null;
 let pendingLobbyItemRewards = readPendingLobbyItemRewards();
+let lobbyRewardPlaybackToken = 0;
+let lobbyRewardPlaybackRenderer = null;
 
 function normalizeItemCounts(saved = {}) {
   return Object.fromEntries(ITEM_KEYS.map(item => {
@@ -501,9 +503,12 @@ function clearLobbyItemRewardLayers(renderer) {
   Object.values(ITEM_REWARD_UI).forEach(cfg => setRewardLayers(renderer, cfg.lobbyLayers, false));
 }
 
-function playLobbyItemReward(renderer, reward, onDone) {
+function playLobbyItemReward(renderer, reward, onDone, playbackToken = lobbyRewardPlaybackToken) {
   const cfg = ITEM_REWARD_UI[reward?.item];
-  if (!cfg) return;
+  if (!cfg) {
+    onDone?.();
+    return;
+  }
   clearLobbyItemRewardLayers(renderer);
   setRewardLayers(renderer, cfg.lobbyLayers, true);
   const icon = renderer.getElement(cfg.lobbyIcon);
@@ -514,43 +519,78 @@ function playLobbyItemReward(renderer, reward, onDone) {
     onDone?.();
     return;
   }
+  const cachedStart = icon.getBoundingClientRect();
+  const cachedEnd = levelButton.getBoundingClientRect();
   icon.animate([
     { transform: 'scale(.75)' },
     { transform: 'scale(1.2)', offset: .55 },
     { transform: 'scale(1)' },
   ], { duration: 520, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
   setTimeout(() => {
-    setRewardLayers(renderer, cfg.lobbyFxLayers, false);
-    const start = icon.getBoundingClientRect();
-    const end = levelButton.getBoundingClientRect();
-    const startX = start.left + start.width / 2;
-    const startY = start.top + start.height / 2;
-    const endX = end.left + end.width / 2;
-    const endY = end.top + end.height / 2;
-    for (let i = 0; i < LOBBY_REWARD_TRAIL_COUNT; i += 1) {
-      const shard = document.createElement('img');
-      shard.src = iconImage.src;
-      shard.alt = '';
-      shard.style.cssText = `position:fixed;left:${startX}px;top:${startY}px;width:${start.width * 0.5}px;height:${start.height * 0.5}px;z-index:10000;pointer-events:none;object-fit:contain;`;
-      document.body.appendChild(shard);
-      const spread = (i - (LOBBY_REWARD_TRAIL_COUNT - 1) / 2) * 8;
-      const lift = i % 2 ? -34 : -20;
-      const curve = Array.from({ length: 7 }, (_, step) => {
-        const t = step / 6;
-        const x = (endX - startX) * t + spread * Math.sin(Math.PI * t);
-        const y = (endY - startY) * t + lift * 4 * t * (1 - t);
-        return {
-          transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${1 - 0.65 * t})`,
-          opacity: 1 - t,
-        };
-      });
-      const anim = shard.animate(curve, { duration: 720, delay: i * 55, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' });
-      anim.onfinish = () => shard.remove();
-    }
-    setTimeout(() => {
-      setRewardLayers(renderer, cfg.lobbyLayers, false);
-      onDone?.();
-    }, 900);
+    const launchTrail = (attempt = 0) => {
+      if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
+      const liveStart = icon.getBoundingClientRect();
+      const liveEnd = levelButton.getBoundingClientRect();
+      const start = liveStart.width && liveStart.height ? liveStart : cachedStart;
+      const end = liveEnd.width && liveEnd.height ? liveEnd : cachedEnd;
+      let iconHidden = !start.width || !start.height;
+      let buttonHidden = !end.width || !end.height;
+      let node = liveStart.width && liveStart.height ? icon : null;
+      while (!iconHidden && node instanceof HTMLElement) {
+        const style = getComputedStyle(node);
+        iconHidden = style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) <= 0;
+        node = node.parentElement;
+      }
+      node = liveEnd.width && liveEnd.height ? levelButton : null;
+      while (!buttonHidden && node instanceof HTMLElement) {
+        const style = getComputedStyle(node);
+        buttonHidden = style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) <= 0;
+        node = node.parentElement;
+      }
+      if (iconHidden || buttonHidden) {
+        if (attempt < 12) {
+          requestAnimationFrame(() => launchTrail(attempt + 1));
+          return;
+        }
+        console.warn('[Item reward] Lobby reward trail launch skipped:', reward.item);
+        clearLobbyItemRewardLayers(renderer);
+        onDone?.();
+        return;
+      }
+      clearLobbyItemRewardLayers(renderer);
+      const startX = start.left + start.width / 2;
+      const startY = start.top + start.height / 2;
+      const endX = end.left + end.width / 2;
+      const endY = end.top + end.height / 2;
+      const shardWidth = Math.max(1, start.width * 0.5);
+      const shardHeight = Math.max(1, start.height * 0.5);
+      for (let i = 0; i < LOBBY_REWARD_TRAIL_COUNT; i += 1) {
+        const shard = document.createElement('img');
+        shard.src = iconImage.src;
+        shard.alt = '';
+        shard.style.cssText = `position:fixed;left:${startX}px;top:${startY}px;width:${shardWidth}px;height:${shardHeight}px;z-index:10000;pointer-events:none;object-fit:contain;`;
+        document.body.appendChild(shard);
+        const spread = (i - (LOBBY_REWARD_TRAIL_COUNT - 1) / 2) * 8;
+        const lift = i % 2 ? -34 : -20;
+        const curve = Array.from({ length: 7 }, (_, step) => {
+          const t = step / 6;
+          const x = (endX - startX) * t + spread * Math.sin(Math.PI * t);
+          const y = (endY - startY) * t + lift * 4 * t * (1 - t);
+          return {
+            transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${1 - 0.65 * t})`,
+            opacity: 1 - t,
+          };
+        });
+        const anim = shard.animate(curve, { duration: 720, delay: i * 55, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' });
+        anim.onfinish = () => shard.remove();
+      }
+      setTimeout(() => {
+        if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
+        clearLobbyItemRewardLayers(renderer);
+        onDone?.();
+      }, 720 + Math.max(0, (LOBBY_REWARD_TRAIL_COUNT - 1) * 55) + 40);
+    };
+    launchTrail();
   }, 800);
 }
 
@@ -558,8 +598,12 @@ function playQueuedLobbyItemRewards(renderer) {
   pendingLobbyItemRewards = normalizeLobbyItemRewards([...pendingLobbyItemRewards, ...readPendingLobbyItemRewards()]);
   savePendingLobbyItemRewards();
   if (!pendingLobbyItemRewards.length) return;
+  if (lobbyRewardPlaybackRenderer) return;
+  const playbackToken = ++lobbyRewardPlaybackToken;
+  lobbyRewardPlaybackRenderer = renderer;
   let attempts = 0;
   const playWhenVisible = () => {
+    if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
     const levelButton = renderer.getElement('home-btn-stage-normal-png-145');
     const rect = levelButton?.getBoundingClientRect();
     let hidden = !levelButton?.isConnected || !rect?.width || !rect?.height;
@@ -571,13 +615,16 @@ function playQueuedLobbyItemRewards(renderer) {
     }
     if (hidden) {
       if (attempts++ < 30) setTimeout(playWhenVisible, 100);
+      else if (lobbyRewardPlaybackToken === playbackToken) lobbyRewardPlaybackRenderer = null;
       return;
     }
     const rewards = pendingLobbyItemRewards.splice(0);
     savePendingLobbyItemRewards();
     const next = () => {
+      if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
       const reward = rewards.shift();
-      if (reward) playLobbyItemReward(renderer, reward, next);
+      if (reward) playLobbyItemReward(renderer, reward, next, playbackToken);
+      else if (lobbyRewardPlaybackToken === playbackToken) lobbyRewardPlaybackRenderer = null;
     };
     next();
   };
@@ -689,7 +736,11 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
   if (sceneName === LOBBY_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
-    clearLobbyItemRewardLayers(renderer);
+    if (lobbyRewardPlaybackRenderer && lobbyRewardPlaybackRenderer !== renderer) {
+      lobbyRewardPlaybackToken += 1;
+      lobbyRewardPlaybackRenderer = null;
+    }
+    if (!lobbyRewardPlaybackRenderer) clearLobbyItemRewardLayers(renderer);
     playQueuedLobbyItemRewards(renderer);
   }
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
