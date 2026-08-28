@@ -113,6 +113,7 @@ const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
 const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
 const ITEM_MOVE_HOLE_POP_SFX = './sound/bubble_pop.mp3';
+const CAT_HOLE_POP_OVERLAY_SFX = './sound/Time_out2.mp3';
 const CAT_MOVE_SFX = './sound/cat_move.mp3';
 const ICE_BREAK_SFX = './sound/ice_breake.mp3';
 const ICE_FREEZING_SFX = './sound/ice-freezing.mp3';
@@ -653,7 +654,21 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
   if (sfx === 'cat-hole-absorb') {
     if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
   }
-  if (sfx === 'item-move-hole-pop' && buttonSfxEnabled) sound.playSfx(ITEM_MOVE_HOLE_POP_SFX);
+  if (sfx === 'item-move-hole-pop') {
+    console.info('[sound:item-move-hole-pop] received', {
+      buttonSfxEnabled,
+      hasUserGesture,
+      activeSceneName,
+      activeSceneUuid,
+      src: ITEM_MOVE_HOLE_POP_SFX,
+	  overlaySrc: CAT_HOLE_POP_OVERLAY_SFX,
+    });
+    if (buttonSfxEnabled) {
+      sound.playSfx(ITEM_MOVE_HOLE_POP_SFX, 0.35);
+      sound.playSfx(CAT_HOLE_POP_OVERLAY_SFX, 1.0);
+    }
+    else console.warn('[sound:item-move-hole-pop] blocked: buttonSfxEnabled is false');
+  }
   if (activeSceneName === INGAME_UI_SCENE && Number.isInteger(stage) && stage > 0) {
     currentMapStage = stage;
     resetItemRuntimeState();

@@ -115,6 +115,7 @@ const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
 const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
 const ITEM_MOVE_HOLE_POP_SFX = './sound/bubble_pop.mp3';
+const CAT_HOLE_POP_OVERLAY_SFX = './sound/Time_out2.mp3';
 const CAT_MOVE_SFX = './sound/cat_move.mp3';
 const ICE_BREAK_SFX = './sound/ice_breake.mp3';
 const ICE_FREEZING_SFX = './sound/ice-freezing.mp3';
@@ -145,7 +146,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":18926640,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19210080,"index.wasm":39513091},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -655,7 +656,21 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
   if (sfx === 'cat-hole-absorb') {
     if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
   }
-  if (sfx === 'item-move-hole-pop' && buttonSfxEnabled) sound.playSfx(ITEM_MOVE_HOLE_POP_SFX);
+  if (sfx === 'item-move-hole-pop') {
+    console.info('[sound:item-move-hole-pop] received', {
+      buttonSfxEnabled,
+      hasUserGesture,
+      activeSceneName,
+      activeSceneUuid,
+      src: ITEM_MOVE_HOLE_POP_SFX,
+	  overlaySrc: CAT_HOLE_POP_OVERLAY_SFX,
+    });
+    if (buttonSfxEnabled) {
+      sound.playSfx(ITEM_MOVE_HOLE_POP_SFX, 0.35);
+      sound.playSfx(CAT_HOLE_POP_OVERLAY_SFX, 1.0);
+    }
+    else console.warn('[sound:item-move-hole-pop] blocked: buttonSfxEnabled is false');
+  }
   if (activeSceneName === INGAME_UI_SCENE && Number.isInteger(stage) && stage > 0) {
     currentMapStage = stage;
     resetItemRuntimeState();
@@ -682,6 +697,7 @@ const handleMainGameEnd = async (result) => {
   if (result.outcome === 'clear') {
     await runEconomyTransaction('stage-clear', async () => {
       await economy.grantHearts(1);
+      await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
     });
     await progress.recordClear(currentMapStage, {
       stars: result.stats?.stars || 0,
@@ -819,7 +835,6 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     });
   }
   if (sceneName === 'pop_LevelWin' && popup) {
-    let levelWinRewardGranted = false;
     if (buttonSfxEnabled) {
       sound.playSfx(STAGE_CLEAR1_SFX);
       setTimeout(() => sound.playSfx(STAGE_CLEAR2_SFX), STAGE_CLEAR2_DELAY_MS);
@@ -827,16 +842,6 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     renderer.getElement('confetti-148')?.style.setProperty('pointer-events', 'none');
     renderer.getElement('confetti-148')?.closest('.sr-fit')?.style.setProperty('z-index', '9001');
     syncLevelWinItemReward(renderer, levelWinItemReward);
-    renderer.on('common-btn-green-sales-png-2404:click', () => {
-      if (levelWinRewardGranted) return;
-      levelWinRewardGranted = true;
-      void runEconomyTransaction('stage-clear-choice-reward', () => economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear'));
-    });
-    renderer.on('common-btn-green-sales-png-2411:click', () => {
-      if (levelWinRewardGranted) return;
-      levelWinRewardGranted = true;
-      void runEconomyTransaction('stage-clear-choice-reward', () => economy.grantCoins(AD_STAGE_CLEAR_REWARD, 'stage-clear-ad'));
-    });
     if (activeGame?.state === 'running') activeGame.pause('level-win');
     activeGame?.message('load_scene', {
       stage: progress.getCurrentStage(),
@@ -1090,3 +1095,4 @@ await flow.start();
 </script>
 </body>
 </html>
+

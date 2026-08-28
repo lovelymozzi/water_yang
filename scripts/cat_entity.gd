@@ -964,16 +964,19 @@ func _finish_absorb() -> void:
 	# 이후 프레임에서 이동/포즈 계산이 다시 돌지 않게 끊는다.
 	level_manager = null
 	manager.release_cat_cell(self)
-	if _item_clear:
-		if UiBridge.is_hosted:
-			UiBridge.post_progress({"sfx": "item-move-hole-pop"})
-		else:
-			remove_child(_item_move_hole_pop_player)
-			manager.add_child(_item_move_hole_pop_player)
-			_item_move_hole_pop_player.finished.connect(_item_move_hole_pop_player.queue_free)
-			_item_move_hole_pop_player.play()
-			_item_move_hole_pop_player = null
 	manager.on_cat_escaped(self, _absorb_cell)
+	print(
+		"[sound:item-move-hole-pop] emit hosted=%s hole=%s cat=%s" %
+		[str(UiBridge.is_hosted), str(_absorb_cell), name]
+	)
+	if UiBridge.is_hosted:
+		UiBridge.post_progress({"sfx": "item-move-hole-pop"})
+	else:
+		remove_child(_item_move_hole_pop_player)
+		manager.add_child(_item_move_hole_pop_player)
+		_item_move_hole_pop_player.finished.connect(_item_move_hole_pop_player.queue_free)
+		_item_move_hole_pop_player.play()
+		_item_move_hole_pop_player = null
 	queue_free()
 
 

@@ -14,8 +14,10 @@ func _init() -> void:
 	var binding_kinds := {}
 	for binding in SoundAdmin.BINDINGS:
 		binding_kinds[binding["id"]] = binding["kind"]
-	assert(SoundAdmin.SOUND_ROLES["bubble_pop.mp3"] == "아이템3으로 cat_hole1.fbx가 사라질 때")
+	assert(SoundAdmin.SOUND_ROLES["bubble_pop.mp3"] == "고양이가 흡수된 뒤 cat_hole 메시가 사라지기 시작할 때")
+	assert(SoundAdmin.SOUND_ROLES["Time_out2.mp3"] == "고양이 구멍 팝 소리 위에 겹쳐 재생되어 더 또렷하게 들리게 할 때")
 	assert(binding_kinds["item_move_hole_pop"] == "VFX 버튼")
+	assert(binding_kinds["cat_hole_pop_overlay"] == "VFX 버튼")
 	assert(binding_kinds["ice_freezing"] == "VFX 버튼")
 	assert(binding_kinds["digging"] == "VFX 버튼")
 	assert(binding_kinds["lobby_bgm"] == "BGM 버튼")

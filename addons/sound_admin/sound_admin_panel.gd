@@ -7,7 +7,8 @@ const SOUND_ROLES := {
 	"Ui_button_sound.mp3": "UI 버튼 또는 내비게이션 탭을 누를 때",
 	"Cat_meow.mp3": "고양이가 입을 열 때",
 	"cat_Hole_sound.mp3": "고양이가 짝 구멍에 흡수될 때",
-	"bubble_pop.mp3": "아이템3으로 cat_hole1.fbx가 사라질 때",
+	"bubble_pop.mp3": "고양이가 흡수된 뒤 cat_hole 메시가 사라지기 시작할 때",
+	"Time_out2.mp3": "고양이 구멍 팝 소리 위에 겹쳐 재생되어 더 또렷하게 들리게 할 때",
 	"cat_move.mp3": "고양이가 타일 한 칸을 이동 완료할 때",
 	"ice_breake.mp3": "얼음 블록이 사라질 때",
 	"ice-freezing.mp3": "얼음 기믹이 얼 때",
@@ -23,7 +24,8 @@ const BINDINGS := [
 	{"id": "button", "kind": "VFX 버튼", "label": "UI 버튼 클릭", "when": "모든 UI 버튼 또는 내비게이션 탭 터치", "targets": [{"path": "res://godot-shell.html", "marker": "const BUTTON_CLICK_SFX =", "prefix": "./sound/"}]},
 	{"id": "mouth", "kind": "VFX 버튼", "label": "고양이 입 열기", "when": "고양이가 입을 열 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOUTH_SFX =", "prefix": "./sound/"}]},
 	{"id": "absorb", "kind": "VFX 버튼", "label": "고양이 구멍 흡수", "when": "짝 구멍으로 들어갈 때", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_HOLE_ABSORB_SFX =", "prefix": "./sound/"}, {"path": "res://scripts/cat_entity.gd", "marker": "const ABSORB_SOUND := preload(", "prefix": "res://src/sound/"}]},
-	{"id": "item_move_hole_pop", "kind": "VFX 버튼", "label": "아이템3 구멍 팝", "when": "item3으로 cat_hole1.fbx가 사라질 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ITEM_MOVE_HOLE_POP_SFX =", "prefix": "./sound/"}, {"path": "res://scripts/cat_entity.gd", "marker": "const ITEM_MOVE_HOLE_POP_SOUND := preload(", "prefix": "res://src/sound/"}]},
+	{"id": "item_move_hole_pop", "kind": "VFX 버튼", "label": "고양이 구멍 팝", "when": "고양이가 흡수된 뒤 cat_hole 메시가 사라지기 시작할 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ITEM_MOVE_HOLE_POP_SFX =", "prefix": "./sound/"}, {"path": "res://scripts/cat_entity.gd", "marker": "const ITEM_MOVE_HOLE_POP_SOUND := preload(", "prefix": "res://src/sound/"}]},
+	{"id": "cat_hole_pop_overlay", "kind": "VFX 버튼", "label": "고양이 구멍 팝 오버레이", "when": "고양이 구멍 팝과 동시에 더 크게 겹쳐 재생", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_HOLE_POP_OVERLAY_SFX =", "prefix": "./sound/"}]},
 	{"id": "cat_move", "kind": "VFX 버튼", "label": "고양이 한 칸 이동", "when": "path tile 한 칸 이동 완료", "targets": [{"path": "res://godot-shell.html", "marker": "const CAT_MOVE_SFX =", "prefix": "./sound/"}]},
 	{"id": "ice_break", "kind": "VFX 버튼", "label": "얼음 블록 파괴", "when": "ice block 이 사라질 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ICE_BREAK_SFX =", "prefix": "./sound/"}]},
 	{"id": "ice_freezing", "kind": "VFX 버튼", "label": "얼음 생성", "when": "ice gimmick 이 얼 때", "targets": [{"path": "res://godot-shell.html", "marker": "const ICE_FREEZING_SFX =", "prefix": "./sound/"}]},
@@ -57,12 +59,18 @@ var _pending: Dictionary = {}
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build_ui()
+	var filesystem := EditorInterface.get_resource_filesystem()
+	if filesystem != null and not filesystem.filesystem_changed.is_connected(_refresh):
+		filesystem.filesystem_changed.connect(_refresh)
 	_refresh()
 
 
 func _exit_tree() -> void:
 	if _preview != null:
 		_preview.stop()
+	var filesystem := EditorInterface.get_resource_filesystem()
+	if filesystem != null and filesystem.filesystem_changed.is_connected(_refresh):
+		filesystem.filesystem_changed.disconnect(_refresh)
 
 
 func _build_ui() -> void:
@@ -370,14 +378,21 @@ func _confirm_pending() -> void:
 				if DirAccess.copy_absolute(_absolute_path(from_path), ProjectSettings.globalize_path(target)) != OK:
 					_status.text = "추가 실패: %s" % from_path.get_file()
 					return
+				if not _sync_web_copy(target):
+					return
 				added += 1
 			_status.text = "%d개 사운드 추가 완료" % added
 		"rename":
 			if not _rename_sound(str(_pending["from"]), str(_pending["to"])):
 				return
 		"delete":
-			if DirAccess.remove_absolute(ProjectSettings.globalize_path(str(_pending["path"]))) != OK:
+			var source_path := str(_pending["path"])
+			var web_path := "res://web/sound".path_join(source_path.get_file())
+			if DirAccess.remove_absolute(ProjectSettings.globalize_path(source_path)) != OK:
 				_status.text = "삭제 실패"
+				return
+			if FileAccess.file_exists(web_path) and DirAccess.remove_absolute(ProjectSettings.globalize_path(web_path)) != OK:
+				_status.text = "웹 사운드 삭제 실패"
 				return
 			_status.text = "삭제 완료"
 		"replace_file_bindings":
