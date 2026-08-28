@@ -7,7 +7,7 @@ const literal = source => Function(`return (${source});`)();
 const startCount = Number(shell.match(/const ITEM_START_COUNT = (\d+);/)?.[1]);
 const itemKeys = literal(shell.match(/const ITEM_KEYS = (\[[^\n]+]);/)?.[1]);
 const rewardTable = literal(shell.match(/const CLEAR_ITEM_REWARD_TABLE = (\[[\s\S]*?\n\]);/)?.[1]);
-const rewardUi = literal(shell.match(/const ITEM_REWARD_UI = (\{[\s\S]*?\n\});\nconst LOBBY_REWARD_TRAIL_COUNT/)?.[1]);
+const rewardUi = literal(shell.match(/const ITEM_REWARD_UI = (\{[\s\S]*?\r?\n\});\r?\nconst LOBBY_REWARD_TRAIL_COUNT/)?.[1]);
 const coinLayerOffsets = literal(shell.match(/const LEVEL_WIN_COIN_REWARD_LAYER_OFFSETS = (\{[\s\S]*?\n\});/)?.[1]);
 const coinRewardPos = literal(shell.match(/const LEVEL_WIN_COIN_REWARD_POS = (\{[\s\S]*?\n\});/)?.[1]);
 const normalizeSource = shell.match(/function normalizeItemCounts\(saved = \{\}\) \{[\s\S]*?\n\}/)?.[0];
@@ -126,6 +126,8 @@ assert.deepEqual(normalizeLobbyItemRewards([
   assert.deepEqual(queue.saved, queue.pendingLobbyItemRewards);
 }
 assert.match(shell, /const LOBBY_ITEM_REWARD_STORAGE_KEY = STORAGE_PREFIX \+ 'lobby_item_rewards_v1';/);
+assert.match(shell, /const LOBBY_REWARD_SCALE_SFX = '\.\/sound\/lobby_reward\.mp3';/);
+assert.match(shell, /const LOBBY_REWARD_TRAIL_SFX = '\.\/sound\/lobby_reward_trail\.mp3';/);
 assert.match(shell, /let pendingLobbyItemRewards = readPendingLobbyItemRewards\(\);/);
 assert.match(playQueuedSource, /requestAnimationFrame/);
 assert.match(playQueuedSource, /pendingLobbyItemRewards\.length/);
@@ -140,9 +142,11 @@ assert.ok(
 );
 assert.match(playLobbySource, /requestAnimationFrame\(\(\) => launchTrail\(attempt \+ 1\)\)/);
 assert.match(playLobbySource, /Math\.max\(1, start\.width \* 0\.5\)/);
+assert.match(playLobbySource, /sound\.playSfx\(LOBBY_REWARD_SCALE_SFX\)/);
+assert.match(playLobbySource, /sound\.playSfx\(LOBBY_REWARD_TRAIL_SFX\)/);
 assert.match(
   playLobbySource,
-  /clearLobbyItemRewardLayers\(renderer\);\n      const startX = start\.left \+ start\.width \/ 2;/,
+  /clearLobbyItemRewardLayers\(renderer\);\r?\n      if \(buttonSfxEnabled\) sound\.playSfx\(LOBBY_REWARD_TRAIL_SFX\);\r?\n      const startX = start\.left \+ start\.width \/ 2;/,
   'Lobby reward icon must be hidden when the trail starts so rewards do not overlap on screen'
 );
 assert.match(playLobbySource, /720 \+ Math\.max\(0, \(LOBBY_REWARD_TRAIL_COUNT - 1\) \* 55\) \+ 40/);

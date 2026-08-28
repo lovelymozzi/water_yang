@@ -130,6 +130,13 @@ func _check_lead_absorb(manager: LevelManager) -> void:
 	_expect(cat.is_absorbing(), "구멍 옆칸에 들어섰는데 흡입이 시작되지 않았다")
 	_expect(cat._absorb_cell == hole, "흡입 대상 구멍이 다르다: %s" % [cat._absorb_cell])
 	_expect(cat._absorb_from_lead, "리드가 닿았는데 후미쪽 흡입으로 잡혔다")
+	var absorb_players := cat.find_children("*", "AudioStreamPlayer", true, false)
+	var absorb_overlay_played := false
+	for player in absorb_players:
+		if player.stream == preload("res://src/sound/time_out2.mp3") and player.playing:
+			absorb_overlay_played = true
+			break
+	_expect(absorb_overlay_played, "구멍 흡입이 시작될 때 time_out2 오버레이 사운드가 재생되지 않았다")
 
 	# 흡입이 시작되면 점유를 즉시 놓는다.
 	for cell in cat.body_cells:

@@ -15,11 +15,13 @@ func _init() -> void:
 	for binding in SoundAdmin.BINDINGS:
 		binding_kinds[binding["id"]] = binding["kind"]
 	assert(SoundAdmin.SOUND_ROLES["bubble_pop.mp3"] == "고양이가 흡수된 뒤 cat_hole 메시가 사라지기 시작할 때")
-	assert(SoundAdmin.SOUND_ROLES["Time_out2.mp3"] == "고양이 구멍 팝 소리 위에 겹쳐 재생되어 더 또렷하게 들리게 할 때")
+	assert(SoundAdmin.SOUND_ROLES["time_out2.mp3"] == "고양이가 캣홀에 닿아 흡수가 시작되는 순간 흡수 사운드 위에 겹쳐 재생될 때")
 	assert(binding_kinds["item_move_hole_pop"] == "VFX 버튼")
 	assert(binding_kinds["cat_hole_pop_overlay"] == "VFX 버튼")
 	assert(binding_kinds["ice_freezing"] == "VFX 버튼")
 	assert(binding_kinds["digging"] == "VFX 버튼")
+	assert(binding_kinds["lobby_reward_scale"] == "VFX 버튼")
+	assert(binding_kinds["lobby_reward_trail"] == "VFX 버튼")
 	assert(binding_kinds["lobby_bgm"] == "BGM 버튼")
 	var row := SoundAdmin.SoundRow.new()
 	row.setup(3, "res://src/sound/Ui_button_sound.mp3", "1.0 KB", 0, [], [

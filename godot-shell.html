@@ -113,7 +113,7 @@ const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
 const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
 const ITEM_MOVE_HOLE_POP_SFX = './sound/bubble_pop.mp3';
-const CAT_HOLE_POP_OVERLAY_SFX = './sound/Time_out2.mp3';
+const CAT_HOLE_POP_OVERLAY_SFX = './sound/time_out2.mp3';
 const CAT_MOVE_SFX = './sound/cat_move.mp3';
 const ICE_BREAK_SFX = './sound/ice_breake.mp3';
 const ICE_FREEZING_SFX = './sound/ice-freezing.mp3';
@@ -122,6 +122,8 @@ const STAGE_CLEAR1_SFX = './sound/stage_clear1.mp3';
 const STAGE_CLEAR2_SFX = './sound/stage_clear2.mp3';
 const TIME_OUT_SFX = './sound/time_out1.mp3';
 const POPUP_OPEN_SFX = './sound/ui_pop.mp3';
+const LOBBY_REWARD_SCALE_SFX = './sound/lobby_reward.mp3';
+const LOBBY_REWARD_TRAIL_SFX = './sound/lobby_reward_trail.mp3';
 const STAGE_CLEAR2_DELAY_MS = 750;
 const LOBBY_BGM = './sound/Lobby_Bgm.mp3';
 const INGAME_BGM = './sound/Ingame_BGM.mp3';
@@ -520,6 +522,7 @@ function playLobbyItemReward(renderer, reward, onDone, playbackToken = lobbyRewa
   }
   const cachedStart = icon.getBoundingClientRect();
   const cachedEnd = levelButton.getBoundingClientRect();
+  if (buttonSfxEnabled) sound.playSfx(LOBBY_REWARD_SCALE_SFX);
   icon.animate([
     { transform: 'scale(.75)' },
     { transform: 'scale(1.2)', offset: .55 },
@@ -557,6 +560,7 @@ function playLobbyItemReward(renderer, reward, onDone, playbackToken = lobbyRewa
         return;
       }
       clearLobbyItemRewardLayers(renderer);
+      if (buttonSfxEnabled) sound.playSfx(LOBBY_REWARD_TRAIL_SFX);
       const startX = start.left + start.width / 2;
       const startY = start.top + start.height / 2;
       const endX = end.left + end.width / 2;
@@ -652,7 +656,10 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
   if (sfx === 'ice-freezing' && buttonSfxEnabled) sound.playSfx(ICE_FREEZING_SFX);
   if (sfx === 'digging' && buttonSfxEnabled) sound.playSfx(DIGGING_SFX);
   if (sfx === 'cat-hole-absorb') {
-    if (buttonSfxEnabled) sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
+    if (buttonSfxEnabled) {
+      sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
+      sound.playSfx(CAT_HOLE_POP_OVERLAY_SFX, 1.0);
+    }
   }
   if (sfx === 'item-move-hole-pop') {
     console.info('[sound:item-move-hole-pop] received', {
@@ -661,11 +668,9 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
       activeSceneName,
       activeSceneUuid,
       src: ITEM_MOVE_HOLE_POP_SFX,
-	  overlaySrc: CAT_HOLE_POP_OVERLAY_SFX,
     });
     if (buttonSfxEnabled) {
       sound.playSfx(ITEM_MOVE_HOLE_POP_SFX, 0.35);
-      sound.playSfx(CAT_HOLE_POP_OVERLAY_SFX, 1.0);
     }
     else console.warn('[sound:item-move-hole-pop] blocked: buttonSfxEnabled is false');
   }
@@ -771,8 +776,13 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   }
   if (sceneName === 'pop_BuyCoins') {
     const purchaseToast = renderer.getElement('common-box-toast-png-2187');
+    const closeButton = renderer.getElement('common-btn-top-x-blue-png-2186');
     let purchaseToastTimer;
     if (purchaseToast) purchaseToast.style.visibility = 'hidden';
+    if (closeButton) {
+      closeButton.style.visibility = popup ? '' : 'hidden';
+      closeButton.style.pointerEvents = popup ? '' : 'none';
+    }
     syncShopCooldowns(renderer);
     const shopCooldownAnchor = renderer.getElement('plain-text-50');
     const shopCooldownTimer = setInterval(() => {

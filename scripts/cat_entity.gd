@@ -19,6 +19,7 @@ const OPEN_MOUTH_TINT_EXCLUSION_MASK_PATH := "res://water_yang/cat2_mask.jpg"
 const TOON_SHADER_PATH := "res://scripts/cat_toon.gdshader"
 const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const ABSORB_SOUND := preload("res://src/sound/cat_Hole_sound.mp3")
+const ABSORB_OVERLAY_SOUND := preload("res://src/sound/time_out2.mp3")
 const ITEM_MOVE_HOLE_POP_SOUND := preload("res://src/sound/bubble_pop.mp3")
 const FLOATING_WATER_OUTLINE_COLOR := Color("f8ffff")
 const FLOATING_WATER_OUTLINE_WIDTH := 0.020
@@ -350,6 +351,7 @@ var _inserted_mid_bones: Array[int] = []
 var _head_mesh_overhang := 0.0
 var _tail_mesh_overhang := 0.0
 var _absorb_sound_player: AudioStreamPlayer
+var _absorb_overlay_sound_player: AudioStreamPlayer
 var _item_move_hole_pop_player: AudioStreamPlayer
 # 중첩고양이. 겉껍질(this)이 빠지는 동안 자리에 남은 안쪽 고양이와 현재 수축량.
 var _inner_cat: CatEntity
@@ -369,6 +371,9 @@ func _ready() -> void:
 	_absorb_sound_player = AudioStreamPlayer.new()
 	_absorb_sound_player.stream = ABSORB_SOUND
 	add_child(_absorb_sound_player)
+	_absorb_overlay_sound_player = AudioStreamPlayer.new()
+	_absorb_overlay_sound_player.stream = ABSORB_OVERLAY_SOUND
+	add_child(_absorb_overlay_sound_player)
 	_item_move_hole_pop_player = AudioStreamPlayer.new()
 	_item_move_hole_pop_player.stream = ITEM_MOVE_HOLE_POP_SOUND
 	add_child(_item_move_hole_pop_player)
@@ -890,6 +895,7 @@ func _begin_absorb(hole_cell: Vector2i, from_lead: bool, item_clear := false) ->
 		UiBridge.post_progress({"sfx": "cat-hole-absorb"})
 	else:
 		_absorb_sound_player.play()
+		_absorb_overlay_sound_player.play()
 	# 빨려 들어가기 시작한 순간부터 점유를 놓는다. 다른 고양이가 곧바로 지나갈 수 있다.
 	level_manager.release_cat_cell(self)
 	# 중첩고양이면 겉껍질이 빠지는 이 순간 안쪽 고양이를 같은 자리에 남긴다.
