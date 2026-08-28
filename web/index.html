@@ -635,7 +635,6 @@ const handleMainGameEnd = async (result) => {
   if (result.outcome === 'clear') {
     await runEconomyTransaction('stage-clear', async () => {
       await economy.grantHearts(1);
-      await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
     });
     await progress.recordClear(currentMapStage, {
       stars: result.stats?.stars || 0,
@@ -769,6 +768,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     });
   }
   if (sceneName === 'pop_LevelWin' && popup) {
+    let levelWinRewardGranted = false;
     if (buttonSfxEnabled) {
       sound.playSfx(STAGE_CLEAR1_SFX);
       setTimeout(() => sound.playSfx(STAGE_CLEAR2_SFX), STAGE_CLEAR2_DELAY_MS);
@@ -776,6 +776,16 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     renderer.getElement('confetti-148')?.style.setProperty('pointer-events', 'none');
     renderer.getElement('confetti-148')?.closest('.sr-fit')?.style.setProperty('z-index', '9001');
     syncLevelWinItemReward(renderer, levelWinItemReward);
+    renderer.on('common-btn-green-sales-png-2404:click', () => {
+      if (levelWinRewardGranted) return;
+      levelWinRewardGranted = true;
+      void runEconomyTransaction('stage-clear-choice-reward', () => economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear'));
+    });
+    renderer.on('common-btn-green-sales-png-2411:click', () => {
+      if (levelWinRewardGranted) return;
+      levelWinRewardGranted = true;
+      void runEconomyTransaction('stage-clear-choice-reward', () => economy.grantCoins(AD_STAGE_CLEAR_REWARD, 'stage-clear-ad'));
+    });
     if (activeGame?.state === 'running') activeGame.pause('level-win');
     activeGame?.message('load_scene', {
       stage: progress.getCurrentStage(),
