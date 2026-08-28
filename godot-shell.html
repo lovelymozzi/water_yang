@@ -129,6 +129,7 @@ const STAGE_CLEAR2_DELAY_MS = 750;
 const LOBBY_BGM = './sound/Lobby_Bgm.mp3';
 const INGAME_BGM = './sound/Ingame_BGM.mp3';
 const STAGE_TIME_LIMIT_SECONDS = 60;
+const TIMEOUT_CONTINUE_SECONDS = 20;
 const SPLASH_LOAD_FILL_DURATION_MS = 700;
 const SETTINGS_MENU_MOTION_MS = 240;
 const SETTINGS_MENU_STAGGER_MS = 60;
@@ -934,6 +935,11 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneName === 'pop_OutOfMoves' && popup) {
     if (buttonSfxEnabled) sound.playSfx(TIME_OUT_SFX);
     if (activeGame?.state === 'running') activeGame.pause('out-of-moves');
+    ['plain-text-1774', 'itemicon-money-coin-png-1773'].forEach((stableId) => {
+      const el = renderer.getElement(stableId);
+      if (!el) return;
+      el.style.pointerEvents = 'none';
+    });
   } else if (sceneName === 'pop_Give_up' && popup) {
     if (activeGame?.state === 'running') activeGame.pause('give-up');
     ['plain-text-2382:click', 'common-btn-top-x-red-png-2384:click'].forEach(eventName => {
@@ -1124,7 +1130,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (activeGame?.state === 'paused') {
     if (godotScene === 'main') endedGame = null;
     if (godotScene === 'main' && continueWithoutHeart) {
-      activeGame.message('continue_stage', { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS });
+      activeGame.message('continue_stage', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
       continueWithoutHeart = false;
     }
     if (godotScene !== activeGodotScene) {
