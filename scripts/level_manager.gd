@@ -504,6 +504,7 @@ static var _shard_process_material: ParticleProcessMaterial = null
 static var _shard_mesh: BoxMesh = null
 static var _item_remove_process_material: ParticleProcessMaterial = null
 static var _item_remove_mesh: BoxMesh = null
+static var _item_remove_meshes_by_color: Dictionary = {}
 
 
 static func _ensure_shard_resources() -> void:
@@ -587,10 +588,15 @@ static func _ensure_item_remove_resources() -> void:
 	_item_remove_mesh = shard
 
 
-func _spawn_item_remove_shards(world_position: Vector3) -> void:
+func _spawn_item_remove_shards(
+	world_position: Vector3,
+	parent_root: Node3D = null,
+	shard_color: Color = ITEM_REMOVE_SHARD_COLOR,
+	emitter_name := "ItemRemoveShards"
+) -> void:
 	_ensure_item_remove_resources()
 	var particles := GPUParticles3D.new()
-	particles.name = "ItemRemoveShards"
+	particles.name = emitter_name
 	particles.amount = 24
 	particles.lifetime = SHARD_LIFETIME
 	particles.one_shot = true
@@ -598,9 +604,26 @@ func _spawn_item_remove_shards(world_position: Vector3) -> void:
 	particles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	particles.visibility_aabb = AABB(Vector3(-3.0, -1.0, -3.0), Vector3(6.0, 5.0, 6.0))
 	particles.process_material = _item_remove_process_material
-	particles.draw_pass_1 = _item_remove_mesh
+	if shard_color == ITEM_REMOVE_SHARD_COLOR:
+		particles.draw_pass_1 = _item_remove_mesh
+	else:
+		var color_key := "%0.4f_%0.4f_%0.4f_%0.4f" % [
+			shard_color.r, shard_color.g, shard_color.b, shard_color.a,
+		]
+		var mesh: BoxMesh = _item_remove_meshes_by_color.get(color_key)
+		if mesh == null:
+			mesh = _item_remove_mesh.duplicate() as BoxMesh
+			var base_material := _item_remove_mesh.material as StandardMaterial3D
+			if mesh != null and base_material != null:
+				var material := base_material.duplicate() as StandardMaterial3D
+				material.albedo_color = shard_color
+				material.emission = shard_color
+				mesh.material = material
+			_item_remove_meshes_by_color[color_key] = mesh
+		particles.draw_pass_1 = mesh if mesh != null else _item_remove_mesh
 	particles.position = world_position
-	_obstacles_root.add_child(particles)
+	var target_root: Node3D = parent_root if parent_root != null else _obstacles_root
+	target_root.add_child(particles)
 	particles.emitting = true
 	get_tree().create_timer(SHARD_LIFETIME + 0.5).timeout.connect(particles.queue_free)
 
@@ -626,6 +649,7 @@ func _close_hole(cell: Vector2i) -> void:
 	var index: int = _hole_cells.find(cell)
 	if index < 0:
 		return
+	var color_id: int = _hole_color_ids[index]
 	_hole_cells.remove_at(index)
 	_hole_color_ids.remove_at(index)
 	_hole_ice_counts.remove_at(index)
@@ -637,6 +661,12 @@ func _close_hole(cell: Vector2i) -> void:
 
 	var visual := _get_hole_visual(cell)
 	if visual != null:
+		_spawn_item_remove_shards(
+			visual.position,
+			_holes_root,
+			get_hole_rim_color(color_id),
+			"HoleCloseShards_%d_%d" % [cell.x, cell.y]
+		)
 		var tween: Tween = create_tween()
 		tween.tween_property(
 			visual, "scale", Vector3(0.001, 0.001, 0.001), 0.25
@@ -905,6 +935,14 @@ func _build_hole_visuals() -> void:
 	# 필요 없다 — 거기서는 얼음이 깨지지 않는다.
 	if not Engine.is_editor_hint() and not _ice_covers.is_empty():
 		_warm_up_ice_shards(_ice_covers.keys()[0])
+	if not Engine.is_editor_hint() and not _hole_cells.is_empty():
+		var warm_cell: Vector2i = _hole_cells[0]
+		_spawn_item_remove_shards(
+			grid_to_world(warm_cell, -2.5),
+			_holes_root,
+			get_hole_rim_color(_hole_color_ids[0]),
+			"HoleCloseShardWarmup"
+		)
 
 
 # 얼음 위에 뜨는 남은 수 라벨. Lilita One, 카메라를 향하는 빌보드로 어느 각도에서도 읽힌다.
