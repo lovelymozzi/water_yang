@@ -11,6 +11,7 @@ extends RefCounted
 const CAT_SCENE_PATH := "res://scenes/cat_entity.tscn"
 const OBSTACLE_SCENE_PATH := "res://scenes/obstacle_block.tscn"
 const HOLE_SCRIPT_PATH := "res://scripts/hole_marker.gd"
+const LevelBounds = preload("res://scripts/level_bounds.gd")
 
 
 # 레벨을 씬의 Layout* 노드에 심는다. 에디터에서는 `owner` 를 지정해 씬 파일에 저장되게 한다.
@@ -225,7 +226,7 @@ static func from_json(data: Dictionary) -> Dictionary:
 			"from_end_cell": _unpack_cell(move["from_end_cell"]),
 			"to_cell": _unpack_cell(move["to_cell"]),
 		})
-	return level
+	return LevelBounds.trim_unused_border(level)
 
 
 static func _pack_cell(cell: Vector2i) -> Array:
@@ -250,5 +251,7 @@ static func to_puzzle_state(level: Dictionary) -> PuzzleState:
 	for index in cats.size():
 		var body: Array[Vector2i] = []
 		body.assign(cats[index]["body_cells"])
-		state.add_cat(index, int(cats[index]["color_id"]), body)
+		var nested: Array[int] = []
+		nested.assign(cats[index].get("nested_color_ids", []))
+		state.add_cat(index, int(cats[index]["color_id"]), body, nested)
 	return state

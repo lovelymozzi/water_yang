@@ -40,6 +40,7 @@ extends RefCounted
 # 를 0.65 로 올리면 2 칸까지 내려간다. "빈 공간이 거의 없는" 판은 이 조합에서 나온다.
 
 const DIRS: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+const LevelBounds = preload("res://scripts/level_bounds.gd")
 # 시도마다 시드를 흩어 놓기 위한 소수. 연속한 시드는 비슷한 맵을 낸다.
 const SEED_STRIDE := 7919
 # 한 고양이를 벽으로 몇 번까지 되돌릴 수 있는가. 벽 세우기 루프의 종료 조건이기도 하다.
@@ -54,6 +55,9 @@ class Config:
 	var base_seed: int = 0
 	var grid_size: Vector2i = Vector2i(7, 9)
 	var cat_count: int = 4
+	# 2중첩으로 만들 겉고양이 수. 각 고양이는 색/구멍 하나를 더 쓰며, 겉이 탈출하면 같은
+	# 몸에서 안쪽 색 고양이가 남는다. 0이면 기존 일반 맵과 완전히 같다.
+	var nested_two_count: int = 0
 	# 이 팔레트 크기를 넘는 색은 만들지 않는다. `LevelManager.pair_colors` 와 맞춘다.
 	var color_count: int = 4
 	# 길이는 맵 설계 요소다. 짧은 고양이는 잘 돌지만 긴 고양이는 2×2 에서 회전조차 못 하므로
@@ -144,9 +148,13 @@ func generate(config: Config) -> Dictionary:
 
 
 func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Dictionary:
-	var holes: Array = _place_holes(config, rng)
-	if holes.size() < config.cat_count:
-		return {"ok": false, "reason": "구멍을 %d개 놓을 자리가 없다" % config.cat_count}
+	var nested_count: int = clampi(config.nested_two_count, 0, config.cat_count)
+	var layer_count: int = config.cat_count + nested_count
+	if config.color_count < layer_count:
+		return {"ok": false, "reason": "2중첩에는 색이 %d개 필요하지만 팔레트가 %d개다" % [layer_count, config.color_count]}
+	var holes: Array = _place_holes(config, rng, layer_count)
+	if holes.size() < layer_count:
+		return {"ok": false, "reason": "구멍을 %d개 놓을 자리가 없다" % layer_count}
 
 	# 작업판. 여기 들어간 고양이는 "시작 자리에 있는 뒤 순번 고양이" 이며 정적 장애물로 쓰인다.
 	var board := PuzzleState.create(config.grid_size)
@@ -190,6 +198,19 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	for k in config.cat_count:
 		solution.append_array(plans[k]["moves"])
 
+	# 중첩은 장애물 사후 주입 전에 실제 모델에 넣고 전체 수순을 다시 찾는다. 따라서 안쪽
+	# 고양이가 나온 뒤의 몸·구멍 상태까지 포함한 풀이만 다음 단계로 넘어간다.
+	var nested_by_cat: Dictionary = _assign_nested_two(config, rng, holes)
+	if not nested_by_cat.is_empty():
+		for cat_id in nested_by_cat:
+			var nested_colors: Array[int] = []
+			nested_colors.assign(nested_by_cat[cat_id])
+			board.set_cat_nested_colors(int(cat_id), nested_colors)
+		var nested_solved: Dictionary = LevelSolver.new().solve(board, config.solver_node_budget)
+		if not bool(nested_solved["found"]):
+			return {"ok": false, "reason": "2중첩 포함 풀이를 찾지 못했다: %s" % nested_solved["reason"]}
+		solution = nested_solved["moves"]
+
 	var touched: Dictionary = _collect_touched(board, solution)
 	if touched.is_empty():
 		return {"ok": false, "reason": "기록된 풀이가 재생되지 않았다"}
@@ -209,6 +230,11 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 				"ok": false, "reason": "첫 탈출 가로막이를 세우지 못했다: %s" % walled["reason"],
 			}
 		solution = walled["solution"]
+		if not nested_by_cat.is_empty():
+			var nested_solved: Dictionary = LevelSolver.new().solve(board, config.solver_node_budget)
+			if not bool(nested_solved["found"]):
+				return {"ok": false, "reason": "첫 탈출 벽 뒤 2중첩 풀이를 찾지 못했다: %s" % nested_solved["reason"]}
+			solution = nested_solved["moves"]
 
 	# squeeze 전 판은 최종 결과가 아니다. 여기서는 구조·기록 풀이·의존만 검증하고 비싼
 	# 난이도 채점은 최종 장애물 배치가 확정된 뒤 한 번만 한다.
@@ -287,8 +313,9 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 		level["cats"].append({
 			"body_cells": plans[k]["start_body"],
 			"color_id": int(holes[k]["color"]),
+			"nested_color_ids": nested_by_cat.get(k, []),
 		})
-	return level
+	return LevelBounds.trim_unused_border(level)
 
 
 # 고양이별 몸 길이. **한 판에 길이가 섞여 있어야 한다** — 전부 같은 길이면 길이가 맵 설계에
@@ -344,9 +371,9 @@ static func _sum(values: Array[int]) -> int:
 #
 # 색은 인덱스를 그대로 쓴다. `cat_count` 가 팔레트 크기를 넘으면 색이 겹치는데, 그러면
 # 두 고양이가 서로의 구멍을 쓸 수 있어 순서 강제가 약해진다. 기본값은 겹치지 않는다.
-func _place_holes(config: Config, rng: RandomNumberGenerator) -> Array:
+func _place_holes(config: Config, rng: RandomNumberGenerator, target_count: int) -> Array:
 	if rng.randf() < config.hole_line_chance:
-		var lined: Array = _place_holes_on_lines(config, rng)
+		var lined: Array = _place_holes_on_lines(config, rng, target_count)
 		if not lined.is_empty():
 			return lined
 	var candidates: Array[Vector2i] = []
@@ -357,7 +384,7 @@ func _place_holes(config: Config, rng: RandomNumberGenerator) -> Array:
 
 	var placed: Array = []
 	for cell in candidates:
-		if placed.size() >= config.cat_count:
+		if placed.size() >= target_count:
 			break
 		var too_close: bool = false
 		for existing in placed:
@@ -375,7 +402,7 @@ func _place_holes(config: Config, rng: RandomNumberGenerator) -> Array:
 # 벽"으로 갈라져, 반대편으로 건너가려면 이미 닫힌 구멍 자리를 지나는 수밖에 없다.
 # 흩뿌리기보다 닫힌 구멍 의존(깊은 사슬)이 훨씬 잘 생긴다. 자리가 안 나오면 빈 배열을
 # 돌려주고 호출부가 흩뿌리기로 폴백한다.
-func _place_holes_on_lines(config: Config, rng: RandomNumberGenerator) -> Array:
+func _place_holes_on_lines(config: Config, rng: RandomNumberGenerator, target_count: int) -> Array:
 	var vertical: bool = rng.randf() < 0.5
 	var span: int = config.grid_size.y if vertical else config.grid_size.x
 	var breadth: int = config.grid_size.x if vertical else config.grid_size.y
@@ -385,7 +412,7 @@ func _place_holes_on_lines(config: Config, rng: RandomNumberGenerator) -> Array:
 	# 한 줄에 들어가는 자리 수(간격 2). 모자라면 두 줄에 나눈다. 줄 사이도 2 이상 벌려
 	# 체비셰프 거리 2 규칙을 지킨다.
 	var per_line: int = (span + 1) / 2
-	var line_total: int = 1 if per_line >= config.cat_count else 2
+	var line_total: int = 1 if per_line >= target_count else 2
 	if line_total == 2 and breadth < 5:
 		return []
 	var first: int = rng.randi_range(1, breadth - 2 - (2 if line_total == 2 else 0))
@@ -399,16 +426,29 @@ func _place_holes_on_lines(config: Config, rng: RandomNumberGenerator) -> Array:
 			candidates.append(
 				Vector2i(line_pos, offset) if vertical else Vector2i(offset, line_pos)
 			)
-	if candidates.size() < config.cat_count:
+	if candidates.size() < target_count:
 		return []
 	_shuffle(candidates, rng)
 	var placed: Array = []
-	for index in config.cat_count:
+	for index in target_count:
 		placed.append({
 			"cell": candidates[index],
 			"color": index % maxi(config.color_count, 1),
 		})
 	return placed
+
+
+# 겉고양이 id와 그 안에 남길 색을 고른다. 추가 구멍은 물리 고양이 구멍 뒤에 배치돼 있다.
+func _assign_nested_two(config: Config, rng: RandomNumberGenerator, holes: Array) -> Dictionary:
+	var count: int = clampi(config.nested_two_count, 0, config.cat_count)
+	var ids: Array[int] = []
+	for cat_id in config.cat_count:
+		ids.append(cat_id)
+	_shuffle(ids, rng)
+	var nested: Dictionary = {}
+	for index in count:
+		nested[ids[index]] = [int(holes[config.cat_count + index]["color"])]
+	return nested
 
 
 # ---------------------------------------------------------------- 역설계 (고양이 한 마리)
@@ -1154,7 +1194,14 @@ func _verify(
 	if not bool(solved["found"]):
 		return {"ok": false, "reason": "오토솔버가 풀지 못했다: %s" % solved["reason"]}
 
-	var graph: LevelDependencyGraph = solver.build_dependency_graph(state, order)
+	# 한 2중첩 고양이는 바깥·안쪽이 모두 같은 논리 cat_id로 기록된다. 의존성은
+	# "물리 몸체가 어느 몸체를 먼저 비워야 했나"를 재는 값이므로 첫 탈출만 남긴다.
+	# 반면 escape_order는 얼음과 리플레이 정보를 위해 실제 탈출 이벤트를 그대로 보존한다.
+	var dependency_order: Array[int] = []
+	for cat_id in order:
+		if not dependency_order.has(cat_id):
+			dependency_order.append(cat_id)
+	var graph: LevelDependencyGraph = solver.build_dependency_graph(state, dependency_order)
 	if graph.has_cycle():
 		return {"ok": false, "reason": "의존성에 순환이 있다 = 아무도 먼저 나갈 수 없다"}
 	var depth: int = graph.longest_chain_depth()

@@ -567,7 +567,15 @@ func _find_replay_cat(cat_id: int) -> CatEntity:
 	if cats_root == null:
 		return null
 	var cat: CatEntity = cats_root.get_node_or_null("Cat_%d" % cat_id) as CatEntity
-	return cat if is_instance_valid(cat) else null
+	if is_instance_valid(cat):
+		return cat
+	# 중첩 고양이는 겉껍질이 사라진 뒤 Cat_<id>Inner(3중첩이면 InnerInner)로 남는다.
+	# 기록된 풀이의 cat_id는 같은 논리 고양이를 계속 가리키므로, 살아 있는 안쪽을 찾는다.
+	var prefix: String = "Cat_%dInner" % cat_id
+	for child in cats_root.get_children():
+		if child is CatEntity and String(child.name).begins_with(prefix) and is_instance_valid(child):
+			return child as CatEntity
+	return null
 
 
 func _stop_replay(reason: String) -> void:

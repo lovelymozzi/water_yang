@@ -26,7 +26,9 @@ var grid_size: Vector2i = Vector2i(7, 9)
 var obstacles: Dictionary = {}
 # Vector2i -> color_id
 var holes: Dictionary = {}
-# cat_id -> {"color": int, "cells": Array[Vector2i]}. cells[0] 과 cells[-1] 이 두 끝이다.
+# cat_id -> {"color": int, "cells": Array[Vector2i], "nested_colors": Array[int]}.
+# nested_colors 는 겉에서 안쪽 순서다. 겉 색이 빠지면 같은 몸으로 다음 색 고양이가 남는다.
+# cells[0] 과 cells[-1] 이 두 끝이다.
 # 실제 게임의 `body_cells` 는 `_flip_lead()` 가 뒤집으므로 여기서 인덱스 0 이 리드라는 뜻은 아니다.
 var cats: Dictionary = {}
 
@@ -74,8 +76,14 @@ func add_ice(cell: Vector2i, count: int) -> void:
 		ice[cell] = count
 
 
-func add_cat(cat_id: int, color_id: int, cells: Array[Vector2i]) -> void:
-	cats[cat_id] = {"color": color_id, "cells": cells.duplicate()}
+func add_cat(
+	cat_id: int, color_id: int, cells: Array[Vector2i], nested_colors: Array[int] = []
+) -> void:
+	cats[cat_id] = {
+		"color": color_id,
+		"cells": cells.duplicate(),
+		"nested_colors": nested_colors.duplicate(),
+	}
 	for cell in cells:
 		_occupancy[cell] = cat_id
 
@@ -103,6 +111,18 @@ func body_of(cat_id: int) -> Array[Vector2i]:
 
 func color_of(cat_id: int) -> int:
 	return int(cats[cat_id]["color"]) if cats.has(cat_id) else -1
+
+
+func nested_colors_of(cat_id: int) -> Array[int]:
+	var colors: Array[int] = []
+	if cats.has(cat_id):
+		colors.assign(cats[cat_id].get("nested_colors", []))
+	return colors
+
+
+func set_cat_nested_colors(cat_id: int, colors: Array[int]) -> void:
+	if cats.has(cat_id):
+		cats[cat_id]["nested_colors"] = colors.duplicate()
 
 
 # 몸을 통째로 갈아 끼운다. 한 마리만 움직이는 탐색(`LevelSolver.can_escape_alone()`)에서
@@ -336,12 +356,21 @@ func _resolve_absorption(cat_id: int, moved_end_cell: Vector2i) -> bool:
 		return false
 	var hole_cell: Variant = adjacent_paired_hole(moved_end_cell, int(cats[cat_id]["color"]))
 	if hole_cell != null:
+		var escaped_cells: Array[Vector2i] = body_of(cat_id)
+		var nested_colors: Array[int] = nested_colors_of(cat_id)
 		remove_cat(cat_id)
 		# 한 마리 빠질 때마다 모든 얼음의 남은 수가 1 준다 (`LevelManager.on_cat_escaped()`).
 		escaped_count += 1
 		# 고양이를 다 삼킨 구멍은 함께 닫힌다. 닫힌 자리는 평범한 빈 칸이 되어 다른
 		# 고양이가 지나갈 수 있다. `LevelManager._close_hole()` 와 같은 규칙이어야 한다.
 		holes.erase(hole_cell)
+		# 실제 CatEntity._spawn_inner_cat()와 같다: 겉껍질이 빠진 같은 자리에서 다음 색
+		# 고양이가 즉시 점유를 넘겨받는다. 같은 cat_id를 유지하면 저장된 풀이도 계속 이 id를
+		# 가리킬 수 있고, 런타임 재현은 Cat_<id>Inner를 찾아 이어서 움직인다.
+		if not nested_colors.is_empty():
+			var remaining: Array[int] = []
+			remaining.assign(nested_colors.slice(1))
+			add_cat(cat_id, nested_colors[0], escaped_cells, remaining)
 		return true
 	return false
 
@@ -387,6 +416,7 @@ func clone() -> PuzzleState:
 		copy.cats[cat_id] = {
 			"color": cats[cat_id]["color"],
 			"cells": (cats[cat_id]["cells"] as Array).duplicate(),
+			"nested_colors": (cats[cat_id].get("nested_colors", []) as Array).duplicate(),
 		}
 	copy._occupancy = _occupancy.duplicate()
 	return copy
@@ -408,7 +438,12 @@ static func body_key(cells: Array) -> String:
 func key() -> String:
 	var parts: Array[String] = []
 	for cat_id in cat_ids():
-		parts.append("%d:%s" % [cat_id, body_key(cats[cat_id]["cells"])])
+		parts.append("%d:%d:%s:%s" % [
+			cat_id,
+			int(cats[cat_id]["color"]),
+			body_key(cats[cat_id]["cells"]),
+			cats[cat_id].get("nested_colors", []),
+		])
 	return "|".join(parts)
 
 

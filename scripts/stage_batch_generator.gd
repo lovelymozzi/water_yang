@@ -220,6 +220,7 @@ static func generate_stage(
 		config.base_seed = base_seed + index * STAGE_SEED_STRIDE + step_index * 37
 		config.grid_size = shape_grid(grid)
 		config.cat_count = cat_count
+		config.nested_two_count = clampi(int(params.get("nested2", 0)), 0, cat_count)
 		config.color_count = int(params.get("colors", 20))
 		config.body_length_min = int(params.get("len_min", 3))
 		config.body_length_max = int(params.get("len_max", 6))

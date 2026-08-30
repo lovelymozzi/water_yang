@@ -129,6 +129,8 @@ func _build_ui() -> void:
 	_add_spin(params_grid, "grid_h", "보드 세로", 3, 16, 1, 9)
 	_add_spin(params_grid, "cats_min", "고양이 (1스테이지)", 2, 8, 1, 3)
 	_add_spin(params_grid, "cats_max", "고양이 (마지막)", 2, 8, 1, 6)
+	_add_spin(params_grid, "nested2", "2중첩 고양이 수", 0, 8, 1, 0,
+		"겉 고양이가 자기 구멍으로 빠지면 같은 몸체에서 안쪽 고양이가 이어서 나온다.\n중첩 1마리마다 색과 구멍이 하나 더 필요하다. 팔레트 색 수보다 (고양이+중첩)가 많으면 생성하지 않는다.")
 	_add_spin(params_grid, "len_min", "몸 길이 하한", 2, 16, 1, 3,
 		"⚠ 긴 몸은 후반 난이도를 깎는다. 한 마리가 빠지면 몸+구멍만큼 칸이 열려\n(길이 6 이면 7칸) 뒤 순번 고양이는 허허벌판에서 논다.\n짧게 여럿이 탈출당 열리는 칸이 적어 후반이 덜 헐렁하다.")
 	_add_spin(params_grid, "len_max", "몸 길이 상한", 2, 16, 1, 6)
@@ -332,6 +334,7 @@ func _params_dict(index: int, count: int) -> Dictionary:
 		"attempts": int(_spins["attempts"].value),
 		"ice": float(_spins["ice"].value),
 		"ice_max": int(_spins["ice_max"].value),
+		"nested2": int(_spins["nested2"].value),
 	}
 
 
