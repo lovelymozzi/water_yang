@@ -17,6 +17,7 @@ shader_parameter/self_overlap_depth_scale = 2.0
 shader_parameter/water_wave_time = 0.0
 shader_parameter/water_wave_phase = 0.0
 shader_parameter/water_wave_amplitude = 0.0
+shader_parameter/body_shrink = 0.0
 
 [resource]
 render_priority = 0

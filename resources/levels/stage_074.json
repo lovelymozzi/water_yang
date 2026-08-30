@@ -1,0 +1,552 @@
+{
+  "cats": [
+    {
+      "body_cells": [
+        [
+          1,
+          6
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "color_id": 0
+    },
+    {
+      "body_cells": [
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "color_id": 1
+    },
+    {
+      "body_cells": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ],
+      "color_id": 2
+    },
+    {
+      "body_cells": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          5
+        ]
+      ],
+      "color_id": 3
+    },
+    {
+      "body_cells": [
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "color_id": 4
+    }
+  ],
+  "dependency": {
+    "chain": [
+      4,
+      3,
+      2
+    ],
+    "chain_depth": 3,
+    "edges": [
+      [
+        1,
+        0
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        3
+      ]
+    ]
+  },
+  "escape_order": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "grid_size": [
+    7,
+    9
+  ],
+  "holes": [
+    {
+      "color_id": 0,
+      "grid_pos": [
+        4,
+        4
+      ]
+    },
+    {
+      "color_id": 1,
+      "grid_pos": [
+        2,
+        4
+      ]
+    },
+    {
+      "color_id": 2,
+      "grid_pos": [
+        0,
+        4
+      ]
+    },
+    {
+      "color_id": 3,
+      "grid_pos": [
+        5,
+        2
+      ]
+    },
+    {
+      "color_id": 4,
+      "grid_pos": [
+        6,
+        4
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "block_size": [
+        2,
+        3
+      ],
+      "grid_pos": [
+        0,
+        0
+      ]
+    },
+    {
+      "block_size": [
+        2,
+        1
+      ],
+      "grid_pos": [
+        5,
+        0
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        3
+      ],
+      "grid_pos": [
+        6,
+        1
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        0,
+        5
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        2,
+        5
+      ]
+    },
+    {
+      "block_size": [
+        2,
+        2
+      ],
+      "grid_pos": [
+        3,
+        7
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        2,
+        8
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        6,
+        8
+      ]
+    }
+  ],
+  "seed": 2555341,
+  "solution": [
+    {
+      "cat_id": 4,
+      "from_end_cell": [
+        6,
+        7
+      ],
+      "to_cell": [
+        5,
+        7
+      ]
+    },
+    {
+      "cat_id": 4,
+      "from_end_cell": [
+        5,
+        7
+      ],
+      "to_cell": [
+        5,
+        8
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        2,
+        2
+      ],
+      "to_cell": [
+        2,
+        3
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        2,
+        3
+      ],
+      "to_cell": [
+        3,
+        3
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        3,
+        1
+      ],
+      "to_cell": [
+        4,
+        1
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        4,
+        1
+      ],
+      "to_cell": [
+        5,
+        1
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        0
+      ],
+      "to_cell": [
+        4,
+        1
+      ]
+    },
+    {
+      "cat_id": 4,
+      "from_end_cell": [
+        3,
+        4
+      ],
+      "to_cell": [
+        3,
+        3
+      ]
+    },
+    {
+      "cat_id": 4,
+      "from_end_cell": [
+        3,
+        3
+      ],
+      "to_cell": [
+        4,
+        3
+      ]
+    },
+    {
+      "cat_id": 4,
+      "from_end_cell": [
+        4,
+        3
+      ],
+      "to_cell": [
+        5,
+        3
+      ]
+    },
+    {
+      "cat_id": 4,
+      "from_end_cell": [
+        6,
+        6
+      ],
+      "to_cell": [
+        6,
+        5
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        3,
+        6
+      ],
+      "to_cell": [
+        3,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        6
+      ],
+      "to_cell": [
+        0,
+        6
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        3,
+        5
+      ],
+      "to_cell": [
+        3,
+        4
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        6
+      ],
+      "to_cell": [
+        0,
+        7
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        2,
+        3
+      ],
+      "to_cell": [
+        1,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        4
+      ],
+      "to_cell": [
+        2,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        3
+      ],
+      "to_cell": [
+        0,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        2,
+        4
+      ],
+      "to_cell": [
+        3,
+        4
+      ]
+    }
+  ],
+  "stats": {
+    "early_clearing": [
+      2,
+      1,
+      0
+    ],
+    "obstacle_cells": 19,
+    "solution_length": 19,
+    "solver_moves": 19,
+    "solver_nodes": 20
+  }
+}

@@ -12,6 +12,7 @@ extends Control
 # 를 그대로 호출한다. 파라미터 의미와 램프 규칙은 stage_batch_generator.gd 머리 주석 참조.
 
 const StageBatch := preload("res://scripts/stage_batch_generator.gd")
+const StageArranger := preload("res://scripts/stage_arranger.gd")
 # 인계 파일 경로의 단일 기준. 문자열을 두 곳에 적어 두면 조용히 어긋난다.
 const MainSceneScript := preload("res://scripts/main_scene.gd")
 const LEVELS_DIR := "res://resources/levels"
@@ -33,6 +34,8 @@ var _status: Label
 var _preview: StagePreview
 var _curve: DifficultyCurve
 var _spins: Dictionary = {}
+var _pattern_pick: OptionButton
+var _nested_mode_pick: OptionButton
 
 
 # 난이도는 `LevelSolver.difficulty_score()` 하나만 쓴다. 여기서 잣대를 따로 만들지 않는다 —
@@ -129,8 +132,19 @@ func _build_ui() -> void:
 	_add_spin(params_grid, "grid_h", "보드 세로", 3, 16, 1, 9)
 	_add_spin(params_grid, "cats_min", "고양이 (1스테이지)", 2, 8, 1, 3)
 	_add_spin(params_grid, "cats_max", "고양이 (마지막)", 2, 8, 1, 6)
-	_add_spin(params_grid, "nested2", "2중첩 고양이 수", 0, 8, 1, 0,
-		"겉 고양이가 자기 구멍으로 빠지면 같은 몸체에서 안쪽 고양이가 이어서 나온다.\n중첩 1마리마다 색과 구멍이 하나 더 필요하다. 팔레트 색 수보다 (고양이+중첩)가 많으면 생성하지 않는다.")
+	var nested_mode_label := Label.new()
+	nested_mode_label.text = "중첩 생성 방식"
+	params_grid.add_child(nested_mode_label)
+	_nested_mode_pick = OptionButton.new()
+	_nested_mode_pick.add_item("2중첩만", 0)
+	_nested_mode_pick.add_item("2+3중첩 혼합", 1)
+	_nested_mode_pick.selected = 0
+	_nested_mode_pick.tooltip_text = "2중첩만: 선택된 고양이를 모두 겉+안 두 겹으로 만든다.\n2+3중첩 혼합: 중첩 대상 안에서 2중첩과 3중첩을 마릿수 차이 1 이하로 골고루 섞는다."
+	params_grid.add_child(_nested_mode_pick)
+	_add_spin(params_grid, "nested2", "중첩 대상 비율", 0.0, 1.0, 0.05, 0.7,
+		"고양이마다 이 확률로 중첩 대상이 된다(마릿수가 아니라 확률 — 판마다 고양이 수가 다르다).
+		첫 탈출 고양이는 100% 중첩하고 나머지 확률을 보정해 판 전체 기대 비율을 맞춘다(0.7이면 10마리 중 약 7마리).
+2중첩은 색·구멍 1개, 3중첩은 2개가 더 필요하다. 팔레트 색 수가 모자라면 생성하지 않는다.")
 	_add_spin(params_grid, "len_min", "몸 길이 하한", 2, 16, 1, 3,
 		"⚠ 긴 몸은 후반 난이도를 깎는다. 한 마리가 빠지면 몸+구멍만큼 칸이 열려\n(길이 6 이면 7칸) 뒤 순번 고양이는 허허벌판에서 논다.\n짧게 여럿이 탈출당 열리는 칸이 적어 후반이 덜 헐렁하다.")
 	_add_spin(params_grid, "len_max", "몸 길이 상한", 2, 16, 1, 6)
@@ -148,9 +162,8 @@ func _build_ui() -> void:
 		"의존 없이 나갈 수 있는 고양이를 몇 마리까지 허용하는가.\n의존 고양이 하한 = 고양이 수 - 이 값 (실측 검증).\n8 = 검사 안 함(기본). 실제 난이도와 상관이 없어 난이도 점수에 맡긴다.")
 	_add_spin(params_grid, "hole_line", "구멍 관문 배치 확률", 0.0, 1.0, 0.05, 0.5,
 		"구멍을 흩뿌리는 대신 안쪽 분할선 위에 관문처럼 늘어놓을 확률.\n판이 구멍 벽으로 갈라져, 반대편으로 가려면 앞 고양이가 나가\n닫힌 구멍 자리를 지나야 한다 = 깊은 의존 사슬이 잘 나온다.")
-	_add_spin(params_grid, "first_min", "첫 탈출까지 치우는 수", 0, 6, 1, 3,
-		"첫 고양이가 빠지기 전에 '다른 고양이'를 최소 몇 번 움직여야 하는가.\n자기 이동은 드래그 한 번에 몇 칸이든 끌리므로 세지 않는다.\n한 마리가 빠지면 판이 헐렁해져 뒤는 대부분 1드래그이므로 여기가 난이도의 지배 항이다.
-3 권장. 올릴수록 생성 실패가 가파르니 재시도 상한을 함께 올린다.")
+	_add_spin(params_grid, "first_min", "첫 탈출 치우기 (고정)", 1, 1, 1, 1,
+		"첫 고양이가 빠지기 전에 다른 고양이를 정확히 최소 1번은 움직이게 한다.\n높은 하한에서 반복되던 벽 배치 실패와 중첩 솔버 재실행 부하를 줄이기 위해 1로 고정한다.")
 	_add_spin(params_grid, "squeeze", "여유 칸 제거", 0, 1, 1, 1,
 		"막아도 여전히 풀리는 빈 칸을 전부 장애물로 채운다.\n빈 공간이 사라져 '앞 고양이가 비운 자리'를 여유 없이 써야만 뒤 고양이가 나갈 수 있다.\n칸마다 오토솔버를 한 번 돌리므로 생성이 몇 배 느려진다.")
 	_add_spin(params_grid, "later_min", "2번째 이후 탈출 치우는 수", 0, 6, 1, 0,
@@ -173,6 +186,43 @@ func _build_ui() -> void:
 	regen.text = "선택 스테이지 재생성"
 	regen.pressed.connect(_on_regenerate_selected)
 	right.add_child(regen)
+
+	# ---- 배치 (맵은 안 건드리고 순서만 다시 매긴다)
+	var arrange_title := Label.new()
+	arrange_title.text = "── 배치 ──"
+	right.add_child(arrange_title)
+
+	var gates_grid := GridContainer.new()
+	gates_grid.columns = 2
+	right.add_child(gates_grid)
+	for key in StageArranger.GIMMICK_NAMES:
+		_add_spin(gates_grid, "gate_%s" % key, "%s 첫 등장" % StageArranger.GIMMICK_NAMES[key],
+			1, 400, 1, 1,
+			"이 기믹이 든 판을 이 스테이지보다 앞에 두지 않고, 여기부터 %d판을 이어서 그 기믹 판으로만 채운다(연습 구간).
+1 = 제한 없음(연습 구간도 없음). 기믹 게이트가 난이도 리듬보다 우선한다
+(안 배운 규칙이 튀어나오는 쪽이 리듬이 흔들리는 것보다 나쁘다).
+해당 기믹 판이 모자라면 연습 구간이 짧아지고, 실제 첫 등장과 채운 판 수를 결과에 찍는다." % (StageArranger.TEACH_FOLLOW_UP + 1))
+
+	var pattern_row := HBoxContainer.new()
+	right.add_child(pattern_row)
+	var pattern_label := Label.new()
+	pattern_label.text = "난이도 리듬"
+	pattern_row.add_child(pattern_label)
+	_pattern_pick = OptionButton.new()
+	_pattern_pick.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_pattern_pick.tooltip_text = "한 주기의 난이도 배치. 띠 크기는 주기에서 그 난이도가 차지하는 비율 그대로다.
+퐁당퐁당 = 절반씩 번갈아, 6주기 = 판의 2/3 가 쉬움 / 1/6 어려움 / 1/6 매우어려움."
+	for key in StageArranger.PATTERNS:
+		_pattern_pick.add_item(StageArranger.PATTERNS[key]["name"])
+		_pattern_pick.set_item_metadata(_pattern_pick.item_count - 1, key)
+	pattern_row.add_child(_pattern_pick)
+
+	var arrange := Button.new()
+	arrange.text = "난이도 리듬으로 재배치"
+	arrange.tooltip_text = "위 리듬대로 난이도 띠를 반복해 놓는다. 띠 안은 오름차순이라 전체 추세는 우상향이다.
+맵 내용은 그대로고 파일 이름만 stage_001 부터 다시 매긴다 — 순번의 구멍도 이때 메워진다."
+	arrange.pressed.connect(_on_rearrange)
+	right.add_child(arrange)
 
 	var archive := Button.new()
 	archive.text = "선택 스테이지 아카이브"
@@ -334,7 +384,8 @@ func _params_dict(index: int, count: int) -> Dictionary:
 		"attempts": int(_spins["attempts"].value),
 		"ice": float(_spins["ice"].value),
 		"ice_max": int(_spins["ice_max"].value),
-		"nested2": int(_spins["nested2"].value),
+		"nested2": float(_spins["nested2"].value),
+		"nested_mode": ["two", "mixed", "three"][clampi(_nested_mode_pick.get_selected_id(), 0, 2)],
 	}
 
 
@@ -414,6 +465,59 @@ func _on_archive_selected() -> void:
 	_status.text = "%s → %s" % [path.get_file(), archived.trim_prefix("res://resources/")]
 	_refresh()
 	EditorInterface.get_resource_filesystem().scan()
+
+
+# 난이도 퐁당퐁당 + 기믹 첫 등장으로 파일 순번을 다시 매긴다.
+func _on_rearrange() -> void:
+	if _stage_paths.size() < 2:
+		_status.text = "재배치할 스테이지가 2개 미만이다"
+		return
+	var gates: Dictionary = {}
+	for key in StageArranger.GIMMICK_NAMES:
+		gates[key] = int(_spins["gate_%s" % key].value)
+	var pattern_key: String = str(_pattern_pick.get_item_metadata(_pattern_pick.selected))
+	var order: Array[int] = StageArranger.arrange(
+		_levels, gates, StageArranger.pattern_steps(pattern_key)
+	)
+	var appearances: Dictionary = StageArranger.first_appearances(_levels, order)
+	var teaching: Dictionary = StageArranger.teaching_fill(_levels, order, gates)
+	var failed: String = StageArranger.apply_order(LEVELS_DIR, _stage_paths, order)
+	if not failed.is_empty():
+		_status.text = "재배치 실패 — %s" % failed
+		return
+
+	var lines: PackedStringArray = PackedStringArray()
+	lines.append("%d판 재배치 완료 (stage_001 부터) — %s" % [
+		order.size(), StageArranger.PATTERNS[pattern_key]["name"],
+	])
+	for key in StageArranger.GIMMICK_NAMES:
+		var at: int = int(appearances.get(key, 0))
+		var wanted: int = int(gates[key])
+		if at == 0:
+			lines.append("%s: 쓰는 판 없음" % StageArranger.GIMMICK_NAMES[key])
+		elif at < wanted:
+			lines.append("%s: %d 스테이지 (요청 %d — 그 기믹 판이 많아 당겨졌다)" % [
+				StageArranger.GIMMICK_NAMES[key], at, wanted,
+			])
+		else:
+			lines.append("%s: %d 스테이지%s" % [
+				StageArranger.GIMMICK_NAMES[key], at, _teaching_note(teaching, key),
+			])
+	_status.text = "
+".join(lines)
+	_selected = 0
+	_refresh()
+	EditorInterface.get_resource_filesystem().scan()
+
+
+# 연습 구간을 다 못 채웠을 때만 덧붙인다(다 채웠으면 굳이 안 적는다).
+func _teaching_note(teaching: Dictionary, key: String) -> String:
+	if not teaching.has(key):
+		return ""
+	var pair: Array = teaching[key]
+	if int(pair[0]) >= int(pair[1]):
+		return ", 연습 %d판" % int(pair[0])
+	return ", 연습 %d/%d판 (그 기믹 판이 모자라다)" % [int(pair[0]), int(pair[1])]
 
 
 func _on_regenerate_selected() -> void:

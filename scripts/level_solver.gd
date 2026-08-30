@@ -156,7 +156,14 @@ func _rebuild_moves(nodes: Array, index: int) -> Array[Dictionary]:
 func _heuristic(state: PuzzleState) -> int:
 	var total: int = 0
 	for cat_id in state.cat_ids():
-		total += state.escape_distance(state.body_of(cat_id), state.color_of(cat_id))
+		var color: int = state.color_of(cat_id)
+		total += state.escape_distance(state.body_of(cat_id), color)
+		# 중첩 레이어를 빼면 3중첩 판에서 h 가 실제 거리의 1/3 이 되어 A* 가 다익스트라로
+		# 무너진다(실측: 4마리 3중첩이 노드 예산 40000 을 60초씩 태우고 전부 실패).
+		# 안쪽 고양이는 겉 구멍 옆에서 시작해 자기 구멍까지 다시 걸으므로 그 몫을 더한다.
+		for next_color in state.nested_colors_of(cat_id):
+			total += state.hole_gap(color, next_color)
+			color = next_color
 	return total
 
 

@@ -66,6 +66,17 @@ func _check(path: String, budget: int) -> void:
 		replay_note = "기록 풀이 %d/%d 수에서 끊김 %s" % [
 			broke_at, recorded.size(), recorded[broke_at],
 		]
+		var broken_move: Dictionary = recorded[broke_at]
+		var broken_cat: int = int(broken_move["cat_id"])
+		print("    끊김 직전: cat=%d color=%d nested=%s body=%s target=%s holes=%s cats=%s" % [
+			broken_cat,
+			replay.color_of(broken_cat),
+			replay.nested_colors_of(broken_cat),
+			replay.body_of(broken_cat),
+			broken_move["to_cell"],
+			replay.holes,
+			replay.cats,
+		])
 	elif not replay.is_solved():
 		replay_note = "기록 풀이를 다 재생했는데 고양이 %s 가 남음" % [replay.cat_ids()]
 	else:

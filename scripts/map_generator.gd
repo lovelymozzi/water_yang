@@ -55,9 +55,16 @@ class Config:
 	var base_seed: int = 0
 	var grid_size: Vector2i = Vector2i(7, 9)
 	var cat_count: int = 4
-	# 2중첩으로 만들 겉고양이 수. 각 고양이는 색/구멍 하나를 더 쓰며, 겉이 탈출하면 같은
-	# 몸에서 안쪽 색 고양이가 남는다. 0이면 기존 일반 맵과 완전히 같다.
-	var nested_two_count: int = 0
+	# 중첩 기믹. 고양이마다 이 확률로 중첩 대상이 된다(얼음 확률과 같은 결). 겉이 탈출하면
+	# 같은 몸에서 안쪽 색 고양이가 남으므로 레이어마다 색/구멍을 하나씩 더 쓴다.
+	# **마릿수가 아니라 확률인 이유**: 고양이 수가 판마다 다르므로 상수 마릿수는 3마리 판에서
+	# 과하고 6마리 판에서 밋밋하다. 확률이면 판 크기에 맞춰 저절로 비례한다. 0 = 기믹 없음.
+	# 0보다 크면 설계상 첫 탈출 대상(cat_id 0)은 항상 중첩이고, 나머지 확률을 보정해 판 전체의
+	# 기대 중첩 비율은 이 값 그대로 유지한다(0.7이면 10마리 중 기대값 7마리).
+	var nested_two_chance: float = 0.0
+	# 선택된 중첩 고양이 중 3중첩으로 만들 비율. 0 = 전부 2중첩, 0.5 = 2중첩/3중첩을 마릿수
+	# 차이 1 이하로 혼합, 1 = 전부 3중첩. 중첩 대상 비율은 위 확률 하나만 책임진다.
+	var nested_three_ratio: float = 0.0
 	# 이 팔레트 크기를 넘는 색은 만들지 않는다. `LevelManager.pair_colors` 와 맞춘다.
 	var color_count: int = 4
 	# 길이는 맵 설계 요소다. 짧은 고양이는 잘 돌지만 긴 고양이는 2×2 에서 회전조차 못 하므로
@@ -87,10 +94,8 @@ class Config:
 	# 끌리므로 세지 않는다. 한 마리가 빠지는 순간 난이도가 급감하므로 첫 탈출을 비싸게
 	# 만드는 하한이다. 이 값이 나오도록 첫 탈출 고양이의 길목에 벽 고양이를 세운다.
 	# 1 = 드래그 한 번으로 나가는 고양이가 없음. 2~3부터 생성 실패가 가파르게 늘어난다.
-	# **스테이지 양산은 3 을 쓴다** (`stage_batch_generator.gd` 의 `first_min` 기본값).
-	# 첫 탈출 비용이 난이도의 지배 항이기 때문이다 — 한 마리가 빠지면 몸+구멍만큼 칸이 열려
-	# 뒤쪽 탈출은 대부분 1드래그가 된다. 여기 라이브러리 기본값은 회귀 검사와의 비교를
-	# 위해 1 로 둔다.
+	# **스테이지 양산은 생성 부하를 줄이기 위해 1로 고정한다.** 한 마리가 빠지면 몸+구멍만큼
+	# 칸이 열려 뒤쪽 탈출은 대부분 1드래그가 되지만, 더 높은 하한은 벽 배치 재시도를 급증시킨다.
 	var min_first_escape_moves: int = 1
 	# 구멍을 흩뿌리는 대신 안쪽 분할선 위에 관문처럼 늘어놓을 확률. 판이 구멍 벽으로
 	# 갈라져 반대편으로 가려면 닫힌 구멍 자리를 지나야 하므로 깊은 사슬이 훨씬 잘 나온다.
@@ -132,14 +137,35 @@ static func default_config() -> Config:
 
 # 조건을 만족하는 레벨 하나. 실패하면 `ok = false` 와 시도별 실패 이유를 함께 돌려준다.
 func generate(config: Config) -> Dictionary:
+	var generation_started: int = Time.get_ticks_msec()
+	var nested_mode_label: String = "대상 %.0f%% / 3중첩 %.0f%%" % [
+		config.nested_two_chance * 100.0, config.nested_three_ratio * 100.0,
+	]
+	print("[맵 생성] 생성 시작 / 시드 %d / 보드 %dx%d / 고양이 %d / 중첩 %s / 최대시도 %d" % [
+		config.base_seed, config.grid_size.x, config.grid_size.y, config.cat_count,
+		nested_mode_label, config.max_attempts,
+	])
 	var failures: Array[String] = []
 	for attempt in config.max_attempts:
+		var attempt_started: int = Time.get_ticks_msec()
+		print("[맵 생성][시도 %d/%d] 시작 / 시드 %d" % [
+			attempt + 1, config.max_attempts, config.base_seed + attempt * SEED_STRIDE,
+		])
 		var rng := RandomNumberGenerator.new()
 		rng.seed = config.base_seed + attempt * SEED_STRIDE
 		var built: Dictionary = _build_once(config, rng, attempt)
 		if bool(built["ok"]):
+			print("[맵 생성][시도 %d/%d] 성공 / %dms" % [
+				attempt + 1, config.max_attempts, Time.get_ticks_msec() - attempt_started,
+			])
+			print("[맵 생성] 생성 완료 / 총 %dms" % (Time.get_ticks_msec() - generation_started))
 			return built
+		print("[맵 생성][시도 %d/%d] 실패 / %dms / %s" % [
+			attempt + 1, config.max_attempts, Time.get_ticks_msec() - attempt_started,
+			built["reason"],
+		])
 		failures.append("시도 %d: %s" % [attempt, built["reason"]])
+	print("[맵 생성] 생성 실패 / 총 %dms" % (Time.get_ticks_msec() - generation_started))
 	return {
 		"ok": false,
 		"reason": "%d회 시도해도 조건을 만족하는 맵이 나오지 않았다" % config.max_attempts,
@@ -148,13 +174,45 @@ func generate(config: Config) -> Dictionary:
 
 
 func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Dictionary:
-	var nested_count: int = clampi(config.nested_two_count, 0, config.cat_count)
-	var layer_count: int = config.cat_count + nested_count
+	var attempt_started: int = Time.get_ticks_msec()
+	var phase_started: int = attempt_started
+	print("[맵 생성][시도 %d][구멍·중첩] 시작" % (attempt + 1))
+	# 구멍 수가 여기에 걸리므로 중첩 주사위는 판을 짜기 전에 한 번에 굴린다. 중첩 확률이
+	# 켜졌다면 설계상 첫 탈출 대상(cat_id 0)은 항상 중첩한다. 그 한 마리를 먼저 확보한 만큼
+	# 나머지 확률을 낮춰 전체 기대값은 `cat_count * nested_two_chance` 로 유지한다. 혼합 모드는
+	# 선택된 중첩 고양이 안에서 2중첩/3중첩을 마릿수 차이 1 이하로 나눈다.
+	var nested_count: int = 0
+	if config.nested_two_chance > 0.0 and config.cat_count > 0:
+		nested_count = 1
+		var remaining_chance: float = 0.0
+		if config.cat_count > 1:
+			remaining_chance = clampf(
+				(config.nested_two_chance * float(config.cat_count) - 1.0)
+					/ float(config.cat_count - 1),
+				0.0,
+				1.0
+			)
+		for _cat_id in range(1, config.cat_count):
+			if rng.randf() < remaining_chance:
+				nested_count += 1
+	var nested_three_count: int = 0
+	if config.nested_three_ratio > 0.0 and nested_count > 0:
+		# 올림이라 혼합(0.5)에서 홀수면 3중첩이 한 마리 더 많고, 중첩 대상이 한 마리뿐이어도
+		# 그 판은 3중첩 맵이 된다. 1.0 이면 선택된 전원이 3중첩이다.
+		nested_three_count = mini(
+			nested_count, ceili(float(nested_count) * config.nested_three_ratio)
+		)
+	var nested_two_count: int = nested_count - nested_three_count
+	var layer_count: int = config.cat_count + nested_count + nested_three_count
 	if config.color_count < layer_count:
-		return {"ok": false, "reason": "2중첩에는 색이 %d개 필요하지만 팔레트가 %d개다" % [layer_count, config.color_count]}
+		return {"ok": false, "reason": "중첩 구성에는 색이 %d개 필요하지만 팔레트가 %d개다" % [layer_count, config.color_count]}
 	var holes: Array = _place_holes(config, rng, layer_count)
 	if holes.size() < layer_count:
 		return {"ok": false, "reason": "구멍을 %d개 놓을 자리가 없다" % layer_count}
+	print("[맵 생성][시도 %d][구멍·중첩] 완료 / %dms / 2중첩 %d / 3중첩 %d / 대상 %d/%d" % [
+		attempt + 1, Time.get_ticks_msec() - phase_started,
+		nested_two_count, nested_three_count, nested_count, config.cat_count,
+	])
 
 	# 작업판. 여기 들어간 고양이는 "시작 자리에 있는 뒤 순번 고양이" 이며 정적 장애물로 쓰인다.
 	var board := PuzzleState.create(config.grid_size)
@@ -168,6 +226,8 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	var later_path_cells: Dictionary = {}
 	var lengths: Array[int] = _pick_body_lengths(config, rng, holes.size())
 
+	phase_started = Time.get_ticks_msec()
+	print("[맵 생성][시도 %d][역설계] 시작" % (attempt + 1))
 	for k in range(config.cat_count - 1, -1, -1):
 		# σ_k 가 정방향으로 움직이는 시점에는 σ_0..σ_{k-1} 이 이미 나가 그 구멍들이 닫혀
 		# 빈 칸이 된 상태다. 그 판을 정확히 재현하려고 걷는 동안만 앞 순번 구멍을 치운다.
@@ -192,6 +252,9 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 		board.add_cat(k, int(holes[k]["color"]), start_body)
 		for cell in plan["path_cells"]:
 			later_path_cells[cell] = true
+	print("[맵 생성][시도 %d][역설계] 완료 / %dms" % [
+		attempt + 1, Time.get_ticks_msec() - phase_started,
+	])
 
 	# 정방향 풀이는 탈출 순서대로 이어 붙인 것이다. σ_0 이 전부 움직여 나가고 그다음 σ_1 이다.
 	var solution: Array[Dictionary] = []
@@ -200,17 +263,26 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 
 	# 중첩은 장애물 사후 주입 전에 실제 모델에 넣고 전체 수순을 다시 찾는다. 따라서 안쪽
 	# 고양이가 나온 뒤의 몸·구멍 상태까지 포함한 풀이만 다음 단계로 넘어간다.
-	var nested_by_cat: Dictionary = _assign_nested_two(config, rng, holes)
+	var nested_by_cat: Dictionary = _assign_nested_layers(
+		config, rng, holes, nested_count, nested_three_count
+	)
 	if not nested_by_cat.is_empty():
+		phase_started = Time.get_ticks_msec()
+		print("[맵 생성][시도 %d][중첩 솔버] 시작" % (attempt + 1))
 		for cat_id in nested_by_cat:
 			var nested_colors: Array[int] = []
 			nested_colors.assign(nested_by_cat[cat_id])
 			board.set_cat_nested_colors(int(cat_id), nested_colors)
 		var nested_solved: Dictionary = LevelSolver.new().solve(board, config.solver_node_budget)
 		if not bool(nested_solved["found"]):
-			return {"ok": false, "reason": "2중첩 포함 풀이를 찾지 못했다: %s" % nested_solved["reason"]}
+			return {"ok": false, "reason": "중첩 포함 풀이를 찾지 못했다: %s" % nested_solved["reason"]}
 		solution = nested_solved["moves"]
+		print("[맵 생성][시도 %d][중첩 솔버] 완료 / %dms / 풀이 %d수" % [
+			attempt + 1, Time.get_ticks_msec() - phase_started, solution.size(),
+		])
 
+	phase_started = Time.get_ticks_msec()
+	print("[맵 생성][시도 %d][장애물] 시작" % (attempt + 1))
 	var touched: Dictionary = _collect_touched(board, solution)
 	if touched.is_empty():
 		return {"ok": false, "reason": "기록된 풀이가 재생되지 않았다"}
@@ -218,12 +290,19 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	for entry in _choose_obstacles(config, rng, touched, board):
 		for cell in PuzzleState.cells_of_block(entry):
 			board.add_obstacle(cell)
+	print("[맵 생성][시도 %d][장애물] 완료 / %dms / 장애물 %d칸" % [
+		attempt + 1, Time.get_ticks_msec() - phase_started, board.obstacles.size(),
+	])
 
 	# 고양이별 단독 산책을 이어 붙인 풀이라, 아무도 안 치우고 나가는 고양이가 생긴다.
 	# 그 길목마다 다른 고양이를 벽으로 되돌려 세우고 비키는 수순을 풀이에 끼워 넣는다.
 	# **장애물을 깐 다음이어야 한다** — 허허벌판에서는 모두가 혼자 탈출 가능으로 판정돼
 	# 벽 후보가 바닥나고, 벽의 되돌리기도 장애물을 피해 걸어야 재생이 성립한다.
 	if config.min_first_escape_moves > 0 and config.cat_count > 1:
+		phase_started = Time.get_ticks_msec()
+		print("[맵 생성][시도 %d][첫 탈출 벽] 시작 / 하한 %d" % [
+			attempt + 1, config.min_first_escape_moves,
+		])
 		var walled: Dictionary = _plant_first_escape_walls(config, rng, board, plans, solution)
 		if not bool(walled["ok"]):
 			return {
@@ -233,16 +312,31 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 		if not nested_by_cat.is_empty():
 			var nested_solved: Dictionary = LevelSolver.new().solve(board, config.solver_node_budget)
 			if not bool(nested_solved["found"]):
-				return {"ok": false, "reason": "첫 탈출 벽 뒤 2중첩 풀이를 찾지 못했다: %s" % nested_solved["reason"]}
+				return {"ok": false, "reason": "첫 탈출 벽 뒤 중첩 풀이를 찾지 못했다: %s" % nested_solved["reason"]}
 			solution = nested_solved["moves"]
+		print("[맵 생성][시도 %d][첫 탈출 벽] 완료 / %dms" % [
+			attempt + 1, Time.get_ticks_msec() - phase_started,
+		])
 
 	# squeeze 전 판은 최종 결과가 아니다. 여기서는 구조·기록 풀이·의존만 검증하고 비싼
 	# 난이도 채점은 최종 장애물 배치가 확정된 뒤 한 번만 한다.
+	phase_started = Time.get_ticks_msec()
+	print("[맵 생성][시도 %d][검증] 시작" % (attempt + 1))
 	var verdict: Dictionary = _verify(
 		config, board, solution, true, not config.squeeze_free_cells
 	)
 	if not bool(verdict["ok"]):
 		return verdict
+	print("[맵 생성][시도 %d][검증] 완료 / %dms" % [
+		attempt + 1, Time.get_ticks_msec() - phase_started,
+	])
+	# 여유 칸 제거는 칸마다 솔버를 돌리는 가장 비싼 단계다. 최종 첫 탈출 100% 중첩 조건을
+	# 먼저 확인해, 어차피 버릴 판에 squeeze 비용을 쓰지 않는다. squeeze 뒤에도 순서가 바뀔 수
+	# 있으므로 저장 직전의 최종 검사는 아래에서 한 번 더 한다.
+	if config.nested_two_chance > 0.0:
+		var pre_squeeze_order: Array = verdict["escape_order"]
+		if pre_squeeze_order.is_empty() or not nested_by_cat.has(int(pre_squeeze_order[0])):
+			return {"ok": false, "reason": "squeeze 전 첫 탈출 고양이가 중첩이 아니다"}
 
 	# 여유 제거는 검증을 통과한 판에만 돌린다 — 칸마다 오토솔버를 돌리므로 실패할 판에
 	# 쓰기엔 너무 비싸다. 판이 바뀌었으니 지표를 다시 재고, 이번에는 의존 사슬을 요구하지
@@ -251,16 +345,30 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	# 사슬 자체는 위에서 이미 요구했고, 장애물 추가는 `can_escape_alone` 을 단조 감소만
 	# 시키므로 의존을 없애지는 못한다(측정만 못 하게 된다).
 	if config.squeeze_free_cells:
+		phase_started = Time.get_ticks_msec()
+		print("[맵 생성][시도 %d][여유 칸 제거] 시작" % (attempt + 1))
 		solution = _squeeze(config, rng, board, solution)
 		verdict = _verify(config, board, solution, false, true)
 		if not bool(verdict["ok"]):
 			return verdict
+		print("[맵 생성][시도 %d][여유 칸 제거] 완료 / %dms" % [
+			attempt + 1, Time.get_ticks_msec() - phase_started,
+		])
+
+	# 설계상 첫 탈출 대상은 cat_id 0이지만, 오토솔버가 찾은 최종 기록 풀이에서는 다른
+	# 고양이가 먼저 나갈 수도 있다. 저장 직전 실제 첫 탈출 이벤트까지 확인해 100% 조건을 보장한다.
+	if config.nested_two_chance > 0.0:
+		var escape_order: Array = verdict["escape_order"]
+		if escape_order.is_empty() or not nested_by_cat.has(int(escape_order[0])):
+			return {"ok": false, "reason": "최종 풀이의 첫 탈출 고양이가 중첩이 아니다"}
 
 	# 얼음은 풀이가 확정된 뒤에 배치한다 — 상한이 "이 구멍이 처음 쓰이기 전까지 빠지는 고양이
 	# 수"라 스퀴즈·벽 삽입까지 반영된 최종 풀이를 기준으로 재야 한다. 배치한 다음에는 **판에
 	# 실제로 얹고 다시 검증한다**: 얼음이 만드는 의존("N마리 빠질 때까지 이 구멍은 안 열린다")은
 	# 그래야만 지표에 잡힌다. 얹기 전 지표로 스테이지를 채점하면 얼음은 난이도에 기여하지 않는
 	# 장식이 되고, 숫자는 탈출 순서를 알려 주는 힌트로만 남는다.
+	phase_started = Time.get_ticks_msec()
+	print("[맵 생성][시도 %d][얼음·최종 검증] 시작" % (attempt + 1))
 	var ice: Dictionary = _assign_ice(config, rng, board, solution, holes, verdict["graph"])
 	if not ice.is_empty():
 		for cell in ice:
@@ -276,6 +384,9 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 			push_warning("얼음을 얹자 검증이 깨져 얼음을 뺐다: %s" % iced["reason"])
 			board.ice.clear()
 			ice.clear()
+	print("[맵 생성][시도 %d][얼음·최종 검증] 완료 / %dms" % [
+		attempt + 1, Time.get_ticks_msec() - phase_started,
+	])
 
 	var level: Dictionary = {
 		"ok": true,
@@ -301,6 +412,13 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 			"obstacle_cells": board.obstacles.size(),
 			"early_clearing": verdict["early_clearing"],
 			"difficulty_score": int(verdict["difficulty_score"]),
+			"nested_mode": "three_ratio_%.2f" % config.nested_three_ratio,
+			"nested_cats": nested_by_cat.size(),
+			"nested_ratio": float(nested_by_cat.size()) / float(config.cat_count),
+			"nested_two_cats": nested_two_count,
+			"nested_three_cats": nested_three_count,
+			# 예전 분석 도구가 읽는 이름은 총 중첩 비율과 같은 값으로 유지한다.
+			"nested_two_ratio": float(nested_by_cat.size()) / float(config.cat_count),
 		},
 	}
 	for hole in holes:
@@ -315,7 +433,11 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 			"color_id": int(holes[k]["color"]),
 			"nested_color_ids": nested_by_cat.get(k, []),
 		})
-	return LevelBounds.trim_unused_border(level)
+	var trimmed: Dictionary = LevelBounds.trim_unused_border(level)
+	print("[맵 생성][시도 %d][출력] 완료 / 시도 누적 %dms" % [
+		attempt + 1, Time.get_ticks_msec() - attempt_started,
+	])
+	return trimmed
 
 
 # 고양이별 몸 길이. **한 판에 길이가 섞여 있어야 한다** — 전부 같은 길이면 길이가 맵 설계에
@@ -439,15 +561,34 @@ func _place_holes_on_lines(config: Config, rng: RandomNumberGenerator, target_co
 
 
 # 겉고양이 id와 그 안에 남길 색을 고른다. 추가 구멍은 물리 고양이 구멍 뒤에 배치돼 있다.
-func _assign_nested_two(config: Config, rng: RandomNumberGenerator, holes: Array) -> Dictionary:
-	var count: int = clampi(config.nested_two_count, 0, config.cat_count)
+# 혼합 모드에서는 선택된 고양이 목록을 한 번 더 섞어 3중첩을 고르므로 특정 id에 깊이가 몰리지
+# 않으면서 2중첩/3중첩 마릿수 차이는 항상 1 이하다.
+func _assign_nested_layers(
+	config: Config, rng: RandomNumberGenerator, holes: Array, count: int, three_count: int
+) -> Dictionary:
 	var ids: Array[int] = []
-	for cat_id in config.cat_count:
+	for cat_id in range(1, config.cat_count):
 		ids.append(cat_id)
 	_shuffle(ids, rng)
+	var selected: Array[int] = []
+	if count > 0:
+		selected.append(0)
+	for index in range(count - 1):
+		selected.append(ids[index])
+	var depth_order: Array[int] = selected.duplicate()
+	_shuffle(depth_order, rng)
+	var three_ids: Dictionary = {}
+	for index in three_count:
+		three_ids[depth_order[index]] = true
 	var nested: Dictionary = {}
-	for index in count:
-		nested[ids[index]] = [int(holes[config.cat_count + index]["color"])]
+	var hole_index: int = config.cat_count
+	for cat_id in selected:
+		var colors: Array[int] = [int(holes[hole_index]["color"])]
+		hole_index += 1
+		if three_ids.has(cat_id):
+			colors.append(int(holes[hole_index]["color"]))
+			hole_index += 1
+		nested[cat_id] = colors
 	return nested
 
 
@@ -806,28 +947,40 @@ func _build_wall(
 		var work: PuzzleState = board.clone()
 		var old_body: Array[Vector2i] = work.body_of(wall_id)
 		var color: int = work.color_of(wall_id)
+		# 2중첩 고양이를 벽으로 옮겨도 안쪽 색을 잃으면 안 된다. 몸·색만 remove/add 하면
+		# 생성 중 검증은 일반 고양이로 통과하지만 JSON 재로드 뒤에는 안쪽 몸이 남아 풀이가 깨진다.
+		var nested_colors: Array[int] = work.nested_colors_of(wall_id)
 		var best: Dictionary = _wall_relocation(work, wall_id, color, old_body, route)
 		if best.is_empty():
 			continue
 
 		board.remove_cat(wall_id)
-		board.add_cat(wall_id, color, best["start_body"])
+		board.add_cat(wall_id, color, best["start_body"], nested_colors)
 		# 세운 벽이 자기 자신은 새지 않는 후보(예: 구멍 관문 뒤에 갇힘)를 우선한다.
 		# 벽이 새면 그 벽을 막을 벽이 또 필요해 연쇄가 안 닫히는 일이 잦다.
 		if not LevelSolver.new().solo_escape_route(board, wall_id).is_empty() \
 				and fallback.is_empty():
 			# 새는 벽이지만 다른 후보가 다 실패하면 쓸 수 있게 적어 둔다.
-			fallback = {"wall_id": wall_id, "color": color, "walk": best}
+			fallback = {
+				"wall_id": wall_id,
+				"color": color,
+				"nested_colors": nested_colors,
+				"walk": best,
+			}
 			board.remove_cat(wall_id)
-			board.add_cat(wall_id, color, old_body)
+			board.add_cat(wall_id, color, old_body, nested_colors)
 			continue
 		return _commit_wall(plans, wall_uses, solution, wall_id, best)
 
 	if not fallback.is_empty():
 		var wall_id: int = int(fallback["wall_id"])
 		var walk: Dictionary = fallback["walk"]
+		var nested_colors: Array[int] = []
+		nested_colors.assign(fallback["nested_colors"])
 		board.remove_cat(wall_id)
-		board.add_cat(wall_id, int(fallback["color"]), walk["start_body"])
+		board.add_cat(
+			wall_id, int(fallback["color"]), walk["start_body"], nested_colors
+		)
 		return _commit_wall(plans, wall_uses, solution, wall_id, walk)
 	return [] as Array[Dictionary]
 
@@ -1194,7 +1347,7 @@ func _verify(
 	if not bool(solved["found"]):
 		return {"ok": false, "reason": "오토솔버가 풀지 못했다: %s" % solved["reason"]}
 
-	# 한 2중첩 고양이는 바깥·안쪽이 모두 같은 논리 cat_id로 기록된다. 의존성은
+	# 한 중첩 고양이는 모든 레이어가 같은 논리 cat_id로 기록된다. 의존성은
 	# "물리 몸체가 어느 몸체를 먼저 비워야 했나"를 재는 값이므로 첫 탈출만 남긴다.
 	# 반면 escape_order는 얼음과 리플레이 정보를 위해 실제 탈출 이벤트를 그대로 보존한다.
 	var dependency_order: Array[int] = []

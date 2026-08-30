@@ -40,24 +40,48 @@ extends SceneTree
 #   dep_slack=99      독립(의존 없는) 고양이 허용 마릿수. 의존 고양이 하한 = 고양이 수 - 이 값.
 #                     **기본 99 = 검사 안 함** (chain 과 같은 이유로 소프트 채점에 맡긴다).
 #   hole_line=0.5     구멍을 분할선 관문으로 늘어놓을 확률 (0=흩뿌리기만, 1=관문만)
-#   first_min=3       첫 흡입까지 "다른 고양이를 치워야 하는" 최소 수. **여기만 하드 조건으로
-#                     남긴다** — 한 마리가 빠지는 순간 판이 헐렁해져 뒤는 대부분 1드래그이므로
-#                     첫 탈출 비용이 난이도의 지배 항이다. 실패는 attempts 로 흡수한다.
+#   첫 탈출 치우기=1  사용자 입력 없이 1로 고정한다. 높은 하한에서 반복되던 벽 배치 실패와
+#                     재시도 부하를 줄이되, 바로 탈출 가능한 판은 계속 제외한다.
 #   squeeze=1         막아도 여전히 풀리는 빈 칸을 전부 장애물로 채운다 (여유 제거).
 #                     빈 공간이 사라져 뒤 순번 고양이가 앞 고양이가 비운 자리를 여유 없이
 #                     써야만 나갈 수 있게 된다. 생성이 몇 배 느려진다. 0 = 끈다.
+#   squeeze_budget=20000  여유 판정 한 칸당 탐색 예산. **여유 제거가 생성 시간의 99%다**
+#                     (실측: 4마리 3중첩 7x9 에서 한 판 71초 중 71초). 막으면 안 되는 칸은
+#                     예산을 다 태우고서야 판정되므로, 낮추면 그만큼 빨라지고 대신 보수적으로
+#                     (막을 수 있었던 칸을 비워 둔 채) 끝난다. 3중첩처럼 레이어가 많은 판은
+#                     4000 정도가 실용적이다.
 #   later_min=0       두 번째 이후 탈출까지 치워야 하는 최소 수. **거르기만 한다** —
+#   jitter=1          보드 크기 흔들기 사용 여부. 분석 배치에서 고정 크기가 필요하면 0.
 #                     생성기가 이 조건을 만들어 내지는 못한다(map_generator.gd 의
 #                     `_plant_first_escape_walls()` 주석 참조). 1 로 걸면 수율이 10%쯤으로
 #                     떨어지므로 attempts 를 크게 잡아야 한다.
-#   ice=0.0           구멍마다 얼음을 씌워 볼 확률. 얼음은 "N마리 빠질 때까지 이 구멍은 안
-#                     열린다"는 진짜 제약이라 의존 사슬을 늘린다. 다만 이미 그만큼 의존이
+#   ── 기믹 ─────────────────────────────────────────────────────────────
+#   기믹 확률은 전부 실수 범위 램프다(0.0..0.6 처럼). 마릿수·개수가 아니라 확률인 이유는
+#   판마다 고양이·구멍 수가 다르기 때문 — 확률이면 판 크기에 맞춰 저절로 비례한다.
+#   배치 순서는 **기믹마다 따로** 잡는다. 하한을 0 으로 두면 앞 스테이지엔 안 나오다가
+#   뒤로 갈수록 잦아지고, 서로 다른 구간을 주면 기믹이 하나씩 소개된다:
+#       nested2=0..0.5 ice=0..0.8   →  중첩이 먼저 붙고 얼음이 나중에 짙어진다
+#
+#   nested_mode=two   중첩 방식. `two` = 선택된 고양이 전부 2중첩,
+#                     `mixed` = 2중첩과 3중첩을 마릿수 차이 1 이하로 혼합,
+#                     `three` = 선택된 고양이 전부 3중첩(색·구멍을 마리당 2개 더 쓴다).
+#   nested2=0.7       고양이가 중첩 대상이 될 목표 비율 (범위 가능, 스테이지 램프).
+#                     첫 탈출 고양이는 100% 중첩하고 나머지 확률을 보정하므로, 0.7이면
+#                     판 전체 기대값이 70%(10마리면 약 7마리)다. 0이면 중첩을 완전히 끈다.
+#                     mixed에서 3중첩은 색·구멍을 두 개씩 더 쓰므로 colors가 모자라면 버린다.
+#   ice=0.0           구멍마다 얼음을 씌워 볼 확률 (범위 가능, 스테이지 램프).
+#                     얼음은 "N마리 빠질 때까지 이 구멍은 안 열린다"는 진짜 제약이라 의존 사슬을 늘린다. 다만 이미 그만큼 의존이
 #                     실측된 구멍에는 아무것도 못 막으므로 자동으로 건너뛴다.
-#   ice_max=0         얼음 숫자 상한 (0 = 그 구멍이 쓰이기 직전까지의 탈출 수를 상한으로).
+#   ice_max=0         얼음 숫자 상한 (범위 가능, 스테이지 램프).
+#                     0 = 그 구멍이 쓰이기 직전까지의 탈출 수를 상한으로.
 #                     같은 숫자는 판에 하나만 나오고, 늦게 쓰이는 구멍이 큰 숫자를 가져간다.
 #   colors=20         색 팔레트 크기 (LevelManager.pair_colors 와 맞춘다)
 #   attempts=120      스테이지당 생성 재시도 상한
 #   out=res://resources/levels   저장 폴더 (기존 파일은 건드리지 않고 뒤 순번으로 추가)
+
+# 중첩 방식 이름 → 3중첩 비율. `MapGenerator.Config.nested_three_ratio` 에 그대로 넣는다.
+const NESTED_THREE_RATIO := {"two": 0.0, "mixed": 0.5, "three": 1.0}
+const NESTED_MODE_LABEL := {"two": "2중첩만", "mixed": "2+3중첩 혼합", "three": "3중첩만"}
 
 const STAGE_SEED_STRIDE := 100003
 # 보드 크기 흔들기용 별도 보폭. 맵 시드와 섞이면 크기와 배치가 같이 움직여 규칙성이 생긴다.
@@ -74,6 +98,15 @@ func _initialize() -> void:
 	var grid: Vector2i = _parse_grid(str(params.get("grid", "7x9")))
 	var cats_range: Vector2i = _parse_range(str(params.get("cats", "3..6")))
 	var chain_range: Vector2i = _parse_range(str(params.get("chain", "0")))
+	# 기믹은 난이도와 따로 램프한다 — 기믹마다 자기 구간을 줘서 등장 순서를 잡는다.
+	var nested_range: Vector2 = _parse_float_range(str(params.get("nested2", "0.7")))
+	var nested_mode: String = str(params.get("nested_mode", "two"))
+	if not NESTED_THREE_RATIO.has(nested_mode):
+		push_error("nested_mode 는 two, mixed, three 중 하나여야 한다 (받은 값: %s)" % nested_mode)
+		quit(1)
+		return
+	var ice_range: Vector2 = _parse_float_range(str(params.get("ice", "0.0")))
+	var ice_max_range: Vector2i = _parse_range(str(params.get("ice_max", "0")))
 	var score_range: Vector2i = _parse_range(str(params.get("score", "0")))
 	var obstacle_range: Vector2 = _parse_float_range(str(params.get("obstacle", "0.7..1.0")))
 	var out_dir: String = str(params.get("out", "res://resources/levels"))
@@ -96,7 +129,12 @@ func _initialize() -> void:
 		stage_params["obstacle"] = rampf(obstacle_range, index, count)
 		# 난이도 하한도 실수 램프처럼 스테이지별 값으로 풀어서 넘긴다.
 		stage_params["score"] = ramp(score_range, index, count)
-		var stage_grid: Vector2i = jitter_grid(grid, base_seed + stage_number * GRID_SEED_STRIDE)
+		stage_params["nested2"] = rampf(nested_range, index, count)
+		stage_params["ice"] = rampf(ice_range, index, count)
+		stage_params["ice_max"] = ramp(ice_max_range, index, count)
+		var stage_grid: Vector2i = grid
+		if int(params.get("jitter", 1)) != 0:
+			stage_grid = jitter_grid(grid, base_seed + stage_number * GRID_SEED_STRIDE)
 
 		# 시드 보폭은 배치 내 순번이 아니라 **전역 스테이지 순번**을 쓴다. 같은 시드로
 		# 이어서 돌려도 이전 배치와 같은 맵을 다시 만들지 않게 하기 위해서다.
@@ -172,14 +210,9 @@ static func rampf(value_range: Vector2, index: int, count: int) -> float:
 	return lerpf(value_range.x, value_range.y, t)
 
 
-# 스테이지 하나. 첫 시드가 실패하면 시드를 흔들어 보고, 그래도 안 되면 조건을 한 단계씩
-# 낮춰서라도 반드시 풀리는 맵을 낸다 (낮췄으면 로그에 남긴다).
-#
-# 낮추는 순서는 **사슬 깊이 먼저, 첫 탈출 하한은 마지막**이다. 첫 탈출 비용이 난이도의
-# 지배 항이므로 그것부터 포기하면 판이 통째로 쉬워진다. 실제로 고양이 3마리 · 짧은 몸에서는
-# `first_min=3` 이 아예 안 나오는 조합이 있어(벽으로 세울 후보가 모자란다) 이 완화가 없으면
-# 배치 전체가 첫 스테이지에서 멈춘다. 완화된 판은 점수가 낮게 나오고, 사후 정렬이 알아서
-# 앞 순번으로 보낸다.
+# 스테이지 하나. 첫 탈출 치우기는 1로 고정하고, 사슬 깊이만 단계적으로 낮춰서 풀리는 맵을 낸다.
+# 2~3 이상의 첫 탈출 벽은 벽 후보 부족과 중첩 솔버 재실행을 반복시켜 생성 부하가 급증하므로
+# 양산 경로에서는 더 이상 입력이나 완화 대상으로 받지 않는다.
 # static 인 이유: 에디터 어드민(addons/stage_admin)이 같은 로직을 그대로 쓴다.
 static func generate_stage(
 	generator: MapGenerator,
@@ -190,17 +223,18 @@ static func generate_stage(
 	cat_count: int,
 	chain_depth: int
 ) -> Dictionary:
-	var first_min: int = int(params.get("first_min", 3))
-	# 완화 사다리 (사슬 깊이, 첫 탈출 하한). 사슬을 0 까지 다 낮춰 본 다음에야 첫 탈출
-	# 하한을 한 칸 내린다. 기본값(chain=0)에서는 첫 항목이 곧 원래 조건이다.
+	var stage_started: int = Time.get_ticks_msec()
+	var nested_mode: String = str(params.get("nested_mode", "two"))
+	var nested_mode_label: String = NESTED_MODE_LABEL.get(nested_mode, "2중첩만")
+	print("[스테이지 생성] stage_%03d 생성 시작 / 보드 %dx%d / 고양이 %d / 중첩 %s %.0f%%" % [
+		index + 1, shape_grid(grid).x, shape_grid(grid).y, cat_count,
+		nested_mode_label, clampf(float(params.get("nested2", 0.7)), 0.0, 1.0) * 100.0,
+	])
+	var first_min: int = 1
+	# 완화 사다리 (사슬 깊이, 첫 탈출 하한). 첫 탈출 하한은 모든 단계에서 1이다.
 	var ladder: Array[Vector2i] = []
-	if first_min <= 0:
-		for depth in range(chain_depth, -1, -1):
-			ladder.append(Vector2i(depth, 0))
-	else:
-		for floor_moves in range(first_min, 0, -1):
-			for depth in range(chain_depth, -1, -1):
-				ladder.append(Vector2i(depth, floor_moves))
+	for depth in range(chain_depth, -1, -1):
+		ladder.append(Vector2i(depth, first_min))
 
 	# MapGenerator.generate() 자체가 시도마다 시드를 바꾸므로 바깥 seed retry 는 중복이다.
 	# attempts 를 사다리 전체의 실제 총예산으로 나누며, 합계가 입력값을 절대 넘지 않는다.
@@ -220,7 +254,8 @@ static func generate_stage(
 		config.base_seed = base_seed + index * STAGE_SEED_STRIDE + step_index * 37
 		config.grid_size = shape_grid(grid)
 		config.cat_count = cat_count
-		config.nested_two_count = clampi(int(params.get("nested2", 0)), 0, cat_count)
+		config.nested_two_chance = clampf(float(params.get("nested2", 0.7)), 0.0, 1.0)
+		config.nested_three_ratio = float(NESTED_THREE_RATIO.get(nested_mode, 0.0))
 		config.color_count = int(params.get("colors", 20))
 		config.body_length_min = int(params.get("len_min", 3))
 		config.body_length_max = int(params.get("len_max", 6))
@@ -233,6 +268,7 @@ static func generate_stage(
 		config.min_first_escape_moves = step.y
 		config.min_later_escape_moves = int(params.get("later_min", 0))
 		config.squeeze_free_cells = int(params.get("squeeze", 1)) != 0
+		config.squeeze_node_budget = int(params.get("squeeze_budget", 20000))
 		config.min_dependent_cats = maxi(cat_count - int(params.get("dep_slack", 99)), 0)
 		config.max_attempts = attempt_budget
 		config.ice_chance = float(params.get("ice", 0.0))
@@ -242,11 +278,17 @@ static func generate_stage(
 
 		var level: Dictionary = generator.generate(config)
 		if bool(level["ok"]):
-			if step.x < chain_depth or step.y < first_min:
-				print("  (스테이지 %d: 사슬 깊이 %d → %d, 첫 탈출 하한 %d → %d 로 낮춰서 성공)" % [
-					index + 1, chain_depth, step.x, first_min, step.y,
+			if step.x < chain_depth:
+				print("  (스테이지 %d: 사슬 깊이 %d → %d 로 낮춰서 성공, 첫 탈출 하한은 1 고정)" % [
+					index + 1, chain_depth, step.x,
 				])
+			print("[스테이지 생성] stage_%03d 생성 완료 / %dms" % [
+				index + 1, Time.get_ticks_msec() - stage_started,
+			])
 			return level
+	print("[스테이지 생성] stage_%03d 생성 실패 / %dms" % [
+		index + 1, Time.get_ticks_msec() - stage_started,
+	])
 	return {}
 
 

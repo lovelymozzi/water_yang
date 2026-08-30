@@ -19,8 +19,10 @@ extends Node
 @export_group("Generation")
 @export var generator_seed: int = 0
 @export_range(2, 8, 1) var cat_count: int = 4
-# 겉 고양이가 빠진 자리에 안쪽 고양이가 이어서 남는 몸체 수. 각 중첩마다 별도 색·구멍 하나가 든다.
-@export_range(0, 4, 1) var nested_two_count: int = 0
+# 2중첩만 또는 2+3중첩 혼합. 혼합은 중첩 대상 안에서 두 깊이를 균등하게 나눈다.
+@export_enum("2중첩만:0", "2+3중첩 혼합:1", "3중첩만:2") var nested_mode: int = 0
+# 중첩 대상 비율. 레이어마다 별도 색·구멍 하나가 든다.
+@export_range(0.0, 1.0, 0.05) var nested_two_chance: float = 0.0
 @export_range(2, 8, 1) var body_length_min: int = 3
 @export_range(2, 8, 1) var body_length_max: int = 4
 @export_range(1, 24, 1) var reverse_steps_min: int = 5
@@ -72,7 +74,8 @@ func generate_level() -> void:
 	config.base_seed = generator_seed
 	config.grid_size = manager.grid_size
 	config.cat_count = cat_count
-	config.nested_two_count = nested_two_count
+	config.nested_two_chance = nested_two_chance
+	config.nested_three_ratio = [0.0, 0.5, 1.0][clampi(nested_mode, 0, 2)]
 	config.color_count = maxi(manager.pair_colors.size(), 1)
 	config.body_length_min = mini(body_length_min, body_length_max)
 	config.body_length_max = maxi(body_length_min, body_length_max)

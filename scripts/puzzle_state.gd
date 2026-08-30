@@ -454,6 +454,23 @@ static func _cells_to_string(cells: Array) -> String:
 	return text
 
 
+# 두 색 구멍 사이의 남은 걸음. 중첩 고양이의 안쪽 레이어는 겉이 빨려 들어간 자리(겉 구멍
+# 옆칸)에서 자기 구멍까지 다시 걸어야 하므로, 솔버 휴리스틱이 그 몫을 이 값으로 더한다.
+# 구멍이 없으면 0 — 낙관적으로 재는 편이 A* 에 낫다(`escape_distance()` 의 얼음 주석과 같은 이유).
+func hole_gap(from_color: int, to_color: int) -> int:
+	var from_cell: Variant = null
+	var to_cell: Variant = null
+	for hole_cell in holes:
+		if color_ids_pair(from_color, hole_color(hole_cell)):
+			from_cell = hole_cell
+		elif color_ids_pair(to_color, hole_color(hole_cell)):
+			to_cell = hole_cell
+	if from_cell == null or to_cell == null:
+		return 0
+	var delta: Vector2i = (to_cell as Vector2i) - (from_cell as Vector2i)
+	return maxi(absi(delta.x) + absi(delta.y) - 1, 0)
+
+
 # ---------------------------------------------------------------- 검증
 
 # 시작 배치가 규칙을 지키는지. 문제를 사람이 읽을 문장으로 돌려준다.
