@@ -83,6 +83,10 @@ class Config:
 	# 끌리므로 세지 않는다. 한 마리가 빠지는 순간 난이도가 급감하므로 첫 탈출을 비싸게
 	# 만드는 하한이다. 이 값이 나오도록 첫 탈출 고양이의 길목에 벽 고양이를 세운다.
 	# 1 = 드래그 한 번으로 나가는 고양이가 없음. 2~3부터 생성 실패가 가파르게 늘어난다.
+	# **스테이지 양산은 3 을 쓴다** (`stage_batch_generator.gd` 의 `first_min` 기본값).
+	# 첫 탈출 비용이 난이도의 지배 항이기 때문이다 — 한 마리가 빠지면 몸+구멍만큼 칸이 열려
+	# 뒤쪽 탈출은 대부분 1드래그가 된다. 여기 라이브러리 기본값은 회귀 검사와의 비교를
+	# 위해 1 로 둔다.
 	var min_first_escape_moves: int = 1
 	# 구멍을 흩뿌리는 대신 안쪽 분할선 위에 관문처럼 늘어놓을 확률. 판이 구멍 벽으로
 	# 갈라져 반대편으로 가려면 닫힌 구멍 자리를 지나야 하므로 깊은 사슬이 훨씬 잘 나온다.
@@ -110,6 +114,12 @@ class Config:
 	# 얼음 숫자의 상한. 0 = "이 구멍이 풀이에서 쓰이기 전까지 빠지는 고양이 수"를 상한으로
 	# 쓴다. 그 수를 넘으면 기록된 풀이에서 얼음이 제때 안 열려 맵이 안 풀린다.
 	var ice_number_max: int = 0
+	# 난이도 채점용 탈출 비용의 상한. 이 값에서 잘리므로 낮으면 어려운 판끼리 구분이 안 된다.
+	var difficulty_limit: int = 8
+	# 소프트 게이트. `LevelSolver.difficulty_score()` 가 이 값 미만이면 버린다. 0 = 검사 안 함.
+	# **조건을 하드하게 강제하는 대신 이 점수 하나만 본다** — 사슬 깊이·의존 마릿수 같은
+	# 개별 조건을 각각 강제하면 버리는 맵만 늘고 정작 체감 난이도는 안 오른다.
+	var min_difficulty_score: int = 0
 
 
 static func default_config() -> Config:
@@ -200,7 +210,11 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 			}
 		solution = walled["solution"]
 
-	var verdict: Dictionary = _verify(config, rng, board, solution)
+	# squeeze 전 판은 최종 결과가 아니다. 여기서는 구조·기록 풀이·의존만 검증하고 비싼
+	# 난이도 채점은 최종 장애물 배치가 확정된 뒤 한 번만 한다.
+	var verdict: Dictionary = _verify(
+		config, board, solution, true, not config.squeeze_free_cells
+	)
 	if not bool(verdict["ok"]):
 		return verdict
 
@@ -212,7 +226,7 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	# 시키므로 의존을 없애지는 못한다(측정만 못 하게 된다).
 	if config.squeeze_free_cells:
 		solution = _squeeze(config, rng, board, solution)
-		verdict = _verify(config, rng, board, solution, false)
+		verdict = _verify(config, board, solution, false, true)
 		if not bool(verdict["ok"]):
 			return verdict
 
@@ -225,7 +239,9 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 	if not ice.is_empty():
 		for cell in ice:
 			board.add_ice(cell, int(ice[cell]))
-		var iced: Dictionary = _verify(config, rng, board, solution, not config.squeeze_free_cells)
+		var iced: Dictionary = _verify(
+			config, board, solution, not config.squeeze_free_cells, true
+		)
 		if bool(iced["ok"]):
 			verdict = iced
 		else:
@@ -258,6 +274,7 @@ func _build_once(config: Config, rng: RandomNumberGenerator, attempt: int) -> Di
 			"solver_nodes": int(verdict["solver_nodes"]),
 			"obstacle_cells": board.obstacles.size(),
 			"early_clearing": verdict["early_clearing"],
+			"difficulty_score": int(verdict["difficulty_score"]),
 		},
 	}
 	for hole in holes:
@@ -680,6 +697,11 @@ func _plant_first_escape_walls(
 		var witness: Dictionary = solver.first_escape_witness(
 			board, config.min_first_escape_moves
 		)
+		if not bool(witness["complete"]):
+			return {
+				"ok": false, "solution": current,
+				"reason": "첫 탈출 탐색이 노드 예산을 넘겼다",
+			}
 		if int(witness["clearing"]) >= config.min_first_escape_moves:
 			break
 		if planted >= guard:
@@ -1064,8 +1086,9 @@ func _group_rectangles(cells: Dictionary) -> Array:
 # 막은 칸을 밟던 옛 수순은 무효이므로 기록된 풀이를 오토솔버가 새로 찾은 수순으로 갈아탄다.
 # 예산 안에 못 찾으면 필요한 칸으로 보고 비워 둔다 — 오탐이 아니라 여유가 덜 깎이는 쪽이다.
 #
-# ponytail: 빈 칸마다 solve 한 번씩 도는 탐욕법이라 순서에 따라 결과가 달라지고 최소도
-# 아니다. 최소 여유가 필요해지면 막힌 칸 조합을 되짚는 탐색으로 올린다.
+# 현재 유효 풀이가 지나지 않는 칸은 그 풀이를 그대로 보존하므로 솔버 없이 막을 수 있다.
+# 풀이가 실제로 밟는 칸만 대체 풀이를 찾아 보고, 찾으면 이후 후보는 그 새 풀이를 기준으로 한다.
+# 탐욕 순서에 따라 결과가 달라지고 전역 최소는 아니라는 한계는 그대로다.
 func _squeeze(
 	config: Config,
 	rng: RandomNumberGenerator,
@@ -1082,11 +1105,16 @@ func _squeeze(
 	_shuffle(candidates, rng)
 
 	var kept: Array[Dictionary] = solution
+	var kept_touched: Dictionary = _collect_touched(board, kept)
 	for cell in candidates:
 		board.add_obstacle(cell)
+		if not kept_touched.has(cell):
+			# 알려진 풀이가 이 칸을 전혀 쓰지 않는다. 재탐색 없이도 같은 풀이가 유효하다.
+			continue
 		var solved: Dictionary = solver.solve(board, config.squeeze_node_budget)
 		if bool(solved["found"]):
 			kept = solved["moves"]
+			kept_touched = _collect_touched(board, kept)
 		else:
 			board.obstacles.erase(cell)
 	return kept
@@ -1096,10 +1124,10 @@ func _squeeze(
 
 func _verify(
 	config: Config,
-	rng: RandomNumberGenerator,
 	state: PuzzleState,
 	solution: Array[Dictionary],
-	require_dependency: bool = true
+	require_dependency: bool = true,
+	measure_difficulty: bool = true
 ) -> Dictionary:
 	var problems: Array[String] = state.start_layout_problems()
 	if not problems.is_empty():
@@ -1146,33 +1174,40 @@ func _verify(
 				],
 			}
 
-	# 첫 탈출 하한. 어떤 수순으로든 "다른 고양이를 치우는 수"가 이보다 적게 첫 흡입이
-	# 나오면 버린다. 자기 이동은 드래그 한 번에 몇 칸이든 끌리므로 세지 않는다.
-	if config.min_first_escape_moves > 0:
-		var clearing: int = solver.clearing_moves_to_first_escape(
-			state, config.min_first_escape_moves
+	var early_clearing: Array[int] = []
+	var score: int = 0
+	if measure_difficulty:
+		# 최종 판에서만 전 탈출 비용을 재며, 첫 탈출 하한도 이 결과를 재사용한다.
+		var difficulty_limit: int = maxi(
+			config.difficulty_limit,
+			maxi(config.min_first_escape_moves, config.min_later_escape_moves)
 		)
-		if clearing < config.min_first_escape_moves:
+		early_clearing = solver.early_escape_costs(state, 0, difficulty_limit)
+		if early_clearing.has(-1):
+			return {"ok": false, "reason": "난이도 탐색이 노드 예산을 넘겼다"}
+		score = LevelSolver.difficulty_score(early_clearing)
+		if config.min_difficulty_score > 0 and score < config.min_difficulty_score:
+			return {
+				"ok": false,
+				"reason": "난이도 점수가 %d 뿐이다 (%d 이상 필요, 탈출 비용 %s)" % [
+					score, config.min_difficulty_score, early_clearing,
+				],
+			}
+		if config.min_first_escape_moves > 0 \
+				and (early_clearing.is_empty() or early_clearing[0] < config.min_first_escape_moves):
 			return {
 				"ok": false,
 				"reason": "첫 탈출까지 치우는 수가 %d수뿐이다 (%d수 이상 필요)" % [
-					clearing, config.min_first_escape_moves,
+					-1 if early_clearing.is_empty() else early_clearing[0],
+					config.min_first_escape_moves,
 				],
 			}
+	# measure_difficulty=false 는 squeeze 직전의 임시 검증이다. 첫 탈출 하한은 바로 앞의
+	# _plant_first_escape_walls()가 같은 판에서 이미 증명했고, squeeze 뒤 최종 채점이 다시 확인한다.
 
-	var probe: Dictionary = solver.random_play_probe(
-		state, config.probe_tries, config.probe_moves, rng, config.solver_node_budget
-	)
-	if not bool(probe["ok"]):
-		return {"ok": false, "reason": "무작위 플레이 후 풀리지 않았다: %s" % probe["reason"]}
-
-	# 초반 탈출 비용 실측. 고양이가 빠질수록 판이 급격히 쉬워지므로 난이도 채점은
-	# 사슬 깊이가 아니라 이 값(1·2번째 탈출까지 치우는 드래그 수)을 지배 항으로 쓴다.
-	# 상한(limit)을 하한보다 낮게 두면 값이 잘려 무조건 실패하므로 하한까지 올려 준다.
-	var early_clearing: Array[int] = solver.early_escape_costs(
-		state, 3, maxi(4, config.min_later_escape_moves)
-	)
-	if config.min_later_escape_moves > 0:
+	# random_play_probe() 는 데드락 없음 논증의 샘플링이며 생성마다 반복할 검증이 아니다.
+	# generator_check.gd 가 별도로 수행한다.
+	if measure_difficulty and config.min_later_escape_moves > 0:
 		for index in range(1, early_clearing.size()):
 			if early_clearing[index] < config.min_later_escape_moves:
 				return {
@@ -1189,6 +1224,7 @@ func _verify(
 		"solver_moves": (solved["moves"] as Array).size(),
 		"solver_nodes": int(solved["nodes"]),
 		"early_clearing": early_clearing,
+		"difficulty_score": score,
 	}
 
 
