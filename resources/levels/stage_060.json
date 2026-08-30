@@ -1,0 +1,473 @@
+{
+  "cats": [
+    {
+      "body_cells": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "color_id": 0
+    },
+    {
+      "body_cells": [
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "color_id": 1
+    },
+    {
+      "body_cells": [
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "color_id": 2
+    }
+  ],
+  "dependency": {
+    "chain": [
+      0,
+      2,
+      1
+    ],
+    "chain_depth": 3,
+    "edges": [
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2,
+        1
+      ]
+    ]
+  },
+  "escape_order": [
+    1,
+    2,
+    0
+  ],
+  "grid_size": [
+    5,
+    10
+  ],
+  "holes": [
+    {
+      "color_id": 0,
+      "grid_pos": [
+        2,
+        7
+      ],
+      "ice_count": 0
+    },
+    {
+      "color_id": 1,
+      "grid_pos": [
+        3,
+        2
+      ],
+      "ice_count": 0
+    },
+    {
+      "color_id": 2,
+      "grid_pos": [
+        0,
+        0
+      ],
+      "ice_count": 0
+    }
+  ],
+  "obstacles": [
+    {
+      "block_size": [
+        1,
+        10
+      ],
+      "grid_pos": [
+        4,
+        0
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        1,
+        2
+      ]
+    },
+    {
+      "block_size": [
+        2,
+        1
+      ],
+      "grid_pos": [
+        2,
+        3
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        6
+      ],
+      "grid_pos": [
+        3,
+        4
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        4
+      ],
+      "grid_pos": [
+        0,
+        6
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        3
+      ],
+      "grid_pos": [
+        1,
+        7
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        2
+      ],
+      "grid_pos": [
+        2,
+        8
+      ]
+    }
+  ],
+  "seed": 5971523,
+  "solution": [
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        2,
+        5
+      ],
+      "to_cell": [
+        2,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        2,
+        4
+      ],
+      "to_cell": [
+        1,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        4
+      ],
+      "to_cell": [
+        1,
+        3
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        0,
+        5
+      ],
+      "to_cell": [
+        1,
+        5
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        1,
+        6
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        3,
+        0
+      ],
+      "to_cell": [
+        2,
+        0
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        2,
+        0
+      ],
+      "to_cell": [
+        1,
+        0
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        1,
+        1
+      ],
+      "to_cell": [
+        2,
+        1
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        2,
+        1
+      ],
+      "to_cell": [
+        2,
+        2
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        3,
+        1
+      ],
+      "to_cell": [
+        2,
+        1
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        3
+      ],
+      "to_cell": [
+        0,
+        3
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        0,
+        3
+      ],
+      "to_cell": [
+        0,
+        2
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        0,
+        2
+      ],
+      "to_cell": [
+        0,
+        1
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        2,
+        1
+      ],
+      "to_cell": [
+        1,
+        1
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        1
+      ],
+      "to_cell": [
+        0,
+        1
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        1
+      ],
+      "to_cell": [
+        0,
+        2
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        2
+      ],
+      "to_cell": [
+        0,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        3
+      ],
+      "to_cell": [
+        0,
+        4
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        4
+      ],
+      "to_cell": [
+        0,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        5
+      ],
+      "to_cell": [
+        1,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        1,
+        6
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        6
+      ],
+      "to_cell": [
+        2,
+        6
+      ]
+    }
+  ],
+  "stats": {
+    "difficulty_score": 20,
+    "early_clearing": [
+      2,
+      0,
+      0
+    ],
+    "obstacle_cells": 28,
+    "solution_length": 22,
+    "solver_moves": 22,
+    "solver_nodes": 51
+  }
+}
