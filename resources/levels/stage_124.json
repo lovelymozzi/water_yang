@@ -3,48 +3,20 @@
     {
       "body_cells": [
         [
-          2,
-          2
-        ],
-        [
-          2,
-          1
-        ],
-        [
           1,
-          1
+          5
         ],
-        [
-          1,
-          0
-        ],
-        [
-          2,
-          0
-        ],
-        [
-          3,
-          0
-        ],
-        [
-          3,
-          1
-        ],
-        [
-          4,
-          1
-        ]
-      ],
-      "color_id": 0,
-      "nested_color_ids": [
-        4
-      ]
-    },
-    {
-      "body_cells": [
         [
           1,
           4
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          3
         ],
         [
           1,
@@ -53,6 +25,35 @@
         [
           1,
           2
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "color_id": 0,
+      "nested_color_ids": [
+        4,
+        5
+      ]
+    },
+    {
+      "body_cells": [
+        [
+          4,
+          7
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          2,
+          6
         ]
       ],
       "color_id": 1
@@ -60,53 +61,51 @@
     {
       "body_cells": [
         [
-          3,
-          5
+          4,
+          1
         ],
         [
-          3,
-          4
+          4,
+          2
         ],
         [
-          3,
+          4,
           3
         ],
         [
-          3,
-          2
+          4,
+          4
+        ],
+        [
+          4,
+          5
         ]
       ],
       "color_id": 2,
       "nested_color_ids": [
-        6
+        8,
+        9
       ]
     },
     {
       "body_cells": [
         [
-          0,
-          5
+          1,
+          6
         ],
         [
           0,
           6
         ],
         [
-          1,
-          6
-        ],
-        [
-          1,
-          7
-        ],
-        [
-          2,
+          0,
           7
         ]
       ],
       "color_id": 3,
       "nested_color_ids": [
-        5
+        6,
+        7
       ]
     }
   ],
@@ -119,15 +118,18 @@
   },
   "escape_order": [
     0,
-    0,
+    3,
     2,
+    2,
+    3,
+    3,
     1,
-    3,
-    3,
-    2
+    2,
+    0,
+    0
   ],
   "grid_size": [
-    5,
+    7,
     9
   ],
   "holes": [
@@ -135,41 +137,41 @@
       "color_id": 0,
       "grid_pos": [
         1,
-        5
+        7
       ],
       "ice_count": 0
     },
     {
       "color_id": 1,
       "grid_pos": [
-        0,
-        7
+        4,
+        0
       ],
-      "ice_count": 3
+      "ice_count": 6
     },
     {
       "color_id": 2,
       "grid_pos": [
         0,
-        2
+        5
       ],
       "ice_count": 2
     },
     {
       "color_id": 3,
       "grid_pos": [
-        4,
-        5
+        5,
+        7
       ],
-      "ice_count": 4
+      "ice_count": 0
     },
     {
       "color_id": 4,
       "grid_pos": [
-        0,
-        0
+        5,
+        3
       ],
-      "ice_count": 0
+      "ice_count": 8
     },
     {
       "color_id": 5,
@@ -177,25 +179,59 @@
         2,
         3
       ],
-      "ice_count": 5
+      "ice_count": 9
     },
     {
       "color_id": 6,
       "grid_pos": [
-        4,
-        8
+        0,
+        2
       ],
-      "ice_count": 6
+      "ice_count": 0
+    },
+    {
+      "color_id": 7,
+      "grid_pos": [
+        3,
+        5
+      ],
+      "ice_count": 5
+    },
+    {
+      "color_id": 8,
+      "grid_pos": [
+        6,
+        5
+      ],
+      "ice_count": 3
+    },
+    {
+      "color_id": 9,
+      "grid_pos": [
+        0,
+        0
+      ],
+      "ice_count": 0
     }
   ],
   "obstacles": [
     {
       "block_size": [
         1,
-        1
+        5
       ],
       "grid_pos": [
-        4,
+        3,
+        0
+      ]
+    },
+    {
+      "block_size": [
+        2,
+        3
+      ],
+      "grid_pos": [
+        5,
         0
       ]
     },
@@ -212,11 +248,31 @@
     {
       "block_size": [
         1,
-        3
+        1
       ],
       "grid_pos": [
-        4,
-        2
+        2,
+        1
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        6,
+        3
+      ]
+    },
+    {
+      "block_size": [
+        1,
+        1
+      ],
+      "grid_pos": [
+        2,
+        4
       ]
     },
     {
@@ -225,356 +281,234 @@
         2
       ],
       "grid_pos": [
-        0,
-        3
+        5,
+        5
       ]
     },
     {
       "block_size": [
-        3,
-        1
+        1,
+        3
       ],
       "grid_pos": [
-        2,
+        6,
         6
       ]
     },
     {
       "block_size": [
         1,
-        1
+        2
       ],
       "grid_pos": [
-        4,
+        3,
         7
       ]
     },
     {
       "block_size": [
-        3,
+        2,
         1
       ],
       "grid_pos": [
-        0,
+        1,
+        8
+      ]
+    },
+    {
+      "block_size": [
+        2,
+        1
+      ],
+      "grid_pos": [
+        4,
         8
       ]
     }
   ],
-  "seed": 13212227,
+  "seed": 15154903,
   "solution": [
     {
-      "cat_id": 3,
-      "from_end_cell": [
-        2,
-        7
-      ],
-      "to_cell": [
-        3,
-        7
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        1,
-        4
-      ],
-      "to_cell": [
-        2,
-        4
-      ]
-    },
-    {
       "cat_id": 1,
       "from_end_cell": [
         2,
-        4
+        6
       ],
       "to_cell": [
         2,
-        5
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        2,
-        2
-      ],
-      "to_cell": [
-        1,
-        2
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        1,
-        2
-      ],
-      "to_cell": [
-        1,
-        3
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        2
-      ],
-      "to_cell": [
-        3,
-        1
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        2,
-        5
-      ],
-      "to_cell": [
-        3,
-        5
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        1,
-        3
-      ],
-      "to_cell": [
-        1,
-        4
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        1,
-        4
-      ],
-      "to_cell": [
-        1,
-        5
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        1
-      ],
-      "to_cell": [
-        3,
-        0
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        3,
-        5
-      ],
-      "to_cell": [
-        3,
-        4
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        0
-      ],
-      "to_cell": [
-        2,
-        0
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        1,
-        5
-      ],
-      "to_cell": [
-        0,
-        5
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        1,
-        1
-      ],
-      "to_cell": [
-        1,
-        0
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        2,
-        5
-      ],
-      "to_cell": [
-        1,
-        5
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        2
-      ],
-      "to_cell": [
-        2,
-        2
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        2,
-        2
-      ],
-      "to_cell": [
-        1,
-        2
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        1,
-        2
-      ],
-      "to_cell": [
-        0,
-        2
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        2
-      ],
-      "to_cell": [
-        3,
-        3
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        3
-      ],
-      "to_cell": [
-        3,
-        4
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        1,
-        5
-      ],
-      "to_cell": [
-        0,
-        5
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        4
-      ],
-      "to_cell": [
-        3,
         5
       ]
     },
     {
       "cat_id": 3,
       "from_end_cell": [
-        3,
+        0,
         7
       ],
       "to_cell": [
-        3,
+        0,
         8
       ]
     },
     {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        1,
+        6
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        2
+      ],
+      "to_cell": [
+        1,
+        1
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        0,
+        6
+      ],
+      "to_cell": [
+        1,
+        6
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        1
+      ],
+      "to_cell": [
+        1,
+        0
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        0,
+        7
+      ],
+      "to_cell": [
+        1,
+        7
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        1,
+        7
+      ],
+      "to_cell": [
+        2,
+        7
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        2,
+        5
+      ],
+      "to_cell": [
+        1,
+        5
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        1,
+        6
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        1,
+        6
+      ],
+      "to_cell": [
+        0,
+        6
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        2,
+        7
+      ],
+      "to_cell": [
+        2,
+        6
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        2,
+        6
+      ],
+      "to_cell": [
+        3,
+        6
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        3,
+        6
+      ],
+      "to_cell": [
+        4,
+        6
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        4,
+        6
+      ],
+      "to_cell": [
+        4,
+        7
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        3,
+        6
+      ],
+      "to_cell": [
+        2,
+        6
+      ]
+    },
+    {
       "cat_id": 1,
       "from_end_cell": [
         0,
-        5
-      ],
-      "to_cell": [
-        0,
         6
-      ]
-    },
-    {
-      "cat_id": 3,
-      "from_end_cell": [
-        1,
-        6
-      ],
-      "to_cell": [
-        1,
-        5
-      ]
-    },
-    {
-      "cat_id": 3,
-      "from_end_cell": [
-        1,
-        5
-      ],
-      "to_cell": [
-        2,
-        5
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        2
-      ],
-      "to_cell": [
-        2,
-        2
-      ]
-    },
-    {
-      "cat_id": 3,
-      "from_end_cell": [
-        2,
-        5
-      ],
-      "to_cell": [
-        3,
-        5
-      ]
-    },
-    {
-      "cat_id": 3,
-      "from_end_cell": [
-        1,
-        7
       ],
       "to_cell": [
         0,
@@ -582,14 +516,25 @@
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 3,
       "from_end_cell": [
-        3,
-        4
+        2,
+        6
       ],
       "to_cell": [
-        3,
+        2,
         5
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        0,
+        7
+      ],
+      "to_cell": [
+        1,
+        7
       ]
     },
     {
@@ -599,105 +544,677 @@
         5
       ],
       "to_cell": [
+        1,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        0
+      ],
+      "to_cell": [
         2,
+        0
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        1,
         4
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 1,
       "from_end_cell": [
-        3,
-        5
+        1,
+        7
       ],
       "to_cell": [
         2,
-        5
+        7
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 1,
       "from_end_cell": [
         2,
-        5
+        7
       ],
       "to_cell": [
-        1,
-        5
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        1,
-        5
-      ],
-      "to_cell": [
-        1,
+        2,
         6
       ]
     },
     {
       "cat_id": 2,
       "from_end_cell": [
-        1,
+        4,
+        5
+      ],
+      "to_cell": [
+        4,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
         6
       ],
       "to_cell": [
-        1,
-        7
+        3,
+        6
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 1,
       "from_end_cell": [
-        1,
+        0,
         7
       ],
       "to_cell": [
-        2,
-        7
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        2,
-        7
-      ],
-      "to_cell": [
-        3,
-        7
-      ]
-    },
-    {
-      "cat_id": 2,
-      "from_end_cell": [
-        3,
-        7
-      ],
-      "to_cell": [
-        3,
+        0,
         8
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        3,
+        6
+      ],
+      "to_cell": [
+        2,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        2,
+        6
+      ],
+      "to_cell": [
+        1,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        6
+      ],
+      "to_cell": [
+        0,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        6
+      ],
+      "to_cell": [
+        4,
+        5
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        5
+      ],
+      "to_cell": [
+        4,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        4
+      ],
+      "to_cell": [
+        5,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        5,
+        4
+      ],
+      "to_cell": [
+        6,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        6
+      ],
+      "to_cell": [
+        3,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        3,
+        6
+      ],
+      "to_cell": [
+        2,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        4
+      ],
+      "to_cell": [
+        4,
+        3
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        2,
+        7
+      ],
+      "to_cell": [
+        2,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        3
+      ],
+      "to_cell": [
+        4,
+        2
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        2,
+        6
+      ],
+      "to_cell": [
+        3,
+        6
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        2
+      ],
+      "to_cell": [
+        4,
+        1
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        3,
+        6
+      ],
+      "to_cell": [
+        4,
+        6
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        4
+      ],
+      "to_cell": [
+        0,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        5
+      ],
+      "to_cell": [
+        0,
+        6
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        6
+      ],
+      "to_cell": [
+        1,
+        6
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        6
+      ],
+      "to_cell": [
+        1,
+        7
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        7
+      ],
+      "to_cell": [
+        0,
+        7
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        1,
+        4
+      ],
+      "to_cell": [
+        1,
+        3
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        1,
+        3
+      ],
+      "to_cell": [
+        1,
+        2
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        1,
+        4
+      ],
+      "to_cell": [
+        1,
+        5
+      ]
+    },
+    {
+      "cat_id": 3,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        2,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        3
+      ],
+      "to_cell": [
+        1,
+        3
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        4,
+        5
+      ],
+      "to_cell": [
+        3,
+        5
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        3,
+        5
+      ],
+      "to_cell": [
+        2,
+        5
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        2,
+        5
+      ],
+      "to_cell": [
+        1,
+        5
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        1,
+        4
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        7
+      ],
+      "to_cell": [
+        0,
+        7
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        4
+      ],
+      "to_cell": [
+        1,
+        3
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        4,
+        6
+      ],
+      "to_cell": [
+        4,
+        5
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        4,
+        5
+      ],
+      "to_cell": [
+        4,
+        4
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        3
+      ],
+      "to_cell": [
+        1,
+        2
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        4,
+        4
+      ],
+      "to_cell": [
+        4,
+        3
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        2
+      ],
+      "to_cell": [
+        0,
+        2
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        4,
+        3
+      ],
+      "to_cell": [
+        4,
+        2
+      ]
+    },
+    {
+      "cat_id": 1,
+      "from_end_cell": [
+        4,
+        2
+      ],
+      "to_cell": [
+        4,
+        1
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        2,
+        5
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        2
+      ],
+      "to_cell": [
+        1,
+        1
+      ]
+    },
+    {
+      "cat_id": 2,
+      "from_end_cell": [
+        1,
+        1
+      ],
+      "to_cell": [
+        1,
+        0
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        0,
+        3
+      ],
+      "to_cell": [
+        1,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        3
+      ],
+      "to_cell": [
+        1,
+        4
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        6
+      ],
+      "to_cell": [
+        1,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        2,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        2,
+        5
+      ],
+      "to_cell": [
+        3,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        3,
+        5
+      ],
+      "to_cell": [
+        4,
+        5
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        4,
+        5
+      ],
+      "to_cell": [
+        4,
+        4
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        4,
+        4
+      ],
+      "to_cell": [
+        4,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        4,
+        3
+      ],
+      "to_cell": [
+        5,
+        3
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        5
+      ],
+      "to_cell": [
+        1,
+        4
+      ]
+    },
+    {
+      "cat_id": 0,
+      "from_end_cell": [
+        1,
+        4
+      ],
+      "to_cell": [
+        1,
+        3
       ]
     }
   ],
   "stats": {
-    "difficulty_score": 37,
+    "difficulty_score": 34,
     "early_clearing": [
-      3,
       1,
-      0,
+      2,
+      2,
       0
     ],
     "nested_cats": 3,
-    "nested_mode": "three_ratio_0.00",
+    "nested_mode": "three_ratio_1.00",
     "nested_ratio": 0.75,
-    "nested_three_cats": 0,
-    "nested_two_cats": 3,
+    "nested_three_cats": 3,
+    "nested_two_cats": 0,
     "nested_two_ratio": 0.75,
-    "obstacle_cells": 19,
-    "solution_length": 38,
-    "solver_moves": 38,
-    "solver_nodes": 70
+    "obstacle_cells": 26,
+    "solution_length": 79,
+    "solver_moves": 79,
+    "solver_nodes": 1542
   }
 }
