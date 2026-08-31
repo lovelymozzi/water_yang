@@ -15,8 +15,6 @@ extends RefCounted
 #      1번보다 **우선**한다. 배우지 않은 규칙이 튀어나오거나, 한 번 보고 지나가 못 배우는
 #      것이 난이도 리듬이 조금 흔들리는 것보다 나쁘다.
 
-const StageBatch := preload("res://scripts/stage_batch_generator.gd")
-
 # 기믹 키 → 표시 이름. 여기 있는 키만 게이트를 건다.
 # 중첩은 깊이별로 따로 가르친다 — 2중첩을 본 적 없는 판에 3중첩이 튀어나오면 규칙이 두 겹
 # 한꺼번에 들어온다. 순서는 이 사전 순서가 아니라 각 게이트 값이 정한다.
@@ -48,6 +46,7 @@ static func gimmicks_of(level: Dictionary) -> Dictionary:
 const PATTERNS := {
 	"alternate": {"name": "퐁당퐁당 (쉬움·어려움)", "steps": [0, 1]},
 	"six": {"name": "6주기 (쉬움·쉬움·어려움·쉬움·쉬움·매우어려움)", "steps": [0, 0, 1, 0, 0, 2]},
+	"warmup_six": {"name": "30레벨 평탄화 + 6주기", "steps": [0, 0, 1, 0, 0, 2], "warmup": 30},
 }
 const DEFAULT_PATTERN := "alternate"
 
@@ -65,8 +64,10 @@ static func pattern_steps(key: String) -> Array[int]:
 
 # levels 를 재배치한 **원본 인덱스 순서**를 돌려준다.
 # gates: {기믹키: 첫 등장 스테이지(1부터)}. 없는 키·1 이하는 제한 없음.
-# steps: 난이도 패턴 한 주기(위 PATTERNS). 자리 i 는 steps[i % steps.size()] 띠에서 뽑는다.
-static func arrange(levels: Array, gates: Dictionary, steps: Array[int] = [0, 1]) -> Array[int]:
+# steps: 난이도 패턴 한 주기(위 PATTERNS). warmup_stages 동안은 가장 쉬운 띠만 오름차순으로 채운다.
+static func arrange(
+	levels: Array, gates: Dictionary, steps: Array[int] = [0, 1], warmup_stages: int = 0
+) -> Array[int]:
 	var count: int = levels.size()
 	if steps.is_empty():
 		steps = [0, 1]
@@ -84,8 +85,8 @@ static func arrange(levels: Array, gates: Dictionary, steps: Array[int] = [0, 1]
 
 	# 점수 같으면 원래 순번으로 갈라 결과를 결정적으로 만든다.
 	by_score.sort_custom(func(a: int, b: int) -> bool:
-		var score_a: int = StageBatch.score_of(levels[a])
-		var score_b: int = StageBatch.score_of(levels[b])
+		var score_a: int = LevelSolver.stored_difficulty_score(levels[a].get("stats", {}))
+		var score_b: int = LevelSolver.stored_difficulty_score(levels[b].get("stats", {}))
 		return a < b if score_a == score_b else score_a < score_b
 	)
 
@@ -94,7 +95,7 @@ static func arrange(levels: Array, gates: Dictionary, steps: Array[int] = [0, 1]
 	var tiers: Array[int] = []
 	var band_count: Dictionary = {}
 	for position in count:
-		var tier: int = steps[position % steps.size()]
+		var tier: int = 0 if position < warmup_stages else steps[(position - warmup_stages) % steps.size()]
 		tiers.append(tier)
 		band_count[tier] = int(band_count.get(tier, 0)) + 1
 	var bands: Dictionary = {}

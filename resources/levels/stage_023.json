@@ -1,28 +1,121 @@
 {
-  "seed": 0,
-  "grid_size": [7, 9],
-  "holes": [
-    {"grid_pos": [2, 1], "color_id": 0, "ice_count": 0},
-    {"grid_pos": [2, 8], "color_id": 1, "ice_count": 0},
-    {"grid_pos": [4, 1], "color_id": 2, "ice_count": 0},
-    {"grid_pos": [4, 8], "color_id": 3, "ice_count": 0},
-    {"grid_pos": [0, 4], "color_id": 4, "ice_count": 0}
-  ],
-  "obstacles": [],
   "cats": [
     {
-      "body_cells": [[2, 3], [2, 4], [2, 5], [2, 6]],
-      "color_id": 0,
-      "nested_color_ids": [1]
+      "body_cells": [
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          4.0
+        ],
+        [
+          2.0,
+          5.0
+        ],
+        [
+          2.0,
+          6.0
+        ]
+      ],
+      "color_id": 0.0,
+      "nested_color_ids": [
+        1.0
+      ]
     },
     {
-      "body_cells": [[4, 3], [4, 4], [4, 5], [4, 6]],
-      "color_id": 2,
-      "nested_color_ids": [3, 4]
+      "body_cells": [
+        [
+          4.0,
+          3.0
+        ],
+        [
+          4.0,
+          4.0
+        ],
+        [
+          4.0,
+          5.0
+        ],
+        [
+          4.0,
+          6.0
+        ]
+      ],
+      "color_id": 2.0,
+      "nested_color_ids": [
+        3.0,
+        4.0
+      ]
     }
   ],
-  "solution": [],
+  "dependency": {
+    "chain": [
+      0.0,
+      1.0
+    ],
+    "chain_depth": 1.0,
+    "edges": []
+  },
   "escape_order": [],
-  "dependency": {"edges": [], "chain_depth": 1, "chain": [0, 1]},
-  "stats": {}
+  "grid_size": [
+    7.0,
+    9.0
+  ],
+  "holes": [
+    {
+      "color_id": 0.0,
+      "grid_pos": [
+        2.0,
+        1.0
+      ],
+      "ice_count": 0.0
+    },
+    {
+      "color_id": 1.0,
+      "grid_pos": [
+        2.0,
+        8.0
+      ],
+      "ice_count": 0.0
+    },
+    {
+      "color_id": 2.0,
+      "grid_pos": [
+        4.0,
+        1.0
+      ],
+      "ice_count": 0.0
+    },
+    {
+      "color_id": 3.0,
+      "grid_pos": [
+        4.0,
+        8.0
+      ],
+      "ice_count": 0.0
+    },
+    {
+      "color_id": 4.0,
+      "grid_pos": [
+        0.0,
+        4.0
+      ],
+      "ice_count": 0.0
+    }
+  ],
+  "obstacles": [],
+  "seed": 0.0,
+  "solution": [],
+  "stats": {
+    "difficulty_score": 0,
+    "early_clearing": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  }
 }

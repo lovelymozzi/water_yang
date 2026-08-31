@@ -639,14 +639,14 @@
             },
             "depth": {
               "size": 4,
-              "color": "#206603"
+              "color": "rgba(32,102,3,0)"
             },
             "shadow": {
               "x": 0,
               "y": 2,
               "blur": 4,
-              "color": "#000000",
-              "opacity": 60
+              "color": "rgba(0,0,0,0)",
+              "opacity": 0
             }
           }
         }
@@ -702,14 +702,14 @@
             },
             "depth": {
               "size": 0,
-              "color": "#000000"
+              "color": "rgba(0,0,0,0)"
             },
             "shadow": {
               "x": 0,
-              "y": 1,
-              "blur": 2,
+              "y": 0,
+              "blur": 0,
               "color": "#000000",
-              "opacity": 50
+              "opacity": 0
             }
           }
         }
@@ -1101,7 +1101,7 @@
       "displayName": "Rays Burst",
       "x": 113,
       "y": 231,
-      "zIndex": 20,
+      "zIndex": 19,
       "visual": {
         "model": {
           "shape": {
@@ -1205,7 +1205,7 @@
       "x": 153,
       "y": 269,
       "scale": 0.23985463355542103,
-      "zIndex": 21,
+      "zIndex": 20,
       "visual": {
         "exportPath": "item1.png",
         "width": 254,
@@ -1218,7 +1218,7 @@
       "displayName": "Gold Glow",
       "x": 107,
       "y": 221,
-      "zIndex": 23,
+      "zIndex": 21,
       "visual": {
         "model": {
           "shape": {
@@ -1302,7 +1302,7 @@
       "displayName": "Rays Burst",
       "x": 119,
       "y": 234,
-      "zIndex": 24,
+      "zIndex": 22,
       "visual": {
         "model": {
           "shape": {
@@ -1406,11 +1406,53 @@
       "x": 156,
       "y": 270,
       "scale": 0.2638221153846154,
-      "zIndex": 25,
+      "zIndex": 23,
       "visual": {
         "exportPath": "item2.png",
         "width": 256,
         "height": 258
+      }
+    },
+    {
+      "stableId": "arrow-png-2549",
+      "layerType": "image",
+      "displayName": "arrow.png",
+      "x": 139,
+      "y": 361,
+      "zIndex": 24,
+      "visible": false,
+      "visual": {
+        "exportPath": "arrow.png",
+        "width": 116,
+        "height": 130
+      }
+    },
+    {
+      "stableId": "arrow-png-2550",
+      "layerType": "image",
+      "displayName": "arrow.png",
+      "x": 139,
+      "y": 361,
+      "zIndex": 25,
+      "visible": false,
+      "visual": {
+        "exportPath": "arrow.png",
+        "width": 116,
+        "height": 130
+      }
+    },
+    {
+      "stableId": "arrow-png-2551",
+      "layerType": "image",
+      "displayName": "arrow.png",
+      "x": 139,
+      "y": 361,
+      "zIndex": 26,
+      "visible": false,
+      "visual": {
+        "exportPath": "arrow.png",
+        "width": 116,
+        "height": 130
       }
     }
   ],

@@ -1,23 +1,13 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://308g6ad1fhot"]
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://308g6ad1fhot"]
 
 [ext_resource type="Shader" uid="uid://c7vpql1xosncg" path="res://scripts/cat_toon.gdshader" id="1_toon_shader"]
 [ext_resource type="Texture2D" uid="uid://dq0pdjrylk65r" path="res://water_yang/cat1.jpeg" id="2_cat_texture"]
 [ext_resource type="Texture2D" uid="uid://0py6fh251laq" path="res://water_yang/cat1_mask.jpg" id="3_eye_mask"]
 [ext_resource type="Texture2D" uid="uid://bseq0y1swpxu2" path="res://water_yang/Cat_Line.png" id="4_line_art"]
-[ext_resource type="Shader" uid="uid://cjvjaxdpqrir" path="res://scripts/cat_hole_outline.gdshader" id="5_outline_shader"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
-render_priority = 0
-shader = ExtResource("5_outline_shader")
-shader_parameter/outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
-shader_parameter/outline_width = 0.006
-shader_parameter/top_outline_scale = 0.78
-shader_parameter/bottom_outline_scale = 0.84
 
 [resource]
 resource_name = "CatHoleFlower"
 render_priority = 0
-next_pass = SubResource("ShaderMaterial_outline")
 shader = ExtResource("1_toon_shader")
 shader_parameter/albedo_tex = ExtResource("2_cat_texture")
 shader_parameter/line_art_tex = ExtResource("4_line_art")

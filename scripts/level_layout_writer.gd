@@ -243,7 +243,9 @@ static func _unpack_cell(value: Array) -> Vector2i:
 static func to_puzzle_state(level: Dictionary) -> PuzzleState:
 	var state := PuzzleState.create(level["grid_size"])
 	for entry in level["holes"]:
-		state.add_hole(entry["grid_pos"], int(entry["color_id"]))
+		var cell: Vector2i = entry["grid_pos"]
+		state.add_hole(cell, int(entry["color_id"]))
+		state.add_ice(cell, int(entry.get("ice_count", 0)))
 	for entry in level["obstacles"]:
 		for cell in PuzzleState.cells_of_block(entry):
 			state.add_obstacle(cell)

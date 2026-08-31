@@ -475,7 +475,12 @@ func early_escape_costs(
 ) -> Array[int]:
 	var costs: Array[int] = []
 	var work: PuzzleState = state.clone()
-	for index in (state.cats.size() if escapes <= 0 else escapes):
+	var escape_count: int = escapes
+	if escape_count <= 0:
+		escape_count = state.cats.size()
+		for cat_id in state.cat_ids():
+			escape_count += state.nested_colors_of(int(cat_id)).size()
+	for index in escape_count:
 		if work.cats.is_empty():
 			break
 		# **뒤로 갈수록 상한을 함께 줄인다.** 상한이 곧 0-1 BFS 의 깊이라 비용이 상한에
@@ -520,6 +525,42 @@ static func difficulty_score(costs: Array) -> int:
 		total += float(cost) * weight
 		weight *= DIFFICULTY_DECAY
 	return int(round(total * 10.0))
+
+
+static func stored_difficulty_score(stats: Dictionary) -> int:
+	return int(stats["difficulty_score"]) if stats.has("difficulty_score") \
+		else difficulty_score(stats.get("early_clearing", []))
+
+
+# 탈출 순서 외에도 시작 시점의 여유 공간과 긴 몸 제약을 같은 기준으로 보정한다.
+static func difficulty_breakdown(state: PuzzleState, costs: Array) -> Dictionary:
+	var base_score: int = difficulty_score(costs)
+	var board_cells: int = state.grid_size.x * state.grid_size.y
+	var open_cells: int = 0
+	for y in state.grid_size.y:
+		for x in state.grid_size.x:
+			if state.is_free_cell(Vector2i(x, y)):
+				open_cells += 1
+	var long_body_excess: int = 0
+	var max_body_length: int = 0
+	for cat_id in state.cat_ids():
+		var length: int = state.body_of(int(cat_id)).size()
+		max_body_length = maxi(max_body_length, length)
+		long_body_excess += maxi(length - 5, 0)
+	var open_ratio: float = float(open_cells) / float(board_cells)
+	var space_score: int = roundi(clampf((0.20 - open_ratio) / 0.20, 0.0, 1.0) * 15.0)
+	var body_score: int = mini(long_body_excess, 15)
+	return {
+		"base_score": base_score,
+		"open_cells": open_cells,
+		"board_cells": board_cells,
+		"open_ratio": open_ratio,
+		"max_body_length": max_body_length,
+		"long_body_excess": long_body_excess,
+		"space_score": space_score,
+		"body_score": body_score,
+		"difficulty_score": -1 if base_score < 0 else base_score + space_score + body_score,
+	}
 
 
 # ---------------------------------------------------------------- 데드락 샘플링

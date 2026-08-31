@@ -117,7 +117,7 @@ const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
 const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
 const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
 const ITEM_MOVE_HOLE_POP_SFX = './sound/bubble_pop.mp3';
-const CAT_HOLE_POP_OVERLAY_SFX = './sound/time_out2.mp3';
+const CAT_HOLE_POP_OVERLAY_SFX = './sound/Time_out2.mp3';
 const CAT_MOVE_SFX = './sound/cat_move.mp3';
 const ICE_BREAK_SFX = './sound/ice_breake.mp3';
 const ICE_FREEZING_SFX = './sound/ice-freezing.mp3';
@@ -131,6 +131,12 @@ const LOBBY_REWARD_TRAIL_SFX = './sound/lobby_reward_trail.mp3';
 const STAGE_CLEAR2_DELAY_MS = 750;
 const LOBBY_BGM = './sound/Lobby_Bgm.mp3';
 const INGAME_BGM = './sound/Ingame_BGM.mp3';
+const AUDIO_ASSETS = [
+  BUTTON_CLICK_SFX, CAT_MOUTH_SFX, CAT_HOLE_ABSORB_SFX, ITEM_MOVE_HOLE_POP_SFX,
+  CAT_HOLE_POP_OVERLAY_SFX, CAT_MOVE_SFX, ICE_BREAK_SFX, ICE_FREEZING_SFX,
+  DIGGING_SFX, STAGE_CLEAR1_SFX, STAGE_CLEAR2_SFX, TIME_OUT_SFX, POPUP_OPEN_SFX,
+  LOBBY_REWARD_SCALE_SFX, LOBBY_REWARD_TRAIL_SFX, LOBBY_BGM, INGAME_BGM,
+];
 const STAGE_TIME_LIMIT_SECONDS = 60;
 const TIMEOUT_CONTINUE_SECONDS = 20;
 const SPLASH_LOAD_FILL_DURATION_MS = 700;
@@ -281,7 +287,7 @@ async function renderLeaderboard(renderer) {
   });
 }
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":20777172,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":18464588,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -305,37 +311,45 @@ const splashCacheablePath = /\.(pck|json|png|jpe?g|webp|mp3|ogg|wav|woff2)$/i;
 const uiPublishPath = new URL(UI_DIR, location.href).pathname;
 const godotEnginePath = new URL(GODOT_ENGINE_URL, location.href).pathname;
 const godotWasmPath = new URL(`${GODOT_CONFIG.executable}.wasm`, location.href).pathname;
+const godotWasmBrUrl = new URL(`${GODOT_CONFIG.executable}.wasm.br`, location.href);
 const godotPackPath = new URL(GODOT_CONFIG.mainPack || `${GODOT_CONFIG.executable}.pck`, location.href).pathname;
 if (splashCache) {
   await navigator.storage?.persist?.();
-  window.fetch = async (input, init) => {
-    const request = new Request(input, init);
-    const url = new URL(request.url);
-    if (url.pathname === godotEnginePath || url.pathname === godotWasmPath || url.pathname === godotPackPath) {
-      return nativeFetch(new Request(request, { cache: 'reload' }));
-    }
-    if (
-      request.method !== 'GET'
-      || request.headers.has('range')
-      || url.origin !== location.origin
-      || url.pathname.startsWith(uiPublishPath)
-      || url.pathname.includes('/src/assets/')
-      || !splashCacheablePath.test(url.pathname)
-    ) {
-      return nativeFetch(input, init);
-    }
-    const cached = await splashCache.match(request);
-    if (cached) return cached;
-    const response = await nativeFetch(request);
-    if (response.ok) await splashCache.put(request, response.clone());
-    return response;
-  };
-} else {
+}
+window.fetch = async (input, init) => {
+  const request = new Request(input, init);
+  const url = new URL(request.url);
+  if (url.pathname === godotWasmPath && request.method === 'GET' && !request.headers.has('range')) {
+    return nativeFetch(godotWasmBrUrl, { cache: 'reload' });
+  }
+  if (url.pathname === godotEnginePath || url.pathname === godotPackPath) {
+    return nativeFetch(new Request(request, { cache: 'reload' }));
+  }
+  if (
+    !splashCache
+    || request.method !== 'GET'
+    || request.headers.has('range')
+    || url.origin !== location.origin
+    || url.pathname.startsWith(uiPublishPath)
+    || url.pathname.includes('/src/assets/')
+    || !splashCacheablePath.test(url.pathname)
+  ) {
+    return nativeFetch(input, init);
+  }
+  const cached = await splashCache.match(request);
+  if (cached) return cached;
+  const response = await nativeFetch(request);
+  if (response.ok) await splashCache.put(request, response.clone());
+  return response;
+};
+if (!splashCache) {
   console.warn('[Splash cache] Cache API를 사용할 수 없어 splash 로딩 데이터를 기기에 저장하지 못합니다.');
 }
 
 const CLICK_EVENT_STABLE_IDS = new Set();
 const UI_FONT_SPECS = new Set();
+const NAVIGATION_TAB_SCENES = ['home_bottom', 'Lobby', 'pop_BuyCoins', 'Ranking'];
+const navigationTabImages = [];
 const uiRenderStylesReady = Promise.all([
   ['scene-renderer-editor-fonts', `${UI_DIR}vendor/fonts/fonts.css`],
   ['ui-css-effect-provider-animate-css', `${UI_DIR}vendor/animate.min.css`],
@@ -353,8 +367,10 @@ const uiRenderStylesReady = Promise.all([
   }
 })));
 const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
+const sceneContracts = new Map();
 await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
   const sceneContract = await (await fetch(UI_DIR + contract)).json();
+  sceneContracts.set(sceneContract.sceneName, sceneContract);
   (sceneContract.layers || []).forEach(({ stableId, events = [], texts = [], widget = null }) => {
     if (events.some(({ trigger }) => trigger === 'click')) CLICK_EVENT_STABLE_IDS.add(stableId);
     if (widget) CLICK_EVENT_STABLE_IDS.add(stableId);
@@ -902,6 +918,13 @@ syncUnlimitedHearts();
 
 flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) => {
   const enterWork = (async () => {
+  const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
+    : sceneName === INGAME_UI_SCENE ? 'main' : null;
+  let gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
+  let parking = document.getElementById('godot-bridge-parking');
+  if (!popup && sceneUuid !== SPLASH_UI_SCENE_UUID && !godotScene && gameHost && parking) {
+    parking.appendChild(gameHost);
+  }
   if (!popup && sceneUuid === LOBBY_NAV_SCENE_UUID) {
     document.body.classList.add('instant-lobby-home-return');
     clearTimeout(instantLobbyHomeReturnTimeoutId);
@@ -1215,6 +1238,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneUuid === SPLASH_UI_SCENE_UUID) {
     splashRenderer = renderer;
     renderer.getElementByName('GameField')?.style.setProperty('visibility', 'hidden');
+    flow.update({ loadingMessage: '파일 다운로드 중입니다...' });
     await uiRenderStylesReady;
     if (splashCache) {
       await Promise.all([
@@ -1226,16 +1250,38 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     if (document.fonts?.load && UI_FONT_SPECS.size) {
       await Promise.all([...UI_FONT_SPECS].map(spec => document.fonts.load(spec).catch(() => null)));
     }
+    const navigationTabPreload = Promise.all([...new Set(
+      NAVIGATION_TAB_SCENES.flatMap(sceneName => {
+        const contract = sceneContracts.get(sceneName);
+        if (!contract) throw new Error(`[Splash preload] 네비게이션 탭 contract 누락: ${sceneName}`);
+        return [...JSON.stringify(contract).matchAll(/"(?:imagePath|exportPath|iconPath|iconActivePath)"\s*:\s*"([^"]+\.(?:png|jpe?g|webp|svg))"/gi)].map(([, path]) => path);
+      }),
+    )].map(path => new Promise((resolve, reject) => {
+      const image = new Image();
+      navigationTabImages.push(image);
+      image.onload = () => image.decode ? image.decode().then(resolve, reject) : resolve();
+      image.onerror = () => reject(new Error(`[Splash preload] 네비게이션 에셋 로드 실패: ${path}`));
+      image.src = ASSET_BASE + path;
+    })));
+    const audioPreload = Promise.all(AUDIO_ASSETS.map(async path => {
+      const response = await fetch(path);
+      if (!response.ok) throw new Error(`[Splash preload] 오디오 에셋 로드 실패(${response.status}): ${path}`);
+      await response.arrayBuffer();
+    }));
     const game = new GameSession({ renderer, initTimeoutMs: 30000 });
     activeGame = game;
-    await game.start(godotCartridge, {
-      stage: progress.getCurrentStage(),
-      config: { godotScene: 'lobby', preloadGodotScenes: ['main'] },
-      onProgress: handleGodotSfx,
-      onHud: ({ timeLeft }) => flow.update({ stage: { timer: timeLeft } }),
-      onEnd: handleMainGameEnd,
-      onError: (error) => console.error('[Godot preload] session error', error),
-    });
+    await Promise.all([
+      navigationTabPreload,
+      audioPreload,
+      game.start(godotCartridge, {
+        stage: progress.getCurrentStage(),
+        config: { godotScene: 'lobby', preloadGodotScenes: ['main'] },
+        onProgress: handleGodotSfx,
+        onHud: ({ timeLeft }) => flow.update({ stage: { timer: timeLeft } }),
+        onEnd: handleMainGameEnd,
+        onError: (error) => console.error('[Godot preload] session error', error),
+      }),
+    ]);
     if (activeGame !== game || game.state !== 'ready') {
       throw new Error('[Godot preload] Lobby/Main 준비에 실패했습니다.');
     }
@@ -1256,10 +1302,6 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     flow.update({ loadingMessage: 'Tap to screen' });
     return;
   }
-  const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
-    : sceneName === INGAME_UI_SCENE ? 'main' : null;
-  const gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
-  const parking = document.getElementById('godot-bridge-parking');
   if (!godotScene) {
     if (!popup && gameHost && parking) parking.appendChild(gameHost);
     return;
@@ -1268,6 +1310,16 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (gameHost && gameField) {
     gameHost.style.cssText = 'position:absolute;inset:0;overflow:hidden;display:block;';
     gameField.appendChild(gameHost);
+    requestAnimationFrame(() => console.info('[Godot mount]', JSON.stringify({
+      sceneName,
+      scene: godotScene,
+      canvasPixels: [gameHost.firstElementChild?.width, gameHost.firstElementChild?.height],
+      host: gameHost.getBoundingClientRect().toJSON(),
+      gameField: gameField.getBoundingClientRect().toJSON(),
+      parent: gameHost.parentElement?.getAttribute('data-stable-id'),
+    })));
+  } else {
+    console.error('[Godot mount] 대상 누락', { sceneName, scene: godotScene, gameHost: !!gameHost, gameField: !!gameField });
   }
   if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
   if (activeGame?.state === 'running') activeGame.pause('scene-switch');

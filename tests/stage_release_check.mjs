@@ -16,5 +16,9 @@ assert.match(shell, /const savedGame = await loadGame\(\);\s+restoreGameState\(s
 assert.match(shell, /window\.HubGame\?\.save\) await window\.HubGame\.save\(HUB_SAVE_KEY, snapshot\)/);
 assert.match(shell, /window\.HubGame\?\.submitScore\) await window\.HubGame\.submitScore\(HUB_LEADERBOARD_KEY, value\)/);
 assert.match(shell, /window\.HubGame\?\.getLeaderboard\) \{\s+const remote = await window\.HubGame\.getLeaderboard\(HUB_LEADERBOARD_KEY, 10\)/);
+assert.match(shell, /const LEADERBOARD_REFRESH_MS = 10 \* 60 \* 1000/);
+assert.match(shell, /if \(!renderer && \(!renderLeaderboard\.cache \|\| Date\.now\(\) - renderLeaderboard\.loadedAt >= LEADERBOARD_REFRESH_MS\)\)/);
+assert.match(shell, /renderLeaderboard\(\),\s+game\.start\(godotCartridge/);
+assert.match(shell, /setInterval\(\(\) => \{ void renderLeaderboard\(\); \}, LEADERBOARD_REFRESH_MS\)/);
 assert.match(shell, /await submitStageLeaderboard\(currentMapStage\);/);
 assert.match(mainScene, /if not UiBridge\.is_hosted:\s+_setup_stage_label\(\)\s+_setup_replay_button\(\)/);

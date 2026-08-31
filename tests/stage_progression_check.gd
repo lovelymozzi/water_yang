@@ -1,11 +1,10 @@
-extends SceneTree
+extends Node
 
 # 스테이지 진행 검사. main_scene 을 띄워 stage_001.json 로드가 실제 보드에 반영되는지,
 # 스테이지 파일 목록이 순번대로 잡히는지 본다.
-#   /Applications/Godot.app/Contents/MacOS/Godot --headless --script tests/stage_progression_check.gd
+#   /Applications/Godot.app/Contents/MacOS/Godot --headless res://tests/stage_progression_check.tscn
 #
-# main_scene 은 `--script` 실행에서 스테이지 모드를 스스로 끄므로(하네스 보호),
-# 여기서는 내부 함수를 직접 불러 로드 경로만 검증한다.
+# UiBridge 오토로드를 쓰는 main_scene 이므로 --script 대신 씬으로 실행한다.
 
 var _main: Node
 var _frames: int = 0
@@ -13,20 +12,19 @@ var _failures: Array[String] = []
 var _stage_loaded: bool = false
 
 
-func _initialize() -> void:
+func _ready() -> void:
 	var scene: PackedScene = load("res://scenes/main_scene.tscn")
 	_main = scene.instantiate()
-	root.add_child(_main)
+	add_child(_main)
 
 
-func _process(_delta: float) -> bool:
+func _process(_delta: float) -> void:
 	_frames += 1
 	if _frames == 20:
 		_run_checks()
 	if _frames == 40:
 		_report()
-		return true
-	return false
+		set_process(false)
 
 
 func _run_checks() -> void:
@@ -70,7 +68,7 @@ func _run_checks() -> void:
 		_expect(_main._stage_timer_running, "첫 보드 조작 뒤 타이머가 시작되지 않았다")
 	_main._on_host_force_quit("")
 	var paths: PackedStringArray = _main._list_stage_files()
-	_expect(paths.size() == 187, "스테이지 파일 수가 187개가 아니다: %d" % paths.size())
+	_expect(paths.size() == 237, "스테이지 파일 수가 237개가 아니다: %d" % paths.size())
 	for index in paths.size():
 		_expect(
 			paths[index].ends_with("stage_%03d.json" % (index + 1)),
@@ -107,6 +105,11 @@ func _run_checks() -> void:
 		(_main._stage_label as Label).visible,
 		"스테이지 라벨이 보이지 않는다"
 	)
+	_expect(is_equal_approx(_main._stage_time_left, 60.0), "쉬움 스테이지의 제한 시간이 1분이 아니다")
+	_main._load_stage(1)
+	_expect(is_equal_approx(_main._stage_time_left, 150.0), "중간 스테이지의 제한 시간이 2분 30초가 아니다")
+	_main._load_stage(235)
+	_expect(is_equal_approx(_main._stage_time_left, 300.0), "어려움 스테이지의 제한 시간이 5분이 아니다")
 
 
 func _expect(condition: bool, message: String) -> void:
@@ -120,4 +123,4 @@ func _report() -> void:
 	else:
 		for failure in _failures:
 			printerr("[스테이지 검사] 실패: " + failure)
-	quit(0 if _failures.is_empty() else 1)
+	get_tree().quit(0 if _failures.is_empty() else 1)

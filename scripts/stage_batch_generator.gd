@@ -24,7 +24,7 @@ extends SceneTree
 #                     "나머지가 전원 시작 자리에 얼어 있다"는 가정에서 재므로 실제 난이도와
 #                     상관이 없다(실측 상관 0.24). 난이도는 score 로 본다.
 #   score=0           난이도 점수 하한 (범위 가능, 스테이지 램프). 0 = 검사 안 함.
-#                     `LevelSolver.difficulty_score()` = 탈출별 드래그 비용의 감쇠 가중합 ×10.
+#                     `LevelSolver.difficulty_breakdown()` = 탈출별 드래그 비용 + 공간 압박 + 긴 몸 제약.
 #                     참고로 기존 55스테이지가 88, 가장 어려웠던 36스테이지가 121 이다.
 #   diff_limit=8      난이도 채점용 탈출 비용 상한. 낮추면 빠르지만 어려운 판끼리 구분이 안 된다.
 #   len_min=3         몸 길이 하한
@@ -174,10 +174,7 @@ func _initialize() -> void:
 
 # 실측 난이도 점수. 예전 파일에는 없는 값이라 그때는 탈출 비용에서 다시 잰다.
 static func score_of(level: Dictionary) -> int:
-	var stats: Dictionary = level.get("stats", {})
-	if stats.has("difficulty_score"):
-		return int(stats["difficulty_score"])
-	return LevelSolver.difficulty_score(stats.get("early_clearing", []))
+	return LevelSolver.stored_difficulty_score(level.get("stats", {}))
 
 
 # 스테이지 순번에 따라 [a..b] 를 선형으로 램프한다. 1스테이지가 a, 마지막이 b.

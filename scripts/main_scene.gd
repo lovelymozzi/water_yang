@@ -16,6 +16,10 @@ const STAGE_LEVELS_DIR := "res://resources/levels"
 const DEV_STAGE_HANDOFF_PATH := "user://dev_start_stage.txt"
 const STAGE_ADVANCE_DELAY_SECONDS := 1.4
 const DEFAULT_STAGE_TIME_SECONDS := 60.0
+const EASY_DIFFICULTY_SCORE_MAX := 35
+const MEDIUM_DIFFICULTY_SCORE_MAX := 70
+const MEDIUM_STAGE_TIME_SECONDS := 150.0
+const HARD_STAGE_TIME_SECONDS := 300.0
 const TIMEOUT_WARNING_SECONDS := 10.0
 const ICE_DISSOLVE_PEAK := 0.522
 
@@ -192,6 +196,7 @@ func _on_level_cleared() -> void:
 	_stage_timer_running = false
 	if UiBridge.is_hosted:
 		UiBridge.post_progress({"outcome": "clear", "score": 0})
+		return
 	var has_next: bool = _stage_index >= 0 and _stage_index + 1 < _stage_paths.size()
 	if _stage_index < 0:
 		clear_label.text = "LEVEL CLEAR!"
@@ -466,6 +471,10 @@ func _load_stage(index: int) -> void:
 		return
 	_stage_index = index
 	LevelLayoutWriter.apply_to_manager(level_manager, level)
+	var difficulty_score: int = int((level.get("stats", {}) as Dictionary).get("difficulty_score", 0))
+	_stage_time_left = DEFAULT_STAGE_TIME_SECONDS if difficulty_score <= EASY_DIFFICULTY_SCORE_MAX else MEDIUM_STAGE_TIME_SECONDS if difficulty_score <= MEDIUM_DIFFICULTY_SCORE_MAX else HARD_STAGE_TIME_SECONDS
+	_last_reported_seconds = -1
+	UiBridge.post_hud({"timeLeft": _format_stage_timer(ceili(_stage_time_left))})
 	_stage_solution = level.get("solution", [])
 	clear_label.visible = false
 	if _stage_label != null:

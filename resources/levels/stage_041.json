@@ -3,521 +3,418 @@
     {
       "body_cells": [
         [
-          2,
-          5
+          0.0,
+          2.0
         ],
         [
-          2,
-          4
+          1.0,
+          2.0
         ],
         [
-          2,
-          3
+          1.0,
+          3.0
         ],
         [
-          2,
-          2
+          1.0,
+          4.0
+        ],
+        [
+          2.0,
+          4.0
         ]
       ],
-      "color_id": 0,
+      "color_id": 0.0,
       "nested_color_ids": [
-        3,
-        4
+        4.0,
+        5.0
       ]
     },
     {
       "body_cells": [
         [
-          1,
-          0
+          1.0,
+          5.0
         ],
         [
-          1,
-          1
+          1.0,
+          6.0
         ],
         [
-          1,
-          2
-        ],
-        [
-          1,
-          3
-        ],
-        [
-          1,
-          4
-        ],
-        [
-          1,
-          5
+          2.0,
+          6.0
         ]
       ],
-      "color_id": 1
+      "color_id": 1.0
     },
     {
       "body_cells": [
         [
-          4,
-          7
+          0.0,
+          4.0
         ],
         [
-          3,
-          7
+          0.0,
+          5.0
         ],
         [
-          2,
-          7
-        ],
-        [
-          2,
-          6
-        ],
-        [
-          1,
-          6
+          0.0,
+          6.0
         ]
       ],
-      "color_id": 2,
-      "nested_color_ids": [
-        5
-      ]
+      "color_id": 2.0
+    },
+    {
+      "body_cells": [
+        [
+          4.0,
+          2.0
+        ],
+        [
+          4.0,
+          3.0
+        ],
+        [
+          4.0,
+          4.0
+        ],
+        [
+          3.0,
+          4.0
+        ]
+      ],
+      "color_id": 3.0
     }
   ],
   "dependency": {
     "chain": [
-      0,
-      2
+      1.0,
+      0.0
     ],
-    "chain_depth": 2,
+    "chain_depth": 2.0,
     "edges": [
       [
-        0,
-        2
+        1.0,
+        0.0
+      ],
+      [
+        3.0,
+        0.0
       ]
     ]
   },
   "escape_order": [
-    2,
-    2,
-    0,
-    0,
-    0,
-    1
+    0.0,
+    0.0,
+    3.0,
+    0.0,
+    1.0,
+    2.0
   ],
   "grid_size": [
-    6,
-    9
+    5.0,
+    7.0
   ],
   "holes": [
     {
-      "color_id": 0,
+      "color_id": 0.0,
       "grid_pos": [
-        3,
-        8
+        2.0,
+        1.0
       ],
-      "ice_count": 0
+      "ice_count": 0.0
     },
     {
-      "color_id": 1,
+      "color_id": 1.0,
       "grid_pos": [
-        5,
-        8
+        2.0,
+        3.0
       ],
-      "ice_count": 0
+      "ice_count": 0.0
     },
     {
-      "color_id": 2,
+      "color_id": 2.0,
       "grid_pos": [
-        3,
-        0
+        2.0,
+        5.0
       ],
-      "ice_count": 0
+      "ice_count": 5.0
     },
     {
-      "color_id": 3,
+      "color_id": 3.0,
       "grid_pos": [
-        3,
-        2
+        0.0,
+        0.0
       ],
-      "ice_count": 0
+      "ice_count": 0.0
     },
     {
-      "color_id": 4,
+      "color_id": 4.0,
       "grid_pos": [
-        5,
-        4
+        0.0,
+        3.0
       ],
-      "ice_count": 0
+      "ice_count": 1.0
     },
     {
-      "color_id": 5,
+      "color_id": 5.0,
       "grid_pos": [
-        5,
-        2
+        4.0,
+        1.0
       ],
-      "ice_count": 0
+      "ice_count": 3.0
     }
   ],
   "obstacles": [
     {
       "block_size": [
-        1,
-        1
+        1.0,
+        2.0
       ],
       "grid_pos": [
-        4,
-        2
+        3.0,
+        0.0
       ]
     },
     {
       "block_size": [
-        1,
-        1
+        1.0,
+        1.0
       ],
       "grid_pos": [
-        4,
-        8
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "block_size": [
+        1.0,
+        1.0
+      ],
+      "grid_pos": [
+        3.0,
+        5.0
+      ]
+    },
+    {
+      "block_size": [
+        1.0,
+        1.0
+      ],
+      "grid_pos": [
+        4.0,
+        6.0
       ]
     }
   ],
-  "seed": 7360479,
+  "seed": 41968283.0,
   "solution": [
     {
-      "cat_id": 2,
+      "cat_id": 3.0,
       "from_end_cell": [
-        1,
-        6
+        4.0,
+        2.0
       ],
       "to_cell": [
-        0,
-        6
+        3.0,
+        2.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 3.0,
       "from_end_cell": [
-        3,
-        7
+        3.0,
+        2.0
       ],
       "to_cell": [
-        3,
-        6
+        2.0,
+        2.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 0.0,
       "from_end_cell": [
-        3,
-        6
+        2.0,
+        4.0
       ],
       "to_cell": [
-        3,
-        5
+        3.0,
+        4.0
       ]
     },
     {
-      "cat_id": 1,
+      "cat_id": 0.0,
       "from_end_cell": [
-        1,
-        5
+        1.0,
+        2.0
       ],
       "to_cell": [
-        1,
-        6
+        1.0,
+        1.0
       ]
     },
     {
-      "cat_id": 1,
+      "cat_id": 3.0,
       "from_end_cell": [
-        1,
-        6
+        2.0,
+        2.0
       ],
       "to_cell": [
-        1,
-        7
+        2.0,
+        1.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 3.0,
       "from_end_cell": [
-        3,
-        5
+        2.0,
+        1.0
       ],
       "to_cell": [
-        3,
-        4
+        2.0,
+        0.0
       ]
     },
     {
-      "cat_id": 1,
+      "cat_id": 0.0,
       "from_end_cell": [
-        1,
-        7
+        2.0,
+        4.0
       ],
       "to_cell": [
-        1,
-        8
+        3.0,
+        4.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 0.0,
       "from_end_cell": [
-        3,
-        4
+        1.0,
+        2.0
       ],
       "to_cell": [
-        3,
-        3
+        0.0,
+        2.0
       ]
     },
     {
-      "cat_id": 1,
+      "cat_id": 0.0,
       "from_end_cell": [
-        1,
-        8
+        2.0,
+        4.0
       ],
       "to_cell": [
-        2,
-        8
+        3.0,
+        4.0
       ]
     },
     {
-      "cat_id": 0,
+      "cat_id": 0.0,
       "from_end_cell": [
-        2,
-        5
+        3.0,
+        4.0
       ],
       "to_cell": [
-        2,
-        6
+        4.0,
+        4.0
       ]
     },
     {
-      "cat_id": 0,
+      "cat_id": 2.0,
       "from_end_cell": [
-        2,
-        6
+        0.0,
+        4.0
       ],
       "to_cell": [
-        2,
-        7
+        0.0,
+        3.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 0.0,
       "from_end_cell": [
-        3,
-        3
+        4.0,
+        4.0
       ],
       "to_cell": [
-        2,
-        3
+        4.0,
+        3.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 3.0,
       "from_end_cell": [
-        2,
-        3
+        2.0,
+        0.0
       ],
       "to_cell": [
-        2,
-        2
+        1.0,
+        0.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 0.0,
       "from_end_cell": [
-        2,
-        2
+        4.0,
+        3.0
       ],
       "to_cell": [
-        2,
-        1
+        4.0,
+        2.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 1.0,
       "from_end_cell": [
-        2,
-        1
+        1.0,
+        5.0
       ],
       "to_cell": [
-        3,
-        1
+        1.0,
+        4.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 1.0,
       "from_end_cell": [
-        3,
-        3
+        1.0,
+        4.0
       ],
       "to_cell": [
-        4,
-        3
+        1.0,
+        3.0
       ]
     },
     {
-      "cat_id": 2,
+      "cat_id": 2.0,
       "from_end_cell": [
-        4,
-        3
+        0.0,
+        5.0
       ],
       "to_cell": [
-        5,
-        3
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        2,
-        4
-      ],
-      "to_cell": [
-        3,
-        4
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        3,
-        4
-      ],
-      "to_cell": [
-        3,
-        5
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        3,
-        5
-      ],
-      "to_cell": [
-        3,
-        6
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        3,
-        6
-      ],
-      "to_cell": [
-        3,
-        7
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        2,
-        8
-      ],
-      "to_cell": [
-        3,
-        8
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        3,
-        4
-      ],
-      "to_cell": [
-        2,
-        4
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        2,
-        4
-      ],
-      "to_cell": [
-        2,
-        3
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        2,
-        3
-      ],
-      "to_cell": [
-        3,
-        3
-      ]
-    },
-    {
-      "cat_id": 0,
-      "from_end_cell": [
-        3,
-        4
-      ],
-      "to_cell": [
-        4,
-        4
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        3,
-        8
-      ],
-      "to_cell": [
-        3,
-        7
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        3,
-        7
-      ],
-      "to_cell": [
-        4,
-        7
-      ]
-    },
-    {
-      "cat_id": 1,
-      "from_end_cell": [
-        4,
-        7
-      ],
-      "to_cell": [
-        5,
-        7
+        1.0,
+        5.0
       ]
     }
   ],
   "stats": {
     "difficulty_score": 10,
     "early_clearing": [
-      1,
-      0,
-      0
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
     ],
-    "nested_cats": 2,
-    "nested_mode": "mixed",
-    "nested_ratio": 0.666666666666667,
-    "nested_three_cats": 1,
-    "nested_two_cats": 1,
-    "nested_two_ratio": 0.666666666666667,
-    "obstacle_cells": 6,
-    "solution_length": 29,
-    "solver_moves": 29,
-    "solver_nodes": 56
+    "nested_cats": 1.0,
+    "nested_mode": "three_ratio_0.50",
+    "nested_ratio": 0.25,
+    "nested_three_cats": 1.0,
+    "nested_two_cats": 0.0,
+    "nested_two_ratio": 0.25,
+    "obstacle_cells": 5.0,
+    "solution_length": 17.0,
+    "solver_moves": 17.0,
+    "solver_nodes": 17.0
   }
 }

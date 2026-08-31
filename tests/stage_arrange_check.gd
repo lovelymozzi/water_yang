@@ -25,7 +25,7 @@ func _initialize() -> void:
 	# 걸린 자리는 예외이므로 "대부분"만 본다.
 	var alternating: int = 0
 	for position in order.size():
-		var easy_half: bool = StageArranger.StageBatch.score_of(levels[order[position]]) <= 40
+		var easy_half: bool = LevelSolver.stored_difficulty_score(levels[order[position]]["stats"]) <= 40
 		if easy_half == (position % 2 == 0):
 			alternating += 1
 	_expect(alternating >= 6, "교대 배치가 %d/8 자리에서만 맞았다" % alternating)
@@ -86,10 +86,21 @@ func _check_six_cycle() -> void:
 	var spikes: Array[int] = [order[5], order[11]]
 	_expect(spikes == [10, 11], "매우어려움 자리에 %s 가 왔다" % [spikes])
 
+	var warmup_levels: Array = []
+	for index in 60:
+		warmup_levels.append(_level((index + 1) * 10, false, false))
+	var warmup_order: Array[int] = StageArranger.arrange(
+		warmup_levels, {}, StageArranger.pattern_steps("warmup_six"),
+		int(StageArranger.PATTERNS["warmup_six"]["warmup"])
+	)
+	_expect(warmup_order.slice(0, 30) == range(30), "1~30이 쉬운 띠의 오름차순이 아니다")
+	_expect(warmup_order[30] == 30 and warmup_order[32] == 50 and warmup_order[35] == 55,
+		"31스테이지부터 6주기가 시작되지 않았다: %s" % [warmup_order.slice(30, 36)])
+
 
 # 파일 이름 바꿔치기까지 실제로 해 본다 — 임시 이름을 안 거치면 서로 덮어쓴다.
 func _check_apply_order() -> void:
-	var dir_path: String = "user://arrange_apply_test"
+	var dir_path: String = ProjectSettings.globalize_path("user://arrange_apply_test")
 	DirAccess.make_dir_recursive_absolute(dir_path)
 	var names: PackedStringArray = PackedStringArray(["stage_004.json", "stage_007.json", "stage_010.json"])
 	var paths: PackedStringArray = PackedStringArray()

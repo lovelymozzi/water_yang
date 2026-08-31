@@ -936,7 +936,7 @@
       "displayName": "Plain Text",
       "x": 329,
       "y": 214,
-      "zIndex": 15,
+      "zIndex": 13,
       "visual": {
         "model": {
           "shape": {
@@ -1055,7 +1055,7 @@
       "displayName": "Plain Text",
       "x": 322,
       "y": 235,
-      "zIndex": 16,
+      "zIndex": 14,
       "visual": {
         "model": {
           "shape": {
@@ -1172,9 +1172,9 @@
       "stableId": "plain-text-219",
       "layerType": "component",
       "displayName": "Plain Text",
-      "x": 140,
+      "x": 146,
       "y": 218,
-      "zIndex": 17,
+      "zIndex": 15,
       "visual": {
         "model": {
           "shape": {
@@ -1294,7 +1294,7 @@
       "x": 9,
       "y": 284,
       "scale": 0.6773448773448774,
-      "zIndex": 18,
+      "zIndex": 16,
       "visual": {
         "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
@@ -1334,7 +1334,7 @@
       "y": 304,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 19,
+      "zIndex": 17,
       "visual": {
         "exportPath": "src/assets/profile_avatar_dummy_43.png",
         "width": 122,
@@ -1350,7 +1350,7 @@
       "scale": 1.22108843537415,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 20,
+      "zIndex": 18,
       "visual": {
         "exportPath": "src/assets/profile_frame_default_5.png",
         "width": 160,
@@ -1389,7 +1389,7 @@
       "x": 15,
       "y": 306,
       "scale": 0.5612588716036991,
-      "zIndex": 21,
+      "zIndex": 19,
       "visual": {
         "exportPath": "src/assets/ranking_icon_2nd.png",
         "width": 58,
@@ -1403,7 +1403,7 @@
       "x": 116,
       "y": 309,
       "scale": 0.3000474383301708,
-      "zIndex": 22,
+      "zIndex": 20,
       "visual": {
         "exportPath": "src/assets/team_normal_02.png",
         "width": 110,
@@ -1416,7 +1416,7 @@
       "displayName": "Plain Text",
       "x": 329,
       "y": 305,
-      "zIndex": 25,
+      "zIndex": 21,
       "visual": {
         "model": {
           "shape": {
@@ -1535,7 +1535,7 @@
       "displayName": "Plain Text",
       "x": 322,
       "y": 326,
-      "zIndex": 26,
+      "zIndex": 22,
       "visual": {
         "model": {
           "shape": {
@@ -1654,7 +1654,7 @@
       "displayName": "Plain Text",
       "x": 140,
       "y": 309,
-      "zIndex": 27,
+      "zIndex": 23,
       "visual": {
         "model": {
           "shape": {
@@ -1774,7 +1774,7 @@
       "x": 9,
       "y": 375,
       "scale": 0.6773448773448774,
-      "zIndex": 28,
+      "zIndex": 24,
       "visual": {
         "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
@@ -1814,7 +1814,7 @@
       "y": 395,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 29,
+      "zIndex": 25,
       "visual": {
         "exportPath": "src/assets/profile_avatar_dummy_16.png",
         "width": 122,
@@ -1830,7 +1830,7 @@
       "scale": 1.22108843537415,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 30,
+      "zIndex": 26,
       "visual": {
         "exportPath": "src/assets/profile_frame_default_9.png",
         "width": 160,
@@ -1869,7 +1869,7 @@
       "x": 15,
       "y": 397,
       "scale": 0.5612588716036991,
-      "zIndex": 31,
+      "zIndex": 27,
       "visual": {
         "exportPath": "src/assets/ranking_icon_3rd.png",
         "width": 58,
@@ -1883,7 +1883,7 @@
       "x": 116,
       "y": 400,
       "scale": 0.3000474383301708,
-      "zIndex": 32,
+      "zIndex": 28,
       "visual": {
         "exportPath": "src/assets/team_normal_03.png",
         "width": 110,
@@ -1896,7 +1896,7 @@
       "displayName": "Plain Text",
       "x": 329,
       "y": 396,
-      "zIndex": 35,
+      "zIndex": 29,
       "visual": {
         "model": {
           "shape": {
@@ -2015,7 +2015,7 @@
       "displayName": "Plain Text",
       "x": 322,
       "y": 417,
-      "zIndex": 36,
+      "zIndex": 30,
       "visual": {
         "model": {
           "shape": {
@@ -2134,7 +2134,7 @@
       "displayName": "Plain Text",
       "x": 140,
       "y": 400,
-      "zIndex": 37,
+      "zIndex": 31,
       "visual": {
         "model": {
           "shape": {
@@ -2254,7 +2254,7 @@
       "x": 9,
       "y": 467,
       "scale": 0.6773448773448774,
-      "zIndex": 38,
+      "zIndex": 32,
       "visual": {
         "exportPath": "src/assets/ranking_box_list_my.png",
         "width": 550,
@@ -2294,7 +2294,7 @@
       "y": 487,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 39,
+      "zIndex": 33,
       "visual": {
         "exportPath": "src/assets/profile_avatar_dummy_48.png",
         "width": 122,
@@ -2310,7 +2310,7 @@
       "scale": 1.22108843537415,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 40,
+      "zIndex": 34,
       "visual": {
         "exportPath": "src/assets/profile_frame_default_8.png",
         "width": 160,
@@ -2349,7 +2349,7 @@
       "x": 116,
       "y": 492,
       "scale": 0.3000474383301708,
-      "zIndex": 41,
+      "zIndex": 35,
       "visual": {
         "exportPath": "src/assets/team_normal_08.png",
         "width": 110,
@@ -2362,7 +2362,7 @@
       "displayName": "Plain Text",
       "x": 329,
       "y": 488,
-      "zIndex": 44,
+      "zIndex": 36,
       "visual": {
         "model": {
           "shape": {
@@ -2481,7 +2481,7 @@
       "displayName": "Plain Text",
       "x": 322,
       "y": 509,
-      "zIndex": 45,
+      "zIndex": 37,
       "visual": {
         "model": {
           "shape": {
@@ -2600,7 +2600,7 @@
       "displayName": "Plain Text",
       "x": 140,
       "y": 492,
-      "zIndex": 46,
+      "zIndex": 38,
       "visual": {
         "model": {
           "shape": {
@@ -2719,7 +2719,7 @@
       "displayName": "Plain Text",
       "x": 14,
       "y": 493,
-      "zIndex": 47,
+      "zIndex": 39,
       "visual": {
         "model": {
           "shape": {
@@ -2839,7 +2839,7 @@
       "x": 9,
       "y": 558,
       "scale": 0.6773448773448774,
-      "zIndex": 48,
+      "zIndex": 40,
       "visual": {
         "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
@@ -2879,7 +2879,7 @@
       "y": 578,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 49,
+      "zIndex": 41,
       "visual": {
         "exportPath": "src/assets/profile_avatar_dummy_17.png",
         "width": 122,
@@ -2895,7 +2895,7 @@
       "scale": 1.22108843537415,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 50,
+      "zIndex": 42,
       "visual": {
         "exportPath": "src/assets/profile_frame_default_6.png",
         "width": 160,
@@ -2934,7 +2934,7 @@
       "x": 116,
       "y": 583,
       "scale": 0.3000474383301708,
-      "zIndex": 51,
+      "zIndex": 43,
       "visual": {
         "exportPath": "src/assets/team_normal_09.png",
         "width": 110,
@@ -2947,7 +2947,7 @@
       "displayName": "Plain Text",
       "x": 329,
       "y": 579,
-      "zIndex": 54,
+      "zIndex": 44,
       "visual": {
         "model": {
           "shape": {
@@ -3066,7 +3066,7 @@
       "displayName": "Plain Text",
       "x": 322,
       "y": 600,
-      "zIndex": 55,
+      "zIndex": 45,
       "visual": {
         "model": {
           "shape": {
@@ -3185,7 +3185,7 @@
       "displayName": "Plain Text",
       "x": 140,
       "y": 583,
-      "zIndex": 56,
+      "zIndex": 46,
       "visual": {
         "model": {
           "shape": {
@@ -3304,7 +3304,7 @@
       "displayName": "Plain Text",
       "x": 14,
       "y": 586,
-      "zIndex": 57,
+      "zIndex": 47,
       "visual": {
         "model": {
           "shape": {
@@ -3424,7 +3424,7 @@
       "x": 9,
       "y": 649,
       "scale": 0.6773448773448774,
-      "zIndex": 58,
+      "zIndex": 48,
       "visual": {
         "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
@@ -3464,7 +3464,7 @@
       "y": 669,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 59,
+      "zIndex": 49,
       "visual": {
         "exportPath": "src/assets/profile_avatar_dummy_44.png",
         "width": 122,
@@ -3480,7 +3480,7 @@
       "scale": 1.22108843537415,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 60,
+      "zIndex": 50,
       "visual": {
         "exportPath": "src/assets/profile_frame_default_2.png",
         "width": 160,
@@ -3519,7 +3519,7 @@
       "x": 116,
       "y": 674,
       "scale": 0.3000474383301708,
-      "zIndex": 61,
+      "zIndex": 51,
       "visual": {
         "exportPath": "src/assets/team_normal_09.png",
         "width": 110,
@@ -3532,7 +3532,7 @@
       "displayName": "Plain Text",
       "x": 329,
       "y": 670,
-      "zIndex": 64,
+      "zIndex": 52,
       "visual": {
         "model": {
           "shape": {
@@ -3651,7 +3651,7 @@
       "displayName": "Plain Text",
       "x": 322,
       "y": 691,
-      "zIndex": 65,
+      "zIndex": 53,
       "visual": {
         "model": {
           "shape": {
@@ -3770,7 +3770,7 @@
       "displayName": "Plain Text",
       "x": 140,
       "y": 674,
-      "zIndex": 66,
+      "zIndex": 54,
       "visual": {
         "model": {
           "shape": {
@@ -3889,7 +3889,7 @@
       "displayName": "Plain Text",
       "x": 14,
       "y": 677,
-      "zIndex": 67,
+      "zIndex": 55,
       "visual": {
         "model": {
           "shape": {
@@ -4009,7 +4009,7 @@
       "x": 9,
       "y": 740,
       "scale": 0.6773448773448774,
-      "zIndex": 68,
+      "zIndex": 56,
       "visual": {
         "exportPath": "src/assets/ranking_box_list.png",
         "width": 550,
@@ -4049,7 +4049,7 @@
       "y": 760,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 69,
+      "zIndex": 57,
       "visual": {
         "exportPath": "src/assets/profile_avatar_dummy_21.png",
         "width": 122,
@@ -4065,7 +4065,7 @@
       "scale": 1.22108843537415,
       "scaleX": 0.33298514391829176,
       "scaleY": 0.3329851439182918,
-      "zIndex": 70,
+      "zIndex": 58,
       "visual": {
         "exportPath": "src/assets/profile_frame_default_7.png",
         "width": 160,
@@ -4104,7 +4104,7 @@
       "x": 116,
       "y": 765,
       "scale": 0.3000474383301708,
-      "zIndex": 71,
+      "zIndex": 59,
       "visual": {
         "exportPath": "src/assets/team_normal_12.png",
         "width": 110,
@@ -4117,7 +4117,7 @@
       "displayName": "Plain Text",
       "x": 329,
       "y": 761,
-      "zIndex": 74,
+      "zIndex": 60,
       "visual": {
         "model": {
           "shape": {
@@ -4236,7 +4236,7 @@
       "displayName": "Plain Text",
       "x": 322,
       "y": 782,
-      "zIndex": 75,
+      "zIndex": 61,
       "visual": {
         "model": {
           "shape": {
@@ -4355,7 +4355,7 @@
       "displayName": "Plain Text",
       "x": 140,
       "y": 765,
-      "zIndex": 76,
+      "zIndex": 62,
       "visual": {
         "model": {
           "shape": {
@@ -4474,7 +4474,7 @@
       "displayName": "Plain Text",
       "x": 14,
       "y": 768,
-      "zIndex": 77,
+      "zIndex": 63,
       "visual": {
         "model": {
           "shape": {

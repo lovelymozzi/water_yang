@@ -477,7 +477,8 @@ func _on_rearrange() -> void:
 		gates[key] = int(_spins["gate_%s" % key].value)
 	var pattern_key: String = str(_pattern_pick.get_item_metadata(_pattern_pick.selected))
 	var order: Array[int] = StageArranger.arrange(
-		_levels, gates, StageArranger.pattern_steps(pattern_key)
+		_levels, gates, StageArranger.pattern_steps(pattern_key),
+		int(StageArranger.PATTERNS[pattern_key].get("warmup", 0))
 	)
 	var appearances: Dictionary = StageArranger.first_appearances(_levels, order)
 	var teaching: Dictionary = StageArranger.teaching_fill(_levels, order, gates)

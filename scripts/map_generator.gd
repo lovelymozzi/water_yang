@@ -125,7 +125,7 @@ class Config:
 	var ice_number_max: int = 0
 	# 난이도 채점용 탈출 비용의 상한. 이 값에서 잘리므로 낮으면 어려운 판끼리 구분이 안 된다.
 	var difficulty_limit: int = 8
-	# 소프트 게이트. `LevelSolver.difficulty_score()` 가 이 값 미만이면 버린다. 0 = 검사 안 함.
+	# 소프트 게이트. `LevelSolver.difficulty_breakdown()`의 보정 점수가 이 값 미만이면 버린다. 0 = 검사 안 함.
 	# **조건을 하드하게 강제하는 대신 이 점수 하나만 본다** — 사슬 깊이·의존 마릿수 같은
 	# 개별 조건을 각각 강제하면 버리는 맵만 늘고 정작 체감 난이도는 안 오른다.
 	var min_difficulty_score: int = 0
@@ -1385,7 +1385,7 @@ func _verify(
 		early_clearing = solver.early_escape_costs(state, 0, difficulty_limit)
 		if early_clearing.has(-1):
 			return {"ok": false, "reason": "난이도 탐색이 노드 예산을 넘겼다"}
-		score = LevelSolver.difficulty_score(early_clearing)
+		score = int(LevelSolver.difficulty_breakdown(state, early_clearing)["difficulty_score"])
 		if config.min_difficulty_score > 0 and score < config.min_difficulty_score:
 			return {
 				"ok": false,
