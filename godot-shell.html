@@ -25,6 +25,7 @@ const UNLIMITED_HEARTS_STORAGE_KEY = STORAGE_PREFIX + 'unlimited_hearts_until';
 const SHOP_COOLDOWN_STORAGE_PREFIX = STORAGE_PREFIX + 'shop_cooldown_until_';
 const HUB_SAVE_KEY = 'leonout_progress';
 const HUB_LEADERBOARD_KEY = 'leonout_stage';
+const PENDING_LEADERBOARD_STAGE_STORAGE_KEY = STORAGE_PREFIX + 'pending_leaderboard_stage_v1';
 const LEADERBOARD_REFRESH_MS = 10 * 60 * 1000;
 const SHOP_PRODUCTS = {
   860: {
@@ -213,6 +214,11 @@ const savedGame = await loadGame();
 restoreGameState(savedGame);
 let submittedLeaderboardStage = Number.isFinite(savedGame?.leaderboardStage)
   ? Math.max(0, Math.floor(savedGame.leaderboardStage)) : 0;
+let pendingLeaderboardStage = Math.max(0, Math.floor(Number(localStorage.getItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY)) || 0));
+if (pendingLeaderboardStage <= submittedLeaderboardStage) {
+  pendingLeaderboardStage = 0;
+  localStorage.removeItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY);
+}
 
 function createGameSnapshot() {
   return {
@@ -237,17 +243,32 @@ function saveGame() {
   return save;
 }
 
-async function submitStageLeaderboard(stage) {
+let leaderboardSubmissionTail = Promise.resolve();
+function submitStageLeaderboard(stage) {
   const value = Math.max(0, Math.floor(stage));
-  if (value <= submittedLeaderboardStage) return;
-  submittedLeaderboardStage = value;
-  try {
-    if (window.HubGame?.submitScore) await window.HubGame.submitScore(HUB_LEADERBOARD_KEY, value);
-  } catch (error) {
-    console.warn('[HubGame] 리더보드 등록에 실패했습니다.', error);
-  }
-  await saveGame();
+  if (value <= submittedLeaderboardStage) return Promise.resolve();
+  pendingLeaderboardStage = Math.max(pendingLeaderboardStage, value);
+  localStorage.setItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY, String(pendingLeaderboardStage));
+  void saveGame();
+  const submission = leaderboardSubmissionTail.then(async () => {
+    const pending = pendingLeaderboardStage;
+    if (!window.HubGame?.submitScore) return;
+    try {
+      await window.HubGame.submitScore(HUB_LEADERBOARD_KEY, pending);
+      submittedLeaderboardStage = Math.max(submittedLeaderboardStage, pending);
+      if (pendingLeaderboardStage <= pending) {
+        pendingLeaderboardStage = 0;
+        localStorage.removeItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY);
+      }
+      void saveGame();
+    } catch (error) {
+      console.warn('[HubGame] 리더보드 등록에 실패했습니다. 다음 실행 시 재시도합니다.', error);
+    }
+  });
+  leaderboardSubmissionTail = submission.catch(() => {});
+  return submission;
 }
+if (pendingLeaderboardStage > submittedLeaderboardStage) void submitStageLeaderboard(pendingLeaderboardStage);
 
 async function renderLeaderboard(renderer) {
   if (!renderer && (!renderLeaderboard.cache || Date.now() - renderLeaderboard.loadedAt >= LEADERBOARD_REFRESH_MS)) {
@@ -419,7 +440,7 @@ const runEconomyTransaction = (key, work) => {
   if (existing) return existing;
   const transaction = economyTransactionTail.then(async () => {
     const result = await work();
-    await saveGame();
+    void saveGame();
     return result;
   });
   economyTransactionTail = transaction.catch(() => {});
@@ -908,11 +929,11 @@ const handleMainGameEnd = async (result) => {
       score: result.score,
       ticket: result.ticket,
     })).current;
-    await submitStageLeaderboard(currentMapStage);
-    await saveGame();
     flow.update({ stage: { current: `Level${currentMapStage}` } });
     levelWinItemReward = grantStageClearItemReward();
     if (levelWinItemReward) queueLobbyItemReward(levelWinItemReward);
+    void submitStageLeaderboard(currentMapStage);
+    void saveGame();
     await flow.fire('스테이지 클리어시');
   } else if (result.outcome === 'fail') {
     await flow.fire('스테이지 시간이 다되어 게임패배시');
