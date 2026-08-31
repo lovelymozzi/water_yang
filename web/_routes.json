@@ -1,5 +1,16 @@
 {
   "version": 1,
   "include": ["/*"],
-  "exclude": ["/*.wasm.br", "/index.wasm.br"]
+  "exclude": [
+    "/src/*",
+    "/sound/*",
+    "/ui/*",
+    "/index.js",
+    "/index.pck",
+    "/index.wasm.br",
+    "/index.audio.worklet.js",
+    "/index.audio.position.worklet.js",
+    "/*.png",
+    "/*.jpg"
+  ]
 }

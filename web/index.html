@@ -7,6 +7,15 @@
 <link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 
+<link rel="preload" as="audio" href="sound/Ingame_BGM.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/Cat_meow.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/cat_Hole_sound.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/cat_move.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/ice_breake.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/ice-freezing.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/diggingt_optimized.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/time_out1.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/Time_out2.mp3" type="audio/mpeg" fetchpriority="low">
 <style>html,body{margin:0;height:100%;background:#000;overflow:hidden}body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}body.instant-lobby-home-return .sr-nav-host-inner,body.instant-lobby-home-return .sr-nav-fg-inner{transition:none!important;transform:none!important}body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr-nav-tabbar *{transition:none!important}</style>
 </head>
 <body>
@@ -27,6 +36,8 @@ const UNLIMITED_HEARTS_STORAGE_KEY = STORAGE_PREFIX + 'unlimited_hearts_until';
 const SHOP_COOLDOWN_STORAGE_PREFIX = STORAGE_PREFIX + 'shop_cooldown_until_';
 const HUB_SAVE_KEY = 'leonout_progress';
 const HUB_LEADERBOARD_KEY = 'leonout_stage';
+const PENDING_LEADERBOARD_STAGE_STORAGE_KEY = STORAGE_PREFIX + 'pending_leaderboard_stage_v1';
+const LEADERBOARD_REFRESH_MS = 10 * 60 * 1000;
 const SHOP_PRODUCTS = {
   860: {
     cooldownMs: 24 * 60 * 60 * 1000,
@@ -214,6 +225,11 @@ const savedGame = await loadGame();
 restoreGameState(savedGame);
 let submittedLeaderboardStage = Number.isFinite(savedGame?.leaderboardStage)
   ? Math.max(0, Math.floor(savedGame.leaderboardStage)) : 0;
+let pendingLeaderboardStage = Math.max(0, Math.floor(Number(localStorage.getItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY)) || 0));
+if (pendingLeaderboardStage <= submittedLeaderboardStage) {
+  pendingLeaderboardStage = 0;
+  localStorage.removeItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY);
+}
 
 function createGameSnapshot() {
   return {
@@ -238,29 +254,49 @@ function saveGame() {
   return save;
 }
 
-async function submitStageLeaderboard(stage) {
+let leaderboardSubmissionTail = Promise.resolve();
+function submitStageLeaderboard(stage) {
   const value = Math.max(0, Math.floor(stage));
-  if (value <= submittedLeaderboardStage) return;
-  submittedLeaderboardStage = value;
-  try {
-    if (window.HubGame?.submitScore) await window.HubGame.submitScore(HUB_LEADERBOARD_KEY, value);
-  } catch (error) {
-    console.warn('[HubGame] 리더보드 등록에 실패했습니다.', error);
-  }
-  await saveGame();
+  if (value <= submittedLeaderboardStage) return Promise.resolve();
+  pendingLeaderboardStage = Math.max(pendingLeaderboardStage, value);
+  localStorage.setItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY, String(pendingLeaderboardStage));
+  void saveGame();
+  const submission = leaderboardSubmissionTail.then(async () => {
+    const pending = pendingLeaderboardStage;
+    if (!window.HubGame?.submitScore) return;
+    try {
+      await window.HubGame.submitScore(HUB_LEADERBOARD_KEY, pending);
+      submittedLeaderboardStage = Math.max(submittedLeaderboardStage, pending);
+      if (pendingLeaderboardStage <= pending) {
+        pendingLeaderboardStage = 0;
+        localStorage.removeItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY);
+      }
+      void saveGame();
+    } catch (error) {
+      console.warn('[HubGame] 리더보드 등록에 실패했습니다. 다음 실행 시 재시도합니다.', error);
+    }
+  });
+  leaderboardSubmissionTail = submission.catch(() => {});
+  return submission;
 }
+if (pendingLeaderboardStage > submittedLeaderboardStage) void submitStageLeaderboard(pendingLeaderboardStage);
 
 async function renderLeaderboard(renderer) {
-  let board = [];
-  try {
-    if (window.HubGame?.getLeaderboard) {
-      const remote = await window.HubGame.getLeaderboard(HUB_LEADERBOARD_KEY, 10);
-      if (Array.isArray(remote)) board = remote;
+  if (!renderer && (!renderLeaderboard.cache || Date.now() - renderLeaderboard.loadedAt >= LEADERBOARD_REFRESH_MS)) {
+    let board = [];
+    try {
+      if (window.HubGame?.getLeaderboard) {
+        const remote = await window.HubGame.getLeaderboard(HUB_LEADERBOARD_KEY, 10);
+        if (Array.isArray(remote)) board = remote;
+      }
+    } catch (error) {
+      console.warn('[HubGame] 리더보드를 불러오지 못했습니다. 현재 플레이어 기록을 표시합니다.', error);
     }
-  } catch (error) {
-    console.warn('[HubGame] 리더보드를 불러오지 못했습니다. 현재 플레이어 기록을 표시합니다.', error);
+    renderLeaderboard.cache = board.length ? board : [{ username: hubPlayerName, value: progress.getCurrentStage() }];
+    renderLeaderboard.loadedAt = Date.now();
   }
-  if (!board.length) board = [{ username: hubPlayerName, value: progress.getCurrentStage() }];
+  if (!renderer) return;
+  const board = renderLeaderboard.cache || [{ username: hubPlayerName, value: progress.getCurrentStage() }];
   const template = renderer.getGroup('ramk1');
   if (!template?.parentElement) {
     console.warn('[HubGame] Ranking의 rank1 템플릿 그룹을 찾지 못했습니다.');
@@ -279,15 +315,34 @@ async function renderLeaderboard(renderer) {
   // ponytail: authored Ranking panel fits 7 rows; add scrolling when all 10 rows must be visible.
   rowData.slice(1).forEach((entry, index) => {
     const row = template.cloneNode(true);
+    const badge = row.querySelector('[data-stable-id="ranking-icon-1st-png-212"]');
     row.dataset.runtimeLeaderboard = '1';
     row.style.transform = `translateY(${(index + 1) * 91.2}px)`;
     row.querySelector('[data-stable-id="plain-text-218"] .text-0').textContent = String(entry.stage);
     row.querySelector('[data-stable-id="plain-text-219"] .text-0').textContent = entry.name;
+    if (index < 2) {
+      badge.querySelector('img').src = renderer.getElement([
+        'ranking-icon-1st-png-225',
+        'ranking-icon-1st-png-236',
+      ][index]).querySelector('img').src;
+    } else {
+      badge.style.display = 'none';
+      const rankNumber = renderer.getElement([
+        'plain-text-254',
+        'plain-text-266',
+        'plain-text-277',
+        'plain-text-288',
+      ][index - 2]).cloneNode(true);
+      rankNumber.style.top = badge.style.top;
+      rankNumber.querySelector('.text-0').textContent = String(index + 2);
+      row.appendChild(rankNumber);
+    }
     parent.appendChild(row);
   });
 }
+setInterval(() => { void renderLeaderboard(); }, LEADERBOARD_REFRESH_MS);
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":18464588,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19109260,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -367,6 +422,7 @@ const uiRenderStylesReady = Promise.all([
   }
 })));
 const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
+const sceneFlow = await (await fetch(UI_DIR + 'scene-flow.json')).json();
 const sceneContracts = new Map();
 await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
   const sceneContract = await (await fetch(UI_DIR + contract)).json();
@@ -396,7 +452,7 @@ const runEconomyTransaction = (key, work) => {
   if (existing) return existing;
   const transaction = economyTransactionTail.then(async () => {
     const result = await work();
-    await saveGame();
+    void saveGame();
     return result;
   });
   economyTransactionTail = transaction.catch(() => {});
@@ -885,11 +941,11 @@ const handleMainGameEnd = async (result) => {
       score: result.score,
       ticket: result.ticket,
     })).current;
-    await submitStageLeaderboard(currentMapStage);
-    await saveGame();
     flow.update({ stage: { current: `Level${currentMapStage}` } });
     levelWinItemReward = grantStageClearItemReward();
     if (levelWinItemReward) queueLobbyItemReward(levelWinItemReward);
+    void submitStageLeaderboard(currentMapStage);
+    void saveGame();
     await flow.fire('스테이지 클리어시');
   } else if (result.outcome === 'fail') {
     await flow.fire('스테이지 시간이 다되어 게임패배시');
@@ -1250,13 +1306,15 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     if (document.fonts?.load && UI_FONT_SPECS.size) {
       await Promise.all([...UI_FONT_SPECS].map(spec => document.fonts.load(spec).catch(() => null)));
     }
-    const navigationTabPreload = Promise.all([...new Set(
-      NAVIGATION_TAB_SCENES.flatMap(sceneName => {
+    const navigationTabPreload = Promise.all([...new Set([
+      ...NAVIGATION_TAB_SCENES.flatMap(sceneName => {
         const contract = sceneContracts.get(sceneName);
         if (!contract) throw new Error(`[Splash preload] 네비게이션 탭 contract 누락: ${sceneName}`);
         return [...JSON.stringify(contract).matchAll(/"(?:imagePath|exportPath|iconPath|iconActivePath)"\s*:\s*"([^"]+\.(?:png|jpe?g|webp|svg))"/gi)].map(([, path]) => path);
       }),
-    )].map(path => new Promise((resolve, reject) => {
+      ...sceneFlow.edges.flatMap(({ transitionIn }) => (transitionIn?.curtainLayers || [])
+        .map(({ visual }) => visual?.exportPath).filter(Boolean)),
+    ])].map(path => new Promise((resolve, reject) => {
       const image = new Image();
       navigationTabImages.push(image);
       image.onload = () => image.decode ? image.decode().then(resolve, reject) : resolve();
@@ -1273,6 +1331,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     await Promise.all([
       navigationTabPreload,
       audioPreload,
+      renderLeaderboard(),
       game.start(godotCartridge, {
         stage: progress.getCurrentStage(),
         config: { godotScene: 'lobby', preloadGodotScenes: ['main'] },

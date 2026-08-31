@@ -1032,14 +1032,15 @@
             "textShadowX": 0,
             "textShadowY": 2,
             "textShadowBlur": 4,
-            "textShadowColor": "#000000",
-            "textShadowOpacity": 60,
+            "textShadowColor": "rgba(0,0,0,0)",
+            "textShadowOpacity": 0,
             "offsetX": 0,
             "offsetY": 0,
             "textDepthSize": 2,
             "bindingKey": "",
             "textStrokeColorRole": "fixed",
-            "textDepthColor": "rgba(0,0,0,0)"
+            "textDepthColor": "rgba(0,0,0,0)",
+            "textShadowColorRole": "fixed"
           }
         ],
         "selectedTextIndex": 0,

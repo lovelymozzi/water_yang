@@ -325,15 +325,15 @@
               "color": "#003f72"
             },
             "depth": {
-              "size": 5,
-              "color": "#003c6c"
+              "size": 3,
+              "color": "rgba(0,60,108,0)"
             },
             "shadow": {
               "x": 0,
               "y": 1,
-              "blur": 2,
-              "color": "#000000",
-              "opacity": 50
+              "blur": 0,
+              "color": "rgba(0,0,0,0)",
+              "opacity": 0
             }
           }
         }

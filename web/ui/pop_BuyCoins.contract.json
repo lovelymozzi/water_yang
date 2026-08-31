@@ -1605,14 +1605,14 @@
             },
             "depth": {
               "size": 0,
-              "color": "#000000"
+              "color": "rgba(0,0,0,0)"
             },
             "shadow": {
               "x": 0,
               "y": 2,
               "blur": 4,
-              "color": "#000000",
-              "opacity": 60
+              "color": "rgba(0,0,0,0)",
+              "opacity": 0
             }
           }
         }
@@ -2264,14 +2264,14 @@
             },
             "depth": {
               "size": 0,
-              "color": "#000000"
+              "color": "rgba(0,0,0,0)"
             },
             "shadow": {
               "x": 0,
               "y": 2,
               "blur": 4,
-              "color": "#000000",
-              "opacity": 60
+              "color": "rgba(0,0,0,0)",
+              "opacity": 0
             }
           }
         }
@@ -2433,14 +2433,14 @@
             },
             "depth": {
               "size": 0,
-              "color": "#000000"
+              "color": "rgba(0,0,0,0)"
             },
             "shadow": {
               "x": 0,
               "y": 2,
               "blur": 4,
-              "color": "#000000",
-              "opacity": 60
+              "color": "rgba(0,0,0,0)",
+              "opacity": 0
             }
           }
         }

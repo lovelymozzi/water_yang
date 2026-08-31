@@ -72,16 +72,17 @@
             "textStrokeColor": "#003f72",
             "textShadowX": 0,
             "textShadowY": 1,
-            "textShadowBlur": 2,
-            "textShadowColor": "#000000",
-            "textShadowOpacity": 50,
-            "textDepthSize": 5,
-            "textDepthColor": "#003c6c",
+            "textShadowBlur": 0,
+            "textShadowColor": "rgba(0,0,0,0)",
+            "textShadowOpacity": 0,
+            "textDepthSize": 3,
+            "textDepthColor": "rgba(0,60,108,0)",
             "offsetX": 0,
             "offsetY": 22,
             "bindingKey": "",
             "zIndex": 1,
-            "textStrokeColorRole": "fixed"
+            "textStrokeColorRole": "fixed",
+            "textShadowColorRole": "fixed"
           }
         ],
         "selectedTextIndex": 0,
