@@ -265,29 +265,28 @@ async function renderLeaderboard(renderer) {
   }
   if (!renderer) return;
   const board = renderLeaderboard.cache || [{ username: hubPlayerName, value: progress.getCurrentStage() }];
-  const template = renderer.getGroup('ramk1');
-  if (!template?.parentElement) {
-    console.warn('[HubGame] Ranking의 rank1 템플릿 그룹을 찾지 못했습니다.');
-    return;
-  }
   const rowData = board.slice(0, 7).map(({ username, value }) => ({
     name: username || '플레이어',
     stage: Math.max(0, Math.floor(Number(value) || 0)),
   }));
   renderer.update({ player: { stage1: String(rowData[0].stage), name1: rowData[0].name } });
-  const parent = template.parentElement;
-  parent.querySelectorAll('[data-runtime-leaderboard]').forEach(row => row.remove());
-  [...parent.querySelectorAll(':scope > [data-group]')]
-    .filter(row => row !== template && row.querySelector('[data-stable-id^="ranking-box-list"]'))
-    .forEach(row => { row.style.display = 'none'; });
   // ponytail: authored Ranking panel fits 7 rows; add scrolling when all 10 rows must be visible.
-  rowData.slice(1).forEach((entry, index) => {
-    const row = template.cloneNode(true);
-    row.dataset.runtimeLeaderboard = '1';
-    row.style.transform = `translateY(${(index + 1) * 91.2}px)`;
-    row.querySelector('[data-stable-id="plain-text-218"] .text-0').textContent = String(entry.stage);
-    row.querySelector('[data-stable-id="plain-text-219"] .text-0').textContent = entry.name;
-    parent.appendChild(row);
+  [
+    ['ramk1'],
+    ['2', 'plain-text-230', 'plain-text-231'],
+    ['3', 'plain-text-241', 'plain-text-242'],
+    ['4', 'plain-text-253', 'plain-text-252', 'plain-text-254'],
+    ['5', 'plain-text-265', 'plain-text-264', 'plain-text-266'],
+    ['6', 'plain-text-276', 'plain-text-275', 'plain-text-277'],
+    ['7', 'plain-text-287', 'plain-text-286', 'plain-text-288'],
+  ].forEach(([group, nameId, stageId, rankId], index) => {
+    const row = renderer.getGroup(group);
+    const entry = rowData[index];
+    row.style.display = entry ? '' : 'none';
+    if (!entry || index === 0) return;
+    renderer.getTextElement(stageId, 0).textContent = String(entry.stage);
+    renderer.getTextElement(nameId, 0).textContent = entry.name;
+    if (rankId) renderer.getTextElement(rankId, 0).textContent = String(index + 1);
   });
 }
 setInterval(() => { void renderLeaderboard(); }, LEADERBOARD_REFRESH_MS);
