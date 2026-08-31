@@ -411,6 +411,7 @@ const uiRenderStylesReady = Promise.all([
   }
 })));
 const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
+const sceneFlow = await (await fetch(UI_DIR + 'scene-flow.json')).json();
 const sceneContracts = new Map();
 await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
   const sceneContract = await (await fetch(UI_DIR + contract)).json();
@@ -1294,13 +1295,15 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     if (document.fonts?.load && UI_FONT_SPECS.size) {
       await Promise.all([...UI_FONT_SPECS].map(spec => document.fonts.load(spec).catch(() => null)));
     }
-    const navigationTabPreload = Promise.all([...new Set(
-      NAVIGATION_TAB_SCENES.flatMap(sceneName => {
+    const navigationTabPreload = Promise.all([...new Set([
+      ...NAVIGATION_TAB_SCENES.flatMap(sceneName => {
         const contract = sceneContracts.get(sceneName);
         if (!contract) throw new Error(`[Splash preload] 네비게이션 탭 contract 누락: ${sceneName}`);
         return [...JSON.stringify(contract).matchAll(/"(?:imagePath|exportPath|iconPath|iconActivePath)"\s*:\s*"([^"]+\.(?:png|jpe?g|webp|svg))"/gi)].map(([, path]) => path);
       }),
-    )].map(path => new Promise((resolve, reject) => {
+      ...sceneFlow.edges.flatMap(({ transitionIn }) => (transitionIn?.curtainLayers || [])
+        .map(({ visual }) => visual?.exportPath).filter(Boolean)),
+    ])].map(path => new Promise((resolve, reject) => {
       const image = new Image();
       navigationTabImages.push(image);
       image.onload = () => image.decode ? image.decode().then(resolve, reject) : resolve();
