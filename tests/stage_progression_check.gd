@@ -70,11 +70,11 @@ func _run_checks() -> void:
 		_expect(_main._stage_timer_running, "첫 보드 조작 뒤 타이머가 시작되지 않았다")
 	_main._on_host_force_quit("")
 	var paths: PackedStringArray = _main._list_stage_files()
-	_expect(paths.size() > 0, "스테이지 파일이 하나도 없다")
-	if paths.size() > 1:
+	_expect(paths.size() == 187, "스테이지 파일 수가 187개가 아니다: %d" % paths.size())
+	for index in paths.size():
 		_expect(
-			paths[0] < paths[1],
-			"스테이지 목록이 순번대로가 아니다: %s, %s" % [paths[0], paths[1]]
+			paths[index].ends_with("stage_%03d.json" % (index + 1)),
+			"스테이지 %d 경로가 순번과 다르다: %s" % [index + 1, paths[index]]
 		)
 
 	if paths.is_empty():

@@ -12,7 +12,6 @@ $GODOT_HEAD_INCLUDE
 const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
-const PROGRESS_STORAGE_KEY = STORAGE_PREFIX + 'progress_v1';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
@@ -255,8 +254,7 @@ if (economy.getCoins() === 0 && localStorage.getItem(INITIAL_COIN_GRANT_STORAGE_
   await runEconomyTransaction('initial-coin-migration', () => economy.grantCoins(INITIAL_COINS, 'initial-coin-migration'));
   localStorage.setItem(INITIAL_COIN_GRANT_STORAGE_KEY, '1');
 }
-localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify({ current: 1, records: {} }));
-const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX });
+const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX, maxStage: 187 });
 const sound = new SoundManager({ storagePrefix: STORAGE_PREFIX });
 const flow = new FlowDriver({
   basePath: ASSET_BASE,
@@ -724,11 +722,12 @@ const handleMainGameEnd = async (result) => {
       await economy.grantHearts(1);
       await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
     });
-    await progress.recordClear(currentMapStage, {
+    currentMapStage = (await progress.recordClear(currentMapStage, {
       stars: result.stats?.stars || 0,
       score: result.score,
       ticket: result.ticket,
-    });
+    })).current;
+    flow.update({ stage: { current: `Level${currentMapStage}` } });
     levelWinItemReward = grantStageClearItemReward();
     if (levelWinItemReward) queueLobbyItemReward(levelWinItemReward);
     await flow.fire('스테이지 클리어시');

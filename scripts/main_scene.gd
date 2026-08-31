@@ -148,11 +148,12 @@ func _ready() -> void:
 	# 읽으면 generate_on_play 가 켜져 있을 때 파일이 남아, 다음 평범한 실행이 엉뚱한
 	# 스테이지에서 시작한다.
 	_dev_stage_handoff = _consume_dev_stage_handoff()
-	_setup_stage_label()
-	_setup_replay_button()
+	if not UiBridge.is_hosted:
+		_setup_stage_label()
+		_setup_replay_button()
 	if _stage_mode_allowed():
 		_stage_paths = _list_stage_files()
-		if not _stage_paths.is_empty():
+		if not UiBridge.is_hosted and not _stage_paths.is_empty():
 			# LevelManager 가 자기 _ready 의 씬 배치 처리를 끝낸 뒤에 갈아 끼운다.
 			call_deferred(
 				"_load_stage", clampi(_dev_start_stage() - 1, 0, _stage_paths.size() - 1)
@@ -467,11 +468,13 @@ func _load_stage(index: int) -> void:
 	LevelLayoutWriter.apply_to_manager(level_manager, level)
 	_stage_solution = level.get("solution", [])
 	clear_label.visible = false
-	_stage_label.text = "STAGE %d / %d" % [index + 1, _stage_paths.size()]
-	_stage_label.visible = true
-	# 정답이 함께 저장된 스테이지에서만 재현 버튼을 띄운다.
-	_replay_button.visible = not _stage_solution.is_empty()
-	_replay_button.text = "정답 재현 (%d수)" % _stage_solution.size()
+	if _stage_label != null:
+		_stage_label.text = "STAGE %d / %d" % [index + 1, _stage_paths.size()]
+		_stage_label.visible = true
+	if _replay_button != null:
+		# 정답이 함께 저장된 스테이지에서만 재현 버튼을 띄운다.
+		_replay_button.visible = not _stage_solution.is_empty()
+		_replay_button.text = "정답 재현 (%d수)" % _stage_solution.size()
 	if UiBridge.is_hosted:
 		UiBridge.post_progress({"stage": index + 1})
 	print("[스테이지] %d/%d 시작 (%s)" % [index + 1, _stage_paths.size(), path])

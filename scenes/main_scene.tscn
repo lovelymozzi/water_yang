@@ -190,7 +190,7 @@ shader_parameter/strength = 0.0
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
 script = ExtResource("1_q0f23")
-start_stage = 51
+start_stage = 1
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
 process_mode = 4

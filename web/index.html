@@ -14,7 +14,6 @@
 const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
-const PROGRESS_STORAGE_KEY = STORAGE_PREFIX + 'progress_v1';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
@@ -150,7 +149,7 @@ const SETTINGS_MENU_GROUPS = [
   { name: 'retry', offset: 377 },
 ];
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19177420,"index.wasm":37902138},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":20774656,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -257,8 +256,7 @@ if (economy.getCoins() === 0 && localStorage.getItem(INITIAL_COIN_GRANT_STORAGE_
   await runEconomyTransaction('initial-coin-migration', () => economy.grantCoins(INITIAL_COINS, 'initial-coin-migration'));
   localStorage.setItem(INITIAL_COIN_GRANT_STORAGE_KEY, '1');
 }
-localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify({ current: 1, records: {} }));
-const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX });
+const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX, maxStage: 187 });
 const sound = new SoundManager({ storagePrefix: STORAGE_PREFIX });
 const flow = new FlowDriver({
   basePath: ASSET_BASE,
@@ -726,11 +724,12 @@ const handleMainGameEnd = async (result) => {
       await economy.grantHearts(1);
       await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
     });
-    await progress.recordClear(currentMapStage, {
+    currentMapStage = (await progress.recordClear(currentMapStage, {
       stars: result.stats?.stars || 0,
       score: result.score,
       ticket: result.ticket,
-    });
+    })).current;
+    flow.update({ stage: { current: `Level${currentMapStage}` } });
     levelWinItemReward = grantStageClearItemReward();
     if (levelWinItemReward) queueLobbyItemReward(levelWinItemReward);
     await flow.fire('스테이지 클리어시');
@@ -744,8 +743,7 @@ flow.defineCondition('not enough coin', () => runEconomyTransaction('coin-gated-
   const reason = activeSceneName === 'pop_OutOfMoves' ? 'out-of-moves-continue' : 'buy-lives-900';
   if (!(await economy.spendCoins(COIN_COST, reason))) return true;
   if (activeSceneName === 'pop_OutOfMoves') continueWithoutHeart = true;
-  else if (activeSceneName === 'pop_BuyLives_1') await economy.grantHearts(5, Date.now(), reason);
-  else await economy.grantHearts(1, Date.now(), reason);
+  else await economy.grantHearts(1);
   return false;
 }));
 
@@ -905,11 +903,6 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       } finally {
         shopPurchasePending = false;
       }
-    });
-  }
-  if (sceneName === 'pop_BuyLives_1' && popup) {
-    renderer.on('common-btn-green-sales-png-2424:click', () => {
-      void runEconomyTransaction('buy-lives-get', () => economy.grantHearts(1, Date.now(), 'buy-lives-get'));
     });
   }
   if (sceneName === 'pop_LevelFail' && popup) {
