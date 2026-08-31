@@ -1,14 +1,5 @@
 {
   "version": 1,
   "include": ["/*"],
-  "exclude": [
-    "/*.Png",
-    "/*.br",
-    "/*.wasm.br",
-    "/index.wasm.br",
-    "/arrow.png",
-    "/src/assets/ItemIcon_Money_Coin_1.Png",
-    "/src/assets/ItemIcon_Money_Coin.Png",
-    "/web/index.wasm.br"
-  ]
+  "exclude": ["/*"]
 }
