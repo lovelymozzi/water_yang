@@ -7,7 +7,7 @@
 <!-- SCENE:Ingame BEGIN -->
 #### `Ingame`  ·  contract: `./web/ui/Ingame.contract.json`
 - sceneUuid: `c0356bcc-a972-4ff9-b115-d91b31c3e8be`
-- 이벤트: `bar1-png-2449:click` · `entry-box-normal-png-2458:click`
+- 이벤트: `bar1-png-2449:click` · `gimmick-coinpurse-coin-png-2450:click` · `bar1-png-2451:click` · `home-btn-plus-png-2452:click` · `bar1-png-2453:click` · `entry-box-normal-png-2458:click` · `entry-box-normal-png-300:click`
 - 텍스트 바인딩: `coin.current` · `stage.current` · `stage.timer` · `item.move.current` · `item.timestop.current` · `item.remove.current` · `item.cancle`
 - 위젯: `item1`(toggle) · `itme3`(toggle) — 입력 이벤트: `widget:item1` · `widget:itme3`
 - GameField 레이어 있음
@@ -117,7 +117,7 @@
 <!-- SCENE:splash BEGIN -->
 #### `splash`  ·  contract: `./web/ui/splash.contract.json`
 - sceneUuid: `c4e72c62-dadd-40ab-85f4-bd397f4ca7f9`
-- 이벤트: `loading-out-png-11:click` · `loading-inner-png-12:click` · `loading-bar-png-13:click` · `text-loading-15:click`
+- 이벤트: `loading-out-png-11:click`
 - 텍스트 바인딩: `loadingMessage`
 - 위젯: `loading.prograss`(fill)
 - GameField 레이어 있음

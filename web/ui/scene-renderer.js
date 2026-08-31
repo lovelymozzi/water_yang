@@ -3947,7 +3947,8 @@ export class SceneRenderer {
             plane.style.zIndex = String(parent.maskPlaneZIndex ?? 0);
             const host = document.createElement('div');
             host.className = 'ui-mask-scale-host';
-            host.style.cssText = 'position:absolute;top:0;left:0;';
+            // 부모 저작 배율 상쇄 — 호스트 좌표계 = 씬 좌표계(에디터 _maskHostFor 와 동일 기하).
+            host.style.cssText = `position:absolute;top:0;left:0;transform:scale(${1 / psx},${1 / psy});transform-origin:0 0;`;
             plane.appendChild(host);
             body.appendChild(plane);
             // 스텐실 전용 부모 — 몸체 자체 페인트만 숨기고 평면은 되살린다(visibility 는 자손에서 재활성 가능)
@@ -3955,7 +3956,7 @@ export class SceneRenderer {
                 body.style.visibility = 'hidden';
                 plane.style.visibility = 'visible';
             }
-            body._uiMaskHost = { plane, host, pb: { x: 0, y: 0, w: pb.w / psx, h: pb.h / psy }, psx, psy };
+            body._uiMaskHost = { plane, host, pb: { x: 0, y: 0, w: pb.w, h: pb.h }, psx, psy };
             return body._uiMaskHost;
         };
         const placeMaskChildren = () => {
@@ -4556,6 +4557,8 @@ export class SceneRenderer {
                 // 전환 순간만 통지. 조준선 측정은 visibility 반영 뒤에 해도 되고(레이아웃 불변),
                 // 그래야 "사라지는 프레임"의 최종 자세에서 발사각이 나온다.
                 if (hooks && rec.wasHidden !== undefined && rec.wasHidden !== hidden) {
+                    // 컷 규약: 등장 순간 스프라이트는 처음부터 재생 — "1회 재생 컷을 연이어" 배치의 기준.
+                    if (!hidden) rec.el.querySelectorAll('canvas').forEach(cv => { if (cv._spriteRestart) cv._spriteRestart(); });
                     const cb = hidden ? hooks.onHide : hooks.onShow;
                     if (cb) cb(k, rec.el, characterAimWorld(rec.el));
                 }
@@ -4604,6 +4607,8 @@ export class SceneRenderer {
                 }
                 // 등장/퇴장 통지의 기준선은 휴지 자세 — 첫 프레임에서 이미 바뀌었다면 그것도 전환이다.
                 Object.keys(poseEls).forEach(k => { poseEls[k].wasHidden = poseEls[k].rest.visible === false; });
+                // 시퀀스 기준점: 스프라이트 프레임 재생을 play 시각에 정렬(컷 체인이 결정적이 되도록 처음부터).
+                host.querySelectorAll('canvas').forEach(cv => { if (cv._spriteRestart) cv._spriteRestart(); });
                 const t0 = performance.now();
                 const rate = Number(opts.rate) > 0 ? Number(opts.rate) : 1; // 재생 배속 — 게임 진행속도 배수 연동용(등장/퇴장 훅·onEnd 도 같이 빨라진다)
                 const step = (now) => {
@@ -4696,13 +4701,17 @@ export class SceneRenderer {
         const { cellW, cellH, cols, count, delays, loop, fps, startDelay } = cfg;
         const defDelay = Math.max(1, Math.round(1000 / (fps || 10)));
         let i = 0, acc = 0, last = 0, loopsDone = 0;
+        // 재시작 핸들 — 스킬/캐릭터 클립의 "컷 등장 순간 처음부터 재생" 규약용.
+        // 세대 토큰이 기존 rAF 체인을 자가종료시키므로 재시작이 몇 번 겹쳐도 체인은 항상 1개다.
+        const gen = canvas._spriteGen = (canvas._spriteGen || 0) + 1;
+        canvas._spriteRestart = () => this._runSpriteLoop(canvas, ctx, atlas, cfg);
         const draw = () => {
             const col = i % cols, row = (i / cols) | 0;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(atlas, col * cellW, row * cellH, cellW, cellH, 0, 0, canvas.width, canvas.height);
         };
         const frame = (now) => {
-            if (!document.contains(canvas)) return; // 노드 분리 → 자가종료(누수 방지)
+            if (!document.contains(canvas) || canvas._spriteGen !== gen) return; // 노드 분리·재시작 → 자가종료(누수 방지)
             if (last === 0) last = now;
             const rate = canvas._spriteRate != null ? canvas._spriteRate : 1;
             acc += (now - last) * (rate > 0 ? rate : 0);
@@ -5129,6 +5138,10 @@ SceneRenderer.mountCharacter = function (hostEl, characterId, opts) {
     return el.__uiCharacter;
 };
 
+// 스킬(스킬 메이커 산출물) = kind:'skill' 캐릭터 정의 — 파일 규약(characters/<id>.character.json)과
+// 조립·클립 재생이 캐릭터와 완전히 같으므로 별칭 하나로 충분하다(핸들의 play/stop 을 그대로 쓴다).
+SceneRenderer.mountSkill = SceneRenderer.mountCharacter;
+
 // ── 전역 이펙트(씬 밖 스프라이트) ────────────────────────────────────────────
 // 씬 레이어가 아닌 이펙트(캐릭터 공격·타격점·스킬 연출)는 씬 json 에서 꺼낼 수 없으므로
 // 발행된 effects.json(전역 이펙트 맵)에서 id 로 정의를 찾는다. 재생은 씬 안 스프라이트 레이어와
@@ -5236,6 +5249,8 @@ SceneRenderer.utils = {
     contractLayerBounds,
     /** 캐릭터 프레임 클립 길이(마지막 프레임 시각) */
     characterClipDuration,
+    /** 스프라이트 1회 재생 길이(ms) — 스킬 ＋컷 경계 계산 공용(mountSprite 자가제거와 같은 계산) */
+    spriteClipDurationMs,
     /** 캐릭터 프레임 클립 샘플링 — t(ms) 시점의 포즈 맵 { 포즈키: 트랜스폼 } (에디터 미리보기 공용) */
     sampleCharacterClip,
     /** 투사체 조준선 → { x, y, angleDeg } (client 좌표) — 포즈 컨테이너에서 발사 지점·각도 측정 */

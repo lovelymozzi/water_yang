@@ -78,6 +78,7 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 	if _selecting_obstacle:
 		var target: Variant = level_manager.screen_to_grid_cell(screen_position)
 		if target == null or not level_manager.get_obstacle_cells().has(target as Vector2i):
+			cancel_item_selection()
 			return
 		_selecting_obstacle = false
 		input_received.emit()
@@ -102,6 +103,7 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 					best_distance = distance
 					best_cat = cat
 		if best_cat == null:
+			cancel_item_selection()
 			return
 		_selecting_cat = false
 		input_received.emit()
