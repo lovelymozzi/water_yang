@@ -342,7 +342,7 @@ async function renderLeaderboard(renderer) {
 }
 setInterval(() => { void renderLeaderboard(); }, LEADERBOARD_REFRESH_MS);
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19109260,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19106576,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -366,7 +366,6 @@ const splashCacheablePath = /\.(pck|json|png|jpe?g|webp|mp3|ogg|wav|woff2)$/i;
 const uiPublishPath = new URL(UI_DIR, location.href).pathname;
 const godotEnginePath = new URL(GODOT_ENGINE_URL, location.href).pathname;
 const godotWasmPath = new URL(`${GODOT_CONFIG.executable}.wasm`, location.href).pathname;
-const godotWasmBrUrl = new URL(`${GODOT_CONFIG.executable}.wasm.br`, location.href);
 const godotPackPath = new URL(GODOT_CONFIG.mainPack || `${GODOT_CONFIG.executable}.pck`, location.href).pathname;
 if (splashCache) {
   await navigator.storage?.persist?.();
@@ -374,9 +373,6 @@ if (splashCache) {
 window.fetch = async (input, init) => {
   const request = new Request(input, init);
   const url = new URL(request.url);
-  if (url.pathname === godotWasmPath && request.method === 'GET' && !request.headers.has('range')) {
-    return nativeFetch(godotWasmBrUrl, { cache: 'reload' });
-  }
   if (url.pathname === godotEnginePath || url.pathname === godotPackPath) {
     return nativeFetch(new Request(request, { cache: 'reload' }));
   }
