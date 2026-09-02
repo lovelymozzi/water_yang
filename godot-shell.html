@@ -1377,12 +1377,14 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
   if (activeGame?.state === 'running') activeGame.pause('scene-switch');
   if (activeGame?.state === 'paused') {
+    const restartingTimedOutStage = godotScene === 'main' && endedGame === activeGame && !continueWithoutHeart;
     if (godotScene === 'main') endedGame = null;
     if (godotScene === 'main' && continueWithoutHeart) {
       activeGame.message('continue_stage', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
       continueWithoutHeart = false;
     }
-    if (godotScene !== activeGodotScene) {
+    if (godotScene !== activeGodotScene || restartingTimedOutStage) {
+      if (restartingTimedOutStage) console.info('[timeout-replay] restarting ended stage after shop return');
       activeGodotScene = godotScene;
       activeGame.message('load_scene', {
         stage: progress.getCurrentStage(),
