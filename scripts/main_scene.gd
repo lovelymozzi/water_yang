@@ -229,7 +229,7 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 	_requested_stage_index = max(0, requested - 1)
 	_stage_time_left = maxf(1.0, float(config.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 	_stage_timer_running = false
-	_stage_timer_waiting_for_touch = false
+	_stage_timer_waiting_for_touch = true
 	_stage_timer_stop_until_msec = 0
 	_last_reported_seconds = -1
 	_clear_item_targets(_obstacle_item_targets)
