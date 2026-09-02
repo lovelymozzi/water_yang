@@ -349,7 +349,7 @@ import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
 
-const SPLASH_CACHE_VERSION = 'engine-sync-v1';
+const SPLASH_CACHE_VERSION = 'engine-sync-v2';
 const SPLASH_CACHE_NAME = `${STORAGE_PREFIX}splash_load_${SPLASH_CACHE_VERSION}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.pck`] || 'pck'}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.wasm`] || 'wasm'}`;
 if ('caches' in window) {
   await Promise.all(
@@ -1392,7 +1392,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
   if (activeGame?.state === 'running') activeGame.pause('scene-switch');
   if (activeGame?.state === 'paused') {
-    const restartingTimedOutStage = godotScene === 'main' && endedGame === activeGame && !continueWithoutHeart;
+    const restartingTimedOutStage = godotScene === 'main' && timeoutRecoveryPending && endedGame === activeGame && !continueWithoutHeart;
     if (godotScene === 'main') {
       endedGame = null;
       timeoutRecoveryPending = false;
