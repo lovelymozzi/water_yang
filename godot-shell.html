@@ -1174,6 +1174,9 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     });
   } else if (sceneName === 'pop_Give_up' && popup) {
     if (activeGame?.state === 'running') activeGame.pause('give-up');
+    renderer.on('common-btn-green-sales-png-2379:click', () => {
+      if (!hasUnlimitedHearts()) void runEconomyTransaction('give-up-heart', () => economy.consumeHeart());
+    });
     ['plain-text-2382:click', 'common-btn-top-x-red-png-2384:click'].forEach(eventName => {
       renderer.on(eventName, () => activeGame?.resume());
     });
