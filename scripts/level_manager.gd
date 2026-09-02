@@ -448,7 +448,12 @@ func on_cat_escaped(cat: CatEntity, hole_cell: Vector2i) -> void:
 	_cats.erase(cat)
 	_close_hole(hole_cell)
 	# 고양이가 한 마리 빠질 때마다 모든 얼음의 남은 수가 1씩 준다. 0 이 되면 깨진다.
+	var escaped_before := _escaped_count
 	_escaped_count += 1
+	print(
+		"[ice-count] cat=%s hole=%s escaped=%d->%d active_covers=%d"
+		% [cat.name, hole_cell, escaped_before, _escaped_count, _ice_covers.size()]
+	)
 	_refresh_ice_covers()
 	if _cats.is_empty():
 		level_cleared.emit()
@@ -471,7 +476,9 @@ func _refresh_ice_covers() -> void:
 			var label: Label3D = entry["label"]
 			if is_instance_valid(label):
 				label.text = str(remaining)
+			print("[ice-count] cell=%s remaining=%d" % [cell, remaining])
 			continue
+		print("[ice-unlock] cell=%s escaped=%d" % [cell, _escaped_count])
 		_break_ice_cover(cell)
 
 

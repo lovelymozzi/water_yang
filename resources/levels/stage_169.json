@@ -3,76 +3,94 @@
     {
       "body_cells": [
         [
-          3.0,
-          1.0
+          4.0,
+          2.0
         ],
         [
-          2.0,
-          1.0
+          4.0,
+          3.0
         ],
         [
-          1.0,
-          1.0
+          4.0,
+          4.0
         ],
         [
-          0.0,
-          1.0
+          4.0,
+          5.0
         ],
-        [
-          0.0,
-          0.0
-        ],
-        [
-          1.0,
-          0.0
-        ],
-        [
-          2.0,
-          0.0
-        ]
-      ],
-      "color_id": 0.0,
-      "nested_color_ids": [
-        4.0
-      ]
-    },
-    {
-      "body_cells": [
         [
           4.0,
           6.0
         ],
         [
-          3.0,
-          6.0
+          4.0,
+          7.0
         ],
         [
-          2.0,
-          6.0
+          3.0,
+          7.0
+        ],
+        [
+          3.0,
+          8.0
         ]
       ],
-      "color_id": 1.0,
-      "nested_color_ids": [
-        6.0
-      ]
+      "color_id": 0.0
     },
     {
       "body_cells": [
         [
-          5.0,
+          0.0,
+          2.0
+        ],
+        [
+          1.0,
+          2.0
+        ],
+        [
+          2.0,
+          2.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          0.0,
+          3.0
+        ],
+        [
+          0.0,
+          4.0
+        ]
+      ],
+      "color_id": 1.0
+    },
+    {
+      "body_cells": [
+        [
+          3.0,
+          2.0
+        ],
+        [
+          3.0,
+          3.0
+        ],
+        [
+          3.0,
           4.0
         ],
         [
-          5.0,
+          3.0,
           5.0
         ],
         [
-          5.0,
+          3.0,
           6.0
-        ],
-        [
-          5.0,
-          7.0
         ]
       ],
       "color_id": 2.0
@@ -81,114 +99,86 @@
       "body_cells": [
         [
           3.0,
-          4.0
+          1.0
         ],
         [
-          4.0,
-          4.0
+          2.0,
+          1.0
         ],
         [
-          4.0,
-          3.0
+          1.0,
+          1.0
         ],
         [
-          4.0,
-          2.0
-        ],
-        [
-          4.0,
+          0.0,
           1.0
         ]
       ],
-      "color_id": 3.0,
-      "nested_color_ids": [
-        5.0
-      ]
+      "color_id": 3.0
     }
   ],
   "dependency": {
     "chain": [
       1.0,
+      3.0,
+      2.0,
       0.0
     ],
-    "chain_depth": 2.0,
+    "chain_depth": 4.0,
     "edges": [
       [
         1.0,
+        3.0
+      ],
+      [
+        2.0,
         0.0
       ],
       [
-        1.0,
-        3.0
+        3.0,
+        2.0
       ]
     ]
   },
   "escape_order": [
     0.0,
-    3.0,
-    0.0,
     2.0,
     3.0,
-    1.0,
     1.0
   ],
   "grid_size": [
-    8.0,
+    6.0,
     9.0
   ],
   "holes": [
     {
       "color_id": 0.0,
       "grid_pos": [
-        5.0,
-        1.0
+        2.0,
+        6.0
       ],
       "ice_count": 0.0
     },
     {
       "color_id": 1.0,
       "grid_pos": [
-        1.0,
-        2.0
+        2.0,
+        0.0
       ],
       "ice_count": 0.0
     },
     {
       "color_id": 2.0,
       "grid_pos": [
-        1.0,
-        6.0
+        2.0,
+        8.0
       ],
       "ice_count": 0.0
     },
     {
       "color_id": 3.0,
       "grid_pos": [
-        6.0,
-        6.0
-      ],
-      "ice_count": 0.0
-    },
-    {
-      "color_id": 4.0,
-      "grid_pos": [
-        7.0,
-        3.0
-      ],
-      "ice_count": 0.0
-    },
-    {
-      "color_id": 5.0,
-      "grid_pos": [
-        1.0,
-        8.0
-      ],
-      "ice_count": 0.0
-    },
-    {
-      "color_id": 6.0,
-      "grid_pos": [
-        1.0,
+        2.0,
         4.0
       ],
       "ice_count": 0.0
@@ -197,7 +187,17 @@
   "obstacles": [
     {
       "block_size": [
-        5.0,
+        2.0,
+        1.0
+      ],
+      "grid_pos": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "block_size": [
+        3.0,
         1.0
       ],
       "grid_pos": [
@@ -208,80 +208,40 @@
     {
       "block_size": [
         2.0,
-        2.0
-      ],
-      "grid_pos": [
-        6.0,
-        1.0
-      ]
-    },
-    {
-      "block_size": [
-        1.0,
-        7.0
-      ],
-      "grid_pos": [
-        0.0,
-        2.0
-      ]
-    },
-    {
-      "block_size": [
-        2.0,
-        2.0
-      ],
-      "grid_pos": [
-        2.0,
-        2.0
-      ]
-    },
-    {
-      "block_size": [
-        1.0,
-        1.0
-      ],
-      "grid_pos": [
-        5.0,
-        2.0
-      ]
-    },
-    {
-      "block_size": [
-        1.0,
-        2.0
-      ],
-      "grid_pos": [
-        2.0,
-        4.0
-      ]
-    },
-    {
-      "block_size": [
-        2.0,
-        2.0
-      ],
-      "grid_pos": [
-        6.0,
-        4.0
-      ]
-    },
-    {
-      "block_size": [
-        1.0,
-        1.0
-      ],
-      "grid_pos": [
-        1.0,
-        5.0
-      ]
-    },
-    {
-      "block_size": [
-        1.0,
         1.0
       ],
       "grid_pos": [
         4.0,
+        1.0
+      ]
+    },
+    {
+      "block_size": [
+        1.0,
+        6.0
+      ],
+      "grid_pos": [
+        5.0,
+        3.0
+      ]
+    },
+    {
+      "block_size": [
+        1.0,
+        5.0
+      ],
+      "grid_pos": [
+        1.0,
+        4.0
+      ]
+    },
+    {
+      "block_size": [
+        1.0,
+        1.0
+      ],
+      "grid_pos": [
+        2.0,
         5.0
       ]
     },
@@ -291,7 +251,7 @@
         3.0
       ],
       "grid_pos": [
-        7.0,
+        0.0,
         6.0
       ]
     },
@@ -301,27 +261,7 @@
         1.0
       ],
       "grid_pos": [
-        1.0,
-        7.0
-      ]
-    },
-    {
-      "block_size": [
         2.0,
-        2.0
-      ],
-      "grid_pos": [
-        3.0,
-        7.0
-      ]
-    },
-    {
-      "block_size": [
-        1.0,
-        2.0
-      ],
-      "grid_pos": [
-        6.0,
         7.0
       ]
     },
@@ -331,556 +271,105 @@
         1.0
       ],
       "grid_pos": [
-        5.0,
+        4.0,
         8.0
       ]
     }
   ],
-  "seed": 14706391.0,
+  "seed": 12329612.0,
   "solution": [
     {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        3.0,
-        4.0
-      ],
-      "to_cell": [
-        3.0,
-        5.0
-      ]
-    },
-    {
-      "cat_id": 2.0,
-      "from_end_cell": [
-        5.0,
-        4.0
-      ],
-      "to_cell": [
-        5.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 0.0,
-      "from_end_cell": [
-        3.0,
-        1.0
-      ],
-      "to_cell": [
-        4.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 0.0,
-      "from_end_cell": [
-        4.0,
-        1.0
-      ],
-      "to_cell": [
-        5.0,
-        1.0
-      ]
-    },
-    {
       "cat_id": 1.0,
-      "from_end_cell": [
-        2.0,
-        6.0
-      ],
-      "to_cell": [
-        2.0,
-        7.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        2.0,
-        7.0
-      ],
-      "to_cell": [
-        2.0,
-        8.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        3.0,
-        5.0
-      ],
-      "to_cell": [
-        3.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        3.0,
-        6.0
-      ],
-      "to_cell": [
-        4.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 2.0,
-      "from_end_cell": [
-        5.0,
-        3.0
-      ],
-      "to_cell": [
-        4.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        6.0
-      ],
-      "to_cell": [
-        5.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        3.0,
-        4.0
-      ],
-      "to_cell": [
-        4.0,
-        4.0
-      ]
-    },
-    {
-      "cat_id": 2.0,
-      "from_end_cell": [
-        5.0,
-        5.0
-      ],
-      "to_cell": [
-        5.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 0.0,
       "from_end_cell": [
         0.0,
-        0.0
+        4.0
       ],
       "to_cell": [
-        1.0,
-        0.0
+        0.0,
+        5.0
+      ]
+    },
+    {
+      "cat_id": 3.0,
+      "from_end_cell": [
+        0.0,
+        1.0
+      ],
+      "to_cell": [
+        0.0,
+        2.0
       ]
     },
     {
       "cat_id": 0.0,
       "from_end_cell": [
         4.0,
-        1.0
+        2.0
       ],
       "to_cell": [
-        4.0,
+        5.0,
         2.0
+      ]
+    },
+    {
+      "cat_id": 2.0,
+      "from_end_cell": [
+        3.0,
+        2.0
+      ],
+      "to_cell": [
+        3.0,
+        1.0
       ]
     },
     {
       "cat_id": 0.0,
       "from_end_cell": [
-        4.0,
-        2.0
+        3.0,
+        7.0
       ],
       "to_cell": [
-        4.0,
-        3.0
+        3.0,
+        6.0
       ]
     },
     {
       "cat_id": 2.0,
       "from_end_cell": [
-        5.0,
+        3.0,
+        5.0
+      ],
+      "to_cell": [
+        3.0,
+        6.0
+      ]
+    },
+    {
+      "cat_id": 2.0,
+      "from_end_cell": [
+        3.0,
         6.0
       ],
       "to_cell": [
-        5.0,
+        3.0,
         7.0
       ]
     },
     {
-      "cat_id": 0.0,
-      "from_end_cell": [
-        4.0,
-        3.0
-      ],
-      "to_cell": [
-        5.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 0.0,
-      "from_end_cell": [
-        5.0,
-        3.0
-      ],
-      "to_cell": [
-        6.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        4.0
-      ],
-      "to_cell": [
-        4.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 2.0,
-      "from_end_cell": [
-        5.0,
-        4.0
-      ],
-      "to_cell": [
-        5.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 2.0,
-      "from_end_cell": [
-        5.0,
-        6.0
-      ],
-      "to_cell": [
-        4.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        3.0
-      ],
-      "to_cell": [
-        4.0,
-        2.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        2.0
-      ],
-      "to_cell": [
-        4.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        2.0,
-        6.0
-      ],
-      "to_cell": [
-        3.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        3.0,
-        6.0
-      ],
-      "to_cell": [
-        3.0,
-        5.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        1.0
-      ],
-      "to_cell": [
-        3.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        3.0,
-        5.0
-      ],
-      "to_cell": [
-        3.0,
-        4.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        3.0,
-        1.0
-      ],
-      "to_cell": [
-        2.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        2.0,
-        1.0
-      ],
-      "to_cell": [
-        1.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        3.0,
-        4.0
-      ],
-      "to_cell": [
-        4.0,
-        4.0
-      ]
-    },
-    {
-      "cat_id": 2.0,
-      "from_end_cell": [
-        4.0,
-        6.0
-      ],
-      "to_cell": [
-        3.0,
-        6.0
-      ]
-    },
-    {
       "cat_id": 2.0,
       "from_end_cell": [
         3.0,
-        6.0
-      ],
-      "to_cell": [
-        2.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        3.0,
-        5.0
-      ],
-      "to_cell": [
-        3.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        2.0
-      ],
-      "to_cell": [
-        4.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        3.0
-      ],
-      "to_cell": [
-        5.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        5.0,
-        3.0
-      ],
-      "to_cell": [
-        5.0,
-        4.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        5.0,
-        4.0
-      ],
-      "to_cell": [
-        5.0,
-        5.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        5.0,
-        5.0
-      ],
-      "to_cell": [
-        5.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        5.0,
-        6.0
-      ],
-      "to_cell": [
-        5.0,
-        7.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        3.0,
-        4.0
-      ],
-      "to_cell": [
-        4.0,
-        4.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        4.0,
-        4.0
-      ],
-      "to_cell": [
-        4.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        4.0,
-        3.0
-      ],
-      "to_cell": [
-        4.0,
-        2.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        5.0,
-        3.0
-      ],
-      "to_cell": [
-        6.0,
-        3.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        5.0,
-        6.0
-      ],
-      "to_cell": [
-        4.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        4.0,
-        6.0
-      ],
-      "to_cell": [
-        3.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        3.0,
-        6.0
-      ],
-      "to_cell": [
-        2.0,
-        6.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        2.0,
-        6.0
-      ],
-      "to_cell": [
-        2.0,
-        7.0
-      ]
-    },
-    {
-      "cat_id": 3.0,
-      "from_end_cell": [
-        2.0,
         7.0
       ],
       "to_cell": [
-        2.0,
+        3.0,
         8.0
       ]
     },
     {
-      "cat_id": 1.0,
+      "cat_id": 3.0,
       "from_end_cell": [
-        4.0,
-        2.0
-      ],
-      "to_cell": [
-        4.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        4.0,
+        2.0,
         1.0
       ],
       "to_cell": [
@@ -889,70 +378,78 @@
       ]
     },
     {
-      "cat_id": 1.0,
+      "cat_id": 3.0,
       "from_end_cell": [
         3.0,
         1.0
       ],
       "to_cell": [
-        2.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        2.0,
-        1.0
-      ],
-      "to_cell": [
-        1.0,
-        1.0
-      ]
-    },
-    {
-      "cat_id": 1.0,
-      "from_end_cell": [
-        1.0,
-        1.0
-      ],
-      "to_cell": [
-        1.0,
+        3.0,
         2.0
       ]
     },
     {
-      "cat_id": 1.0,
+      "cat_id": 3.0,
       "from_end_cell": [
-        1.0,
+        3.0,
         2.0
       ],
       "to_cell": [
-        1.0,
+        3.0,
         3.0
+      ]
+    },
+    {
+      "cat_id": 1.0,
+      "from_end_cell": [
+        1.0,
+        2.0
+      ],
+      "to_cell": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "cat_id": 3.0,
+      "from_end_cell": [
+        3.0,
+        3.0
+      ],
+      "to_cell": [
+        3.0,
+        4.0
+      ]
+    },
+    {
+      "cat_id": 1.0,
+      "from_end_cell": [
+        1.0,
+        1.0
+      ],
+      "to_cell": [
+        2.0,
+        1.0
       ]
     }
   ],
   "stats": {
     "difficulty_score": 47,
     "early_clearing": [
-      1.0,
-      2.0,
-      1.0,
-      2.0,
+      3.0,
       0.0,
       0.0,
       0.0
     ],
-    "nested_cats": 3.0,
+    "nested_cats": 0.0,
     "nested_mode": "three_ratio_0.00",
-    "nested_ratio": 0.75,
+    "nested_ratio": 0.0,
     "nested_three_cats": 0.0,
-    "nested_two_cats": 3.0,
-    "nested_two_ratio": 0.75,
-    "obstacle_cells": 40.0,
-    "solution_length": 54.0,
-    "solver_moves": 54.0,
-    "solver_nodes": 1322.0
+    "nested_two_cats": 0.0,
+    "nested_two_ratio": 0.0,
+    "obstacle_cells": 24.0,
+    "solution_length": 14.0,
+    "solver_moves": 14.0,
+    "solver_nodes": 16.0
   }
 }
