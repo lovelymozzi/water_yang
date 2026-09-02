@@ -149,7 +149,7 @@ const AUDIO_ASSETS = [
   LOBBY_REWARD_SCALE_SFX, LOBBY_REWARD_TRAIL_SFX, LOBBY_BGM, INGAME_BGM,
 ];
 const STAGE_TIME_LIMIT_SECONDS = 60;
-const TIMEOUT_CONTINUE_SECONDS = 20;
+const TIMEOUT_CONTINUE_SECONDS = 20 * 60;
 const SPLASH_LOAD_FILL_DURATION_MS = 700;
 const SETTINGS_MENU_MOTION_MS = 240;
 const SETTINGS_MENU_STAGGER_MS = 60;
@@ -342,7 +342,7 @@ async function renderLeaderboard(renderer) {
 }
 setInterval(() => { void renderLeaderboard(); }, LEADERBOARD_REFRESH_MS);
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19106576,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":19106976,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -593,6 +593,7 @@ let activeSceneUuid = '';
 let splashRenderer = null;
 let continueWithoutHeart = false;
 let endedGame = null;
+let timeoutRecoveryPending = false;
 let sceneSessionToken = 0;
 let instantLobbyHomeReturnTimeoutId = null;
 let activeGodotScene = 'lobby';
@@ -928,6 +929,7 @@ const handleMainGameEnd = async (result) => {
   if (endedGame === activeGame) return;
   endedGame = activeGame;
   if (result.outcome === 'clear') {
+    timeoutRecoveryPending = false;
     await runEconomyTransaction('stage-clear', async () => {
       await economy.grantHearts(1);
       await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
@@ -944,6 +946,7 @@ const handleMainGameEnd = async (result) => {
     void saveGame();
     await flow.fire('스테이지 클리어시');
   } else if (result.outcome === 'fail') {
+    timeoutRecoveryPending = true;
     await flow.fire('스테이지 시간이 다되어 게임패배시');
   }
 };
@@ -1059,6 +1062,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     const purchaseToast = renderer.getElement('common-box-toast-png-2187');
     const closeButton = renderer.getElement('common-btn-top-x-blue-png-2186');
     let purchaseToastTimer;
+    let resumeTimeoutAfterShop = false;
     if (purchaseToast) purchaseToast.style.visibility = 'hidden';
     if (closeButton) {
       closeButton.style.visibility = popup ? '' : 'hidden';
@@ -1074,11 +1078,22 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       syncShopCooldowns(renderer);
     }, 1000);
     const showPurchaseToast = () => {
+      resumeTimeoutAfterShop = timeoutRecoveryPending && endedGame === activeGame && activeGame?.state === 'paused';
+      console.info('[timeout-shop] purchase completed', { resumeTimeoutAfterShop, gameState: activeGame?.state });
       if (!purchaseToast) return;
       clearTimeout(purchaseToastTimer);
       purchaseToast.style.visibility = '';
       purchaseToastTimer = setTimeout(() => { purchaseToast.style.visibility = 'hidden'; }, 2500);
     };
+    renderer.on('common-btn-top-x-blue-png-2186:click', () => {
+      if (!resumeTimeoutAfterShop || activeGame?.state !== 'paused') return;
+      resumeTimeoutAfterShop = false;
+      timeoutRecoveryPending = false;
+      endedGame = null;
+      console.info('[timeout-shop] resuming purchased timeout continue', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
+      activeGame.message('continue_stage', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
+      activeGame.resume();
+    });
     renderer.on('860', async () => {
       if (shopPurchasePending || getShopCooldownRemaining('860') > 0) return;
       shopPurchasePending = true;
@@ -1379,12 +1394,17 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
   if (activeGame?.state === 'running') activeGame.pause('scene-switch');
   if (activeGame?.state === 'paused') {
-    if (godotScene === 'main') endedGame = null;
+    const restartingTimedOutStage = godotScene === 'main' && endedGame === activeGame && !continueWithoutHeart;
+    if (godotScene === 'main') {
+      endedGame = null;
+      timeoutRecoveryPending = false;
+    }
     if (godotScene === 'main' && continueWithoutHeart) {
       activeGame.message('continue_stage', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
       continueWithoutHeart = false;
     }
-    if (godotScene !== activeGodotScene) {
+    if (godotScene !== activeGodotScene || restartingTimedOutStage) {
+      if (restartingTimedOutStage) console.info('[timeout-replay] restarting ended stage after shop return');
       activeGodotScene = godotScene;
       activeGame.message('load_scene', {
         stage: progress.getCurrentStage(),
