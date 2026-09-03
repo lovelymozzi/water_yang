@@ -1,28 +1,16 @@
-[gd_resource type="ShaderMaterial" load_steps=4 format=3]
+[gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Shader" path="res://scripts/ice_dissolve_mesh.gdshader" id="1_dissolve"]
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_reference"]
-noise_type = 1
-frequency = 0.75
-fractal_octaves = 4
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_reference"]
-noise = SubResource("FastNoiseLite_reference")
-width = 256
-height = 256
-seamless = true
+[ext_resource type="Shader" path="res://scripts/shadertoy_xdvbw1.gdshader" id="1_xdvbw1"]
 
 [resource]
 resource_name = "Shadertoy Dissolve Reference"
-render_priority = 1
-shader = ExtResource("1_dissolve")
-shader_parameter/dissolve_amount = 0.0
-shader_parameter/noise_speed = 0.08
-shader_parameter/fractal_noise_texture = SubResource("NoiseTexture2D_reference")
-shader_parameter/shadertoy_reference_mode = true
-shader_parameter/reference_dissolve_speed = 1.0
-shader_parameter/reference_noise_scale = 7.0
-shader_parameter/reference_surface_color = Color(0.04, 0.16, 0.12, 1)
-shader_parameter/reference_edge_color = Color(0.3, 1, 1, 1)
-shader_parameter/reference_edge_energy = 2.8
+shader = ExtResource("1_xdvbw1")
+shader_parameter/camera_orbit = Vector2(-1, -1)
+shader_parameter/viewport_aspect = 0.461
+shader_parameter/sky_horizon = Color(0.08, 0.14, 0.24, 1)
+shader_parameter/sky_zenith = Color(0.42, 0.72, 0.93, 1)
+shader_parameter/sphere_one_color = Color(0.12, 0.38, 0.18, 1)
+shader_parameter/sphere_two_color = Color(0.34, 0.25, 0.05, 1)
+shader_parameter/cyan_edge_color = Color(0.3, 1, 1, 1)
+shader_parameter/yellow_edge_color = Color(1, 1, 0, 1)
+shader_parameter/edge_emission = 3.0

@@ -1,41 +1,20 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Shader" path="res://scripts/ice_dissolve_mesh.gdshader" id="1_dissolve"]
-[ext_resource type="Material" path="res://resources/lobby_water_material.tres" id="2_water"]
-[ext_resource type="Material" path="res://resources/shadertoy_dissolve_test_material.tres" id="3_dissolve_material"]
-[ext_resource type="Environment" path="res://resources/shadertoy_test_environment.tres" id="4_environment"]
+[ext_resource type="Material" path="res://resources/shadertoy_dissolve_test_material.tres" id="1_dissolve_material"]
+[ext_resource type="Environment" path="res://resources/shadertoy_test_environment.tres" id="2_environment"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_reference"]
-material = ExtResource("3_dissolve_material")
-radius = 1.5
-height = 3.0
-radial_segments = 96
-rings = 48
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
-material = ExtResource("2_water")
-size = Vector2(18, 18)
-subdivide_width = 16
-subdivide_depth = 16
+[sub_resource type="QuadMesh" id="QuadMesh_reference"]
+material = ExtResource("1_dissolve_material")
+size = Vector2(2, 2)
 
 [node name="ShadertoyDissolveTest" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = ExtResource("4_environment")
+environment = ExtResource("2_environment")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.894427, -0.447214, 0, 0.447214, 0.894427, 0, 4.5, 9)
 current = true
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-35, -30, 0)
-light_color = Color(0.65, 0.84, 1, 1)
-light_energy = 1.2
-shadow_enabled = true
-
-[node name="Water" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_water")
-
-[node name="DissolveSphere" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.5, 0)
-mesh = SubResource("SphereMesh_reference")
+[node name="ReferenceQuad" type="MeshInstance3D" parent="Camera3D"]
+position = Vector3(0, 0, -1)
+mesh = SubResource("QuadMesh_reference")

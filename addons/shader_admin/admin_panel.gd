@@ -6,7 +6,7 @@ const EFFECTS := [
 	{
 		"name": "디졸브 + 발광 · XdVBW1",
 		"path": "res://resources/shadertoy_dissolve_test_material.tres",
-		"detail": "Noxbuds Shadertoy의 FBM 임계값 디졸브와 청록 발광 경계입니다.",
+		"detail": "Noxbuds Shadertoy의 3D SDF, 반사, FBM 디졸브를 Godot 전체 화면 셰이더로 옮긴 테스트입니다.",
 	},
 	{
 		"name": "물",
