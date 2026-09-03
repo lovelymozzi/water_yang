@@ -130,7 +130,16 @@ void fragment() {
 	frost = mix(frost, outer_edge_color.rgb, min(1.0, outer_edge * outer_visibility + inner_edge * 0.35 * inner_visibility));
 	frost = mix(frost, inner_edge_color.rgb, min(1.0, crystal_rim + inner_edge * 0.65) * inner_visibility);
 	frost = mix(frost, frost_core_color.rgb, white_rim * inner_visibility);
-	vec4 overlay = texture(overlay_texture, screen_uv * texture_tiling);
+	// The edge is not the only moving part: displace the existing ice image
+	// itself with two offset noise fields for a subtle frozen-water shimmer.
+	vec2 overlay_uv = screen_uv * texture_tiling;
+	float ripple_time = TIME * (0.15 + noise_speed);
+	vec2 ripple = vec2(
+		fractal_noise(overlay_uv * 5.5 + vec2(ripple_time, -ripple_time * 0.71)),
+		fractal_noise(overlay_uv * 5.5 + vec2(4.2 - ripple_time * 0.63, 8.7 + ripple_time))
+	) - 0.5;
+	overlay_uv += ripple * noise_strength * 0.018;
+	vec4 overlay = texture(overlay_texture, overlay_uv);
 	vec3 textured_frost = texture_blend_mode == 0 ? overlay_blend(frost, overlay.rgb) : frost * overlay.rgb;
 	frost = mix(frost, textured_frost, texture_opacity * overlay.a);
 	ALBEDO = frost;
