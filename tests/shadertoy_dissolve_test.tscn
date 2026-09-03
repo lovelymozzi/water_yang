@@ -5,7 +5,7 @@
 
 [sub_resource type="QuadMesh" id="QuadMesh_reference"]
 material = ExtResource("1_dissolve_material")
-size = Vector2(2, 2)
+size = Vector2(3, 2)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_reference"]
 viewport_path = NodePath("SubViewport")
@@ -34,4 +34,5 @@ grow_vertical = 2
 texture = SubResource("ViewportTexture_reference")
 expand_mode = 1
 stretch_mode = 5
+flip_v = true
 material = ExtResource("2_bloom_material")

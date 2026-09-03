@@ -112,7 +112,7 @@ vec4 material_data(float object_id, vec3 point, vec3 normal, vec3 ray, out bool 
 	if (object_id == 1.0 || object_id == 2.0) {
 		vec2 cylindrical_uv = vec2(atan(normal.x, normal.z) / (2.0 * REFERENCE_PI) + 0.5, point.y * 0.5 + 0.5);
 		cylindrical_uv.x = mod((cylindrical_uv.x + 0.22) * 2.0, 1.0);
-		vec3 base_color = texture(surface_texture, cylindrical_uv).rgb;
+		vec3 base_color = texture(surface_texture, vec2(cylindrical_uv.x, 1.0 - cylindrical_uv.y)).rgb;
 		vec2 noise_uv = cylindrical_uv * 2.0 - 1.0;
 		float dissolve_noise;
 		float threshold;
@@ -143,25 +143,25 @@ vec3 sky_color(vec3 ray) {
 	if (magnitude.x >= magnitude.y && magnitude.x >= magnitude.z) {
 		if (ray.x > 0.0) {
 			cube_uv = vec2(-ray.z, ray.y) / magnitude.x;
-			return texture(cube_face_0, cube_uv * 0.5 + 0.5).rgb;
+			return texture(cube_face_0, vec2(cube_uv.x * 0.5 + 0.5, 0.5 - cube_uv.y * 0.5)).rgb;
 		}
 		cube_uv = vec2(ray.z, ray.y) / magnitude.x;
-		return texture(cube_face_1, cube_uv * 0.5 + 0.5).rgb;
+		return texture(cube_face_1, vec2(cube_uv.x * 0.5 + 0.5, 0.5 - cube_uv.y * 0.5)).rgb;
 	}
 	if (magnitude.y >= magnitude.z) {
 		if (ray.y > 0.0) {
 			cube_uv = vec2(ray.x, -ray.z) / magnitude.y;
-			return texture(cube_face_2, cube_uv * 0.5 + 0.5).rgb;
+			return texture(cube_face_2, vec2(cube_uv.x * 0.5 + 0.5, 0.5 - cube_uv.y * 0.5)).rgb;
 		}
 		cube_uv = vec2(ray.x, ray.z) / magnitude.y;
-		return texture(cube_face_3, cube_uv * 0.5 + 0.5).rgb;
+		return texture(cube_face_3, vec2(cube_uv.x * 0.5 + 0.5, 0.5 - cube_uv.y * 0.5)).rgb;
 	}
 	if (ray.z > 0.0) {
 		cube_uv = vec2(ray.x, ray.y) / magnitude.z;
-		return texture(cube_face_4, cube_uv * 0.5 + 0.5).rgb;
+		return texture(cube_face_4, vec2(cube_uv.x * 0.5 + 0.5, 0.5 - cube_uv.y * 0.5)).rgb;
 	}
 	cube_uv = vec2(-ray.x, ray.y) / magnitude.z;
-	return texture(cube_face_5, cube_uv * 0.5 + 0.5).rgb;
+	return texture(cube_face_5, vec2(cube_uv.x * 0.5 + 0.5, 0.5 - cube_uv.y * 0.5)).rgb;
 }
 
 vec3 raymarch(vec2 screen_uv) {
@@ -231,8 +231,5 @@ vec3 raymarch(vec2 screen_uv) {
 }
 
 void fragment() {
-	vec3 color = raymarch(SCREEN_UV);
-	ALBEDO = vec3(0.0);
-	EMISSION = color;
-	ALPHA = 1.0;
+	ALBEDO = raymarch(SCREEN_UV);
 }

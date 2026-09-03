@@ -12,9 +12,9 @@
 [resource]
 resource_name = "Shadertoy Dissolve Reference"
 shader = ExtResource("1_xdvbw1")
-shader_parameter/camera_orbit = Vector2(-1, -1)
+shader_parameter/camera_orbit = Vector2(0, 0)
 shader_parameter/viewport_aspect = 1.777778
-shader_parameter/time_offset = 1649.25
+shader_parameter/time_offset = 0.0
 shader_parameter/surface_texture = ExtResource("2_rock")
 shader_parameter/cube_face_0 = ExtResource("3_forest0")
 shader_parameter/cube_face_1 = ExtResource("4_forest1")
