@@ -100,12 +100,22 @@ void fragment() {
 	float vertical_progress = min((vertical_distance + vertical_curve_depth)
 		/ max(dissolve_amount * vertical_edge_size * edge_noise, 0.0001), 2.0);
 	float edge_progress = -log(exp(-8.0 * side_progress) + exp(-8.0 * vertical_progress)) / 8.0;
+	// Port the reference dissolve's moving noise threshold onto the frost front,
+	// so the already-existing edge texture appears in irregular glowing fragments.
+	float dissolve_noise = mix(
+		seamless_noise(vec3(noise_uv * 11.0, TIME * noise_speed)),
+		fractal_noise(noise_uv * 11.0),
+		0.78
+	);
+	edge_progress += (dissolve_noise - 0.5) * noise_strength * 0.36;
 	float edge_softness = 0.12 / cartoon_edge_sharpness;
 	float edge_visibility = hide_edges ? 0.0 : 1.0;
 	float outer_visibility = hide_outer_edge ? 0.0 : edge_visibility;
 	float inner_visibility = hide_inner_edge ? 0.0 : edge_visibility;
 	float inner_edge = cartoon_band(edge_progress, 1.0 - edge_gap, 0.17, edge_softness);
 	float outer_edge = cartoon_band(edge_progress, 1.0 + edge_gap, 0.14, edge_softness);
+	float dissolve_glow = cartoon_band(edge_progress, 1.0, 0.22, edge_softness * 1.5)
+		* mix(0.45, 1.0, dissolve_noise);
 	float body = 1.0 - smoothstep(1.0 + edge_gap + 0.05, 1.0 + edge_gap + 0.15, edge_progress);
 	float coverage = max(body, outer_edge);
 	if (coverage < 0.01) {
@@ -126,6 +136,8 @@ void fragment() {
 	ALBEDO = frost;
 	EMISSION = frost_core_color.rgb * white_rim * inner_visibility * 2.2
 		+ inner_edge_color.rgb * min(1.0, crystal_rim + inner_edge * 0.65) * inner_visibility * 1.3
-		+ outer_edge_color.rgb * (outer_edge * outer_visibility + frost_fill * 0.3 * edge_visibility) * 0.5;
+		+ outer_edge_color.rgb * (
+			outer_edge * outer_visibility + frost_fill * 0.3 * edge_visibility + dissolve_glow * edge_visibility
+		) * 0.5;
 	ALPHA = coverage * mix(0.76, 0.92, noise_value);
 }
