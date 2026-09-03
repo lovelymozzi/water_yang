@@ -7,7 +7,6 @@
 resource_name = "Shadertoy Dissolve Mesh"
 shader = ExtResource("1_shader")
 shader_parameter/surface_texture = ExtResource("2_rock")
-shader_parameter/cyan_edge_color = Color(0.3, 1, 1, 1)
-shader_parameter/yellow_edge_color = Color(1, 1, 0, 1)
+shader_parameter/edge_color = Color(1, 1, 1, 1)
 shader_parameter/edge_emission = 2.0
 shader_parameter/dissolve_speed = 1.0
