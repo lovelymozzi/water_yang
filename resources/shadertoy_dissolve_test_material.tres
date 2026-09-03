@@ -1,0 +1,28 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3]
+
+[ext_resource type="Shader" path="res://scripts/ice_dissolve_mesh.gdshader" id="1_dissolve"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_reference"]
+noise_type = 1
+frequency = 0.75
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_reference"]
+noise = SubResource("FastNoiseLite_reference")
+width = 256
+height = 256
+seamless = true
+
+[resource]
+resource_name = "Shadertoy Dissolve Reference"
+render_priority = 1
+shader = ExtResource("1_dissolve")
+shader_parameter/dissolve_amount = 0.0
+shader_parameter/noise_speed = 0.08
+shader_parameter/fractal_noise_texture = SubResource("NoiseTexture2D_reference")
+shader_parameter/shadertoy_reference_mode = true
+shader_parameter/reference_dissolve_speed = 1.0
+shader_parameter/reference_noise_scale = 7.0
+shader_parameter/reference_surface_color = Color(0.04, 0.16, 0.12, 1)
+shader_parameter/reference_edge_color = Color(0.3, 1, 1, 1)
+shader_parameter/reference_edge_energy = 2.8

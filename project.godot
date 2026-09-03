@@ -33,7 +33,7 @@ window/handheld/orientation=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/cat_hole_palette_inspector/plugin.cfg", "res://addons/stage_admin/plugin.cfg", "res://addons/sound_admin/plugin.cfg", "res://addons/godot_ai/plugin.cfg")
+enabled=PackedStringArray("res://addons/cat_hole_palette_inspector/plugin.cfg", "res://addons/stage_admin/plugin.cfg", "res://addons/sound_admin/plugin.cfg", "res://addons/shader_admin/plugin.cfg", "res://addons/godot_ai/plugin.cfg")
 
 [filesystem]
 

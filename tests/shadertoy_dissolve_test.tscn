@@ -1,34 +1,12 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Shader" path="res://scripts/ice_dissolve_mesh.gdshader" id="1_dissolve"]
 [ext_resource type="Material" path="res://resources/lobby_water_material.tres" id="2_water"]
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_reference"]
-noise_type = 1
-frequency = 0.75
-fractal_octaves = 4
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_reference"]
-noise = SubResource("FastNoiseLite_reference")
-width = 256
-height = 256
-seamless = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_reference"]
-render_priority = 1
-shader = ExtResource("1_dissolve")
-shader_parameter/dissolve_amount = 0.0
-shader_parameter/noise_speed = 0.08
-shader_parameter/fractal_noise_texture = SubResource("NoiseTexture2D_reference")
-shader_parameter/shadertoy_reference_mode = true
-shader_parameter/reference_dissolve_speed = 1.0
-shader_parameter/reference_noise_scale = 7.0
-shader_parameter/reference_surface_color = Color(0.04, 0.16, 0.12, 1)
-shader_parameter/reference_edge_color = Color(0.3, 1, 1, 1)
-shader_parameter/reference_edge_energy = 2.8
+[ext_resource type="Material" path="res://resources/shadertoy_dissolve_test_material.tres" id="3_dissolve_material"]
+[ext_resource type="Environment" path="res://resources/shadertoy_test_environment.tres" id="4_environment"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_reference"]
-material = SubResource("ShaderMaterial_reference")
+material = ExtResource("3_dissolve_material")
 radius = 1.5
 height = 3.0
 radial_segments = 96
@@ -40,25 +18,10 @@ size = Vector2(18, 18)
 subdivide_width = 16
 subdivide_depth = 16
 
-[sub_resource type="Environment" id="Environment_reference"]
-background_mode = 1
-background_color = Color(0.015, 0.035, 0.07, 1)
-ambient_light_source = 3
-ambient_light_color = Color(0.18, 0.26, 0.34, 1)
-ambient_light_energy = 0.55
-tonemap_mode = 2
-tonemap_exposure = 1.1
-glow_enabled = true
-glow_normalized = true
-glow_intensity = 1.0
-glow_strength = 0.9
-glow_bloom = 0.2
-glow_hdr_threshold = 0.4
-
 [node name="ShadertoyDissolveTest" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_reference")
+environment = ExtResource("4_environment")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.894427, -0.447214, 0, 0.447214, 0.894427, 0, 4.5, 9)
