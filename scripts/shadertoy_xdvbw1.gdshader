@@ -17,7 +17,7 @@ uniform sampler2D cube_face_4 : source_color, repeat_disable, filter_nearest;
 uniform sampler2D cube_face_5 : source_color, repeat_disable, filter_nearest;
 uniform vec3 cyan_edge_color : source_color = vec3(0.3, 1.0, 1.0);
 uniform vec3 yellow_edge_color : source_color = vec3(1.0, 1.0, 0.0);
-uniform float edge_emission : hint_range(1.0, 8.0, 0.1) = 3.0;
+uniform float edge_emission : hint_range(0.0, 8.0, 0.1) = 1.0;
 group_uniforms;
 
 const float REFERENCE_PI = 3.14159;
@@ -232,7 +232,7 @@ vec3 raymarch(vec2 screen_uv) {
 
 void fragment() {
 	vec3 color = raymarch(SCREEN_UV);
-	ALBEDO = clamp(color, 0.0, 1.0);
-	EMISSION = max(color - vec3(0.5), vec3(0.0));
+	ALBEDO = vec3(0.0);
+	EMISSION = color;
 	ALPHA = 1.0;
 }
