@@ -26,6 +26,19 @@ uniform int texture_blend_mode : hint_enum("Overlay", "Multiply") = 0;
 uniform float texture_opacity : hint_range(0.0, 1.0, 0.01) = 0.35;
 uniform vec2 texture_tiling = vec2(2.0);
 
+// Opt-in visual-study mode derived from the threshold dissolve in
+// https://www.shadertoy.com/view/XdVBW1 (Noxbuds).  It deliberately reuses
+// this shader's already-compiled noise path rather than its costly 3D
+// raymarch and 441-tap bloom pass.
+group_uniforms shadertoy_reference_test;
+uniform bool shadertoy_reference_mode = false;
+uniform float reference_dissolve_speed : hint_range(0.0, 3.0, 0.01) = 1.0;
+uniform float reference_noise_scale : hint_range(0.1, 32.0, 0.1) = 7.0;
+uniform vec4 reference_surface_color : source_color = vec4(0.04, 0.16, 0.12, 1.0);
+uniform vec4 reference_edge_color : source_color = vec4(0.3, 1.0, 1.0, 1.0);
+uniform float reference_edge_energy : hint_range(0.0, 8.0, 0.1) = 2.0;
+group_uniforms;
+
 vec3 hash33(vec3 p) {
 	p = vec3(
 		dot(p, vec3(127.1, 311.7, 74.7)),
@@ -85,7 +98,29 @@ void vertex() {
 }
 
 void fragment() {
-	vec2 screen_uv = SCREEN_UV;
+	if (shadertoy_reference_mode) {
+		// The reference uses a scrolling FBM threshold: pixels above it vanish,
+		// while the final 0.1 of the threshold becomes the emissive cyan rim.
+		vec2 reference_uv = UV * reference_noise_scale;
+		float reference_noise = mix(
+			seamless_noise(vec3(reference_uv, TIME * reference_dissolve_speed)),
+			fractal_noise(reference_uv),
+			0.78
+		);
+		float reference_threshold = 0.5 + 0.5 * sin(TIME * reference_dissolve_speed);
+		if (reference_noise > reference_threshold) {
+			discard;
+		}
+		float reference_edge = smoothstep(
+			reference_threshold - 0.1,
+			reference_threshold,
+			reference_noise
+		);
+		ALBEDO = reference_surface_color.rgb;
+		EMISSION = reference_edge_color.rgb * reference_edge * reference_edge_energy;
+		ALPHA = 1.0;
+	} else {
+		vec2 screen_uv = SCREEN_UV;
 	float side_distance = min(screen_uv.x, 1.0 - screen_uv.x);
 	float vertical_distance = min(screen_uv.y, 1.0 - screen_uv.y);
 	vec2 noise_uv = screen_uv * noise_scale + vec2(TIME * noise_speed, TIME * noise_speed * 0.63);
@@ -148,5 +183,6 @@ void fragment() {
 		+ outer_edge_color.rgb * (
 			outer_edge * outer_visibility + frost_fill * 0.3 * edge_visibility + dissolve_glow * edge_visibility
 		) * 0.5;
-	ALPHA = coverage * mix(0.76, 0.92, noise_value);
+		ALPHA = coverage * mix(0.76, 0.92, noise_value);
+	}
 }
