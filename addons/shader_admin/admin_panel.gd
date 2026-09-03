@@ -4,9 +4,16 @@ extends Control
 const TEST_SCENE_PATH := "res://tests/shadertoy_dissolve_test.tscn"
 const EFFECTS := [
 	{
-		"name": "디졸브 + 발광 · XdVBW1",
+		"name": "디졸브 + 발광 · XdVBW1 (선택 Mesh)",
+		"path": "res://resources/shadertoy_dissolve_mesh_material.tres",
+		"detail": "선택한 MeshInstance3D에 적용하는 Shadertoy식 노이즈 디졸브입니다.",
+		"edge_colors": true,
+	},
+	{
+		"name": "디졸브 + 발광 · XdVBW1 (테스트 화면)",
 		"path": "res://resources/shadertoy_dissolve_test_material.tres",
 		"detail": "Noxbuds Shadertoy의 3D SDF, 반사, FBM 디졸브를 Godot 전체 화면 셰이더로 옮긴 테스트입니다.",
+		"edge_colors": true,
 	},
 	{
 		"name": "물",
@@ -82,8 +89,8 @@ func _ready() -> void:
 
 func _select_effect(index: int) -> void:
 	_detail.text = EFFECTS[index]["detail"]
-	_edge_colors.visible = index == 0
-	if index == 0:
+	_edge_colors.visible = EFFECTS[index].get("edge_colors", false)
+	if _edge_colors.visible:
 		_sync_edge_colors()
 
 
@@ -99,7 +106,7 @@ func _add_color_picker(label_text: String, parameter: String) -> ColorPickerButt
 
 
 func _sync_edge_colors() -> void:
-	var material := load(EFFECTS[0]["path"]) as ShaderMaterial
+	var material := load(EFFECTS[_picker.selected]["path"]) as ShaderMaterial
 	if material == null:
 		return
 	_updating = true
@@ -111,7 +118,7 @@ func _sync_edge_colors() -> void:
 func _set_edge_color(color: Color, parameter: String) -> void:
 	if _updating or _undo_redo == null:
 		return
-	var material := load(EFFECTS[0]["path"]) as ShaderMaterial
+	var material := load(EFFECTS[_picker.selected]["path"]) as ShaderMaterial
 	if material == null:
 		return
 	var previous := material.get_shader_parameter(parameter)
@@ -144,7 +151,7 @@ func _apply_to_selected_meshes() -> void:
 	_undo_redo.create_action("Shader Admin: 선택 Mesh에 효과 적용")
 	for mesh in meshes:
 		var material := source.duplicate() as Material
-		if material is ShaderMaterial and _picker.selected == 0:
+		if material is ShaderMaterial and EFFECTS[_picker.selected].get("edge_colors", false):
 			(material as ShaderMaterial).set_shader_parameter("cyan_edge_color", _cyan_picker.color)
 			(material as ShaderMaterial).set_shader_parameter("yellow_edge_color", _yellow_picker.color)
 		_undo_redo.add_do_property(mesh, "material_override", material)

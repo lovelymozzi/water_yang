@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://scripts/shadertoy_xdvbw1_mesh.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/rock.jpg" id="2_rock"]
+
+[resource]
+resource_name = "Shadertoy Dissolve Mesh"
+shader = ExtResource("1_shader")
+shader_parameter/surface_texture = ExtResource("2_rock")
+shader_parameter/cyan_edge_color = Color(0.3, 1, 1, 1)
+shader_parameter/yellow_edge_color = Color(1, 1, 0, 1)
+shader_parameter/edge_emission = 2.0
+shader_parameter/dissolve_speed = 1.0
