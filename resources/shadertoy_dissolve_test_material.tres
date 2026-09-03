@@ -1,16 +1,27 @@
 [gd_resource type="ShaderMaterial" format=3]
 
 [ext_resource type="Shader" path="res://scripts/shadertoy_xdvbw1.gdshader" id="1_xdvbw1"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/rock.jpg" id="2_rock"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/forest_0.png" id="3_forest0"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/forest_1.png" id="4_forest1"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/forest_2.png" id="5_forest2"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/forest_3.png" id="6_forest3"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/forest_4.png" id="7_forest4"]
+[ext_resource type="Texture2D" path="res://assets/shadertoy/xdvbw1/forest_5.png" id="8_forest5"]
 
 [resource]
 resource_name = "Shadertoy Dissolve Reference"
 shader = ExtResource("1_xdvbw1")
 shader_parameter/camera_orbit = Vector2(-1, -1)
-shader_parameter/viewport_aspect = 0.461
-shader_parameter/sky_horizon = Color(0.08, 0.14, 0.24, 1)
-shader_parameter/sky_zenith = Color(0.42, 0.72, 0.93, 1)
-shader_parameter/sphere_one_color = Color(0.12, 0.38, 0.18, 1)
-shader_parameter/sphere_two_color = Color(0.34, 0.25, 0.05, 1)
+shader_parameter/viewport_aspect = 1.777778
+shader_parameter/time_offset = 1649.25
+shader_parameter/surface_texture = ExtResource("2_rock")
+shader_parameter/cube_face_0 = ExtResource("3_forest0")
+shader_parameter/cube_face_1 = ExtResource("4_forest1")
+shader_parameter/cube_face_2 = ExtResource("5_forest2")
+shader_parameter/cube_face_3 = ExtResource("6_forest3")
+shader_parameter/cube_face_4 = ExtResource("7_forest4")
+shader_parameter/cube_face_5 = ExtResource("8_forest5")
 shader_parameter/cyan_edge_color = Color(0.3, 1, 1, 1)
 shader_parameter/yellow_edge_color = Color(1, 1, 0, 1)
 shader_parameter/edge_emission = 3.0

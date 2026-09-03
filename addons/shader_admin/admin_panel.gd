@@ -15,8 +15,8 @@ const EFFECTS := [
 	},
 	{
 		"name": "글로우",
-		"path": "res://resources/shadertoy_test_environment.tres",
-		"detail": "발광 경계의 블룸 강도를 결정하는 테스트 환경입니다.",
+		"path": "res://resources/shadertoy_dissolve_bloom_material.tres",
+		"detail": "원본 Image 패스의 21 × 21 블룸 커널입니다.",
 	},
 ]
 

@@ -1,18 +1,20 @@
 // Godot-native study of https://www.shadertoy.com/view/XdVBW1 by Noxbuds.
-// The original iChannel0 cubemap and iChannel1 texture are unavailable as
-// distributable project assets, so the two source inputs are replaced by the
-// procedural sky and surface pattern below. The SDF, reflection, dissolve,
-// and timing structure mirror the reference.
+// iChannel0 and iChannel1 are the source forest cube faces and rock texture
+// captured from the reference page for this test-only asset set.
 shader_type spatial;
 render_mode unshaded, cull_disabled, depth_draw_never, fog_disabled;
 
 group_uniforms shadertoy_reference;
 uniform vec2 camera_orbit = vec2(-1.0, -1.0);
-uniform float viewport_aspect : hint_range(0.2, 3.0, 0.001) = 0.461;
-uniform vec3 sky_horizon : source_color = vec3(0.08, 0.14, 0.24);
-uniform vec3 sky_zenith : source_color = vec3(0.42, 0.72, 0.93);
-uniform vec3 sphere_one_color : source_color = vec3(0.12, 0.38, 0.18);
-uniform vec3 sphere_two_color : source_color = vec3(0.34, 0.25, 0.05);
+uniform float viewport_aspect : hint_range(0.2, 3.0, 0.001) = 1.777778;
+uniform float time_offset = 1649.25;
+uniform sampler2D surface_texture : source_color, repeat_disable, filter_nearest;
+uniform sampler2D cube_face_0 : source_color, repeat_disable, filter_nearest;
+uniform sampler2D cube_face_1 : source_color, repeat_disable, filter_nearest;
+uniform sampler2D cube_face_2 : source_color, repeat_disable, filter_nearest;
+uniform sampler2D cube_face_3 : source_color, repeat_disable, filter_nearest;
+uniform sampler2D cube_face_4 : source_color, repeat_disable, filter_nearest;
+uniform sampler2D cube_face_5 : source_color, repeat_disable, filter_nearest;
 uniform vec3 cyan_edge_color : source_color = vec3(0.3, 1.0, 1.0);
 uniform vec3 yellow_edge_color : source_color = vec3(1.0, 1.0, 0.0);
 uniform float edge_emission : hint_range(1.0, 8.0, 0.1) = 3.0;
@@ -110,18 +112,17 @@ vec4 material_data(float object_id, vec3 point, vec3 normal, vec3 ray, out bool 
 	if (object_id == 1.0 || object_id == 2.0) {
 		vec2 cylindrical_uv = vec2(atan(normal.x, normal.z) / (2.0 * REFERENCE_PI) + 0.5, point.y * 0.5 + 0.5);
 		cylindrical_uv.x = mod((cylindrical_uv.x + 0.22) * 2.0, 1.0);
-		vec3 base_color = object_id == 1.0 ? sphere_one_color : sphere_two_color;
-		base_color *= mix(0.7, 1.3, fbm(cylindrical_uv * 7.0));
+		vec3 base_color = texture(surface_texture, cylindrical_uv).rgb;
 		vec2 noise_uv = cylindrical_uv * 2.0 - 1.0;
 		float dissolve_noise;
 		float threshold;
 		if (object_id == 1.0) {
 			dissolve_noise = fbm(noise_uv * 5.0);
-			threshold = 0.5 + 0.5 * sin(TIME);
+			threshold = 0.5 + 0.5 * sin(TIME + time_offset);
 		} else {
-			noise_uv += vec2(fbm(noise_uv * 2.0 + vec2(TIME, 0.0)));
+			noise_uv += vec2(fbm(noise_uv * 2.0 + vec2(TIME + time_offset, 0.0)));
 			dissolve_noise = smooth_noise(noise_uv * 25.0);
-			threshold = 0.5 + 0.5 * sin(TIME);
+			threshold = 0.5 + 0.5 * sin(TIME + time_offset);
 			threshold *= threshold + 0.1;
 		}
 		if (dissolve_noise > threshold) {
@@ -137,8 +138,30 @@ vec4 material_data(float object_id, vec3 point, vec3 normal, vec3 ray, out bool 
 }
 
 vec3 sky_color(vec3 ray) {
-	float horizon = clamp(ray.y * 0.5 + 0.5, 0.0, 1.0);
-	return mix(sky_horizon, sky_zenith, horizon);
+	vec3 magnitude = abs(ray);
+	vec2 cube_uv;
+	if (magnitude.x >= magnitude.y && magnitude.x >= magnitude.z) {
+		if (ray.x > 0.0) {
+			cube_uv = vec2(-ray.z, ray.y) / magnitude.x;
+			return texture(cube_face_0, cube_uv * 0.5 + 0.5).rgb;
+		}
+		cube_uv = vec2(ray.z, ray.y) / magnitude.x;
+		return texture(cube_face_1, cube_uv * 0.5 + 0.5).rgb;
+	}
+	if (magnitude.y >= magnitude.z) {
+		if (ray.y > 0.0) {
+			cube_uv = vec2(ray.x, -ray.z) / magnitude.y;
+			return texture(cube_face_2, cube_uv * 0.5 + 0.5).rgb;
+		}
+		cube_uv = vec2(ray.x, ray.z) / magnitude.y;
+		return texture(cube_face_3, cube_uv * 0.5 + 0.5).rgb;
+	}
+	if (ray.z > 0.0) {
+		cube_uv = vec2(ray.x, ray.y) / magnitude.z;
+		return texture(cube_face_4, cube_uv * 0.5 + 0.5).rgb;
+	}
+	cube_uv = vec2(-ray.x, ray.y) / magnitude.z;
+	return texture(cube_face_5, cube_uv * 0.5 + 0.5).rgb;
 }
 
 vec3 raymarch(vec2 screen_uv) {
@@ -186,11 +209,13 @@ vec3 raymarch(vec2 screen_uv) {
 					continue;
 				}
 				if (ray.y <= 0.0 && max3(data.rgb) < 0.6 && !hit_transparent) {
-					data.rgb = mix(data.rgb, data.rgb * soft_shadow(point, -LIGHT_DIRECTION, 0.01, 10.0, 2.0), 0.5 + 0.5 * sin(TIME));
+					data.rgb = mix(data.rgb, data.rgb * soft_shadow(point, -LIGHT_DIRECTION, 0.01, 10.0, 2.0), 0.5 + 0.5 * sin(TIME + time_offset));
 				}
 				vec3 shaded = bounce_falloff * data.rgb;
 				if (bounce > 0) {
-					color = mix(color, color + shaded, previous.a);
+					vec3 reflected = mix(color, color + shaded, previous.a);
+					float fog = 1.0 / (1.0 + travel * travel * 0.2);
+					color = mix(color, reflected, fog);
 				} else {
 					color = shaded;
 				}

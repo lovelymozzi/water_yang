@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://scripts/shadertoy_xdvbw1_bloom.gdshader" id="1_bloom"]
+
+[resource]
+resource_name = "Shadertoy XdVBW1 Bloom"
+shader = ExtResource("1_bloom")
