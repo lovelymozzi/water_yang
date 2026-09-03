@@ -22,6 +22,16 @@ const EFFECTS := [
 
 var _picker: OptionButton
 var _detail: Label
+var _edge_colors: HBoxContainer
+var _cyan_picker: ColorPickerButton
+var _yellow_picker: ColorPickerButton
+var _status: Label
+var _undo_redo: EditorUndoRedoManager
+var _updating := false
+
+
+func configure(undo_redo: EditorUndoRedoManager) -> void:
+	_undo_redo = undo_redo
 
 
 func _ready() -> void:
@@ -47,19 +57,68 @@ func _ready() -> void:
 	_detail = Label.new()
 	_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(_detail)
+	_edge_colors = HBoxContainer.new()
+	root.add_child(_edge_colors)
+	_cyan_picker = _add_color_picker("파란 가장자리", "cyan_edge_color")
+	_yellow_picker = _add_color_picker("노란 가장자리", "yellow_edge_color")
 	var inspect := Button.new()
 	inspect.text = "선택 리소스 Inspector에서 조절"
 	inspect.pressed.connect(_inspect_selected)
 	root.add_child(inspect)
+	var apply := Button.new()
+	apply.text = "선택 Mesh에 적용"
+	apply.tooltip_text = "씬 트리에서 선택한 MeshInstance3D에 현재 효과를 Material Override로 적용합니다."
+	apply.pressed.connect(_apply_to_selected_meshes)
+	root.add_child(apply)
 	var open_test := Button.new()
 	open_test.text = "Shadertoy 테스트 씬 열기"
 	open_test.pressed.connect(_open_test_scene)
 	root.add_child(open_test)
+	_status = Label.new()
+	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	root.add_child(_status)
 	_select_effect(0)
 
 
 func _select_effect(index: int) -> void:
 	_detail.text = EFFECTS[index]["detail"]
+	_edge_colors.visible = index == 0
+	if index == 0:
+		_sync_edge_colors()
+
+
+func _add_color_picker(label_text: String, parameter: String) -> ColorPickerButton:
+	var label := Label.new()
+	label.text = label_text
+	_edge_colors.add_child(label)
+	var picker := ColorPickerButton.new()
+	picker.custom_minimum_size = Vector2(44, 26)
+	picker.color_changed.connect(_set_edge_color.bind(parameter))
+	_edge_colors.add_child(picker)
+	return picker
+
+
+func _sync_edge_colors() -> void:
+	var material := load(EFFECTS[0]["path"]) as ShaderMaterial
+	if material == null:
+		return
+	_updating = true
+	_cyan_picker.color = material.get_shader_parameter("cyan_edge_color")
+	_yellow_picker.color = material.get_shader_parameter("yellow_edge_color")
+	_updating = false
+
+
+func _set_edge_color(color: Color, parameter: String) -> void:
+	if _updating or _undo_redo == null:
+		return
+	var material := load(EFFECTS[0]["path"]) as ShaderMaterial
+	if material == null:
+		return
+	var previous := material.get_shader_parameter(parameter)
+	_undo_redo.create_action("Shadertoy 가장자리 색 변경")
+	_undo_redo.add_do_method(material, "set_shader_parameter", parameter, color)
+	_undo_redo.add_undo_method(material, "set_shader_parameter", parameter, previous)
+	_undo_redo.commit_action()
 
 
 func _inspect_selected() -> void:
@@ -68,6 +127,31 @@ func _inspect_selected() -> void:
 		push_error("Shader Admin resource could not be loaded")
 		return
 	EditorInterface.inspect_object(resource)
+
+
+func _apply_to_selected_meshes() -> void:
+	var source := load(EFFECTS[_picker.selected]["path"]) as Material
+	if source == null:
+		_status.text = "선택 효과를 불러오지 못했습니다."
+		return
+	var meshes: Array[MeshInstance3D] = []
+	for node in EditorInterface.get_selection().get_selected_nodes():
+		if node is MeshInstance3D:
+			meshes.append(node)
+	if meshes.is_empty():
+		_status.text = "씬 트리에서 MeshInstance3D를 먼저 선택하세요."
+		return
+	_undo_redo.create_action("Shader Admin: 선택 Mesh에 효과 적용")
+	for mesh in meshes:
+		var material := source.duplicate() as Material
+		if material is ShaderMaterial and _picker.selected == 0:
+			(material as ShaderMaterial).set_shader_parameter("cyan_edge_color", _cyan_picker.color)
+			(material as ShaderMaterial).set_shader_parameter("yellow_edge_color", _yellow_picker.color)
+		_undo_redo.add_do_property(mesh, "material_override", material)
+		_undo_redo.add_undo_property(mesh, "material_override", mesh.material_override)
+		_undo_redo.add_do_reference(material)
+	_undo_redo.commit_action()
+	_status.text = "%d개 Mesh에 적용했습니다. Ctrl+Z로 되돌릴 수 있습니다." % meshes.size()
 
 
 func _open_test_scene() -> void:

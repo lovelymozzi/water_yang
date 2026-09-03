@@ -6,6 +6,7 @@ var _panel: Control
 
 func _enter_tree() -> void:
 	_panel = preload("res://addons/shader_admin/admin_panel.gd").new()
+	_panel.configure(get_undo_redo())
 	EditorInterface.get_editor_main_screen().add_child(_panel)
 	_make_visible(false)
 
