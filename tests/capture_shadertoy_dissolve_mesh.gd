@@ -16,7 +16,7 @@ func _initialize() -> void:
 	mesh.mesh = SphereMesh.new()
 	var material := DISSOLVE_MATERIAL.duplicate() as ShaderMaterial
 	material.set_shader_parameter("dissolve_speed", 0.0)
-	material.set_shader_parameter("edge_color", Color("a855f7"))
+	material.set_shader_parameter("dissolve_color", Color("a855f7"))
 	mesh.material_override = material
 	scene.add_child(mesh)
 

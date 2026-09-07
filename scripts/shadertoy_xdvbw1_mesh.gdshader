@@ -2,8 +2,9 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled, depth_draw_never;
 
-uniform sampler2D surface_texture : source_color, repeat_enable, filter_linear_mipmap;
-uniform vec4 edge_color : source_color = vec4(1.0);
+// The applied mesh is intentionally texture-free: the colour comes solely
+// from Shader Admin's user-controlled picker.
+uniform vec4 dissolve_color : source_color = vec4(1.0);
 uniform float edge_emission : hint_range(0.0, 8.0, 0.1) = 2.0;
 uniform float dissolve_speed : hint_range(0.0, 3.0, 0.01) = 1.0;
 
@@ -38,6 +39,6 @@ void fragment() {
 		discard;
 	}
 	float edge = smoothstep(threshold - 0.1, threshold, dissolve_noise);
-	ALBEDO = mix(texture(surface_texture, UV).rgb, edge_color.rgb, edge);
-	EMISSION = edge_color.rgb * edge * edge_emission;
+	ALBEDO = dissolve_color.rgb;
+	EMISSION = dissolve_color.rgb * edge * edge_emission;
 }

@@ -6,14 +6,8 @@ const EFFECTS := [
 	{
 		"name": "디졸브 + 발광 · XdVBW1 (선택 Mesh)",
 		"path": "res://resources/shadertoy_dissolve_mesh_material.tres",
-		"detail": "선택한 MeshInstance3D에 적용하는 Shadertoy식 노이즈 디졸브입니다.",
-		"edge_parameters": ["edge_color"],
-	},
-	{
-		"name": "디졸브 + 발광 · XdVBW1 (테스트 화면)",
-		"path": "res://resources/shadertoy_dissolve_test_material.tres",
-		"detail": "Noxbuds Shadertoy의 3D SDF, 반사, FBM 디졸브를 Godot 전체 화면 셰이더로 옮긴 테스트입니다.",
-		"edge_parameters": ["cyan_edge_color", "yellow_edge_color"],
+		"detail": "선택한 MeshInstance3D를 텍스처·Shadertoy 배경 없이, 고른 색으로 디졸브합니다.",
+		"edge_parameters": ["dissolve_color"],
 	},
 	{
 		"name": "물",
@@ -66,8 +60,8 @@ func _ready() -> void:
 	root.add_child(_detail)
 	_edge_colors = VBoxContainer.new()
 	root.add_child(_edge_colors)
-	_primary_picker = _add_color_picker("가장자리 색", 0)
-	_secondary_picker = _add_color_picker("보조 가장자리 색", 1)
+	_primary_picker = _add_color_picker("디졸브 색", 0)
+	_secondary_picker = _add_color_picker("보조 색", 1)
 	var inspect := Button.new()
 	inspect.text = "선택 리소스 Inspector에서 조절"
 	inspect.pressed.connect(_inspect_selected)
