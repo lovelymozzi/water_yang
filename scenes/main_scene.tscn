@@ -194,9 +194,33 @@ fill_to = Vector2(0.5, 0)
 shader = ExtResource("2_timeout_warning")
 shader_parameter/strength = 0.0
 
+[sub_resource type="Environment" id="Environment_gameplay"]
+background_mode = 1
+background_color = Color(0.4, 0.48, 0.42, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.63, 0.72, 0.66, 1)
+ambient_light_energy = 0.36
+tonemap_mode = 2
+tonemap_exposure = 1.0
+tonemap_white = 1.35
+glow_enabled = true
+glow_normalized = true
+glow_hdr_threshold = 0.65
+glow_hdr_scale = 2.0
+glow_intensity = 0.35
+glow_strength = 0.25
+glow_bloom = 0.0
+adjustment_enabled = true
+adjustment_saturation = 1.14
+adjustment_contrast = 1.04
+adjustment_brightness = 0.98
+
 [node name="MainScene" type="Node3D" unique_id=1040827005]
 script = ExtResource("1_q0f23")
 start_stage = 33
+
+[node name="RuntimeWorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gameplay")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
 process_mode = 4
@@ -235,8 +259,8 @@ draw_pass_1 = SubResource("QuadMesh_ice_dissolve_snow")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)
-light_color = Color(0.8427468, 0.832763, 0.60438275, 1)
-light_energy = 1.252
+light_color = Color(1, 0.98, 0.95, 1)
+light_energy = 1.0
 light_indirect_energy = 0.3
 light_volumetric_fog_energy = 0.0
 light_angular_distance = 0.05
@@ -885,7 +909,7 @@ fbx_scale_per_tile = 7.5
 tint_from_pair_color = true
 key_local_position = Vector3(0.14, 0, 0.1)
 tint_color = Color(0.95577335, 0.8633, 0.97, 1)
-rim_strength = 0.42
+rim_strength = 0.24
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
@@ -903,7 +927,7 @@ fbx_scale_per_tile = 7.5
 color_id = 1
 tint_from_pair_color = true
 key_material_override = null
-rim_strength = 0.42
+rim_strength = 0.24
 outline_color = Color(0.387, 0.518, 0.686, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
@@ -919,7 +943,7 @@ fbx_scale_per_tile = 7.5
 color_id = 2
 tint_from_pair_color = true
 key_material_override = null
-rim_strength = 0.42
+rim_strength = 0.24
 outline_color = Color(0.423, 0.606, 0.409, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
@@ -935,7 +959,7 @@ fbx_scale_per_tile = 7.5
 color_id = 3
 tint_from_pair_color = true
 key_material_override = null
-rim_strength = 0.42
+rim_strength = 0.24
 outline_color = Color(0.672, 0.438, 0.54, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001

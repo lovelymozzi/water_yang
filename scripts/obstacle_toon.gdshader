@@ -67,5 +67,5 @@ void light() {
 
 	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_attenuation;
 	vec3 toon_rim = specular_color.rgb * LIGHT_COLOR.rgb * rim * shadow_attenuation;
-	DIFFUSE_LIGHT += toon_diffuse + toon_rim;
+	DIFFUSE_LIGHT += (toon_diffuse + toon_rim) / PI;
 }

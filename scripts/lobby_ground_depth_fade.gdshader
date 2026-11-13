@@ -3,6 +3,7 @@ render_mode cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_enable;
 uniform vec2 albedo_uv_scale = vec2(5.0, 5.0);
+uniform vec4 albedo_tint : source_color = vec4(1.0);
 
 group_uniforms water_depth;
 uniform float water_level = 0.0;
@@ -20,7 +21,7 @@ void vertex() {
 }
 
 void fragment() {
-	vec3 land_color = texture(albedo_texture, UV * albedo_uv_scale).rgb;
+	vec3 land_color = texture(albedo_texture, UV * albedo_uv_scale).rgb * albedo_tint.rgb;
 	float height_from_water = land_world_position.y - water_level;
 	float water_depth = 1.0 - smoothstep(-deep_fade_distance, shoreline_fade_height, height_from_water);
 	vec3 water_color = mix(shallow_water_color.rgb, deep_water_color.rgb, water_depth);
