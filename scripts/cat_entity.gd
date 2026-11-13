@@ -45,8 +45,6 @@ const TAIL_BONE_NAME := "Bone022"
 const STRETCH_BONE_FIRST := 7
 const STRETCH_BONE_LAST := 14
 const SCALE_LOCKED_BONE_NAMES := ["Bone001", "Bone002", "Bone017"]
-# 코너에 정확히 놓인 본이 어느 선분의 방향을 쓸지 확정하기 위한 미세 편향.
-const SEGMENT_PICK_EPSILON := 0.0001
 const INVALID_CELL := Vector2i(-9999, -9999)
 # 오버행 고정점 반복 횟수. 3회면 0.001칸 아래로 수렴한다.
 # 양끝 여백을 맞추는 완화 반복. 머리쪽 극점(앞다리 Bone027/028)은 체인이 줄면 2배로
@@ -1386,6 +1384,17 @@ func _rounded_pose_polyline(points: PackedVector3Array) -> PackedVector3Array:
 	var rounded := PackedVector3Array()
 	rounded.append(points[0])
 	var max_radius := level_manager.fitted_tile_size() * CORNER_ROUNDING_CELLS
+	if _inserted_mid_bones.is_empty() and _rest_chain_length > 0.0:
+		var model_scale := _grid_fitted_model_scale()
+		var minimum_length := (_rest_chain_length - _stretchable_rest_length() * 0.15) * model_scale
+		var raw_lengths := _cumulative_lengths(points)
+		var raw_length := raw_lengths[raw_lengths.size() - 1]
+		raw_length += _end_extension(_head_mesh_overhang) + _end_extension(_tail_mesh_overhang)
+		var shortening := 2.0 - 2.0 * CORNER_ROUND_SEGMENTS * sin(PI / (4.0 * CORNER_ROUND_SEGMENTS))
+		max_radius = minf(
+			max_radius,
+			maxf(raw_length - minimum_length, 0.0) / (maxi(points.size() - 2, 1) * shortening)
+		)
 	for index in range(1, points.size() - 1):
 		var previous: Vector3 = points[index - 1]
 		var current: Vector3 = points[index]
@@ -1402,7 +1411,7 @@ func _rounded_pose_polyline(points: PackedVector3Array) -> PackedVector3Array:
 		if absf(incoming_dir.dot(outgoing_dir)) > 0.999:
 			rounded.append(current)
 			continue
-		var radius := minf(max_radius, incoming_length * 0.49, outgoing_length * 0.49)
+		var radius := minf(max_radius, minf(incoming_length * 0.49, outgoing_length * 0.49))
 		if radius <= 0.000001:
 			rounded.append(current)
 			continue
@@ -1413,7 +1422,7 @@ func _rounded_pose_polyline(points: PackedVector3Array) -> PackedVector3Array:
 		var center := current - incoming_dir * radius + outgoing_dir * radius
 		var start_offset := entry - center
 		var end_offset := exit - center
-		var sweep := Vector2(start_offset.x, start_offset.z).angle_to(Vector2(end_offset.x, end_offset.z))
+		var sweep := start_offset.signed_angle_to(end_offset, Vector3.UP)
 		for segment in range(1, CORNER_ROUND_SEGMENTS):
 			var ratio := float(segment) / float(CORNER_ROUND_SEGMENTS)
 			rounded.append(center + start_offset.rotated(Vector3.UP, sweep * ratio))
@@ -1500,33 +1509,21 @@ func _sample_polyline(
 	return polyline[segment].lerp(polyline[segment + 1], (target - cumulative[segment]) / span)
 
 
-# 이 위치에서 모델의 머리가 향하는 방향. 폴리라인 선분 방향을 그대로 쓰므로
-# 둥글게 다듬은 포즈 폴리라인의 접선을 그대로 따라간다.
+# 같은 포즈 경로의 앞뒤를 함께 샘플링해 선분 경계에서도 본 방향을 연속으로 잇는다.
 func _model_head_direction(
 	polyline: PackedVector3Array, cumulative: PackedFloat32Array, arc: float
 ) -> Vector3:
 	var total: float = cumulative[cumulative.size() - 1]
-	# 경계에서는 머리 쪽 선분을 택한다. 그래야 코너 본의 방향이 한쪽으로 확정된다.
-	var bias := SEGMENT_PICK_EPSILON if _lead_is_tail else -SEGMENT_PICK_EPSILON
-	var segment := _segment_index_at(cumulative, clampf(arc + bias, 0.0, total))
-	var direction := _segment_direction(polyline, segment)
+	var target := clampf(arc, 0.0, total)
+	var tangent_span := level_manager.fitted_tile_size() * 0.05
+	var direction := (
+		_sample_polyline(polyline, cumulative, target + tangent_span)
+		- _sample_polyline(polyline, cumulative, target - tangent_span)
+	).normalized()
 	if direction.length_squared() < 0.000001:
 		direction = level_manager.grid_dir_to_world(facing_dir)
 		return direction if direction.length_squared() > 0.000001 else Vector3.FORWARD
 	return direction if _lead_is_tail else -direction
-
-
-# 길이가 0인 선분(전이 시작 순간의 끝 조각)은 건너뛰고 가장 가까운 유효 선분을 쓴다.
-func _segment_direction(polyline: PackedVector3Array, segment: int) -> Vector3:
-	var count := polyline.size() - 1
-	for offset in count:
-		for candidate in [segment - offset, segment + offset]:
-			if candidate < 0 or candidate >= count:
-				continue
-			var delta: Vector3 = polyline[candidate + 1] - polyline[candidate]
-			if delta.length_squared() > 0.000001:
-				return delta.normalized()
-	return Vector3.ZERO
 
 
 func _segment_index_at(cumulative: PackedFloat32Array, arc: float) -> int:

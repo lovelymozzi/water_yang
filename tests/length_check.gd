@@ -1,7 +1,7 @@
-extends SceneTree
+extends Node
 
 # 길이 신축(중간복제) 회귀 검사.
-#   /Applications/Godot.app/Contents/MacOS/Godot --headless --script tests/length_check.gd
+#   Godot --headless --path . res://tests/length_check.tscn
 #
 # 길이 증가는 잡아늘리기가 아니라 본+링 복제다(`CatMiddleDuplicator`). 여기서 지키는 것:
 #   1. 잔여 신축 배율이 1±15% 안 — 복제가 증가분을 흡수하고 배율은 끝수만 다듬는다.
@@ -24,15 +24,17 @@ var _frames := 0
 var _failures: Array[String] = []
 
 
-func _initialize() -> void:
+func _ready() -> void:
+	UiBridge.standalone_autostart = false
 	_scene = (load("res://scenes/main_scene.tscn") as PackedScene).instantiate()
-	root.add_child(_scene)
+	_scene.set_script(null)
+	add_child(_scene)
 
 
-func _process(_delta: float) -> bool:
+func _process(_delta: float) -> void:
 	_frames += 1
 	if _frames < 10:
-		return false
+		return
 	var manager: LevelManager = _scene.get_node("LevelManager")
 	_isolate_board(manager)
 
@@ -44,7 +46,14 @@ func _process(_delta: float) -> bool:
 			body.append(Vector2i(5, 1 + index))
 		for index in range(1, length - half + 1):
 			body.append(Vector2i(5 - index, half))
-		_check_body(manager, body, "L자 길이 %d" % length, length)
+		for turn in 4:
+			var rotated: Array[Vector2i] = []
+			for cell in body:
+				var offset := cell - body[0]
+				for quarter in turn:
+					offset = Vector2i(-offset.y, offset.x)
+				rotated.append(body[0] + offset)
+			_check_body(manager, rotated, "L자 길이 %d 방향 %d" % [length, turn], length)
 
 	# S자 길이 12: 코너 두 개.
 	var snake: Array[Vector2i] = []
@@ -57,16 +66,18 @@ func _process(_delta: float) -> bool:
 	for index in 3:
 		snake.append(Vector2i(4 + index, 7))
 	_check_body(manager, snake, "S자 길이 12", 12)
+	_check_body(manager,
+		[Vector2i(5, 1), Vector2i(5, 2), Vector2i(6, 2), Vector2i(6, 3)], "S자 길이 4", 4)
 
 	_report()
-	return true
+	set_process(false)
+	get_tree().quit(0 if _failures.is_empty() else 1)
 
 
 func _check_body(
 	manager: LevelManager, body: Array[Vector2i], label: String, length: int
 ) -> void:
-	var cat := CatEntity.new()
-	cat.set_script(load("res://scripts/cat_entity.gd"))
+	var cat := (load("res://scenes/cat_entity.tscn") as PackedScene).instantiate() as CatEntity
 	cat.initial_body_cells = body
 	manager.get_node("LayoutCats").add_child(cat)
 	cat.initialize_runtime(manager)
@@ -98,6 +109,27 @@ func _check_body(
 	# 대해 잰다. 폴리라인은 양끝을 메시 오버행만큼 내밀어 두므로 끝 본들이 셀 중심 경로
 	# 밖에 있는 것은 정상이다.
 	var polyline: PackedVector3Array = cat._body_polyline()
+	var cumulative := cat._cumulative_lengths(polyline)
+	_expect(
+		absf(cumulative[cumulative.size() - 1] - cat._target_chain_world_length()) < 0.001,
+		"%s: 포즈 경로와 본 체인 길이가 다르다" % label
+	)
+	var previous_direction := Vector3.ZERO
+	for index in range(1, polyline.size()):
+		var direction := polyline[index] - polyline[index - 1]
+		if direction.length_squared() < 0.000001:
+			continue
+		direction = direction.normalized()
+		if previous_direction != Vector3.ZERO and scale >= SCALE_MIN:
+			_expect(
+				previous_direction.dot(direction) > 0.95,
+				"%s: 코너 접선이 불연속이다 (선분 %d)" % [label, index]
+			)
+		previous_direction = direction
+		if index < polyline.size() - 1:
+			var before := cat._model_head_direction(polyline, cumulative, cumulative[index] - tile * 0.00001)
+			var after := cat._model_head_direction(polyline, cumulative, cumulative[index] + tile * 0.00001)
+			_expect(before.dot(after) > 0.9999, "%s: 선분 경계에서 본 방향이 튄다" % label)
 	var worst_bone := 0.0
 	for chain_index in cat._bone_chain.size():
 		var bone: int = cat._bone_chain[chain_index]
@@ -170,12 +202,14 @@ func _cell_coverage(
 		coverage[cell] = INF
 	var skeleton: Skeleton3D = cat._skeleton
 	var tile: float = manager.tile_size
+	var worst_rest_bind_gap := 0.0
 
 	for mesh_instance in _find_meshes(cat):
 		var skin: Skin = mesh_instance.skin
 		if skin == null:
 			continue
 		var matrices: Dictionary = {}
+		var rest_matrices: Dictionary = {}
 		for bind in skin.get_bind_count():
 			var bone_name: String = skin.get_bind_name(bind)
 			var bone: int = (
@@ -183,6 +217,7 @@ func _cell_coverage(
 			)
 			if bone >= 0:
 				matrices[bind] = skeleton.get_bone_global_pose(bone) * skin.get_bind_pose(bind)
+				rest_matrices[bind] = skeleton.get_bone_global_rest(bone) * skin.get_bind_pose(bind)
 		var mesh: Mesh = mesh_instance.mesh
 		for surface in mesh.get_surface_count():
 			var arrays: Array = mesh.surface_get_arrays(surface)
@@ -193,6 +228,13 @@ func _cell_coverage(
 				continue
 			var slots: int = bones.size() / vertices.size()
 			for vertex in vertices.size():
+				if (surface == CatMiddleDuplicator.TILE_SURFACE_INDEX
+					and skin.get_bind_name(bones[vertex * slots]).begins_with("BoneMid")):
+					var first_rest: Vector3 = rest_matrices[bones[vertex * slots]] * vertices[vertex]
+					for slot in range(1, slots):
+						if weights[vertex * slots + slot] > 0.0:
+							var rest: Vector3 = rest_matrices[bones[vertex * slots + slot]] * vertices[vertex]
+							worst_rest_bind_gap = maxf(worst_rest_bind_gap, first_rest.distance_to(rest))
 				var accumulated := Vector3.ZERO
 				var total := 0.0
 				for slot in slots:
@@ -213,6 +255,8 @@ func _cell_coverage(
 					)
 					if distance < float(coverage[cell]):
 						coverage[cell] = distance
+	_expect(worst_rest_bind_gap < 0.0001,
+		"길이 %d: 복제 링의 바인드 기준점이 %.5f 어긋났다" % [body.size(), worst_rest_bind_gap])
 	return coverage
 
 

@@ -159,7 +159,9 @@
   - `scripts/dependency_graph.gd` — 탈출 순서 의존성. 순환 = 소프트락.
   - `scripts/level_layout_writer.gd` — 씬 노드 / `.tscn` / JSON 출력과 모델 왕복.
   - `scripts/map_generator_tool.gd` — `MainScene/MapGenerator` 노드의 에디터 버튼 두 개.
-- 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`, `tests/puzzle_state_parity_check.gd` → `PARITY CHECK: PASS`, `tests/generator_check.gd` → `GENERATOR CHECK: PASS`, `tests/generator_replay_check.gd` → `REPLAY CHECK: PASS`, `tests/length_check.gd` → `LENGTH CHECK: PASS`. 하네스는 서로 독립이어야 한다.
+- 회귀 검사: `Godot --headless --path . res://tests/movement_check.tscn` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`, `tests/puzzle_state_parity_check.gd` → `PARITY CHECK: PASS`, `tests/generator_check.gd` → `GENERATOR CHECK: PASS`, `tests/generator_replay_check.gd` → `REPLAY CHECK: PASS`, `Godot --headless --path . res://tests/length_check.tscn` → `LENGTH CHECK: PASS`. 이동·길이 검사는 UiBridge 오토로드가 등록되는 씬 실행을 사용하고, 스테이지 자동 로드를 끈다. 하네스는 서로 독립이어야 한다.
 - **이동 검사는 레벨 배치와 무관해야 한다.** 고양이를 보드 곳곳으로 순간이동시키므로 시작 시 `_isolate_board()`로 구멍·장애물·나머지 고양이를 지우고 기준 자세로 되돌린다. 배치를 바꿀 때 이동 검사가 깨지면 배치를 되돌리지 말고 이 격리를 넓힌다.
 - 시각 확인: `Godot --script tests/capture_shots.gd` → `user://shots/*.png`, `Godot --script tests/capture_hole.gd` → `user://shots_hole/*.png`, `Godot --script tests/capture_generated.gd` → `user://shots_generated/*.png`, `Godot --script tests/capture_length.gd` → `user://shots_length/*.png`. 헤드리스가 아니어야 렌더된다.
 - 90도 코너 시각 처리: 목·허리 꺾임은 `_body_polyline()` 렌더 경로에 짧은 원호를 넣어 완화한다. 논리/판정은 여전히 `body_cells` 셀 중심 경로를 기준으로 유지한다. 시각 평가는 사용자 확인이 필요하다.
+- 원호 회전은 `Vector3.signed_angle_to(..., Vector3.UP)`으로 구한다. XZ를 Vector2로 옮겨 구한 각도는 +Y 회전과 부호가 반대라 이음새가 뒤집힌다. 본 위치·방향·체인 길이는 같은 포즈 경로를 사용하며, 짧은 몸은 중간 구간의 압축 한도 안에서만 둥글린다.
+- 복제 링의 이웃 본에는 각자의 역바인드를 옮긴다. 양쪽에 같은 역바인드를 쓰면 rest 정점부터 어긋나 단면 간격이 반 관절 간격씩 밀리고 꺾임에서 움푹 팬다. 본 방향도 같은 포즈 경로의 앞뒤를 함께 샘플링해 선분 경계에서 연속으로 잇는다.

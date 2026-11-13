@@ -108,8 +108,7 @@ static func _insert_bones(
 # ---------------------------------------------------------------- 메시
 
 # 서피스 1 의 [링A(Bone008) → 링B(Bone009/010)] 밴드를 삽입 본마다 복제한다.
-# 링A 의 정점을 그대로 복사하고 바인드만 새 본으로 바꾸면, rest 스키닝이 복사 링을
-# 새 본 자리에 앉힌다(바인드 포즈를 Bone008 것과 같게 두기 때문이다).
+# 링A 정점을 복사하고 이웃 본의 역바인드 쌍을 옮겨 단면 간격과 웨이트를 유지한다.
 static func _duplicate_rings(
 	skeleton: Skeleton3D, mesh_instance: MeshInstance3D, inserted: Array[int]
 ) -> bool:
@@ -201,15 +200,20 @@ static func _duplicate_rings(
 	var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
 	var v_step: float = _average_v(uvs, ring_b) - _average_v(uvs, ring_a)
 
-	# 새 바인드: 삽입 본마다 Bone008 의 바인드 포즈를 복사한다. 정점도 링A 를 그대로 복사하므로
-	# rest 스키닝 결과가 "링A 모양을 새 본 프레임에 놓은 것"이 된다.
+	# 링A 는 Bone008 원점보다 한 관절 뒤에 있다. 이웃 본 각각의 역바인드를 보존해야
+	# 두 웨이트가 같은 rest 정점을 가리키며, 삽입 시작과 끝의 단면 간격도 일정해진다.
 	var cut_bind_pose: Transform3D = skin.get_bind_pose(cut_bind)
 	var inserted_binds: Array[int] = []
+	var inserted_next_binds: Array[int] = []
 	for bone in inserted:
 		var bind: int = skin.get_bind_count()
 		skin.add_bind(bone, cut_bind_pose)
 		skin.set_bind_name(bind, skeleton.get_bone_name(bone))
 		inserted_binds.append(bind)
+		bind = skin.get_bind_count()
+		skin.add_bind(bone, skin.get_bind_pose(next_bind))
+		skin.set_bind_name(bind, skeleton.get_bone_name(bone))
+		inserted_next_binds.append(bind)
 
 	# 복제 링 정점 추가. copies[layer][ring_a 안의 순번] = 새 정점 인덱스.
 	#
@@ -217,15 +221,25 @@ static func _duplicate_rings(
 	# 이웃 링끼리 90도로 확 꺾여 안쪽이 접히고, 뒤집힌 면으로 아웃라인 껍데기가 비집고
 	# 나와 검은 쐐기가 보인다. 0.5/0.5 는 방향을 두 본에 걸쳐 섞어 코너를 둥글린다.
 	var mutable: Array = arrays.duplicate()
+	for vertex in ring_a:
+		for slot in slots:
+			bones[vertex * slots + slot] = (
+				cut_bind if slot == 0 else (inserted_next_binds[0] if slot == 1 else 0)
+			)
+			weights[vertex * slots + slot] = 0.5 if slot <= 1 else 0.0
+	mutable[Mesh.ARRAY_BONES] = bones
+	mutable[Mesh.ARRAY_WEIGHTS] = weights
 	var copies: Array = []
 	for layer in inserted.size():
-		var previous_bind: int = cut_bind if layer == 0 else inserted_binds[layer - 1]
+		var following_bind: int = (
+			next_bind if layer == inserted.size() - 1 else inserted_next_binds[layer + 1]
+		)
 		var layer_map: Dictionary = {}
 		for position in ring_a.size():
 			var source: int = ring_a[position]
 			var created: int = _append_vertex_copy(
 				mutable, source, slots,
-				previous_bind, inserted_binds[layer],
+				inserted_binds[layer], following_bind,
 				v_step * float(layer + 1)
 			)
 			layer_map[source] = created

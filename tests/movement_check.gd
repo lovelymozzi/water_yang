@@ -1,24 +1,32 @@
-extends SceneTree
+extends Node
 
 # 이동 스펙(1_움직임고찰.md) 회귀 검사. 렌더가 없으므로 기하 수치로만 본다.
-#   /Applications/Godot.app/Contents/MacOS/Godot --headless --script tests/movement_check.gd
+#   Godot --headless --path . res://tests/movement_check.tscn
 
 var _scene: Node
 var _frames := 0
 var _failures: Array[String] = []
 
 
-func _initialize() -> void:
+func _ready() -> void:
+	UiBridge.standalone_autostart = false
 	_scene = (load("res://scenes/main_scene.tscn") as PackedScene).instantiate()
-	root.add_child(_scene)
+	_scene.set_script(null)
+	add_child(_scene)
+	var controller := preload("res://scripts/drag_controller.gd").new()
+	controller.name = "DragController"
+	controller.level_manager = _scene.get_node("LevelManager")
+	_scene.add_child(controller)
 
 
-func _process(_delta: float) -> bool:
+func _process(_delta: float) -> void:
 	_frames += 1
 	if _frames < 10:
-		return false
+		return
 	var manager: LevelManager = _scene.get_node("LevelManager")
 	var cat: CatEntity = _isolate_board(manager)
+	cat.initialize_runtime(manager)
+	cat.advance(0.0)
 	_check_rig(cat)
 	_check_bone_placement(cat, "정지")
 	_check_trace(manager, cat)
@@ -36,7 +44,8 @@ func _process(_delta: float) -> bool:
 	_check_reverse_bend(manager, cat)
 	_check_reverse_wall_slide(manager, cat)
 	_report()
-	return true
+	set_process(false)
+	get_tree().quit(0 if _failures.is_empty() else 1)
 
 
 # 스펙 6절. 코너를 낀 자세에서도 모든 본이 실제 포즈 폴리라인 위에 있어야 한다.

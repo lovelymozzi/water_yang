@@ -53,6 +53,12 @@ shader_parameter/overlay_texture = ExtResource("3_01n6w")
 shader_parameter/texture_blend_mode = 0
 shader_parameter/texture_opacity = 0.999999977648
 shader_parameter/texture_tiling = Vector2(1, 1)
+shader_parameter/shadertoy_reference_mode = false
+shader_parameter/reference_dissolve_speed = 1.0
+shader_parameter/reference_noise_scale = 7.0
+shader_parameter/reference_surface_color = Color(0.04, 0.16, 0.12, 1)
+shader_parameter/reference_edge_color = Color(0.3, 1, 1, 1)
+shader_parameter/reference_edge_energy = 2.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ice_dissolve"]
 material = SubResource("ShaderMaterial_ice_mesh")

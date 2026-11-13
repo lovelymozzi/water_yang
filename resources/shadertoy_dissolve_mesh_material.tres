@@ -1,10 +1,11 @@
-[gd_resource type="ShaderMaterial" format=3]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bbsod1p1q0yru"]
 
-[ext_resource type="Shader" path="res://scripts/shadertoy_xdvbw1_mesh.gdshader" id="1_shader"]
+[ext_resource type="Shader" uid="uid://dly7rsxejidik" path="res://scripts/shadertoy_xdvbw1_mesh.gdshader" id="1_shader"]
 
 [resource]
 resource_name = "Shadertoy Dissolve Mesh"
+render_priority = 0
 shader = ExtResource("1_shader")
-shader_parameter/dissolve_color = Color(1, 1, 1, 1)
+shader_parameter/dissolve_color = Color(0.5008797, 0.90385205, 0.9579771, 1)
 shader_parameter/edge_emission = 2.0
 shader_parameter/dissolve_speed = 1.0
