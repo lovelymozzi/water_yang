@@ -12,8 +12,10 @@ uniform vec4 foliage_color : source_color = vec4(0.46, 0.65, 0.37, 1.0);
 uniform vec4 trunk_color : source_color = vec4(0.52, 0.32, 0.20, 1.0);
 
 void fragment() {
-	vec3 tex = textureLod(albedo_tex, UV, 3.0).rgb;
-	float foliage = smoothstep(-0.02, 0.045, tex.g - tex.r);
+	// Classify the atlas at full resolution: dark leaves are still green, and
+	// blurred mip levels must not spread bark color into neighboring leaf UVs.
+	vec3 tex = textureLod(albedo_tex, UV, 0.0).rgb;
+	float foliage = step(tex.r, tex.g);
 	float paint_band = mix(0.92, 1.0, smoothstep(0.28, 0.40, dot(tex, vec3(0.3, 0.6, 0.1))));
 	ALBEDO = mix(trunk_color.rgb, foliage_color.rgb, foliage) * paint_band * tint_color.rgb;
 	ROUGHNESS = max(roughness, 0.95);
