@@ -109,7 +109,6 @@ func _process(delta: float) -> void:
 			continue
 		var phase := float(index) / float(_cats.size())
 		var wave := _elapsed * bob_speed + phase * TAU
-		var leg_wave := sin(_elapsed * 2.1 + phase * TAU)
 		var route_width := _route_x_max - _route_x_min
 		if is_zero_approx(route_width):
 			var camera := get_viewport().get_camera_3d()
@@ -141,17 +140,16 @@ func _process(delta: float) -> void:
 		wake.global_position = Vector3(
 			cat.global_position.x + cat_scale * 0.34,
 			_water_bounds.position.y + 0.06,
-			cat.global_position.z + leg_wave * 0.16
+			cat.global_position.z
 		)
 		var wake_material := wake.material_override as ShaderMaterial
-		wake_material.set_shader_parameter("leg_wave", leg_wave)
 		# Do not assign Euler components around X=90°. That angle has an Euler
 		# singularity and can re-express the same pose with a 180° head flip.
 		var floating_rotation := Quaternion.from_euler(Vector3(deg_to_rad(90.0), deg_to_rad(90.0), 0.0))
 		floating_rotation *= Quaternion(Vector3.RIGHT, sin(wave) * 0.07)
 		floating_rotation *= Quaternion(Vector3.FORWARD, cos(wave) * 0.055)
 		cat.quaternion = floating_rotation
-		(cat as CatEntity).set_floating_water_wave(_elapsed, phase * TAU, 0.028)
+		(cat as CatEntity).set_floating_water_wave(_elapsed, phase * TAU, 0.028, wake_material)
 
 
 func _create_cats() -> void:
@@ -194,12 +192,13 @@ func _create_cats() -> void:
 		wake.name = "FloatingCatWake%d" % (index + 1)
 		var wake_mesh := PlaneMesh.new()
 		# The model origin is at its tail; the water contact sits under the body.
-		wake_mesh.size = Vector2(0.85, 0.30) * cat_scale
+		wake_mesh.size = Vector2(1.15, 0.58) * cat_scale
 		wake.mesh = wake_mesh
 		var wake_material := ShaderMaterial.new()
 		wake_material.shader = CAT_WAKE_SHADER
 		wake_material.render_priority = 2
 		wake_material.set_shader_parameter("wake_color", Color("e1fff4"))
+		wake_material.set_shader_parameter("water_y", _water_bounds.position.y + 0.06)
 		wake.material_override = wake_material
 		wake.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		add_child(wake)

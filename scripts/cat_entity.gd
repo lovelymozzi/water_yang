@@ -21,8 +21,8 @@ const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const ABSORB_SOUND := preload("res://src/sound/cat_Hole_sound.mp3")
 const ABSORB_OVERLAY_SOUND := preload("res://src/sound/time_out2.mp3")
 const ITEM_MOVE_HOLE_POP_SOUND := preload("res://src/sound/bubble_pop.mp3")
-const FLOATING_WATER_OUTLINE_COLOR := Color("285767")
-const FLOATING_WATER_OUTLINE_WIDTH := 0.006
+const FLOATING_WATER_OUTLINE_COLOR := Color("f0fff9")
+const FLOATING_WATER_OUTLINE_WIDTH := 0.010
 const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
@@ -390,7 +390,7 @@ func _process(delta: float) -> void:
 	advance(delta)
 
 
-func set_floating_water_wave(time: float, phase: float, amplitude: float) -> void:
+func set_floating_water_wave(time: float, phase: float, amplitude: float, wake_material: ShaderMaterial = null) -> void:
 	if not _floating_water_outline:
 		_floating_water_outline = true
 		_apply_current_shader_parameters()
@@ -401,6 +401,8 @@ func set_floating_water_wave(time: float, phase: float, amplitude: float) -> voi
 		# Lobby motion is driven by the rig below.  Leaving vertex displacement
 		# disabled keeps the opaque cat and its outline on the same depth surface.
 		material.set_shader_parameter("water_wave_amplitude", 0.0)
+		material.set_shader_parameter("water_wave_time", time)
+		material.set_shader_parameter("water_wave_phase", phase)
 
 	if _skeleton == null:
 		return
@@ -417,6 +419,21 @@ func set_floating_water_wave(time: float, phase: float, amplitude: float) -> voi
 			bone_index,
 			rest_rotation * Quaternion(Vector3.FORWARD, wave * amplitude * 1.45)
 		)
+	if wake_material != null:
+		# Project the live body chain onto the water, along the camera rays.
+		# This aligns the ripples with the visible cat even as its rig sways.
+		_skeleton.force_update_all_bone_transforms()
+		var camera := get_viewport().get_camera_3d()
+		var water_y: float = wake_material.get_shader_parameter("water_y")
+		var body_points := PackedVector2Array()
+		for bone_index in _bone_chain:
+			var point := _skeleton.global_transform * _skeleton.get_bone_global_pose(bone_index).origin
+			var ray := camera.project_ray_normal(camera.unproject_position(point))
+			point += ray * ((water_y - point.y) / ray.y)
+			body_points.append(Vector2(point.x, point.z))
+		wake_material.set_shader_parameter("body_points", body_points)
+		wake_material.set_shader_parameter("body_scale", global_basis.get_scale().x)
+		wake_material.set_shader_parameter("wave_time", time * 2.1 + phase)
 
 
 func _process_blink(delta: float) -> void:
@@ -1934,6 +1951,7 @@ func _apply_shader_parameters(
 		)
 		_outline_material.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_outline_material.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
+		_outline_material.set_shader_parameter("water_foam_enabled", _floating_water_outline)
 	if _material_id_2_outline != null:
 		_material_id_2_outline.set_shader_parameter("outline_color", _effective_outline_color())
 		_material_id_2_outline.set_shader_parameter(
@@ -1942,6 +1960,7 @@ func _apply_shader_parameters(
 		)
 		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
+		_material_id_2_outline.set_shader_parameter("water_foam_enabled", _floating_water_outline)
 
 	# 중첩고양이 색 영역. 마스크 텍스처가 아직 없으면 셰이더의 임시 줄무늬로 폴백한다.
 	var mask1 := _get_nest_mask1()
