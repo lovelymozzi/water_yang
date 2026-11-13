@@ -57,6 +57,8 @@ const OVERHANG_DEBUG := true
 # 구멍 흡입에서 몸이 구멍 중심을 지나 더 내려가는 깊이(칸 단위). 이 깊이를 다 내려가면
 # 바닥 아래로 완전히 사라진 것으로 보고 흡입을 끝낸다.
 const ABSORB_SINK_CELLS := 0.9
+const CORNER_ROUNDING_CELLS := 0.46
+const CORNER_ROUND_SEGMENTS := 10
 
 @export_group("Layout")
 @export var grid_pos: Vector2i = Vector2i.ZERO:
@@ -1239,7 +1241,7 @@ func apply_rest_pose() -> void:
 	_update_visual_pose()
 
 
-# 몸을 셀 중심 폴리라인 위에 올린다. 본 위치는 호 길이로 직접 구하며
+# 몸을 실제 포즈 폴리라인 위에 올린다. 본 위치는 호 길이로 직접 구하며
 # 회전을 누적해 포즈를 재구성하지 않는다. 그것이 이 프로젝트의 단골 실패 모드다.
 func _update_visual_pose() -> void:
 	if _cat_model == null or _skeleton == null or level_manager == null:
@@ -1370,12 +1372,57 @@ func _bones_in_tree_order() -> Array[int]:
 	return _bone_tree_order
 
 
-# 리드 → 반대쪽 끝 순서의 셀 중심 폴리라인. 전이 중에는 양 끝만 셀 사이에 놓인다.
+# 리드 → 반대쪽 끝 순서의 시각 포즈 폴리라인. 직선 구간은 셀 중심을 따르고,
+# 90도 코너만 짧은 원호로 깎아 목·허리 꺾임이 덜 부자연스럽게 보이게 한다.
 func _body_polyline() -> PackedVector3Array:
-	return _extend_ends(_cell_center_polyline())
+	return _extend_ends(_rounded_pose_polyline(_cell_center_polyline()))
 
 
-# 셀 중심을 잇는 순수 경로. 코너는 언제나 셀 중앙을 관통한다.
+# 셀 중심 경로를 시각 포즈용 폴리라인으로 다듬는다. 논리 body_cells 는 그대로 두고,
+# 렌더에만 작은 필렛을 넣어 직각 꺾임을 완화한다.
+func _rounded_pose_polyline(points: PackedVector3Array) -> PackedVector3Array:
+	if points.size() < 3 or level_manager == null:
+		return points
+	var rounded := PackedVector3Array()
+	rounded.append(points[0])
+	var max_radius := level_manager.fitted_tile_size() * CORNER_ROUNDING_CELLS
+	for index in range(1, points.size() - 1):
+		var previous: Vector3 = points[index - 1]
+		var current: Vector3 = points[index]
+		var following: Vector3 = points[index + 1]
+		var incoming: Vector3 = current - previous
+		var outgoing: Vector3 = following - current
+		var incoming_length := incoming.length()
+		var outgoing_length := outgoing.length()
+		if incoming_length <= 0.000001 or outgoing_length <= 0.000001:
+			rounded.append(current)
+			continue
+		var incoming_dir := incoming / incoming_length
+		var outgoing_dir := outgoing / outgoing_length
+		if absf(incoming_dir.dot(outgoing_dir)) > 0.999:
+			rounded.append(current)
+			continue
+		var radius := minf(max_radius, incoming_length * 0.49, outgoing_length * 0.49)
+		if radius <= 0.000001:
+			rounded.append(current)
+			continue
+		var entry := current - incoming_dir * radius
+		var exit := current + outgoing_dir * radius
+		if rounded[rounded.size() - 1].distance_to(entry) > 0.000001:
+			rounded.append(entry)
+		var center := current - incoming_dir * radius + outgoing_dir * radius
+		var start_offset := entry - center
+		var end_offset := exit - center
+		var sweep := Vector2(start_offset.x, start_offset.z).angle_to(Vector2(end_offset.x, end_offset.z))
+		for segment in range(1, CORNER_ROUND_SEGMENTS):
+			var ratio := float(segment) / float(CORNER_ROUND_SEGMENTS)
+			rounded.append(center + start_offset.rotated(Vector3.UP, sweep * ratio))
+		rounded.append(exit)
+	rounded.append(points[points.size() - 1])
+	return rounded
+
+
+# 셀 중심을 잇는 순수 경로. 전이 중에는 양끝만 셀 사이에 놓인다.
 func _cell_center_polyline() -> PackedVector3Array:
 	var points := PackedVector3Array()
 	var height := level_manager.cat_world_y
@@ -1403,7 +1450,6 @@ func _cell_center_polyline() -> PackedVector3Array:
 		)
 	)
 	return points
-
 
 # 양끝을 메시 오버행만큼 밖으로 내민다. 이래야 스킨된 메시가 발자국을 정확히 채운다.
 # 내미는 방향은 끝 선분의 연장선이므로 셀 중심 경로의 모양은 변하지 않는다.
@@ -1455,7 +1501,7 @@ func _sample_polyline(
 
 
 # 이 위치에서 모델의 머리가 향하는 방향. 폴리라인 선분 방향을 그대로 쓰므로
-# 코너 회전이 여러 관절에 나눠지지 않고 코너를 낀 두 본 사이에서만 일어난다.
+# 둥글게 다듬은 포즈 폴리라인의 접선을 그대로 따라간다.
 func _model_head_direction(
 	polyline: PackedVector3Array, cumulative: PackedFloat32Array, arc: float
 ) -> Vector3:
@@ -1697,13 +1743,16 @@ func _baseline_stretch_scale() -> float:
 	return _fitted_stretch_scale(_target_chain_world_length())
 
 
-# 본 체인이 가져야 할 길이. 셀 중심 경로에 양끝 내밀기를 더한 값이다.
+# 본 체인이 가져야 할 길이. 직선 구간은 셀 중심을 따르되, 코너는 렌더용 필렛 길이를 쓴다.
 func _target_chain_world_length() -> float:
 	if level_manager == null:
 		return 1.0
+	var path_points := _rounded_pose_polyline(_cell_center_polyline())
 	var path := float(maxi(body_cells.size() - 1, 1)) * level_manager.fitted_tile_size()
+	if path_points.size() >= 2:
+		var cumulative := _cumulative_lengths(path_points)
+		path = cumulative[cumulative.size() - 1]
 	return path + _end_extension(_head_mesh_overhang) + _end_extension(_tail_mesh_overhang)
-
 
 # 폴리라인 양끝을 끝 셀 중심에서 밖으로 내미는 양. 메시가 그만큼 더 나가므로
 # 오버행이 큰 머리쪽은 거의 내밀지 않는다. 음수면 경로가 접히므로 0으로 묶는다.

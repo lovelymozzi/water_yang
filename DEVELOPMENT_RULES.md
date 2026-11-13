@@ -74,7 +74,7 @@
 - 모델의 기준 크기는 타일 크기와 연동한다. 현재 `fbx_scale_per_tile` 기본값은 `7.65`이며, 변경 시 4칸 배치와 몸 비율을 함께 확인한다.
 - `cat1.fbx`는 분기형 리그다. 게임에서 사용하는 본 경로는 `Bone002`(머리 끝)에서 `Bone022`(꼬리 끝)까지이며, `cat_entity.gd`의 `_build_bone_chain()`이 구성한다.
 - 관절 간격은 균일하지 않다. 따라서 경로 위 위치는 본 인덱스 비율이 아니라 rest 누적 거리로 환산해야 한다.
-- 코너 회전은 여러 관절에 나눠 주지 않는다. 나눠 주면 그만큼 코너가 잘려 몸통이 옆 칸으로 밀린다.
+- 직각 코너를 그대로 여러 관절에 억지로 나눠 주지 않는다. 그렇게 하면 몸통이 옆 칸으로 밀린다. 둥글림이 필요하면 `_body_polyline()` 렌더 경로에 짧은 원호를 넣고, 논리/판정은 계속 `body_cells` 셀 중심 경로를 쓴다.
 - 본 체인 길이는 **메시 기준**으로 맞춘다. 발자국(N칸)에서 양끝 여백(`footprint_margin_cells`)과 메시 오버행을 뺀 값이다. 메시가 양끝 본보다 내미는 양은 머리 0.41칸, 꼬리 0.10칸으로 4배 차이나므로 이걸 무시하면 꼬리쪽만 비어 보인다.
 - 폴리라인 양끝 내밀기는 음수가 되면 경로가 접혀 호 길이가 늘어난다. 반드시 0으로 묶는다.
 
@@ -162,4 +162,4 @@
 - 회귀 검사: `Godot --headless --script tests/movement_check.gd` → `MOVEMENT CHECK: PASS`, `tests/hole_check.gd` → `HOLE CHECK: PASS`, `tests/obstacle_check.gd` → `OBSTACLE CHECK: PASS`, `tests/puzzle_state_parity_check.gd` → `PARITY CHECK: PASS`, `tests/generator_check.gd` → `GENERATOR CHECK: PASS`, `tests/generator_replay_check.gd` → `REPLAY CHECK: PASS`, `tests/length_check.gd` → `LENGTH CHECK: PASS`. 하네스는 서로 독립이어야 한다.
 - **이동 검사는 레벨 배치와 무관해야 한다.** 고양이를 보드 곳곳으로 순간이동시키므로 시작 시 `_isolate_board()`로 구멍·장애물·나머지 고양이를 지우고 기준 자세로 되돌린다. 배치를 바꿀 때 이동 검사가 깨지면 배치를 되돌리지 말고 이 격리를 넓힌다.
 - 시각 확인: `Godot --script tests/capture_shots.gd` → `user://shots/*.png`, `Godot --script tests/capture_hole.gd` → `user://shots_hole/*.png`, `Godot --script tests/capture_generated.gd` → `user://shots_generated/*.png`, `Godot --script tests/capture_length.gd` → `user://shots_length/*.png`. 헤드리스가 아니어야 렌더된다.
-- 남은 시각 이슈: 90도 코너가 머리 청크 안에 들어오는 순간 목·어깨가 눌린다. 코너 회전을 관절에 분산하거나 코너를 둥글게 깎으면 완화되지만, 둘 다 "본은 셀 중앙만 관통" 규칙과 충돌한다. 결정 전까지 그대로 둔다.
+- 90도 코너 시각 처리: 목·허리 꺾임은 `_body_polyline()` 렌더 경로에 짧은 원호를 넣어 완화한다. 논리/판정은 여전히 `body_cells` 셀 중심 경로를 기준으로 유지한다. 시각 평가는 사용자 확인이 필요하다.

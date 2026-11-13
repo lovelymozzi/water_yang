@@ -39,7 +39,7 @@ func _process(_delta: float) -> bool:
 	return true
 
 
-# 스펙 6절. 코너를 낀 자세에서도 모든 본이 셀 중심 폴리라인 위에 있어야 한다.
+# 스펙 6절. 코너를 낀 자세에서도 모든 본이 실제 포즈 폴리라인 위에 있어야 한다.
 func _check_corner(cat: CatEntity) -> void:
 	var turn := Vector2i(cat.facing_dir.y, cat.facing_dir.x)
 	if turn == Vector2i.ZERO:
@@ -190,7 +190,7 @@ func _check_rig(cat: CatEntity) -> void:
 	)
 
 
-# 스펙 6절. 본은 셀 중심 폴리라인 위에만 놓이고, 양 끝 본은 끝 셀 중심에 정확히 온다.
+# 스펙 6절. 본은 실제 포즈 폴리라인 위에만 놓이고, 양 끝 본은 그 포즈 끝점에 정확히 온다.
 func _check_bone_placement(cat: CatEntity, label: String) -> void:
 	var skeleton: Skeleton3D = cat._skeleton
 	if skeleton == null or cat._bone_chain.is_empty():
