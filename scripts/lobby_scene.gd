@@ -4,7 +4,7 @@ extends Node3D
 const LOBBY_GROUND_LAND_MATERIAL: ShaderMaterial = preload("res://resources/lobby_ground_land_material.tres")
 const LOBBY_GROUND_WATER_MATERIAL: ShaderMaterial = preload("res://resources/lobby_ground_water_material.tres")
 const LOBBY_WATER_MATERIAL: ShaderMaterial = preload("res://resources/lobby_water_material.tres")
-const LOBBY_FOAM_COLOR := Color("8edce4")
+const LOBBY_FOAM_COLOR := Color("d6f8ee")
 
 @export_group("Lobby Flower Glow")
 @export_range(0.0, 8.0, 0.05) var flower_glow_energy_cap := 1.4
@@ -21,7 +21,6 @@ func _apply_lobby_materials() -> void:
 	ground_mesh.set_surface_override_material(0, LOBBY_GROUND_LAND_MATERIAL)
 	ground_mesh.set_surface_override_material(1, LOBBY_GROUND_WATER_MATERIAL)
 	water_mesh.material_override = LOBBY_WATER_MATERIAL
-	LOBBY_WATER_MATERIAL.set_shader_parameter("foam_color", LOBBY_FOAM_COLOR)
 	var ground_foam := LOBBY_GROUND_WATER_MATERIAL.next_pass as ShaderMaterial
 	if ground_foam != null:
 		ground_foam.set_shader_parameter("foam_color", LOBBY_FOAM_COLOR)

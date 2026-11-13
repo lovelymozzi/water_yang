@@ -1165,6 +1165,8 @@ func _make_material(color: Color) -> StandardMaterial3D:
 	var material: StandardMaterial3D = StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = 0.95
+	material.diffuse_mode = BaseMaterial3D.DIFFUSE_TOON
+	material.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
 	return material
 
 

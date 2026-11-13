@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, cull_back;
+render_mode diffuse_toon, specular_disabled, cull_back;
 
 uniform sampler2D albedo_tex : source_color, filter_linear_mipmap, repeat_enable;
 uniform float rotation_duration : hint_range(0.1, 60.0) = 4.0;

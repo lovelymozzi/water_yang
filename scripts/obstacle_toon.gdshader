@@ -42,7 +42,8 @@ void fragment() {
 	if (UV.x >= tile_uv_min_u) {
 		mapped_uv = UV * uv_tiling + uv_offset;
 	}
-	vec4 tex = texture(albedo_tex, mapped_uv);
+	vec4 tex = textureLod(albedo_tex, mapped_uv, 2.0);
+	tex.rgb = mix(tex.rgb, floor(tex.rgb * 8.0 + 0.5) / 8.0, 0.65);
 	float exclusion = 0.0;
 	if (tint_exclusion_enabled > 0.0) {
 		exclusion = texture(tint_exclusion_mask, mapped_uv).r;
@@ -58,14 +59,16 @@ void fragment() {
 
 void light() {
 	float ndotl = max(dot(NORMAL, LIGHT), 0.0);
-	float stepped = floor(ndotl * float(max(shadow_steps, 1))) / float(max(shadow_steps, 1));
+	float steps = float(max(shadow_steps, 2));
+	float stepped = floor(min(ndotl, 0.9999) * steps) / (steps - 1.0);
 	float light_band = mix(shadow_darkness, 1.0, stepped);
 	float shadow_attenuation = pow(clamp(ATTENUATION, 0.0, 1.0), max(shadow_receive_strength, 0.001));
 
 	float view_term = 1.0 - max(dot(NORMAL, VIEW), 0.0);
 	float rim = pow(view_term, 2.5) * rim_strength;
 
-	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_attenuation;
-	vec3 toon_rim = specular_color.rgb * LIGHT_COLOR.rgb * rim * shadow_attenuation;
+	vec3 shadow_tint = mix(vec3(0.65, 0.79, 1.0), vec3(1.0), stepped * shadow_attenuation);
+	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_attenuation * shadow_tint;
+	vec3 toon_rim = ALBEDO * specular_color.rgb * LIGHT_COLOR.rgb * rim * shadow_attenuation * 0.35;
 	DIFFUSE_LIGHT += (toon_diffuse + toon_rim) / PI;
 }

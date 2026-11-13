@@ -49,23 +49,25 @@ void fragment() {
 	vec3 ice_color = tex.rgb * mix(tint_color.rgb, vec3(1.0), exclusion);
 	float facing = 1.0 - max(dot(NORMAL, VIEW), 0.0);
 	float fresnel = pow(facing, 3.0);
-	float crystal_glint = pow(max(sin((mapped_uv.x + mapped_uv.y) * 30.0), 0.0), 12.0);
+	float crystal_glint = smoothstep(0.94, 0.98, sin((mapped_uv.x + mapped_uv.y) * 18.0));
 	ALBEDO = ice_color;
 	ALPHA = tex.a * tint_color.a * opacity;
-	ROUGHNESS = mix(0.24, 0.06, fresnel);
+	ROUGHNESS = 0.65;
 	METALLIC = 0.0;
-	EMISSION = ice_color * (0.055 + fresnel * 0.12 + crystal_glint * 0.08);
+	EMISSION = ice_color * (0.03 + fresnel * 0.04 + crystal_glint * 0.03);
 }
 
 void light() {
 	float ndotl = max(dot(NORMAL, LIGHT), 0.0);
-	float stepped = floor(ndotl * float(max(shadow_steps, 1))) / float(max(shadow_steps, 1));
+	float steps = float(max(shadow_steps, 2));
+	float stepped = floor(min(ndotl, 0.9999) * steps) / (steps - 1.0);
 	float light_band = mix(shadow_darkness, 1.0, stepped);
 	float shadow_attenuation = pow(clamp(ATTENUATION, 0.0, 1.0), max(shadow_receive_strength, 0.001));
 	float rim = pow(1.0 - max(dot(NORMAL, VIEW), 0.0), 2.5) * rim_strength;
 	vec3 half_vector = normalize(LIGHT + VIEW);
-	float sparkle = pow(max(dot(NORMAL, half_vector), 0.0), 48.0);
+	float sparkle = smoothstep(0.94, 0.97, max(dot(NORMAL, half_vector), 0.0));
 
-	DIFFUSE_LIGHT += ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_attenuation;
-	SPECULAR_LIGHT += specular_color.rgb * LIGHT_COLOR.rgb * (sparkle * 0.72 + rim * 0.28) * shadow_attenuation;
+	vec3 shadow_tint = mix(vec3(0.58, 0.78, 1.0), vec3(1.0), stepped);
+	DIFFUSE_LIGHT += ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_attenuation * shadow_tint / PI;
+	SPECULAR_LIGHT += specular_color.rgb * LIGHT_COLOR.rgb * (sparkle * 0.15 + rim * 0.10) * shadow_attenuation / PI;
 }

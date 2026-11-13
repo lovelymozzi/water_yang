@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_test_disabled, fog_disabled;
+render_mode unshaded, cull_disabled, depth_draw_never, fog_disabled;
 
 group_uniforms shoreline_foam;
 uniform vec4 foam_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
@@ -17,10 +17,12 @@ void fragment() {
 	wave += sin(UV.x * wave_scale_b - TIME * wave_speed_b) * 0.32;
 	float shore_distance = abs(UV.y - (foam_uv_center + wave * wave_amplitude));
 	float foam = 1.0 - smoothstep(foam_uv_half_width * 0.45, foam_uv_half_width, shore_distance);
+	float outer_distance = abs(UV.y - (foam_uv_center + 0.028 + wave * wave_amplitude * 1.5));
+	float outer_foam = 1.0 - smoothstep(foam_uv_half_width * 0.2, foam_uv_half_width * 0.5, outer_distance);
+	foam = max(foam, outer_foam * smoothstep(-0.2, 0.5, sin(UV.x * 32.0 - TIME * 0.3)));
 	if (foam < 0.16) {
 		discard;
 	}
 
 	ALBEDO = foam_color.rgb;
-	EMISSION = foam_color.rgb * 0.16;
 }

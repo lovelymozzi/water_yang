@@ -7,10 +7,10 @@ const MAX_WATER_CATS := 2
 @export_group("Floating Cats")
 @export_range(1, 1, 1) var cat_count := 1
 @export_range(0.1, 20.0, 0.1) var travel_speed := 2.3
-@export_range(0.0, 2.0, 0.01) var bob_height := 0.20
+@export_range(0.0, 2.0, 0.01) var bob_height := 0.10
 @export_range(0.1, 8.0, 0.05) var bob_speed := 1.15
 @export_range(0.1, 20.0, 0.1) var cat_scale := 9.0
-@export_range(0.0, 3.0, 0.01) var water_surface_offset := 1.05
+@export_range(0.0, 3.0, 0.01) var water_surface_offset := 1.35
 
 const CAT_TINTS := [
 	Color("f2a35e"),
@@ -139,7 +139,7 @@ func _process(delta: float) -> void:
 		cat.global_position.y = _water_bounds.position.y + water_surface_offset + sin(wave) * bob_height
 		cat.global_position.z = _cat_lanes[index] + flow_wave
 		wake.global_position = Vector3(
-			cat.global_position.x - 1.4,
+			cat.global_position.x + cat_scale * 0.34,
 			_water_bounds.position.y + 0.06,
 			cat.global_position.z + leg_wave * 0.16
 		)
@@ -193,12 +193,13 @@ func _create_cats() -> void:
 		var wake := MeshInstance3D.new()
 		wake.name = "FloatingCatWake%d" % (index + 1)
 		var wake_mesh := PlaneMesh.new()
-		wake_mesh.size = Vector2(9.0, 3.2)
+		# The model origin is at its tail; the water contact sits under the body.
+		wake_mesh.size = Vector2(0.85, 0.30) * cat_scale
 		wake.mesh = wake_mesh
 		var wake_material := ShaderMaterial.new()
 		wake_material.shader = CAT_WAKE_SHADER
 		wake_material.render_priority = 2
-		wake_material.set_shader_parameter("wake_color", Color("8edce4"))
+		wake_material.set_shader_parameter("wake_color", Color("e1fff4"))
 		wake.material_override = wake_material
 		wake.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		add_child(wake)

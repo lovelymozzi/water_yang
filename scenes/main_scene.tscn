@@ -198,12 +198,12 @@ shader_parameter/strength = 0.0
 background_mode = 1
 background_color = Color(0.4, 0.48, 0.42, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.63, 0.72, 0.66, 1)
-ambient_light_energy = 0.36
+ambient_light_color = Color(0.62, 0.74, 0.90, 1)
+ambient_light_energy = 0.28
 tonemap_mode = 2
 tonemap_exposure = 1.0
 tonemap_white = 1.35
-glow_enabled = true
+glow_enabled = false
 glow_normalized = true
 glow_hdr_threshold = 0.65
 glow_hdr_scale = 2.0
@@ -211,9 +211,9 @@ glow_intensity = 0.35
 glow_strength = 0.25
 glow_bloom = 0.0
 adjustment_enabled = true
-adjustment_saturation = 1.14
-adjustment_contrast = 1.04
-adjustment_brightness = 0.98
+adjustment_saturation = 1.06
+adjustment_contrast = 1.02
+adjustment_brightness = 1.0
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
 script = ExtResource("1_q0f23")
@@ -410,138 +410,138 @@ transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08
 [node name="TreeDecor4" parent="LevelManager/TileVisuals" unique_id=336948251 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.854678, 0.22081338, -1.2938244, 0.668489, 4.588242, 3.8080375, 1.1295415, -3.8599577, 4.452513, -2.9919102, -0.34438372, -11.40588)
 tint_color = Color(0.95133823, 0.809188, 0.9328923, 1)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor5" parent="LevelManager/TileVisuals" unique_id=885010155 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.92216, 0.27145115, -0.9243133, 0.31861493, 4.880985, 3.4748335, 0.9091339, -3.4788382, 4.8032413, 3.8443851, -0.29022217, -11.300243)
 tint_color = Color(0.95133823, 0.809188, 0.9328923, 1)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor17" parent="LevelManager/TileVisuals" unique_id=1979147080 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.92216, 0.27145115, -0.9243133, 0.31861493, 4.880985, 3.4748335, 0.9091339, -3.4788382, 4.8032413, 2.4944768, -0.2901001, -14.212839)
 tint_color = Color(0.95133823, 0.809188, 0.9328923, 1)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor20" parent="LevelManager/TileVisuals" unique_id=444416261 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.92216, 0.27145115, -0.9243133, 0.31861493, 4.880985, 3.4748335, 0.9091339, -3.4788382, 4.8032413, 5.591429, -0.2904663, -14.410776)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor18" parent="LevelManager/TileVisuals" unique_id=378859390 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.92216, 0.27145115, -0.9243133, 0.31861493, 4.880985, 3.4748335, 0.9091339, -3.4788382, 4.8032413, -4.9800797, -0.2897339, -13.424889)
 tint_color = Color(0.80245715, 0.8664177, 0.9492844, 1)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor19" parent="LevelManager/TileVisuals" unique_id=87345645 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.92216, 0.27145118, -0.92431337, 0.31630105, 4.889819, 3.4626029, 0.9099415, -3.4664094, 4.8120656, -1.2679145, -0.2892456, -14.065001)
 tint_color = Color(0.8075, 0.874, 0.95, 1)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor2" parent="LevelManager/TileVisuals" unique_id=955409879 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(-7.9725947, -0.64902145, -0.12842718, -0.38872176, 5.851748, -5.441133, 0.5353668, -5.4162536, -5.8632407, 7.276475, 0.08136606, -10.114599)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor3" parent="LevelManager/TileVisuals" unique_id=1199570824 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, 0.27567196, 0.08136606, -10.159104)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor6" parent="LevelManager/TileVisuals" unique_id=1743793446 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, -7.041112, 0.08136606, -10.058444)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor7" parent="LevelManager/TileVisuals" unique_id=1510664430 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, -8.407822, 0.08136606, 12.890993)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor8" parent="LevelManager/TileVisuals" unique_id=1389872339 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, -5.6031427, 0.08136606, 14.936781)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor9" parent="LevelManager/TileVisuals" unique_id=51316820 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.2845645, 0.86274576, 5.9438243, -3.5807402, 6.808742, 2.195297, -4.821997, -4.1105595, 4.8838143, 9.810789, 0.16289377, 4.699007)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor11" parent="LevelManager/TileVisuals" unique_id=1842112114 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(-0.6087439, 0.83151054, 7.93335, -5.020695, 6.142766, -1.0290846, -6.198551, -5.0571723, 0.054423217, -10.022898, 0.16289377, 4.0428047)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor12" parent="LevelManager/TileVisuals" unique_id=2127854983 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, -9.837112, 0.16289377, -5.398031)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor13" parent="LevelManager/TileVisuals" unique_id=1701649236 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, 10.070692, 0.16289377, -6.2380905)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor14" parent="LevelManager/TileVisuals" unique_id=254503699 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(1.7007408, 1.1049607, 7.7386403, -5.054081, 6.197194, 0.22588445, -5.963533, -4.936986, 2.015548, 9.765799, 0.16289377, -0.29474258)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor10" parent="LevelManager/TileVisuals" unique_id=846306897 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, 8.463831, 0.16289377, 12.897206)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor15" parent="LevelManager/TileVisuals" unique_id=1636833883 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, -1.9704547, 0.16289377, 15.468815)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
 [node name="TreeDecor16" parent="LevelManager/TileVisuals" unique_id=1515352377 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(0.1849505, -0.1406357, 7.996626, -5.054081, 6.1971946, 0.22588447, -6.1985517, -5.057172, 0.0544233, 4.794363, 0.6949487, 14.714743)
-roughness = 0.31
-rim_strength = 0.51
+roughness = 0.95
+rim_strength = 0.08
 outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
 outline_width = 0.005
 
@@ -1016,7 +1016,7 @@ texture = SubResource("GradientTexture2D_6u1mn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
-density = 0.83
+density = 0.28
 fade_start = 0.58
 fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
 
@@ -1036,7 +1036,7 @@ texture = SubResource("GradientTexture2D_7nt27")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
-density = 0.83
+density = 0.28
 fade_start = 0.58
 fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
 
@@ -1056,7 +1056,7 @@ texture = SubResource("GradientTexture2D_xdqt8")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
-density = 0.83
+density = 0.28
 fade_start = 0.58
 fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
 
@@ -1075,7 +1075,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_58gk3")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.83
+density = 0.28
 fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
 
 [node name="TopFog3" type="TextureRect" parent="CanvasLayer" unique_id=1214358096]
@@ -1093,7 +1093,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_u0fll")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.83
+density = 0.28
 fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
 
 [node name="TopFog4" type="TextureRect" parent="CanvasLayer" unique_id=2115787559]
@@ -1111,7 +1111,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_k67gn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.83
+density = 0.28
 fog_color = Color(0.13614139, 0.30416697, 0.35069743, 1)
 
 [node name="TopFog7" type="TextureRect" parent="CanvasLayer" unique_id=2015031252]
@@ -1129,7 +1129,7 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_4bgka")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.83
+density = 0.28
 fog_color = Color(0.5186065, 0.39951208, 0.16007605, 1)
 
 [node name="BottomFog" type="TextureRect" parent="CanvasLayer" unique_id=2102111729]
@@ -1146,7 +1146,7 @@ texture = SubResource("GradientTexture2D_pgk25")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 screen_y = 0.66
-density = 1.0
+density = 0.30
 fade_start = 0.82
 fog_color = Color(0.09129093, 0.11507381, 0.31847164, 1)
 

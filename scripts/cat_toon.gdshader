@@ -74,6 +74,10 @@ void fragment() {
 		mapped_uv = UV * uv_tiling + uv_offset;
 	}
 	vec4 tex = texture(albedo_tex, mapped_uv);
+	// Keep facial ink and the atlas masks, but flatten painted highlights into
+	// clean color areas before the three lighting bands describe the volume.
+	float painted_light = dot(tex.rgb, vec3(0.3, 0.6, 0.1));
+	tex.rgb = mix(tex.rgb, vec3(0.96), smoothstep(0.45, 0.78, painted_light) * 0.2);
 	// cat1_mask.jpg supports a grayscale tint exclusion amount:
 	// black = full tint, white = no tint, gray = partial tint.
 	float eye_mask = 0.0;
@@ -114,12 +118,7 @@ void fragment() {
 	ALBEDO = mix(base_color, line_art_color.rgb, line_alpha);
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;
-	// The editor preview makes rim highlights bloom through its HDR
-	// environment. Emit the same rim in Play View so the runtime glow pass
-	// can reproduce that soft silhouette instead of only brightening diffuse.
-	float view_rim = pow(1.0 - max(dot(normalize(NORMAL), normalize(VIEW)), 0.0), 2.5);
-	EMISSION = tint_color.rgb * view_rim * rim_strength * 2.2;
-	EMISSION += ambient_color.rgb * ambient_energy;
+	EMISSION = ambient_color.rgb * ambient_energy;
 }
 
 void light() {
@@ -139,7 +138,8 @@ void light() {
 	float view_term = 1.0 - max(dot(NORMAL, VIEW), 0.0);
 	float rim = pow(view_term, 2.5) * rim_strength;
 
-	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band;
-	vec3 toon_rim = LIGHT_COLOR.rgb * rim * clamp(ATTENUATION, 0.0, 1.0);
+	vec3 shadow_tint = mix(vec3(0.65, 0.78, 1.0), vec3(1.0), stepped);
+	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_tint;
+	vec3 toon_rim = ALBEDO * LIGHT_COLOR.rgb * rim * 0.35 * clamp(ATTENUATION, 0.0, 1.0);
 	DIFFUSE_LIGHT += (toon_diffuse + toon_rim) / PI;
 }

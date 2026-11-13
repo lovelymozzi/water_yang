@@ -13,8 +13,6 @@ void fragment() {
 	ALBEDO = texture(albedo_tex, UV).rgb * albedo_color.rgb;
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;
-	float view_rim = pow(1.0 - max(dot(normalize(NORMAL), normalize(VIEW)), 0.0), 2.5);
-	EMISSION = albedo_color.rgb * view_rim * rim_strength * 2.2;
 }
 
 void light() {
@@ -27,7 +25,8 @@ void light() {
 	float view_term = 1.0 - max(dot(NORMAL, VIEW), 0.0);
 	float rim = pow(view_term, 2.5) * rim_strength;
 
-	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band;
-	vec3 toon_rim = LIGHT_COLOR.rgb * rim * clamp(ATTENUATION, 0.0, 1.0);
-	DIFFUSE_LIGHT += toon_diffuse + toon_rim;
+	vec3 shadow_tint = mix(vec3(0.68, 0.80, 1.0), vec3(1.0), stepped);
+	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_tint;
+	vec3 toon_rim = ALBEDO * LIGHT_COLOR.rgb * rim * clamp(ATTENUATION, 0.0, 1.0) * 0.35;
+	DIFFUSE_LIGHT += (toon_diffuse + toon_rim) / PI;
 }
