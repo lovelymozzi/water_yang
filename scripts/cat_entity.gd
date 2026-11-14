@@ -1978,6 +1978,12 @@ func _apply_shader_parameters(
 	# 흡입 중에만 바닥 면 아래로 내려간 부분을 지운다. 본체와 아웃라인이 같은 기준을
 	# 써야 껍데기만 남는 일이 없다.
 	var tile: float = level_manager.fitted_tile_size() if level_manager != null else 2.0
+	var absorb_light_portal := Vector4.ZERO
+	if _is_absorbing and level_manager != null:
+		var portal := level_manager.get_node("HoleVisuals").get_node_or_null("PortalFX_%d_%d" % [_absorb_cell.x, _absorb_cell.y]) as Node3D
+		if portal != null:
+			var center := portal.global_position
+			absorb_light_portal = Vector4(center.x, center.y, center.z, portal.global_basis.get_scale().x * 0.5)
 	for sink_material in [_cat_material, _material_id_2, _outline_material, _material_id_2_outline]:
 		if sink_material == null:
 			continue
@@ -1985,6 +1991,7 @@ func _apply_shader_parameters(
 		sink_material.set_shader_parameter("sink_clip_plane_y", LevelManager.TILE_HEIGHT)
 		sink_material.set_shader_parameter("sink_clip_span", tile * ABSORB_SINK_CELLS)
 		sink_material.set_shader_parameter("body_shrink", _nest_shrink)
+		sink_material.set_shader_parameter("absorb_light_portal", absorb_light_portal)
 
 
 # 안쪽 i번째 색. 팔레트에서 뽑아 겉껍질 위 마스크 영역에 그대로 보여 준다.

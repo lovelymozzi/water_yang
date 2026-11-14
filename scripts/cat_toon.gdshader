@@ -35,6 +35,7 @@ uniform float tile_uv_min_u : hint_range(0.0, 1.0) = 0.0;
 uniform float sink_clip_enabled : hint_range(0.0, 1.0) = 0.0;
 uniform float sink_clip_plane_y = 0.0;
 uniform float sink_clip_span = 1.0;
+uniform vec4 absorb_light_portal = vec4(0.0);
 // Lobby-only water motion. Gameplay cats retain the default zero amplitude.
 uniform float water_wave_time = 0.0;
 uniform float water_wave_phase = 0.0;
@@ -115,10 +116,15 @@ void fragment() {
 		}
 	}
 	line_alpha *= 1.0 - (line_art_eyes_hidden * line_art_eye_mask_value);
-	ALBEDO = mix(base_color, line_art_color.rgb, line_alpha);
+	#include "res://scripts/cat_absorb_light.gdshaderinc"
+	vec3 surface_color = mix(base_color, line_art_color.rgb, line_alpha);
+	// Replace facial ink and shading in the entry light, rather than adding
+	// brightness on top of a still-readable cat texture.
+	ALBEDO = surface_color * (1.0 - absorb_light_weight);
 	ROUGHNESS = 0.82;
 	METALLIC = 0.0;
-	EMISSION = ambient_color.rgb * ambient_energy;
+	EMISSION = ALBEDO * ambient_color.rgb * ambient_energy
+		+ absorb_light_color * absorb_light_weight;
 }
 
 void light() {

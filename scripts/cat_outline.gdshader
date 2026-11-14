@@ -11,6 +11,7 @@ uniform float bottom_outline_scale : hint_range(0.8, 1.6, 0.01) = 1.12;
 uniform float sink_clip_enabled : hint_range(0.0, 1.0) = 0.0;
 uniform float sink_clip_plane_y = 0.0;
 uniform float sink_clip_span = 1.0;
+uniform vec4 absorb_light_portal = vec4(0.0);
 // Move the shell's depth just behind the source mesh.  This makes normal depth
 // testing remove the hull where a curved body folds over itself, while the
 // shell remains visible where it extends past the true outer silhouette.
@@ -75,7 +76,8 @@ void fragment() {
 			discard;
 		}
 	}
-	ALBEDO = outline_color.rgb;
+	#include "res://scripts/cat_absorb_light.gdshaderinc"
+	ALBEDO = mix(outline_color.rgb, absorb_light_color, absorb_light_weight);
 	if (water_foam_enabled) {
 		// Small moving gaps read as contact foam rather than a solid sticker edge.
 		float breakup = sin(foam_body_position * 23.0 - water_wave_time * 2.1 + water_wave_phase);
@@ -83,6 +85,6 @@ void fragment() {
 			discard;
 		}
 	} else {
-		EMISSION = outline_color.rgb * 0.16;
+		EMISSION = outline_color.rgb * 0.16 * (1.0 - absorb_light_weight);
 	}
 }
