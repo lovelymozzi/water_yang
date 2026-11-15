@@ -1,0 +1,156 @@
+{
+  "viewport": [
+    519,
+    911
+  ],
+  "finalFrames": 995,
+  "captureDurationMs": 95619,
+  "cases": {
+    "before-lobby": {
+      "count": 100,
+      "skipTransitionFrames": 10,
+      "durationMs": 8774,
+      "navigationRange": [
+        117.73446327683615,
+        135.8502824858757
+      ],
+      "buttonBorderRange": [
+        107.41296296296296,
+        209.2824074074074
+      ]
+    },
+    "trace": {
+      "count": 110,
+      "skipTransitionFrames": 10,
+      "durationMs": 10125,
+      "navigationRange": [
+        117.73446327683615,
+        135.8502824858757
+      ],
+      "buttonBorderRange": [
+        107.41296296296296,
+        209.2824074074074
+      ]
+    },
+    "final1": {
+      "count": 150,
+      "skipTransitionFrames": 10,
+      "durationMs": 14550,
+      "navigationRange": [
+        135.58262711864407,
+        135.8502824858757
+      ],
+      "buttonBorderRange": [
+        206.82500000000002,
+        209.2824074074074
+      ]
+    },
+    "final2": {
+      "count": 140,
+      "skipTransitionFrames": 10,
+      "durationMs": 13829,
+      "navigationRange": [
+        135.58262711864407,
+        135.8502824858757
+      ],
+      "buttonBorderRange": [
+        206.77407407407406,
+        209.2824074074074
+      ]
+    },
+    "final3": {
+      "count": 140,
+      "skipTransitionFrames": 10,
+      "durationMs": 13082,
+      "navigationRange": [
+        135.58262711864407,
+        135.8502824858757
+      ],
+      "buttonBorderRange": [
+        206.70833333333334,
+        209.2824074074074
+      ]
+    },
+    "ingame1": {
+      "count": 130,
+      "skipTransitionFrames": 25,
+      "durationMs": 13719,
+      "navigationRange": [
+        103.05875706214688,
+        103.05875706214688
+      ],
+      "buttonBorderRange": [
+        167.3574074074074,
+        167.49166666666667
+      ]
+    },
+    "return": {
+      "count": 100,
+      "skipTransitionFrames": 20,
+      "durationMs": 9479,
+      "navigationRange": [
+        135.60056497175142,
+        135.60056497175142
+      ],
+      "buttonBorderRange": [
+        206.7638888888889,
+        207.8472222222222
+      ]
+    },
+    "shop": {
+      "count": 55,
+      "skipTransitionFrames": 10,
+      "durationMs": 5270,
+      "navigationRange": [
+        124.79802259887005,
+        124.79802259887005
+      ],
+      "buttonBorderRange": [
+        217.92685185185186,
+        217.92685185185186
+      ]
+    },
+    "home": {
+      "count": 100,
+      "skipTransitionFrames": 20,
+      "durationMs": 9659,
+      "navigationRange": [
+        135.60056497175142,
+        135.60056497175142
+      ],
+      "buttonBorderRange": [
+        206.70833333333334,
+        207.85
+      ]
+    },
+    "idle": {
+      "count": 180,
+      "skipTransitionFrames": 0,
+      "durationMs": 16031,
+      "navigationRange": [
+        135.58262711864407,
+        135.58262711864407
+      ],
+      "buttonBorderRange": [
+        206.61666666666667,
+        207.79907407407407
+      ]
+    }
+  },
+  "notes": [
+    "Sequential screenshots, about 10-11 fps; no claim of a 60fps capture.",
+    "The initial splash / curtain / enter animation is excluded by the stated frame offsets.",
+    "The Shop selected indicator changes the sampled color; compare within each settled tab.",
+    "Tests entered Level19 and used GiveUp; no cats moved and stage progress stayed Level19.",
+    "Two local test hearts were consumed by the Start / GiveUp flow.",
+    "An existing pop_Settings_1 unwired-event warning appeared during the exit path; no render/image error was logged."
+  ],
+  "web/ui/scene-renderer.js": {
+    "sha256": "8c5bdaacf57bf88e58fa5e90c0ce3b09c90e9a874be4e7089e7aa37bda7569f2",
+    "servedMatchesDisk": true
+  },
+  "web/index.html": {
+    "sha256": "e09a9464f931983019344f7122cecf1e8b69982c3d31f3040298c06e787d1c02",
+    "servedMatchesDisk": true
+  }
+}

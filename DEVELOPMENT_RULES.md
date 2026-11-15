@@ -17,7 +17,7 @@
 
 - 검은 화면 깜빡임 방지: `.sr-game-host`와 `.sr-nav-overlay`는 별도 합성 그룹으로 두고, 하단 메뉴는 고정된 합성 계층을 유지한다. 숨김 주차장은 `display:none` 대신 유효한 GameField 크기를 보존한 화면 밖 `visibility:hidden` 컨테이너를 쓴다. publish 브리지의 ResizeObserver가 숨김 시 WebGL을 1×1로 줄여 버퍼를 초기화하던 경로를 막는다. 첫 진입뿐 아니라 running/paused 재진입·Retry도 `sceneReady`까지 `waitUntil`을 유지한다. `UiBridge`는 지연된 보드 생성 이후 웹의 `RenderingServer.frame_post_draw`까지 기다리고 초기화/준비 신호를 보낸다. 30초 동안 준비 신호가 없으면 오류를 내며 커튼을 임의로 걷지 않는다. 위 Node 검사는 실제 주차 코드·publish 브리지의 크기 계산·모든 재진입 상태의 대기 순서를 확인한다. 사용자가 보고한 Codex 내부 보기의 실제 검은 깜빡임이 사라졌는지는 사용자 시각 검증으로 확인한다.
 
-- 로딩 직후 UI 합성 이미지: 2026-11-15 사용자가 “이번 오류 부분만 직접 수정”을 승인하여 `web/ui/scene-renderer.js`의 기존 `composeSliceBitmap()`과 `_whenRenderResourcesReady()` 두 부분만 publish 산출물 수정 금지의 예외로 보정했다. 합성 PNG는 `Image.decode()` 완료 뒤에만 배경/광택 마스크로 교체하며, 씬 공개도 시작된 합성 Promise들을 기다린다. `tests/ui_slice_decode_check.mjs`는 디코더를 지연해 기존 이미지 유지·공개 대기·캐시 공유를 검사한다. 반복 광택·레이아웃·디자인 값은 유지한다. 인게임 이미지도 초기 사전 로딩에 포함한다. 재publish 시 이 보정의 유지 여부를 확인한다.
+- 로딩 직후 UI 합성 이미지: 2026-11-15 사용자가 “이번 오류 부분만 직접 수정”과 직접 브라우저 검사를 승인했다. `web/ui/scene-renderer.js`의 합성 PNG는 `Image.decode()` 완료 뒤에만 배경/광택 마스크로 교체한다. **합성 전체를 기다리며 씬을 숨기지 않는다.** 커튼 없는 진입이 검게 비므로, 사전 로딩한 기존 `border-image`를 표시한 채 디코드 후 교체한다. 셸의 native import map으로 모든 매니저의 렌더러 import를 동일한 버전 URL에 연결한다. 실제 탭이 캐시된 이전 모듈을 사용해 앞선 보정이 실행되지 않았으므로 렌더러 수정·재publish 시 버전과 보정 유지 여부를 함께 확인한다. `tests/ui_slice_decode_check.mjs`는 지연 디코드 중 원본 유지·검은 진입 대기 방지·캐시 공유·버전 매핑을 검사한다. 실제 Codex 내부 보기에서 수정 전 하단 배경과 버튼 배경이 한 프레임 사라지는 것을 두 번 재현했고, 최종 코드로 새로고침 3회·인게임 진입·복귀·탭 전환·대기 총 995프레임(약 10~11fps)에서는 누락이 재현되지 않았다. 기록은 `artifacts/ui-flicker-review/README.md`. 반복 광택·레이아웃·디자인 값과 초기 인게임 이미지 사전 로딩은 유지한다.
 
 ## 씬과 에디터
 

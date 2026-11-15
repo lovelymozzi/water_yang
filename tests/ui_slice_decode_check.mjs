@@ -35,7 +35,7 @@ var gate = new RenderGate()._whenRenderResourcesReady().then(() => { gateFinishe
 `, context);
 await new Promise(setImmediate);
 assert.equal(context.element.style.borderImage, 'url(original.png)', 'Existing image removed before the replacement was decoded');
-assert.equal(context.gateFinished, false, 'Scene revealed before its composed images were decoded');
+assert.equal(context.gateFinished, true, 'Pending bitmap composition hid the preloaded original UI during entry');
 assert.equal(typeof finishDecode, 'function', 'Composed image was never passed to the decoder');
 finishDecode();
 await Promise.all([context.bitmap, context.gate]);
@@ -43,4 +43,8 @@ assert.equal(context.element.style.borderImage, 'none');
 assert.ok(context.element.style.background.includes('blob:composed-button'));
 assert.equal(context.gateFinished, true);
 assert.equal(context._sliceBitmapCache.size, 1, 'Identical images did not share composition');
-console.log('UI SLICE DECODE CHECK: PASS (original kept until decode, reveal waits, shared bitmap promise)');
+const shell = readFileSync(new URL('../godot-shell.html', import.meta.url), 'utf8');
+const importMap = JSON.parse(shell.match(/<script type="importmap">\s*([\s\S]*?)<\/script>/)[1]);
+assert.match(importMap.imports['./ui/scene-renderer.js'], /^\.\/ui\/scene-renderer\.js\?v=ui-bitmap-decode-/, 'Renderer fix can be bypassed by the previously cached unversioned module');
+assert.ok(shell.indexOf('type="importmap"') < shell.indexOf('type="module"'), 'Import map must precede all module imports');
+console.log('UI SLICE DECODE CHECK: PASS (original kept until decode, no blank entry wait, shared bitmap, versioned renderer)');

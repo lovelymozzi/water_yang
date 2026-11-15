@@ -2902,8 +2902,8 @@ export class SceneRenderer {
     _whenRenderResourcesReady() {
         if (typeof document === 'undefined') return Promise.resolve();
         const waits = [];
-        // Includes composed backgrounds and the bitmap masks used by repeating shine.
-        waits.push(..._sliceBitmapCache.values());
+        // Keep the preloaded border-image visible while its decoded bitmap is prepared.
+        // Waiting on all compositions here leaves non-curtain transitions blank.
         document.querySelectorAll('link[id^="ui-css-effect-provider-"]').forEach(l => {
             if (l._loadPromise) waits.push(l._loadPromise);
         });
