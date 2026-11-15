@@ -2,7 +2,7 @@
 
 2026-11-15. `revision-03/`의 무문자 만화 2페이지/8컷을 기존 웹 게임의 첫 입장에 연결했다. 이번 만화에 한해 사용자가 새 UI 씬 2개·다음/건너뛰기 이벤트·진입 분기·필요한 연결 코드의 직접 추가를 명시적으로 승인했다. 이 예외는 다른 UI 작업에 적용하지 않는다.
 
-같은 날 사용자가 설명을 요청해 `revision-04/`에서 한글 설명칸을 붙였다. 이후 사용자가 가로 네 컷과 하단 타이핑 대사·상점 배경을 요청해 현재는 `revision-05/`를 사용한다. 가로 구도에 맞춰 Sunburst로 재구성한 744×290 WebP를 1/2배로 세로 배치한다. 글자는 이미지에 굽지 않고 SceneRenderer의 `story.dialogue`·`story.hint` 바인딩으로 표시한다.
+같은 날 사용자가 설명을 요청해 `revision-04/`에서 한글 설명칸을 붙였고, `revision-05/`에서 가로 네 컷과 하단 타이핑 대사·상점 배경을 연결했다. 현재 `revision-06/`은 같은 그림에 사선 만화 프레임을 적용하고, 동화식 설명 어미를 짧은 상황 서술과 대화로 바꾼 버전이다. 744×290 WebP를 1/2배로 표시한다. 글자는 이미지에 굽지 않고 SceneRenderer의 `story.dialogue`·`story.hint` 바인딩으로 표시한다.
 
 ## 실제 흐름
 
@@ -25,7 +25,7 @@
 - 실행용 UI: `web/ui/StoryIntro01.contract.json`, `StoryIntro02.contract.json`, `scenes-index.json`, `scene-flow.json`, splash의 첫 입장 분기, 루트 `SCENES.md`.
 - 런타임 훅: `web/story-intro.js`. `attachStoryIntro`가 첫 입장·건너뛰기·페이지 완료 조건, 공개 visibility/text 바인딩과 터치·타이핑을 공급한다. 페이지 전환은 FlowDriver에 맡긴다. `Intl.Segmenter`로 분해된 한글 자모도 한 음절씩 출력한다. 건너뛰기·씬 이탈 때 rAF와 이벤트 구독을 해제한다.
 - 호스트: `godot-shell.html`과 `web/index.html`에서 모듈/모션 CSS를 읽고 기존 splash 디코드 대기에 두 이야기 씬을 포함한다.
-- 컷은 `story_cat_liquid_wide_card_01.webp`~`_08.webp` 8개다. 그림·테두리·그림자는 Pillow로 합성한다. 원화/개별 컷을 중복 선로딩하지 않는다. 새 파일명과 CSS/JS 버전으로 이전 캐시와 분리한다.
+- 현재 컷은 `story_cat_liquid_ink_card_01.webp`~`_08.webp` 8개다. 기존 원화를 비틀지 않고 사선 마스크와 검은 테두리·흰 테두리를 Pillow로 합성한다. 두 번째 사고 장면에만 짧은 집중선을 덧붙인다. 원화/개별 컷을 중복 선로딩하지 않는다. 새 에셋 경로와 CSS `cat-liquid-v7`로 이전 이미지 캐시와 분리하고, 이야기 데이터는 HTTP 재검증한다. JS 모듈은 `cat-liquid-v7` 그대로다.
 - 레이아웃·상점과 같은 배경·버튼·대사창·표시 위젯은 계약에 있다. 자동 `sceneAnimations`를 제거하고 터치 단계마다 `.story-panel-enter`를 붙여 기존 200ms 스탬프 모션을 재생한다. `web/story-intro.css`는 타격선과 `skip` 밑줄도 지정한다.
 - 배율은 1.16 → 0.96 → 1.015 → 1.0, 길이는 200ms다. 정적 회전은 이미지 안쪽 래퍼, 동적 회전은 바깥 타임라인 대상에 합성한다. Pillow와 CSS의 양의 회전 방향 차이를 반영한다.
 - OS의 움직임 줄이기 설정에서는 같은 등장 순서로 카드가 즉시 나타나고 타격선을 생략한다.

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "revision": 5,
+  "revision": 6,
   "assets": [
     {
       "path": "src/assets/story_cat_liquid_card_01.webp",
@@ -165,6 +165,15 @@
       "sha256": "1f3263cbac2453461402116ec2b175bf9af40eb7dfba27b1a50757c718d00af7"
     },
     {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "bytes": 1536,
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    },
+    {
       "path": "src/assets/story_cat_liquid_impact_wide.png",
       "size": [
         792,
@@ -172,6 +181,78 @@
       ],
       "bytes": 1577,
       "sha256": "87b009db2165e560c88cad3e507525f27dfd4b810d81496ef69ed9d2cfd85a3b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_01.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 63430,
+      "sha256": "ff0cbd56ffdf7192b7182dd97946dc65922ff9a6556f0f22970f543a7730ca04"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_02.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 74480,
+      "sha256": "5443c2bab8f45bceb312e10cbad6e07ceb11ded1f485b4773a4b681970b60a1c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_03.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 71034,
+      "sha256": "0e1c1c7a66a59cdda6af6865a6d43f52de199ad86bb0529dc316606e7afd679e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_04.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 70772,
+      "sha256": "e25f91cbd550bc1578e7cdf936d862568cdc156049a8e36766f44649cbd6709c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_05.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 70922,
+      "sha256": "fed5108a873e13f3c28ac02295c08461eb42e51f244178ec5a9d079cbce02bf2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_06.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 75326,
+      "sha256": "399e353cae0eee948fbc69b5f418ac56870920218e3988d6a9f242f56caf6fad"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_07.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 71790,
+      "sha256": "b12b9493186327fe4682c15759b4905da23e36140c2aa039736f6a8812a3a25b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_08.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 75742,
+      "sha256": "f7ea164c063d468dec45206ad6b7e9e8a4fc94abe22ccf97b2e8caa288b7458d"
     },
     {
       "path": "src/assets/story_cat_liquid_page_01.webp",

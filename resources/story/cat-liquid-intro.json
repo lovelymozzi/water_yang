@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "id": "cat-liquid-intro-v5",
-  "revision": 5,
+  "id": "cat-liquid-intro-v6",
+  "revision": 6,
   "locale": "ko",
   "status": "integrated-awaiting-user-visual-check",
   "canvas": {
@@ -34,9 +34,9 @@
     "entryDurationMs": 200,
     "impactLineDurationMs": 120,
     "paperColor": "#FFFFFF",
-    "frameInk": "#532C1E",
+    "frameInk": "#000000",
     "framePaddingPx": 3,
-    "frameBorderPx": 2,
+    "frameBorderPx": 2.5,
     "imageWidth": 360,
     "imageHeight": 132,
     "layout": [
@@ -98,26 +98,26 @@
         {
           "number": 1,
           "art": "src/assets/story_cat_liquid_wide_panel_01.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_01.webp",
-          "caption": "‘고양이 액체설’ 논문에 푹 빠진 박사.\n“고양이는 정말 액체일까?”"
+          "cardArt": "src/assets/story_cat_liquid_ink_card_01.webp",
+          "caption": "‘고양이 액체설’을 연구하던 박사.\n“이건 직접 확인해 봐야겠는데.”"
         },
         {
           "number": 2,
           "art": "src/assets/story_cat_liquid_wide_panel_02.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_02.webp",
-          "caption": "그때, 실험실 바닥에 차원문이 열리더니…\n박사가 쏙 빨려 들어갔어요!"
+          "cardArt": "src/assets/story_cat_liquid_ink_card_02.webp",
+          "caption": "실험 중, 차원문이 갑자기 작동했다.\n“잠깐, 좌표 설정 안 했는데?!”"
         },
         {
           "number": 3,
           "art": "src/assets/story_cat_liquid_wide_panel_03.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_03.webp",
-          "caption": "눈을 떠 보니 낯선 숲!\n컵에 쏙, 상자에 쏙 들어간 고양이들?"
+          "cardArt": "src/assets/story_cat_liquid_ink_card_03.webp",
+          "caption": "도착한 곳엔 컵 고양이와 박스 고양이.\n“여긴 대체 어디지?”"
         },
         {
           "number": 4,
           "art": "src/assets/story_cat_liquid_wide_panel_04.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_04.webp",
-          "caption": "“너희는 어디든 몸을 맞출 수 있구나!”\n박사의 눈이 반짝였죠."
+          "cardArt": "src/assets/story_cat_liquid_ink_card_04.webp",
+          "caption": "“컵이든 상자든 몸을 맞춘다고?\n논문보다 더한데.”"
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
@@ -130,26 +130,26 @@
         {
           "number": 5,
           "art": "src/assets/story_cat_liquid_wide_panel_05.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_05.webp",
-          "caption": "초록 고양이가 초록 차원문에 닿자,\n빛이 반짝!"
+          "cardArt": "src/assets/story_cat_liquid_ink_card_05.webp",
+          "caption": "“저 차원문, 너랑 같은 색이네.\n가까이 가 볼래?”"
         },
         {
           "number": 6,
           "art": "src/assets/story_cat_liquid_wide_panel_06.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_06.webp",
-          "caption": "“내 연구실이잖아!\n같은 색 차원문은 인간 세상과 이어져!”"
+          "cardArt": "src/assets/story_cat_liquid_ink_card_06.webp",
+          "caption": "차원문 너머로 연구실이 보였다.\n“인간 세계로 연결돼 있어!”"
         },
         {
           "number": 7,
           "art": "src/assets/story_cat_liquid_wide_panel_07.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_07.webp",
-          "caption": "폭신한 소파와 따뜻한 햇살이 있는 곳.\n“우리도 가 보고 싶어!”"
+          "cardArt": "src/assets/story_cat_liquid_ink_card_07.webp",
+          "caption": "“저쪽에 가면 소파도 있는 거야?”\n“그럼 우리도 가지.”"
         },
         {
           "number": 8,
           "art": "src/assets/story_cat_liquid_wide_panel_08.webp",
-          "cardArt": "src/assets/story_cat_liquid_wide_card_08.webp",
-          "caption": "“너희와 같은 색의 차원문을 찾아가렴!”\n고양이들의 모험이 시작됐어요."
+          "cardArt": "src/assets/story_cat_liquid_ink_card_08.webp",
+          "caption": "“같은 색 차원문을 찾으면 돼.\n자, 한 마리씩 출발!”"
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
@@ -171,7 +171,7 @@
       "skip",
       "complete"
     ],
-    "impactArt": "src/assets/story_cat_liquid_impact_wide.png"
+    "impactArt": "src/assets/story_cat_liquid_impact_ink.png"
   },
   "background": {
     "type": "image-tile",
@@ -187,6 +187,23 @@
     "scrollEnabled": true,
     "scrollDirection": "up-right",
     "scrollDuration": 18
+  },
+  "frame": {
+    "style": "angled-ink",
+    "cardWidth": 372,
+    "cardHeight": 145,
+    "rimPx": 3,
+    "inkPx": 2.5,
+    "outlines": [
+      [[2, 4], [370, 4], [370, 130], [2, 141]],
+      [[2, 15], [370, 4], [358, 141], [12, 141]],
+      [[12, 4], [358, 4], [370, 141], [2, 129]],
+      [[2, 4], [370, 15], [370, 141], [2, 141]]
+    ],
+    "speedLinePanels": [2],
+    "referenceUrl": "https://kr.pinterest.com/search/pins/?q=%EB%A7%8C%ED%99%94%20%ED%94%84%EB%A0%88%EC%9E%84&rs=typed",
+    "observedExampleUrl": "https://i.pinimg.com/474x/03/dc/df/03dcdf244f5f83c44d4038dcb2e43a6a.jpg",
+    "observation": "검색 결과의 실제 프레임 예시에서 검은 선, 흰 여백, 사선 컷 경계, 집중선을 확인. 가로 네 컷을 유지하며 테두리와 사고 장면의 집중선에 적용."
   },
   "dialogue": {
     "x": 16,

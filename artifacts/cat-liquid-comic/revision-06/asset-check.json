@@ -1,0 +1,279 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_01.webp",
+      "sourceSha256": "0b53aa114355ebe68bae136c215b8dedc54c65efc5520f6d5eeaae1cd92a5005",
+      "outline": [
+        [
+          2,
+          4
+        ],
+        [
+          370,
+          4
+        ],
+        [
+          370,
+          130
+        ],
+        [
+          2,
+          141
+        ]
+      ],
+      "caption": "‘고양이 액체설’을 연구하던 박사.\n“이건 직접 확인해 봐야겠는데.”",
+      "fits": true
+    },
+    {
+      "panel": 2,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_02.webp",
+      "sourceSha256": "a77c8a8ec9cadcf32d9413a75e677c06dc89d03bf72691aa792f9f10297b337c",
+      "outline": [
+        [
+          2,
+          15
+        ],
+        [
+          370,
+          4
+        ],
+        [
+          358,
+          141
+        ],
+        [
+          12,
+          141
+        ]
+      ],
+      "caption": "실험 중, 차원문이 갑자기 작동했다.\n“잠깐, 좌표 설정 안 했는데?!”",
+      "fits": true
+    },
+    {
+      "panel": 3,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_03.webp",
+      "sourceSha256": "1b699cddea169be0422dbb913c5ce1bf595cdc18a52803ecd0f921b1d8dcd50c",
+      "outline": [
+        [
+          12,
+          4
+        ],
+        [
+          358,
+          4
+        ],
+        [
+          370,
+          141
+        ],
+        [
+          2,
+          129
+        ]
+      ],
+      "caption": "도착한 곳엔 컵 고양이와 박스 고양이.\n“여긴 대체 어디지?”",
+      "fits": true
+    },
+    {
+      "panel": 4,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_04.webp",
+      "sourceSha256": "866146c2eb5c908c8c93b5f8f5c4c3739cb0cef012d7af8c70d263816f66b214",
+      "outline": [
+        [
+          2,
+          4
+        ],
+        [
+          370,
+          15
+        ],
+        [
+          370,
+          141
+        ],
+        [
+          2,
+          141
+        ]
+      ],
+      "caption": "“컵이든 상자든 몸을 맞춘다고?\n논문보다 더한데.”",
+      "fits": true
+    },
+    {
+      "panel": 5,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_05.webp",
+      "sourceSha256": "55e7de59e2bd6da20945401ce9388cce421c43f7d167ec3a4807f9d281c3d0e3",
+      "outline": [
+        [
+          2,
+          4
+        ],
+        [
+          370,
+          4
+        ],
+        [
+          370,
+          130
+        ],
+        [
+          2,
+          141
+        ]
+      ],
+      "caption": "“저 차원문, 너랑 같은 색이네.\n가까이 가 볼래?”",
+      "fits": true
+    },
+    {
+      "panel": 6,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_06.webp",
+      "sourceSha256": "0d246b4b7a19941dafd404afc74e14da7661e1a2414b68a949c06b80dfc096fb",
+      "outline": [
+        [
+          2,
+          15
+        ],
+        [
+          370,
+          4
+        ],
+        [
+          358,
+          141
+        ],
+        [
+          12,
+          141
+        ]
+      ],
+      "caption": "차원문 너머로 연구실이 보였다.\n“인간 세계로 연결돼 있어!”",
+      "fits": true
+    },
+    {
+      "panel": 7,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_07.webp",
+      "sourceSha256": "4e70beaa972af598bedf5024e75aaec3841e28cf02d980888c8d708784237253",
+      "outline": [
+        [
+          12,
+          4
+        ],
+        [
+          358,
+          4
+        ],
+        [
+          370,
+          141
+        ],
+        [
+          2,
+          129
+        ]
+      ],
+      "caption": "“저쪽에 가면 소파도 있는 거야?”\n“그럼 우리도 가지.”",
+      "fits": true
+    },
+    {
+      "panel": 8,
+      "sourceArt": "src/assets/story_cat_liquid_wide_panel_08.webp",
+      "sourceSha256": "e7eba48d90fc0237d910b65eb5af9548cbb6240db0c02af5712ec18e368e1cb8",
+      "outline": [
+        [
+          2,
+          4
+        ],
+        [
+          370,
+          15
+        ],
+        [
+          370,
+          141
+        ],
+        [
+          2,
+          141
+        ]
+      ],
+      "caption": "“같은 색 차원문을 찾으면 돼.\n자, 한 마리씩 출발!”",
+      "fits": true
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_01.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "ff0cbd56ffdf7192b7182dd97946dc65922ff9a6556f0f22970f543a7730ca04"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_02.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "5443c2bab8f45bceb312e10cbad6e07ceb11ded1f485b4773a4b681970b60a1c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_03.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "0e1c1c7a66a59cdda6af6865a6d43f52de199ad86bb0529dc316606e7afd679e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_04.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "e25f91cbd550bc1578e7cdf936d862568cdc156049a8e36766f44649cbd6709c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_05.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "fed5108a873e13f3c28ac02295c08461eb42e51f244178ec5a9d079cbce02bf2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_06.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "399e353cae0eee948fbc69b5f418ac56870920218e3988d6a9f242f56caf6fad"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_07.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "b12b9493186327fe4682c15759b4905da23e36140c2aa039736f6a8812a3a25b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_ink_card_08.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "f7ea164c063d468dec45206ad6b7e9e8a4fc94abe22ccf97b2e8caa288b7458d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ]
+}

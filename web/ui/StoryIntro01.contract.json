@@ -40,7 +40,7 @@
       "rotation": 0,
       "zIndex": 1,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_wide_card_01.webp",
+        "exportPath": "src/assets/story_cat_liquid_ink_card_01.webp",
         "width": 744,
         "height": 290
       },
@@ -59,7 +59,7 @@
       "rotation": 0,
       "zIndex": 2,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_wide_card_02.webp",
+        "exportPath": "src/assets/story_cat_liquid_ink_card_02.webp",
         "width": 744,
         "height": 290
       },
@@ -78,7 +78,7 @@
       "rotation": 0,
       "zIndex": 3,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_wide_card_03.webp",
+        "exportPath": "src/assets/story_cat_liquid_ink_card_03.webp",
         "width": 744,
         "height": 290
       },
@@ -97,7 +97,7 @@
       "rotation": 0,
       "zIndex": 4,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_wide_card_04.webp",
+        "exportPath": "src/assets/story_cat_liquid_ink_card_04.webp",
         "width": 744,
         "height": 290
       },
@@ -314,7 +314,7 @@
             "type": "rectangle",
             "width": 361,
             "height": 100,
-            "radius": 10
+            "radius": 0
           },
           "fill": {
             "type": "solid",
@@ -322,7 +322,7 @@
           },
           "border": {
             "width": 2,
-            "color": "#532C1E"
+            "color": "#000000"
           }
         }
       },
@@ -334,7 +334,7 @@
           "fontSize": 18,
           "fontWeight": "bold",
           "fontFamily": "Arial, sans-serif",
-          "color": "#532C1E",
+          "color": "#000000",
           "offsetX": 0,
           "offsetY": -5,
           "textAlign": "center",

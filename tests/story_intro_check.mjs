@@ -88,7 +88,7 @@ assert.match(css, /prefers-reduced-motion: reduce/);
 assert.ok(existsSync(new URL(story.integration.impactArt, root)));
 for (const path of ['godot-shell.html', 'web/index.html']) {
   const shell = read(path);
-  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v6"/);
+  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v7"/);
   assert.match(shell, /import \{ attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX \}/);
   assert.match(shell, /const GAME_STORAGE_KEYS = \[[\s\S]*?STORY_INTRO_STORAGE_KEY,/);
   assert.match(shell, /localStorage\.getItem\(STORY_INTRO_STORAGE_KEY\) !== '1'\) \? STORY_INTRO_SCENES : \[\]/);

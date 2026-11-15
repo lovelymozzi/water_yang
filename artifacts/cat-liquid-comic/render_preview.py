@@ -1,17 +1,19 @@
-"""Extract wide comic strips and render an offline preview; the game uses SceneRenderer."""
+"""Frame existing comic art and render an offline preview; the game uses SceneRenderer."""
 import hashlib
 import json
 import math
-from decimal import Decimal
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 
-output = Path(__file__).resolve().parent
-root = output.parents[2]
+artifact_dir = Path(__file__).resolve().parent
+root = artifact_dir.parents[1]
 story = json.loads((root / 'resources/story/cat-liquid-intro.json').read_text())
-assert story['revision'] == 5 and story['textMode'] == 'bottom-typewriter'
+assert story['revision'] == 6 and story['textMode'] == 'bottom-typewriter'
+output = artifact_dir / f'revision-{story["revision"]:02d}'
+output.mkdir(exist_ok=True)
 motion = story['motion']
+frame_style = story['frame']
 scale = 2
 font_path = '/Library/Fonts/Managed/NanumGothicOTFBold_1589433817.otf'
 body_font = ImageFont.truetype(font_path, story['dialogue']['fontSize'] * scale)
@@ -25,41 +27,50 @@ for y in range(0, base.height, background.height):
 boards = []
 frames = []
 checks = []
-generation = []
 for page_index, page in enumerate(story['pages'], 1):
-    source = Image.open(output / f'page-{page_index:02d}-generated.png').convert('RGB')
-    assert source.size == (1024, 1536)
-    source.save(root / page['art'], 'WEBP', quality=95, method=6)
-    # Measure generated white gutters instead of assuming the model obeyed their exact coordinates.
-    gutter_rows = [y for y in range(source.height)
-                   if all(low >= 240 for low, high in source.crop((0, y, source.width, y + 1)).getextrema())]
-    runs = []
-    for y in gutter_rows:
-        if not runs or y != runs[-1][-1] + 1:
-            runs.append([y])
-        else:
-            runs[-1].append(y)
-    runs = [run for run in runs if len(run) >= 4]
-    assert len(runs) == 3, f'Expected 3 white gutters, found {runs}'
-    crops = [(0, top, source.width, bottom) for top, bottom in
-             zip([0] + [run[-1] + 1 for run in runs], [run[0] for run in runs] + [source.height])]
     cards = []
-    for slot, (panel, crop) in enumerate(zip(page['panels'], crops)):
-        art = source.crop(crop)
-        art.save(root / panel['art'], 'WEBP', quality=95, method=6)
-        art = ImageOps.fit(art, (720, 264), Image.Resampling.LANCZOS)
-        card = Image.new('RGBA', (744, 290))
+    for slot, panel in enumerate(page['panels']):
+        # Work at four times display size; clip edges rather than skewing faces or bodies.
+        raster = 4
+        size = (frame_style['cardWidth'] * raster, frame_style['cardHeight'] * raster)
+        picture = ImageOps.fit(Image.open(root / panel['art']).convert('RGBA'),
+                               (size[0], motion['imageHeight'] * raster), Image.Resampling.LANCZOS)
+        art = Image.new('RGBA', size)
+        art.paste(picture, (0, (size[1] - picture.height) // 2))
+        outer = [(x * raster, y * raster) for x, y in frame_style['outlines'][slot]]
+        rim = frame_style['rimPx'] * raster
+        inner = [(x + (rim if x < size[0] / 2 else -rim),
+                  y + (rim if y < size[1] / 2 else -rim)) for x, y in outer]
+        mask = Image.new('L', size)
+        ImageDraw.Draw(mask).polygon(inner, fill=255)
+        if panel['number'] in frame_style['speedLinePanels']:
+            # Short tapered lines stay at the edges; the professor and portal remain readable.
+            lines = Image.new('RGBA', size)
+            line_draw = ImageDraw.Draw(lines)
+            for index, angle in enumerate(range(0, 360, 13)):
+                theta = math.radians(angle)
+                dx, dy = math.cos(theta), math.sin(theta)
+                distance = min(size[0] / 2 / max(abs(dx), 0.001), size[1] / 2 / max(abs(dy), 0.001))
+                x, y = size[0] / 2 + dx * distance, size[1] / 2 + dy * distance
+                length = (9 + index % 4 * 3) * raster
+                width = (0.4 + index % 3 * 0.15) * raster
+                line_draw.polygon([(x - dy * width, y + dx * width), (x + dy * width, y - dx * width),
+                                   (x - dx * length, y - dy * length)], fill=(0, 0, 0, 110))
+            art = Image.alpha_composite(art, lines)
+        card = Image.new('RGBA', size)
         draw = ImageDraw.Draw(card)
-        draw.rectangle((6, 8, 738, 284), fill=(83, 44, 30, 42))
-        draw.rectangle((0, 0, 731, 275), fill='white')
-        card.paste(art, (6, 6))
-        draw.rectangle((0, 0, 731, 275), outline=motion['frameInk'], width=4)
+        draw.polygon(outer, fill=motion['paperColor'])
+        card.paste(art, (0, 0), mask)
+        draw.line(inner + inner[:1], fill=motion['frameInk'], width=round(frame_style['inkPx'] * raster), joint='curve')
+        card = card.resize((744, 290), Image.Resampling.LANCZOS)
         card.save(root / panel['cardArt'], 'WEBP', quality=95, method=6)
         cards.append(card)
         box = draw.multiline_textbbox((0, 0), panel['caption'], font=body_font, spacing=7, align='center')
         assert box[2] - box[0] <= (story['dialogue']['width'] - 16) * scale, f'Caption width: {panel["number"]}'
         assert box[3] - box[1] < 70 * scale
-        checks.append({'panel': panel['number'], 'sourceCrop': list(crop), 'caption': panel['caption'], 'fits': True})
+        checks.append({'panel': panel['number'], 'sourceArt': panel['art'],
+                       'sourceSha256': hashlib.sha256((root / panel['art']).read_bytes()).hexdigest(),
+                       'outline': frame_style['outlines'][slot], 'caption': panel['caption'], 'fits': True})
     # Auto advances below only demonstrate typing. The game waits for a touch after every line.
     for index, panel in enumerate(page['panels']):
         samples = list(range(0, len(panel['caption']), 4)) + [len(panel['caption'])] * 3
@@ -69,7 +80,7 @@ for page_index, page in enumerate(story['pages'], 1):
                 layout = motion['layout'][slot]
                 board.alpha_composite(cards[slot], (21, round((layout['centerY'] - 72.5) * scale)))
             draw = ImageDraw.Draw(board)
-            draw.rounded_rectangle((32, 1400, 754, 1600), radius=20, fill='white', outline=motion['frameInk'], width=4)
+            draw.rectangle((32, 1400, 754, 1600), fill='white', outline=motion['frameInk'], width=4)
             text = panel['caption'][:sample]
             box = draw.multiline_textbbox((0, 0), text, font=body_font, spacing=7, align='center')
             draw.multiline_text(((786 - box[2] - box[0]) / 2, 1490 - (box[3] + box[1]) / 2), text,
@@ -84,7 +95,6 @@ for page_index, page in enumerate(story['pages'], 1):
             frames.append(board.convert('RGB').resize((393, 852), Image.Resampling.LANCZOS))
     board.convert('RGB').save(output / f'page-{page_index:02d}-board.png')
     boards.append(board.convert('RGB'))
-    generation.append(json.loads((output / f'page-{page_index:02d}-generation.json').read_text()))
 
 contact = Image.new('RGB', (1596, 1704), '#225D93')
 for index, board in enumerate(boards):
@@ -109,10 +119,6 @@ for path in assets:
         dimensions = list(asset.size)
         asset.verify()
     manifest.append({'path': str(path.relative_to(root)), 'size': dimensions, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
-usd = sum(Decimal(item['usage']['estimated_cost_usd']) for item in generation)
-(output / 'generation.json').write_text(json.dumps({'model': 'gpt-image-2.5-sunburst', 'route': 'Sunburst skill generate_image.py through Flava', 'pages': generation,
-    'total': {'input_text_tokens': sum(item['usage']['input_text_tokens'] for item in generation), 'input_image_tokens': sum(item['usage']['input_image_tokens'] for item in generation), 'output_image_tokens': sum(item['usage']['output_image_tokens'] for item in generation),
-              'estimated_cost_usd': str(usd), 'estimated_cost_krw': str((usd * 1400).quantize(Decimal('0.01')))}}, ensure_ascii=False, indent=2) + '\n')
 (output / 'asset-check.json').write_text(json.dumps({'kind': 'offline-assets-only', 'panels': checks, 'assets': manifest}, ensure_ascii=False, indent=2) + '\n')
 all_assets = []
 for path in sorted((root / 'src/assets').glob('story_cat_liquid_*')):
@@ -122,5 +128,5 @@ for path in sorted((root / 'src/assets').glob('story_cat_liquid_*')):
         dimensions = list(asset.size)
         asset.verify()
     all_assets.append({'path': str(path.relative_to(root)), 'size': dimensions, 'bytes': path.stat().st_size, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
-(output.parent / 'asset-manifest.json').write_text(json.dumps({'version': 1, 'revision': 5, 'assets': all_assets}, ensure_ascii=False, indent=2) + '\n')
-print(f'WIDE COMIC: PASS — {len(checks)} landscape cuts and dialogues, measured gutters, shop background, offline typing preview')
+(artifact_dir / 'asset-manifest.json').write_text(json.dumps({'version': 1, 'revision': story['revision'], 'assets': all_assets}, ensure_ascii=False, indent=2) + '\n')
+print(f'COMIC FRAMES: PASS — {len(checks)} clipped ink frames, existing art, caption bounds, offline typing preview')

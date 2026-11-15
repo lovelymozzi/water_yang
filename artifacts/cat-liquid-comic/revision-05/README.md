@@ -18,7 +18,7 @@
 - `page-01-board.png`, `page-02-board.png`, `two-page-board.jpg`: 상점 배경·마지막 대사를 포함한 오프라인 배치 이미지. 미리보기 버튼/한글 폰트는 Pillow용 근사이며 실제 게임 캡처가 아니다.
 - `typewriter-preview.gif`: 동작 시안. 시안은 반복 재생을 위해 컷을 자동 진행한다. 게임은 매번 터치를 기다린다.
 - `asset-check.json`: 생성 이미지에서 측정한 분리 좌표, 대사 경계, 게임 에셋 크기와 SHA-256.
-- `render_preview.py`: 위 에셋과 오프라인 배치를 재생성한다.
+- `../render_preview.py`: 현재 버전의 프레임 에셋과 오프라인 배치를 재생성한다. 이 버전의 원화와 분리 좌표는 이 폴더에 보존했다.
 
 줄거리의 모티브는 Fardin의 「On the Rheology of Cats」(2014)이며 박사와 차원문 모험은 창작이다. 출처와 전체 문구는 `resources/story/cat-liquid-intro.json`에 있다.
 
