@@ -593,7 +593,6 @@ let continueWithoutHeart = false;
 let endedGame = null;
 let timeoutRecoveryPending = false;
 let sceneSessionToken = 0;
-let instantLobbyHomeReturnTimeoutId = null;
 let activeGodotScene = 'lobby';
 let currentMapStage = progress.getCurrentStage();
 const itemCounts = readItemCounts();
@@ -975,27 +974,28 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     : sceneName === INGAME_UI_SCENE ? 'main' : null;
   let gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
   let parking = document.getElementById('godot-bridge-parking');
-  if (!popup && sceneUuid !== SPLASH_UI_SCENE_UUID && !godotScene && gameHost && parking) {
+  if (!popup && sceneUuid !== SPLASH_UI_SCENE_UUID && sceneUuid !== LOBBY_NAV_SCENE_UUID
+    && !godotScene && gameHost && parking && gameHost.parentElement !== parking) {
     parking.appendChild(gameHost);
   }
   if (!popup && sceneUuid === LOBBY_NAV_SCENE_UUID) {
     document.body.classList.add('instant-lobby-home-return');
-    clearTimeout(instantLobbyHomeReturnTimeoutId);
+    // Restore tab motion on input, not on a timer that changes the idle
+    // navigation host's transform/compositing state ten seconds after entry.
     document.addEventListener('pointerdown', () => {
       document.body.classList.remove('instant-lobby-home-return');
-      clearTimeout(instantLobbyHomeReturnTimeoutId);
-      instantLobbyHomeReturnTimeoutId = null;
     }, { capture: true, once: true });
-    instantLobbyHomeReturnTimeoutId = setTimeout(() => {
-      document.body.classList.remove('instant-lobby-home-return');
-      instantLobbyHomeReturnTimeoutId = null;
-    }, 10000);
   }
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
   if (sceneName === LOBBY_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
+    // Keep entrance/press motion, but stop the 2.9s idle brightness sweep.
+    const stageButton = renderer.getElement('home-btn-stage-normal-png-145');
+    for (const animation of stageButton?.getAnimations({ subtree: true }) || []) {
+      if (animation.animationName?.startsWith('ui-shine-')) animation.cancel();
+    }
     if (lobbyRewardPlaybackRenderer && lobbyRewardPlaybackRenderer !== renderer) {
       lobbyRewardPlaybackToken += 1;
       lobbyRewardPlaybackRenderer = null;
@@ -1374,11 +1374,10 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     return;
   }
   if (!godotScene) {
-    if (!popup && gameHost && parking) parking.appendChild(gameHost);
     return;
   }
   const gameField = renderer.getElementByName('GameField');
-  if (gameHost && gameField) {
+  if (gameHost && gameField && gameHost.parentElement !== gameField) {
     gameHost.style.cssText = 'position:absolute;inset:0;overflow:hidden;display:block;';
     gameField.appendChild(gameHost);
     requestAnimationFrame(() => console.info('[Godot mount]', JSON.stringify({
@@ -1389,7 +1388,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       gameField: gameField.getBoundingClientRect().toJSON(),
       parent: gameHost.parentElement?.getAttribute('data-stable-id'),
     })));
-  } else {
+  } else if (!gameHost || !gameField) {
     console.error('[Godot mount] 대상 누락', { sceneName, scene: godotScene, gameHost: !!gameHost, gameField: !!gameField });
   }
   if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
