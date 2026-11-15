@@ -85,6 +85,8 @@ func _check_body(
 	for material in [cat._outline_material, cat._material_id_2_outline]:
 		_expect(material.get_shader_parameter("storybook_outline_enabled") == true,
 			"%s: 고양이 두 서피스의 동화풍 외곽선이 누락됐다" % label)
+		_expect(material.get_shader_parameter("soft_outline_enabled") == true,
+			"%s: 인게임 외곽선 완화가 누락됐다" % label)
 	_expect(cat._cat_material.next_pass == cat._outline_material
 		and cat._material_id_2.next_pass == cat._material_id_2_outline,
 		"%s: 외곽선이 구부러진 본체와 다른 메시를 사용한다" % label)
@@ -164,6 +166,10 @@ func _check_body(
 		label, scale, cat._inserted_mid_bones.size(), worst_bone, _max_value(coverage)
 	])
 
+	cat.set_floating_water_wave(0.0, 0.0, 0.0)
+	for material in [cat._outline_material, cat._material_id_2_outline]:
+		_expect(material.get_shader_parameter("soft_outline_enabled") == false,
+			"%s: 인게임 외곽선 보정이 로비에 남았다" % label)
 	manager.release_cat_cell(cat)
 	manager._cats.erase(cat)
 	cat.get_parent().remove_child(cat)

@@ -1947,6 +1947,8 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("uv_offset", Vector2(0.0, (1.0 - tile_scale) * 0.5))
 	if _outline_material != null:
 		_outline_material.set_shader_parameter("outline_color", _effective_outline_color())
+		_outline_material.set_shader_parameter("soft_outline_enabled", not _floating_water_outline)
+		_outline_material.set_shader_parameter("tint_color", active_tint)
 		_outline_material.set_shader_parameter(
 			"outline_width",
 			FLOATING_WATER_OUTLINE_WIDTH if _floating_water_outline else outline_width
@@ -1956,6 +1958,8 @@ func _apply_shader_parameters(
 		_outline_material.set_shader_parameter("water_foam_enabled", _floating_water_outline)
 	if _material_id_2_outline != null:
 		_material_id_2_outline.set_shader_parameter("outline_color", _effective_outline_color())
+		_material_id_2_outline.set_shader_parameter("soft_outline_enabled", not _floating_water_outline)
+		_material_id_2_outline.set_shader_parameter("tint_color", active_tint)
 		_material_id_2_outline.set_shader_parameter(
 			"outline_width",
 			FLOATING_WATER_OUTLINE_WIDTH if _floating_water_outline else outline_width

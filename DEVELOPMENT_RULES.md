@@ -115,7 +115,7 @@
 ## 머티리얼, 조명, 그림자
 
 - 고양이에는 툰 셰이더와 아웃라인 셰이더를 적용한다.
-- 고양이의 동화풍 외곽선은 `cat_outline.gdshader`의 `storybook_outline_enabled`로 켠다. `CatEntity._build_cat_material()`에서 본체·연장 몸통의 두 `next_pass`에 모두 지정해 같은 스키닝과 굽힘을 따르게 한다. 기존 색을 바탕으로 선 폭 1.65배·잉크 RGB 0.82배를 적용하고 외곽선의 추가 발광은 끈다. 접힌 안쪽에 껍데기가 드러나지 않도록 깊이 바이어스도 폭에 맞추며, Compatibility의 깊이는 역투영 전 `0..1 → -1..1`, 기록 전 `-1..1 → 0..1`로 변환한다. 스타일 플래그는 기본 false이며 물거품·흡입 클리핑·입구 빛 처리를 유지한다. 이동/점유·몸 경로·카메라는 바꾸지 않는다. `tests/length_check.tscn`과 `tests/hole_check.tscn`, 실제 Compatibility 직선·L·S·U자와 U자 이동 17프레임, 웹 로비를 확인했다. 기록은 `artifacts/cat-storybook-review/README.md`.
+- 고양이의 동화풍 외곽선은 `cat_outline.gdshader`의 `storybook_outline_enabled`로 켠다. `CatEntity._build_cat_material()`에서 본체·연장 몸통의 두 `next_pass`에 모두 지정해 같은 스키닝과 굽힘을 따르게 한다. **인게임만** `soft_outline_enabled=true`로 선 폭을 Inspector 값의 0.75배로 하고 선 색에 몸 틴트의 선형 RGB를 25% 섞는다. 로비는 기존 폭 1.65배·잉크 RGB 0.82배를 유지하며, `_floating_water_outline`가 켜질 때 두 서피스의 완화 플래그를 끈다. 외곽선의 추가 발광은 끈다. 접힌 안쪽에 껍데기가 드러나지 않도록 깊이 바이어스도 폭에 맞추며, Compatibility의 깊이는 역투영 전 `0..1 → -1..1`, 기록 전 `-1..1 → 0..1`로 변환한다. 두 스타일 플래그는 기본 false이며 물거품·흡입 클리핑·입구 빛 처리를 유지한다. 이동/점유·몸 경로·카메라는 바꾸지 않는다. `tests/length_check.tscn`은 인게임/로비 스타일 분리도 검사한다. 초기 검증은 `artifacts/cat-storybook-review/README.md`, 인게임 완화 비교는 `artifacts/cat-outline-softening/README.md`에 기록한다.
 - 고양이의 색상 변형은 텍스처를 교체하지 않고 `tint_color`를 우선 사용한다.
 - 바닥은 조명의 영향을 받고 고양이 그림자를 받아야 한다. Unshaded 머티리얼이나 뒤집힌 노멀을 바닥에 적용하지 않는다.
 - 그림자 방향은 `DirectionalLight3D`의 회전으로 결정된다. 고양이와 바닥에서 그림자 방향이 서로 반대라면 바닥 노멀, 메시 면 방향, 셰이더의 법선 처리부터 점검한다.
