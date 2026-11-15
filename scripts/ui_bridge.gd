@@ -144,9 +144,12 @@ func _initialize_host_scene(stage_data: Dictionary) -> void:
 		_active_host_scene = scene
 		await get_tree().process_frame
 	emit_signal("host_initialize", stage_data)
+	# MainScene builds its board with call_deferred. process_frame alone runs before drawing.
+	await get_tree().process_frame
+	if OS.has_feature("web"):
+		await RenderingServer.frame_post_draw
 	_host_scene_loading = false
 	notify_initialized()
-	await get_tree().process_frame
 	post_progress({"sceneReady": scene_key})
 	if _start_after_scene_ready:
 		_start_after_scene_ready = false

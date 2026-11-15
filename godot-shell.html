@@ -14,7 +14,15 @@ $GODOT_HEAD_INCLUDE
 <link rel="preload" as="audio" href="sound/diggingt_optimized.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/time_out1.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/Time_out2.mp3" type="audio/mpeg" fetchpriority="low">
-<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}body.instant-lobby-home-return .sr-nav-host-inner,body.instant-lobby-home-return .sr-nav-fg-inner{transition:none!important;transform:none!important}body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr-nav-tabbar *{transition:none!important}</style>
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden}
+/* Keep the native WebGL surface and the bottom navigation in separate compositing groups. */
+.sr-game-host{isolation:isolate}
+.sr-nav-overlay{isolation:isolate;transform:translateZ(0)}
+body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+body.instant-lobby-home-return .sr-nav-host-inner,body.instant-lobby-home-return .sr-nav-fg-inner{transition:none!important;transform:none!important}
+body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr-nav-tabbar *{transition:none!important}
+</style>
 </head>
 <body>
 <script type="module">
@@ -1354,7 +1362,12 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     const gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
     const parking = document.getElementById('godot-bridge-parking') || document.createElement('div');
     parking.id = 'godot-bridge-parking';
-    parking.style.cssText = 'display:none;';
+    if (!(gameHost?.clientWidth > 0 && gameHost.clientHeight > 0)) {
+      throw new Error('[Godot preload] 캔버스 보관 전 GameField 크기가 유효하지 않습니다.');
+    }
+    // display:none makes the bridge ResizeObserver shrink WebGL to 1x1 and clear its buffer.
+    // Preserve the unscaled layout size while parked, including after a window resize.
+    parking.style.cssText = `position:fixed;left:-100000px;top:0;width:${gameHost.clientWidth}px;height:${gameHost.clientHeight}px;visibility:hidden;pointer-events:none;overflow:hidden;`;
     if (!parking.isConnected) document.body.appendChild(parking);
     if (gameHost) parking.appendChild(gameHost);
     loadingReady = true;
@@ -1386,10 +1399,23 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   } else if (!gameHost || !gameField) {
     console.error('[Godot mount] 대상 누락', { sceneName, scene: godotScene, gameHost: !!gameHost, gameField: !!gameField });
   }
-  if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
+  const restartingTimedOutStage = godotScene === 'main' && timeoutRecoveryPending && endedGame === activeGame && !continueWithoutHeart;
+  if (activeGame?.state === 'running' && godotScene === activeGodotScene && !restartingTimedOutStage) return;
   if (activeGame?.state === 'running') activeGame.pause('scene-switch');
+  const sceneReadyPromise = (activeGame?.state === 'paused' || activeGame?.state === 'ready')
+    && (godotScene !== activeGodotScene || restartingTimedOutStage)
+    ? new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        pendingSceneReady = null;
+        reject(new Error(`[Godot] ${godotScene} 첫 화면 렌더 완료 신호가 30초 안에 도착하지 않았습니다.`));
+      }, 30000);
+      pendingSceneReady = { scene: godotScene, resolve: () => {
+        clearTimeout(timeout);
+        pendingSceneReady = null;
+        resolve();
+      } };
+    }) : null;
   if (activeGame?.state === 'paused') {
-    const restartingTimedOutStage = godotScene === 'main' && timeoutRecoveryPending && endedGame === activeGame && !continueWithoutHeart;
     if (godotScene === 'main') {
       endedGame = null;
       timeoutRecoveryPending = false;
@@ -1407,18 +1433,16 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       });
     }
     activeGame.resume();
+    if (sceneReadyPromise) await sceneReadyPromise;
     return;
   }
   if (activeGame?.state === 'ready') {
-    if (godotScene === activeGodotScene) return;
+    if (godotScene === activeGodotScene && !restartingTimedOutStage) return;
     if (godotScene === 'main') {
       if (!continueWithoutHeart && !hasUnlimitedHearts() && !(await runEconomyTransaction('game-entry-heart', () => economy.consumeHeart()))) {
         throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
       }
       continueWithoutHeart = false;
-      const sceneReadyPromise = new Promise(resolve => {
-        pendingSceneReady = { scene: godotScene, resolve: () => { pendingSceneReady = null; resolve(); } };
-      });
       activeGame.message('load_scene', {
         stage: currentMapStage,
         config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },

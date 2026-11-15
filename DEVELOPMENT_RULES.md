@@ -15,6 +15,8 @@
 - 웹 내보내기는 반드시 프로젝트 루트에서 서빙한다. 루트 `index.html`이 `web/index.html`로 이동하며, ui-editor 씬의 텍스처는 프로젝트 루트 기준 `src/assets/`를 사용한다. `web/`만 서버 루트로 열면 `src/assets/...`가 404가 되므로 금지한다.
 - 로비 UI의 밝기 안정성: 스타트 버튼의 2.9초 주기 반복 광택은 사용자가 요청한 정상 연출이므로 유지한다. 사용자가 보고한 순간 밝기 깜빡임과 혼동해 광택을 중단하지 않는다. 등장·누름·나비 애니메이션도 유지한다. 로비 복귀용 `instant-lobby-home-return`은 첫 입력 때 해제하며, 가만히 있는 화면의 transform/transition 조건을 10초 뒤 바꾸는 타이머를 두지 않는다. navigation 호스트 진입 통지가 Lobby 자식 뒤에 와도 이미 붙인 Godot 캔버스를 숨김 주차장으로 옮기지 않는다. 같은 GameField/주차장에 재삽입하지 않고, 다른 탭으로 떠날 때만 한 번 주차한다. `tests/lobby_ui_stability_check.mjs`는 실제 scene:enter 핸들러로 이 경로와 설정 팝업·반복 광택 유지를 검사한다. 이는 호스트 로직 검사이며 브라우저의 실제 밝기 변화가 사라졌다는 시각 검증과 구분한다.
 
+- 검은 화면 깜빡임 방지: `.sr-game-host`와 `.sr-nav-overlay`는 별도 합성 그룹으로 두고, 하단 메뉴는 고정된 합성 계층을 유지한다. 숨김 주차장은 `display:none` 대신 유효한 GameField 크기를 보존한 화면 밖 `visibility:hidden` 컨테이너를 쓴다. publish 브리지의 ResizeObserver가 숨김 시 WebGL을 1×1로 줄여 버퍼를 초기화하던 경로를 막는다. 첫 진입뿐 아니라 running/paused 재진입·Retry도 `sceneReady`까지 `waitUntil`을 유지한다. `UiBridge`는 지연된 보드 생성 이후 웹의 `RenderingServer.frame_post_draw`까지 기다리고 초기화/준비 신호를 보낸다. 30초 동안 준비 신호가 없으면 오류를 내며 커튼을 임의로 걷지 않는다. 위 Node 검사는 실제 주차 코드·publish 브리지의 크기 계산·모든 재진입 상태의 대기 순서를 확인한다. 사용자가 보고한 Codex 내부 보기의 실제 검은 깜빡임이 사라졌는지는 사용자 시각 검증으로 확인한다.
+
 ## 씬과 에디터
 
 - 메인 씬은 `scenes/main_scene.tscn`이다.
