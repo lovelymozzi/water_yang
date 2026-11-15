@@ -2,6 +2,8 @@
 
 2026-11-15. `revision-03/`의 무문자 만화 2페이지/8컷을 기존 웹 게임의 첫 입장에 연결했다. 이번 만화에 한해 사용자가 새 UI 씬 2개·다음/건너뛰기 이벤트·진입 분기·필요한 연결 코드의 직접 추가를 명시적으로 승인했다. 이 예외는 다른 UI 작업에 적용하지 않는다.
 
+같은 날 사용자가 설명을 요청해 현재는 `revision-04/`의 한글 설명 포함 버전을 사용한다. Sunburst 원화는 유지하고 각 그림 밑에 64px 설명칸을 붙였다. 글자는 Nanum Gothic Bold 15.5px을 2배 해상도로 이미지에 합성해 브라우저 폰트 준비와 무관하게 컷과 함께 등장한다. 384×698 WebP의 새 파일명으로 캐시 충돌을 피하며 UI Editor 원본과 실행 계약의 크기·위치를 함께 맞췄다.
+
 ## 실제 흐름
 
 1. 기존 splash에서 로딩을 완료하고 화면을 터치한다.
@@ -10,7 +12,7 @@
 4. 2페이지의 `next` 또는 어느 페이지의 밑줄 친 `skip`을 누르면 완료를 기록하고 기존 navigation의 로비 홈 탭으로 이동한다.
 5. 이후 입장에서는 기존 splash → 로비로 간다. 진행 중 새로고침하면 1페이지부터 다시 볼 수 있다.
 
-만화에는 글자를 표시하지 않으며 페이지를 자동으로 넘기지 않는다. 이동 버튼은 사용자 요청으로 X·화살표 대신 `skip`(밑줄)·`next` 텍스트로 변경했다. `revision-03/stamp-preview.gif`의 페이지당 6.4초 자동 전환/반복은 시안 확인용이다.
+만화에는 컷별 3줄의 설명·대사가 있고 페이지를 자동으로 넘기지 않는다. 이동 버튼은 사용자 요청으로 X·화살표 대신 `skip`(밑줄)·`next` 텍스트로 변경했다. `revision-04/stamp-preview.gif`의 페이지당 6.4초 자동 전환/반복은 시안 확인용이다.
 
 ## 파일과 배선
 
@@ -23,8 +25,8 @@
 - 실행용 UI: `web/ui/StoryIntro01.contract.json`, `StoryIntro02.contract.json`, `scenes-index.json`, `scene-flow.json`, splash의 첫 입장 분기, 루트 `SCENES.md`.
 - 런타임 훅: `web/story-intro.js`. `attachStoryIntro`가 `story.firstEntry`/`story.complete` 조건과 버튼의 키보드·접근성 레이블만 공급한다. 버튼 전환은 FlowDriver에 맡긴다.
 - 호스트: `godot-shell.html`과 `web/index.html`에서 모듈/모션 CSS를 읽고 기존 splash 디코드 대기에 두 이야기 씬을 포함한다.
-- 컷은 원화에서 추출한 `story_cat_liquid_card_01.webp`~`_08.webp` 8개를 사용한다. 테두리·그림자는 GIF와 같은 Pillow 코드로 합성한다. 프레임용 WebP와 원화/개별 컷을 중복 선로딩하지 않는다.
-- 레이아웃과 글자 버튼은 계약에 있고, 등장 타이밍은 SceneRenderer의 기본 `sceneAnimations`로 실행한다. `web/story-intro.css`는 카드 등장 키프레임·짧은 타격선과 `skip` 텍스트의 밑줄을 지정한다.
+- 컷은 `story_cat_liquid_card_captioned_01.webp`~`_08.webp` 8개를 사용한다. 그림·설명칸·글자·테두리·그림자는 GIF와 같은 Pillow 코드로 합성한다. 프레임용 WebP와 원화/개별 컷을 중복 선로딩하지 않는다.
+- 레이아웃과 글자 버튼은 계약에 있고, 등장 타이밍은 SceneRenderer의 기본 `sceneAnimations`로 실행한다. `web/story-intro.css`는 카드 등장 키프레임·설명 포함 크기에 맞춘 타격선과 `skip` 텍스트의 밑줄을 지정한다.
 - 배율은 1.16 → 0.96 → 1.015 → 1.0, 길이는 200ms다. 정적 회전은 이미지 안쪽 래퍼, 동적 회전은 바깥 타임라인 대상에 합성한다. Pillow와 CSS의 양의 회전 방향 차이를 반영한다.
 - OS의 움직임 줄이기 설정에서는 같은 등장 순서로 카드가 즉시 나타나고 타격선을 생략한다.
 

@@ -1,0 +1,127 @@
+{
+  "kind": "offline-asset-check",
+  "font": "Nanum Gothic Bold (rasterized, no runtime font dependency)",
+  "fontSizePx": 15.5,
+  "panels": [
+    {
+      "panel": 1,
+      "caption": "‘고양이 액체설’ 논문에\n푹 빠진 어느 박사.\n“정말 액체일까?”",
+      "textBoundsPx": [
+        0.0,
+        0,
+        291.0,
+        99
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    },
+    {
+      "panel": 2,
+      "caption": "그때, 실험실 바닥에\n차원문이 열리더니…\n박사가 쏙 빨려갔어요!",
+      "textBoundsPx": [
+        0.0,
+        0,
+        292.0,
+        99
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    },
+    {
+      "panel": 3,
+      "caption": "눈을 떠 보니 낯선 숲!\n컵에 쏙, 상자에 쏙\n들어간 고양이들?",
+      "textBoundsPx": [
+        0.0,
+        0,
+        281.0,
+        99
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    },
+    {
+      "panel": 4,
+      "caption": "“너희는 어디든\n몸을 맞출 수 있구나!”\n박사의 눈이 반짝였죠.",
+      "textBoundsPx": [
+        0.0,
+        0,
+        288.0,
+        99
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    },
+    {
+      "panel": 5,
+      "caption": "초록 고양이가\n초록 차원문에 닿자\n빛이 반짝!",
+      "textBoundsPx": [
+        0.0,
+        0,
+        250.0,
+        100
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    },
+    {
+      "panel": 6,
+      "caption": "“내 연구실이잖아!\n같은 색 차원문은\n인간 세상과 이어져!”",
+      "textBoundsPx": [
+        0.0,
+        0,
+        274.0,
+        99
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    },
+    {
+      "panel": 7,
+      "caption": "폭신한 소파와\n따뜻한 햇살이 있는 곳.\n“우리도 가 보고 싶어!”",
+      "textBoundsPx": [
+        0.0,
+        0,
+        297.0,
+        99
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    },
+    {
+      "panel": 8,
+      "caption": "“너희와 같은 색의\n차원문을 찾아가렴!”\n모험이 시작됐어요.",
+      "textBoundsPx": [
+        0.0,
+        0,
+        265.0,
+        100
+      ],
+      "fits": true,
+      "cardSize": [
+        384,
+        698
+      ]
+    }
+  ]
+}

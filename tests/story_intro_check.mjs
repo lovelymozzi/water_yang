@@ -15,7 +15,7 @@ const key = 'leonout_' + STORY_INTRO_STORAGE_SUFFIX;
 
 assert.deepEqual(story.pages.map(page => page.sceneUuid), [...STORY_INTRO_SCENE_UUIDS]);
 assert.deepEqual(story.pages.map(page => page.sceneName), [...STORY_INTRO_SCENES]);
-assert.equal(story.textMode, 'none');
+assert.equal(story.textMode, 'panel-captions');
 assert.equal(story.display.autoAdvance, false);
 assert.equal(story.display.startStageAutomatically, false);
 const firstEntryEdges = graph.edges.filter(edge => edge.fromSceneName === 'splash');
@@ -36,6 +36,21 @@ for (const page of story.pages) {
   assert.deepEqual(contract.sceneAnimations, source.sceneAnimations);
   const cards = contract.layers.filter(layer => layer.stableId.startsWith('story-card-'));
   assert.equal(cards.length, 4);
+  for (const [slot, card] of cards.entries()) {
+    assert.equal(card.visual.exportPath, page.panels[slot].cardArt);
+    assert.equal(card.visual.height * card.scale, 285 + story.motion.captionHeightPx);
+    assert.equal(card.x + card.visual.width * card.scale / 2, story.motion.layout[slot].centerX);
+    assert.equal(card.y + card.visual.height * card.scale / 2, story.motion.layout[slot].centerY);
+    assert.ok(page.panels[slot].caption.trim());
+    const angle = Math.abs(card.rotation) * Math.PI / 180;
+    const halfWidth = card.visual.width * card.scale / 2;
+    const halfHeight = card.visual.height * card.scale / 2;
+    const extentX = halfWidth * Math.cos(angle) + halfHeight * Math.sin(angle);
+    const extentY = halfHeight * Math.cos(angle) + halfWidth * Math.sin(angle);
+    const { centerX, centerY } = story.motion.layout[slot];
+    assert.ok(centerX >= extentX && centerX + extentX <= story.canvas.width, 'Settled card clips horizontally');
+    assert.ok(centerY >= extentY && centerY + extentY <= story.canvas.height, 'Settled card clips vertically');
+  }
   assert.deepEqual(contract.sceneAnimations.slice(0, 4).map(item => item.startTimeMs), story.motion.panelStartMs);
   assert.ok(contract.sceneAnimations.every(item => item.loop === false));
   assert.equal(contract.sceneAnimations.at(-1).targetStableId, `story-next-${page.sceneName.slice(-2)}`);
@@ -66,10 +81,10 @@ for (const page of story.pages) {
 const css = read('web/story-intro.css');
 assert.match(css, /animation-duration: var\(--animate-duration\)/);
 assert.match(css, /prefers-reduced-motion: reduce/);
-assert.ok(existsSync(new URL('src/assets/story_cat_liquid_impact.png', root)));
+assert.ok(existsSync(new URL(story.integration.impactArt, root)));
 for (const path of ['godot-shell.html', 'web/index.html']) {
   const shell = read(path);
-  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v4"/);
+  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v5"/);
   assert.match(shell, /import \{ attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX \}/);
   assert.match(shell, /const GAME_STORAGE_KEYS = \[[\s\S]*?STORY_INTRO_STORAGE_KEY,/);
   assert.match(shell, /localStorage\.getItem\(STORY_INTRO_STORAGE_KEY\) !== '1'\) \? STORY_INTRO_SCENES : \[\]/);

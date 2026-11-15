@@ -15,7 +15,7 @@
   position: absolute;
   inset: -12px;
   pointer-events: none;
-  background: url("../src/assets/story_cat_liquid_impact.png") center / 100% 100% no-repeat;
+  background: url("../src/assets/story_cat_liquid_impact_captioned.png") center / 100% 100% no-repeat;
   animation: story-stamp-impact var(--animate-duration) steps(1, end) both;
 }
 @keyframes story-card-stamp {

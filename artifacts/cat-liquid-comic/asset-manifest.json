@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "revision": 3,
+  "revision": 4,
   "assets": [
     {
       "path": "src/assets/story_cat_liquid_card_01.webp",
@@ -75,6 +75,78 @@
       "sha256": "58fa8011053b97c9f5f6b65059025432caee97c5805bc8b3617c3dfeffba6555"
     },
     {
+      "path": "src/assets/story_cat_liquid_card_captioned_01.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 76554,
+      "sha256": "dfe5fb90f2c257d235ff56eeb806daf4e4655d7fbf5662db59aed629172ce2a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_captioned_02.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 86708,
+      "sha256": "a0c8c4ed2e9d0801156c886ae91e7d2d9a4077b4dda17623d20f8b3160fe3571"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_captioned_03.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 77228,
+      "sha256": "e59f2f5ccef8dd7b23f33c8706793daff23a9bb0f632b980984465abf686d3ff"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_captioned_04.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 77414,
+      "sha256": "53e74d24dd3a4680a3736a97bfe17fa3edb922a03c31e499d29dda79013c5e73"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_captioned_05.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 77740,
+      "sha256": "133b83af4598f405e30eb1cb88692758a2acbe7f046f224b3418fe2b4db97031"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_captioned_06.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 82834,
+      "sha256": "eb4140da5fc57640a4a6af6e60800bddedec92aa2f7ad509707b94a257596d79"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_captioned_07.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 84828,
+      "sha256": "8f1e5e671762fe807bb450728d53ec64e8eb8536ce544a1d3d4fe24f96a5ce53"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_captioned_08.webp",
+      "size": [
+        384,
+        698
+      ],
+      "bytes": 86920,
+      "sha256": "2f04c330781c98ac1c6042f9d8d1b41583fc8b7c3abe5f2aa776719f9a27a85a"
+    },
+    {
       "path": "src/assets/story_cat_liquid_impact.png",
       "size": [
         432,
@@ -82,6 +154,15 @@
       ],
       "bytes": 1571,
       "sha256": "1a06914ac6f353edc49473a2c8213bfe11fdc883adc857c9ab6485e6f676df0f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_captioned.png",
+      "size": [
+        432,
+        746
+      ],
+      "bytes": 1787,
+      "sha256": "1f3263cbac2453461402116ec2b175bf9af40eb7dfba27b1a50757c718d00af7"
     },
     {
       "path": "src/assets/story_cat_liquid_page_01.webp",
