@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "id": "cat-liquid-intro-v1",
+  "locale": "ko-KR",
+  "status": "art-ready-awaiting-ui-publish",
+  "canvas": { "width": 393, "height": 852 },
+  "display": {
+    "firstEntryOnly": true,
+    "autoAdvance": false,
+    "allowSkip": true,
+    "completeDestination": "lobby",
+    "startStageAutomatically": false,
+    "recordSeenOn": ["skip", "complete"]
+  },
+  "pages": [
+    {
+      "id": "page-01",
+      "title": "고양이는 액체일지도?",
+      "subtitle": "말랑한 친구들의 작은 발견",
+      "art": "src/assets/story_cat_liquid_page_01.webp",
+      "actionLabel": "다음",
+      "panels": [
+        { "number": 1, "art": "src/assets/story_cat_liquid_panel_01.webp", "caption": "고양이는…\n액체일지도?" },
+        { "number": 2, "art": "src/assets/story_cat_liquid_panel_02.webp", "caption": "컵에도 쏙,\n상자에도 착!" },
+        { "number": 3, "art": "src/assets/story_cat_liquid_panel_03.webp", "caption": "몸을 쭉 늘리면\n못 갈 곳이 없지." },
+        { "number": 4, "art": "src/assets/story_cat_liquid_panel_04.webp", "caption": "어라? 저 반짝이는\n구멍은 뭐지?" }
+      ]
+    },
+    {
+      "id": "page-02",
+      "title": "집으로 돌아가자냥!",
+      "subtitle": "말랑한 몸으로, 같은 색 차원문까지",
+      "art": "src/assets/story_cat_liquid_page_02.webp",
+      "actionLabel": "모험 시작",
+      "panels": [
+        { "number": 5, "art": "src/assets/story_cat_liquid_panel_05.webp", "caption": "앗! 친구들이\n뿔뿔이 흩어졌어!" },
+        { "number": 6, "art": "src/assets/story_cat_liquid_panel_06.webp", "caption": "좁은 길도 말랑하게,\n구불구불~" },
+        { "number": 7, "art": "src/assets/story_cat_liquid_panel_07.webp", "caption": "같은 색 차원문이\n집으로 이어진대!" },
+        { "number": 8, "art": "src/assets/story_cat_liquid_panel_08.webp", "caption": "우리 모두 집으로\n돌아가게 도와줄래?" }
+      ]
+    }
+  ],
+  "skipLabel": "건너뛰기",
+  "reference": {
+    "paper": "Marc-Antoine Fardin, On the Rheology of Cats, Rheology Bulletin 83(2), July 2014, pp. 16–17, 30",
+    "sourceUrl": "https://improbable.com/ig/winners/#ig2017",
+    "interpretation": "유변학 연구와 고양이 액체 밈에서 영감을 얻은 창작 이야기. 고양이가 실제 액체라는 과학적 증명을 주장하지 않는다."
+  }
+}

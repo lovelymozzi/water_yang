@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_page_01.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "bytes": 392050,
+      "sha256": "ed66a6a35ad9d05d8c2d08f7ac4d08d30293219182ee3be37ac11d5cbbf8f0d0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_page_02.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "bytes": 414780,
+      "sha256": "6bfefcaf1f5e1b0a104792c302f840813243088d953a9146f332c7fdc42f2c66"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_01.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 97818,
+      "sha256": "0de2c33be0267d93243c70811b77a88fb3cf3c3159aa2cae4924af62b83d0bfa"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_02.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 102112,
+      "sha256": "f0864e6a90954bf41817154090e5acbc186522a4b66e191dcc800b89075449c5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_03.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 111982,
+      "sha256": "460908b66d37a816a6aa8f2f3e74c331e9130fa9a3ff4878e66970e37a5b9a14"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_04.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 110232,
+      "sha256": "e1fcb75eb27236f94428bbdf311085443d13275d8eb74dfb5045a6805cbf630a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_05.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 117974,
+      "sha256": "0cf5f60e2ed60667ace5249af877b0c94df796a511185eb860cb75b0843f6e04"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_06.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 95902,
+      "sha256": "9315bdfddb0843f203097aca754a4f0e89833cb28cc09fc07e9c5a1c8f1230ff"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_07.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 113744,
+      "sha256": "408a5751a79899c5b0ca77950fd70b6d71f9d4126dc6c8d3665e8d03cc3a7e69"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_panel_08.webp",
+      "size": [
+        500,
+        756
+      ],
+      "bytes": 111474,
+      "sha256": "bbd0ad4d951070927dc4c48a081be2efd0d77f372ce54a844fefa5ae20529602"
+    }
+  ]
+}

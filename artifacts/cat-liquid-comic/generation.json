@@ -1,0 +1,43 @@
+{
+  "model": "gpt-image-2.5-sunburst",
+  "route": "sunburst-image-generation/scripts/generate_image.py through Flava",
+  "operation": "image edit with one composed reference board per request",
+  "quality": "high",
+  "size": "1024x1536",
+  "generatedAtDate": "2026-11-15",
+  "pages": [
+    {
+      "output": "page-01-generated.png",
+      "prompt": "page-01.prompt.txt",
+      "reference": "game-style-reference.png",
+      "usage": {
+        "input_text_tokens": 1008,
+        "input_image_tokens": 1536,
+        "output_image_tokens": 1372,
+        "estimated_cost_usd": "0.029244",
+        "estimated_cost_krw": "40.94"
+      }
+    },
+    {
+      "output": "page-02-generated.png",
+      "prompt": "page-02.prompt.txt",
+      "reference": "page-02-style-reference.png",
+      "usage": {
+        "input_text_tokens": 998,
+        "input_image_tokens": 1521,
+        "output_image_tokens": 1372,
+        "estimated_cost_usd": "0.029159",
+        "estimated_cost_krw": "40.82"
+      }
+    }
+  ],
+  "total": {
+    "input_text_tokens": 2006,
+    "input_image_tokens": 3057,
+    "output_image_tokens": 2744,
+    "estimated_cost_usd": "0.058403",
+    "estimated_cost_krw": "81.76",
+    "usd_to_krw_rate": 1400
+  },
+  "notes": "Two successful requests; no retries. Generated art is inspired by the actual game captures; it does not reuse the actual mesh or shader. Preview captions and controls are composited separately and are not functional game UI."
+}
