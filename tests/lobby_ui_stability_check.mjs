@@ -63,7 +63,7 @@ for (const entry of [
   assert.equal(host.parentElement, field, `${entry.sceneName} detached the live canvas`);
 }
 assert.deepEqual(moves, [], 'Already mounted canvas was removed/reinserted');
-assert.equal(animations[0].cancelled, true, 'Idle brightness sweep is still looping');
+assert.equal(animations[0].cancelled, false, 'Start button repeating shine must be preserved');
 assert.equal(animations[1].cancelled, false, 'Normal entrance animation was removed');
 assert.equal(bodyClasses.has('instant-lobby-home-return'), true);
 for (const timer of timers.filter(timer => timer.delay <= 10000)) timer.callback();
@@ -73,4 +73,4 @@ context.enter({ sceneName: 'Ranking', sceneUuid: 'ranking', renderer, waitUntil:
 await work;
 assert.equal(host.parentElement, parking, 'Leaving the game view did not park the canvas');
 assert.deepEqual(moves, ['parking'], 'Leaving the game view parked the canvas more than once');
-console.log('LOBBY UI STABILITY CHECK: PASS (no repeated shine, no redundant canvas moves, nav host preserves child, popup preserves mount)');
+console.log('LOBBY UI STABILITY CHECK: PASS (shine preserved, no redundant canvas moves, nav host preserves child, popup preserves mount)');

@@ -991,11 +991,6 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
   if (sceneName === LOBBY_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
-    // Keep entrance/press motion, but stop the 2.9s idle brightness sweep.
-    const stageButton = renderer.getElement('home-btn-stage-normal-png-145');
-    for (const animation of stageButton?.getAnimations({ subtree: true }) || []) {
-      if (animation.animationName?.startsWith('ui-shine-')) animation.cancel();
-    }
     if (lobbyRewardPlaybackRenderer && lobbyRewardPlaybackRenderer !== renderer) {
       lobbyRewardPlaybackToken += 1;
       lobbyRewardPlaybackRenderer = null;
