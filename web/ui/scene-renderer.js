@@ -747,6 +747,12 @@ function composeSliceBitmap(style, src, sx, sy, boxW, boxH) {
             if (canvas.toBlob) canvas.toBlob(b => resolve(b ? URL.createObjectURL(b) : canvas.toDataURL('image/png')), 'image/png');
             else resolve(canvas.toDataURL('image/png'));
         });
+    }).then(async url => {
+        if (!url) return null;
+        const decoded = new Image();
+        decoded.src = url;
+        await decoded.decode();
+        return url;
     }).catch(err => { console.warn('[SceneRenderer] 9-slice 비트맵 합성 실패 — border-image 유지:', err); return null; });
     _sliceBitmapCache.set(key, p);
     return p;
@@ -2896,6 +2902,8 @@ export class SceneRenderer {
     _whenRenderResourcesReady() {
         if (typeof document === 'undefined') return Promise.resolve();
         const waits = [];
+        // Includes composed backgrounds and the bitmap masks used by repeating shine.
+        waits.push(..._sliceBitmapCache.values());
         document.querySelectorAll('link[id^="ui-css-effect-provider-"]').forEach(l => {
             if (l._loadPromise) waits.push(l._loadPromise);
         });
