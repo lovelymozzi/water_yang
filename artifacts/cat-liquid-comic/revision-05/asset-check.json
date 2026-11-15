@@ -1,0 +1,167 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        353
+      ],
+      "caption": "‘고양이 액체설’ 논문에 푹 빠진 박사.\n“고양이는 정말 액체일까?”",
+      "fits": true
+    },
+    {
+      "panel": 2,
+      "sourceCrop": [
+        0,
+        368,
+        1024,
+        737
+      ],
+      "caption": "그때, 실험실 바닥에 차원문이 열리더니…\n박사가 쏙 빨려 들어갔어요!",
+      "fits": true
+    },
+    {
+      "panel": 3,
+      "sourceCrop": [
+        0,
+        752,
+        1024,
+        1124
+      ],
+      "caption": "눈을 떠 보니 낯선 숲!\n컵에 쏙, 상자에 쏙 들어간 고양이들?",
+      "fits": true
+    },
+    {
+      "panel": 4,
+      "sourceCrop": [
+        0,
+        1138,
+        1024,
+        1536
+      ],
+      "caption": "“너희는 어디든 몸을 맞출 수 있구나!”\n박사의 눈이 반짝였죠.",
+      "fits": true
+    },
+    {
+      "panel": 5,
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        378
+      ],
+      "caption": "초록 고양이가 초록 차원문에 닿자,\n빛이 반짝!",
+      "fits": true
+    },
+    {
+      "panel": 6,
+      "sourceCrop": [
+        0,
+        392,
+        1024,
+        757
+      ],
+      "caption": "“내 연구실이잖아!\n같은 색 차원문은 인간 세상과 이어져!”",
+      "fits": true
+    },
+    {
+      "panel": 7,
+      "sourceCrop": [
+        0,
+        776,
+        1024,
+        1146
+      ],
+      "caption": "폭신한 소파와 따뜻한 햇살이 있는 곳.\n“우리도 가 보고 싶어!”",
+      "fits": true
+    },
+    {
+      "panel": 8,
+      "sourceCrop": [
+        0,
+        1161,
+        1024,
+        1536
+      ],
+      "caption": "“너희와 같은 색의 차원문을 찾아가렴!”\n고양이들의 모험이 시작됐어요.",
+      "fits": true
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_01.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "2a33c461725666132bbe3e508aa2e4ae608fc5ca79a3a4790f1af70868f8d27a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_02.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "fd8831b0656cb6edcecda70e835bbcc426e5ae26b01f72886abe3a09e23d5dbd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_03.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "4fc586b8ca79a1993d67a217dfc89041e21cdc54277ec7d4ae1c3bafecd82194"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_04.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "a325b0080bfa55c60bf259622e8ed9201e669204c8156598faf860476ef38f48"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_05.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "f0b25c2877ea25cfbba8f05cfb10e32c11209ac98143b986a3e27970a77497fb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_06.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "fa8d4366d71d517d0c040e8141f35b32fae01aa58d2d5bb78f3ee3ec4cd084e3"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_07.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "a8e3e1d831bf87922d2a06e384ada1b5b9a49276a43f83174f81a45b343fc253"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_wide_card_08.webp",
+      "size": [
+        744,
+        290
+      ],
+      "sha256": "b3436f66e86b78d996d0b88099994b5c9718dfcd70cd86ffc550e27dad50b7b8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_wide.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "87b009db2165e560c88cad3e507525f27dfd4b810d81496ef69ed9d2cfd85a3b"
+    }
+  ]
+}

@@ -1,14 +1,14 @@
 {
   "version": 1,
-  "id": "cat-liquid-intro-v4",
-  "revision": 4,
+  "id": "cat-liquid-intro-v5",
+  "revision": 5,
   "locale": "ko",
   "status": "integrated-awaiting-user-visual-check",
   "canvas": {
     "width": 393,
     "height": 852
   },
-  "textMode": "panel-captions",
+  "textMode": "bottom-typewriter",
   "controls": {
     "next": "next",
     "skip": "skip-underlined"
@@ -22,48 +22,43 @@
     "recordSeenOn": [
       "skip",
       "complete"
-    ]
+    ],
+    "advanceMode": "tap-complete-then-next-panel"
   },
   "motion": {
-    "type": "sequential-stamp",
+    "type": "tap-sequential-stamp",
     "keepPreviousPanels": true,
     "loopEntrance": false,
     "frameDurationMs": 40,
     "previewPageDurationMs": 6400,
-    "panelStartMs": [
-      240,
-      1320,
-      2480,
-      3640
-    ],
     "entryDurationMs": 200,
     "impactLineDurationMs": 120,
     "paperColor": "#FFFFFF",
     "frameInk": "#532C1E",
     "framePaddingPx": 3,
     "frameBorderPx": 2,
-    "imageWidth": 180,
-    "imageHeight": 272,
+    "imageWidth": 360,
+    "imageHeight": 132,
     "layout": [
       {
-        "centerX": 102,
-        "centerY": 271,
-        "rotationDeg": -1.5
+        "centerX": 196.5,
+        "centerY": 142.5,
+        "rotationDeg": 0
       },
       {
-        "centerX": 290,
-        "centerY": 249,
-        "rotationDeg": 2
+        "centerX": 196.5,
+        "centerY": 296.5,
+        "rotationDeg": 0
       },
       {
-        "centerX": 102,
-        "centerY": 629,
-        "rotationDeg": 1.8
+        "centerX": 196.5,
+        "centerY": 450.5,
+        "rotationDeg": 0
       },
       {
-        "centerX": 290,
-        "centerY": 607,
-        "rotationDeg": -1.7
+        "centerX": 196.5,
+        "centerY": 604.5,
+        "rotationDeg": 0
       }
     ],
     "entryKeyframes": [
@@ -92,37 +87,37 @@
         "translateY": 0
       }
     ],
-    "captionHeightPx": 64,
-    "captionFontSizePx": 15.5
+    "initialDelayMs": 240,
+    "typewriterMsPerCharacter": 38
   },
   "pages": [
     {
       "id": "page-01",
-      "art": "src/assets/story_cat_liquid_page_01.webp",
+      "art": "src/assets/story_cat_liquid_wide_page_01.webp",
       "panels": [
         {
           "number": 1,
-          "art": "src/assets/story_cat_liquid_panel_01.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_01.webp",
-          "caption": "‘고양이 액체설’ 논문에\n푹 빠진 어느 박사.\n“정말 액체일까?”"
+          "art": "src/assets/story_cat_liquid_wide_panel_01.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_01.webp",
+          "caption": "‘고양이 액체설’ 논문에 푹 빠진 박사.\n“고양이는 정말 액체일까?”"
         },
         {
           "number": 2,
-          "art": "src/assets/story_cat_liquid_panel_02.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_02.webp",
-          "caption": "그때, 실험실 바닥에\n차원문이 열리더니…\n박사가 쏙 빨려갔어요!"
+          "art": "src/assets/story_cat_liquid_wide_panel_02.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_02.webp",
+          "caption": "그때, 실험실 바닥에 차원문이 열리더니…\n박사가 쏙 빨려 들어갔어요!"
         },
         {
           "number": 3,
-          "art": "src/assets/story_cat_liquid_panel_03.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_03.webp",
-          "caption": "눈을 떠 보니 낯선 숲!\n컵에 쏙, 상자에 쏙\n들어간 고양이들?"
+          "art": "src/assets/story_cat_liquid_wide_panel_03.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_03.webp",
+          "caption": "눈을 떠 보니 낯선 숲!\n컵에 쏙, 상자에 쏙 들어간 고양이들?"
         },
         {
           "number": 4,
-          "art": "src/assets/story_cat_liquid_panel_04.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_04.webp",
-          "caption": "“너희는 어디든\n몸을 맞출 수 있구나!”\n박사의 눈이 반짝였죠."
+          "art": "src/assets/story_cat_liquid_wide_panel_04.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_04.webp",
+          "caption": "“너희는 어디든 몸을 맞출 수 있구나!”\n박사의 눈이 반짝였죠."
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
@@ -130,31 +125,31 @@
     },
     {
       "id": "page-02",
-      "art": "src/assets/story_cat_liquid_page_02.webp",
+      "art": "src/assets/story_cat_liquid_wide_page_02.webp",
       "panels": [
         {
           "number": 5,
-          "art": "src/assets/story_cat_liquid_panel_05.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_05.webp",
-          "caption": "초록 고양이가\n초록 차원문에 닿자\n빛이 반짝!"
+          "art": "src/assets/story_cat_liquid_wide_panel_05.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_05.webp",
+          "caption": "초록 고양이가 초록 차원문에 닿자,\n빛이 반짝!"
         },
         {
           "number": 6,
-          "art": "src/assets/story_cat_liquid_panel_06.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_06.webp",
-          "caption": "“내 연구실이잖아!\n같은 색 차원문은\n인간 세상과 이어져!”"
+          "art": "src/assets/story_cat_liquid_wide_panel_06.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_06.webp",
+          "caption": "“내 연구실이잖아!\n같은 색 차원문은 인간 세상과 이어져!”"
         },
         {
           "number": 7,
-          "art": "src/assets/story_cat_liquid_panel_07.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_07.webp",
-          "caption": "폭신한 소파와\n따뜻한 햇살이 있는 곳.\n“우리도 가 보고 싶어!”"
+          "art": "src/assets/story_cat_liquid_wide_panel_07.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_07.webp",
+          "caption": "폭신한 소파와 따뜻한 햇살이 있는 곳.\n“우리도 가 보고 싶어!”"
         },
         {
           "number": 8,
-          "art": "src/assets/story_cat_liquid_panel_08.webp",
-          "cardArt": "src/assets/story_cat_liquid_card_captioned_08.webp",
-          "caption": "“너희와 같은 색의\n차원문을 찾아가렴!”\n모험이 시작됐어요."
+          "art": "src/assets/story_cat_liquid_wide_panel_08.webp",
+          "cardArt": "src/assets/story_cat_liquid_wide_card_08.webp",
+          "caption": "“너희와 같은 색의 차원문을 찾아가렴!”\n고양이들의 모험이 시작됐어요."
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
@@ -176,6 +171,29 @@
       "skip",
       "complete"
     ],
-    "impactArt": "src/assets/story_cat_liquid_impact_captioned.png"
+    "impactArt": "src/assets/story_cat_liquid_impact_wide.png"
+  },
+  "background": {
+    "type": "image-tile",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "src/assets/common_bg_pt_3.png",
+    "imagePaths": [],
+    "tileSize": 86,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": true,
+    "scrollDirection": "up-right",
+    "scrollDuration": 18
+  },
+  "dialogue": {
+    "x": 16,
+    "y": 700,
+    "width": 361,
+    "height": 100,
+    "fontSize": 18,
+    "hintFontSize": 12
   }
 }

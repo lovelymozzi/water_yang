@@ -126,15 +126,19 @@
 <!-- SCENE:StoryIntro01 BEGIN -->
 #### `StoryIntro01` · contract: `./web/ui/StoryIntro01.contract.json`
 - sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb401`
-- 이벤트: `story-skip-01:click` · `story-next-01:click`
-- 무문자 4컷 순차 등장. 다음 아이콘은 마지막 컷 정착 뒤 표시.
+- 이벤트: `story-skip-01:click` · `story-next-01:click` · `story-advance-01:click`
+- 텍스트 바인딩: `story.dialogue` · `story.hint`
+- 위젯: `story.panel01`~`story.panel04`, `story.nextReady` (visibility)
+- 가로 네 컷을 세로 배치. 하단 대사를 한 글자씩 출력하고 터치로 완성한 뒤 다음 컷으로 진행. 마지막 대사 완료 후 `story.pageComplete` 조건으로 다음 페이지 이동.
 <!-- SCENE:StoryIntro01 END -->
 
 <!-- SCENE:StoryIntro02 BEGIN -->
 #### `StoryIntro02` · contract: `./web/ui/StoryIntro02.contract.json`
 - sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb402`
-- 이벤트: `story-skip-02:click` · `story-next-02:click`
-- 무문자 4컷 순차 등장. 다음 아이콘은 마지막 컷 정착 뒤 표시.
+- 이벤트: `story-skip-02:click` · `story-next-02:click` · `story-advance-02:click`
+- 텍스트 바인딩: `story.dialogue` · `story.hint`
+- 위젯: `story.panel05`~`story.panel08`, `story.nextReady` (visibility)
+- 가로 네 컷과 하단 타이핑 대사. 마지막 대사 완료 후 `story.finish` 조건에서 완료 저장 후 로비 이동. 어느 페이지든 `story.complete` 조건으로 건너뛰기 가능.
 <!-- SCENE:StoryIntro02 END -->
 
 <!-- CHARACTERS BEGIN -->

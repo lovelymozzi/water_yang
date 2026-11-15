@@ -1458,7 +1458,7 @@
       "trigger": {
         "stableId": "story-next-01",
         "eventName": "story-next-01:click",
-        "condition": "else"
+        "condition": "story.pageComplete"
       },
       "transitionOut": null,
       "transitionIn": null,
@@ -1503,7 +1503,7 @@
       "trigger": {
         "stableId": "story-next-02",
         "eventName": "story-next-02:click",
-        "condition": "story.complete"
+        "condition": "story.finish"
       },
       "transitionOut": null,
       "transitionIn": {

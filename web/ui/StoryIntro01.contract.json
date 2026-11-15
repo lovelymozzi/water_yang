@@ -12,131 +12,98 @@
     "height": 852
   },
   "background": {
-    "type": "solid",
-    "color": "#FFFFFF"
+    "type": "image-tile",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "src/assets/common_bg_pt_3.png",
+    "imagePaths": [],
+    "tileSize": 86,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": true,
+    "scrollDirection": "up-right",
+    "scrollDuration": 18
   },
   "groups": [],
   "fxGroups": [],
-  "sceneAnimations": [
-    {
-      "id": "story-stamp-1",
-      "enabled": true,
-      "type": "object-animation",
-      "targetStableId": "story-card-01",
-      "cssPresetId": "bounce-in",
-      "startMode": "atTime",
-      "startTimeMs": 240,
-      "delayMs": 0,
-      "durationMs": 200,
-      "loop": false
-    },
-    {
-      "id": "story-stamp-2",
-      "enabled": true,
-      "type": "object-animation",
-      "targetStableId": "story-card-02",
-      "cssPresetId": "bounce-in",
-      "startMode": "atTime",
-      "startTimeMs": 1320,
-      "delayMs": 0,
-      "durationMs": 200,
-      "loop": false
-    },
-    {
-      "id": "story-stamp-3",
-      "enabled": true,
-      "type": "object-animation",
-      "targetStableId": "story-card-03",
-      "cssPresetId": "bounce-in",
-      "startMode": "atTime",
-      "startTimeMs": 2480,
-      "delayMs": 0,
-      "durationMs": 200,
-      "loop": false
-    },
-    {
-      "id": "story-stamp-4",
-      "enabled": true,
-      "type": "object-animation",
-      "targetStableId": "story-card-04",
-      "cssPresetId": "bounce-in",
-      "startMode": "atTime",
-      "startTimeMs": 3640,
-      "delayMs": 0,
-      "durationMs": 200,
-      "loop": false
-    },
-    {
-      "id": "story-next-reveal-1",
-      "enabled": true,
-      "type": "object-animation",
-      "targetStableId": "story-next-01",
-      "cssPresetId": "fade-in",
-      "startMode": "atTime",
-      "startTimeMs": 4040,
-      "durationMs": 160,
-      "loop": false
-    }
-  ],
+  "sceneAnimations": [],
   "layers": [
     {
       "stableId": "story-card-01",
       "layerType": "image",
       "displayName": "Story card 1",
-      "x": 6,
-      "y": 96.5,
+      "x": 10.5,
+      "y": 70,
       "scale": 0.5,
-      "rotation": 1.5,
+      "rotation": 0,
       "zIndex": 1,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_card_captioned_01.webp",
-        "width": 384,
-        "height": 698
+        "exportPath": "src/assets/story_cat_liquid_wide_card_01.webp",
+        "width": 744,
+        "height": 290
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel01"
       }
     },
     {
       "stableId": "story-card-02",
       "layerType": "image",
       "displayName": "Story card 2",
-      "x": 194,
-      "y": 74.5,
+      "x": 10.5,
+      "y": 224,
       "scale": 0.5,
-      "rotation": -2,
+      "rotation": 0,
       "zIndex": 2,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_card_captioned_02.webp",
-        "width": 384,
-        "height": 698
+        "exportPath": "src/assets/story_cat_liquid_wide_card_02.webp",
+        "width": 744,
+        "height": 290
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel02"
       }
     },
     {
       "stableId": "story-card-03",
       "layerType": "image",
       "displayName": "Story card 3",
-      "x": 6,
-      "y": 454.5,
+      "x": 10.5,
+      "y": 378,
       "scale": 0.5,
-      "rotation": -1.8,
+      "rotation": 0,
       "zIndex": 3,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_card_captioned_03.webp",
-        "width": 384,
-        "height": 698
+        "exportPath": "src/assets/story_cat_liquid_wide_card_03.webp",
+        "width": 744,
+        "height": 290
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel03"
       }
     },
     {
       "stableId": "story-card-04",
       "layerType": "image",
       "displayName": "Story card 4",
-      "x": 194,
-      "y": 432.5,
+      "x": 10.5,
+      "y": 532,
       "scale": 0.5,
-      "rotation": 1.7,
+      "rotation": 0,
       "zIndex": 4,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_card_captioned_04.webp",
-        "width": 384,
-        "height": 698
+        "exportPath": "src/assets/story_cat_liquid_wide_card_04.webp",
+        "width": 744,
+        "height": 290
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel04"
       }
     },
     {
@@ -194,12 +161,13 @@
           "fontSize": 24,
           "fontWeight": "normal",
           "fontFamily": "\"Lilita One\", cursive",
-          "color": "#396FA9",
+          "color": "#FFFFFF",
           "offsetX": 0,
           "offsetY": 0,
           "style": {
             "stroke": {
-              "width": 0
+              "width": 2,
+              "color": "#225D93"
             },
             "depth": {
               "size": 0
@@ -216,7 +184,7 @@
       "layerType": "component",
       "displayName": "Next page",
       "x": 292,
-      "y": 798,
+      "y": 806,
       "zIndex": 10,
       "scale": 1,
       "rotation": 0,
@@ -225,7 +193,7 @@
           "shape": {
             "type": "rectangle",
             "width": 80,
-            "height": 48
+            "height": 40
           },
           "fill": {
             "type": "none"
@@ -252,7 +220,7 @@
           "eventName": "story-next-01:click",
           "branches": [
             {
-              "condition": "else",
+              "condition": "story.pageComplete",
               "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
               "targetSceneName": "StoryIntro02"
             }
@@ -266,9 +234,135 @@
           "fontSize": 28,
           "fontWeight": "normal",
           "fontFamily": "\"Lilita One\", cursive",
-          "color": "#396FA9",
+          "color": "#FFFFFF",
           "offsetX": 0,
           "offsetY": 0,
+          "style": {
+            "stroke": {
+              "width": 2,
+              "color": "#225D93"
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
+        }
+      ],
+      "widget": {
+        "type": "visibility",
+        "key": "story.nextReady"
+      }
+    },
+    {
+      "stableId": "story-advance-01",
+      "x": 0,
+      "y": 68,
+      "scale": 1,
+      "rotation": 0,
+      "zIndex": 5,
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-advance-01:click",
+          "memo": "대사 출력 중이면 즉시 완성, 완료 후에는 다음 컷 표시"
+        }
+      ],
+      "layerType": "component",
+      "displayName": "Story advance",
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 393,
+            "height": 736,
+            "radius": 0
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#FFFFFF"
+          },
+          "border": {
+            "width": 0,
+            "color": "#532C1E"
+          }
+        }
+      },
+      "texts": []
+    },
+    {
+      "stableId": "story-dialogue-01",
+      "x": 16,
+      "y": 700,
+      "scale": 1,
+      "rotation": 0,
+      "zIndex": 6,
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-advance-01:click",
+          "memo": "대사 출력 중이면 즉시 완성, 완료 후에는 다음 컷 표시"
+        }
+      ],
+      "layerType": "component",
+      "displayName": "Story dialogue",
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 361,
+            "height": 100,
+            "radius": 10
+          },
+          "fill": {
+            "type": "solid",
+            "color1": "#FFFFFF"
+          },
+          "border": {
+            "width": 2,
+            "color": "#532C1E"
+          }
+        }
+      },
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "",
+          "bindingKey": "story.dialogue",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "fontFamily": "Arial, sans-serif",
+          "color": "#532C1E",
+          "offsetX": 0,
+          "offsetY": -5,
+          "textAlign": "center",
+          "autoWrap": true,
+          "style": {
+            "stroke": {
+              "width": 0
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
+        },
+        {
+          "slotIndex": 1,
+          "staticContent": "",
+          "bindingKey": "story.hint",
+          "fontSize": 12,
+          "fontWeight": "normal",
+          "fontFamily": "Arial, sans-serif",
+          "color": "#396FA9",
+          "offsetX": 0,
+          "offsetY": 36,
+          "textAlign": "center",
+          "autoWrap": true,
           "style": {
             "stroke": {
               "width": 0

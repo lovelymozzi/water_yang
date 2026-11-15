@@ -1,22 +1,22 @@
-/* Layout and navigation are defined by StoryIntro contracts, motion by their timeline. */
+/* Layout and visibility are defined by StoryIntro contracts; input starts each stamp. */
 :is(#story-intro-01, #story-intro-02) [data-stable-id^="story-skip-"] .text-0 {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-:is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"].animate__bounceIn {
+:is(#story-intro-01, #story-intro-02) .story-panel-enter {
   animation-name: story-card-stamp;
-  animation-duration: var(--animate-duration);
+  animation-duration: 200ms;
   animation-timing-function: linear;
   animation-fill-mode: both;
   transform-origin: 50% 50%;
 }
-:is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"].animate__bounceIn::after {
+:is(#story-intro-01, #story-intro-02) .story-panel-enter::after {
   content: "";
   position: absolute;
   inset: -12px;
   pointer-events: none;
-  background: url("../src/assets/story_cat_liquid_impact_captioned.png") center / 100% 100% no-repeat;
-  animation: story-stamp-impact var(--animate-duration) steps(1, end) both;
+  background: url("../src/assets/story_cat_liquid_impact_wide.png") center / 100% 100% no-repeat;
+  animation: story-stamp-impact 200ms steps(1, end) both;
 }
 @keyframes story-card-stamp {
   0% { opacity: 1; transform: translateY(-22px) rotate(3deg) scale(1.16); }
@@ -29,7 +29,7 @@
   60%, 100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  :is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"].animate__bounceIn {
+  :is(#story-intro-01, #story-intro-02) .story-panel-enter {
     animation-name: story-card-reveal;
     animation-duration: 1ms;
   }
