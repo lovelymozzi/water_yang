@@ -1,0 +1,60 @@
+{
+  "effect": "fx_char_levelup_01",
+  "assetId": "b328fc5d-bbc6-524f-9ba8-49d6d94338d4",
+  "sourceLibrary": "omaren",
+  "storeTitle": "idle-rangers",
+  "storeUrl": "https://ui-editor-lscommon.app.linecorp-dev.com/asset-store?tab=effect&tag=library%3Amagic-fx",
+  "durationSeconds": 0.6,
+  "sourceSampleRate": 30,
+  "sourceAnimation": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/animation/battle/common/fx_char_levelup_01.anim",
+  "sourceAnimationSha256": "29efe2f770851ef95fe117640866436d2d98f22cf7dbf7de31704dfdfa47ceae",
+  "adaptation": "Restores the source prefab's complete sprite hierarchy, transforms, pivots, sprite sizes and tints using all seven unchanged source textures. Replays all 24 source animation tracks: 3 position curves, 7 scale curves, 13 scalar curves and 1 sprite replacement track. Unweighted Unity Hermite curves are sampled at 120Hz; original scalar alpha is preserved without opacity floors or RGB boosts. The cylinder sprite preserves its bottom pivot and 28px/98px nine-slice borders. The complete composition faces the gameplay camera, retaining the original cylindrical sprite illusion rather than substituting a horizontal ring. Its bright ground disk (64/128px alpha-half-width of glow_102.png, peak authored width 1.1948784) is fitted to the measured aperture diameter; the soft halo extends beyond it; camera-depth compensation preserves that size when shifted 1.25 fitted tiles along the viewing ray to clear the absorbing cat. Vertical placement anchors the cylinder lower edge (authored Y=-0.20300001) to the maximum projected Y of the actual aperture surface vertices, rather than centering the base disk on the aperture. Horizontal centering, camera depth and size are preserved. Depth testing remains enabled. Native CPU glitter uses source speed 4-12, size 0.3-0.4, lifetime 0.2-0.5, radius 0.74, volume height 1.09, the source size curve, separate initial-color and lifetime-alpha gradients, and the source particle material's SrcAlpha/OneMinusSrcAlpha blending. Serialized shader variants are warmed below the board. No Unity runtime is embedded.",
+  "lifecycle": "Start at absorption entry; loop while the cat is absorbing; removed with the cat at completion, reset or scene teardown. A hidden-under-board instance warms the shader during level construction.",
+  "beamPresentation": "User-requested tall fan adaptation: only the two additive cylinder materials use beam_height_scale=1.9 and beam_top_spread=1.25. The beam remains anchored at its original bottom pivot, grows to 1.9 times its previous height, and widens continuously from the unchanged base width to 2.25 times that width at the top. Fragment inverse mapping avoids a diagonal interpolation kink, and the upper 24 percent fades softly. The base disk, other sprite dimensions, original animation tracks, portal placement and opaque-cat depth are preserved. This presentation deliberately changes the source cylinder silhouette.",
+  "absorptionCover": "User-selected adaptation: only the cat surface entering the measured world-space aperture is concealed by light. The body and outline shaders share a world-XZ entry mask that replaces facial ink/body details with pale yellow emission. Above-floor opaque surfaces and their depth remain intact so the rear vortex cannot appear over the cat; the foreground source effect composites over the luminous cat. Only the existing below-floor sink clip removes surfaces. Outside surface appearance remains unchanged. This affects only the absorbing cat, not the complete body, neighboring cats or lobby cats. Source effect curves and absorption movement are unchanged.",
+  "validation": "Godot 4.7.2 runtime samples checked independently against original Unity animation YAML: 24 tracks at 73 timestamps, 3431 scalar comparisons, maximum error 0.000000299; seven runtime texture hashes match their sources. Hole regression checks aperture projection, camera-facing height, source alpha/nine-slice values, pause and cleanup. Actual OpenGL Compatibility captures include the real stage-1 solution triggering absorption and an isolated render for comparison with the existing authenticated UI Editor Unity preview at 0.1-0.5 seconds. Source-value equality does not establish pixel equality.",
+  "materialRecovery": "The raw YAML collection lacks GUID 9dfc825aed78fcd4ba02077103263b40. The existing UI Editor tab's actual native bundle was inspected to recover its SpriteRenderer material reference: pathId -5072788815148685618, Sprite-Unlit-Default, Universal Render Pipeline/2D/Sprite-Unlit-Default shader. Compiled shader blend state is SrcAlpha (5) / OneMinusSrcAlpha (10). This is now blend_mix for every ordinary sprite. Only c_gradi_01 and c_gradi_01_add use glow_01's SrcAlpha (5) / One (1) additive blend. Both variants share the same nine-slice shader implementation without duplicated functions.",
+  "nativeBundleEvidence": [
+    {"name": "Sprite-Unlit-Default", "bundle": "asset-f1d80dba42c5d8437b4d0ca90ac0735a", "sha256": "9fe0fb2b715c383077c850ab3f32d43d52a58f5b44cca192301ea3fab72f6e34", "sourceBlend": 5, "destinationBlend": 10},
+    {"name": "glow_01", "bundle": "asset-1351ddc0fb7b17e807d2a844c3e8498a", "sha256": "f6097e72f3721588ef00a8ec807a3136ff0e0d2869d6664d03d4441e6e176d60", "sourceBlend": 5, "destinationBlend": 1},
+    {"name": "dot_02", "bundle": "asset-40acfcdeefd3ece0e4f1c3d534b0e0af", "sha256": "986811fd0bf3e9e3f95d0ecefefefd176d8f21751c1f3fb5c3dd22833bf9ec13", "sourceBlend": 5, "destinationBlend": 10}
+  ],
+  "limitations": "Native glitter preserves the random two-to-three burst count; its random-number sequence and ring-volume sampling differ from Unity cone-volume sampling. Random seeds, Gamma-space compositing and pixel sampling prevent a claim of identical rendered output. The source one-shot clip is looped every 0.6s for the requested absorption lifecycle. Unity preview and Godot captures show the same cylinder, ring-frame and rising-dot structure and timing; exact pixel equality is not established.",
+  "textures": [
+    {
+      "source": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/texture/single/dot_long_01.png",
+      "runtime": "water_yang/portal_levelup/dot_long_01.png",
+      "sha256": "741502713470d6f5a1deb2e8f14d4c0fcb8b652fda881e0d3328595655493017"
+    },
+    {
+      "source": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/texture/single/trail_gradi_02.png",
+      "runtime": "water_yang/portal_levelup/trail_gradi_02.png",
+      "sha256": "86bd579e07d8c96bb6500b5b7812862c1bfb2d6c4a34f10471a15b0135b48fc4"
+    },
+    {
+      "source": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/texture/single/gradi_cylinder_01.png",
+      "runtime": "water_yang/portal_levelup/gradi_cylinder_01.png",
+      "sha256": "0a0e0b5fac324282847e2fcbc88dd2b9c65387a77806348574e33a7789a06cf2"
+    },
+    {
+      "source": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/texture/single/glow_01.png",
+      "runtime": "water_yang/portal_levelup/glow_01.png",
+      "sha256": "1b92821fef846d34f48ab12189e2dae040b64a60771adb55486be0c009fbb03e"
+    },
+    {
+      "source": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/texture/single/glow_102.png",
+      "runtime": "water_yang/portal_levelup/glow_102.png",
+      "sha256": "185ecfff5b729728942186088abf7e6364468a6371978b238b0847a93465617c"
+    },
+    {
+      "source": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/texture/single/dot_02.png",
+      "runtime": "water_yang/portal_levelup/dot_02.png",
+      "sha256": "0150f498ebee8c61974fddbf6f84d1895fe0d9639588abd1683679199c161a6a"
+    },
+    {
+      "source": "effect/fx_char_levelup_01_b328fc5d-bbc6-524f-9ba8-49d6d94338d4/source-resources/Assets/Art/Effect/texture/sequence/ring_sq_01.png",
+      "runtime": "water_yang/portal_levelup/ring_sq_01.png",
+      "sha256": "e7dc3ff7beb9a06fecdae2dcec8d1d7b0f8d3cd74d8d9ba5ee71db9821ffe9d4"
+    }
+  ]
+}

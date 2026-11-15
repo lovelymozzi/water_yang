@@ -127,6 +127,8 @@
 - 형제로 두면 **해제 책임이 함께 옮겨온다.** 구멍이 닫힐 때(`_close_hole()`) 자식이 아니라서 같이 사라지지 않으므로, 기믹 노드를 명시적으로 지우지 않으면 미아 노드가 화면에 남는다.
 - 3D 숫자·문자는 `Label3D` + `FontVariation`으로 만든다. 프로젝트 폰트(Lilita One)는 굵기가 하나뿐이라 볼드 파일이 없고, 굵게 하려면 `variation_embolden`을 쓴다. 굵은 폰트 파일을 새로 들이지 않는다.
 
+- 흡입 빛의 부채꼴 표시는 `cat_absorb_levelup_effect.tscn`의 원통 가산광 재질 두 개에만 `beam_height_scale=1.9`, `beam_top_spread=1.25`를 지정한다. `portal_levelup_sprite.gdshaderinc`가 하단 피벗을 유지한 채 세로를 1.9배 늘리고, 밑변 너비는 유지하면서 위로 갈수록 최대 2.25배 넓힌다. 사각형 내부에서 UV를 역변환해 삼각형 대각선의 꺾임을 피하고 상단 24%를 부드럽게 감쇠한다. 원본 24개 트랙과 바닥 원판·입자·차원문 위치·고양이 깊이 처리는 유지한다. 원본 원통 모양과 다른 사용자 요청에 따른 표시 보정임을 구분한다.
+
 ## 진단
 
 - 파일 로깅은 `project.godot` 의 `[debug] file_logging` 으로 켜 둔다. macOS 로그 위치는 `~/Library/Application Support/Godot/app_userdata/LeonOutPrototype/logs/` 이고, 실행 시 `[boot]` 줄에 경로가 찍힌다.
