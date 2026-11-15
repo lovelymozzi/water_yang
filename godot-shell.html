@@ -411,6 +411,11 @@ window.fetch = async (input, init) => {
   if (url.pathname === godotEnginePath || url.pathname === godotPackPath) {
     return nativeFetch(new Request(request, { cache: 'reload' }));
   }
+  if (request.method === 'GET' && url.origin === location.origin
+    && url.pathname.startsWith(uiPublishPath) && url.pathname.endsWith('.json')) {
+    // Cache API bypass alone still permits a stale HTTP-cached scene index or contract.
+    return nativeFetch(new Request(request, { cache: 'no-cache' }));
+  }
   if (
     !splashCache
     || request.method !== 'GET'

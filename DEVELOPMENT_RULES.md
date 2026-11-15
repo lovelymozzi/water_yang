@@ -196,6 +196,7 @@
 
 ## 검증과 변경 원칙
 
+- 웹 UI의 `scenes-index.json`·`scene-flow.json`·씬 계약 JSON은 `godot-shell.html`/`web/index.html`의 공통 fetch 경로에서 `cache: 'no-cache'`로 HTTP 재검증한다. Cache API에서 제외하는 것만으로는 브라우저 HTTP 캐시의 예전 씬 목록이 반환될 수 있다. 2026-11-15 만화 추가 후 실제 탭에서 `[Splash preload] 네비게이션 탭 contract 누락: StoryIntro01`로 로딩이 멈춘 사례가 있다. `tests/splash_cache_check.mjs`는 예전 HTTP 응답을 돌려주는 조건과 Cache API 사용/미사용을 함께 검사한다.
 - 리그, 포즈, 셰이더, 조명 변경 뒤에는 에디터 뷰와 게임 실행 뷰를 모두 확인한다.
 - 본 변경 뒤에는 다음을 반드시 확인한다: 얼굴이 위를 보는지, 4칸 중앙 정렬인지, 몸 비율이 원본과 같은지, 스케일 잠금 본이 변하지 않는지.
 - 시각적으로 확인하지 못한 기능은 완료되었다고 표현하지 않는다.

@@ -40,6 +40,7 @@
 
 - `node tests/story_intro_check.mjs`: 실제 publish FlowDriver와 렌더러/DOM 대역으로 첫 입장, 로딩 전 진입 차단, 두 페이지, 완료 저장, 1·2페이지 건너뛰기, 재접속, 다시보기, 키보드 동작 검사.
 - `node tests/splash_cache_check.mjs`, `node tests/ui_bare_asset_paths_check.mjs`: 기존 선로딩/에셋 경로 회귀 검사.
+- 2026-11-15 로딩 정지 수정: 열린 게임 탭의 로그에서 `[Splash preload] 네비게이션 탭 contract 누락: StoryIntro01`을 확인했다. Cache API 제외만으로는 이전 HTTP 캐시가 반환될 수 있어, 호스트의 UI JSON 요청을 `cache: 'no-cache'`로 재검증한다. `splash_cache_check.mjs`에 오래된 HTTP 응답 재현을 추가했고 수정 전 실패/수정 후 통과했다. 서버 파일 존재 검사와 씬 전환 대역 검사만으로 이 캐시 문제를 검증했다고 보지 않는다.
 - 두 HTML의 module 스크립트 문법과 `git diff --check`.
 - Pillow로 모든 WebP/타격선 PNG를 디코드하고 크기·SHA-256 검증. 인코딩한 GIF에서 페이지별 누적 컷 0/1/2/3/4/4와 정착 후 픽셀 유지, 길이 12,800ms 확인.
 - localhost:8080의 HTML·연결 모듈·모션 CSS·흐름·새 계약·이미지가 실제 작업 폴더의 내용과 일치하는지 검사.
