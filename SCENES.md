@@ -126,19 +126,19 @@
 <!-- SCENE:StoryIntro01 BEGIN -->
 #### `StoryIntro01` · contract: `./web/ui/StoryIntro01.contract.json`
 - sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb401`
-- 이벤트: `story-skip-01:click` · `story-next-01:click` · `story-advance-01:click`
-- 텍스트 바인딩: `story.dialogue` · `story.hint`
+- 이벤트: `story-advance-01:click` (`next` 버튼)
+- 텍스트 바인딩: `story.dialogue`
 - 위젯: `story.panel01`~`story.panel04`, `story.nextReady` (visibility)
-- 가로 네 컷을 세로 배치. 하단 대사를 한 글자씩 출력하고 터치로 완성한 뒤 다음 컷으로 진행. 마지막 대사 완료 후 `story.pageComplete` 조건으로 다음 페이지 이동.
+- 가로 네 컷과 당사자 독백. `next` 한 번에 타이핑 중에도 다음 컷으로 바로 진행. 네 번째 컷에서 `next`를 누르면 문서 엣지 `story.pageComplete`를 발화해 다음 페이지 이동. 다른 안내·건너뛰기·화면 전체 터치 없음.
 <!-- SCENE:StoryIntro01 END -->
 
 <!-- SCENE:StoryIntro02 BEGIN -->
 #### `StoryIntro02` · contract: `./web/ui/StoryIntro02.contract.json`
 - sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb402`
-- 이벤트: `story-skip-02:click` · `story-next-02:click` · `story-advance-02:click`
-- 텍스트 바인딩: `story.dialogue` · `story.hint`
+- 이벤트: `story-advance-02:click` (`next` 버튼)
+- 텍스트 바인딩: `story.dialogue`
 - 위젯: `story.panel05`~`story.panel08`, `story.nextReady` (visibility)
-- 가로 네 컷과 하단 타이핑 대사. 마지막 대사 완료 후 `story.finish` 조건에서 완료 저장 후 로비 이동. 어느 페이지든 `story.complete` 조건으로 건너뛰기 가능.
+- 같은 `next` 진행 방식. 마지막 컷에서 `next`를 누르면 완료 저장 후 문서 엣지 `story.finish`를 발화해 로비로 이동. 안내 글자 없음.
 <!-- SCENE:StoryIntro02 END -->
 
 <!-- CHARACTERS BEGIN -->

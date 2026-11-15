@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "revision": 6,
+  "revision": 7,
   "assets": [
     {
       "path": "src/assets/story_cat_liquid_card_01.webp",
@@ -253,6 +253,168 @@
       ],
       "bytes": 75742,
       "sha256": "f7ea164c063d468dec45206ad6b7e9e8a4fc94abe22ccf97b2e8caa288b7458d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_01.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 46650,
+      "sha256": "9aac13c78e71de8313b95836227df8f5468a9f07d0228243c45ac12d36c91d09"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_02.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 46354,
+      "sha256": "abd6bc2cfe1f8dbd4ff211058f79e886bc867b3aa7f45059de2b1b9f4495219c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_03.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 53512,
+      "sha256": "1e199d78a81bc2fb0e01b033ac1183ae95ececd9aeebc5962e93d156b8b2f441"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_04.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 52336,
+      "sha256": "080a47be5e0f7d92b30bca6dbd19b440b78a693d32fd53a99e72df7449a1d0a1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_05.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 55306,
+      "sha256": "4a88b9c1f69d9aa9bac99776bbbefb5df4749a216f8fd5592faf47402838beee"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_06.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 56406,
+      "sha256": "2b9cbfd9b46369a0fafd9239118c8c824c7da874de5a2e3a5efc8450068a722e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_07.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 44100,
+      "sha256": "64e0c0c6071356a0163da8384c61a4a15201ddcacee0341d0a8231c220e99339"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_card_08.webp",
+      "size": [
+        744,
+        290
+      ],
+      "bytes": 56502,
+      "sha256": "9f1a857106b10ceb6a32389101f22516c539ba8b119030a5dc3cb178c58e72ff"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_page_01.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "bytes": 295902,
+      "sha256": "664d4e34849035b9bf8eebd690b9a49c996c6345cf9c5e54c1a9e7f2cb552404"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_page_02.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "bytes": 329734,
+      "sha256": "cfb8f0f6c78144094c338b8c257b9dfb3e3c737dd596253f2de01c7392f9001e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_01.webp",
+      "size": [
+        1024,
+        368
+      ],
+      "bytes": 69212,
+      "sha256": "beb05f9ae7f69f0b9b5881c3fc882d9dd4acdba2df0a5ff4abbb92f1e73ea122"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_02.webp",
+      "size": [
+        1024,
+        342
+      ],
+      "bytes": 61896,
+      "sha256": "81b52405759736e400432acba1d908388027ead66fc071ac5fd3e7823cccba7f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_03.webp",
+      "size": [
+        1024,
+        383
+      ],
+      "bytes": 80286,
+      "sha256": "1080ddba161e9b81c49e62068554e18607401b01bc7d333ee1079e17025e67ec"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_04.webp",
+      "size": [
+        1024,
+        384
+      ],
+      "bytes": 80276,
+      "sha256": "0571ea97a3149a9c26291e89ccda8fb8df04ef23ffd43b4faa8c6b71a9bb8017"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_05.webp",
+      "size": [
+        1024,
+        368
+      ],
+      "bytes": 84764,
+      "sha256": "75cd0d6161cbe285ae4a65cfcc1355ca10ebd35bcf61f4141fdae942d6fc6032"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_06.webp",
+      "size": [
+        1024,
+        369
+      ],
+      "bytes": 87058,
+      "sha256": "3405450e6ba8fec026cce6dbf77c7a6e1c34e613f772bf33747801c8a325befc"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_07.webp",
+      "size": [
+        1024,
+        368
+      ],
+      "bytes": 63040,
+      "sha256": "b08855d8e57fcb56ced691e0d191f32e281fdfb5c500f1320a4baa5e78b5a9d4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_misfit_panel_08.webp",
+      "size": [
+        1024,
+        375
+      ],
+      "bytes": 90886,
+      "sha256": "17d5d413cc89f3e4f5e1c260e55f811eb2f57102ff758bc060370fbe4994960b"
     },
     {
       "path": "src/assets/story_cat_liquid_page_01.webp",

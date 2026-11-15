@@ -23,7 +23,7 @@
       "stableId": "story-card-05",
       "type": "image",
       "name": "Story card 5",
-      "exportPath": "src/assets/story_cat_liquid_ink_card_05.webp",
+      "exportPath": "src/assets/story_cat_liquid_misfit_card_05.webp",
       "x": 10.5,
       "y": 70,
       "scale": 0.5,
@@ -50,7 +50,7 @@
       "stableId": "story-card-06",
       "type": "image",
       "name": "Story card 6",
-      "exportPath": "src/assets/story_cat_liquid_ink_card_06.webp",
+      "exportPath": "src/assets/story_cat_liquid_misfit_card_06.webp",
       "x": 10.5,
       "y": 224,
       "scale": 0.5,
@@ -77,7 +77,7 @@
       "stableId": "story-card-07",
       "type": "image",
       "name": "Story card 7",
-      "exportPath": "src/assets/story_cat_liquid_ink_card_07.webp",
+      "exportPath": "src/assets/story_cat_liquid_misfit_card_07.webp",
       "x": 10.5,
       "y": 378,
       "scale": 0.5,
@@ -104,7 +104,7 @@
       "stableId": "story-card-08",
       "type": "image",
       "name": "Story card 8",
-      "exportPath": "src/assets/story_cat_liquid_ink_card_08.webp",
+      "exportPath": "src/assets/story_cat_liquid_misfit_card_08.webp",
       "x": 10.5,
       "y": 532,
       "scale": 0.5,
@@ -124,65 +124,6 @@
       "widget": {
         "type": "visibility",
         "key": "story.panel08"
-      }
-    },
-    {
-      "id": 20102,
-      "stableId": "story-skip-02",
-      "type": "component",
-      "name": "Skip story",
-      "x": 312,
-      "y": 20,
-      "zIndex": 10,
-      "scale": 1,
-      "scaleX": 1,
-      "scaleY": 1,
-      "rotation": 0,
-      "visible": true,
-      "pressEnabled": true,
-      "pressScale": 95,
-      "pressBrightness": 95,
-      "pressTransition": 100,
-      "zLayerId": "zl-ui",
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "story-skip-02:click",
-          "branches": [
-            {
-              "condition": "story.complete",
-              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
-              "targetSceneName": "Lobby"
-            }
-          ]
-        }
-      ],
-      "source": "preset",
-      "componentState": {
-        "name": "Skip story",
-        "shapeType": "rectangle",
-        "width": 64,
-        "height": 44,
-        "bgType": "none",
-        "borderWidth": 0,
-        "pressEnabled": true,
-        "pressScale": 95,
-        "pressBrightness": 95,
-        "pressTransition": 100,
-        "texts": [
-          {
-            "content": "skip",
-            "fontSize": 24,
-            "fontWeight": "normal",
-            "fontFamily": "\"Lilita One\", cursive",
-            "color": "#FFFFFF",
-            "offsetX": 0,
-            "offsetY": 0,
-            "textStrokeWidth": 2,
-            "textShadowOpacity": 0,
-            "textStrokeColor": "#225D93"
-          }
-        ]
       }
     },
     {
@@ -206,14 +147,8 @@
       "events": [
         {
           "trigger": "click",
-          "eventName": "story-next-02:click",
-          "branches": [
-            {
-              "condition": "story.finish",
-              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
-              "targetSceneName": "Lobby"
-            }
-          ]
+          "eventName": "story-advance-02:click",
+          "memo": "next 클릭마다 다음 컷, 마지막 컷이면 문서 엣지 발화"
         }
       ],
       "source": "preset",
@@ -249,55 +184,13 @@
       }
     },
     {
-      "stableId": "story-advance-02",
-      "x": 0,
-      "y": 68,
-      "scale": 1,
-      "rotation": 0,
-      "zIndex": 5,
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "story-advance-02:click",
-          "memo": "대사 출력 중이면 즉시 완성, 완료 후에는 다음 컷 표시"
-        }
-      ],
-      "id": 20200,
-      "type": "component",
-      "source": "preset",
-      "name": "Story advance",
-      "scaleX": 1,
-      "scaleY": 1,
-      "visible": true,
-      "zLayerId": "zl-ui",
-      "componentState": {
-        "name": "Story dialogue",
-        "shapeType": "rectangle",
-        "width": 393,
-        "height": 736,
-        "borderRadius": 0,
-        "bgType": "none",
-        "bgColor1": "#FFFFFF",
-        "borderWidth": 0,
-        "borderColor": "#532C1E",
-        "pressEnabled": false,
-        "texts": []
-      }
-    },
-    {
       "stableId": "story-dialogue-02",
       "x": 16,
       "y": 700,
       "scale": 1,
       "rotation": 0,
       "zIndex": 6,
-      "events": [
-        {
-          "trigger": "click",
-          "eventName": "story-advance-02:click",
-          "memo": "대사 출력 중이면 즉시 완성, 완료 후에는 다음 컷 표시"
-        }
-      ],
+      "events": [],
       "id": 20201,
       "type": "component",
       "source": "preset",
@@ -326,22 +219,8 @@
             "fontFamily": "Arial, sans-serif",
             "color": "#000000",
             "offsetX": 0,
-            "offsetY": -5,
+            "offsetY": 0,
             "textAlign": "center",
-            "autoWrap": true,
-            "textStrokeWidth": 0,
-            "textShadowOpacity": 0
-          },
-          {
-            "content": "",
-            "bindingKey": "story.hint",
-            "fontSize": 12,
-            "fontWeight": "normal",
-            "fontFamily": "Arial, sans-serif",
-            "color": "#396FA9",
-            "offsetX": -16,
-            "offsetY": 36,
-            "textAlign": "right",
             "autoWrap": true,
             "textStrokeWidth": 0,
             "textShadowOpacity": 0

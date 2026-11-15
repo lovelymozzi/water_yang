@@ -14,7 +14,7 @@ $GODOT_HEAD_INCLUDE
 <link rel="preload" as="audio" href="sound/diggingt_optimized.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/time_out1.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/Time_out2.mp3" type="audio/mpeg" fetchpriority="low">
-<link rel="stylesheet" href="./story-intro.css?v=cat-liquid-v7">
+<link rel="stylesheet" href="./story-intro.css?v=cat-liquid-v8">
 <style>
 html,body{margin:0;height:100%;background:#000;overflow:hidden}
 /* Keep the native WebGL surface and the bottom navigation in separate compositing groups. */
@@ -384,7 +384,7 @@ import { ProgressManager } from './ui/progress-manager.js';
 import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
-import { attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX } from './story-intro.js?v=cat-liquid-v7';
+import { attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX } from './story-intro.js?v=cat-liquid-v8';
 
 const SPLASH_CACHE_VERSION = 'story-intro-v3';
 const SPLASH_CACHE_NAME = `${STORAGE_PREFIX}splash_load_${SPLASH_CACHE_VERSION}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.pck`] || 'pck'}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.wasm`] || 'wasm'}`;

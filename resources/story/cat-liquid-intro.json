@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "id": "cat-liquid-intro-v6",
-  "revision": 6,
+  "id": "cat-liquid-intro-v7",
+  "revision": 7,
   "locale": "ko",
   "status": "integrated-awaiting-user-visual-check",
   "canvas": {
@@ -10,20 +10,18 @@
   },
   "textMode": "bottom-typewriter",
   "controls": {
-    "next": "next",
-    "skip": "skip-underlined"
+    "next": "next"
   },
   "display": {
     "firstEntryOnly": true,
     "autoAdvance": false,
-    "allowSkip": true,
+    "allowSkip": false,
     "completeDestination": "lobby",
     "startStageAutomatically": false,
     "recordSeenOn": [
-      "skip",
       "complete"
     ],
-    "advanceMode": "tap-complete-then-next-panel"
+    "advanceMode": "next-click-next-panel"
   },
   "motion": {
     "type": "tap-sequential-stamp",
@@ -93,31 +91,31 @@
   "pages": [
     {
       "id": "page-01",
-      "art": "src/assets/story_cat_liquid_wide_page_01.webp",
+      "art": "src/assets/story_cat_liquid_misfit_page_01.webp",
       "panels": [
         {
           "number": 1,
-          "art": "src/assets/story_cat_liquid_wide_panel_01.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_01.webp",
-          "caption": "‘고양이 액체설’을 연구하던 박사.\n“이건 직접 확인해 봐야겠는데.”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_01.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_01.webp",
+          "caption": "고양이는 액체야… 틀림없어.\n내 이름 박힌 논문으로 증명해 주지.\n흐흐… 한 번만 더 측정하고."
         },
         {
           "number": 2,
-          "art": "src/assets/story_cat_liquid_wide_panel_02.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_02.webp",
-          "caption": "실험 중, 차원문이 갑자기 작동했다.\n“잠깐, 좌표 설정 안 했는데?!”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_02.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_02.webp",
+          "caption": "어? 이 버튼이 아닌데.\n내 노트! 내 안경! 잠깐, 나까지?!"
         },
         {
           "number": 3,
-          "art": "src/assets/story_cat_liquid_wide_panel_03.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_03.webp",
-          "caption": "도착한 곳엔 컵 고양이와 박스 고양이.\n“여긴 대체 어디지?”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_03.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_03.webp",
+          "caption": "안경은 멀쩡하고… 허리는 안 멀쩡하고.\n가만. 컵 고양이에 박스 고양이?\n나 지금 논문 안에 들어온 건가?"
         },
         {
           "number": 4,
-          "art": "src/assets/story_cat_liquid_wide_panel_04.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_04.webp",
-          "caption": "“컵이든 상자든 몸을 맞춘다고?\n논문보다 더한데.”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_04.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_04.webp",
+          "caption": "통이 바뀌면 몸도 바뀐다… 역시!\n학회에서 이걸 봤어야 했는데.\n잠깐만. 전부 기록해야 해."
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
@@ -125,31 +123,31 @@
     },
     {
       "id": "page-02",
-      "art": "src/assets/story_cat_liquid_wide_page_02.webp",
+      "art": "src/assets/story_cat_liquid_misfit_page_02.webp",
       "panels": [
         {
           "number": 5,
-          "art": "src/assets/story_cat_liquid_wide_panel_05.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_05.webp",
-          "caption": "“저 차원문, 너랑 같은 색이네.\n가까이 가 볼래?”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_05.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_05.webp",
+          "caption": "초록 고양이, 초록 차원문…\n우연? 아니지. 이건 분명 뭔가 있어.\n딱 한 발만. 그래, 거기!"
         },
         {
           "number": 6,
-          "art": "src/assets/story_cat_liquid_wide_panel_06.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_06.webp",
-          "caption": "차원문 너머로 연구실이 보였다.\n“인간 세계로 연결돼 있어!”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_06.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_06.webp",
+          "caption": "저거 내 연구실인데?!\n같은 색끼리 만나면 인간계로 통한다…\n흐흐, 이번엔 내 쪽이 맞았어."
         },
         {
           "number": 7,
-          "art": "src/assets/story_cat_liquid_wide_panel_07.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_07.webp",
-          "caption": "“저쪽에 가면 소파도 있는 거야?”\n“그럼 우리도 가지.”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_07.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_07.webp",
+          "caption": "저 너머에 소파가 있네.\n저 인간 말은 반쯤 못 알아듣겠지만…\n일단 누울 자리는 합격."
         },
         {
           "number": 8,
-          "art": "src/assets/story_cat_liquid_wide_panel_08.webp",
-          "cardArt": "src/assets/story_cat_liquid_ink_card_08.webp",
-          "caption": "“같은 색 차원문을 찾으면 돼.\n자, 한 마리씩 출발!”"
+          "art": "src/assets/story_cat_liquid_misfit_panel_08.webp",
+          "cardArt": "src/assets/story_cat_liquid_misfit_card_08.webp",
+          "caption": "각자 자기 색 차원문으로 가면 돼!\n돌아가면 논문부터… 아니, 밥부터.\n내 노트! 또 두고 왔네."
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
@@ -168,7 +166,6 @@
     "replayQuery": "story=replay",
     "stampCss": "web/story-intro.css",
     "completedOn": [
-      "skip",
       "complete"
     ],
     "impactArt": "src/assets/story_cat_liquid_impact_ink.png"
@@ -195,12 +192,82 @@
     "rimPx": 3,
     "inkPx": 2.5,
     "outlines": [
-      [[2, 4], [370, 4], [370, 130], [2, 141]],
-      [[2, 15], [370, 4], [358, 141], [12, 141]],
-      [[12, 4], [358, 4], [370, 141], [2, 129]],
-      [[2, 4], [370, 15], [370, 141], [2, 141]]
+      [
+        [
+          2,
+          4
+        ],
+        [
+          370,
+          4
+        ],
+        [
+          370,
+          130
+        ],
+        [
+          2,
+          141
+        ]
+      ],
+      [
+        [
+          2,
+          15
+        ],
+        [
+          370,
+          4
+        ],
+        [
+          358,
+          141
+        ],
+        [
+          12,
+          141
+        ]
+      ],
+      [
+        [
+          12,
+          4
+        ],
+        [
+          358,
+          4
+        ],
+        [
+          370,
+          141
+        ],
+        [
+          2,
+          129
+        ]
+      ],
+      [
+        [
+          2,
+          4
+        ],
+        [
+          370,
+          15
+        ],
+        [
+          370,
+          141
+        ],
+        [
+          2,
+          141
+        ]
+      ]
     ],
-    "speedLinePanels": [2],
+    "speedLinePanels": [
+      2
+    ],
     "referenceUrl": "https://kr.pinterest.com/search/pins/?q=%EB%A7%8C%ED%99%94%20%ED%94%84%EB%A0%88%EC%9E%84&rs=typed",
     "observedExampleUrl": "https://i.pinimg.com/474x/03/dc/df/03dcdf244f5f83c44d4038dcb2e43a6a.jpg",
     "observation": "검색 결과의 실제 프레임 예시에서 검은 선, 흰 여백, 사선 컷 경계, 집중선을 확인. 가로 네 컷을 유지하며 테두리와 사고 장면의 집중선에 적용."
@@ -210,7 +277,7 @@
     "y": 700,
     "width": 361,
     "height": 100,
-    "fontSize": 18,
-    "hintFontSize": 12
-  }
+    "fontSize": 18
+  },
+  "artDirection": "Actual game reference: matte dimensional cel shading, long cuboid half-lidded cats, asymmetric eccentric scientist. No educational-book illustration."
 }

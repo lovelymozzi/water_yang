@@ -1,4 +1,4 @@
-"""Frame existing comic art and render an offline preview; the game uses SceneRenderer."""
+"""Extract generated comic rows, frame them, and render an offline SceneRenderer layout preview."""
 import hashlib
 import json
 import math
@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 artifact_dir = Path(__file__).resolve().parent
 root = artifact_dir.parents[1]
 story = json.loads((root / 'resources/story/cat-liquid-intro.json').read_text())
-assert story['revision'] == 6 and story['textMode'] == 'bottom-typewriter'
+assert story['revision'] == 7 and story['textMode'] == 'bottom-typewriter'
 output = artifact_dir / f'revision-{story["revision"]:02d}'
 output.mkdir(exist_ok=True)
 motion = story['motion']
@@ -17,7 +17,6 @@ frame_style = story['frame']
 scale = 2
 font_path = '/Library/Fonts/Managed/NanumGothicOTFBold_1589433817.otf'
 body_font = ImageFont.truetype(font_path, story['dialogue']['fontSize'] * scale)
-hint_font = ImageFont.truetype(font_path, story['dialogue']['hintFontSize'] * scale)
 control_font = ImageFont.truetype(font_path, 24 * scale)
 background = Image.open(root / story['background']['imagePath']).convert('RGB').resize((172, 172), Image.Resampling.LANCZOS)
 base = Image.new('RGB', (786, 1704))
@@ -28,13 +27,30 @@ boards = []
 frames = []
 checks = []
 for page_index, page in enumerate(story['pages'], 1):
+    source = Image.open(output / f'page-{page_index:02d}-generated.png').convert('RGB')
+    assert source.size == (1024, 1536)
+    source.save(root / page['art'], 'WEBP', quality=95, method=6)
+    gutter_rows = [y for y in range(source.height)
+                   if all(low >= 240 for low, high in source.crop((0, y, source.width, y + 1)).getextrema())]
+    runs = []
+    for y in gutter_rows:
+        if not runs or y != runs[-1][-1] + 1:
+            runs.append([y])
+        else:
+            runs[-1].append(y)
+    runs = [run for run in runs if len(run) >= 4]
+    assert len(runs) == 3, f'Expected 3 white gutters, found {runs}'
+    crops = [(0, top, source.width, bottom) for top, bottom in
+             zip([0] + [run[-1] + 1 for run in runs], [run[0] for run in runs] + [source.height])]
     cards = []
     for slot, panel in enumerate(page['panels']):
+        source.crop(crops[slot]).save(root / panel['art'], 'WEBP', quality=95, method=6)
         # Work at four times display size; clip edges rather than skewing faces or bodies.
         raster = 4
         size = (frame_style['cardWidth'] * raster, frame_style['cardHeight'] * raster)
         picture = ImageOps.fit(Image.open(root / panel['art']).convert('RGBA'),
-                               (size[0], motion['imageHeight'] * raster), Image.Resampling.LANCZOS)
+                               (size[0], motion['imageHeight'] * raster), Image.Resampling.LANCZOS,
+                               centering=(0 if panel['number'] == 2 else 0.5, 0.5))
         art = Image.new('RGBA', size)
         art.paste(picture, (0, (size[1] - picture.height) // 2))
         outer = [(x * raster, y * raster) for x, y in frame_style['outlines'][slot]]
@@ -67,13 +83,14 @@ for page_index, page in enumerate(story['pages'], 1):
         cards.append(card)
         box = draw.multiline_textbbox((0, 0), panel['caption'], font=body_font, spacing=7, align='center')
         assert box[2] - box[0] <= (story['dialogue']['width'] - 16) * scale, f'Caption width: {panel["number"]}'
-        assert box[3] - box[1] < 70 * scale
+        assert box[3] - box[1] < (story['dialogue']['height'] - 16) * scale
         checks.append({'panel': panel['number'], 'sourceArt': panel['art'],
+                       'sourceCrop': list(crops[slot]),
                        'sourceSha256': hashlib.sha256((root / panel['art']).read_bytes()).hexdigest(),
                        'outline': frame_style['outlines'][slot], 'caption': panel['caption'], 'fits': True})
-    # Auto advances below only demonstrate typing. The game waits for a touch after every line.
+    # The offline GIF demonstrates typing; the game advances only when next is clicked.
     for index, panel in enumerate(page['panels']):
-        samples = list(range(0, len(panel['caption']), 4)) + [len(panel['caption'])] * 3
+        samples = [0, len(panel['caption']) // 3, len(panel['caption']) * 2 // 3, len(panel['caption']), len(panel['caption'])]
         for sample in samples:
             board = base.convert('RGBA')
             for slot in range(index + 1):
@@ -83,15 +100,9 @@ for page_index, page in enumerate(story['pages'], 1):
             draw.rectangle((32, 1400, 754, 1600), fill='white', outline=motion['frameInk'], width=4)
             text = panel['caption'][:sample]
             box = draw.multiline_textbbox((0, 0), text, font=body_font, spacing=7, align='center')
-            draw.multiline_text(((786 - box[2] - box[0]) / 2, 1490 - (box[3] + box[1]) / 2), text,
+            draw.multiline_text(((786 - box[2] - box[0]) / 2, 1500 - (box[3] + box[1]) / 2), text,
                                 font=body_font, spacing=7, align='center', fill=motion['frameInk'])
-            done = sample == len(panel['caption'])
-            hint = ('next를 눌러 계속' if index == 3 else 'next') if done else '터치하면 대사가 모두 표시됩니다'
-            draw.text((722, 1572), hint, font=hint_font, anchor='rm', fill='#396FA9')
-            draw.text((688, 84), 'skip', font=control_font, anchor='mm', fill='white', stroke_width=2, stroke_fill='#225D93')
-            draw.line((650, 110, 726, 110), fill='white', width=2)
-            if index == 3 and done:
-                draw.text((664, 1652), 'next', font=control_font, anchor='mm', fill='white', stroke_width=2, stroke_fill='#225D93')
+            draw.text((664, 1652), 'next', font=control_font, anchor='mm', fill='white', stroke_width=2, stroke_fill='#225D93')
             frames.append(board.convert('RGB').resize((393, 852), Image.Resampling.LANCZOS))
     board.convert('RGB').save(output / f'page-{page_index:02d}-board.png')
     boards.append(board.convert('RGB'))
@@ -102,7 +113,7 @@ for index, board in enumerate(boards):
 contact.save(output / 'two-page-board.jpg', quality=94)
 palette = contact.resize((512, 512)).quantize(colors=192)
 gif_frames = [frame.quantize(palette=palette, dither=Image.Dither.NONE) for frame in frames]
-gif_frames[0].save(output / 'typewriter-preview.gif', save_all=True, append_images=gif_frames[1:], duration=152, loop=0, disposal=2, optimize=True)
+gif_frames[0].save(output / 'typewriter-preview.gif', save_all=True, append_images=gif_frames[1:], duration=300, loop=0, disposal=2, optimize=True)
 impact = Image.new('RGBA', (792, 338))
 draw = ImageDraw.Draw(impact)
 for degrees in range(0, 360, 45):
@@ -129,4 +140,4 @@ for path in sorted((root / 'src/assets').glob('story_cat_liquid_*')):
         asset.verify()
     all_assets.append({'path': str(path.relative_to(root)), 'size': dimensions, 'bytes': path.stat().st_size, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
 (artifact_dir / 'asset-manifest.json').write_text(json.dumps({'version': 1, 'revision': story['revision'], 'assets': all_assets}, ensure_ascii=False, indent=2) + '\n')
-print(f'COMIC FRAMES: PASS — {len(checks)} clipped ink frames, existing art, caption bounds, offline typing preview')
+print(f'COMIC FRAMES: PASS — {len(checks)} measured landscape cuts, clipped ink frames, monologue bounds, offline typing preview')
