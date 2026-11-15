@@ -359,9 +359,9 @@
           "fontWeight": "normal",
           "fontFamily": "Arial, sans-serif",
           "color": "#396FA9",
-          "offsetX": 0,
+          "offsetX": -16,
           "offsetY": 36,
-          "textAlign": "center",
+          "textAlign": "right",
           "autoWrap": true,
           "style": {
             "stroke": {

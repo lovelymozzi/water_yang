@@ -36,7 +36,7 @@ export function attachStoryIntro(flow, { story, storageKey, isReady, saveGame, r
     state.ready = state.index === 3;
     state.renderer.update({ story: {
       dialogue: state.characters.join(''),
-      hint: state.ready ? 'next를 눌러 계속' : '터치해서 다음 장면',
+      hint: state.ready ? 'next를 눌러 계속' : 'next',
       nextReady: state.ready,
     } });
   };

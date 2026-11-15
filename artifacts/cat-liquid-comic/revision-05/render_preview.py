@@ -75,8 +75,8 @@ for page_index, page in enumerate(story['pages'], 1):
             draw.multiline_text(((786 - box[2] - box[0]) / 2, 1490 - (box[3] + box[1]) / 2), text,
                                 font=body_font, spacing=7, align='center', fill=motion['frameInk'])
             done = sample == len(panel['caption'])
-            hint = ('next를 눌러 계속' if index == 3 else '터치해서 다음 장면') if done else '터치하면 대사가 모두 표시됩니다'
-            draw.text((393, 1572), hint, font=hint_font, anchor='mm', fill='#396FA9')
+            hint = ('next를 눌러 계속' if index == 3 else 'next') if done else '터치하면 대사가 모두 표시됩니다'
+            draw.text((722, 1572), hint, font=hint_font, anchor='rm', fill='#396FA9')
             draw.text((688, 84), 'skip', font=control_font, anchor='mm', fill='white', stroke_width=2, stroke_fill='#225D93')
             draw.line((650, 110, 726, 110), fill='white', width=2)
             if index == 3 and done:

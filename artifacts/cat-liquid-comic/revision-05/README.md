@@ -6,7 +6,9 @@
 
 첫 컷은 입장 240ms 후 200ms 동안 찍히고, 정착 후 38ms마다 한 글자씩 대사가 출력된다. 한글은 `Intl.Segmenter('ko', {granularity:'grapheme'})`로 자모를 묶어 출력한다. 타이핑 중 터치는 현재 문장을 즉시 완성한다. 완료 후 다시 터치해야 다음 컷이 추가되고, 이전 컷은 남는다. 네 번째 대사가 끝난 뒤에만 `next`가 보이며 조건 판정도 잠금 상태를 확인한다. `skip`은 언제든 완료 이력을 저장하고 로비로 간다. 페이지를 여는 것만으로 완료 처리하지 않는다.
 
-레이아웃은 두 StoryIntro 계약과 `.ui-editor` 원본에 함께 반영했다. `story.panel01`~`panel08`·`nextReady` visibility 위젯과 `story.dialogue`·`hint` 텍스트 바인딩을 공개 API로 갱신한다. 페이지 이동은 기존 FlowDriver가 담당한다. 씬 이탈·건너뛰기는 타이핑 rAF와 진행 이벤트 구독을 해제하며, 재입장 때는 첫 컷부터 초기화한다. 스타일시트·모듈은 `cat-liquid-v6`, 이야기 데이터는 HTTP `no-cache`로 읽는다.
+레이아웃은 두 StoryIntro 계약과 `.ui-editor` 원본에 함께 반영했다. `story.panel01`~`panel08`·`nextReady` visibility 위젯과 `story.dialogue`·`hint` 텍스트 바인딩을 공개 API로 갱신한다. 페이지 이동은 기존 FlowDriver가 담당한다. 씬 이탈·건너뛰기는 타이핑 rAF와 진행 이벤트 구독을 해제하며, 재입장 때는 첫 컷부터 초기화한다. 스타일시트는 `cat-liquid-v6`, 모듈은 `cat-liquid-v7`, 이야기 데이터는 HTTP `no-cache`로 읽는다.
+
+사용자의 후속 요청으로 중간 컷의 대사 완료 안내를 `next`로 바꾸고, 안내 영역을 오른쪽 정렬·안쪽 여백 16px로 맞췄다. 마지막 컷의 페이지 이동 안내와 버튼 동작은 유지한다.
 
 ## 그림과 파일
 

@@ -202,6 +202,7 @@ function readPage(flow, pageIndex) {
     assert.equal([...new Intl.Segmenter('ko', { granularity: 'grapheme' }).segment(renderer.data.story.dialogue)].length, 1);
     renderer.getElement(`story-dialogue-${pageNumber}`).click();
     assert.equal(renderer.data.story.dialogue, panel.caption, 'First tap completes dialogue without advancing');
+    assert.equal(renderer.data.story.hint, index === 3 ? 'next를 눌러 계속' : 'next');
     assert.equal(renderer.data.story.nextReady, index === 3);
     step(10000);
     if (index < 3) {
