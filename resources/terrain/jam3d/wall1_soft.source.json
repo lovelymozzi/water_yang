@@ -1,0 +1,13 @@
+{
+  "source": "wall1.png",
+  "source_sha256": "023598bc480d08087ca444f8efb07f61b2abec3d06ce32d0df453b894f3337db",
+  "output": "wall1_soft.png",
+  "output_sha256": "c260670a1a2aa686e49bc3c5cdfe1a286b3515589af29e62ef84fe39906cd0cc",
+  "operation": "HSV saturation and value reduction, preserving hue and alpha",
+  "green_mask": "clamp((G - max(R, B) - 0.02) / 0.08, 0, 1), sRGB channels 0-1",
+  "saturation_multiplier_at_full_mask": 0.82,
+  "value_multiplier_at_full_mask": 0.97,
+  "changed_pixels": 157922,
+  "generator": "tools/soften_terrain_grass.py",
+  "verification": "Texture pixel measurements only; rendered appearance requires user review."
+}

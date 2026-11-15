@@ -1,0 +1,14 @@
+{
+  "library": "ui-editor Magic FX / BBT",
+  "effect": "fx_ray_103_low",
+  "assetId": "d38cb59f-00a8-5560-bff3-3d88a9a01e58",
+  "storeUrl": "https://ui-editor-lscommon.app.linecorp-dev.com/asset-store?tab=effect&tag=library%3Amagic-fx",
+  "downloadedSource": "effect/fx_ray_103_low_d38cb59f-00a8-5560-bff3-3d88a9a01e58/source-resources/Assets/Resources_Addressable/Features/MainEvent/PopupDecoPrefab/fx_ray_103_low.png",
+  "runtimeTexture": "water_yang/lobby_sunlight_rays.png",
+  "textureSha256": "0f18d143d0ccd754a0c5a5c3b7177cc1ad34f225cd39a6f597c100b88f24a121",
+  "textureModification": "None: byte-for-byte copy of the original 512x512 RGBA sheet, arranged as 4x4 frames of 128x128 pixels, ordered left to right then top to bottom.",
+  "observed": "Inspected the authenticated library sheet preview and original RGBA frames. They show multiple soft shafts with differing widths, lengths and opacity. This is an independent frame sheet, not a verified in-game Unity rendering.",
+  "sourceTiming": "Unknown. The library explicitly uses 12 FPS only for frame inspection; neither the original FPS nor repeat setting is supplied.",
+  "screenExtent": "The upper grass origins project to normalized viewport y=0.3213–0.3342 using the lobby camera. The serialized vertical_fade starts at y=0.22 and reaches zero at y=0.34, limiting sunlight to the upper grass area. This is a screen-space extent, not terrain occlusion.",
+  "adaptation": "The Godot shader interpolates adjacent original alpha frames and traverses frames forward/reverse over about 33.6 seconds. Ray UV coordinates remain fixed, with only a static linear spread. Broad, low-contrast transmission changes travel down the shafts, ranging from 0.72 to 1.0, with a warm gold tint and a lower-screen fade. Procedural UV bending, animated width warping and vertical displacement were removed after the user reported unnatural curvature. Original frame variations remain. The existing ambient water clock drives motion through UI pause. This adapts source images and light density; it does not reproduce a known Unity animation or simulate volumetric occlusion. Final visual verification is performed by the user."
+}

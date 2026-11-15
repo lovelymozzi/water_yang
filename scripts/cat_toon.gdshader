@@ -24,6 +24,7 @@ uniform float toon_shadow_spread : hint_range(0.0, 0.5) = 0.0;
 uniform float rim_strength : hint_range(0.0, 1.0) = 0.24;
 uniform vec4 ambient_color : source_color = vec4(1.0);
 uniform float ambient_energy : hint_range(0.0, 2.0) = 0.0;
+uniform vec3 shadow_tint_color = vec3(0.65, 0.78, 1.0);
 uniform vec2 uv_tiling = vec2(1.0);
 uniform vec2 uv_offset = vec2(0.0);
 // Only UVs in the right-side tile region receive the V repeat transform.
@@ -144,7 +145,7 @@ void light() {
 	float view_term = 1.0 - max(dot(NORMAL, VIEW), 0.0);
 	float rim = pow(view_term, 2.5) * rim_strength;
 
-	vec3 shadow_tint = mix(vec3(0.65, 0.78, 1.0), vec3(1.0), stepped);
+	vec3 shadow_tint = mix(shadow_tint_color, vec3(1.0), stepped);
 	vec3 toon_diffuse = ALBEDO * LIGHT_COLOR.rgb * light_band * shadow_tint;
 	vec3 toon_rim = ALBEDO * LIGHT_COLOR.rgb * rim * 0.35 * clamp(ATTENUATION, 0.0, 1.0);
 	DIFFUSE_LIGHT += (toon_diffuse + toon_rim) / PI;

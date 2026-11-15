@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/grass_decor.gd" id="1_grass"]
 [ext_resource type="PackedScene" path="res://water_yang/grass1.fbx" id="2_grass_fbx"]
+[ext_resource type="Material" path="res://resources/gameplay_grass_material.tres" id="3_lawn"]
 
 [node name="GrassDecor" type="Node3D" groups=["persistent_tile_visuals"]]
 script = ExtResource("1_grass")
+surface_material = ExtResource("3_lawn")
 
 [node name="GrassModel" parent="." instance=ExtResource("2_grass_fbx")]

@@ -99,7 +99,7 @@ func _ready() -> void:
 	_drag_controller.name = "DragController"
 	_drag_controller.level_manager = level_manager
 	_drag_controller.input_received.connect(func():
-		if _stage_timer_waiting_for_touch:
+		if visible and not get_tree().paused and _stage_timer_waiting_for_touch:
 			_stage_timer_waiting_for_touch = false
 			_stage_timer_running = true
 	)
@@ -196,7 +196,7 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 	_requested_stage_index = max(0, requested - 1)
 	_stage_time_left = maxf(1.0, float(config.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 	_stage_timer_running = false
-	_stage_timer_waiting_for_touch = true
+	_stage_timer_waiting_for_touch = not bool(config.get("startTimerImmediately", false))
 	_stage_timer_stop_until_msec = 0
 	_last_reported_seconds = -1
 	_clear_item_targets(_obstacle_item_targets)
@@ -208,8 +208,7 @@ func _on_host_initialize(stage_data: Dictionary) -> void:
 
 
 func _on_host_start() -> void:
-	_stage_timer_running = false
-	_stage_timer_waiting_for_touch = true
+	_stage_timer_running = not _stage_timer_waiting_for_touch
 	_stage_timer_stop_until_msec = 0
 
 
@@ -223,10 +222,13 @@ func _on_host_force_quit(_reason: String) -> void:
 
 
 func _on_host_message(topic: String, payload) -> void:
+	if topic == "stage_touch":
+		_drag_controller.input_received.emit()
+		return
 	if topic == "continue_stage":
 		_stage_time_left = maxf(1.0, float(payload.get("timeLimitSeconds", DEFAULT_STAGE_TIME_SECONDS)))
 		_stage_timer_running = false
-		_stage_timer_waiting_for_touch = true
+		_stage_timer_waiting_for_touch = false
 		_stage_timer_stop_until_msec = 0
 		_last_reported_seconds = -1
 		_clear_item_targets(_obstacle_item_targets)

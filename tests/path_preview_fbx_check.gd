@@ -1,9 +1,11 @@
-extends SceneTree
+extends Node
 
 var _failures: Array[String] = []
 
 
-func _init() -> void:
+func _ready() -> void:
+	UiBridge.standalone_autostart = false
+	UiBridge.is_hosted = true
 	var scene := load("res://scenes/main_scene.tscn") as PackedScene
 	if scene == null:
 		_failures.append("Failed to load main scene")
@@ -11,8 +13,9 @@ func _init() -> void:
 		return
 
 	var root_node := scene.instantiate()
-	root.add_child(root_node)
-	await process_frame
+	root_node.set_script(null)
+	add_child(root_node)
+	await get_tree().process_frame
 
 	var manager := root_node.get_node_or_null("LevelManager") as LevelManager
 	if manager == null:
@@ -20,9 +23,47 @@ func _init() -> void:
 		_report()
 		return
 
-	if manager.has_method("rebuild_now"):
-		manager.call("rebuild_now")
-	await process_frame
+	# Check the authored board and stages with different sizes/obstacle layouts.
+	for stage in [0, 1, 33, 120, 237]:
+		if stage != 0:
+			LevelLayoutWriter.apply_to_manager(manager, LevelLayoutWriter.load_json("res://resources/levels/stage_%03d.json" % stage))
+		await get_tree().process_frame
+		var selected: CatEntity
+		var move_target: Variant
+		for candidate in manager.get_cats():
+			candidate.set_process(false)
+			if selected == null:
+				move_target = _find_preview_target(candidate, manager)
+				if move_target != null:
+					selected = candidate
+		if selected == null:
+			_failures.append("Stage %d: no safe movement target" % stage)
+			continue
+		var static_geometry := {}
+		for branch in ["BoardVisuals", "TileVisuals", "ObstacleVisuals", "OccupancyHighlights"]:
+			for geometry: GeometryInstance3D in manager.get_node(branch).find_children("*", "GeometryInstance3D", true, false):
+				static_geometry[geometry] = [geometry.global_transform, geometry.visible]
+		selected.request_path_to(move_target)
+		if selected.get_preview_path_cells().is_empty():
+			_failures.append("Stage %d: movement queue did not populate" % stage)
+		if manager.get_node("PathPreviewVisuals").get_child_count() != 0:
+			_failures.append("Stage %d: legacy blocks appear before movement starts" % stage)
+		for frame in 60:
+			selected.advance(1.0 / 60.0)
+			if manager.get_node("PathPreviewVisuals").get_child_count() != 0:
+				_failures.append("Stage %d frame %d: legacy blocks cover terrain" % [stage, frame])
+				break
+			for geometry in static_geometry:
+				if not is_instance_valid(geometry) or not geometry.is_inside_tree() or [geometry.global_transform, geometry.visible] != static_geometry[geometry]:
+					_failures.append("Stage %d frame %d: static geometry changed during movement" % [stage, frame])
+					break
+		if selected.get_lead_cell() != move_target:
+			_failures.append("Stage %d: cat did not reach requested cell" % stage)
+		print("PATH PREVIEW stage=%d static_geometry=%d target=%s reached=%s" % [stage, static_geometry.size(), move_target, selected.get_lead_cell()])
+
+	# Retain the optional FBX preview for boards using the original floor.
+	manager.terrain_library = null
+	manager.rebuild_now()
 
 	var cats := manager.get_cats()
 	if cats.is_empty():
@@ -37,7 +78,6 @@ func _init() -> void:
 		return
 
 	cat.begin_drag(cat.get_tail_cell())
-	await process_frame
 
 	var target: Variant = _find_preview_target(cat, manager)
 	if target == null:
@@ -46,7 +86,6 @@ func _init() -> void:
 		return
 
 	cat.request_path_to(target as Vector2i)
-	await process_frame
 
 	var preview_cells := cat.get_preview_path_cells()
 	if preview_cells.is_empty():
@@ -89,7 +128,6 @@ func _init() -> void:
 		_failures.append("Preview FBX mesh missing under ObstacleModel")
 
 	cat.begin_drag(cat.get_head_cell())
-	await process_frame
 
 	if preview_root.get_child_count() != 0:
 		_failures.append("Preview did not clear after starting drag from the non-draggable end")
@@ -98,12 +136,15 @@ func _init() -> void:
 
 
 func _find_preview_target(cat: CatEntity, manager: LevelManager) -> Variant:
-	for y in range(manager.grid_size.y):
-		for x in range(manager.grid_size.x):
-			var cell := Vector2i(x, y)
-			cat.request_path_to(cell)
-			if not cat.get_preview_path_cells().is_empty():
-				return cell
+	for direction in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
+		var cell: Vector2i = cat.get_lead_cell() + direction
+		if not cat.can_enter(cell):
+			continue
+		var safe := manager.adjacent_hole(cell, cat.color_id) == null
+		for body_cell in cat.body_cells:
+			safe = safe and manager.adjacent_hole(body_cell, cat.color_id) == null
+		if safe:
+			return cell
 	return null
 
 
@@ -124,4 +165,4 @@ func _report() -> void:
 		print("PATH PREVIEW FBX CHECK: FAIL (%d)" % _failures.size())
 		for failure in _failures:
 			print("  - %s" % failure)
-	quit()
+	get_tree().quit(0 if _failures.is_empty() else 1)

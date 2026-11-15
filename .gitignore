@@ -3,3 +3,9 @@
 .ui-editor/trash/
 .tools/
 addons/godot_ui_editor/
+
+# Local editor state and generated review captures/backups.
+.ui-editor/write-state.json
+artifacts/**/*.import
+artifacts/ui-flicker-review/live/
+artifacts/popup-background-fix/before/

@@ -17,9 +17,8 @@ const HOLE_TEXTURE := preload("res://water_yang/hole1.jpg")
 const HOLE_SPIN_SHADER := preload("res://scripts/hole_spin.gdshader")
 const HOLE_ROTATION_DURATION := 4.0
 
-# CatHole only: keep enough toon shading for its rotating flower to read as a
-# solid object, even when the matching cat's runtime style is very flat.
-@export_range(0.0, 1.0, 0.01) var flower_shadow_darkness := 0.32
+# Keep the flower's darkest toon band aligned with the clear cat palette.
+@export_range(0.0, 1.0, 0.01) var flower_shadow_darkness := 0.80
 
 @export var flower_material: Material:
 	set(value):
@@ -140,9 +139,7 @@ func _build_flower_material() -> Material:
 	if _has_pair_color:
 		tinted.set_shader_parameter("tint_color", _pair_color)
 	_apply_toon_style(tinted)
-	# Apply this after the paired cat's style.  The level currently gives cats a
-	# very low shadow value, which otherwise makes CatHole's surface shading
-	# effectively disappear.
+	# Retain the independent Inspector control for the rotating flower.
 	tinted.set_shader_parameter("shadow_darkness", flower_shadow_darkness)
 
 	var outline := tinted.next_pass as ShaderMaterial
@@ -167,6 +164,7 @@ func _apply_toon_style(material: ShaderMaterial) -> void:
 		return
 	for parameter in [
 		"tint_color", "toon_steps", "shadow_darkness", "toon_shadow_spread", "rim_strength",
+		"ambient_energy", "shadow_tint_color",
 		"line_art_tex", "line_art_eye_mask", "line_art_enabled",
 		"line_art_color", "line_art_strength", "tint_exclusion_mask",
 		"tint_exclusion_enabled",

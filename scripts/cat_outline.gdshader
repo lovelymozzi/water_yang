@@ -26,13 +26,14 @@ uniform float water_wave_time = 0.0;
 uniform float water_wave_phase = 0.0;
 uniform float water_wave_amplitude : hint_range(0.0, 0.08, 0.001) = 0.0;
 uniform bool water_foam_enabled = false;
-varying float foam_body_position;
+uniform float water_y = 0.0;
+uniform vec4 water_foam_color : source_color = vec4(0.58, 1.0, 0.88, 1.0);
+#include "res://scripts/lobby_foam_mapping.gdshaderinc"
 // 본체(cat_toon)와 같은 값으로 줄어든다. 값이 다르면 얇은 몸에 두꺼운 외곽선이 남는다.
 uniform float body_shrink = 0.0;
 
 void vertex() {
 	VERTEX -= NORMAL * body_shrink;
-	foam_body_position = VERTEX.y;
 	if (water_wave_amplitude > 0.0) {
 		float wave = VERTEX.y * 3.2 + water_wave_time * 2.1 + water_wave_phase;
 		VERTEX.z += sin(wave) * water_wave_amplitude;
@@ -43,12 +44,30 @@ void vertex() {
 	float line_weight = mix(1.0, top_outline_scale, upward_facing);
 	line_weight = mix(line_weight, bottom_outline_scale, downward_facing);
 	line_weight *= storybook_outline_enabled ? (soft_outline_enabled ? 0.75 : 1.65) : 1.0;
-	float foam_width = 1.0;
 	if (water_foam_enabled) {
-		float sway = sin(water_wave_time * 2.1 + water_wave_phase - VERTEX.y * 9.0);
-		foam_width = 0.85 + sway * 0.22;
+		// This is the original skinned mesh, not an ellipse around its bones.
+		vec3 world_vertex = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+		vec3 world_normal = normalize(MODEL_NORMAL_MATRIX * NORMAL);
+		// Put the expanded hull on the water along the same camera rays as the
+		// visible body. Ears, paws and the gap between the legs stay in register.
+		vec3 normal_tip = world_vertex + world_normal;
+		vec3 ray = world_vertex - INV_VIEW_MATRIX[3].xyz;
+		world_vertex += ray * ((water_y - world_vertex.y) / ray.y);
+		vec3 tip_ray = normal_tip - INV_VIEW_MATRIX[3].xyz;
+		normal_tip += tip_ray * ((water_y - normal_tip.y) / tip_ray.y);
+		vec2 projected_normal = normal_tip.xz - world_vertex.xz;
+		vec2 water_normal = projected_normal / max(length(projected_normal), 0.00001);
+		// Normal incident flow gives bow compression fixed to the body.
+		// Released films move through the world-space velocity field.
+		float speed = length(flow_velocity);
+		float incident = max(dot(water_normal, -flow_velocity), 0.0) / max(speed, 0.001);
+		float motion = smoothstep(0.02, 0.65, speed);
+		float foam_width = body_width * (0.006 + motion * (0.008 + incident * incident * 0.028));
+		world_vertex.xz += water_normal * foam_width;
+		VERTEX = (inverse(MODEL_MATRIX) * vec4(world_vertex, 1.0)).xyz;
+	} else {
+		VERTEX += NORMAL * outline_width * line_weight;
 	}
-	VERTEX += NORMAL * outline_width * line_weight * foam_width;
 }
 
 void fragment() {
@@ -73,13 +92,8 @@ void fragment() {
 		DEPTH = DEPTH * 0.5 + 0.5;
 	#endif
 	if (water_foam_enabled) {
-		// Keep the contact foam close to the visible skin. Compatibility uses
-		// -1..1 clip depth, which must be mapped to the depth buffer's 0..1.
-		vec4 foam_clip = PROJECTION_MATRIX * vec4(VERTEX.xy, VERTEX.z - outline_width * model_scale * 0.3, 1.0);
-		DEPTH = foam_clip.z / foam_clip.w;
-		#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
-			DEPTH = DEPTH * 0.5 + 0.5;
-		#endif
+		// The hull was already projected onto the real water plane in vertex().
+		DEPTH = FRAGCOORD.z;
 	}
 
 	if (sink_clip_enabled > 0.5) {
@@ -97,11 +111,7 @@ void fragment() {
 	}
 	ALBEDO = mix(ink_color, absorb_light_color, absorb_light_weight);
 	if (water_foam_enabled) {
-		// Small moving gaps read as contact foam rather than a solid sticker edge.
-		float breakup = sin(foam_body_position * 23.0 - water_wave_time * 2.1 + water_wave_phase);
-		if (breakup < -0.87) {
-			discard;
-		}
+		ALBEDO = water_foam_color.rgb;
 	} else {
 		EMISSION = outline_color.rgb * (storybook_outline_enabled ? 0.0 : 0.16) * (1.0 - absorb_light_weight);
 	}

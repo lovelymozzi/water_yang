@@ -17,6 +17,7 @@ next_pass = SubResource("TreeOutline")
 shader = ExtResource("1_toon")
 shader_parameter/albedo_tex = ExtResource("2_texture")
 shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/trunk_color = Color(0.72, 0.50, 0.32, 1)
 shader_parameter/roughness = 0.9
 shader_parameter/shadow_steps = 3
 shader_parameter/shadow_darkness = 0.58

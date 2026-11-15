@@ -21,8 +21,7 @@ const OUTLINE_SHADER_PATH := "res://scripts/cat_outline.gdshader"
 const ABSORB_SOUND := preload("res://src/sound/cat_Hole_sound.mp3")
 const ABSORB_OVERLAY_SOUND := preload("res://src/sound/time_out2.mp3")
 const ITEM_MOVE_HOLE_POP_SOUND := preload("res://src/sound/bubble_pop.mp3")
-const FLOATING_WATER_OUTLINE_COLOR := Color("f0fff9")
-const FLOATING_WATER_OUTLINE_WIDTH := 0.010
+const FLOATING_WATER_OUTLINE_WIDTH := 0.004
 const REFERENCE_TILE_SIZE := 2.0
 const BLINK_INTERVAL_MIN := 2.4
 const BLINK_INTERVAL_MAX := 5.2
@@ -30,6 +29,8 @@ const BLINK_CLOSED_DURATION := 0.11
 const OPEN_MOUTH_CHANCE := 0.22
 const OPEN_MOUTH_DURATION := 0.95
 const EAR_BONE_PAIRS := [["Bone031", "Bone032"], ["Bone033", "Bone034"]]
+const TOON_AMBIENT_ENERGY := 0.22
+const TOON_SHADOW_TINT := Vector3(0.88, 0.96, 1.0)
 const EAR_TWITCH_INTERVAL_MIN := 3.8
 const EAR_TWITCH_INTERVAL_MAX := 7.6
 const EAR_TWITCH_DURATION := 0.30
@@ -55,8 +56,10 @@ const OVERHANG_DEBUG := true
 # 구멍 흡입에서 몸이 구멍 중심을 지나 더 내려가는 깊이(칸 단위). 이 깊이를 다 내려가면
 # 바닥 아래로 완전히 사라진 것으로 보고 흡입을 끝낸다.
 const ABSORB_SINK_CELLS := 0.9
-const CORNER_ROUNDING_CELLS := 0.46
-const CORNER_ROUND_SEGMENTS := 10
+const ABSORB_BEND_RADIUS_CELLS := 0.42
+const ABSORB_SWAY_CELLS := 0.035
+const CORNER_ROUNDING_CELLS := 0.38
+const CORNER_ROUND_SEGMENTS := 14
 
 @export_group("Layout")
 @export var grid_pos: Vector2i = Vector2i.ZERO:
@@ -209,17 +212,17 @@ const CORNER_ROUND_SEGMENTS := 10
 		toon_steps = value
 		_refresh_shader_material()
 
-@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.22:
+@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.80:
 	set(value):
 		shadow_darkness = value
 		_refresh_shader_material()
 
-@export_range(0.0, 0.5, 0.01) var toon_shadow_spread: float = 0.14:
+@export_range(0.0, 0.5, 0.01) var toon_shadow_spread: float = 0.02:
 	set(value):
 		toon_shadow_spread = value
 		_refresh_shader_material()
 
-@export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.24:
+@export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.16:
 	set(value):
 		rim_strength = value
 		_refresh_shader_material()
@@ -264,12 +267,12 @@ const CORNER_ROUND_SEGMENTS := 10
 		line_art_texture = value
 		_refresh_shader_material()
 
-@export var line_art_color: Color = Color(0.32, 0.24, 0.20, 1.0):
+@export var line_art_color: Color = Color("5c5450"):
 	set(value):
 		line_art_color = value
 		_refresh_shader_material()
 
-@export_range(0.0, 1.0, 0.01) var line_art_strength: float = 0.82:
+@export_range(0.0, 1.0, 0.01) var line_art_strength: float = 0.85:
 	set(value):
 		line_art_strength = value
 		_refresh_shader_material()
@@ -305,6 +308,8 @@ var _is_absorbing := false
 var _absorb_cell := INVALID_CELL
 # 구멍으로 먼저 들어가는 끝이 리드쪽인지. 후진 중에는 후미가 먼저 닿을 수 있다.
 var _absorb_from_lead := true
+# 수직으로 잠긴 뒤에도 진입 평면을 유지하는 모델 머리의 수평 축.
+var _absorb_head_axis := Vector3.FORWARD
 var _item_clear := false
 # 몸이 자기 경로를 따라 구멍 쪽으로 밀려 들어간 길이(월드 단위).
 var _swallowed_arc := 0.0
@@ -331,6 +336,14 @@ var _blink_time_remaining := -1.0
 var _eyes_are_closed := false
 var _mouth_is_open := false
 var _floating_water_outline := false
+var _floating_body_radii := PackedFloat32Array()
+var _floating_body_width := 0.0
+var _floating_mesh_surfaces: Array[Dictionary] = []
+var _floating_water_sections: Array[PackedVector2Array] = []
+var _floating_section_velocities: Array[PackedVector2Array] = []
+var _floating_section_incidence: Array[PackedFloat32Array] = []
+var _floating_previous_time := -1.0
+var _floating_open_water_cuts := 0
 var _blink_random := RandomNumberGenerator.new()
 var _ear_twitch_time_remaining := -1.0
 var _ear_twitch_elapsed := 0.0
@@ -431,9 +444,323 @@ func set_floating_water_wave(time: float, phase: float, amplitude: float, wake_m
 			var ray := camera.project_ray_normal(camera.unproject_position(point))
 			point += ray * ((water_y - point.y) / ray.y)
 			body_points.append(Vector2(point.x, point.z))
+		var model_scale := global_basis.get_scale().x
+		# Cache mesh topology, not its pose. Skin and intersect the live triangles
+		# with the actual water plane every frame; camera projection is shadow-only.
+		if _floating_mesh_surfaces.is_empty():
+			for mesh_instance in _skinned_meshes(_cat_model):
+				var skin: Skin = mesh_instance.skin
+				var bind_bones := PackedInt32Array()
+				var bind_poses: Array[Transform3D] = []
+				for bind_index in skin.get_bind_count():
+					var bind_name := skin.get_bind_name(bind_index)
+					bind_bones.append(_skeleton.find_bone(bind_name) if bind_name != "" else skin.get_bind_bone(bind_index))
+					bind_poses.append(skin.get_bind_pose(bind_index))
+				for surface in mesh_instance.mesh.get_surface_count():
+					var arrays := mesh_instance.mesh.surface_get_arrays(surface)
+					_floating_mesh_surfaces.append({"arrays": arrays, "bind_bones": bind_bones, "bind_poses": bind_poses})
+			# Weld UV/material seams in rest space once, so crossing a world-space
+			# rounding cell while swimming cannot open the projected contour.
+			var shadow_vertices := PackedVector3Array()
+			var shadow_cells := {}
+			var shadow_precision := 0.00002
+			for surface in _floating_mesh_surfaces:
+				var remap := PackedInt32Array()
+				for point: Vector3 in surface.arrays[Mesh.ARRAY_VERTEX]:
+					var cell := Vector3i((point / shadow_precision).floor())
+					var identity := -1
+					for z in range(-1, 2):
+						for y in range(-1, 2):
+							for x in range(-1, 2):
+								for candidate: int in shadow_cells.get(cell + Vector3i(x, y, z), []):
+									if point.distance_squared_to(shadow_vertices[candidate]) < shadow_precision * shadow_precision:
+										identity = candidate
+					if identity == -1:
+						identity = shadow_vertices.size()
+						shadow_vertices.append(point)
+						if not shadow_cells.has(cell):
+							shadow_cells[cell] = []
+						shadow_cells[cell].append(identity)
+					remap.append(identity)
+				surface["shadow_vertex_ids"] = remap
+		var cuts := PackedVector2Array()
+		var cut_velocities := PackedVector2Array()
+		var cut_incidence := PackedFloat32Array()
+		var time_step := time - _floating_previous_time
+		for surface in _floating_mesh_surfaces:
+			var matrices: Array[Transform3D] = []
+			for bind in surface.bind_bones.size():
+				matrices.append(_skeleton.get_bone_global_pose(surface.bind_bones[bind]) * surface.bind_poses[bind])
+			var vertices: PackedVector3Array = surface.arrays[Mesh.ARRAY_VERTEX]
+			var bones: PackedInt32Array = surface.arrays[Mesh.ARRAY_BONES]
+			var weights: PackedFloat32Array = surface.arrays[Mesh.ARRAY_WEIGHTS]
+			var indices: PackedInt32Array = surface.arrays[Mesh.ARRAY_INDEX]
+			var slots: int = bones.size() / vertices.size()
+			var world := PackedVector3Array()
+			world.resize(vertices.size())
+			for vertex_index in vertices.size():
+				for slot in slots:
+					var binding := vertex_index * slots + slot
+					world[vertex_index] += (matrices[bones[binding]] * vertices[vertex_index]) * weights[binding]
+				world[vertex_index] = _skeleton.global_transform * world[vertex_index]
+			var previous: PackedVector3Array = surface.get("world", PackedVector3Array())
+			var has_previous := previous.size() == world.size() and time_step > 0.000001
+			if has_previous and world[0].distance_to(previous[0]) > model_scale * 0.5:
+				has_previous = false
+			for triangle in range(0, indices.size(), 3):
+				var intersections := PackedVector2Array()
+				var velocities := PackedVector2Array()
+				var triangle_a := world[indices[triangle]]
+				var triangle_normal := (world[indices[triangle + 1]] - triangle_a).cross(world[indices[triangle + 2]] - triangle_a)
+				var horizontal_normal := Vector2(triangle_normal.x, triangle_normal.z)
+				for edge in 3:
+					var a := world[indices[triangle + edge]]
+					var b := world[indices[triangle + (edge + 1) % 3]]
+					if (a.y < water_y) == (b.y < water_y):
+						continue
+					var ratio := (water_y - a.y) / (b.y - a.y)
+					var point := a.lerp(b, ratio)
+					intersections.append(Vector2(point.x, point.z))
+					var wall_velocity: Vector2 = -wake_material.get_shader_parameter("flow_velocity")
+					if has_previous and horizontal_normal.length_squared() > 0.000000000001:
+						var material_velocity := (a - previous[indices[triangle + edge]]).lerp(b - previous[indices[triangle + (edge + 1) % 3]], ratio) / time_step
+						# n3·(v_body-v_water)=0 with vertical water velocity
+						# omitted: vertical immersion also moves the planar cut.
+						wall_velocity = Vector2(material_velocity.x, material_velocity.z) + horizontal_normal * (material_velocity.y * triangle_normal.y / horizontal_normal.length_squared())
+					velocities.append(wall_velocity)
+				if intersections.size() == 2 and intersections[0].distance_squared_to(intersections[1]) > 0.00000000000001:
+					cuts.append_array(intersections)
+					cut_velocities.append_array(velocities)
+					var incidence := horizontal_normal.length() / maxf(triangle_normal.length(), 0.000001)
+					cut_incidence.append(incidence)
+					cut_incidence.append(incidence)
+			surface["world"] = world
+		_floating_previous_time = time
+		# Join triangle cuts across duplicated UV/material seams. Preserve
+		# separate components (including paws), concavities and the actual curve.
+		_floating_water_sections.clear()
+		_floating_section_velocities.clear()
+		_floating_section_incidence.clear()
+		var adjacency: Dictionary = {}
+		var precision := model_scale * 0.00002
+		var weld_cells: Dictionary = {}
+		var weld_ids := PackedInt32Array()
+		weld_ids.resize(cuts.size())
+		for cut in cuts.size():
+			weld_ids[cut] = cut
+			var cell := Vector2i((cuts[cut] / precision).floor())
+			for y in range(-1, 2):
+				for x in range(-1, 2):
+					for candidate in weld_cells.get(cell + Vector2i(x, y), []):
+						if cuts[cut].distance_squared_to(cuts[candidate]) < precision * precision:
+							var root_a := cut
+							var root_b: int = candidate
+							while weld_ids[root_a] != root_a:
+								root_a = weld_ids[root_a]
+							while weld_ids[root_b] != root_b:
+								root_b = weld_ids[root_b]
+							weld_ids[maxi(root_a, root_b)] = mini(root_a, root_b)
+			if not weld_cells.has(cell):
+				weld_cells[cell] = []
+			weld_cells[cell].append(cut)
+		for cut in cuts.size():
+			var root := cut
+			while weld_ids[root] != root:
+				root = weld_ids[root]
+			weld_ids[cut] = root
+			cuts[cut] = cuts[root]
+		for cut in cuts.size():
+			var paired := cut + 1 if cut % 2 == 0 else cut - 1
+			if weld_ids[cut] == weld_ids[paired]:
+				continue
+			var key := weld_ids[cut]
+			if not adjacency.has(key):
+				adjacency[key] = []
+			adjacency[key].append(cut)
+		var used := PackedByteArray()
+		used.resize(cuts.size() / 2)
+		_floating_open_water_cuts = 0
+		for start in used.size():
+			if used[start] != 0:
+				continue
+			if weld_ids[start * 2] == weld_ids[start * 2 + 1]:
+				used[start] = 1
+				continue
+			var section := PackedVector2Array([cuts[start * 2]])
+			var section_velocities := PackedVector2Array([cut_velocities[start * 2]])
+			var section_incidence := PackedFloat32Array([cut_incidence[start * 2]])
+			var first_key := weld_ids[start * 2]
+			var endpoint := start * 2 + 1
+			used[start] = 1
+			for walk in used.size():
+				var key := weld_ids[endpoint]
+				if key == first_key:
+					break
+				section.append(cuts[endpoint])
+				section_velocities.append(cut_velocities[endpoint])
+				section_incidence.append(cut_incidence[endpoint])
+				var next := -1
+				for candidate in adjacency[key]:
+					if used[candidate / 2] == 0:
+						next = candidate
+						break
+				if next == -1:
+					break
+				used[next / 2] = 1
+				endpoint = next + 1 if next % 2 == 0 else next - 1
+			if weld_ids[endpoint] != first_key:
+				_floating_open_water_cuts += 1
+				continue
+			if section.size() < 3:
+				continue
+			var signed_area := 0.0
+			for point in section.size():
+				signed_area += section[point].cross(section[(point + 1) % section.size()])
+			if signed_area < 0.0:
+				section.reverse()
+				section_velocities.reverse()
+				section_incidence.reverse()
+			_floating_water_sections.append(section)
+			_floating_section_velocities.append(section_velocities)
+			_floating_section_incidence.append(section_incidence)
+		if _floating_open_water_cuts > 0:
+			push_error("Live mesh/water section contains %d open cuts" % _floating_open_water_cuts)
+		if _floating_body_radii.is_empty():
+			# Measure the posed, skinned silhouette once. Model scale is not a
+			# body width, and the face/feet extend beyond the bone centerline.
+			_floating_body_radii.resize(body_points.size())
+			var body_axis := (body_points[0] - body_points[body_points.size() - 1]).normalized()
+			var body_side := Vector2(-body_axis.y, body_axis.x)
+			var side_min := INF
+			var side_max := -INF
+			for mesh_instance in _skinned_meshes(_cat_model):
+				var skin: Skin = mesh_instance.skin
+				var skin_matrices: Array[Transform3D] = []
+				for bind_index in skin.get_bind_count():
+					var bind_name := skin.get_bind_name(bind_index)
+					var bound_bone := _skeleton.find_bone(bind_name) if bind_name != "" else skin.get_bind_bone(bind_index)
+					skin_matrices.append(_skeleton.get_bone_global_pose(bound_bone) * skin.get_bind_pose(bind_index))
+				for surface in mesh_instance.mesh.get_surface_count():
+					var arrays := mesh_instance.mesh.surface_get_arrays(surface)
+					var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+					var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+					var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+					var slots := bones.size() / vertices.size()
+					for vertex_index in vertices.size():
+						var posed := Vector3.ZERO
+						for slot in slots:
+							var binding := vertex_index * slots + slot
+							posed += (skin_matrices[bones[binding]] * vertices[vertex_index]) * weights[binding]
+						var world := _skeleton.global_transform * posed
+						var ray := camera.project_ray_normal(camera.unproject_position(world))
+						world += ray * ((water_y - world.y) / ray.y)
+						var projected := Vector2(world.x, world.z)
+						side_min = minf(side_min, projected.dot(body_side))
+						side_max = maxf(side_max, projected.dot(body_side))
+						var nearest_distance := INF
+						var nearest_segment := 0
+						for segment_index in body_points.size() - 1:
+							var closest := Geometry2D.get_closest_point_to_segment(projected, body_points[segment_index], body_points[segment_index + 1])
+							var distance := projected.distance_to(closest)
+							if distance < nearest_distance:
+								nearest_distance = distance
+								nearest_segment = segment_index
+						var radius := nearest_distance / model_scale
+						_floating_body_radii[nearest_segment] = maxf(_floating_body_radii[nearest_segment], radius)
+						_floating_body_radii[nearest_segment + 1] = maxf(_floating_body_radii[nearest_segment + 1], radius)
+			_floating_body_width = (side_max - side_min) / model_scale
 		wake_material.set_shader_parameter("body_points", body_points)
-		wake_material.set_shader_parameter("body_scale", global_basis.get_scale().x)
-		wake_material.set_shader_parameter("wave_time", time * 2.1 + phase)
+		wake_material.set_shader_parameter("body_radii", _floating_body_radii)
+		wake_material.set_shader_parameter("body_width", _floating_body_width * model_scale)
+		wake_material.set_shader_parameter("body_scale", model_scale)
+		var body_length := 0.0
+		for index in range(1, body_points.size()):
+			body_length += body_points[index - 1].distance_to(body_points[index])
+		wake_material.set_shader_parameter("body_length", body_length)
+		for water_outline in [_outline_material, _material_id_2_outline]:
+			for key in ["body_points", "body_radii", "body_width", "body_scale", "body_length"]:
+				water_outline.set_shader_parameter(key, wake_material.get_shader_parameter(key))
+			water_outline.set_shader_parameter("water_y", water_y + 0.01)
+		# Project the already skinned triangles for a shadow with real paw gaps.
+		# Cancel shared front-facing edges before tracing the outer silhouette.
+		var projected := PackedVector2Array()
+		var silhouette_edges := {}
+		for surface in _floating_mesh_surfaces:
+			var remap: PackedInt32Array = surface.shadow_vertex_ids
+			var world: PackedVector3Array = surface.world
+			for vertex in world.size():
+				if remap[vertex] < projected.size():
+					continue
+				assert(remap[vertex] == projected.size(), "Shadow vertex cache is out of order")
+				var point := world[vertex]
+				var ray := camera.project_ray_normal(camera.unproject_position(point))
+				var on_water := point + ray * ((water_y - point.y) / ray.y)
+				projected.append(Vector2(on_water.x, on_water.z))
+			var indices: PackedInt32Array = surface.arrays[Mesh.ARRAY_INDEX]
+			for triangle in range(0, indices.size(), 3):
+				var a := projected[remap[indices[triangle]]]
+				var b := projected[remap[indices[triangle + 1]]]
+				var c := projected[remap[indices[triangle + 2]]]
+				if (b - a).cross(c - a) <= 0.0:
+					continue
+				for edge in 3:
+					var start := remap[indices[triangle + edge]]
+					var end := remap[indices[triangle + (edge + 1) % 3]]
+					var key := Vector2i(mini(start, end), maxi(start, end))
+					var balance: int = silhouette_edges.get(key, 0) + (1 if start < end else -1)
+					if balance == 0:
+						silhouette_edges.erase(key)
+					else:
+						silhouette_edges[key] = balance
+		var outgoing := {}
+		for key: Vector2i in silhouette_edges:
+			var balance: int = silhouette_edges[key]
+			var edge := key if balance > 0 else Vector2i(key.y, key.x)
+			if not outgoing.has(edge.x):
+				outgoing[edge.x] = []
+			for copy in absi(balance):
+				outgoing[edge.x].append(edge.y)
+		var silhouette := PackedVector2Array()
+		var largest_area := 0.0
+		while not outgoing.is_empty():
+			var first: int = outgoing.keys()[0]
+			var cursor := first
+			var polygon := PackedVector2Array()
+			for walk in projected.size() * 6:
+				polygon.append(projected[cursor])
+				assert(outgoing.has(cursor), "Live projected shadow has an open silhouette")
+				var next: int = outgoing[cursor].pop_back()
+				if outgoing[cursor].is_empty():
+					outgoing.erase(cursor)
+				cursor = next
+				if cursor == first:
+					break
+			assert(cursor == first, "Live projected shadow contour did not close")
+			var twice_area := 0.0
+			for vertex in polygon.size():
+				twice_area += (polygon[vertex] - polygon[0]).cross(polygon[(vertex + 1) % polygon.size()] - polygon[0])
+			# ponytail: the connected cat outline; detached facial micro-polygons
+			# are omitted. Use a union of contours for disconnected accessories.
+			if twice_area > largest_area:
+				largest_area = twice_area
+				silhouette = polygon
+		var shadow_points := PackedVector2Array()
+		var tolerance := _floating_body_width * model_scale * 0.008
+		while true:
+			shadow_points.clear()
+			for vertex in silhouette.size():
+				var before := silhouette[-1] if shadow_points.is_empty() else shadow_points[-1]
+				var after := silhouette[(vertex + 1) % silhouette.size()]
+				if silhouette[vertex].distance_to(Geometry2D.get_closest_point_to_segment(silhouette[vertex], before, after)) > tolerance:
+					shadow_points.append(silhouette[vertex])
+			if shadow_points.size() <= 128:
+				break
+			tolerance *= 1.25
+			assert(tolerance <= _floating_body_width * model_scale * 0.025, "Shadow contour exceeds its WebGL edge budget")
+		assert(shadow_points.size() >= 3, "Live projected shadow lost its body contour")
+		wake_material.set_shader_parameter("shadow_point_count", shadow_points.size())
+		shadow_points.resize(128)
+		wake_material.set_shader_parameter("shadow_points", shadow_points)
 
 
 func _process_blink(delta: float) -> void:
@@ -908,6 +1235,12 @@ func _begin_absorb(hole_cell: Vector2i, from_lead: bool, item_clear := false) ->
 	_transition_t = 0.0
 	_is_blocked = false
 	_rail = body_cells.duplicate()
+	var polyline := _body_polyline()
+	var entry_point: Vector3 = polyline[0] if from_lead else polyline[polyline.size() - 1]
+	var hole_point := level_manager.grid_to_world(hole_cell, level_manager.cat_world_y)
+	_absorb_head_axis = (hole_point - entry_point).normalized()
+	if from_lead == _lead_is_tail:
+		_absorb_head_axis = -_absorb_head_axis
 	if UiBridge.is_hosted:
 		UiBridge.post_progress({"sfx": "cat-hole-absorb"})
 	else:
@@ -1015,7 +1348,7 @@ func clear_with_item(hole_cell: Vector2i) -> bool:
 
 
 # 흡입 중 이 호 위치의 본이 놓일 자리와 머리 축 방향. 몸은 자기 경로를 따라 구멍 쪽으로
-# 밀리고, 끝점을 지난 부분은 구멍 중심까지 직선으로 간 뒤 곧장 아래로 내려간다.
+# 밀리고, 구멍 직전부터 원호를 따라 자세까지 아래로 굽힌 뒤 수직으로 잠긴다.
 # 포즈 경로를 새로 만들지 않고 샘플 위치만 바꾸는 것이 핵심이다.
 func _absorb_pose_at(
 	polyline: PackedVector3Array,
@@ -1037,15 +1370,26 @@ func _absorb_pose_at(
 	var to_hole: Vector3 = hole_point - entry_point
 	var span: float = to_hole.length()
 	var overshoot: float = -from_entry
-	var direction: Vector3 = _model_head_direction(polyline, cumulative, entry_arc)
-	if span > 0.000001:
-		# 모델 머리가 들어가는 쪽 끝에 있으면 머리 축이 구멍을 향한다.
-		var head_on_entry: bool = _absorb_from_lead != _lead_is_tail
-		direction = to_hole.normalized() * (1.0 if head_on_entry else -1.0)
-	if span > 0.000001 and overshoot <= span:
-		var position := entry_point.lerp(hole_point, overshoot / span)
-		return [position, direction]
-	return [hole_point + Vector3.DOWN * (overshoot - span), direction]
+	var heading := to_hole.normalized()
+	var head_sign := 1.0 if _absorb_from_lead != _lead_is_tail else -1.0
+	var radius := minf(level_manager.fitted_tile_size() * ABSORB_BEND_RADIUS_CELLS, span)
+	var straight_length := span - radius
+	if overshoot <= straight_length:
+		return [entry_point + heading * overshoot, heading * head_sign]
+	var bend_arc := overshoot - straight_length
+	var bend_length := radius * PI * 0.5
+	if radius > 0.000001 and bend_arc < bend_length:
+		var angle := bend_arc / radius
+		var position := (
+			hole_point - heading * radius * (1.0 - sin(angle))
+			+ Vector3.DOWN * radius * (1.0 - cos(angle))
+		)
+		var tangent := heading * cos(angle) + Vector3.DOWN * sin(angle)
+		return [position, tangent * head_sign]
+	return [
+		hole_point + Vector3.DOWN * (radius + bend_arc - bend_length),
+		Vector3.DOWN * head_sign,
+	]
 
 
 # 마지막 본까지 바닥 아래로 사라지는 데 필요한 총 흡입 길이.
@@ -1055,9 +1399,12 @@ func _absorb_arc_to_finish(
 	var entry_arc: float = 0.0 if _absorb_from_lead else total_length
 	var entry_point: Vector3 = _sample_polyline(polyline, cumulative, entry_arc)
 	var hole_point: Vector3 = level_manager.grid_to_world(_absorb_cell, level_manager.cat_world_y)
+	var span := entry_point.distance_to(hole_point)
+	var radius := minf(level_manager.fitted_tile_size() * ABSORB_BEND_RADIUS_CELLS, span)
+	# 직선에서 반지름을 빼고 1/4 원호를 더한다. 낙하 깊이는 기존과 동일하다.
 	return (
 		total_length
-		+ entry_point.distance_to(hole_point)
+		+ span + radius * (PI * 0.5 - 2.0)
 		+ level_manager.fitted_tile_size() * ABSORB_SINK_CELLS
 	)
 
@@ -1337,7 +1684,28 @@ func _pose_at(
 	arc_from_lead: float
 ) -> Array:
 	if _is_absorbing:
-		return _absorb_pose_at(polyline, cumulative, total_length, arc_from_lead)
+		var pose := _absorb_pose_at(polyline, cumulative, total_length, arc_from_lead)
+		var tile := level_manager.fitted_tile_size()
+		var entry_arc := 0.0 if _absorb_from_lead else total_length
+		var entry_point := _sample_polyline(polyline, cumulative, entry_arc)
+		var hole_point := level_manager.grid_to_world(_absorb_cell, level_manager.cat_world_y)
+		var span := entry_point.distance_to(hole_point)
+		var radius := minf(tile * ABSORB_BEND_RADIUS_CELLS, span)
+		var body_distance := absf(arc_from_lead - entry_arc)
+		# A small travelling sway follows actual suction progress. Pin the bend
+		# and submerged body so the entry never slides around the hole rim.
+		var taper := tile * 0.65
+		var u := clampf((body_distance - _swallowed_arc + span - radius) / taper, 0.0, 1.0)
+		var weight := u * u * (3.0 - 2.0 * u)
+		var amplitude := tile * ABSORB_SWAY_CELLS * smoothstep(0.0, 0.35, _swallowed_arc / tile)
+		var phase := TAU * (0.32 * _swallowed_arc - 0.16 * body_distance) / tile
+		var side := _absorb_head_axis.cross(Vector3.UP).normalized()
+		pose[0] += side * amplitude * weight * sin(phase)
+		# Tilt each bone along the deformed path, preserving unit scale.
+		var slope := amplitude * (6.0 * u * (1.0 - u) / taper * sin(phase) - weight * TAU * 0.16 / tile * cos(phase))
+		var head_sign := 1.0 if _absorb_from_lead != _lead_is_tail else -1.0
+		pose[1] = (pose[1] - side * slope * head_sign).normalized()
+		return pose
 	return [
 		_sample_polyline(polyline, cumulative, arc_from_lead),
 		_model_head_direction(polyline, cumulative, arc_from_lead),
@@ -1403,7 +1771,10 @@ func _rounded_pose_polyline(points: PackedVector3Array) -> PackedVector3Array:
 	var max_radius := level_manager.fitted_tile_size() * CORNER_ROUNDING_CELLS
 	if _inserted_mid_bones.is_empty() and _rest_chain_length > 0.0:
 		var model_scale := _grid_fitted_model_scale()
-		var minimum_length := (_rest_chain_length - _stretchable_rest_length() * 0.15) * model_scale
+		# The original three-cell rig has no inserted middle rings. Give its
+		# existing middle spacing a little more room to form the same curve.
+		var compression := 0.20 if body_cells.size() <= 3 else 0.15
+		var minimum_length := (_rest_chain_length - _stretchable_rest_length() * compression) * model_scale
 		var raw_lengths := _cumulative_lengths(points)
 		var raw_length := raw_lengths[raw_lengths.size() - 1]
 		raw_length += _end_extension(_head_mesh_overhang) + _end_extension(_tail_mesh_overhang)
@@ -1776,10 +2147,13 @@ func _end_extension(overhang_model: float) -> float:
 
 func _fbx_basis_for_direction(direction: Vector3) -> Basis:
 	# FBX local Y is the body length and local +Z is the face side.
-	# Keep the face side toward world up while only the body length follows the grid path.
+	# 일반 이동은 얼굴이 위를 향한다. 흡입 때는 같은 진입 평면 안에서 아래로 굽힌다.
 	var body_axis := direction.normalized()
-	var face_axis := Vector3.UP
-	var side_axis := body_axis.cross(face_axis).normalized()
+	var horizontal_axis := Vector3(body_axis.x, 0.0, body_axis.z)
+	if horizontal_axis.length_squared() < 0.000000000001:
+		horizontal_axis = _absorb_head_axis
+	var side_axis := horizontal_axis.cross(Vector3.UP).normalized()
+	var face_axis := side_axis.cross(body_axis).normalized()
 	return Basis(side_axis, body_axis, face_axis)
 
 
@@ -1799,6 +2173,13 @@ func load_model_with_texture() -> Node3D:
 	# so it must remain responsible for its own rest-pose cache.
 	_cat_model = model_root
 	_skeleton = _find_skeleton_in(model_root)
+	_floating_body_radii.clear()
+	_floating_body_width = 0.0
+	_floating_mesh_surfaces.clear()
+	_floating_water_sections.clear()
+	_floating_section_velocities.clear()
+	_floating_section_incidence.clear()
+	_floating_previous_time = -1.0
 	return model_root
 
 
@@ -1824,11 +2205,7 @@ func _apply_material_recursive(node: Node) -> void:
 				if _is_tile_material_surface(mesh_instance, surface_index) and _material_id_2 != null:
 					material = _material_id_2
 				mesh_instance.set_surface_override_material(surface_index, material)
-		mesh_instance.cast_shadow = (
-			GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			if _floating_water_outline
-			else GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
-		)
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_DOUBLE_SIDED
 	for child in node.get_children():
 		_apply_material_recursive(child)
 
@@ -1914,7 +2291,7 @@ func _apply_shader_parameters(
 		_cat_material.set_shader_parameter("shadow_steps", toon_steps)
 		_cat_material.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_cat_material.set_shader_parameter("toon_shadow_spread", toon_shadow_spread)
-		_cat_material.set_shader_parameter("rim_strength", 0.0 if _floating_water_outline else rim_strength)
+		_cat_material.set_shader_parameter("rim_strength", rim_strength)
 		_cat_material.set_shader_parameter("line_art_tex", line_art_texture)
 		_cat_material.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
 		_cat_material.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
@@ -1933,7 +2310,7 @@ func _apply_shader_parameters(
 		_material_id_2.set_shader_parameter("shadow_steps", toon_steps)
 		_material_id_2.set_shader_parameter("shadow_darkness", shadow_darkness)
 		_material_id_2.set_shader_parameter("toon_shadow_spread", toon_shadow_spread)
-		_material_id_2.set_shader_parameter("rim_strength", 0.0 if _floating_water_outline else rim_strength)
+		_material_id_2.set_shader_parameter("rim_strength", rim_strength)
 		_material_id_2.set_shader_parameter("line_art_tex", line_art_texture)
 		_material_id_2.set_shader_parameter("line_art_eye_mask", _get_tint_exclusion_mask())
 		_material_id_2.set_shader_parameter("line_art_enabled", 1.0 if line_art_texture != null else 0.0)
@@ -1955,7 +2332,7 @@ func _apply_shader_parameters(
 		)
 		_outline_material.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_outline_material.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
-		_outline_material.set_shader_parameter("water_foam_enabled", _floating_water_outline)
+		_outline_material.set_shader_parameter("water_foam_enabled", false)
 	if _material_id_2_outline != null:
 		_material_id_2_outline.set_shader_parameter("outline_color", _effective_outline_color())
 		_material_id_2_outline.set_shader_parameter("soft_outline_enabled", not _floating_water_outline)
@@ -1966,13 +2343,15 @@ func _apply_shader_parameters(
 		)
 		_material_id_2_outline.set_shader_parameter("top_outline_scale", top_outline_scale)
 		_material_id_2_outline.set_shader_parameter("bottom_outline_scale", bottom_outline_scale)
-		_material_id_2_outline.set_shader_parameter("water_foam_enabled", _floating_water_outline)
+		_material_id_2_outline.set_shader_parameter("water_foam_enabled", false)
 
 	# 중첩고양이 색 영역. 마스크 텍스처가 아직 없으면 셰이더의 임시 줄무늬로 폴백한다.
 	var mask1 := _get_nest_mask1()
 	for body_material in [_cat_material, _material_id_2]:
 		if body_material == null:
 			continue
+		body_material.set_shader_parameter("ambient_energy", TOON_AMBIENT_ENERGY)
+		body_material.set_shader_parameter("shadow_tint_color", TOON_SHADOW_TINT)
 		body_material.set_shader_parameter("nest1_enabled", 1.0 if nested_color_ids.size() >= 1 else 0.0)
 		body_material.set_shader_parameter("nest2_enabled", 1.0 if nested_color_ids.size() >= 2 else 0.0)
 		body_material.set_shader_parameter("nest_color1", _nest_color(0))
@@ -2050,6 +2429,8 @@ func get_hole_visual_style(pair_color: Color) -> Dictionary:
 		"shadow_darkness": shadow_darkness,
 		"toon_shadow_spread": toon_shadow_spread,
 		"rim_strength": rim_strength,
+		"ambient_energy": TOON_AMBIENT_ENERGY,
+		"shadow_tint_color": TOON_SHADOW_TINT,
 		"line_art_tex": line_art_texture,
 		"line_art_eye_mask": _get_tint_exclusion_mask(),
 		"line_art_enabled": 1.0 if line_art_texture != null else 0.0,
@@ -2071,7 +2452,7 @@ func get_hole_visual_style(pair_color: Color) -> Dictionary:
 # CatEntity Inspector 에서 개별 조정할 수 있게 별도 배율/알파를 얹는다.
 func _effective_outline_color() -> Color:
 	if _floating_water_outline:
-		return FLOATING_WATER_OUTLINE_COLOR
+		return _effective_tint_color().darkened(0.30).lerp(Color("326b71"), 0.15)
 	var pair: Variant = _pair_color()
 	var base_color: Color = outline_color if pair == null else (pair as Color).darkened(0.27)
 	var effective := Color(

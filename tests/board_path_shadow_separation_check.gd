@@ -1,9 +1,12 @@
-extends SceneTree
+extends Node
 
 var _failures: Array[String] = []
 
 
-func _init() -> void:
+func _ready() -> void:
+	UiBridge.standalone_autostart = false
+	UiBridge.is_hosted = true
+	await get_tree().process_frame
 	var scene := load("res://scenes/main_scene.tscn") as PackedScene
 	if scene == null:
 		_failures.append("Failed to load main scene")
@@ -11,8 +14,9 @@ func _init() -> void:
 		return
 
 	var scene_root := scene.instantiate() as Node3D
-	root.add_child(scene_root)
-	await process_frame
+	scene_root.set_script(null)
+	add_child(scene_root)
+	await get_tree().process_frame
 
 	var manager := scene_root.get_node_or_null("LevelManager") as LevelManager
 	if manager == null:
@@ -20,7 +24,18 @@ func _init() -> void:
 		_report()
 		return
 	manager.rebuild_now()
-	await process_frame
+	await get_tree().process_frame
+	var light := scene_root.get_node("DirectionalLight3D") as DirectionalLight3D
+	var camera := scene_root.get_node("Camera3D") as Camera3D
+	if light.directional_shadow_mode != DirectionalLight3D.SHADOW_ORTHOGONAL:
+		_failures.append("Board shadows must not split across a cat")
+	for z in [-1, manager.grid_size.y]:
+		for x in [-1, manager.grid_size.x]:
+			for height in [0.0, 2.0]:
+				var point := manager.grid_to_world(Vector2i(x, z), height)
+				var depth := -(camera.global_transform.affine_inverse() * manager.to_global(point)).z
+				if depth >= light.directional_shadow_max_distance * light.directional_shadow_fade_start:
+					_failures.append("Board/cat geometry enters directional shadow fade range")
 
 	var board := manager.get_node_or_null("BoardVisuals/BoardBase") as CSGPolygon3D
 	if board == null:
@@ -85,4 +100,4 @@ func _report() -> void:
 		print("BOARD/PATH SHADOW SEPARATION CHECK: FAIL (%d)" % _failures.size())
 		for failure in _failures:
 			print("  - %s" % failure)
-	quit()
+	get_tree().quit(0 if _failures.is_empty() else 1)

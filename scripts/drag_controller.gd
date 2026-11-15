@@ -75,13 +75,13 @@ func _process(_delta: float) -> void:
 
 
 func _press(pointer_index: int, screen_position: Vector2) -> void:
+	input_received.emit()
 	if _selecting_obstacle:
 		var target: Variant = level_manager.screen_to_grid_cell(screen_position)
 		if target == null or not level_manager.get_obstacle_cells().has(target as Vector2i):
 			cancel_item_selection()
 			return
 		_selecting_obstacle = false
-		input_received.emit()
 		obstacle_selected.emit(target as Vector2i)
 		return
 	if _selecting_cat:
@@ -106,7 +106,6 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 			cancel_item_selection()
 			return
 		_selecting_cat = false
-		input_received.emit()
 		cat_selected.emit(best_cat)
 		return
 	# 이미 잡고 있으면 새 포인터를 받지 않는다. 터치가 끝나야 새 입력을 받는다.
@@ -133,7 +132,6 @@ func _press(pointer_index: int, screen_position: Vector2) -> void:
 	if best_cat == null:
 		return
 
-	input_received.emit()
 	_cat = best_cat
 	_pointer_index = pointer_index
 	_has_pointer = true

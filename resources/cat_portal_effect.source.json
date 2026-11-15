@@ -1,0 +1,33 @@
+{
+  "library": "ui-editor Magic FX / BBT",
+  "effect": "fx_bg_twinkle",
+  "assetId": "9c2ac14e-f672-57e4-a576-2ec2b73944d6",
+  "storeUrl": "https://ui-editor-lscommon.app.linecorp-dev.com/asset-store?tab=effect&tag=library%3Amagic-fx",
+  "textures": [
+    {
+      "source": "effect/fx_bg_twinkle_9c2ac14e-f672-57e4-a576-2ec2b73944d6/source-resources/Assets/Resources_Addressable/Features/Common/FX/fx_common_circle02.png",
+      "runtime": "water_yang/portal_soft_light.png",
+      "sha256": "f0637824f8b3dbd9726476cbb52e65fd0a6ca467c140bc6fb7425f49ff928552"
+    },
+    {
+      "source": "effect/fx_bg_twinkle_9c2ac14e-f672-57e4-a576-2ec2b73944d6/source-resources/Assets/Resources_Addressable/Features/Common/FX/fx_common_ray01.png",
+      "runtime": "water_yang/lobby_water_sparkle.png",
+      "sha256": "2c1c786285f73da67a7f5a9da9154865f298895eb7708131d512b1fb57bbe75c"
+    }
+  ],
+  "textureModification": "None; original RGBA bytes are preserved. The existing lobby ray copy is shared.",
+  "risingMotes": {
+    "speedInApertureDiametersPerSecond": [0.65, 1.0],
+    "lifetimeSeconds": 2.4,
+    "lifetimeRandomness": 0.2,
+    "quadWidthInApertureDiameters": 0.3,
+    "scaleRange": [0.7, 1.05],
+    "emissionShape": "CPUParticles3D.EMISSION_SHAPE_BOX (3)",
+    "emissionBoxHalfExtentsInApertureDiameters": [0.018, 0.0, 0.018],
+    "spreadDegrees": 0.0,
+    "footprintValidation": "Both rising motes and light wisps use BOX (3). The former serialized value 2 was SPHERE_SURFACE with radius 1, so the earlier box-extents reductions had no effect on actual emission. The regression first asserts the actual emission shape. Twinkle width is increased from 0.26 to 0.3 aperture diameters (about 15%). Twinkle box half extents are narrowed to 0.018 so the larger sprites still fit within half the aperture radius; fixed light wisps retain half extents of 0.035. Zero spread and gravity keep motion vertical. Birth-box corners expanded by the maximum billboard bounding-sphere radius are ray-tested against actual aperture triangles; the conservative XZ radial bound is 0.249 aperture diameters, including the full sprite. This constrains world-space horizontal spread, not screen-space height as motes rise.",
+    "validation": "The current gameplay camera projects the minimum-speed/shortest-life trajectory between 15% and 82% lifetime to about 8.5 pixels at 852px viewport height; the former settings projected to about 0.74 pixels. This is an analytic camera projection, not a rendered particle-motion measurement."
+  },
+  "adaptation": "Godot CPUParticles3D uses the original soft circle texture for one faint aperture glow and four vertical light wisps, and the original ray texture for twelve independently twinkling rising motes per portal. The effect origin is the actual transformed hole-surface center, offset 0.5% of its diameter above the surface, with scale from its measured diameter. The wisps have zero velocity and a bottom-anchored quad, so growth never detaches their base from the aperture. Only the motes travel upward. Shared serialized additive materials retain depth testing and never write depth. Color follows each hole's pair color, blended 55% toward white. Effects are siblings of rotating holes, stay off under ice, start on unlock, and fade out on close. Particle motion inherits the gameplay pause. This adapts source textures, not the Unity prefab execution.",
+  "sourceLimitation": "The downloaded manifest has one unresolved GUID; neither texture used here is missing. Source files were inspected locally; the live library was not browsed for this change. Final in-game visual review is performed by the user."
+}

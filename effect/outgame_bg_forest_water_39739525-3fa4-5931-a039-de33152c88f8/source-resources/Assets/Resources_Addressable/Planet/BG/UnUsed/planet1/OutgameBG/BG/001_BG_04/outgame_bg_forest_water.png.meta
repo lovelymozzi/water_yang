@@ -1,0 +1,1194 @@
+fileFormatVersion: 2
+guid: 6add92903510cd3479812222d3e32871
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7698146404565626213
+    second: outgame_bg_forest_water_0
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 50
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1816
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b925aeea1a0ba2590800000000000000
+      internalID: -7698146404565626213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_1
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 1816
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ef40c869d18dce458acf29ffce91cae
+      internalID: 1110083891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_2
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 1816
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a913c317e6c01354d88603960a4343f2
+      internalID: -1210348755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_3
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 1816
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f729b8660cd80048a05e20170bff94a
+      internalID: -710758921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_4
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 1816
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 297427190927a1646bf6b0221198a466
+      internalID: -1276964315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1589
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e65215081e6ef29459e46e1a4b0e4faf
+      internalID: -1227255502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_6
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 1589
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a3f58a5fc8fc50488784364316d4fbb
+      internalID: 547795315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_7
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 1589
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d349e5d6dbe4877439166bcddf979026
+      internalID: 1709482470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_8
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 1589
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61b219c611531614e96925d804d8760d
+      internalID: -803773703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_9
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 1589
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08c36634d783e204abdb70d4ef36826d
+      internalID: -1590122247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1362
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a6f90afe3d86d549959ee14a3ee0496
+      internalID: 682210742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_11
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 1362
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69866f589cc85f14fa3eccb1d7b2b1c0
+      internalID: 1312820489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_12
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 1362
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ab56a514971b82418d4d689e4018cec
+      internalID: 479735770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_13
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 1362
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1bc9be2f327ed8409888aed4047187b
+      internalID: 1347157621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_14
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 1362
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cb34e84e8022d342823229e6a1f3f77
+      internalID: -358277939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1135
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdb32631e1d45b8408980a5983f59eaa
+      internalID: 65395601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_16
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 1135
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c6fc370d814c2248862d8fc5927beb8
+      internalID: -1244028398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_17
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 1135
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55e3f21baca22304197fca7906642432
+      internalID: 1997878678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_18
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 1135
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6a798a38a877dc4fbe2c420df35313d
+      internalID: -1379196247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_19
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 1135
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 346f50ff43f86034f86ceb38807b9aa9
+      internalID: 1052637008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 908
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa856a2ff96ca644c9b107a70e0a3b22
+      internalID: -916421392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_21
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 908
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb027dbe84e3dba49bb4b993e228867b
+      internalID: -1339757747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_22
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 908
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8220db9efc1d4fe4b977f33eb687d796
+      internalID: -152093077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_23
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 908
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07fb73aaa01d3504081132fa775fdcfc
+      internalID: -498604483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_24
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 908
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49e42623ca7ccd94daf56b5aafd04c79
+      internalID: -527368933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 681
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73698d168ae91a9488ac7c766a51c47c
+      internalID: -912150171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_26
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 681
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 240fccd6e5501fc418409563d8dac6dd
+      internalID: 802459708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_27
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 681
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69f23e8e4cbb0fa41868a9f4dd132764
+      internalID: -635762774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_28
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 681
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f669bc70fb52be488cd104f5c42948e
+      internalID: 1082430051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_29
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 681
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2dbfe791f31029744b026acd1cf360f4
+      internalID: -587048928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 454
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b442402c20ed5146adbf3f3a584086e
+      internalID: 1933477164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_31
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 454
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05e9af4195383f942933b1b59f030e31
+      internalID: 82107138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_32
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 454
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 964a61891c4a4b741912a066c378291a
+      internalID: -1638291411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_33
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 454
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9395e8c9cb7cfb458ddc8b469192032
+      internalID: -2085389566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_34
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 454
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04394c1d988b247418d5537dbcca45b1
+      internalID: -201924497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 227
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69ae94dacf69b4e488ccf111ab5aa56f
+      internalID: -812525968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_36
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 227
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c1da27f9cc01e84ca6362ef1697b443
+      internalID: -1188376404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_37
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 227
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb1c4a625abf2bf4cb3e02dd2b1f4011
+      internalID: -2140693139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_38
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 227
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53e1f7e0f3ea82243a256ad1efe67e69
+      internalID: 855737199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_39
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 227
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a666e066cb8e0854483836b13b785cf4
+      internalID: -448698775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e823c2362f5bec4bbeb58bb230e46cc
+      internalID: -415338136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_41
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 0
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4111bd825da6eac459947361edd296ef
+      internalID: -2080265162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_42
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 0
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6edab3b36cc71d04f9ba3819f1ba2e05
+      internalID: -1478134412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_43
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 0
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d9c78fe118d37340a48f592afe9b12d
+      internalID: 264636683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: outgame_bg_forest_water_44
+      rect:
+        serializedVersion: 2
+        x: 1556
+        y: 0
+        width: 389
+        height: 227
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99d7425737ae8484fa81e4ad8dbe2883
+      internalID: -77812091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 878a1287f8a42be4e858e2d46beff138
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      outgame_bg_forest_water_0: -7698146404565626213
+      outgame_bg_forest_water_1: 1110083891
+      outgame_bg_forest_water_10: 682210742
+      outgame_bg_forest_water_11: 1312820489
+      outgame_bg_forest_water_12: 479735770
+      outgame_bg_forest_water_13: 1347157621
+      outgame_bg_forest_water_14: -358277939
+      outgame_bg_forest_water_15: 65395601
+      outgame_bg_forest_water_16: -1244028398
+      outgame_bg_forest_water_17: 1997878678
+      outgame_bg_forest_water_18: -1379196247
+      outgame_bg_forest_water_19: 1052637008
+      outgame_bg_forest_water_2: -1210348755
+      outgame_bg_forest_water_20: -916421392
+      outgame_bg_forest_water_21: -1339757747
+      outgame_bg_forest_water_22: -152093077
+      outgame_bg_forest_water_23: -498604483
+      outgame_bg_forest_water_24: -527368933
+      outgame_bg_forest_water_25: -912150171
+      outgame_bg_forest_water_26: 802459708
+      outgame_bg_forest_water_27: -635762774
+      outgame_bg_forest_water_28: 1082430051
+      outgame_bg_forest_water_29: -587048928
+      outgame_bg_forest_water_3: -710758921
+      outgame_bg_forest_water_30: 1933477164
+      outgame_bg_forest_water_31: 82107138
+      outgame_bg_forest_water_32: -1638291411
+      outgame_bg_forest_water_33: -2085389566
+      outgame_bg_forest_water_34: -201924497
+      outgame_bg_forest_water_35: -812525968
+      outgame_bg_forest_water_36: -1188376404
+      outgame_bg_forest_water_37: -2140693139
+      outgame_bg_forest_water_38: 855737199
+      outgame_bg_forest_water_39: -448698775
+      outgame_bg_forest_water_4: -1276964315
+      outgame_bg_forest_water_40: -415338136
+      outgame_bg_forest_water_41: -2080265162
+      outgame_bg_forest_water_42: -1478134412
+      outgame_bg_forest_water_43: 264636683
+      outgame_bg_forest_water_44: -77812091
+      outgame_bg_forest_water_5: -1227255502
+      outgame_bg_forest_water_6: 547795315
+      outgame_bg_forest_water_7: 1709482470
+      outgame_bg_forest_water_8: -803773703
+      outgame_bg_forest_water_9: -1590122247
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

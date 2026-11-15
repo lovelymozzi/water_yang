@@ -1,0 +1,13 @@
+{
+  "library": "ui-editor Magic FX / BBT",
+  "effect": "fx_bg_twinkle",
+  "assetId": "9c2ac14e-f672-57e4-a576-2ec2b73944d6",
+  "storeUrl": "https://ui-editor-lscommon.app.linecorp-dev.com/asset-store?tab=effect&tag=library%3Amagic-fx",
+  "downloadedSource": "effect/fx_bg_twinkle_9c2ac14e-f672-57e4-a576-2ec2b73944d6/source-resources/Assets/Resources_Addressable/Features/Common/FX/fx_common_ray01.png",
+  "runtimeTexture": "water_yang/lobby_water_sparkle.png",
+  "textureSha256": "2c1c786285f73da67a7f5a9da9154865f298895eb7708131d512b1fb57bbe75c",
+  "textureModification": "None: byte-for-byte copy of the original RGBA texture.",
+  "reference": "The original ray particle has zero start speed, a one-second lifetime, size 0.2–0.65, and a size-over-life curve. The prefab also contains two transient line layers and a separate circle layer.",
+  "adaptation": "Godot CPUParticles3D reuses the original ray texture on horizontal water-level planes. It uses sparse, independently randomized births, zero speed/gravity, mint-white opacity and size envelopes, and 0.55m clearance from the baked cliff contact line. Terrain and cats retain depth occlusion. This adapts the source texture and twinkle behavior; it does not execute the Unity prefab.",
+  "sourceLimitation": "The downloaded manifest reports one unresolved GUID (16f0b0b6d0b7542bfbd20a3e05b04ff1). The copied ray texture is present. No missing Unity component is used by the Godot adaptation."
+}

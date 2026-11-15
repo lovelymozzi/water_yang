@@ -14,6 +14,98 @@
 [ext_resource type="Script" uid="uid://bng4ofm1w82i1" path="res://scripts/top_fog.gd" id="18_dr74i"]
 [ext_resource type="PackedScene" uid="uid://bon52b0jge40n" path="res://water_yang/water1.fbx" id="20_water"]
 [ext_resource type="Script" uid="uid://cba4aonn838by" path="res://scripts/lobby_floating_cats.gd" id="24_floating_cats"]
+[ext_resource type="Texture2D" path="res://water_yang/lobby_underwater.png" id="25_underwater"]
+[ext_resource type="Shader" path="res://scripts/lobby_underwater.gdshader" id="26_underwater_shader"]
+[ext_resource type="Texture2D" path="res://water_yang/lobby_underwater_shore_mask.png" id="27_shore_mask"]
+[ext_resource type="Texture2D" path="res://water_yang/lobby_water_sparkle.png" id="28_water_sparkle"]
+[ext_resource type="Shader" path="res://scripts/lobby_sunlight.gdshader" id="29_sunlight"]
+[ext_resource type="Texture2D" path="res://water_yang/lobby_sunlight_rays.png" id="30_sunlight_rays"]
+[ext_resource type="ArrayMesh" path="res://resources/terrain/jam3d/flower_white.obj" id="31_meadow_flower"]
+[ext_resource type="Material" path="res://resources/terrain/jam3d/flower_material.tres" id="32_meadow_flower_material"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sunlight"]
+resource_name = "Flowing sunlight from BBT fx_ray_103_low"
+render_priority = 10
+shader = ExtResource("29_sunlight")
+shader_parameter/light_color = Color(1, 0.94, 0.76, 1)
+shader_parameter/ray_sheet = ExtResource("30_sunlight_rays")
+shader_parameter/strength = 0.42
+shader_parameter/direction = Vector2(0.48, 1)
+shader_parameter/motion_speed = 0.22
+shader_parameter/vertical_fade = Vector2(0.22, 0.34)
+shader_parameter/sunlight_time = 0.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_sunlight"]
+size = Vector2(2, 2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sun_dust"]
+resource_name = "Warm dust inside lobby sunlight"
+render_priority = 11
+shader = ExtResource("29_sunlight")
+shader_parameter/light_color = Color(1, 0.94, 0.76, 1)
+shader_parameter/ray_sheet = ExtResource("30_sunlight_rays")
+shader_parameter/strength = 0.42
+shader_parameter/direction = Vector2(0.48, 1)
+shader_parameter/motion_speed = 0.22
+shader_parameter/vertical_fade = Vector2(0.22, 0.34)
+shader_parameter/sunlight_time = 0.0
+shader_parameter/dust_pass = true
+shader_parameter/dust_strength = 0.95
+
+[sub_resource type="QuadMesh" id="QuadMesh_sun_dust"]
+material = SubResource("ShaderMaterial_sun_dust")
+size = Vector2(0.045, 0.045)
+
+[sub_resource type="Gradient" id="Gradient_sun_dust"]
+offsets = PackedFloat32Array(0, 0.12, 0.25, 0.36, 0.48, 0.60, 0.73, 0.87, 1)
+colors = PackedColorArray(1, 1, 0.9, 0, 1, 1, 0.9, 0.3, 1, 1, 0.95, 0.9, 1, 1, 0.9, 0.35, 1, 1, 0.95, 0.8, 1, 1, 0.9, 0.4, 1, 1, 0.95, 0.95, 1, 1, 0.9, 0.25, 1, 1, 0.9, 0)
+
+[sub_resource type="Curve" id="Curve_sun_dust"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.15, 0.75), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(0.85, 0.75), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_water_sparkle"]
+resource_name = "BBT fx_bg_twinkle water glints"
+render_priority = 1
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+depth_draw_mode = 2
+cull_mode = 2
+disable_fog = true
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("28_water_sparkle")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_water_sparkle"]
+material = SubResource("StandardMaterial3D_water_sparkle")
+size = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_water_sparkle"]
+offsets = PackedFloat32Array(0, 0.18, 0.42, 0.7, 1)
+colors = PackedColorArray(0.8, 1, 0.96, 0, 0.8, 1, 0.96, 0.65, 1, 1, 1, 0.95, 0.8, 1, 0.96, 0.4, 0.8, 1, 0.96, 0)
+
+[sub_resource type="Curve" id="Curve_water_sparkle"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.22, 0.65), 0.0, 0.0, 0, 0, Vector2(0.42, 1), 0.0, 0.0, 0, 0, Vector2(0.68, 0.6), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_underwater"]
+resource_local_to_scene = true
+resource_name = "Sunburst Underwater Illustration"
+shader = ExtResource("26_underwater_shader")
+shader_parameter/illustration = ExtResource("25_underwater")
+shader_parameter/shore_mask = ExtResource("27_shore_mask")
+shader_parameter/water_color = Color(0.03, 0.50, 0.56, 1)
+shader_parameter/illustration_strength = 0.48
+shader_parameter/illustration_scale = Vector2(1.418, 0.42)
+shader_parameter/illustration_offset = Vector2(-0.209, 0.29)
+shader_parameter/water_origin = Vector2(-12.26392, -4.454312)
+shader_parameter/water_size = Vector2(24.58556, 10.92316)
+shader_parameter/refraction_strength = 0.16
+shader_parameter/water_motion_time = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_underwater"]
+resource_local_to_scene = true
+size = Vector2(24.58556, 10.92316)
 
 [sub_resource type="Gradient" id="Gradient_dbdus"]
 offsets = PackedFloat32Array(0, 0.73, 1)
@@ -105,12 +197,12 @@ fill_to = Vector2(0.5, 1)
 
 [sub_resource type="Environment" id="Environment_lobby"]
 background_mode = 1
-background_color = Color(0.34, 0.56, 0.42, 1)
+background_color = Color(0.0, 0.43, 0.49, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.62, 0.74, 0.90, 1)
-ambient_light_energy = 0.28
-tonemap_mode = 2
-tonemap_white = 1.35
+ambient_light_color = Color(0.40, 0.74, 0.68, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 0
+tonemap_white = 1.0
 glow_enabled = false
 glow_normalized = true
 glow_intensity = 0.35
@@ -130,40 +222,108 @@ volumetric_fog_density = 0.0
 volumetric_fog_albedo = Color(0.8069303, 0.70817614, 0.30541062, 1)
 volumetric_fog_emission = Color(0.29157785, 0.65763474, 0.8717881, 1)
 adjustment_enabled = true
-adjustment_saturation = 1.06
-adjustment_contrast = 1.02
+adjustment_saturation = 1.0
+adjustment_contrast = 1.0
 adjustment_brightness = 1.0
+
+[sub_resource type="MultiMesh" id="MultiMesh_lobby_flowers"]
+transform_format = 1
+mesh = ExtResource("31_meadow_flower")
+instance_count = 10
+buffer = PackedFloat32Array(0.11938246, 0.057358687, 0.7296257, -5.7552144, 0.04259379, 0.73747122, -0.064944714, 0.044524805, -0.73063633, 0.052364376, 0.11543126, -4.509975, 0.3116153, 0.0058546057, 0.59007866, -3.3613586, -0.015109864, 0.66715893, 0.0013600091, 0.041907094, -0.58991423, -0.013995757, 0.31166733, -5.4847937, -0.19221863, 0.063443989, -0.61530771, -2.2337591, -0.0095391438, 0.64395071, 0.069377325, 0.040624579, 0.61849634, 0.029649093, -0.19015765, -4.8281329, 0.69611306, 0.0020842683, 0.30067398, -0.97446595, -0.038252198, 0.75271065, 0.083342775, 0.043594283, -0.29823808, -0.091678267, 0.69110905, -3.7885608, 0.56591541, -0.023399517, -0.81728483, 1.574111, 0.054895087, 0.99280256, 0.0095864686, 0.051184115, 0.81577483, -0.050575029, 0.56631784, -4.7678837, 0.2617841, -0.033478492, -0.58138376, 3.3295343, 0.040368901, 0.63693555, -0.018500183, 0.041235846, 0.58094599, -0.02917354, 0.26326691, -5.6558748, -0.70985584, 0.016886828, -0.39379923, 5.3400704, -0.027992682, 0.80699365, 0.085064494, 0.04514749, 0.39316588, 0.0879454, -0.70494291, -4.0910584, -0.54412772, 0.036437408, 0.36046052, -4.6011999, 0.069546111, 0.64880323, 0.039397544, 0.041199519, -0.35555986, 0.071141713, -0.54392141, 4.2749441, -0.60526246, -0.075517305, -0.13653597, 0.034060158, -0.067204231, 0.61980295, -0.044894031, 0.041089176, 0.14081379, -0.028792697, -0.60830094, 4.906205, 0.54585969, -0.028882484, -0.25020285, 4.3737408, 0.062565154, 0.59402896, 0.067923942, 0.039368505, 0.2439698, -0.087714666, 0.54238671, 5.1094326)
 
 [node name="LobbyScene" type="Node3D" unique_id=1923355865]
 process_priority = 100
 script = ExtResource("2_lobby_scene")
 flower_glow_range_cap = 0.4
 
+[node name="MeadowFlowers" type="MultiMeshInstance3D" parent="."]
+material_override = ExtResource("32_meadow_flower_material")
+multimesh = SubResource("MultiMesh_lobby_flowers")
+
 [node name="FloatingCats" type="Node3D" parent="." unique_id=1312220681]
 script = ExtResource("24_floating_cats")
 
+[node name="WaterSparkles" type="CPUParticles3D" parent="."]
+process_mode = 3
+cast_shadow = 0
+emitting = false
+amount = 48
+lifetime = 2.2
+preprocess = 2.2
+randomness = 0.85
+lifetime_randomness = 0.45
+mesh = SubResource("PlaneMesh_water_sparkle")
+emission_shape = 4
+direction = Vector3(1, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.0
+initial_velocity_max = 0.0
+scale_amount_min = 0.32
+scale_amount_max = 0.7
+scale_amount_curve = SubResource("Curve_water_sparkle")
+color_ramp = SubResource("Gradient_water_sparkle")
+
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
 process_mode = 4
+environment = SubResource("Environment_lobby")
 transform = Transform3D(1, 0, 0, 0, 0.24022803, 0.9707165, 0, -0.9707165, 0.24022803, 0, 77.27166, 19.13752)
 current = true
 fov = 20.7
 size = 25.321
 near = 10.0
 
+[node name="Sunlight" type="MeshInstance3D" parent="Camera3D"]
+position = Vector3(0, 0, -12)
+cast_shadow = 0
+extra_cull_margin = 16384.0
+ignore_occlusion_culling = true
+material_override = SubResource("ShaderMaterial_sunlight")
+mesh = SubResource("QuadMesh_sunlight")
+
+[node name="SunDust" type="CPUParticles3D" parent="Camera3D"]
+process_mode = 3
+position = Vector3(0, 1.55, -12)
+cast_shadow = 0
+extra_cull_margin = 4.0
+ignore_occlusion_culling = true
+amount = 44
+lifetime = 10.0
+preprocess = 10.0
+randomness = 0.85
+lifetime_randomness = 0.45
+local_coords = true
+mesh = SubResource("QuadMesh_sun_dust")
+emission_shape = 3
+emission_box_extents = Vector3(1.05, 0.7, 0.15)
+direction = Vector3(0.3, -1, 0)
+spread = 45.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.008
+initial_velocity_max = 0.02
+scale_amount_min = 0.35
+scale_amount_max = 0.8
+scale_amount_curve = SubResource("Curve_sun_dust")
+color_ramp = SubResource("Gradient_sun_dust")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)
-light_color = Color(1, 0.98, 0.95, 1)
+light_color = Color(1, 0.96, 0.82, 1)
 light_energy = 1.0
 light_indirect_energy = 0.683
 light_volumetric_fog_energy = 0.0
-light_angular_distance = 0.05
+light_angular_distance = 0.65
 light_specular = 0.0
 shadow_enabled = true
-shadow_bias = 7.936
-shadow_normal_bias = 3.727
+shadow_bias = 0.04
+shadow_normal_bias = 0.6
 shadow_transmittance_bias = 0.69
-shadow_opacity = 0.38
-shadow_blur = 0.043
+shadow_opacity = 0.55
+shadow_blur = 2.0
+directional_shadow_mode = 0
+directional_shadow_max_distance = 110.0
+directional_shadow_fade_start = 0.95
 directional_shadow_split_1 = 0.17
 directional_shadow_split_2 = 0.404
 directional_shadow_split_3 = 0.765
@@ -239,6 +399,7 @@ outline_width = 0.004
 
 [node name="TreeShadowDecor" parent="LevelManager/TileVisuals" unique_id=35423290 instance=ExtResource("5_1uvfp")]
 transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, -6.479742, 0.64867926, -6.3031855)
+visible = false
 
 [node name="TreeDecor4" parent="LevelManager/TileVisuals" unique_id=336948251 instance=ExtResource("2_4tn4g")]
 transform = Transform3D(5.854678, 0.22081338, -1.2938244, 0.668489, 4.588242, 3.8080375, 1.1295415, -3.8599577, 4.452513, -2.9919102, -0.34438372, -7.010687)
@@ -338,6 +499,14 @@ outline_width = 0.005
 
 [node name="TreeDecor32" parent="LevelManager/TileVisuals" unique_id=416442358 instance=ExtResource("2_4tn4g")]
 transform = Transform3D(5.854678, 0.22081338, -1.2938244, 0.668489, 4.588242, 3.8080375, 1.1295415, -3.8599577, 4.452513, 2.5926113, -0.34438372, -14.035808)
+tint_color = Color(0.7441765, 0.87999064, 0.9927868, 1)
+roughness = 0.95
+rim_strength = 0.08
+outline_color = Color(0.3122174, 0.43458626, 0.24556792, 1)
+outline_width = 0.005
+
+[node name="TreeDecorBackRight" parent="LevelManager/TileVisuals" instance=ExtResource("2_4tn4g")]
+transform = Transform3D(5.854678, 0.22081338, -1.2938244, 0.668489, 4.588242, 3.8080375, 1.1295415, -3.8599577, 4.452513, 6.9, -0.34438372, -14.25)
 tint_color = Color(0.7441765, 0.87999064, 0.9927868, 1)
 roughness = 0.95
 rim_strength = 0.08
@@ -724,6 +893,214 @@ rim_strength = 0.0
 outline_color = Color(0.45882353, 0.5372549, 0.27058825, 1)
 outline_width = 0.001
 
+[node name="GrassBreeze01" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-15.38899620, -0.00000237, 12.59783559, -9.56865541, 12.93609173, -11.68867183, -8.19428552, -15.10576748, -10.00980225, -1.06460284, 0.03180781, -7.18002972)
+cast_shadow = false
+
+[node name="GrassBreeze02" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(16.84372433, -0.00000208, -4.40150502, 3.34315348, 11.32392331, 12.79360763, 2.86296669, -13.22320188, 10.95603263, 7.39499317, 0.03181800, -7.32882050)
+cast_shadow = false
+
+[node name="GrassBreeze03" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(14.15546761, -0.00000214, 11.00830220, -8.36132669, 11.66396477, 10.75175046, -7.16037158, -13.62027601, 9.20745039, -4.77438732, 0.03181191, -7.40161885)
+cast_shadow = false
+
+[node name="GrassBreeze04" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-17.74465439, -0.00000213, 2.23567672, -1.69810418, 11.63329237, -13.47790696, -1.45419952, -13.58445915, -11.54204422, -0.54096566, 0.03180478, -6.52482085)
+cast_shadow = false
+
+[node name="GrassBreeze05" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(7.51466043, -0.00000177, 12.79097935, -9.71535520, 9.64949921, 5.70774240, -8.31991708, -11.26793892, 4.88792468, -8.16251689, 0.03179889, -6.42762186)
+cast_shadow = false
+
+[node name="GrassBreeze06" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(12.96976953, -0.00000198, -10.39301676, 7.89399065, 10.81061506, 9.85115456, 6.76015701, -12.62380021, 8.43621159, 6.30194428, 0.03180914, -7.03052115)
+cast_shadow = false
+
+[node name="GrassBreeze07" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-13.74920736, -0.00000191, -8.18895454, 6.21989838, 10.40925673, -10.44317626, 5.32652153, -12.15512499, -8.94319774, -8.61254512, 0.03177799, -4.65782334)
+cast_shadow = false
+
+[node name="GrassBreeze08" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-14.84716216, -0.00000219, 10.81809382, -8.21685702, 11.94902275, -11.27712332, -7.03664913, -13.95314467, -9.65736521, -6.25498862, 0.03177151, -4.45925064)
+cast_shadow = false
+
+[node name="GrassBreeze09" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(16.47089588, -0.00000197, -1.12829540, 0.85699540, 10.73863350, 12.51042702, 0.73390129, -12.53974571, 10.71352554, -7.94984670, 0.03177902, -4.92492456)
+cast_shadow = false
+
+[node name="GrassBreeze10" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-6.38010363, -0.00000203, 15.82490181, -12.01976455, 11.09841855, -4.84599007, -10.29333720, -12.95987486, -4.14995109, 1.61801704, 0.03176316, -3.92241043)
+cast_shadow = false
+
+[node name="GrassBreeze11" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(16.94544746, -0.00000203, 1.27473817, -0.96822261, 11.05334194, 12.87087168, -0.82915648, -12.90723788, 11.02219842, -4.16149363, 0.03177987, -5.10046055)
+cast_shadow = false
+
+[node name="GrassBreeze12" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(18.14301353, -0.00000217, -1.41233884, 1.07274002, 11.83686043, 13.78047971, 0.91865782, -13.82217018, 11.80115765, 6.12552404, 0.03177684, -3.80532828)
+cast_shadow = false
+
+[node name="GrassBreeze13" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(8.69446147, -0.00000232, -17.39651763, 13.21348156, 12.65011915, 6.60385455, 11.31559761, -14.77183082, 5.65532960, -1.76874069, 0.03177228, -4.22640757)
+cast_shadow = false
+
+[node name="GrassBreeze14" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(11.69054477, -0.00000193, -11.20434414, 8.51023218, 10.53262571, 8.87952257, 7.28788649, -12.29918575, 7.60413745, -7.13364598, 0.03180525, -6.90369180)
+cast_shadow = false
+
+[node name="GrassBreeze15" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(15.49266827, -0.00000220, 9.96085094, -7.56573763, 11.98035193, 11.76741773, -6.47905497, -13.98972846, 10.07723513, -1.89075562, 0.03181308, -7.48977663)
+cast_shadow = false
+
+[node name="GrassBreeze16" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(14.15951113, -0.00000210, 10.44322154, -7.93212111, 11.44412131, 10.75482166, -6.79281379, -13.36355981, 9.21008052, -8.88040593, 0.03179580, -6.04076315)
+cast_shadow = false
+
+[node name="GrassBreeze17" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-13.54997817, -0.00000238, -14.62196945, 11.10607853, 12.96675378, -10.29185282, 9.51088828, -15.14157226, -8.81360850, 6.34088931, 0.03178325, -4.34293721)
+cast_shadow = false
+
+[node name="GrassBreeze18" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(13.63192914, -0.00000222, -12.68537053, 9.63514219, 12.11217839, 10.35409600, 8.25122285, -14.14366520, 8.86691465, 0.90943370, 0.03181372, -7.27536876)
+cast_shadow = false
+
+[node name="GrassBreeze19" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(13.93152770, -0.00000201, 9.43675552, -7.16766242, 10.94499776, 10.58165733, -6.13815605, -12.78072194, 9.06178830, -5.92320811, 0.03178754, -5.57867603)
+cast_shadow = false
+
+[node name="GrassBreeze20" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-18.10154714, -0.00000233, 7.40301324, -5.62294154, 12.72079456, -13.74898348, -4.81530336, -14.85436010, -11.77418597, 1.46667172, 0.03181589, -7.47898128)
+cast_shadow = false
+
+[node name="GrassBreeze21" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-12.39440000, -0.00000194, -10.56868044, 8.02741326, 10.59494457, -9.41413599, 6.87441871, -12.37195689, -8.06196063, 5.64534092, 0.03180414, -6.81479202)
+cast_shadow = false
+
+[node name="GrassBreeze22" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-16.21308087, -0.00000231, 10.54572121, -8.00997722, 12.58042338, -12.31460344, -6.85948380, -14.69044549, -10.54582962, -6.05083573, 0.03180318, -6.74886815)
+cast_shadow = false
+
+[node name="GrassBreeze23" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(0.44679395, -0.00000216, -18.13135562, 13.77162514, 11.79715531, 0.33935957, 11.79357467, -13.77580562, 0.29061863, -2.08516286, 0.03176778, -3.80572654)
+cast_shadow = false
+
+[node name="GrassBreeze24" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-15.89537072, -0.00000203, -6.09419539, 4.62882919, 11.07301562, -12.07328900, 3.96398154, -12.93021129, -10.33917384, -1.43430464, 0.03179731, -5.98900488)
+cast_shadow = false
+
+[node name="GrassBreeze25" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(9.17984388, -0.00000227, -16.65743654, 12.65211444, 12.37124207, 6.97252560, 10.83486089, -14.44617974, 5.97104749, 4.79864309, 0.03177146, -4.01196070)
+cast_shadow = false
+
+[node name="GrassBreeze26" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-1.82556691, -0.00000215, -17.97371169, 13.65188689, 11.75118417, -1.38660633, 11.69103496, -13.72212408, -1.18744281, 5.45538701, 0.03178217, -4.74480784)
+cast_shadow = false
+
+[node name="GrassBreeze27" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-14.25671673, -0.00000172, 2.43925500, -1.85273123, 9.40806109, -10.82865275, -1.58661753, -10.98600615, -9.27330855, -8.56144598, 0.03180596, -6.95652490)
+cast_shadow = false
+
+[node name="GrassBreeze28" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-14.08285892, -0.00000190, 7.47703589, -5.67916489, 10.37125105, -10.69659904, -4.86345168, -12.11074490, -9.16022259, -4.66355609, 0.03177952, -5.20043924)
+cast_shadow = false
+
+[node name="GrassBreeze29" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(12.09270214, -0.00000221, -14.00961236, 10.64096657, 12.03780189, 9.18497992, 9.11257852, -14.05681408, 7.86572157, 8.74393240, 0.03182089, -5.86243367)
+cast_shadow = false
+
+[node name="GrassBreeze30" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-8.11607994, -0.00000218, 16.39237751, -12.45078943, 11.89777376, -6.16454642, -10.66245278, -13.89330006, -5.27912020, 8.76459709, 0.03182178, -5.05864805)
+cast_shadow = false
+
+[node name="GrassBreeze31" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-12.56570660, -0.00000172, 7.03406027, -5.34270375, 9.36684616, -9.54424989, -4.57531740, -10.93787855, -8.17338797, 3.19656461, 0.03192404, 7.64976575)
+cast_shadow = false
+
+[node name="GrassBreeze32" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-5.13052726, -0.00000194, -15.40461695, 11.70053721, 10.56107469, -3.89688034, 10.01996253, -12.33240627, -3.33716064, 5.34745095, 0.03192419, 8.57373808)
+cast_shadow = false
+
+[node name="GrassBreeze33" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(13.23255303, -0.00000176, 6.52818158, -4.95846254, 9.59758541, 10.05075263, -4.24626858, -11.20731800, 8.60713900, 4.38078223, 0.03192423, 8.77187410)
+cast_shadow = false
+
+[node name="GrassBreeze34" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-19.66098663, -0.00000235, -0.78494949, 0.59620461, 12.79871461, -14.93345252, 0.51057260, -14.94534911, -12.78852605, 1.41959400, 0.03192381, 6.22640790)
+cast_shadow = false
+
+[node name="GrassBreeze35" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(20.28823851, -0.00000245, -3.39240252, 2.57669255, 13.37973467, 15.40987972, 2.20659392, -15.62381940, 13.19652338, 3.79066029, 0.03192358, 4.83133833)
+cast_shadow = false
+
+[node name="GrassBreeze36" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-3.56194149, -0.00000243, 20.05477472, -15.23255352, 13.24881981, -2.70546180, -13.04466617, -15.47094715, -2.31687233, -0.17804448, 0.03192397, 7.20514189)
+cast_shadow = false
+
+[node name="GrassBreeze37" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-10.31894842, -0.00000238, -17.10111057, 12.98910416, 12.99160573, -7.83773261, 11.12345021, -15.17059244, -6.71197897, -3.33916288, 0.03192366, 5.27582901)
+cast_shadow = false
+
+[node name="GrassBreeze38" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(11.06062406, -0.00000214, 14.12777368, -10.73071361, 11.67069898, 8.40107019, -9.18943762, -13.62813969, 7.19440341, -3.09949359, 0.03192391, 6.85631358)
+cast_shadow = false
+
+[node name="GrassBreeze39" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(7.77138449, -0.00000227, -17.35096184, 13.17887969, 12.36629190, 5.90273378, 11.28596579, -14.44039931, 5.05491243, 3.95792956, 0.03192388, 6.62363468)
+cast_shadow = false
+
+[node name="GrassBreeze40" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-10.79593978, -0.00000208, 13.74549900, -10.44035983, 11.36879549, -8.20002739, -8.94078553, -13.27560014, -7.02224002, 6.53374207, 0.03192401, 7.46626424)
+cast_shadow = false
+
+[node name="GrassBreeze41" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(0.62780525, -0.00000230, 19.30388516, -14.66221688, 12.56288782, 0.47684963, -12.55624878, -14.66996883, 0.40835642, 4.62045970, 0.03192404, 7.60700067)
+cast_shadow = false
+
+[node name="GrassBreeze42" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-4.25076330, -0.00000227, 18.59374412, -14.12283150, 12.40635907, -3.22865479, -12.09433601, -14.48718666, -2.76491774, 7.28316130, 0.03192386, 6.52720453)
+cast_shadow = false
+
+[node name="GrassBreeze43" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(2.37427373, -0.00000189, 15.70701234, -11.93022111, 10.33271927, 1.80337500, -10.21665609, -12.06575047, 1.54435029, -8.73641394, 0.03192374, 5.78239502)
+cast_shadow = false
+
+[node name="GrassBreeze44" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-15.61330876, -0.00000211, -8.30958494, 6.31152272, 11.50444467, -11.85904976, 5.40498587, -13.43400077, -10.15570603, -4.79257447, 0.03192375, 5.87359806)
+cast_shadow = false
+
+[node name="GrassBreeze45" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(12.66836138, -0.00000186, -9.16275018, 6.95954477, 10.16961085, 9.62222088, 5.95992780, -11.87528507, 8.24016005, -4.64241814, 0.03192394, 7.03977413)
+cast_shadow = false
+
+[node name="GrassBreeze46" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-0.31630497, -0.00000222, -18.66052938, 14.17355766, 12.13952081, -0.24025032, 12.13777677, -14.17559357, -0.20574049, -0.77940163, 0.03192419, 8.52997206)
+cast_shadow = false
+
+[node name="GrassBreeze47" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-4.52706294, -0.00000232, -18.91987168, 14.37054007, 12.65385373, -3.43852087, 12.30646662, -14.77619178, -2.94463600, -4.38282206, 0.03192381, 6.23963059)
+cast_shadow = false
+
+[node name="GrassBreeze48" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(7.07359922, -0.00000181, -13.45578364, 10.22030692, 9.88802285, 5.37273310, 8.75233976, -11.54646838, 4.60103653, 6.16258795, 0.03192416, 8.38430561)
+cast_shadow = false
+
+[node name="GrassBreeze49" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(-5.30968068, -0.00000208, -16.59519304, 12.60483624, 11.33342514, -4.03295597, 10.79437502, -13.23429738, -3.45369128, -1.10686372, 0.03192388, 6.64400637)
+cast_shadow = false
+
+[node name="GrassBreeze50" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(12.61182216, -0.00000248, -16.49642213, 12.52981666, 13.50670900, 9.57927599, 10.73012864, -15.77209021, 8.20338426, 0.53022096, 0.03192372, 5.65623293)
+cast_shadow = false
+
+[node name="GrassBreeze51" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(3.02389078, -0.00000216, -17.90722693, 13.60138900, 11.81269211, 2.29678694, 11.64778964, -13.79394829, 1.96689615, -8.14448371, 0.03192360, 4.90726824)
+cast_shadow = false
+
+[node name="GrassBreeze52" parent="LevelManager/TileVisuals" instance=ExtResource("9_onm0k")]
+transform = Transform3D(4.78882431, -0.00000178, 14.11630723, -10.72200487, 9.69594471, 3.63734062, -9.18197901, -11.32217438, 3.11489935, -6.60580027, 0.03192376, 5.90549708)
+cast_shadow = false
+
 [node name="ObstacleVisuals" type="Node3D" parent="LevelManager" unique_id=1279314469]
 
 [node name="HoleVisuals" type="Node3D" parent="LevelManager" unique_id=1074621782]
@@ -851,9 +1228,9 @@ texture = SubResource("GradientTexture2D_06unt")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 height_ratio = 0.18
-density = 0.28
+density = 0.12
 fade_start = 0.73
-fog_color = Color(0.07338134, 0.24427584, 0.58293784, 1)
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog5" type="TextureRect" parent="CanvasLayer" unique_id=896030614]
 anchors_preset = -1
@@ -871,9 +1248,9 @@ texture = SubResource("GradientTexture2D_38fwc")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 height_ratio = 0.25
-density = 0.28
+density = 0.12
 fade_start = 0.58
-fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog6" type="TextureRect" parent="CanvasLayer" unique_id=819386610]
 anchors_preset = -1
@@ -891,9 +1268,9 @@ texture = SubResource("GradientTexture2D_ethtu")
 expand_mode = 1
 script = ExtResource("18_dr74i")
 height_ratio = 0.25
-density = 0.28
+density = 0.12
 fade_start = 0.58
-fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog2" type="TextureRect" parent="CanvasLayer" unique_id=393871392]
 anchors_preset = -1
@@ -910,8 +1287,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_ouubi")
 expand_mode = 1
 script = ExtResource("18_dr74i")
-density = 0.28
-fog_color = Color(0.76167256, 0.6007306, 0.21869814, 1)
+density = 0.10
+fog_color = Color(0.45, 0.73, 0.45, 1)
 
 [node name="TopFog3" type="TextureRect" parent="CanvasLayer" unique_id=1214358096]
 anchors_preset = -1
@@ -928,8 +1305,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_1uvfp")
 expand_mode = 1
 script = ExtResource("18_dr74i")
-density = 0.28
-fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
+density = 0.10
+fog_color = Color(0.05, 0.51, 0.48, 1)
 
 [node name="TopFog4" type="TextureRect" parent="CanvasLayer" unique_id=2115787559]
 anchors_preset = -1
@@ -946,8 +1323,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_tf6sc")
 expand_mode = 1
 script = ExtResource("18_dr74i")
-density = 0.28
-fog_color = Color(0.30494362, 0.16241252, 0.5875979, 1)
+density = 0.10
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog7" type="TextureRect" parent="CanvasLayer" unique_id=2015031252]
 anchors_preset = -1
@@ -964,8 +1341,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_rg4kk")
 expand_mode = 1
 script = ExtResource("18_dr74i")
-density = 0.28
-fog_color = Color(0.5186065, 0.39951208, 0.16007605, 1)
+density = 0.10
+fog_color = Color(0.45, 0.73, 0.45, 1)
 
 [node name="BottomFog" type="TextureRect" parent="CanvasLayer" unique_id=2102111729]
 visible = false
@@ -997,11 +1374,17 @@ offset_bottom = 648.0
 [node name="LobbyWorldEnvironment" type="WorldEnvironment" parent="." unique_id=1363010940]
 environment = SubResource("Environment_lobby")
 
+[node name="UnderwaterIllustration" type="MeshInstance3D" parent="."]
+position = Vector3(0.02885437, -3.823924, 1.0072665)
+cast_shadow = 0
+material_override = SubResource("ShaderMaterial_underwater")
+mesh = SubResource("PlaneMesh_underwater")
+
 [node name="LobbyGround" parent="." unique_id=755407211 instance=ExtResource("3_lobby_ground")]
 transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0.02885437, 0.0069229603, 1.0072665)
 
 [node name="Water" parent="LobbyGround" unique_id=2138602713 instance=ExtResource("20_water")]
-transform = Transform3D(0.9999995, 0, 0, 0, 0.9999995, 0, 0, 0, 0.9999995, 0, -0.055519108, 0)
+transform = Transform3D(0.9999995, 0, 0, 0, 0.9999995, 0, 0, 0, 0.9999995, 0, -0.050519108, 0)
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=198053193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.105163574, -8.356716, -0.08203125)

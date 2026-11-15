@@ -8,6 +8,11 @@ extends Node3D
 
 const GRASS_MATERIAL_PATH := "res://resources/grass_material.tres"
 
+@export var surface_material: Material:
+	set(value):
+		surface_material = value
+		_apply_material_style()
+
 @export_group("Model")
 @export_range(0.01, 20.0, 0.01) var model_scale := 1.0:
 	set(value):
@@ -124,6 +129,7 @@ func _apply_material_style() -> void:
 func _apply_material_recursive(node: Node) -> void:
 	if node is MeshInstance3D:
 		var mesh_instance := node as MeshInstance3D
+		mesh_instance.material_override = surface_material
 		if mesh_instance.mesh != null:
 			for surface_index in mesh_instance.mesh.get_surface_count():
 				mesh_instance.set_surface_override_material(surface_index, _grass_material)

@@ -1,0 +1,58 @@
+--- a/web/ui/popup-manager.js
++++ b/web/ui/popup-manager.js
+@@ -63,7 +63,10 @@
+       const root = document.getElementById(this._sceneId);
+       if (!root) throw new Error(`PopupManager: 팝업 루트(#${this._sceneId})를 찾지 못했습니다.`);
+       root.parentElement.style.zIndex = String(Z_POPUP); // .sr-fit 을 백드롭 위로
+-      root.style.background = 'transparent';              // contract 내장 딤 제거(백드롭으로 대체)
++      // Keep published image backgrounds, including the shop used as a popup.
++      if (!contract.background?.type?.startsWith('image-')) {
++        root.style.background = 'transparent'; // Solid popup dim uses the separate backdrop.
++      }
+       root.style.transition = 'none';                     // 내장 opacity transition 과 충돌 방지
+       root.style.transformOrigin = 'center center';
+ 
+--- a/.ui-editor/scenes/pop_Settings.scene.json
++++ b/.ui-editor/scenes/pop_Settings.scene.json
+@@ -6,7 +6,7 @@
+   "bgColor": "#16213e",
+   "bgColor2": "#0e4a8c",
+   "bgGradientAngle": 180,
+-  "bgImagePath": "common_bg_pt_2.png",
++  "bgImagePath": "common_bg_pt_3.png",
+   "bgTileSize": 86,
+   "bgTilePad": 0,
+   "bgImageAlpha": 100,
+--- a/web/ui/pop_Settings.contract.json
++++ b/web/ui/pop_Settings.contract.json
+@@ -16,7 +16,7 @@
+     "color": "#16213e",
+     "color2": "#0e4a8c",
+     "gradientAngle": 180,
+-    "imagePath": "common_bg_pt_2.png",
++    "imagePath": "common_bg_pt_3.png",
+     "imagePaths": [],
+     "tileSize": 86,
+     "tilePad": 0,
+--- a/godot-shell.html
++++ b/godot-shell.html
+@@ -26,7 +26,7 @@
+ </head>
+ <body>
+ <script type="importmap">
+-{"imports":{"./ui/scene-renderer.js":"./ui/scene-renderer.js?v=ui-bitmap-decode-20261115-1"}}
++{"imports":{"./ui/scene-renderer.js":"./ui/scene-renderer.js?v=ui-bitmap-decode-20261115-1","./ui/popup-manager.js":"./ui/popup-manager.js?v=popup-background-20261115-1"}}
+ </script>
+ <script type="module">
+ const UI_DIR = './ui/';
+--- a/web/index.html
++++ b/web/index.html
+@@ -28,7 +28,7 @@
+ </head>
+ <body>
+ <script type="importmap">
+-{"imports":{"./ui/scene-renderer.js":"./ui/scene-renderer.js?v=ui-bitmap-decode-20261115-1"}}
++{"imports":{"./ui/scene-renderer.js":"./ui/scene-renderer.js?v=ui-bitmap-decode-20261115-1","./ui/popup-manager.js":"./ui/popup-manager.js?v=popup-background-20261115-1"}}
+ </script>
+ <script type="module">
+ const UI_DIR = './ui/';

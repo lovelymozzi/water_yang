@@ -52,10 +52,35 @@ func _run_checks() -> void:
 	)
 	_main._on_host_start()
 	_expect(not _main._stage_timer_running, "첫 터치 전 타이머가 시작됐다")
+	var drag_controller: Node = _main.get_node("DragController")
+	drag_controller._unhandled_input(InputEventMouseMotion.new())
+	drag_controller._unhandled_input(InputEventKey.new())
 	var first_touch := InputEventScreenTouch.new()
+	drag_controller._unhandled_input(first_touch)
+	_expect(not _main._stage_timer_running, "이동·키보드·터치 해제가 타이머를 시작했다")
 	first_touch.pressed = true
-	(_main.get_node("DragController") as Node)._unhandled_input(first_touch)
-	_expect(not _main._stage_timer_running, "빈 곳 터치가 타이머를 시작했다")
+	drag_controller._unhandled_input(first_touch)
+	var first_touch_time: float = _main._stage_time_left
+	_main._process(0.125)
+	_expect(_main._stage_timer_running and _main._stage_time_left < first_touch_time,
+		"빈 곳을 한 번 터치해도 타이머가 시작되지 않는다")
+	for input_kind in ["mouse", "hud", "hidden", "paused"]:
+		_main._stage_timer_running = false
+		_main._stage_timer_waiting_for_touch = true
+		_main.visible = input_kind != "hidden"
+		get_tree().paused = input_kind == "paused"
+		if input_kind == "mouse":
+			var mouse_press := InputEventMouseButton.new()
+			mouse_press.button_index = MOUSE_BUTTON_LEFT
+			mouse_press.pressed = true
+			drag_controller._unhandled_input(mouse_press)
+		else:
+			_main._on_host_message("stage_touch", {})
+		_expect(_main._stage_timer_running == (input_kind == "mouse" or input_kind == "hud"),
+			"첫 터치 처리 상태가 다르다: " + input_kind)
+		get_tree().paused = false
+		_main.show()
+	_main._on_host_message("stage_touch", {})
 	var manager: LevelManager = _main.level_manager
 	var camera: Camera3D = _main.get_viewport().get_camera_3d()
 	_expect(not manager.get_cats().is_empty() and camera != null, "타이머 입력 검사용 고양이 또는 카메라가 없다")
@@ -66,6 +91,64 @@ func _run_checks() -> void:
 		)
 		(_main.get_node("DragController") as Node)._unhandled_input(first_touch)
 		_expect(_main._stage_timer_running, "첫 보드 조작 뒤 타이머가 시작되지 않았다")
+	_main._on_host_force_quit("")
+	# 시간 초과 뒤 20초를 받는 Retry도 추가 터치 없이 재개되어야 한다.
+	_main._stage_timer_stop_until_msec = Time.get_ticks_msec() + 10000
+	_main._on_host_message("continue_stage", {"timeLimitSeconds": 20})
+	_expect(is_equal_approx(_main._stage_time_left, 20.0) and not _main._stage_timer_running,
+		"20초 Retry의 준비 상태 또는 지급 시간이 다르다")
+	UiBridge.host_resume.emit()
+	for tick in 40:
+		_main._process(0.125)
+	print("[20초 Retry] 추가 입력 없이 5초 후 남은 시간: %.3f" % _main._stage_time_left)
+	_expect(not _main._stage_timer_waiting_for_touch and _main._stage_timer_running
+		and is_equal_approx(_main._stage_time_left, 15.0), "20초 Retry가 터치 없이 카운트다운하지 않는다")
+	_expect(_main._stage_timer_stop_until_msec == 0, "20초 Retry에 이전 시간정지가 남았다")
+	_main._on_host_force_quit("")
+	# Retry skips first-touch waiting; initialization still waits for host start/resume.
+	var initial_paths: PackedStringArray = _main._stage_paths
+	_main._stage_paths = PackedStringArray()
+	_main._stage_timer_stop_until_msec = Time.get_ticks_msec() + 10000
+	_main._on_host_initialize({"stage": 1, "config": {"startTimerImmediately": true}})
+	_expect(not _main._stage_timer_running, "Retry 초기화 중 호스트 시작 전에 타이머가 돌았다")
+	_expect(not _main._stage_timer_waiting_for_touch, "Retry가 첫 터치를 다시 기다린다")
+	_expect(_main._stage_timer_stop_until_msec == 0, "Retry에 이전 시간정지 효과가 남았다")
+	_main._on_host_start()
+	var retry_time: float = _main._stage_time_left
+	_main._process(0.125)
+	_expect(_main._stage_timer_running and _main._stage_time_left < retry_time,
+		"Retry 후 입력 없이 타이머가 감소하지 않는다")
+	UiBridge.host_pause.emit("settings")
+	var paused_time: float = _main._stage_time_left
+	_main._process(0.125)
+	_expect(is_equal_approx(_main._stage_time_left, paused_time), "설정창에서 Retry 타이머가 멈추지 않는다")
+	UiBridge.host_resume.emit()
+	_main._process(0.125)
+	_expect(_main._stage_time_left < paused_time, "설정창을 닫은 뒤 Retry 타이머가 재개되지 않는다")
+	_main._on_host_force_quit("")
+	_main._on_host_initialize({"stage": 1, "config": {"startTimerImmediately": true}})
+	UiBridge.host_resume.emit()
+	_expect(_main._stage_timer_running, "일시정지된 세션의 Retry에서 타이머가 재개되지 않는다")
+	_main._on_host_force_quit("")
+	_main._on_host_initialize({"stage": 2, "config": {}})
+	_main._on_host_start()
+	UiBridge.host_pause.emit("settings")
+	UiBridge.host_resume.emit()
+	var untouched_time: float = _main._stage_time_left
+	_main._process(0.125)
+	_expect(_main._stage_timer_waiting_for_touch and not _main._stage_timer_running
+		and is_equal_approx(_main._stage_time_left, untouched_time), "새 스테이지의 첫 조작 대기가 사라졌다")
+	_main._on_host_force_quit("")
+	_main._stage_paths = initial_paths
+	# 실제 지연 보드 재로드까지 거쳐도 Retry의 즉시 시작 정책을 유지해야 한다.
+	_main._on_host_initialize({"stage": 1, "config": {"startTimerImmediately": true}})
+	UiBridge.host_resume.emit()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var reloaded_time: float = _main._stage_time_left
+	_main._process(0.125)
+	_expect(_main._stage_timer_running and not _main._stage_timer_waiting_for_touch
+		and _main._stage_time_left < reloaded_time, "보드 재로드 후 Retry가 첫 터치를 다시 기다린다")
 	_main._on_host_force_quit("")
 	var paths: PackedStringArray = _main._list_stage_files()
 	_expect(paths.size() == 237, "스테이지 파일 수가 237개가 아니다: %d" % paths.size())
@@ -106,10 +189,21 @@ func _run_checks() -> void:
 		"스테이지 라벨이 보이지 않는다"
 	)
 	_expect(is_equal_approx(_main._stage_time_left, 60.0), "쉬움 스테이지의 제한 시간이 1분이 아니다")
-	_main._load_stage(1)
-	_expect(is_equal_approx(_main._stage_time_left, 150.0), "중간 스테이지의 제한 시간이 2분 30초가 아니다")
-	_main._load_stage(235)
-	_expect(is_equal_approx(_main._stage_time_left, 300.0), "어려움 스테이지의 제한 시간이 5분이 아니다")
+	# 맵 순번 대신 실제 난이도로 중간/어려움 검사 대상을 고른다.
+	var timer_stages := {150.0: -1, 300.0: -1}
+	for index in paths.size():
+		var stage: Dictionary = LevelLayoutWriter.load_json(paths[index])
+		var score: int = int(stage.get("stats", {}).get("difficulty_score", 0))
+		if score > 35 and score <= 70 and timer_stages[150.0] == -1:
+			timer_stages[150.0] = index
+		if score > 70 and timer_stages[300.0] == -1:
+			timer_stages[300.0] = index
+	for seconds in timer_stages:
+		var index: int = timer_stages[seconds]
+		_expect(index >= 0, "%d초 제한 시간 검사용 스테이지가 없다" % seconds)
+		if index >= 0:
+			_main._load_stage(index)
+			_expect(is_equal_approx(_main._stage_time_left, seconds), "%d초 제한 시간이 다르다" % seconds)
 
 
 func _expect(condition: bool, message: String) -> void:

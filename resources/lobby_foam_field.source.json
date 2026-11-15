@@ -1,0 +1,53 @@
+{
+  "source": "https://kr.pinterest.com/pin/918312180285979398/",
+  "source_video": "https://v1.pinimg.com/videos/iht/expMp4/3a/1c/ee/3a1cee887beae31aeed5a13ccc1d60d8_720w.mp4",
+  "source_video_sha256": "32572d1dcaebf270aa652afadd90ae139ef467037c7e950bebb7a8af459ceab8",
+  "frames": 60,
+  "sample_fps": 30,
+  "period_seconds": 2,
+  "atlas_grid": [
+    6,
+    10
+  ],
+  "tile_pixels": [
+    512,
+    128
+  ],
+  "polar_radius_range": [
+    0.98,
+    1.82
+  ],
+  "circle_fit_mean": [
+    406.6230205258626,
+    627.4572138195289,
+    131.55306699269667,
+    0.4492789084830896
+  ],
+  "circle_fit_range": [
+    0.680197730170562,
+    0.6942741733762432,
+    0.4680476761091654,
+    0.23108734316444668
+  ],
+  "fit_columns": [
+    "center_x",
+    "center_y",
+    "radius",
+    "median_residual_pixels"
+  ],
+  "method": "Whole polar field, no connected-component filtering or separate fragment scaling. Strictly monotone angular transport anchored at the head and tail on both sides.",
+  "matte": "Exclude source pixel x<320 and y>660 (the second frog).",
+  "distance_encoding": "128 + signed (chamfer boundary distance + 0.5) * 15. Decode at 128.",
+  "profile_encoding": "RG: unsigned 16-bit inverse source angle; B: measured contact thickness / 0.16 reference radius.",
+  "decoded_mask_error_pixels": 0,
+  "minimum_angular_map_step": 0.0008138020833332593,
+  "contact_width_radius_quantiles": [
+    0.0,
+    0.0,
+    0.04629921259842518,
+    0.0859842519685039,
+    0.11244094488188972,
+    0.14551181102362198
+  ],
+  "limits": "Mask threshold and the long-body angular transport are approximations; this is not source shader code or a fluid solver."
+}

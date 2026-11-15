@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://resources/terrain/jam3d/wall1_lobby.png" id="1_wall"]
+
+[resource]
+resource_name = "Jam3D terrain wall atlas"
+albedo_color = Color(1, 0.92, 1, 1)
+albedo_texture = ExtResource("1_wall")
+roughness = 0.9
+texture_filter = 5

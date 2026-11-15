@@ -16,6 +16,8 @@
 [ext_resource type="Script" uid="uid://bbv43e8mewbn4" path="res://scripts/hole_marker.gd" id="5_hole"]
 [ext_resource type="Script" uid="uid://c3ml5skocqjq0" path="res://scripts/map_generator_tool.gd" id="6_gen"]
 [ext_resource type="Script" path="res://scripts/top_fog.gd" id="6_top_fog"]
+[ext_resource type="MeshLibrary" path="res://resources/terrain/jam3d/terrain_library.tres" id="7_terrain"]
+[ext_resource type="PackedScene" path="res://scenes/terrain_floor_tile.tscn" id="8_terrain_floor"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_ice_dissolve"]
 noise_type = 2
@@ -196,13 +198,13 @@ shader_parameter/strength = 0.0
 
 [sub_resource type="Environment" id="Environment_gameplay"]
 background_mode = 1
-background_color = Color(0.4, 0.48, 0.42, 1)
+background_color = Color(0.0, 0.43, 0.49, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.62, 0.74, 0.90, 1)
-ambient_light_energy = 0.28
-tonemap_mode = 2
+ambient_light_color = Color(0.40, 0.74, 0.68, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 0
 tonemap_exposure = 1.0
-tonemap_white = 1.35
+tonemap_white = 1.0
 glow_enabled = false
 glow_normalized = true
 glow_hdr_threshold = 0.65
@@ -211,8 +213,8 @@ glow_intensity = 0.35
 glow_strength = 0.25
 glow_bloom = 0.0
 adjustment_enabled = true
-adjustment_saturation = 1.06
-adjustment_contrast = 1.02
+adjustment_saturation = 1.0
+adjustment_contrast = 1.0
 adjustment_brightness = 1.0
 
 [node name="MainScene" type="Node3D" unique_id=1040827005]
@@ -224,6 +226,7 @@ environment = SubResource("Environment_gameplay")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983525109]
 process_mode = 4
+environment = SubResource("Environment_gameplay")
 transform = Transform3D(1, 0, 0, 0, 0.24022803, 0.9707165, 0, -0.9707165, 0.24022803, 0, 77.27166, 19.13752)
 current = true
 fov = 23.0
@@ -259,18 +262,21 @@ draw_pass_1 = SubResource("QuadMesh_ice_dissolve_snow")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2071165799]
 transform = Transform3D(0.99886847, 0.004369249, 0.0473581, -0.04755118, 0.073427066, 0.99616635, 0.0008751323, -0.997291, 0.07355173, 0, 3.2760153, 0)
-light_color = Color(1, 0.98, 0.95, 1)
+light_color = Color(1, 0.96, 0.82, 1)
 light_energy = 1.0
-light_indirect_energy = 0.3
+light_indirect_energy = 0.683
 light_volumetric_fog_energy = 0.0
-light_angular_distance = 0.05
+light_angular_distance = 0.65
 light_specular = 0.0
 shadow_enabled = true
-shadow_bias = 7.936
-shadow_normal_bias = 3.727
+shadow_bias = 0.04
+shadow_normal_bias = 0.6
 shadow_transmittance_bias = 0.69
-shadow_opacity = 0.38
-shadow_blur = 0.043
+shadow_opacity = 0.55
+shadow_blur = 2.0
+directional_shadow_mode = 0
+directional_shadow_max_distance = 110.0
+directional_shadow_fade_start = 0.95
 directional_shadow_split_1 = 0.17
 directional_shadow_split_2 = 0.404
 directional_shadow_split_3 = 0.765
@@ -278,11 +284,13 @@ directional_shadow_pancake_size = 25.0
 
 [node name="LevelManager" type="Node3D" parent="." unique_id=1305581177]
 script = ExtResource("2_5srec")
+terrain_library = ExtResource("7_terrain")
+floor_tile_scene = ExtResource("8_terrain_floor")
 board_texture_tiling = Vector2(2, 2)
 cat_world_y = 0.68
 obstacles_enabled = true
 obstacle_fbx_height = 0.5
-board_visuals_color = Color(0.67, 0.67, 0.67, 1)
+board_visuals_color = Color(0.75, 0.82, 0.79, 1)
 tile_primary_color = Color(0.43130937, 0.57282066, 0.2760929, 1)
 tile_secondary_color = Color(0.4151132, 0.55480856, 0.31393868, 1)
 pair_colors = PackedColorArray(0.9529412, 0.61960787, 0.41960788, 1, 0.43529412, 0.6627451, 0.9098039, 1, 0.48706055, 0.7421875, 0.49617225, 1, 0.9098039, 0.53333336, 0.6627451, 1, 0.78039217, 0.58431375, 0.9098039, 1, 0.9490196, 0.7882353, 0.29803923, 1, 0.3647059, 0.78431374, 0.7607843, 1, 0.9411765, 0.54509807, 0.35686275, 1, 0.62352943, 0.79607844, 0.3529412, 1, 0.37600708, 0.5041411, 0.8671875, 1, 0.9137255, 0.4745098, 0.79607844, 1, 0.39215687, 0.7254902, 0.89411765, 1, 0.9098039, 0.74938726, 0.6431373, 1, 0.7137255, 0.6313726, 0.42745098, 1, 0.2922516, 0.69921875, 0.50309, 1, 0.8666667, 0.4509804, 0.4509804, 1, 0.59887075, 0.47547913, 0.86328125, 1, 0.8392157, 0.72156864, 0.35686275, 1, 0.335083, 0.71484375, 0.6673737, 1, 0.640625, 0.46295166, 0.5001391, 1)
@@ -406,6 +414,7 @@ outline_width = 0.004
 
 [node name="TreeShadowDecor" parent="LevelManager/TileVisuals" unique_id=35423290 instance=ExtResource("3_c1pb6")]
 transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, -6.479742, 1.0393701, -10.698379)
+visible = false
 
 [node name="TreeDecor4" parent="LevelManager/TileVisuals" unique_id=336948251 instance=ExtResource("3_rt2n2")]
 transform = Transform3D(5.854678, 0.22081338, -1.2938244, 0.668489, 4.588242, 3.8080375, 1.1295415, -3.8599577, 4.452513, -2.9919102, -0.34438372, -11.40588)
@@ -909,13 +918,11 @@ fbx_scale_per_tile = 7.5
 tint_from_pair_color = true
 key_local_position = Vector3(0.14, 0, 0.1)
 tint_color = Color(0.95577335, 0.8633, 0.97, 1)
-rim_strength = 0.24
 outline_color = Color(0.69, 0.565225, 0.4761, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 cat_hole_outline_width = 0.001
 line_art_texture = ExtResource("4_gubc5")
-line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 
 [node name="Cat_C1" type="Node3D" parent="LevelManager/LayoutCats" unique_id=1587945065]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.68, -2)
@@ -927,12 +934,10 @@ fbx_scale_per_tile = 7.5
 color_id = 1
 tint_from_pair_color = true
 key_material_override = null
-rim_strength = 0.24
 outline_color = Color(0.387, 0.518, 0.686, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
-line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 
 [node name="Cat_C2" type="Node3D" parent="LevelManager/LayoutCats" unique_id=747906881]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.68, 0)
@@ -943,12 +948,10 @@ fbx_scale_per_tile = 7.5
 color_id = 2
 tint_from_pair_color = true
 key_material_override = null
-rim_strength = 0.24
 outline_color = Color(0.423, 0.606, 0.409, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
-line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 
 [node name="Cat_C3" type="Node3D" parent="LevelManager/LayoutCats" unique_id=485963275]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.68, 0)
@@ -959,12 +962,10 @@ fbx_scale_per_tile = 7.5
 color_id = 3
 tint_from_pair_color = true
 key_material_override = null
-rim_strength = 0.24
 outline_color = Color(0.672, 0.438, 0.54, 0.6627451)
 outline_width = 0.006
 bottom_outline_scale = 0.8400000000000001
 line_art_texture = ExtResource("4_gubc5")
-line_art_color = Color(0.2679695, 0.19882667, 0.1625919, 1)
 
 [node name="LayoutObstacles" type="Node3D" parent="LevelManager" unique_id=845746606]
 
@@ -1016,9 +1017,9 @@ texture = SubResource("GradientTexture2D_6u1mn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
-density = 0.28
+density = 0.12
 fade_start = 0.58
-fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog5" type="TextureRect" parent="CanvasLayer" unique_id=896030614]
 anchors_preset = -1
@@ -1036,9 +1037,9 @@ texture = SubResource("GradientTexture2D_7nt27")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
-density = 0.28
+density = 0.12
 fade_start = 0.58
-fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog6" type="TextureRect" parent="CanvasLayer" unique_id=819386610]
 anchors_preset = -1
@@ -1056,9 +1057,9 @@ texture = SubResource("GradientTexture2D_xdqt8")
 expand_mode = 1
 script = ExtResource("6_top_fog")
 height_ratio = 0.25
-density = 0.28
+density = 0.12
 fade_start = 0.58
-fog_color = Color(0.08799503, 0.117553465, 0.4753844, 1)
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog2" type="TextureRect" parent="CanvasLayer" unique_id=393871392]
 anchors_preset = -1
@@ -1075,8 +1076,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_58gk3")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.28
-fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
+density = 0.10
+fog_color = Color(0.45, 0.73, 0.45, 1)
 
 [node name="TopFog3" type="TextureRect" parent="CanvasLayer" unique_id=1214358096]
 anchors_preset = -1
@@ -1093,8 +1094,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_u0fll")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.28
-fog_color = Color(0.5501482, 0.3202245, 0.56168336, 1)
+density = 0.10
+fog_color = Color(0.05, 0.51, 0.48, 1)
 
 [node name="TopFog4" type="TextureRect" parent="CanvasLayer" unique_id=2115787559]
 anchors_preset = -1
@@ -1111,8 +1112,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_k67gn")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.28
-fog_color = Color(0.13614139, 0.30416697, 0.35069743, 1)
+density = 0.10
+fog_color = Color(0.02, 0.43, 0.49, 1)
 
 [node name="TopFog7" type="TextureRect" parent="CanvasLayer" unique_id=2015031252]
 anchors_preset = -1
@@ -1129,8 +1130,8 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_4bgka")
 expand_mode = 1
 script = ExtResource("6_top_fog")
-density = 0.28
-fog_color = Color(0.5186065, 0.39951208, 0.16007605, 1)
+density = 0.10
+fog_color = Color(0.45, 0.73, 0.45, 1)
 
 [node name="BottomFog" type="TextureRect" parent="CanvasLayer" unique_id=2102111729]
 anchors_preset = -1

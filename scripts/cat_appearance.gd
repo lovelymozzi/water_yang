@@ -16,12 +16,12 @@ extends Resource
 		toon_steps = value
 		emit_changed()
 
-@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.0:
+@export_range(0.0, 1.0, 0.01) var shadow_darkness: float = 0.80:
 	set(value):
 		shadow_darkness = value
 		emit_changed()
 
-@export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.39:
+@export_range(0.0, 1.0, 0.01) var rim_strength: float = 0.16:
 	set(value):
 		rim_strength = value
 		emit_changed()
@@ -53,12 +53,12 @@ extends Resource
 		line_art_texture = value
 		emit_changed()
 
-@export var line_art_color: Color = Color(0.2679695, 0.19882667, 0.1625919, 1.0):
+@export var line_art_color: Color = Color("5c5450"):
 	set(value):
 		line_art_color = value
 		emit_changed()
 
-@export_range(0.0, 1.0, 0.01) var line_art_strength: float = 1.0:
+@export_range(0.0, 1.0, 0.01) var line_art_strength: float = 0.85:
 	set(value):
 		line_art_strength = value
 		emit_changed()

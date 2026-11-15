@@ -1,0 +1,130 @@
+{
+  "source": "https://kr.pinterest.com/pin/918312180285979398/",
+  "period_seconds": 2.0,
+  "repeat_mask_iou_at_2_seconds": 0.9186397326087551,
+  "source_sampling_seconds": 0.2,
+  "upstream_rois": [
+    [
+      260,
+      385,
+      400,
+      500
+    ],
+    [
+      400,
+      385,
+      535,
+      500
+    ]
+  ],
+  "five_cycle_mean_density_weights": [
+    [
+      0.9984,
+      1.4306
+    ],
+    [
+      1.5706,
+      1.1993
+    ],
+    [
+      2.1943,
+      0.6745
+    ],
+    [
+      2.4325,
+      0.3552
+    ],
+    [
+      1.3248,
+      0.0482
+    ],
+    [
+      0.7229,
+      0.2948
+    ],
+    [
+      0.1688,
+      0.6511
+    ],
+    [
+      0.0,
+      1.6343
+    ],
+    [
+      0.0389,
+      1.9656
+    ],
+    [
+      0.5486,
+      1.7465
+    ]
+  ],
+  "shape_components": [
+    {
+      "frame": 0,
+      "seconds": 0.0,
+      "centroid": [
+        555.1159292035398,
+        589.7884955752212
+      ],
+      "pixels": 1130,
+      "principal_length_pixels": 85.40452817894365,
+      "principal_width_pixels": 23.36453606164854
+    },
+    {
+      "frame": 2,
+      "seconds": 0.4,
+      "centroid": [
+        576.6582194064688,
+        635.7692564188063
+      ],
+      "pixels": 2999,
+      "principal_length_pixels": 141.38245068239985,
+      "principal_width_pixels": 37.09688580592305
+    },
+    {
+      "frame": 4,
+      "seconds": 0.8,
+      "centroid": [
+        578.8371602005807,
+        662.1760358933756
+      ],
+      "pixels": 3789,
+      "principal_length_pixels": 159.01400071143138,
+      "principal_width_pixels": 62.41040864410991
+    },
+    {
+      "frame": 6,
+      "seconds": 1.2000000000000002,
+      "centroid": [
+        587.2340543538547,
+        635.606211869107
+      ],
+      "pixels": 1803,
+      "principal_length_pixels": 79.00123608647074,
+      "principal_width_pixels": 33.98434891082351
+    },
+    {
+      "frame": 9,
+      "seconds": 1.8,
+      "centroid": [
+        558.5243445692884,
+        710.3445692883895
+      ],
+      "pixels": 267,
+      "principal_length_pixels": 26.142241353810345,
+      "principal_width_pixels": 12.37364745304668
+    }
+  ],
+  "atlas": {
+    "file": "water_yang/lobby_foam_shapes.png",
+    "tile_pixels": [
+      128,
+      64
+    ],
+    "frames": 5,
+    "shared_reference_span_pixels": 160,
+    "distance_encoding": "128 + signed_distance_pixels * 10; inside positive"
+  },
+  "interpretation": "Density weights estimate clustered emission rhythm; they are not direct measurements of particle births. Selected components are shape exemplars, not an asserted continuous particle identity through splitting."
+}

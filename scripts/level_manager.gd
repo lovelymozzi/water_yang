@@ -11,6 +11,7 @@ const BOARD_VISUAL_TEXTURE = preload("res://water_yang/bg_tile1_1.jpg")
 const FLOOR_TILE_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const PATH_PREVIEW_SCENE = preload("res://scenes/path_tile_1x1.tscn")
 const ICE_BLOCK_SCENE = preload("res://scenes/ice_block.tscn")
+const CAT_PORTAL_EFFECT_SCENE = preload("res://scenes/cat_portal_effect.tscn")
 const ICE_NUMBER_FONT = preload("res://web/ui/vendor/fonts/lilita-one-1.woff2")
 # 하얀 글씨 + 검정 외곽선.
 # 이 크기까지는 타일을 줄이지 않는다. 이보다 큰 판만 비율대로 축소해 같은 자리에 담는다.
@@ -30,6 +31,21 @@ const TILE_HEIGHT := 0.12
 const TILE_CORNER_RADIUS := 0.14
 const BOARD_CORNER_RADIUS := 0.42
 const ROUND_CORNER_SEGMENTS := 6
+const TERRAIN_FLOWER_MESH = preload("res://resources/terrain/jam3d/flower_white.obj")
+const TERRAIN_FLOWER_MATERIAL = preload("res://resources/terrain/jam3d/flower_material.tres")
+const TERRAIN_GRASS_SCENE = preload("res://water_yang/grass1.fbx")
+const TERRAIN_GRASS_MATERIAL = preload("res://resources/gameplay_grass_material.tres")
+const TERRAIN_GRASS_HEIGHT_SCALE := 1.65
+const TERRAIN_NEIGHBORS := {
+	"self": Vector2i.ZERO, "top": Vector2i.UP, "right": Vector2i.RIGHT,
+	"bottom": Vector2i.DOWN, "left": Vector2i.LEFT,
+	"topLeft": Vector2i(-1, -1), "topRight": Vector2i(1, -1),
+	"bottomLeft": Vector2i(-1, 1), "bottomRight": Vector2i(1, 1),
+}
+const TERRAIN_PATH_CORNERS := {
+	3: Vector2i(1, -1), 6: Vector2i(1, 1),
+	9: Vector2i(-1, -1), 12: Vector2i(-1, 1),
+}
 
 enum CellState {
 	EMPTY,
@@ -80,6 +96,11 @@ enum CellState {
 		request_preview_refresh()
 
 @export_group("Board Tiles")
+@export var terrain_library: MeshLibrary:
+	set(value):
+		terrain_library = value
+		request_preview_refresh()
+
 @export var floor_tile_scene: PackedScene = FLOOR_TILE_SCENE:
 	set(value):
 		floor_tile_scene = value
@@ -395,7 +416,9 @@ func _refresh_path_preview() -> void:
 	if _path_preview_root == null:
 		return
 	_free_children(_path_preview_root)
-	if path_preview_scene == null:
+	# The imported terrain already supplies the floor. Legacy preview blocks
+	# briefly cover it, then disappear as each queued step begins.
+	if terrain_library != null or path_preview_scene == null:
 		return
 
 	var seen := {}
@@ -487,6 +510,11 @@ func _break_ice_cover(cell: Vector2i) -> void:
 	_ice_covers.erase(cell)
 	if entry.is_empty():
 		return
+	var portal := _holes_root.get_node_or_null("PortalFX_%d_%d" % [cell.x, cell.y]) as Node3D
+	if portal != null and _hole_cells.has(cell):
+		portal.visible = true
+		for emitter: CPUParticles3D in portal.get_children():
+			emitter.emitting = true
 	var label: Label3D = entry.get("label")
 	if is_instance_valid(label):
 		label.queue_free()
@@ -665,6 +693,14 @@ func _close_hole(cell: Vector2i) -> void:
 	_break_ice_cover(cell)
 	if is_inside_grid(cell):
 		_set_cell_state(cell, CellState.EMPTY)
+
+	var portal := _holes_root.get_node_or_null("PortalFX_%d_%d" % [cell.x, cell.y]) as Node3D
+	if portal != null:
+		var fade := portal.create_tween()
+		for emitter: CPUParticles3D in portal.get_children():
+			emitter.emitting = false
+			fade.parallel().tween_property(emitter, "color:a", 0.0, 0.2)
+		fade.chain().tween_callback(portal.queue_free)
 
 	var visual := _get_hole_visual(cell)
 	if visual != null:
@@ -913,6 +949,33 @@ func _build_hole_visuals() -> void:
 			get_hole_pit_color(color_id)
 		)
 		var ice_count: int = _hole_ice_counts[index]
+		# Keep vertical light independent of the flower's spin and FBX fit scale.
+		var portal := CAT_PORTAL_EFFECT_SCENE.instantiate() as Node3D
+		portal.name = "PortalFX_%d_%d" % [cell.x, cell.y]
+		var aperture := AABB()
+		var found_aperture := false
+		for mesh: MeshInstance3D in visual.find_children("*", "MeshInstance3D", true, false):
+			for surface in mesh.mesh.get_surface_count():
+				var source := mesh.mesh.surface_get_material(surface)
+				if source == null or source.resource_name.to_lower() != "hole":
+					continue
+				var vertices: PackedVector3Array = mesh.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+				for vertex in vertices:
+					var point := _holes_root.to_local(mesh.to_global(vertex))
+					if not found_aperture:
+						aperture = AABB(point, Vector3.ZERO)
+						found_aperture = true
+					else:
+						aperture = aperture.expand(point)
+		assert(found_aperture, "Portal FX requires the actual hole surface")
+		var aperture_width := minf(aperture.size.x, aperture.size.z)
+		portal.position = aperture.get_center() + Vector3.UP * aperture_width * 0.005
+		portal.scale = Vector3.ONE * aperture_width
+		portal.visible = ice_count <= _escaped_count
+		for emitter: CPUParticles3D in portal.get_children():
+			emitter.color = get_hole_rim_color(color_id).lerp(Color.WHITE, 0.55)
+			emitter.emitting = portal.visible
+		_holes_root.add_child(portal)
 		# 에디터 미리보기에서는 배치한 그대로(잠금 상태)를 보여 준다. 실행 중에는 이미
 		# 임계값을 넘긴 얼음이면 아예 만들지 않는다(예: 저장된 씬을 중간부터 재개하는 경우).
 		if ice_count > _escaped_count:
@@ -979,6 +1042,253 @@ func _make_ice_number_label(remaining: int) -> Label3D:
 # 같은 둥근 덩어리를 타일 위에 얹는다. 높이는 고양이(`cat_world_y`)보다 낮게 두어 고양이를
 # 가리지 않는다.
 func _build_obstacle_visuals() -> void:
+	if terrain_library != null:
+		# Terrain consumes the existing layout. It never writes to the logical grid.
+		var previous := _board_root.get_node_or_null("Terrain")
+		if previous != null:
+			_board_root.remove_child(previous)
+			previous.queue_free()
+		var terrain := GridMap.new()
+		terrain.name = "Terrain"
+		terrain.mesh_library = terrain_library
+		terrain.cell_size = Vector3.ONE
+		terrain.cell_center_x = false
+		terrain.cell_center_y = false
+		terrain.cell_center_z = false
+		var tile_side := fitted_tile_size()
+		var terrain_height := tile_side * float(terrain_library.get_meta("height_per_cell"))
+		var placement := Transform3D(
+			Basis.from_scale(Vector3.ONE * tile_side),
+			grid_to_world(Vector2i.ZERO, TILE_HEIGHT)
+		)
+		terrain.transform = _board_root.transform.affine_inverse() * placement
+		_board_root.add_child(terrain)
+		# Cover the existing grass base, including its authored scale, without
+		# changing the board extents, camera, cell spacing or stage data.
+		var base := _board_root.get_node("BoardBase") as CSGPolygon3D
+		var low := Vector2(INF, INF)
+		var high := Vector2(-INF, -INF)
+		for point in base.polygon:
+			var local := _board_root.transform * (base.transform * Vector3(point.x, point.y, 0.0))
+			low = low.min(Vector2(local.x, local.z))
+			high = high.max(Vector2(local.x, local.z))
+		var origin := grid_to_world(Vector2i.ZERO)
+		var first := Vector2i(floori((low.x - origin.x) / tile_side), floori((low.y - origin.z) / tile_side))
+		var last := Vector2i(ceili((high.x - origin.x) / tile_side), ceili((high.y - origin.z) / tile_side))
+		var filled := {}
+		for z in range(first.y, last.y + 1):
+			for x in range(first.x, last.x + 1):
+				var cell := Vector2i(x, z)
+				if not is_inside_grid(cell):
+					filled[cell] = true
+		for cell in _obstacle_cells:
+			filled[cell] = true
+		var rules: Dictionary = terrain_library.get_meta("neighbor_rules")
+		var flower_surfaces: Dictionary = terrain_library.get_meta("flower_surfaces")
+		var grass_source := TERRAIN_GRASS_SCENE.instantiate()
+		var grass_meshes := grass_source.find_children("*", "MeshInstance3D", true, false)
+		assert(grass_meshes.size() == 1, "Terrain grass requires the original single grass mesh")
+		var grass_mesh := grass_meshes[0] as MeshInstance3D
+		var grass_model := grass_mesh.transform
+		var grass_parent := grass_mesh.get_parent()
+		while grass_parent is Node3D:
+			grass_model = grass_parent.transform * grass_model
+			grass_parent = grass_parent.get_parent()
+		# Use the authored clumps' actual lean and length rather than upright replicas.
+		var grass_poses: Array[Basis] = []
+		var grass_roots: Array[Vector2] = []
+		for decoration in _tiles_root.get_children():
+			if decoration.scene_file_path != "res://scenes/grass_decor.tscn":
+				continue
+			if not decoration.has_meta("terrain_original_basis"):
+				decoration.set_meta("terrain_original_basis", decoration.basis)
+			var authored: Basis = decoration.get_meta("terrain_original_basis")
+			var posed := Basis.from_scale(Vector3(1.0, TERRAIN_GRASS_HEIGHT_SCALE, 1.0)) * authored
+			grass_poses.append(posed.scaled(Vector3.ONE * decoration.model_scale / tile_side))
+			var root: Vector3 = placement.affine_inverse() * (_tiles_root.transform * decoration.position)
+			grass_roots.append(Vector2(root.x, root.z))
+		assert(not grass_poses.is_empty(), "Terrain grass requires authored clumps as its pose reference")
+		var foliage := [
+			{"name": "Flowers", "mesh": TERRAIN_FLOWER_MESH, "material": TERRAIN_FLOWER_MATERIAL,
+				"model": Transform3D.IDENTITY, "density": 0.7, "min_scale": 0.3, "max_scale": 0.5,
+				"clearance": 0.0, "seed": 1337, "transforms": []},
+			{"name": "Grass", "mesh": grass_mesh.mesh, "material": TERRAIN_GRASS_MATERIAL,
+				"model": grass_model, "density": 0.55, "min_scale": 1.0, "max_scale": 1.0,
+				"poses": grass_poses, "clearance": 0.11 / tile_side, "seed": 9871, "transforms": []},
+		]
+		grass_source.free()
+		var directions := [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
+		for cell: Vector2i in filled:
+			var mask := 0
+			for index in directions.size():
+				if filled.has(cell + directions[index]):
+					mask |= 1 << index
+			var output := {}
+			# Evaluate the source project's rules against OUR occupied cells.
+			for rule: Dictionary in rules.rules:
+				if int(rule.mask) != mask or (rule.get("when", "") == "top_boundary" and cell.y != first.y):
+					continue
+				var matches := true
+				for neighbor: String in rule.neighbors:
+					var state: String = rule.neighbors[neighbor]
+					if state != "any" and filled.has(cell + TERRAIN_NEIGHBORS[neighbor]) != (state == "filled"):
+						matches = false
+						break
+				if not matches:
+					continue
+				if rule.has("resolver"):
+					var horizontal: bool = rule.resolver == "horizontal_corner_connector"
+					var step := Vector2i.RIGHT if horizontal else Vector2i.DOWN
+					for sign_value in [-1, 1]:
+						var adjacent: Vector2i = cell + step * sign_value
+						if not filled.has(adjacent):
+							continue
+						var adjacent_mask := 0
+						for index in directions.size():
+							if filled.has(adjacent + directions[index]):
+								adjacent_mask |= 1 << index
+						if TERRAIN_PATH_CORNERS.has(adjacent_mask) and not filled.has(adjacent + TERRAIN_PATH_CORNERS[adjacent_mask]):
+							output = {"tile_id": "corner_left_top_to_h" if horizontal else "corner_left_top_to_v", "rotation": 0 if sign_value < 0 else 180}
+							break
+				else:
+					output = rule.output
+				if not output.is_empty():
+					break
+			if output.is_empty():
+				# The source's explicit mask table is part of its tiling rules.
+				output = rules.fallback[str(mask)]
+			var item_name := "%s_%d" % [output.tile_id, posmod(int(output.rotation), 360)]
+			var item := terrain_library.find_item_by_name(item_name)
+			assert(item >= 0, "Missing terrain library item: " + item_name)
+			if not is_inside_grid(cell):
+				terrain.set_cell_item(Vector3i(cell.x, 0, cell.y), item)
+			else:
+				var visual := MeshInstance3D.new()
+				visual.name = "Obstacle_%d_%d" % [cell.x, cell.y]
+				visual.mesh = terrain_library.get_item_mesh(item)
+				visual.transform = Transform3D(placement.basis, grid_to_world(cell, TILE_HEIGHT)) * terrain_library.get_item_mesh_transform(item)
+				_obstacles_root.add_child(visual)
+			# Both decoration types share sampling and batching. Roots and their
+			# surrounding footprint must stay on actual grass, including at cliffs.
+			var triangles: Array = flower_surfaces[item]
+			var area := 0.0
+			for triangle: Dictionary in triangles:
+				area += float(triangle.area)
+			var occupied_roots: Array[Vector2] = []
+			for style: Dictionary in foliage:
+				var model: Transform3D = style.model
+				var bounds: AABB = model * style.mesh.get_aabb()
+				var anchor := Vector3(bounds.get_center().x, bounds.position.y, bounds.get_center().z)
+				var rng := RandomNumberGenerator.new()
+				rng.seed = int(style.seed) + cell.x * 92821 + cell.y * 68917 + String(output.tile_id).hash()
+				var expected_count: float = area * style.density
+				var count := floori(expected_count)
+				if rng.randf() < expected_count - float(count):
+					count += 1
+				for instance_index in count:
+					for attempt in 16:
+						var selected: Dictionary = {}
+						var target := rng.randf() * area
+						for triangle: Dictionary in triangles:
+							target -= float(triangle.area)
+							if target <= 0.0:
+								selected = triangle
+								break
+						assert(not selected.is_empty())
+						if selected.normal.y < 0.98:
+							continue
+						var u := rng.randf()
+						var v := rng.randf()
+						if u + v > 1.0:
+							u = 1.0 - u
+							v = 1.0 - v
+						var point: Vector3 = selected.a + (selected.b - selected.a) * u + (selected.c - selected.a) * v
+						var scale_factor := rng.randf_range(float(style.min_scale), float(style.max_scale))
+						var basis := Basis.IDENTITY
+						var radius: float = Vector2(bounds.size.x, bounds.size.z).length() * scale_factor * 0.5 + style.clearance
+						if style.has("poses"):
+							# Copy the authored facing as well as its lean and size.
+							basis = style.poses[rng.randi_range(0, style.poses.size() - 1)]
+							var footprint: AABB = (Transform3D(basis, -(basis * anchor)) * model) * style.mesh.get_aabb()
+							var reach := Vector2(maxf(absf(footprint.position.x), absf(footprint.end.x)), maxf(absf(footprint.position.z), absf(footprint.end.z)))
+							radius = reach.length() + style.clearance
+						if absf(point.x) + radius > 0.49 or absf(point.z) + radius > 0.49:
+							continue
+						var supported := true
+						for previous_root in occupied_roots:
+							if previous_root.distance_to(Vector2(point.x, point.z)) < 0.18:
+								supported = false
+								break
+						if not supported:
+							continue
+						if style.has("poses"):
+							# Check across tile boundaries as well as within this tile.
+							# Leave gaps and stagger adjacent rows instead of columns.
+							var root := Vector2(cell.x + point.x, cell.y + point.z)
+							for previous_root in grass_roots:
+								var offset := root - previous_root
+								if offset.length() < 0.65 or (absf(offset.x) < 0.22 and absf(offset.y) < 1.8):
+									supported = false
+									break
+								if not supported:
+									continue
+						for sample in 8:
+							var around := point + Vector3(cos(sample * TAU / 8.0), 0.0, sin(sample * TAU / 8.0)) * radius
+							var hit_grass := false
+							for triangle: Dictionary in triangles:
+								var hit: Variant = Geometry3D.ray_intersects_triangle(around + Vector3.UP, Vector3.DOWN, triangle.a, triangle.b, triangle.c)
+								if hit is Vector3 and absf(hit.y - point.y) < 0.02:
+									hit_grass = true
+									break
+							if not hit_grass:
+								supported = false
+								break
+						if not supported:
+							continue
+						if not style.has("poses"):
+							var rotation := Vector3(deg_to_rad(rng.randf_range(-7.0, 7.0)), rng.randf_range(0.0, TAU), deg_to_rad(rng.randf_range(-7.0, 7.0)))
+							basis = Basis.from_euler(rotation).scaled(Vector3.ONE * scale_factor)
+						var position: Vector3 = Vector3(cell.x, 0.0, cell.y) + point + selected.normal * 0.008 - basis * anchor
+						style.transforms.append(Transform3D(basis, position) * model)
+						occupied_roots.append(Vector2(point.x, point.z))
+						if style.has("poses"):
+							grass_roots.append(Vector2(cell.x + point.x, cell.y + point.z))
+						break
+		for style: Dictionary in foliage:
+			var batch := MultiMeshInstance3D.new()
+			batch.name = style.name
+			batch.material_override = style.material
+			var multimesh := MultiMesh.new()
+			multimesh.transform_format = MultiMesh.TRANSFORM_3D
+			multimesh.mesh = style.mesh
+			multimesh.instance_count = style.transforms.size()
+			# Dummy rendering does not retain MultiMesh buffers; keep the inputs
+			# available for numerical placement checks and editor inspection.
+			multimesh.set_meta("terrain_instance_transforms", style.transforms)
+			var bounds := AABB()
+			for index in style.transforms.size():
+				var transform: Transform3D = style.transforms[index]
+				multimesh.set_instance_transform(index, transform)
+				var instance_bounds: AABB = transform * style.mesh.get_aabb()
+				bounds = instance_bounds if index == 0 else bounds.merge(instance_bounds)
+			multimesh.custom_aabb = bounds.grow(0.1)
+			batch.multimesh = multimesh
+			terrain.add_child(batch)
+		for decoration in _tiles_root.get_children():
+			if not decoration.is_in_group("persistent_tile_visuals") or not decoration is Node3D:
+				continue
+			if not decoration.has_meta("terrain_original_y"):
+				decoration.set_meta("terrain_original_y", decoration.position.y)
+			var cell: Vector2i = board_point_to_grid_cell(decoration.position)
+			decoration.position.y = float(decoration.get_meta("terrain_original_y"))
+			if filled.has(cell):
+				decoration.position.y += TILE_HEIGHT + terrain_height
+			if decoration.scene_file_path == "res://scenes/grass_decor.tscn":
+				# Rebuild from the authored basis so repeated refreshes never compound height.
+				decoration.basis = Basis.from_scale(Vector3(1.0, TERRAIN_GRASS_HEIGHT_SCALE, 1.0)) * (decoration.get_meta("terrain_original_basis") as Basis)
+				for grass_instance: MeshInstance3D in decoration.find_children("*", "MeshInstance3D", true, false):
+					grass_instance.extra_cull_margin = 0.12
+		return
 	var block_side := maxf(fitted_tile_size() - tile_gap, 0.01)
 	for cell in _obstacle_cells:
 		if obstacle_scene != null:
@@ -1093,11 +1403,11 @@ func get_hole_color_id(cell: Vector2i) -> int:
 
 
 # color_id → 실제 색. 팔레트를 벗어난 값과 와일드카드(-1)는 하양이다. 색이 곧 짝이므로
-# 고양이와 구멍이 이 함수 하나만 쓰게 한다.
+# 고양이·구멍·중첩 색·로비가 같은 12% 흰색 보정을 한 번만 받는다.
 func get_pair_color(color_id: int) -> Color:
 	if color_id < 0 or color_id >= pair_colors.size():
 		return Color(1.0, 1.0, 1.0, 1.0)
-	return pair_colors[color_id]
+	return pair_colors[color_id].lerp(Color.WHITE, 0.12)
 
 
 # 와일드카드 구멍은 색 없이 예전 톤을 그대로 쓴다.
@@ -1213,6 +1523,9 @@ func remove_obstacle(cell: Vector2i) -> bool:
 		effect_position = visual.position
 		_obstacles_root.remove_child(visual)
 		visual.queue_free()
+	if terrain_library != null:
+		_free_children(_obstacles_root)
+		_build_obstacle_visuals()
 	_spawn_item_remove_shards(effect_position)
 	return true
 

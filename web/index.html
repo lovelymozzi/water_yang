@@ -16,7 +16,15 @@
 <link rel="preload" as="audio" href="sound/diggingt_optimized.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/time_out1.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/Time_out2.mp3" type="audio/mpeg" fetchpriority="low">
-<style>html,body{margin:0;height:100%;background:#000;overflow:hidden}body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}body.instant-lobby-home-return .sr-nav-host-inner,body.instant-lobby-home-return .sr-nav-fg-inner{transition:none!important;transform:none!important}body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr-nav-tabbar *{transition:none!important}</style>
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden}
+/* Keep the native WebGL surface and the bottom navigation in separate compositing groups. */
+.sr-game-host{isolation:isolate}
+.sr-nav-overlay{isolation:isolate;transform:translateZ(0)}
+body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+body.instant-lobby-home-return .sr-nav-host-inner,body.instant-lobby-home-return .sr-nav-fg-inner{transition:none!important;transform:none!important}
+body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr-nav-tabbar *{transition:none!important}
+</style>
 </head>
 <body>
 <script type="importmap">
@@ -29,6 +37,15 @@ const STORAGE_PREFIX = 'leonout_';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
+const LOBBY_BUTTERFLY_FLIGHTS = [
+  { id: 'butterfly-sequence-2289', duration: 54000, wingRate: 0.8,
+    stops: [[295, 226], [340, 304], [256, 365], [140, 326], [62, 360], [76, 248], [157, 215]] },
+  { id: 'butterfly-sequence-2291', duration: 62000, wingRate: 0.7,
+    stops: [[280, 357], [190, 390], [92, 342], [54, 265], [156, 236], [237, 293], [301, 225]] },
+  { id: 'butterfly-sequence-2292', duration: 70000, wingRate: 0.75,
+    stops: [[52, 338], [135, 382], [214, 330], [320, 347], [336, 263], [254, 220], [149, 246]] },
+];
+let lobbyButterflyAnimations = [];
 const INGAME_UI_SCENE = 'Ingame';
 const COIN_COST = 900;
 const INITIAL_COINS = 500;
@@ -257,6 +274,18 @@ function saveGame() {
   return save;
 }
 
+const startupUrl = new URL(location.href);
+if (startupUrl.searchParams.get('resetStage') === '1') {
+  const progressKey = STORAGE_PREFIX + 'progress_v1';
+  const stageProgress = JSON.parse(localStorage.getItem(progressKey) || '{"current":1,"records":{}}');
+  stageProgress.current = 1;
+  localStorage.setItem(progressKey, JSON.stringify(stageProgress));
+  await saveGame();
+  startupUrl.searchParams.delete('resetStage');
+  history.replaceState(null, '', startupUrl.href);
+  console.info('[stage-reset] current=1; records and economy preserved');
+}
+
 let leaderboardSubmissionTail = Promise.resolve();
 function submitStageLeaderboard(stage) {
   const value = Math.max(0, Math.floor(stage));
@@ -345,7 +374,7 @@ async function renderLeaderboard(renderer) {
 }
 setInterval(() => { void renderLeaderboard(); }, LEADERBOARD_REFRESH_MS);
 const GODOT_ENGINE_URL = "index.js";
-const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":30246320,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":46984872,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
 
 import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
 import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
@@ -402,7 +431,7 @@ if (!splashCache) {
 
 const CLICK_EVENT_STABLE_IDS = new Set();
 const UI_FONT_SPECS = new Set();
-const NAVIGATION_TAB_SCENES = ['home_bottom', 'Lobby', 'pop_BuyCoins', 'Ranking'];
+const NAVIGATION_TAB_SCENES = ['home_bottom', 'Lobby', 'Ingame', 'pop_BuyCoins', 'Ranking'];
 const navigationTabImages = [];
 const uiRenderStylesReady = Promise.all([
   ['scene-renderer-editor-fonts', `${UI_DIR}vendor/fonts/fonts.css`],
@@ -597,10 +626,16 @@ let splashRenderer = null;
 let continueWithoutHeart = false;
 let endedGame = null;
 let timeoutRecoveryPending = false;
+let retryStagePending = false;
 let sceneSessionToken = 0;
-let instantLobbyHomeReturnTimeoutId = null;
 let activeGodotScene = 'lobby';
 let currentMapStage = progress.getCurrentStage();
+// HTML HUD presses also count as the first touch; they do not reach Godot's canvas.
+document.addEventListener('pointerdown', event => {
+  if (event.button === 0 && activeSceneName === INGAME_UI_SCENE && activeGame?.state === 'running') {
+    activeGame.message('stage_touch', {});
+  }
+}, { capture: true });
 const itemCounts = readItemCounts();
 const itemPending = { remove: 0, timestop: 0, move: 0 };
 let selectedTargetItem = null;
@@ -980,21 +1015,17 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     : sceneName === INGAME_UI_SCENE ? 'main' : null;
   let gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
   let parking = document.getElementById('godot-bridge-parking');
-  if (!popup && sceneUuid !== SPLASH_UI_SCENE_UUID && !godotScene && gameHost && parking) {
+  if (!popup && sceneUuid !== SPLASH_UI_SCENE_UUID && sceneUuid !== LOBBY_NAV_SCENE_UUID
+    && !godotScene && gameHost && parking && gameHost.parentElement !== parking) {
     parking.appendChild(gameHost);
   }
   if (!popup && sceneUuid === LOBBY_NAV_SCENE_UUID) {
     document.body.classList.add('instant-lobby-home-return');
-    clearTimeout(instantLobbyHomeReturnTimeoutId);
+    // Restore tab motion on input, not on a timer that changes the idle
+    // navigation host's transform/compositing state ten seconds after entry.
     document.addEventListener('pointerdown', () => {
       document.body.classList.remove('instant-lobby-home-return');
-      clearTimeout(instantLobbyHomeReturnTimeoutId);
-      instantLobbyHomeReturnTimeoutId = null;
     }, { capture: true, once: true });
-    instantLobbyHomeReturnTimeoutId = setTimeout(() => {
-      document.body.classList.remove('instant-lobby-home-return');
-      instantLobbyHomeReturnTimeoutId = null;
-    }, 10000);
   }
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
@@ -1010,6 +1041,50 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   }
   if (sceneName === 'Ranking') await renderLeaderboard(renderer);
   if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+  // Ambient butterfly flight: animate the published sprites through the public API.
+  // The navigation host may enter after its Lobby child; preserve that child's flight.
+  if (!popup && sceneUuid !== LOBBY_NAV_SCENE_UUID) {
+    for (const animation of lobbyButterflyAnimations) animation.cancel();
+    lobbyButterflyAnimations = [];
+    if (sceneName === LOBBY_UI_SCENE) {
+      for (const flight of LOBBY_BUTTERFLY_FLIGHTS) {
+        const butterfly = renderer.getElement(flight.id);
+        if (!butterfly) throw new Error(`Lobby butterfly is missing: ${flight.id}`);
+        const origin = [parseFloat(butterfly.style.left), parseFloat(butterfly.style.top)];
+        const stops = [origin, ...flight.stops];
+        const frames = [];
+        let distance = 0;
+        let previous = origin;
+        // Sample a closed Catmull–Rom curve; matching end tangents prevent a loop snap.
+        for (let segment = 0; segment < stops.length; segment += 1) {
+          const p0 = stops[(segment + stops.length - 1) % stops.length];
+          const p1 = stops[segment];
+          const p2 = stops[(segment + 1) % stops.length];
+          const p3 = stops[(segment + 2) % stops.length];
+          for (let sample = 0; sample < 64; sample += 1) {
+            const t = sample / 64;
+            const position = [];
+            for (let axis = 0; axis < 2; axis += 1) {
+              position.push(0.5 * (2 * p1[axis] + (-p0[axis] + p2[axis]) * t
+                + (2 * p0[axis] - 5 * p1[axis] + 4 * p2[axis] - p3[axis]) * t * t
+                + (-p0[axis] + 3 * p1[axis] - 3 * p2[axis] + p3[axis]) * t * t * t));
+            }
+            distance += Math.hypot(position[0] - previous[0], position[1] - previous[1]);
+            frames.push({ translate: `${position[0] - origin[0]}px ${position[1] - origin[1]}px`, offset: distance });
+            previous = position;
+          }
+        }
+        distance += Math.hypot(origin[0] - previous[0], origin[1] - previous[1]);
+        frames.push({ translate: '0px 0px', offset: distance });
+        // Arc-length timing keeps long stretches from accelerating between stops.
+        for (const frame of frames) frame.offset /= distance;
+        renderer.setSpriteRate(flight.id, flight.wingRate);
+        lobbyButterflyAnimations.push(butterfly.animate(frames, {
+          duration: flight.duration, iterations: Infinity, easing: 'linear',
+        }));
+      }
+    }
+  }
   if (sceneName === INGAME_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
     syncItemCounts();
@@ -1139,6 +1214,11 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       } finally {
         shopPurchasePending = false;
       }
+    });
+  }
+  if ((sceneName === 'pop_LevelFail' || sceneName === 'pop_Fail') && popup) {
+    renderer.on(sceneName === 'pop_LevelFail' ? 'common-btn-green-sales-png-2318:click' : 'common-btn-green-sales-png-2367:click', () => {
+      retryStagePending = true;
     });
   }
   if (sceneName === 'pop_LevelFail' && popup) {
@@ -1364,7 +1444,12 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     const gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
     const parking = document.getElementById('godot-bridge-parking') || document.createElement('div');
     parking.id = 'godot-bridge-parking';
-    parking.style.cssText = 'display:none;';
+    if (!(gameHost?.clientWidth > 0 && gameHost.clientHeight > 0)) {
+      throw new Error('[Godot preload] 캔버스 보관 전 GameField 크기가 유효하지 않습니다.');
+    }
+    // display:none makes the bridge ResizeObserver shrink WebGL to 1x1 and clear its buffer.
+    // Preserve the unscaled layout size while parked, including after a window resize.
+    parking.style.cssText = `position:fixed;left:-100000px;top:0;width:${gameHost.clientWidth}px;height:${gameHost.clientHeight}px;visibility:hidden;pointer-events:none;overflow:hidden;`;
     if (!parking.isConnected) document.body.appendChild(parking);
     if (gameHost) parking.appendChild(gameHost);
     loadingReady = true;
@@ -1379,11 +1464,10 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     return;
   }
   if (!godotScene) {
-    if (!popup && gameHost && parking) parking.appendChild(gameHost);
     return;
   }
   const gameField = renderer.getElementByName('GameField');
-  if (gameHost && gameField) {
+  if (gameHost && gameField && gameHost.parentElement !== gameField) {
     gameHost.style.cssText = 'position:absolute;inset:0;overflow:hidden;display:block;';
     gameField.appendChild(gameHost);
     requestAnimationFrame(() => console.info('[Godot mount]', JSON.stringify({
@@ -1394,46 +1478,61 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
       gameField: gameField.getBoundingClientRect().toJSON(),
       parent: gameHost.parentElement?.getAttribute('data-stable-id'),
     })));
-  } else {
+  } else if (!gameHost || !gameField) {
     console.error('[Godot mount] 대상 누락', { sceneName, scene: godotScene, gameHost: !!gameHost, gameField: !!gameField });
   }
-  if (activeGame?.state === 'running' && godotScene === activeGodotScene) return;
+  const restartingStage = godotScene === 'main' && !continueWithoutHeart
+    && (retryStagePending || (timeoutRecoveryPending && endedGame === activeGame));
+  if (godotScene === 'lobby') retryStagePending = false;
+  if (activeGame?.state === 'running' && godotScene === activeGodotScene && !restartingStage) return;
   if (activeGame?.state === 'running') activeGame.pause('scene-switch');
+  const sceneReadyPromise = (activeGame?.state === 'paused' || activeGame?.state === 'ready')
+    && (godotScene !== activeGodotScene || restartingStage)
+    ? new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        pendingSceneReady = null;
+        reject(new Error(`[Godot] ${godotScene} 첫 화면 렌더 완료 신호가 30초 안에 도착하지 않았습니다.`));
+      }, 30000);
+      pendingSceneReady = { scene: godotScene, resolve: () => {
+        clearTimeout(timeout);
+        pendingSceneReady = null;
+        resolve();
+      } };
+    }) : null;
   if (activeGame?.state === 'paused') {
-    const restartingTimedOutStage = godotScene === 'main' && timeoutRecoveryPending && endedGame === activeGame && !continueWithoutHeart;
     if (godotScene === 'main') {
       endedGame = null;
       timeoutRecoveryPending = false;
+      retryStagePending = false;
     }
     if (godotScene === 'main' && continueWithoutHeart) {
       activeGame.message('continue_stage', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
       continueWithoutHeart = false;
     }
-    if (godotScene !== activeGodotScene || restartingTimedOutStage) {
-      if (restartingTimedOutStage) console.info('[timeout-replay] restarting ended stage after shop return');
+    if (godotScene !== activeGodotScene || restartingStage) {
+      if (restartingStage) console.info('[stage-retry] restarting stage with immediate countdown');
       activeGodotScene = godotScene;
       activeGame.message('load_scene', {
         stage: progress.getCurrentStage(),
-        config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS } : {}) },
+        config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS, startTimerImmediately: restartingStage } : {}) },
       });
     }
     activeGame.resume();
+    if (sceneReadyPromise) await sceneReadyPromise;
     return;
   }
   if (activeGame?.state === 'ready') {
-    if (godotScene === activeGodotScene) return;
+    if (godotScene === activeGodotScene && !restartingStage) return;
     if (godotScene === 'main') {
       if (!continueWithoutHeart && !hasUnlimitedHearts() && !(await runEconomyTransaction('game-entry-heart', () => economy.consumeHeart()))) {
         throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
       }
       continueWithoutHeart = false;
-      const sceneReadyPromise = new Promise(resolve => {
-        pendingSceneReady = { scene: godotScene, resolve: () => { pendingSceneReady = null; resolve(); } };
-      });
       activeGame.message('load_scene', {
         stage: currentMapStage,
-        config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
+        config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS, startTimerImmediately: restartingStage },
       });
+      retryStagePending = false;
       activeGodotScene = godotScene;
       activeGame.startGame();
       await sceneReadyPromise;
@@ -1458,7 +1557,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   activeGodotScene = godotScene;
   await game.start(godotCartridge, {
     stage: currentMapStage,
-    config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS } : {}) },
+    config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS, startTimerImmediately: restartingStage } : {}) },
     onEnd: handleMainGameEnd,
     onProgress: handleGodotSfx,
     onError: (error) => console.error('[Godot integration] session error', error),
@@ -1467,6 +1566,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     game.abort('stale-scene-enter');
     return;
   }
+  if (godotScene === 'main') retryStagePending = false;
   if (game.state === 'ready') game.startGame();
   })();
   waitUntil?.(enterWork);

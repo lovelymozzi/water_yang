@@ -1,0 +1,44 @@
+{
+  "source": "wall1.png",
+  "source_sha256": "023598bc480d08087ca444f8efb07f61b2abec3d06ce32d0df453b894f3337db",
+  "output": "wall1_lobby.png",
+  "output_sha256": "1784f05255026f31aac11cb9dac23d6390334d336bf83175235a987423530637",
+  "operation": "Match mean grass palette to lobby with constant HSV hue shift and saturation/value ratios; preserve spatial texture contrast, non-green pixels and alpha",
+  "green_mask": "clamp((G - max(R, B) - 0.02) / 0.08, 0, 1), sRGB channels 0-1",
+  "changed_pixels": 157922,
+  "generator": "tools/soften_terrain_grass.py",
+  "verification": "Texture pixel measurements only; rendered appearance requires user review.",
+  "palette_origin": "Original lobby ground albedo_tint before shared terrain texturing; fixed to avoid recoloring feedback",
+  "lobby_albedo_srgb": [
+    0.46,
+    0.62,
+    0.32
+  ],
+  "terrain_tint_srgb": [
+    1.0,
+    0.92,
+    1.0
+  ],
+  "reference_region_uv": [
+    0.135461,
+    0.135866,
+    0.452677,
+    0.452678
+  ],
+  "reference_mean_hsv": [
+    0.2581825474833064,
+    0.810522005908572,
+    0.7479608192860974
+  ],
+  "target_texture_hsv": [
+    0.2674037674037674,
+    0.5251612903225806,
+    0.6739130434782609
+  ],
+  "hue_shift": 0.009221219920461043,
+  "saturation_ratio": 0.6479297125731828,
+  "value_ratio": 0.9010004616571861,
+  "generator_arguments": [
+    "--lobby"
+  ]
+}

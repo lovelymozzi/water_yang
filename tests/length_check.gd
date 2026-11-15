@@ -68,6 +68,19 @@ func _process(_delta: float) -> void:
 	_check_body(manager, snake, "S자 길이 12", 12)
 	_check_body(manager,
 		[Vector2i(5, 1), Vector2i(5, 2), Vector2i(6, 2), Vector2i(6, 3)], "S자 길이 4", 4)
+	# One-cell-wide U bends must retain a straight bridge between the two
+	# rounded corners, including when the opposite end is the lead.
+	for leg in [2, 3, 4]:
+		for turn in 4:
+			var body: Array[Vector2i] = []
+			for index in leg * 2:
+				var offset := Vector2i(0, index) if index < leg else Vector2i(1, leg * 2 - index - 1)
+				for quarter in turn:
+					offset = Vector2i(-offset.y, offset.x)
+				body.append(Vector2i(4, 4) + offset)
+			for reverse in 2:
+				_check_body(manager, body, "U자 길이 %d 방향 %d 리드 %d" % [body.size(), turn, reverse], body.size())
+				body.reverse()
 
 	_report()
 	set_process(false)
@@ -97,7 +110,7 @@ func _check_body(
 	var scale: float = cat._baseline_stretch_scale()
 	var scale_min: float = SCALE_MIN_SHORTEST if length <= 3 else SCALE_MIN
 	_expect(
-		scale >= scale_min and scale <= SCALE_MAX,
+		scale >= scale_min - 0.00001 and scale <= SCALE_MAX + 0.00001,
 		"%s: 잔여 배율이 %.3f 다 (%.2f~%.2f 밖, 잡아늘리기로 퇴행)" % [label, scale, scale_min, SCALE_MAX]
 	)
 	if length >= 5:
@@ -119,6 +132,15 @@ func _check_body(
 	# 대해 잰다. 폴리라인은 양끝을 메시 오버행만큼 내밀어 두므로 끝 본들이 셀 중심 경로
 	# 밖에 있는 것은 정상이다.
 	var polyline: PackedVector3Array = cat._body_polyline()
+	var smallest_corner := INF
+	for index in range(1, body.size() - 1):
+		var center := manager.grid_to_world(body[index], manager.cat_world_y)
+		var corner_cut := _distance_to_polyline(polyline, center) / tile
+		_expect(corner_cut < 0.17,
+			"%s: 둥근 코너가 셀 중심을 너무 많이 잘라냈다" % label)
+		if Vector2(body[index] - body[index - 1]).dot(Vector2(body[index + 1] - body[index])) == 0.0:
+			smallest_corner = minf(smallest_corner, corner_cut)
+	_expect(smallest_corner > 0.04, "%s: 몸통 코너가 다시 직각으로 접혔다" % label)
 	var cumulative := cat._cumulative_lengths(polyline)
 	_expect(
 		absf(cumulative[cumulative.size() - 1] - cat._target_chain_world_length()) < 0.001,
@@ -162,8 +184,8 @@ func _check_body(
 			"%s: 셀 %s 가 비었다 (최근접 정점 %.3f타일, 코너 잘림)" % [label, cell, gap]
 		)
 
-	print("[길이] %s: 배율 %.3f, 삽입본 %d, 본이탈 %.3f, 최대셀공백 %.3f" % [
-		label, scale, cat._inserted_mid_bones.size(), worst_bone, _max_value(coverage)
+	print("[길이] %s: 배율 %.3f, 삽입본 %d, 본이탈 %.3f, 최대셀공백 %.3f, 최소코너곡선 %.3f" % [
+		label, scale, cat._inserted_mid_bones.size(), worst_bone, _max_value(coverage), smallest_corner
 	])
 
 	cat.set_floating_water_wave(0.0, 0.0, 0.0)

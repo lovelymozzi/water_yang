@@ -1,28 +1,27 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://bqgt33f4c1otr"]
 
 [ext_resource type="Texture2D" uid="uid://voml2p150fee" path="res://water_yang/wall.jpg" id="1_water_texture"]
-[ext_resource type="Shader" uid="uid://dgmfpi64ok5gf" path="res://scripts/lobby_ground_foam.gdshader" id="2_foam_shader"]
-[ext_resource type="Shader" uid="uid://nom8twrrlyo0" path="res://scripts/lobby_ground_water_fade.gdshader" id="3_water_fade"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_foam"]
-render_priority = 1
-shader = ExtResource("2_foam_shader")
-shader_parameter/foam_color = Color(0.5568628, 0.8627451, 0.89411765, 1)
-shader_parameter/foam_uv_center = 0.08
-shader_parameter/foam_uv_half_width = 0.006
-shader_parameter/wave_amplitude = 0.0045
-shader_parameter/wave_scale_a = 11.0
-shader_parameter/wave_speed_a = 0.7
-shader_parameter/wave_scale_b = 17.0
-shader_parameter/wave_speed_b = 0.44
+[ext_resource type="Texture2D" path="res://resources/terrain/jam3d/wall1_lobby.png" id="2_grass_texture"]
+[ext_resource type="Shader" path="res://scripts/lobby_ground_depth_fade.gdshader" id="3_depth_fade"]
 
 [resource]
 resource_name = "Lobby Ground Water"
 render_priority = 0
-next_pass = SubResource("ShaderMaterial_foam")
-shader = ExtResource("3_water_fade")
-shader_parameter/albedo_texture = ExtResource("1_water_texture")
-shader_parameter/underwater_color = Color(0.1, 0.55, 0.70, 1)
-shader_parameter/underwater_fade_start = 0.11
-shader_parameter/underwater_fade_end = 0.280073
+shader = ExtResource("3_depth_fade")
+shader_parameter/albedo_texture = ExtResource("2_grass_texture")
+shader_parameter/albedo_uv_scale = Vector2(0.5, 0.5)
+shader_parameter/albedo_tint = Color(1, 0.92, 1, 1)
+shader_parameter/grass_use_texture_color = true
+shader_parameter/grass_world_uv = true
+shader_parameter/grass_texture_region = Vector4(0.135461, 0.135866, 0.452677, 0.452678)
+shader_parameter/cliff_surface = true
+shader_parameter/cliff_texture = ExtResource("1_water_texture")
+shader_parameter/water_level = 0.0
+shader_parameter/shoreline_fade_height = 0.55
+shader_parameter/deep_fade_distance = 2.6
+shader_parameter/water_tint_strength = 0.78
+shader_parameter/shallow_water_color = Color(0.12, 0.54, 0.72, 1)
+shader_parameter/deep_water_color = Color(0.035, 0.23, 0.42, 1)
+shader_parameter/underwater_color = Color(0.03, 0.43, 0.49, 1)
+shader_parameter/cliff_water_fade_distance = 0.5
 shader_parameter/underwater_fade_strength = 1.0
