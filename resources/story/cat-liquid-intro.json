@@ -1,6 +1,7 @@
 {
   "version": 1,
-  "id": "cat-liquid-intro-v1",
+  "id": "cat-liquid-intro-v2",
+  "revision": 2,
   "locale": "ko-KR",
   "status": "art-ready-awaiting-ui-publish",
   "canvas": { "width": 393, "height": 852 },
@@ -15,28 +16,28 @@
   "pages": [
     {
       "id": "page-01",
-      "title": "고양이는 액체일지도?",
-      "subtitle": "말랑한 친구들의 작은 발견",
+      "title": "박사님의 이상한 연구",
+      "subtitle": "호기심이 열어 버린 작은 차원문",
       "art": "src/assets/story_cat_liquid_page_01.webp",
       "actionLabel": "다음",
       "panels": [
-        { "number": 1, "art": "src/assets/story_cat_liquid_panel_01.webp", "caption": "고양이는…\n액체일지도?" },
-        { "number": 2, "art": "src/assets/story_cat_liquid_panel_02.webp", "caption": "컵에도 쏙,\n상자에도 착!" },
-        { "number": 3, "art": "src/assets/story_cat_liquid_panel_03.webp", "caption": "몸을 쭉 늘리면\n못 갈 곳이 없지." },
-        { "number": 4, "art": "src/assets/story_cat_liquid_panel_04.webp", "caption": "어라? 저 반짝이는\n구멍은 뭐지?" }
+        { "number": 1, "art": "src/assets/story_cat_liquid_panel_01.webp", "caption": "“고양이는…\n정말 액체일까?”" },
+        { "number": 2, "art": "src/assets/story_cat_liquid_panel_02.webp", "caption": "그 순간, 박사님이\n차원문 속으로 쏘옥!" },
+        { "number": 3, "art": "src/assets/story_cat_liquid_panel_03.webp", "caption": "눈을 떠 보니…\n고양이들의 세계?!" },
+        { "number": 4, "art": "src/assets/story_cat_liquid_panel_04.webp", "caption": "컵에도, 상자에도\n꼭 맞는 친구들이네!" }
       ]
     },
     {
       "id": "page-02",
-      "title": "집으로 돌아가자냥!",
-      "subtitle": "말랑한 몸으로, 같은 색 차원문까지",
+      "title": "인간 세상으로 가는 길",
+      "subtitle": "박사님과 함께 떠나는 말랑한 모험",
       "art": "src/assets/story_cat_liquid_page_02.webp",
       "actionLabel": "모험 시작",
       "panels": [
-        { "number": 5, "art": "src/assets/story_cat_liquid_panel_05.webp", "caption": "앗! 친구들이\n뿔뿔이 흩어졌어!" },
-        { "number": 6, "art": "src/assets/story_cat_liquid_panel_06.webp", "caption": "좁은 길도 말랑하게,\n구불구불~" },
-        { "number": 7, "art": "src/assets/story_cat_liquid_panel_07.webp", "caption": "같은 색 차원문이\n집으로 이어진대!" },
-        { "number": 8, "art": "src/assets/story_cat_liquid_panel_08.webp", "caption": "우리 모두 집으로\n돌아가게 도와줄래?" }
+        { "number": 5, "art": "src/assets/story_cat_liquid_panel_05.webp", "caption": "“같은 색일 때만\n차원문이 반응하네!”" },
+        { "number": 6, "art": "src/assets/story_cat_liquid_panel_06.webp", "caption": "“문 너머는…\n내가 살던 인간 세상이야!”" },
+        { "number": 7, "art": "src/assets/story_cat_liquid_panel_07.webp", "caption": "햇볕 드는 창가,\n폭신한 소파가 있다고?!" },
+        { "number": 8, "art": "src/assets/story_cat_liquid_panel_08.webp", "caption": "“자, 너희 색의\n차원문을 찾아 떠나자!”" }
       ]
     }
   ],

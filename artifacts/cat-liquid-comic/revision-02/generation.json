@@ -1,0 +1,44 @@
+{
+  "revision": 2,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "sunburst-image-generation/scripts/generate_image.py through Flava",
+  "operation": "image edit with one composed reference board per request",
+  "quality": "high",
+  "size": "1024x1536",
+  "generatedAtDate": "2026-11-15",
+  "pages": [
+    {
+      "output": "page-01-generated.png",
+      "prompt": "page-01.prompt.txt",
+      "reference": "game-face-and-world-reference.png",
+      "usage": {
+        "input_text_tokens": 1338,
+        "input_image_tokens": 1536,
+        "output_image_tokens": 1372,
+        "estimated_cost_usd": "0.030069",
+        "estimated_cost_krw": "42.10"
+      }
+    },
+    {
+      "output": "page-02-generated.png",
+      "prompt": "page-02.prompt.txt",
+      "reference": "page-02-style-reference.png",
+      "usage": {
+        "input_text_tokens": 1267,
+        "input_image_tokens": 1521,
+        "output_image_tokens": 1372,
+        "estimated_cost_usd": "0.0298315",
+        "estimated_cost_krw": "41.76"
+      }
+    }
+  ],
+  "total": {
+    "input_text_tokens": 2605,
+    "input_image_tokens": 3057,
+    "output_image_tokens": 2744,
+    "estimated_cost_usd": "0.0599005",
+    "estimated_cost_krw": "83.86",
+    "usd_to_krw_rate": 1400
+  },
+  "notes": "This revision used two successful requests, no retries. The fictional professor, compact plump cats and volumetric shading replace revision 1. No game UI or flow changes are included. Original game faces and environment informed the reference board; the generated characters are not renders of the actual meshes or shaders."
+}

@@ -24,7 +24,7 @@
 
 ## 씬과 에디터
 
-- 첫 입장 이야기(2026-11-15): 고양이 액체 밈을 소재로 현재 게임 캡처를 참조한 Sunburst 원화 2페이지(각 4컷)와 문구를 제작했다. 문구·표시 정책은 `resources/story/cat-liquid-intro.json`, 원화/개별 컷은 `src/assets/story_cat_liquid_*.webp`, 제작 기록과 UI 연결 명세는 `artifacts/cat-liquid-comic/`에 있다. 다음 버튼으로 수동 진행하고 건너뛰기를 제공하며, 마지막은 기존 로비로 이어져 자동 스테이지 시작·하트 소비를 하지 않는 구성이다. 새 UI 씬·이벤트와 흐름은 아직 publish되지 않았으며 게임 연결은 대기 중이다. 이번 이미지 제작은 publish 산출물 직접 수정 예외를 의미하지 않는다.
+- 첫 입장 이야기(2026-11-15): 현재 시안은 `artifacts/cat-liquid-comic/revision-02/`의 Sunburst 원화 2페이지(각 4컷)다. 사용자의 수정 줄거리에 따라 박사의 실험 사고 → 고양이 세계의 컵고양이·박스고양이와 만남 → 같은 색 차원문 반응 관찰 → 인간계 발견 → 모험 출발로 구성했다. 이야기 속 고양이는 짧고 통통한 입체형이며, 이전의 긴 몸 시안은 보관 기록이다. 문구·표시 정책은 `resources/story/cat-liquid-intro.json`, 현재 원화/개별 컷은 `src/assets/story_cat_liquid_*.webp`, UI 연결 명세는 `artifacts/cat-liquid-comic/ui-editor-handoff.md`에 있다. 다음 버튼으로 수동 진행하고 건너뛰기를 제공하며, 마지막은 기존 로비로 이어져 자동 스테이지 시작·하트 소비를 하지 않는 구성이다. 새 UI 씬·이벤트와 흐름은 아직 publish되지 않았으며 게임 연결은 대기 중이다. 이번 이미지 수정 진행 승인은 publish 산출물 직접 수정 예외를 의미하지 않는다.
 
 - 팝업 배경 보정(2026-11-15 사용자 예외 승인): `web/ui/popup-manager.js`는 contract의 `image-*` 배경을 투명화하지 않는다. 로비 설정과 재화 `+`로 여는 상점은 상점 탭의 `common_bg_pt_3.png` 패턴을 유지한다. 설정 원본 `.ui-editor/scenes/pop_Settings.scene.json`과 publish contract를 함께 맞췄다. 재publish 시 이 매니저 보정과 셸·웹 import map의 팝업 매니저 버전을 유지한다. 이번 직접 수정 승인은 이 배경 오류에만 적용한다. 시각 확인은 사용자 확인으로 남긴다.
 
