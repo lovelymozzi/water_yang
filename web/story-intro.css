@@ -1,4 +1,8 @@
 /* Layout and visibility are defined by StoryIntro contracts; input starts each stamp. */
+:is(#story-intro-01, #story-intro-02) [data-stable-id^="story-skip-"] .text-0 {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 :is(#story-intro-01, #story-intro-02) .story-panel-enter {
   animation-name: story-card-stamp;
   animation-duration: 200ms;

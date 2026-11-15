@@ -1,0 +1,328 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        503
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_01.webp",
+      "sourceSha256": "4ad484eec3a7933916e4692fc20b05be5dde37fc99593663900790b2da966725",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 2,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        519,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_02.webp",
+      "sourceSha256": "fceeb2572446a699bbd3df4fe1332c86be7463ca7501f81f42fc16dcac9dfb3e",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 3,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        503
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_03.webp",
+      "sourceSha256": "a6dc11566913b025d0d193ded58c87b8287a6087efabb13c33c2f0c97a34a7c6",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 4,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        520,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_04.webp",
+      "sourceSha256": "02f5fb83ae51c37819289814b47d4bca01dfcc13bebaa6c28be9447c69e5e72e",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 5,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        503
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_05.webp",
+      "sourceSha256": "f0fb23616a5a0186e77abd06d6ecdf8142a5a7fc081c41758352d750c08233e2",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 6,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        520,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_06.webp",
+      "sourceSha256": "f7c9a645266a74c6101aed42d8fff9e798575ab92f322502ca2c57e3b497bbb3",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 7,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        509
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_07.webp",
+      "sourceSha256": "845f26cbe3ab27dfa80d526f3507de9124a95984996ae67b16d3907ea5466013",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 8,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        519,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_full_panel_08.webp",
+      "sourceSha256": "f1efc125a40321cd0e8dcd96a45c91b69fb8bac1688a370ccfb173955d7e4dc3",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_full_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "286435eae6b39793e99050e2b398225c3b964813144571d70ab4f64f1ac1117f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_full_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "103cb8447538fd75c028a128881511dd107dc0bb0b0a69b2b4d7558a1195a7f9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_full_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "97894a4a2df9072f19f1ff0535643e0d7d590d14bb0d9da1e8873be063942a99"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_full_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "48d55684d59635484e77c6916a9152f3e6caac41ac13f11562405a6eaf64f2ea"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_full_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "465fc5a5c53d4c5be555f327ff401e713bbecc66a12d42e441ce1578e166910b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_full_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "9c2f393a0d5160860fde17cf5ecda5c97bed3db22d1c67eb1b15cc911a848ebc"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_full_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "ea733933721b000fcfca76b8a043e10cd649e324330c201d4caffea6626c8028"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_full_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "3c6bb2e11395d855912a1f65770988c674f3ee705d2171d8ce4fd9d007b7bf37"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ],
+  "artAreaRatio": 0.8831
+}

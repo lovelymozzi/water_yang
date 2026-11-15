@@ -1456,6 +1456,68 @@
         }
       ],
       "label": "story.finish"
+    },
+    {
+      "id": "edge-story-skip-01",
+      "fromSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "story-skip-01",
+        "eventName": "story-skip-01:click",
+        "condition": "story.complete"
+      },
+      "transitionOut": null,
+      "transitionIn": {
+        "presetId": "image-curtain",
+        "type": "image-curtain",
+        "durationMs": 1000,
+        "gatherMs": 500,
+        "holdMs": 0,
+        "scatterMs": 500,
+        "curtainLayers": [],
+        "curtainAutoAll": false
+      },
+      "fromSceneName": "StoryIntro01",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
+    },
+    {
+      "id": "edge-story-skip-02",
+      "fromSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
+      "toSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+      "trigger": {
+        "stableId": "story-skip-02",
+        "eventName": "story-skip-02:click",
+        "condition": "story.complete"
+      },
+      "transitionOut": null,
+      "transitionIn": {
+        "presetId": "image-curtain",
+        "type": "image-curtain",
+        "durationMs": 1000,
+        "gatherMs": 500,
+        "holdMs": 0,
+        "scatterMs": 500,
+        "curtainLayers": [],
+        "curtainAutoAll": false
+      },
+      "fromSceneName": "StoryIntro02",
+      "toSceneName": "Lobby",
+      "toHostedBy": [
+        {
+          "navScene": "home_bottom",
+          "navSceneUuid": "37f376d8-4e32-4340-9bbd-4ed17767e148",
+          "navContract": "home_bottom.contract.json",
+          "tabId": "t1"
+        }
+      ]
     }
   ],
   "entrySceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9"

@@ -126,19 +126,19 @@
 <!-- SCENE:StoryIntro01 BEGIN -->
 #### `StoryIntro01` · contract: `./web/ui/StoryIntro01.contract.json`
 - sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb401`
-- 이벤트: `story-advance-01:click` (`next` 버튼)
-- 텍스트 바인딩: `story.dialogue`
+- 이벤트: `story-advance-01:click` (`next` 버튼) · `story-skip-01:click` (`skip` 버튼)
+- 텍스트 바인딩: 없음
 - 위젯: `story.panel01`~`story.panel04`, `story.nextReady` (visibility)
-- 가로 네 컷과 당사자 독백. `next` 한 번에 타이핑 중에도 다음 컷으로 바로 진행. 네 번째 컷에서 `next`를 누르면 문서 엣지 `story.pageComplete`를 발화해 다음 페이지 이동. 다른 안내·건너뛰기·화면 전체 터치 없음.
+- 대사 없는 세로 화면용 네 컷. `next`로 다음 컷을 추가하며 네 번째 컷에서 `story.pageComplete` 문서 엣지로 다음 페이지 이동. 하단 왼쪽 `skip`은 `story.complete` 조건에서 완료 저장 후 로비 이동. 대사창·가이드·화면 전체 터치 없음.
 <!-- SCENE:StoryIntro01 END -->
 
 <!-- SCENE:StoryIntro02 BEGIN -->
 #### `StoryIntro02` · contract: `./web/ui/StoryIntro02.contract.json`
 - sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb402`
-- 이벤트: `story-advance-02:click` (`next` 버튼)
-- 텍스트 바인딩: `story.dialogue`
+- 이벤트: `story-advance-02:click` (`next` 버튼) · `story-skip-02:click` (`skip` 버튼)
+- 텍스트 바인딩: 없음
 - 위젯: `story.panel05`~`story.panel08`, `story.nextReady` (visibility)
-- 같은 `next` 진행 방식. 마지막 컷에서 `next`를 누르면 완료 저장 후 문서 엣지 `story.finish`를 발화해 로비로 이동. 안내 글자 없음.
+- 같은 무대사 네 컷과 하단 `skip`/`next`. 마지막 `next`는 완료 저장 후 `story.finish` 문서 엣지로 로비 이동. `skip`은 어느 컷에서나 건너뛰기.
 <!-- SCENE:StoryIntro02 END -->
 
 <!-- CHARACTERS BEGIN -->

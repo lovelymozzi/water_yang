@@ -1,24 +1,25 @@
 {
   "version": 1,
-  "id": "cat-liquid-intro-v7",
-  "revision": 7,
-  "locale": "ko",
+  "id": "cat-liquid-intro-v8",
+  "revision": 8,
   "status": "integrated-awaiting-user-visual-check",
   "canvas": {
     "width": 393,
     "height": 852
   },
-  "textMode": "bottom-typewriter",
+  "textMode": "none",
   "controls": {
+    "skip": "skip",
     "next": "next"
   },
   "display": {
     "firstEntryOnly": true,
     "autoAdvance": false,
-    "allowSkip": false,
+    "allowSkip": true,
     "completeDestination": "lobby",
     "startStageAutomatically": false,
     "recordSeenOn": [
+      "skip",
       "complete"
     ],
     "advanceMode": "next-click-next-panel"
@@ -33,29 +34,29 @@
     "impactLineDurationMs": 120,
     "paperColor": "#FFFFFF",
     "frameInk": "#000000",
-    "framePaddingPx": 3,
-    "frameBorderPx": 2.5,
-    "imageWidth": 360,
-    "imageHeight": 132,
+    "framePaddingPx": 2.5,
+    "frameBorderPx": 2,
+    "imageWidth": 385,
+    "imageHeight": 192,
     "layout": [
       {
         "centerX": 196.5,
-        "centerY": 142.5,
+        "centerY": 100,
         "rotationDeg": 0
       },
       {
         "centerX": 196.5,
-        "centerY": 296.5,
+        "centerY": 296,
         "rotationDeg": 0
       },
       {
         "centerX": 196.5,
-        "centerY": 450.5,
+        "centerY": 492,
         "rotationDeg": 0
       },
       {
         "centerX": 196.5,
-        "centerY": 604.5,
+        "centerY": 688,
         "rotationDeg": 0
       }
     ],
@@ -85,37 +86,32 @@
         "translateY": 0
       }
     ],
-    "initialDelayMs": 240,
-    "typewriterMsPerCharacter": 38
+    "initialDelayMs": 240
   },
   "pages": [
     {
       "id": "page-01",
-      "art": "src/assets/story_cat_liquid_misfit_page_01.webp",
+      "art": "src/assets/story_cat_liquid_full_page_01.webp",
       "panels": [
         {
           "number": 1,
-          "art": "src/assets/story_cat_liquid_misfit_panel_01.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_01.webp",
-          "caption": "고양이는 액체야… 틀림없어.\n내 이름 박힌 논문으로 증명해 주지.\n흐흐… 한 번만 더 측정하고."
+          "art": "src/assets/story_cat_liquid_full_panel_01.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_01.webp"
         },
         {
           "number": 2,
-          "art": "src/assets/story_cat_liquid_misfit_panel_02.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_02.webp",
-          "caption": "어? 이 버튼이 아닌데.\n내 노트! 내 안경! 잠깐, 나까지?!"
+          "art": "src/assets/story_cat_liquid_full_panel_02.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_02.webp"
         },
         {
           "number": 3,
-          "art": "src/assets/story_cat_liquid_misfit_panel_03.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_03.webp",
-          "caption": "안경은 멀쩡하고… 허리는 안 멀쩡하고.\n가만. 컵 고양이에 박스 고양이?\n나 지금 논문 안에 들어온 건가?"
+          "art": "src/assets/story_cat_liquid_full_panel_03.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_03.webp"
         },
         {
           "number": 4,
-          "art": "src/assets/story_cat_liquid_misfit_panel_04.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_04.webp",
-          "caption": "통이 바뀌면 몸도 바뀐다… 역시!\n학회에서 이걸 봤어야 했는데.\n잠깐만. 전부 기록해야 해."
+          "art": "src/assets/story_cat_liquid_full_panel_04.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_04.webp"
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
@@ -123,31 +119,27 @@
     },
     {
       "id": "page-02",
-      "art": "src/assets/story_cat_liquid_misfit_page_02.webp",
+      "art": "src/assets/story_cat_liquid_full_page_02.webp",
       "panels": [
         {
           "number": 5,
-          "art": "src/assets/story_cat_liquid_misfit_panel_05.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_05.webp",
-          "caption": "초록 고양이, 초록 차원문…\n우연? 아니지. 이건 분명 뭔가 있어.\n딱 한 발만. 그래, 거기!"
+          "art": "src/assets/story_cat_liquid_full_panel_05.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_05.webp"
         },
         {
           "number": 6,
-          "art": "src/assets/story_cat_liquid_misfit_panel_06.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_06.webp",
-          "caption": "저거 내 연구실인데?!\n같은 색끼리 만나면 인간계로 통한다…\n흐흐, 이번엔 내 쪽이 맞았어."
+          "art": "src/assets/story_cat_liquid_full_panel_06.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_06.webp"
         },
         {
           "number": 7,
-          "art": "src/assets/story_cat_liquid_misfit_panel_07.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_07.webp",
-          "caption": "저 너머에 소파가 있네.\n저 인간 말은 반쯤 못 알아듣겠지만…\n일단 누울 자리는 합격."
+          "art": "src/assets/story_cat_liquid_full_panel_07.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_07.webp"
         },
         {
           "number": 8,
-          "art": "src/assets/story_cat_liquid_misfit_panel_08.webp",
-          "cardArt": "src/assets/story_cat_liquid_misfit_card_08.webp",
-          "caption": "각자 자기 색 차원문으로 가면 돼!\n돌아가면 논문부터… 아니, 밥부터.\n내 노트! 또 두고 왔네."
+          "art": "src/assets/story_cat_liquid_full_panel_08.webp",
+          "cardArt": "src/assets/story_cat_liquid_full_card_08.webp"
         }
       ],
       "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
@@ -166,6 +158,7 @@
     "replayQuery": "story=replay",
     "stampCss": "web/story-intro.css",
     "completedOn": [
+      "skip",
       "complete"
     ],
     "impactArt": "src/assets/story_cat_liquid_impact_ink.png"
@@ -187,81 +180,81 @@
   },
   "frame": {
     "style": "angled-ink",
-    "cardWidth": 372,
-    "cardHeight": 145,
-    "rimPx": 3,
-    "inkPx": 2.5,
+    "cardWidth": 385,
+    "cardHeight": 192,
+    "rimPx": 2.5,
+    "inkPx": 2,
     "outlines": [
       [
         [
-          2,
-          4
+          1,
+          1
         ],
         [
-          370,
-          4
+          384,
+          1
         ],
         [
-          370,
-          130
+          384,
+          183
         ],
         [
-          2,
-          141
+          1,
+          191
         ]
       ],
       [
         [
-          2,
-          15
+          1,
+          9
         ],
         [
-          370,
-          4
+          384,
+          1
         ],
         [
-          358,
-          141
+          378,
+          191
         ],
         [
-          12,
-          141
+          7,
+          191
         ]
       ],
       [
         [
-          12,
-          4
+          7,
+          1
         ],
         [
-          358,
-          4
+          378,
+          1
         ],
         [
-          370,
-          141
+          384,
+          191
         ],
         [
-          2,
-          129
+          1,
+          183
         ]
       ],
       [
         [
-          2,
-          4
+          1,
+          1
         ],
         [
-          370,
-          15
+          384,
+          9
         ],
         [
-          370,
-          141
+          384,
+          191
         ],
         [
-          2,
-          141
+          1,
+          191
         ]
       ]
     ],
@@ -272,12 +265,19 @@
     "observedExampleUrl": "https://i.pinimg.com/474x/03/dc/df/03dcdf244f5f83c44d4038dcb2e43a6a.jpg",
     "observation": "검색 결과의 실제 프레임 예시에서 검은 선, 흰 여백, 사선 컷 경계, 집중선을 확인. 가로 네 컷을 유지하며 테두리와 사고 장면의 집중선에 적용."
   },
-  "dialogue": {
-    "x": 16,
-    "y": 700,
-    "width": 361,
-    "height": 100,
-    "fontSize": 18
-  },
-  "artDirection": "Actual game reference: matte dimensional cel shading, long cuboid half-lidded cats, asymmetric eccentric scientist. No educational-book illustration."
+  "artDirection": "Wordless tall phone comic. Roomier 2:1 panels, dimensional matte game art, same eccentric researcher and cuboid cats. No embedded text or dialogue area.",
+  "controlLayout": {
+    "skip": {
+      "x": 16,
+      "y": 800,
+      "width": 80,
+      "height": 44
+    },
+    "next": {
+      "x": 297,
+      "y": 800,
+      "width": 80,
+      "height": 44
+    }
+  }
 }

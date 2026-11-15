@@ -15,17 +15,19 @@ const key = 'leonout_' + STORY_INTRO_STORAGE_SUFFIX;
 
 assert.deepEqual(story.pages.map(page => page.sceneUuid), [...STORY_INTRO_SCENE_UUIDS]);
 assert.deepEqual(story.pages.map(page => page.sceneName), [...STORY_INTRO_SCENES]);
-assert.equal(story.textMode, 'bottom-typewriter');
+assert.equal(story.textMode, 'none');
 assert.equal(story.display.autoAdvance, false);
 assert.equal(story.display.startStageAutomatically, false);
 const firstEntryEdges = graph.edges.filter(edge => edge.fromSceneName === 'splash');
 assert.equal(firstEntryEdges[0].trigger.condition, 'story.firstEntry');
 assert.equal(firstEntryEdges[1].trigger.condition, '로딩');
 const newEdges = graph.edges.filter(edge => edge.id.startsWith('edge-story-') || edge.id === 'edge-splash-story-first-entry');
-assert.equal(newEdges.length, 3);
+assert.equal(newEdges.length, 5);
 assert.ok(newEdges.every(edge => edge.toSceneName !== 'Ingame'));
 assert.equal(story.display.advanceMode, 'next-click-next-panel');
-assert.equal(story.display.allowSkip, false);
+assert.equal(story.display.allowSkip, true);
+assert.deepEqual(story.controls, { skip: 'skip', next: 'next' });
+assert.equal(story.dialogue, undefined);
 assert.deepEqual(newEdges.filter(edge => !edge.trigger).map(edge => edge.label), ['story.pageComplete', 'story.finish']);
 const sourceGraph = json('.ui-editor/scene-flow.json');
 for (const edge of newEdges) assert.deepEqual(sourceGraph.edges.find(item => item.id === edge.id), edge);
@@ -41,11 +43,11 @@ for (const page of story.pages) {
   assert.equal(cards.length, 4);
   for (const [slot, card] of cards.entries()) {
     assert.equal(card.visual.exportPath, page.panels[slot].cardArt);
-    assert.equal(card.visual.height * card.scale, story.motion.imageHeight + 13);
-    assert.equal(card.visual.width * card.scale, story.motion.imageWidth + 12);
+    assert.equal(card.visual.height * card.scale, story.frame.cardHeight);
+    assert.equal(card.visual.width * card.scale, story.frame.cardWidth);
     assert.equal(card.x + card.visual.width * card.scale / 2, story.motion.layout[slot].centerX);
     assert.equal(card.y + card.visual.height * card.scale / 2, story.motion.layout[slot].centerY);
-    assert.ok(page.panels[slot].caption.trim());
+    assert.equal(page.panels[slot].caption, undefined);
     const angle = Math.abs(card.rotation) * Math.PI / 180;
     const halfWidth = card.visual.width * card.scale / 2;
     const halfHeight = card.visual.height * card.scale / 2;
@@ -62,22 +64,32 @@ for (const page of story.pages) {
   assert.equal(contract.background.scrollEnabled, true);
   assert.equal(contract.background.imagePath, 'src/assets/common_bg_pt_3.png');
   assert.ok(cards.every(layer => !layer.texts?.length));
-  assert.ok(contract.layers.every(layer => !layer.stableId.startsWith('story-skip-') && !layer.stableId.startsWith('story-advance-')));
-  assert.ok(contract.layers.flatMap(layer => layer.texts || []).every(text => text.staticContent === '' || text.staticContent === 'next'));
-  assert.ok(contract.layers.flatMap(layer => layer.texts || []).every(text => text.bindingKey !== 'story.hint'));
+  assert.ok(contract.layers.every(layer => !layer.stableId.startsWith('story-dialogue-') && !layer.stableId.startsWith('story-advance-')));
+  assert.deepEqual(contract.layers.flatMap(layer => layer.texts || []).map(text => text.staticContent).sort(), ['next', 'skip']);
+  assert.ok(contract.layers.flatMap(layer => layer.texts || []).every(text => !text.bindingKey));
   for (const layer of contract.layers) {
     if (layer.visual.exportPath) assert.ok(existsSync(new URL(layer.visual.exportPath, root)), layer.visual.exportPath);
     const sourceLayer = source.layers.find(item => item.stableId === layer.stableId);
     assert.ok(sourceLayer);
-    if (layer.stableId.startsWith('story-next-')) {
-      assert.equal(layer.texts[0].staticContent, 'next');
-      assert.equal(sourceLayer.componentState.texts[0].content, 'next');
+    if (layer.stableId.startsWith('story-next-') || layer.stableId.startsWith('story-skip-')) {
+      const action = layer.stableId.startsWith('story-next-') ? 'next' : 'skip';
+      assert.equal(layer.texts[0].staticContent, action);
+      assert.equal(sourceLayer.componentState.texts[0].content, action);
       assert.equal(layer.rotation, 0);
+      assert.equal(layer.x, story.controlLayout[action].x);
+      assert.equal(layer.y, story.controlLayout[action].y);
+      assert.ok(layer.y >= Math.max(...cards.map(card => card.y + card.visual.height * card.scale)));
     }
     assert.deepEqual(layer.events || [], sourceLayer.events || []);
     for (const event of layer.events || []) {
-      assert.equal(event.eventName, `story-advance-${page.sceneName.slice(-2)}:click`);
-      assert.ok(layer.stableId.startsWith('story-next-'));
+      const n = page.sceneName.slice(-2);
+      if (layer.stableId.startsWith('story-next-')) assert.equal(event.eventName, `story-advance-${n}:click`);
+      else {
+        assert.equal(event.eventName, `story-skip-${n}:click`);
+        const edge = newEdges.find(edge => edge.id === `edge-story-skip-${n}`);
+        assert.equal(edge.trigger.condition, 'story.complete');
+        assert.equal(edge.toHostedBy[0].tabId, 't1');
+      }
     }
   }
 }
@@ -88,7 +100,7 @@ assert.match(css, /prefers-reduced-motion: reduce/);
 assert.ok(existsSync(new URL(story.integration.impactArt, root)));
 for (const path of ['godot-shell.html', 'web/index.html']) {
   const shell = read(path);
-  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v8"/);
+  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v9"/);
   assert.match(shell, /import \{ attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX \}/);
   assert.match(shell, /const GAME_STORAGE_KEYS = \[[\s\S]*?STORY_INTRO_STORAGE_KEY,/);
   assert.match(shell, /localStorage\.getItem\(STORY_INTRO_STORAGE_KEY\) !== '1'\) \? STORY_INTRO_SCENES : \[\]/);
@@ -196,18 +208,12 @@ function readPage(flow, pageIndex) {
   for (const [index, panel] of story.pages[pageIndex].panels.entries()) {
     const cardKey = `panel${String(panel.number).padStart(2, '0')}`;
     assert.equal(renderer.data.story[cardKey], true);
-    assert.equal(renderer.data.story.dialogue, '');
+    assert.equal(renderer.data.story.dialogue, undefined);
     assert.equal(renderer.data.story.nextReady, true);
     assert.equal(renderer.data.story.hint, undefined);
-    step(story.motion.entryDurationMs + story.motion.typewriterMsPerCharacter);
-    assert.equal([...new Intl.Segmenter('ko', { granularity: 'grapheme' }).segment(renderer.data.story.dialogue)].length, 1);
-    const partial = renderer.data.story.dialogue;
-    renderer.getElement(`story-dialogue-${pageNumber}`).click();
-    assert.equal(renderer.data.story.dialogue, partial, 'Dialogue is not a hidden advance button');
-    if (index === 1) {
-      step(10000);
-      assert.equal(renderer.data.story.dialogue, panel.caption);
-    }
+    assert.equal(renderer.getElement(`story-dialogue-${pageNumber}`), null);
+    assert.equal(pendingFrames.size, 0, 'A wordless panel must not keep a typing animation loop');
+    step(10000);
     if (index < 3) {
       const nextKey = `panel${String(panel.number + 1).padStart(2, '0')}`;
       assert.equal(renderer.data.story[nextKey], false, 'Waiting must not reveal the next cut');
@@ -218,9 +224,8 @@ function readPage(flow, pageIndex) {
         assert.ok(prevented);
       } else next.click();
       assert.equal(renderer.data.story[cardKey], true, 'Earlier cuts stay visible');
-      assert.equal(renderer.data.story[nextKey], true, 'One next click advances immediately, including mid-type');
-      assert.equal(renderer.data.story.dialogue, '');
-      assert.equal(pendingFrames.size, 1, 'Advancing cancels the previous typing loop');
+      assert.equal(renderer.data.story[nextKey], true, 'One next click advances immediately');
+      assert.equal(pendingFrames.size, 0);
     }
   }
 }
@@ -235,7 +240,7 @@ try {
   assert.equal(storage.get(key), undefined, 'Opening the story must not mark it complete');
   const next = first.current.renderer.getElement('story-next-01');
   assert.equal(next.attributes.role, 'button');
-  assert.equal(next.attributes['aria-label'], '다음 장면');
+  assert.equal(next.attributes['aria-label'], 'next');
   assert.equal(first.current.renderer.data.story.panel01, false);
   next.click();
   await delay(5);
@@ -243,11 +248,10 @@ try {
   step(story.motion.initialDelayMs - 1);
   assert.equal(first.current.renderer.data.story.panel01, false);
   step(1);
-  step(story.motion.entryDurationMs + story.motion.typewriterMsPerCharacter * 3);
-  assert.equal(first.current.renderer.data.story.dialogue, story.pages[0].panels[0].caption.slice(0, 3));
-  // Natural completion leaves the next cut hidden until next is clicked.
+  assert.equal(first.current.renderer.data.story.panel01, true);
+  // Wordless panels stay visible until next is clicked.
   step(10000);
-  assert.equal(first.current.renderer.data.story.dialogue, story.pages[0].panels[0].caption);
+  assert.equal(first.current.renderer.data.story.dialogue, undefined);
   assert.equal(first.current.renderer.data.story.panel02, false);
   // Re-enter the same cached renderer: state and event subscriptions must reset.
   await first.goto('splash');
@@ -279,17 +283,34 @@ try {
   await delay(10);
   assert.equal(replay.current.name, 'home_bottom');
   assert.equal(saves, 2);
-  assert.equal(pendingFrames.size, 0, 'Leaving mid-type cancels the animation loop, including double next');
-  const originalCaption = story.pages[0].panels[0].caption;
-  story.pages[0].panels[0].caption = '고양이'.normalize('NFD');
-  const decomposed = await boot(true);
-  await press(decomposed, 'loading-out-png-11', 'StoryIntro01');
+  assert.equal(pendingFrames.size, 0);
+  const skipped = await boot(true);
+  await press(skipped, 'loading-out-png-11', 'StoryIntro01');
+  assert.equal(pendingFrames.size, 1);
+  const skip = skipped.current.renderer.getElement('story-skip-01');
+  assert.equal(skip.attributes['aria-label'], 'skip');
+  skip.click();
+  skip.click();
+  await delay(10);
+  assert.equal(skipped.current.name, 'home_bottom');
+  assert.equal(saves, 3, 'Double skip saves once, even before the first cut');
+  assert.equal(pendingFrames.size, 0);
+  const skippedSecond = await boot(true);
+  await press(skippedSecond, 'loading-out-png-11', 'StoryIntro01');
+  readPage(skippedSecond, 0);
+  await press(skippedSecond, 'story-next-01', 'StoryIntro02');
   step(story.motion.initialDelayMs);
-  step(story.motion.entryDurationMs + story.motion.typewriterMsPerCharacter);
-  assert.equal(decomposed.current.renderer.data.story.dialogue, '고'.normalize('NFD'), 'Even decomposed Hangul appears one syllable at a time');
-  await decomposed.goto('splash');
-  assert.equal(pendingFrames.size, 0, 'Scene exit cancels unfinished typing');
-  story.pages[0].panels[0].caption = originalCaption;
+  let prevented = false;
+  skippedSecond.current.renderer.getElement('story-skip-02').listeners.keydown({ key: 'Enter', preventDefault() { prevented = true; } });
+  await delay(10);
+  assert.ok(prevented);
+  assert.equal(skippedSecond.current.name, 'home_bottom');
+  assert.equal(saves, 4);
+  const interrupted = await boot(true);
+  await press(interrupted, 'loading-out-png-11', 'StoryIntro01');
+  assert.equal(pendingFrames.size, 1);
+  await interrupted.goto('splash');
+  assert.equal(pendingFrames.size, 0, 'Scene exit cancels the entrance wait');
   assert.deepEqual(errors, [], 'Story navigation must not emit FlowDriver errors');
 } finally {
   globalThis.fetch = nativeFetch;
@@ -302,4 +323,4 @@ try {
   else globalThis.localStorage = nativeStorage;
   Object.assign(console, consoleMethods);
 }
-console.log('story intro: next-only controls, immediate mid-type advance, document edges, grapheme typing, cached reentry, double-click cleanup, replay and save passed');
+console.log('story intro: wordless tall panels, bottom skip/next, immediate advance, document edges, early skip, keyboard, cached reentry, double-click cleanup, replay and save passed');
