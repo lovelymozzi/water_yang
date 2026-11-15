@@ -3,6 +3,8 @@ render_mode unshaded, cull_front, fog_disabled;
 
 uniform vec4 outline_color : source_color = vec4(0.18, 0.09, 0.06, 1.0);
 uniform float outline_width : hint_range(0.001, 0.04, 0.001) = 0.008;
+// Enabled only by CatEntity; shared key/grass/hole materials keep their style.
+uniform bool storybook_outline_enabled = false;
 // A completely uniform shell looks mechanical. Keep the upper silhouette
 // lighter and let the lower/underside silhouette carry a little more ink.
 uniform float top_outline_scale : hint_range(0.4, 1.2, 0.01) = 0.78;
@@ -37,6 +39,7 @@ void vertex() {
 	float downward_facing = max(-NORMAL.y, 0.0);
 	float line_weight = mix(1.0, top_outline_scale, upward_facing);
 	line_weight = mix(line_weight, bottom_outline_scale, downward_facing);
+	line_weight *= storybook_outline_enabled ? 1.65 : 1.0;
 	float foam_width = 1.0;
 	if (water_foam_enabled) {
 		float sway = sin(water_wave_time * 2.1 + water_wave_phase - VERTEX.y * 9.0);
@@ -53,11 +56,19 @@ void fragment() {
 		length(MODEL_MATRIX[0].xyz),
 		max(length(MODEL_MATRIX[1].xyz), length(MODEL_MATRIX[2].xyz))
 	);
-	vec4 outline_view = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, FRAGCOORD.z, 1.0);
+	float clip_depth = FRAGCOORD.z;
+	#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+		clip_depth = clip_depth * 2.0 - 1.0;
+	#endif
+	vec4 outline_view = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, clip_depth, 1.0);
 	float outline_depth = -outline_view.z / outline_view.w;
 	float shell_depth_bias = outline_width * model_scale * self_overlap_depth_scale;
+	shell_depth_bias *= storybook_outline_enabled ? 1.65 : 1.0;
 	vec4 biased_clip = PROJECTION_MATRIX * vec4(0.0, 0.0, -outline_depth - shell_depth_bias, 1.0);
 	DEPTH = biased_clip.z / biased_clip.w;
+	#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+		DEPTH = DEPTH * 0.5 + 0.5;
+	#endif
 	if (water_foam_enabled) {
 		// Keep the contact foam close to the visible skin. Compatibility uses
 		// -1..1 clip depth, which must be mapped to the depth buffer's 0..1.
@@ -77,7 +88,8 @@ void fragment() {
 		}
 	}
 	#include "res://scripts/cat_absorb_light.gdshaderinc"
-	ALBEDO = mix(outline_color.rgb, absorb_light_color, absorb_light_weight);
+	vec3 ink_color = outline_color.rgb * (storybook_outline_enabled ? 0.82 : 1.0);
+	ALBEDO = mix(ink_color, absorb_light_color, absorb_light_weight);
 	if (water_foam_enabled) {
 		// Small moving gaps read as contact foam rather than a solid sticker edge.
 		float breakup = sin(foam_body_position * 23.0 - water_wave_time * 2.1 + water_wave_phase);
@@ -85,6 +97,6 @@ void fragment() {
 			discard;
 		}
 	} else {
-		EMISSION = outline_color.rgb * 0.16 * (1.0 - absorb_light_weight);
+		EMISSION = outline_color.rgb * (storybook_outline_enabled ? 0.0 : 0.16) * (1.0 - absorb_light_weight);
 	}
 }

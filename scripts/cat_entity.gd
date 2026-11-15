@@ -1865,8 +1865,10 @@ func _build_cat_material() -> void:
 	if outline_shader != null:
 		_outline_material = ShaderMaterial.new()
 		_outline_material.shader = outline_shader
+		_outline_material.set_shader_parameter("storybook_outline_enabled", true)
 		_material_id_2_outline = ShaderMaterial.new()
 		_material_id_2_outline.shader = outline_shader
+		_material_id_2_outline.set_shader_parameter("storybook_outline_enabled", true)
 		_cat_material.next_pass = _outline_material
 		_material_id_2.next_pass = _material_id_2_outline
 

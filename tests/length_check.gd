@@ -82,6 +82,14 @@ func _check_body(
 	manager.get_node("LayoutCats").add_child(cat)
 	cat.initialize_runtime(manager)
 	cat.advance(0.0)
+	for material in [cat._outline_material, cat._material_id_2_outline]:
+		_expect(material.get_shader_parameter("storybook_outline_enabled") == true,
+			"%s: 고양이 두 서피스의 동화풍 외곽선이 누락됐다" % label)
+	_expect(cat._cat_material.next_pass == cat._outline_material
+		and cat._material_id_2.next_pass == cat._material_id_2_outline,
+		"%s: 외곽선이 구부러진 본체와 다른 메시를 사용한다" % label)
+	_expect(load("res://resources/key_toon_material.tres").next_pass.get_shader_parameter("storybook_outline_enabled") != true,
+		"%s: 고양이의 외곽선 스타일이 열쇠 재질에 적용됐다" % label)
 
 	var tile: float = manager.tile_size
 	var scale: float = cat._baseline_stretch_scale()
