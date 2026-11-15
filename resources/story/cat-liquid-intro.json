@@ -10,8 +10,8 @@
   },
   "textMode": "none",
   "controls": {
-    "next": "icon-only",
-    "skip": "icon-only"
+    "next": "next",
+    "skip": "skip-underlined"
   },
   "display": {
     "firstEntryOnly": true,

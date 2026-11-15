@@ -1,4 +1,8 @@
 /* Layout and navigation are defined by StoryIntro contracts, motion by their timeline. */
+:is(#story-intro-01, #story-intro-02) [data-stable-id^="story-skip-"] .text-0 {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 :is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"].animate__bounceIn {
   animation-name: story-card-stamp;
   animation-duration: var(--animate-duration);

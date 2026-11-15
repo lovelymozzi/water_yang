@@ -141,17 +141,27 @@
     },
     {
       "stableId": "story-skip-02",
-      "layerType": "image",
+      "layerType": "component",
       "displayName": "Skip story",
-      "x": 329,
+      "x": 312,
       "y": 24,
       "zIndex": 10,
-      "scale": 0.52,
+      "scale": 1,
       "rotation": 0,
       "visual": {
-        "exportPath": "src/assets/common_btn_top_x_blue.png",
-        "width": 86,
-        "height": 92
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 64,
+            "height": 48
+          },
+          "fill": {
+            "type": "none"
+          },
+          "border": {
+            "width": 0
+          }
+        }
       },
       "effects": [
         {
@@ -176,21 +186,54 @@
             }
           ]
         }
+      ],
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "skip",
+          "fontSize": 24,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#396FA9",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "stroke": {
+              "width": 0
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
+        }
       ]
     },
     {
       "stableId": "story-next-02",
-      "layerType": "image",
+      "layerType": "component",
       "displayName": "Next page",
-      "x": 300,
+      "x": 292,
       "y": 748,
       "zIndex": 10,
-      "scale": 0.5,
-      "rotation": -90,
+      "scale": 1,
+      "rotation": 0,
       "visual": {
-        "exportPath": "src/assets/arrow.png",
-        "width": 116,
-        "height": 130
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 80,
+            "height": 56
+          },
+          "fill": {
+            "type": "none"
+          },
+          "border": {
+            "width": 0
+          }
+        }
       },
       "effects": [
         {
@@ -214,6 +257,29 @@
               "targetSceneName": "Lobby"
             }
           ]
+        }
+      ],
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "next",
+          "fontSize": 28,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#396FA9",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "stroke": {
+              "width": 0
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
         }
       ]
     }

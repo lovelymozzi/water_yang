@@ -40,10 +40,17 @@ for (const page of story.pages) {
   assert.ok(contract.sceneAnimations.every(item => item.loop === false));
   assert.equal(contract.sceneAnimations.at(-1).targetStableId, `story-next-${page.sceneName.slice(-2)}`);
   assert.ok(contract.sceneAnimations.at(-1).startTimeMs > story.motion.panelStartMs.at(-1) + story.motion.entryDurationMs);
-  assert.ok(contract.layers.every(layer => !layer.texts?.length));
+  assert.ok(cards.every(layer => !layer.texts?.length));
   for (const layer of contract.layers) {
-    assert.ok(existsSync(new URL(layer.visual.exportPath, root)), layer.visual.exportPath);
-    assert.ok(source.layers.some(item => item.stableId === layer.stableId));
+    if (layer.visual.exportPath) assert.ok(existsSync(new URL(layer.visual.exportPath, root)), layer.visual.exportPath);
+    const sourceLayer = source.layers.find(item => item.stableId === layer.stableId);
+    assert.ok(sourceLayer);
+    if (layer.events?.length) {
+      const label = layer.stableId.startsWith('story-skip-') ? 'skip' : 'next';
+      assert.equal(layer.texts[0].staticContent, label);
+      assert.equal(sourceLayer.componentState.texts[0].content, label);
+      assert.equal(layer.rotation, 0);
+    }
     for (const event of layer.events || []) {
       const edge = newEdges.find(item => item.fromSceneUuid === page.sceneUuid && item.trigger.eventName === event.eventName);
       assert.ok(edge, event.eventName);
@@ -62,7 +69,7 @@ assert.match(css, /prefers-reduced-motion: reduce/);
 assert.ok(existsSync(new URL('src/assets/story_cat_liquid_impact.png', root)));
 for (const path of ['godot-shell.html', 'web/index.html']) {
   const shell = read(path);
-  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v3"/);
+  assert.match(shell, /href="\.\/story-intro\.css\?v=cat-liquid-v4"/);
   assert.match(shell, /import \{ attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX \}/);
   assert.match(shell, /const GAME_STORAGE_KEYS = \[[\s\S]*?STORY_INTRO_STORAGE_KEY,/);
   assert.match(shell, /localStorage\.getItem\(STORY_INTRO_STORAGE_KEY\) !== '1'\) \? STORY_INTRO_SCENES : \[\]/);

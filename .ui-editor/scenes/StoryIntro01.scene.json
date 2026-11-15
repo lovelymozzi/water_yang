@@ -113,24 +113,20 @@
     {
       "id": 20100,
       "stableId": "story-skip-01",
-      "type": "image",
+      "type": "component",
       "name": "Skip story",
-      "exportPath": "src/assets/common_btn_top_x_blue.png",
-      "x": 329,
+      "x": 312,
       "y": 24,
       "zIndex": 10,
-      "scale": 0.52,
+      "scale": 1,
       "scaleX": 1,
       "scaleY": 1,
       "rotation": 0,
       "visible": true,
-      "width": 86,
-      "height": 92,
       "pressEnabled": true,
       "pressScale": 95,
       "pressBrightness": 95,
       "pressTransition": 100,
-      "texts": [],
       "zLayerId": "zl-ui",
       "events": [
         {
@@ -144,29 +140,51 @@
             }
           ]
         }
-      ]
+      ],
+      "source": "preset",
+      "componentState": {
+        "name": "Skip story",
+        "shapeType": "rectangle",
+        "width": 64,
+        "height": 48,
+        "bgType": "none",
+        "borderWidth": 0,
+        "pressEnabled": true,
+        "pressScale": 95,
+        "pressBrightness": 95,
+        "pressTransition": 100,
+        "texts": [
+          {
+            "content": "skip",
+            "fontSize": 24,
+            "fontWeight": "normal",
+            "fontFamily": "\"Lilita One\", cursive",
+            "color": "#396FA9",
+            "offsetX": 0,
+            "offsetY": 0,
+            "textStrokeWidth": 0,
+            "textShadowOpacity": 0
+          }
+        ]
+      }
     },
     {
       "id": 20101,
       "stableId": "story-next-01",
-      "type": "image",
+      "type": "component",
       "name": "Next page",
-      "exportPath": "src/assets/arrow.png",
-      "x": 300,
+      "x": 292,
       "y": 748,
       "zIndex": 10,
-      "scale": 0.5,
+      "scale": 1,
       "scaleX": 1,
       "scaleY": 1,
-      "rotation": -90,
+      "rotation": 0,
       "visible": true,
-      "width": 116,
-      "height": 130,
       "pressEnabled": true,
       "pressScale": 95,
       "pressBrightness": 95,
       "pressTransition": 100,
-      "texts": [],
       "zLayerId": "zl-ui",
       "events": [
         {
@@ -180,7 +198,33 @@
             }
           ]
         }
-      ]
+      ],
+      "source": "preset",
+      "componentState": {
+        "name": "Next page",
+        "shapeType": "rectangle",
+        "width": 80,
+        "height": 56,
+        "bgType": "none",
+        "borderWidth": 0,
+        "pressEnabled": true,
+        "pressScale": 95,
+        "pressBrightness": 95,
+        "pressTransition": 100,
+        "texts": [
+          {
+            "content": "next",
+            "fontSize": 28,
+            "fontWeight": "normal",
+            "fontFamily": "\"Lilita One\", cursive",
+            "color": "#396FA9",
+            "offsetX": 0,
+            "offsetY": 0,
+            "textStrokeWidth": 0,
+            "textShadowOpacity": 0
+          }
+        ]
+      }
     }
   ],
   "zLayers": [
