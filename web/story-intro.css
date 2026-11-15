@@ -1,0 +1,38 @@
+/* Layout and navigation are defined by StoryIntro contracts, motion by their timeline. */
+:is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"].animate__bounceIn {
+  animation-name: story-card-stamp;
+  animation-duration: var(--animate-duration);
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+  transform-origin: 50% 50%;
+}
+:is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"].animate__bounceIn::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  pointer-events: none;
+  background: url("../src/assets/story_cat_liquid_impact.png") center / 100% 100% no-repeat;
+  animation: story-stamp-impact var(--animate-duration) steps(1, end) both;
+}
+@keyframes story-card-stamp {
+  0% { opacity: 1; transform: translateY(-22px) rotate(3deg) scale(1.16); }
+  40% { opacity: 1; transform: translateY(4px) rotate(-1deg) scale(0.96); }
+  70% { opacity: 1; transform: translateY(-1px) rotate(0.4deg) scale(1.015); }
+  100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+@keyframes story-stamp-impact {
+  0% { opacity: 1; }
+  60%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"].animate__bounceIn {
+    animation-name: story-card-reveal;
+    animation-duration: 1ms;
+  }
+  :is(#story-intro-01, #story-intro-02) [data-stable-id^="story-card-"]::after {
+    display: none;
+  }
+}
+@keyframes story-card-reveal {
+  from, to { opacity: 1; transform: none; }
+}

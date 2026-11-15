@@ -4,7 +4,7 @@ import json
 import math
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageOps
 
 output = Path(__file__).resolve().parent
 root = output.parents[2]
@@ -42,6 +42,7 @@ for page_index, page in enumerate(story["pages"], 1):
         draw.rectangle((0, 0, paper_w - 1, paper_h - 1), fill=motion["paperColor"])
         card.paste(art, (padding, padding))
         draw.rectangle((0, 0, paper_w - 1, paper_h - 1), outline=motion["frameInk"], width=motion["frameBorderPx"] * scale)
+        card.save(root / panel["cardArt"], "WEBP", quality=95, method=6)
         cards.append(card)
         settled.append(card.rotate(motion["layout"][slot]["rotationDeg"], Image.Resampling.BICUBIC, expand=True))
     for time_ms in range(0, motion["previewPageDurationMs"], motion["frameDurationMs"]):
@@ -87,15 +88,45 @@ contact = Image.new("RGB", (width * scale * 2 + 24, height * scale), motion["pap
 for index, board in enumerate(boards):
     contact.paste(board, (index * (width * scale + 24), 0))
 contact.save(output / "two-page-board.jpg", quality=94)
+impact = Image.new("RGBA", ((192 + 24) * scale, (285 + 24) * scale))
+impact_draw = ImageDraw.Draw(impact)
+for degrees in range(0, 360, 45):
+    theta = math.radians(degrees)
+    impact_x = (108 + math.cos(theta) * 98) * scale
+    impact_y = (154.5 + math.sin(theta) * 144.5) * scale
+    impact_draw.line((impact_x, impact_y, impact_x + math.cos(theta) * 9 * scale, impact_y + math.sin(theta) * 9 * scale), fill=motion["frameInk"], width=2 * scale)
+impact.save(root / "src/assets/story_cat_liquid_impact.png")
 palette = contact.resize((512, 512)).quantize(colors=192)
 gif_frames = [frame.quantize(palette=palette, dither=Image.Dither.NONE) for frame in all_frames]
 gif_frames[0].save(output / "stamp-preview.gif", save_all=True, append_images=gif_frames[1:], duration=motion["frameDurationMs"], loop=0, disposal=2, optimize=True)
 gif = Image.open(output / "stamp-preview.gif")
 duration_ms = 0
+decoded_samples = {}
+sample_times = [0, 1000, 2200, 3300, 4400, 6300]
 for index in range(gif.n_frames):
     gif.seek(index)
-    duration_ms += gif.info["duration"]
+    frame_end = duration_ms + gif.info["duration"]
+    for page_index in range(len(story["pages"])):
+        for sample_time in sample_times:
+            if duration_ms <= page_index * motion["previewPageDurationMs"] + sample_time < frame_end:
+                decoded_samples[(page_index, sample_time)] = gif.convert("RGB").copy()
+    duration_ms = frame_end
 assert duration_ms == len(story["pages"]) * motion["previewPageDurationMs"]
+for page_index in range(len(story["pages"])):
+    background = decoded_samples[(page_index, 0)].getpixel((0, 0))
+    visible_counts = []
+    for sample_time in sample_times:
+        decoded = decoded_samples[(page_index, sample_time)]
+        visible_count = 0
+        for layout in motion["layout"]:
+            crop = decoded.crop((layout["centerX"] - 20, layout["centerY"] - 20, layout["centerX"] + 20, layout["centerY"] + 20))
+            visible_count += ImageChops.difference(crop, Image.new("RGB", crop.size, background)).getbbox() is not None
+        visible_counts.append(visible_count)
+    assert visible_counts == [0, 1, 2, 3, 4, 4], visible_counts
+    first_layout = motion["layout"][0]
+    first_box = (first_layout["centerX"] - 40, first_layout["centerY"] - 40, first_layout["centerX"] + 40, first_layout["centerY"] + 40)
+    assert decoded_samples[(page_index, 1000)].crop(first_box).tobytes() == decoded_samples[(page_index, 6300)].crop(first_box).tobytes()
+    assert decoded_samples[(page_index, 4400)].tobytes() == decoded_samples[(page_index, 6300)].tobytes()
 frames_per_page = motion["previewPageDurationMs"] // motion["frameDurationMs"]
 for page_index in range(len(story["pages"])):
     sample_indices = [start // motion["frameDurationMs"] + 2 for start in motion["panelStartMs"]]
@@ -107,11 +138,11 @@ for page_index in range(len(story["pages"])):
         sheet.paste(sample, ((index % 3) * width, (index // 3) * height))
     sheet.save(output / f"page-{page_index+1:02d}-motion-frames.jpg", quality=92)
 manifest = []
-for path in sorted((root / "src/assets").glob("story_cat_liquid_*.webp")):
+for path in sorted([*(root / "src/assets").glob("story_cat_liquid_*.webp"), root / "src/assets/story_cat_liquid_impact.png"]):
     with Image.open(path) as image:
         dimensions = list(image.size)
         image.verify()
     manifest.append({"path": str(path.relative_to(root)), "size": dimensions, "bytes": path.stat().st_size, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
 (output.parent / "asset-manifest.json").write_text(json.dumps({"version": 1, "revision": 3, "assets": manifest}, ensure_ascii=False, indent=2) + "\n")
-(output / "motion-check.json").write_text(json.dumps({"kind": "offline-preview-only", "frameDurationMs": motion["frameDurationMs"], "previewDurationMs": duration_ms, "gifFrames": gif.n_frames, "records": frame_records}, ensure_ascii=False, indent=2) + "\n")
+(output / "motion-check.json").write_text(json.dumps({"kind": "offline-preview-only", "frameDurationMs": motion["frameDurationMs"], "previewDurationMs": duration_ms, "gifFrames": gif.n_frames, "records": frame_records, "encodedGifInspection": {"visibleCountsEachPage": visible_counts, "firstPanelUnchangedAfterSettle": True, "finalHoldPixelsUnchanged": True, "durationMs": duration_ms}}, ensure_ascii=False, indent=2) + "\n")
 print(f"STAMP PREVIEW: PASS — {duration_ms}ms, {gif.n_frames} GIF frames, no rendered text; {sum(item['bytes'] for item in manifest)} art bytes")

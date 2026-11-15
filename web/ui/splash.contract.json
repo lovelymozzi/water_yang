@@ -217,6 +217,11 @@
           "eventName": "loading-out-png-11:click",
           "branches": [
             {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
+            {
               "condition": "로딩",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
               "targetSceneName": "Lobby"
@@ -242,6 +247,11 @@
           "trigger": "click",
           "eventName": "loading-out-png-11:click",
           "branches": [
+            {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
             {
               "condition": "로딩",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
@@ -293,6 +303,11 @@
           "trigger": "click",
           "eventName": "loading-out-png-11:click",
           "branches": [
+            {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
             {
               "condition": "로딩",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
@@ -452,6 +467,11 @@
           "trigger": "click",
           "eventName": "loading-out-png-11:click",
           "branches": [
+            {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
             {
               "condition": "로딩",
               "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",

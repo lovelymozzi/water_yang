@@ -3,6 +3,87 @@
   "revision": 3,
   "assets": [
     {
+      "path": "src/assets/story_cat_liquid_card_01.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 64756,
+      "sha256": "68331345c20a0d63ddb72642a8875e34699572fe525939c7a2bad7b81c231e2f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_02.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 74896,
+      "sha256": "3b8d95d0dec80db0af99f30f10b94ce3d24587212ea4f1f3c8f9524fa718eaea"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_03.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 66482,
+      "sha256": "707e426935f9e6c7d529a1c1a1d3a80e9220dfb5fa5cffd40cf8878caf9bbb9d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_04.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 65072,
+      "sha256": "2eac584d3791e2a9c3bedcad3a2976ba914b9ed3e3810a44f111bb8c59d2e5b8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_05.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 67418,
+      "sha256": "f54c3156d33e1ccd3c94df6e651520c137bef3d3401783b5f903f256de6f8c88"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_06.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 71738,
+      "sha256": "52e264594f8a0748cce8a055152e0e14b7ce2168e4f4c0b3d60c02e95b88b58b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_07.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 73354,
+      "sha256": "1896ffcb4cf02799687989fa8ae4522cb6634246ba54bcba70a848bf584b6a9a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_card_08.webp",
+      "size": [
+        384,
+        570
+      ],
+      "bytes": 76558,
+      "sha256": "58fa8011053b97c9f5f6b65059025432caee97c5805bc8b3617c3dfeffba6555"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact.png",
+      "size": [
+        432,
+        618
+      ],
+      "bytes": 1571,
+      "sha256": "1a06914ac6f353edc49473a2c8213bfe11fdc883adc857c9ab6485e6f676df0f"
+    },
+    {
       "path": "src/assets/story_cat_liquid_page_01.webp",
       "size": [
         1024,

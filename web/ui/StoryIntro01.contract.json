@@ -1,0 +1,221 @@
+{
+  "contractVersion": 1,
+  "sceneId": "story-intro-01",
+  "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+  "sceneName": "StoryIntro01",
+  "canvas": {
+    "width": 393,
+    "height": 852
+  },
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "background": {
+    "type": "solid",
+    "color": "#FFFFFF"
+  },
+  "groups": [],
+  "fxGroups": [],
+  "sceneAnimations": [
+    {
+      "id": "story-stamp-1",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-01",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 240,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-stamp-2",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-02",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 1320,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-stamp-3",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-03",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 2480,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-stamp-4",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-04",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 3640,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-next-reveal-1",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-next-01",
+      "cssPresetId": "fade-in",
+      "startMode": "atTime",
+      "startTimeMs": 4040,
+      "durationMs": 160,
+      "loop": false
+    }
+  ],
+  "layers": [
+    {
+      "stableId": "story-card-01",
+      "layerType": "image",
+      "displayName": "Story card 1",
+      "x": 4,
+      "y": 99.5,
+      "scale": 0.5,
+      "rotation": 1.5,
+      "zIndex": 1,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_card_01.webp",
+        "width": 384,
+        "height": 570
+      }
+    },
+    {
+      "stableId": "story-card-02",
+      "layerType": "image",
+      "displayName": "Story card 2",
+      "x": 197,
+      "y": 77.5,
+      "scale": 0.5,
+      "rotation": -2,
+      "zIndex": 2,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_card_02.webp",
+        "width": 384,
+        "height": 570
+      }
+    },
+    {
+      "stableId": "story-card-03",
+      "layerType": "image",
+      "displayName": "Story card 3",
+      "x": 4,
+      "y": 432.5,
+      "scale": 0.5,
+      "rotation": -1.8,
+      "zIndex": 3,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_card_03.webp",
+        "width": 384,
+        "height": 570
+      }
+    },
+    {
+      "stableId": "story-card-04",
+      "layerType": "image",
+      "displayName": "Story card 4",
+      "x": 197,
+      "y": 411.5,
+      "scale": 0.5,
+      "rotation": 1.7,
+      "zIndex": 4,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_card_04.webp",
+        "width": 384,
+        "height": 570
+      }
+    },
+    {
+      "stableId": "story-skip-01",
+      "layerType": "image",
+      "displayName": "Skip story",
+      "x": 329,
+      "y": 24,
+      "zIndex": 10,
+      "scale": 0.52,
+      "rotation": 0,
+      "visual": {
+        "exportPath": "src/assets/common_btn_top_x_blue.png",
+        "width": 86,
+        "height": 92
+      },
+      "effects": [
+        {
+          "type": "press",
+          "enabled": true,
+          "params": {
+            "scale": 95,
+            "brightness": 95,
+            "transitionMs": 100
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-skip-01:click",
+          "branches": [
+            {
+              "condition": "story.complete",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "story-next-01",
+      "layerType": "image",
+      "displayName": "Next page",
+      "x": 300,
+      "y": 748,
+      "zIndex": 10,
+      "scale": 0.5,
+      "rotation": -90,
+      "visual": {
+        "exportPath": "src/assets/arrow.png",
+        "width": 116,
+        "height": 130
+      },
+      "effects": [
+        {
+          "type": "press",
+          "enabled": true,
+          "params": {
+            "scale": 95,
+            "brightness": 95,
+            "transitionMs": 100
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-next-01:click",
+          "branches": [
+            {
+              "condition": "else",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
+              "targetSceneName": "StoryIntro02"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

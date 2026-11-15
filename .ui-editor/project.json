@@ -82,7 +82,9 @@
       "pop_DailyBonus": "System",
       "pop_TreasureChest": "System",
       "pop_Notice": "System",
-      "pop_ConnectAccount": "System"
+      "pop_ConnectAccount": "System",
+      "StoryIntro01": "Core",
+      "StoryIntro02": "Core"
     },
     "aliasMap": {
       "New Scene": "Shop",
@@ -297,7 +299,9 @@
       "no_heart",
       "New Scene",
       "Lobby_1",
-      "home_bottom"
+      "home_bottom",
+      "StoryIntro01",
+      "StoryIntro02"
     ],
     "lastScene": "pop_BuyCoins"
   },

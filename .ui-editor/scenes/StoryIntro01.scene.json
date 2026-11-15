@@ -1,0 +1,281 @@
+{
+  "name": "StoryIntro01",
+  "sceneType": "scene",
+  "canvasHeight": 852,
+  "bgType": "solid",
+  "bgColor": "#FFFFFF",
+  "bgColor2": "#0e4a8c",
+  "bgGradientAngle": 180,
+  "bgImagePath": "",
+  "bgTileSize": 64,
+  "bgTilePad": 0,
+  "bgImageAlpha": 100,
+  "bgStretchMode": "cover",
+  "bgScrollEnabled": false,
+  "bgScrollDirection": "right",
+  "bgScrollDuration": 4,
+  "refImagePath": "",
+  "refVisible": false,
+  "refDim": 0,
+  "layers": [
+    {
+      "id": 20001,
+      "stableId": "story-card-01",
+      "type": "image",
+      "name": "Story card 1",
+      "exportPath": "src/assets/story_cat_liquid_card_01.webp",
+      "x": 4,
+      "y": 99.5,
+      "scale": 0.5,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 1.5,
+      "zIndex": 1,
+      "visible": true,
+      "width": 384,
+      "height": 570,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "pressEnabled": false,
+      "texts": [],
+      "zLayerId": "zl-content"
+    },
+    {
+      "id": 20002,
+      "stableId": "story-card-02",
+      "type": "image",
+      "name": "Story card 2",
+      "exportPath": "src/assets/story_cat_liquid_card_02.webp",
+      "x": 197,
+      "y": 77.5,
+      "scale": 0.5,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": -2,
+      "zIndex": 2,
+      "visible": true,
+      "width": 384,
+      "height": 570,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "pressEnabled": false,
+      "texts": [],
+      "zLayerId": "zl-content"
+    },
+    {
+      "id": 20003,
+      "stableId": "story-card-03",
+      "type": "image",
+      "name": "Story card 3",
+      "exportPath": "src/assets/story_cat_liquid_card_03.webp",
+      "x": 4,
+      "y": 432.5,
+      "scale": 0.5,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": -1.8,
+      "zIndex": 3,
+      "visible": true,
+      "width": 384,
+      "height": 570,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "pressEnabled": false,
+      "texts": [],
+      "zLayerId": "zl-content"
+    },
+    {
+      "id": 20004,
+      "stableId": "story-card-04",
+      "type": "image",
+      "name": "Story card 4",
+      "exportPath": "src/assets/story_cat_liquid_card_04.webp",
+      "x": 197,
+      "y": 411.5,
+      "scale": 0.5,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 1.7,
+      "zIndex": 4,
+      "visible": true,
+      "width": 384,
+      "height": 570,
+      "flipX": false,
+      "flipY": false,
+      "tintMode": "off",
+      "pressEnabled": false,
+      "texts": [],
+      "zLayerId": "zl-content"
+    },
+    {
+      "id": 20100,
+      "stableId": "story-skip-01",
+      "type": "image",
+      "name": "Skip story",
+      "exportPath": "src/assets/common_btn_top_x_blue.png",
+      "x": 329,
+      "y": 24,
+      "zIndex": 10,
+      "scale": 0.52,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": 0,
+      "visible": true,
+      "width": 86,
+      "height": 92,
+      "pressEnabled": true,
+      "pressScale": 95,
+      "pressBrightness": 95,
+      "pressTransition": 100,
+      "texts": [],
+      "zLayerId": "zl-ui",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-skip-01:click",
+          "branches": [
+            {
+              "condition": "story.complete",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 20101,
+      "stableId": "story-next-01",
+      "type": "image",
+      "name": "Next page",
+      "exportPath": "src/assets/arrow.png",
+      "x": 300,
+      "y": 748,
+      "zIndex": 10,
+      "scale": 0.5,
+      "scaleX": 1,
+      "scaleY": 1,
+      "rotation": -90,
+      "visible": true,
+      "width": 116,
+      "height": 130,
+      "pressEnabled": true,
+      "pressScale": 95,
+      "pressBrightness": 95,
+      "pressTransition": 100,
+      "texts": [],
+      "zLayerId": "zl-ui",
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-next-01:click",
+          "branches": [
+            {
+              "condition": "else",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
+              "targetSceneName": "StoryIntro02"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "zLayers": [
+    {
+      "id": "zl-bg",
+      "name": "Background",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-content",
+      "name": "Content",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-ui",
+      "name": "UI",
+      "locked": false,
+      "hidden": false
+    },
+    {
+      "id": "zl-overlay",
+      "name": "Overlay",
+      "locked": false,
+      "hidden": false
+    }
+  ],
+  "activeZLayerId": "zl-content",
+  "groups": [],
+  "fxGroups": [],
+  "sceneAnimations": [
+    {
+      "id": "story-stamp-1",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-01",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 240,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-stamp-2",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-02",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 1320,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-stamp-3",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-03",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 2480,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-stamp-4",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-card-04",
+      "cssPresetId": "bounce-in",
+      "startMode": "atTime",
+      "startTimeMs": 3640,
+      "delayMs": 0,
+      "durationMs": 200,
+      "loop": false
+    },
+    {
+      "id": "story-next-reveal-1",
+      "enabled": true,
+      "type": "object-animation",
+      "targetStableId": "story-next-01",
+      "cssPresetId": "fade-in",
+      "startMode": "atTime",
+      "startTimeMs": 4040,
+      "durationMs": 160,
+      "loop": false
+    }
+  ],
+  "guides": {
+    "v": [],
+    "h": []
+  },
+  "uuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401"
+}

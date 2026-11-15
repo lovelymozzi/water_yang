@@ -123,6 +123,20 @@
 - GameField 레이어 있음
 <!-- SCENE:splash END -->
 
+<!-- SCENE:StoryIntro01 BEGIN -->
+#### `StoryIntro01` · contract: `./web/ui/StoryIntro01.contract.json`
+- sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb401`
+- 이벤트: `story-skip-01:click` · `story-next-01:click`
+- 무문자 4컷 순차 등장. 다음 아이콘은 마지막 컷 정착 뒤 표시.
+<!-- SCENE:StoryIntro01 END -->
+
+<!-- SCENE:StoryIntro02 BEGIN -->
+#### `StoryIntro02` · contract: `./web/ui/StoryIntro02.contract.json`
+- sceneUuid: `91b7f29b-8b6d-41b7-a08a-99a0a1dfb402`
+- 이벤트: `story-skip-02:click` · `story-next-02:click`
+- 무문자 4컷 순차 등장. 다음 아이콘은 마지막 컷 정착 뒤 표시.
+<!-- SCENE:StoryIntro02 END -->
+
 <!-- CHARACTERS BEGIN -->
 ## 캐릭터 (Character Maker)
 

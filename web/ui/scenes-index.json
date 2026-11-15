@@ -103,6 +103,18 @@
       "name": "splash",
       "contract": "splash.contract.json",
       "sceneType": "scene"
+    },
+    {
+      "uuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+      "name": "StoryIntro01",
+      "contract": "StoryIntro01.contract.json",
+      "sceneType": "scene"
+    },
+    {
+      "uuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
+      "name": "StoryIntro02",
+      "contract": "StoryIntro02.contract.json",
+      "sceneType": "scene"
     }
   ]
 }

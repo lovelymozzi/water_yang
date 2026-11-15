@@ -16,6 +16,7 @@
 <link rel="preload" as="audio" href="sound/diggingt_optimized.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/time_out1.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/Time_out2.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="stylesheet" href="./story-intro.css?v=cat-liquid-v3">
 <style>
 html,body{margin:0;height:100%;background:#000;overflow:hidden}
 /* Keep the native WebGL surface and the bottom navigation in separate compositing groups. */
@@ -34,6 +35,8 @@ body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr
 const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
+const STORY_INTRO_STORAGE_KEY = STORAGE_PREFIX + STORY_INTRO_STORAGE_SUFFIX;
+const STORY_INTRO_REPLAY = new URLSearchParams(location.search).get('story') === 'replay';
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
@@ -190,6 +193,7 @@ const SETTINGS_MENU_GROUPS = [
 const GAME_STORAGE_KEYS = [
   STORAGE_PREFIX + 'economy_v1',
   STORAGE_PREFIX + 'progress_v1',
+  STORY_INTRO_STORAGE_KEY,
   INITIAL_COIN_GRANT_STORAGE_KEY,
   UNLIMITED_HEARTS_STORAGE_KEY,
   ITEM_STORAGE_KEY,
@@ -382,8 +386,9 @@ import { ProgressManager } from './ui/progress-manager.js';
 import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
+import { attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX } from './story-intro.js?v=cat-liquid-v3';
 
-const SPLASH_CACHE_VERSION = 'engine-sync-v2';
+const SPLASH_CACHE_VERSION = 'story-intro-v3';
 const SPLASH_CACHE_NAME = `${STORAGE_PREFIX}splash_load_${SPLASH_CACHE_VERSION}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.pck`] || 'pck'}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.wasm`] || 'wasm'}`;
 if ('caches' in window) {
   await Promise.all(
@@ -431,7 +436,10 @@ if (!splashCache) {
 
 const CLICK_EVENT_STABLE_IDS = new Set();
 const UI_FONT_SPECS = new Set();
-const NAVIGATION_TAB_SCENES = ['home_bottom', 'Lobby', 'Ingame', 'pop_BuyCoins', 'Ranking'];
+const NAVIGATION_TAB_SCENES = [
+  'home_bottom', 'Lobby', 'Ingame', 'pop_BuyCoins', 'Ranking',
+  ...((STORY_INTRO_REPLAY || localStorage.getItem(STORY_INTRO_STORAGE_KEY) !== '1') ? STORY_INTRO_SCENES : []),
+];
 const navigationTabImages = [];
 const uiRenderStylesReady = Promise.all([
   ['scene-renderer-editor-fonts', `${UI_DIR}vendor/fonts/fonts.css`],
@@ -612,6 +620,12 @@ document.addEventListener('click', event => {
 }, { capture: true });
 
 let loadingReady = false;
+attachStoryIntro(flow, {
+  storageKey: STORY_INTRO_STORAGE_KEY,
+  isReady: () => loadingReady,
+  saveGame,
+  replay: STORY_INTRO_REPLAY,
+});
 flow.defineCondition('로딩', () => loadingReady);
 flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
 flow.defineCondition('no_heart', () => economy.getHearts() === 0 && !hasUnlimitedHearts());
