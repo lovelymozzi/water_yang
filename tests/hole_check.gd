@@ -130,6 +130,12 @@ func _check_lead_absorb(manager: LevelManager) -> void:
 	_expect(cat.is_absorbing(), "구멍 옆칸에 들어섰는데 흡입이 시작되지 않았다")
 	_expect(cat._absorb_cell == hole, "흡입 대상 구멍이 다르다: %s" % [cat._absorb_cell])
 	_expect(cat._absorb_from_lead, "리드가 닿았는데 후미쪽 흡입으로 잡혔다")
+	_expect(cat.get_node_or_null("AbsorbLevelUp") == null, "제거한 흡입 이펙트가 생성됐다")
+	_expect(manager.get_node_or_null("HoleVisuals/AbsorbLevelUpWarmup") == null,
+		"제거한 흡입 이펙트의 사전 재생이 남아 있다")
+	for material in [cat._cat_material, cat._material_id_2, cat._outline_material, cat._material_id_2_outline]:
+		_expect((material.get_shader_parameter("absorb_light_portal") as Vector4).is_zero_approx(),
+			"흡입 중 고양이 몸을 덮는 발광이 남아 있다")
 	var absorb_players := cat.find_children("*", "AudioStreamPlayer", true, false)
 	var absorb_overlay_played := false
 	for player in absorb_players:
