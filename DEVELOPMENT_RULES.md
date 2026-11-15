@@ -21,6 +21,8 @@
 
 ## 씬과 에디터
 
+- 팝업 배경 보정(2026-11-15 사용자 예외 승인): `web/ui/popup-manager.js`는 contract의 `image-*` 배경을 투명화하지 않는다. 로비 설정과 재화 `+`로 여는 상점은 상점 탭의 `common_bg_pt_3.png` 패턴을 유지한다. 설정 원본 `.ui-editor/scenes/pop_Settings.scene.json`과 publish contract를 함께 맞췄다. 재publish 시 이 매니저 보정과 셸·웹 import map의 팝업 매니저 버전을 유지한다. 이번 직접 수정 승인은 이 배경 오류에만 적용한다. 시각 확인은 사용자 확인으로 남긴다.
+
 - 메인 씬은 `scenes/main_scene.tscn`이다.
 - 레벨 배치용 고양이는 `LevelManager/LayoutCats` 아래에 둔다. 새로 배치하는 고양이는 템플릿 `scenes/cat_entity.tscn` 을 인스턴스로 떨어뜨린다. 손으로 튜닝한 툰·아웃라인·라인아트 값이 거기 담겨 있으므로, 노드를 새로 만들어 값을 다시 적으면 생성 고양이와 손 배치 고양이가 서로 다르게 보인다.
 - 레벨 배치용 장애물은 `LevelManager/LayoutObstacles` 아래에 둔다. 배치는 템플릿 `scenes/obstacle_block.tscn`을 인스턴스로 떨어뜨리고 `grid_pos`(좌상단 칸)와 `block_size`(칸 수)만 지정한다. 노드를 칸마다 하나씩 만들지 않는다.

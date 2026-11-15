@@ -63,7 +63,10 @@ export class PopupManager {
       const root = document.getElementById(this._sceneId);
       if (!root) throw new Error(`PopupManager: 팝업 루트(#${this._sceneId})를 찾지 못했습니다.`);
       root.parentElement.style.zIndex = String(Z_POPUP); // .sr-fit 을 백드롭 위로
-      root.style.background = 'transparent';              // contract 내장 딤 제거(백드롭으로 대체)
+      // Keep published image backgrounds, including the shop used as a popup.
+      if (!contract.background?.type?.startsWith('image-')) {
+        root.style.background = 'transparent'; // Solid popup dim uses the separate backdrop.
+      }
       root.style.transition = 'none';                     // 내장 opacity transition 과 충돌 방지
       root.style.transformOrigin = 'center center';
 
