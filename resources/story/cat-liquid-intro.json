@@ -1,10 +1,12 @@
 {
   "version": 1,
-  "id": "cat-liquid-intro-v2",
-  "revision": 2,
-  "locale": "ko-KR",
-  "status": "art-ready-awaiting-ui-publish",
+  "id": "cat-liquid-intro-v3",
+  "revision": 3,
+  "locale": "und",
+  "status": "art-and-motion-preview-ready-awaiting-ui-publish",
   "canvas": { "width": 393, "height": 852 },
+  "textMode": "none",
+  "controls": { "next": "icon-only", "skip": "icon-only" },
   "display": {
     "firstEntryOnly": true,
     "autoAdvance": false,
@@ -13,35 +15,56 @@
     "startStageAutomatically": false,
     "recordSeenOn": ["skip", "complete"]
   },
+  "motion": {
+    "type": "sequential-stamp",
+    "keepPreviousPanels": true,
+    "loopEntrance": false,
+    "frameDurationMs": 40,
+    "previewPageDurationMs": 6400,
+    "panelStartMs": [240, 1320, 2480, 3640],
+    "entryDurationMs": 200,
+    "impactLineDurationMs": 120,
+    "paperColor": "#FFFFFF",
+    "frameInk": "#532C1E",
+    "framePaddingPx": 3,
+    "frameBorderPx": 2,
+    "imageWidth": 180,
+    "imageHeight": 272,
+    "layout": [
+      { "centerX": 100, "centerY": 242, "rotationDeg": -1.5 },
+      { "centerX": 293, "centerY": 220, "rotationDeg": 2 },
+      { "centerX": 100, "centerY": 575, "rotationDeg": 1.8 },
+      { "centerX": 293, "centerY": 554, "rotationDeg": -1.7 }
+    ],
+    "entryKeyframes": [
+      { "offset": 0, "scale": 1.16, "rotationOffsetDeg": -3, "translateY": -22 },
+      { "offset": 0.4, "scale": 0.96, "rotationOffsetDeg": 1, "translateY": 4 },
+      { "offset": 0.7, "scale": 1.015, "rotationOffsetDeg": -0.4, "translateY": -1 },
+      { "offset": 1, "scale": 1, "rotationOffsetDeg": 0, "translateY": 0 }
+    ]
+  },
   "pages": [
     {
       "id": "page-01",
-      "title": "박사님의 이상한 연구",
-      "subtitle": "호기심이 열어 버린 작은 차원문",
       "art": "src/assets/story_cat_liquid_page_01.webp",
-      "actionLabel": "다음",
       "panels": [
-        { "number": 1, "art": "src/assets/story_cat_liquid_panel_01.webp", "caption": "“고양이는…\n정말 액체일까?”" },
-        { "number": 2, "art": "src/assets/story_cat_liquid_panel_02.webp", "caption": "그 순간, 박사님이\n차원문 속으로 쏘옥!" },
-        { "number": 3, "art": "src/assets/story_cat_liquid_panel_03.webp", "caption": "눈을 떠 보니…\n고양이들의 세계?!" },
-        { "number": 4, "art": "src/assets/story_cat_liquid_panel_04.webp", "caption": "컵에도, 상자에도\n꼭 맞는 친구들이네!" }
+        { "number": 1, "art": "src/assets/story_cat_liquid_panel_01.webp" },
+        { "number": 2, "art": "src/assets/story_cat_liquid_panel_02.webp" },
+        { "number": 3, "art": "src/assets/story_cat_liquid_panel_03.webp" },
+        { "number": 4, "art": "src/assets/story_cat_liquid_panel_04.webp" }
       ]
     },
     {
       "id": "page-02",
-      "title": "인간 세상으로 가는 길",
-      "subtitle": "박사님과 함께 떠나는 말랑한 모험",
       "art": "src/assets/story_cat_liquid_page_02.webp",
-      "actionLabel": "모험 시작",
       "panels": [
-        { "number": 5, "art": "src/assets/story_cat_liquid_panel_05.webp", "caption": "“같은 색일 때만\n차원문이 반응하네!”" },
-        { "number": 6, "art": "src/assets/story_cat_liquid_panel_06.webp", "caption": "“문 너머는…\n내가 살던 인간 세상이야!”" },
-        { "number": 7, "art": "src/assets/story_cat_liquid_panel_07.webp", "caption": "햇볕 드는 창가,\n폭신한 소파가 있다고?!" },
-        { "number": 8, "art": "src/assets/story_cat_liquid_panel_08.webp", "caption": "“자, 너희 색의\n차원문을 찾아 떠나자!”" }
+        { "number": 5, "art": "src/assets/story_cat_liquid_panel_05.webp" },
+        { "number": 6, "art": "src/assets/story_cat_liquid_panel_06.webp" },
+        { "number": 7, "art": "src/assets/story_cat_liquid_panel_07.webp" },
+        { "number": 8, "art": "src/assets/story_cat_liquid_panel_08.webp" }
       ]
     }
   ],
-  "skipLabel": "건너뛰기",
   "reference": {
     "paper": "Marc-Antoine Fardin, On the Rheology of Cats, Rheology Bulletin 83(2), July 2014, pp. 16–17, 30",
     "sourceUrl": "https://improbable.com/ig/winners/#ig2017",

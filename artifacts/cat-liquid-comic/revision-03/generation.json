@@ -1,0 +1,44 @@
+{
+  "revision": 3,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "sunburst-image-generation/scripts/generate_image.py through Flava",
+  "operation": "image edit with one composed reference board per request",
+  "quality": "high",
+  "size": "1024x1536",
+  "generatedAtDate": "2026-11-15",
+  "pages": [
+    {
+      "output": "page-01-generated.png",
+      "prompt": "page-01.prompt.txt",
+      "reference": "game-cartoon-reference.png",
+      "usage": {
+        "input_text_tokens": 1334,
+        "input_image_tokens": 1536,
+        "output_image_tokens": 1372,
+        "estimated_cost_usd": "0.030059",
+        "estimated_cost_krw": "42.08"
+      }
+    },
+    {
+      "output": "page-02-generated.png",
+      "prompt": "page-02.prompt.txt",
+      "reference": "page-02-style-reference.png",
+      "usage": {
+        "input_text_tokens": 1102,
+        "input_image_tokens": 1521,
+        "output_image_tokens": 1372,
+        "estimated_cost_usd": "0.029419",
+        "estimated_cost_krw": "41.19"
+      }
+    }
+  ],
+  "total": {
+    "input_text_tokens": 2436,
+    "input_image_tokens": 3057,
+    "output_image_tokens": 2744,
+    "estimated_cost_usd": "0.059478",
+    "estimated_cost_krw": "83.27",
+    "usd_to_krw_rate": 1400
+  },
+  "notes": "Two successful requests, no retries. Hand-drawn game-cartoon art replaces polished CGI style. Wordless images contain no dialogue, captions, written effects or panel numbers. The offline GIF adds only card transforms, borders and short impact strokes; no game UI/flow is changed."
+}

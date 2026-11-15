@@ -24,7 +24,7 @@
 
 ## 씬과 에디터
 
-- 첫 입장 이야기(2026-11-15): 현재 시안은 `artifacts/cat-liquid-comic/revision-02/`의 Sunburst 원화 2페이지(각 4컷)다. 사용자의 수정 줄거리에 따라 박사의 실험 사고 → 고양이 세계의 컵고양이·박스고양이와 만남 → 같은 색 차원문 반응 관찰 → 인간계 발견 → 모험 출발로 구성했다. 이야기 속 고양이는 짧고 통통한 입체형이며, 이전의 긴 몸 시안은 보관 기록이다. 문구·표시 정책은 `resources/story/cat-liquid-intro.json`, 현재 원화/개별 컷은 `src/assets/story_cat_liquid_*.webp`, UI 연결 명세는 `artifacts/cat-liquid-comic/ui-editor-handoff.md`에 있다. 다음 버튼으로 수동 진행하고 건너뛰기를 제공하며, 마지막은 기존 로비로 이어져 자동 스테이지 시작·하트 소비를 하지 않는 구성이다. 새 UI 씬·이벤트와 흐름은 아직 publish되지 않았으며 게임 연결은 대기 중이다. 이번 이미지 수정 진행 승인은 publish 산출물 직접 수정 예외를 의미하지 않는다.
+- 첫 입장 이야기(2026-11-15): 현재 시안은 `artifacts/cat-liquid-comic/revision-03/`의 손그림 만화풍 Sunburst 원화 2페이지(각 4컷)와 `stamp-preview.gif`다. 박사의 실험 사고 → 컵고양이·박스고양이와 만남 → 색상 차원문 반응 관찰 → 인간계 발견 → 모험 출발이라는 줄거리를 유지한다. 사용자의 “한화면에 순서대로 한장씩 탕탕탕 박히는 느낌”에 따라 제목·대사·내레이션·컷 번호·효과음 글자를 모두 제거했다. 한 화면에 4컷이 240/1320/2480/3640ms에 추가되고, 각 200ms의 국소 스탬프 모션 뒤 이전 컷과 함께 남는다. 명세는 `resources/story/cat-liquid-intro.json`, 현재 WebP는 `src/assets/story_cat_liquid_*.webp`, UI 연결 명세는 `artifacts/cat-liquid-comic/ui-editor-handoff.md`에 있다. 실제 도입은 다음/건너뛰기 아이콘으로 진행하며 자동 스테이지 시작·하트 소비가 없다. GIF의 페이지당 6.4초 자동 넘김/반복은 오프라인 확인용이다. 새 UI 씬·이벤트·흐름은 아직 publish되지 않았으며, 이번 원화·모션 시안 제작이 publish 산출물 직접 수정 예외를 의미하지 않는다.
 
 - 팝업 배경 보정(2026-11-15 사용자 예외 승인): `web/ui/popup-manager.js`는 contract의 `image-*` 배경을 투명화하지 않는다. 로비 설정과 재화 `+`로 여는 상점은 상점 탭의 `common_bg_pt_3.png` 패턴을 유지한다. 설정 원본 `.ui-editor/scenes/pop_Settings.scene.json`과 publish contract를 함께 맞췄다. 재publish 시 이 매니저 보정과 셸·웹 import map의 팝업 매니저 버전을 유지한다. 이번 직접 수정 승인은 이 배경 오류에만 적용한다. 시각 확인은 사용자 확인으로 남긴다.
 
