@@ -1,0 +1,89 @@
+{
+  "scope": "HTTP response checks, not browser/game rendering",
+  "responses": [
+    {
+      "path": "web/index.html",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "125b73f568aba14d675512add3a984ade0bd3b85143f893c047cae8ffd4ecb99"
+    },
+    {
+      "path": "web/story-intro.js",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "7a237fb6e9d1789dcee010a9576f90d5df024e09b57dd90090522e1ba8828054"
+    },
+    {
+      "path": "web/story-intro.css",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "ab5715abf993c61f88974381bdb0b89f2e66ab7b6dcf7798b21f640c8161856c"
+    },
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "935a997a1052cd5569a395b148db3045470182cb1cfe1551af3670f2ebbd662d"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "1fe16ed1bdb20ec6a14d8bfc158173a14a87df37fbe8dcc6b0e4378ead14fbaf"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "b3abc085ff6bc72b02f56dc0bd13e8be423072c80585531cb570cfee7ddd0d0a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "b6defca340a615b848c9a72c1ac92ea8e38a5cdc33fc25b05e2ce393c9a5f099"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "6649d854db3e933a9e40434277bf3ed3edbbc2aa44b4b0ab7a0655c4066c071c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "7903f45066861eb11f9d0791d74c5ef4c255452196863c7d1a0f591d361353e2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "357e3c1a12d9f1ee169b672702e9274758b6c3e62f76bd6b4a2739a3b27408a7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "27728d840feb7f417a55db3561ae8cea107485edfef22c0c4d0eb0a5c2d8b8bb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "545c3512960cceb1bec81b2e0e4cab0ad4af305c763314f2ae9ab6f8e878406e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_07.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "f9a5df0eabe5be1fdcfb0a5690553c7ebbb487262b698f6750aa5c34401b3ed6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_08.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "bef57cd4cb09f20e9b2f4e409842561b6841c63fa2a4adf6b49068220b4e0166"
+    }
+  ]
+}

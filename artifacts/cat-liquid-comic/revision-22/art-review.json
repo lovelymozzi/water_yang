@@ -1,0 +1,25 @@
+{
+  "kind": "offline-generated-artwork-and-composite-inspection",
+  "browserGameVisualTest": false,
+  "reference": "Existing saved3D lobby cat capture + confirmed CatEntity/cat1.fbx source route, not a new game capture.",
+  "observations": [
+    "Scene4 cats match lobby silhouette more closely: smooth long torso, small tucked forepaws, short hindlegs along body axis with gap; removed big front-facing pads and banana tails.",
+    "Scene4 scientist retains original pixels; local cat/water masks only.",
+    "Scene5 continues in same stream: scientist wades and supports green cat chest with both hands, long body continues underwater in a gentle curve; relaxed deadpan cat and curious surprised scientist.",
+    "Orange/blue float alongside with same corrected lobby-like shape; horizontal arrival portal remains on distant bank.",
+    "Other6 scenes raw/cards byte-identical, including scene3 corrected legs and scene6 happy discovery eyes.",
+    "Final cards and offline full layout inspected."
+  ],
+  "tests": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "gitDiffCheck": "passed",
+    "httpResources": 9,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  },
+  "limit": "Actual game/browser visual verification remains user responsibility under AGENTS."
+}

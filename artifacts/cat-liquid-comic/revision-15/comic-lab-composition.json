@@ -1,0 +1,30 @@
+[
+  {
+    "pair": 1,
+    "replacement": "lower",
+    "originalGutter": [
+      506,
+      513
+    ],
+    "editGutter": [
+      506,
+      512
+    ],
+    "preservedPixelsSha256": "5b788ba5551011c3a42a0a2d03a2ab83b3a2e44f9677c0c5575ff6e5d20d86b2",
+    "preservedPixelsUnchanged": true
+  },
+  {
+    "pair": 2,
+    "replacement": "upper",
+    "originalGutter": [
+      508,
+      513
+    ],
+    "editGutter": [
+      557,
+      561
+    ],
+    "preservedPixelsSha256": "9e064a9c5866e5e14e3a826ae827dc10c2837546c3cfa726f4a4bff73467f433",
+    "preservedPixelsUnchanged": true
+  }
+]

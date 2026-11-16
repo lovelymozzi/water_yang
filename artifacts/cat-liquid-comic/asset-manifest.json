@@ -1,7 +1,142 @@
 {
   "version": 1,
-  "revision": 8,
+  "revision": 25,
   "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 113638,
+      "sha256": "2091e3244c3697afcb82b5e851223fefc5dddb42416c14570f7fbebc12ed81d1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 142222,
+      "sha256": "cb96248e57437d2f99348c20db0ac617e568fbd23969b6e76349528338d5de01"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 154242,
+      "sha256": "fb2f43b7490c1560a12eb9870d03b14583ce9f6f381d03a80f9a84f0890c88f7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 120888,
+      "sha256": "0ff45b05eae153ed3a0b36bef64bb16999ef73a5dc3eb51644dcd8a2562911cb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 773634,
+      "sha256": "d1755ef91483fadd92d093a5779b981704cfde559e60a1d01e78299279679b40"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 686460,
+      "sha256": "c15ba63feb8a1c9a953b0d93144e547aa0176b84de834f195c9d77aa8cc401bd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_panel_02.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 174654,
+      "sha256": "bc2bdcfe22a454c20c8caf388048a690c8a61c722e5a8c7daa111bf89623987f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_panel_03.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 228836,
+      "sha256": "dddd7313d297ea7e57d5949f1fc19406244743732f2ab30ee561ebc988342bc4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_panel_04.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 243586,
+      "sha256": "59f47a15ed8656e17d6a972f867e04e36d95a000e976ef793a187f361c9aabc1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_panel_05.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 178818,
+      "sha256": "c121b2fc177e774394073fc616e23166ba42202a870b35fc0c2b406df9b2be2f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 143278,
+      "sha256": "0cb826686f6aaf11b05ca90bc9f334cce4c1bec441c852b216ea7f36cf4e3d04"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 167792,
+      "sha256": "fc958405d827ee62447f21d1eab451f97f1e89e2f536246b9da9b35ac7ad63a4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 827880,
+      "sha256": "eaa71ec45fccb2cde14fc2d918e41715a8d7e0607dec950b498a778c83edd66f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_panel_03.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 230730,
+      "sha256": "4125228aa4fb88ee7924ec26d351a628023a0ef771605a11bd8834a064ef76a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_panel_04.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 275940,
+      "sha256": "d21253c0cb7f4c28f751807a0fec8be1f23f94c5d97dde8ba4c812c2406adef2"
+    },
     {
       "path": "src/assets/story_cat_liquid_card_01.webp",
       "size": [
@@ -145,6 +280,546 @@
       ],
       "bytes": 86920,
       "sha256": "2f04c330781c98ac1c6042f9d8d1b41583fc8b7c3abe5f2aa776719f9a27a85a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_conclusion_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 102896,
+      "sha256": "526668e5bca7d930d8fe69238ec36d106e675a25fa61e174bb5aece17c7653fd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_conclusion_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 738164,
+      "sha256": "99e0f568912d323a67f472f1b116fbdd97c9c4fc1b598ef74b5a5c989e4b2523"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_conclusion_panel_08.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 156156,
+      "sha256": "2b785e2fea71c743ccb31b605833c81ea04e92637ed77147c0c7f2395efd3149"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 106650,
+      "sha256": "750cb88a48dc54d62de1d1fc1f0be3849c968d8940bb3ac071455b3792f6ec28"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 111882,
+      "sha256": "d8135624accf88edb146361dbf281b0a47bdd4d709df2f69bb2e6208cfd9195e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 122872,
+      "sha256": "31973bf35070f2aa5c7c04126c0541d4e49d2760ac245c5a69dbd3ad7637d19a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 107440,
+      "sha256": "2309edfc77f721736cdb3539c6da26f42570c7ee8e8735e649a0c90ea81d57a7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 113668,
+      "sha256": "7ca9ab4aa5279960aeaad9cfabce9b78c83cb6790e899af52e4d78dfb21acb79"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 115208,
+      "sha256": "b8aa72d27450005a8b175693c605fb331bfa86ecd5f835ae9e03351b463a43d4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 96230,
+      "sha256": "6b17c08b12a885434c8b5490c69cebdf20fb0ebd891c4670821071b766b540ca"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 94546,
+      "sha256": "0cf366d29ca41fc5ccac39ea2671e96f9926834bfb2b67b74007ed7d093b3e2f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_page_01.webp",
+      "size": [
+        1024,
+        2105
+      ],
+      "bytes": 675084,
+      "sha256": "65484d88ad37bd6ddc621bd4c9b32d449928ea09204a7a3a45927d3d5588e7e5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_page_02.webp",
+      "size": [
+        1024,
+        2099
+      ],
+      "bytes": 618988,
+      "sha256": "f02211d3fcb19bbf2a7c44487003f99a67b66952bda8eb47cd8baeb4a8b141d8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_01.webp",
+      "size": [
+        1024,
+        504
+      ],
+      "bytes": 159510,
+      "sha256": "85ca6dd3700df74989e23d81aff4733e46afdd8df022d9ecce427cddd6ab5507"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_02.webp",
+      "size": [
+        1024,
+        511
+      ],
+      "bytes": 166938,
+      "sha256": "9c9c0cdbce7abfdb0c2afad09e85e29c22cc6828fc723ff326d9c6e2b64e1dab"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_03.webp",
+      "size": [
+        1024,
+        540
+      ],
+      "bytes": 193702,
+      "sha256": "385f0a0980b9ae9a2e8b2949207e2d3272f37cd5095d10d6c8cdbc8a9ddd6d24"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_04.webp",
+      "size": [
+        1024,
+        478
+      ],
+      "bytes": 161216,
+      "sha256": "efe758b09b614c75dcee6318f9c5f00e0064b462a68e67e56fcb0d9a87dbff87"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_05.webp",
+      "size": [
+        1024,
+        504
+      ],
+      "bytes": 167148,
+      "sha256": "ca6b83893c433d3ff7f6d91ec67a728bbd9e213896c0d4d1eb58d05ff2ce7d6b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_06.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 172734,
+      "sha256": "5c059203d7987a8217dbc08a3be2952e080d505a3e4bd43650d2e6182d14ab1e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_07.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 139848,
+      "sha256": "c29929a2c807aa6b80bf83383ed1f324c216bed6720d6c56b5ac6653c7b5b41b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_panel_08.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 137964,
+      "sha256": "6a76d68d87da25909e1841e67b8cc8b18b14b8458092850e08e2d677fe7a2d88"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_discovery_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 119376,
+      "sha256": "5819f715bac18c41db4e5cab4379bacab5e9b78be05d3e3495e0d0f2b13f68d0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_discovery_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 688372,
+      "sha256": "9ff657718e4c35a1450b15c43c4a012490fd529a018405b5db74e08323d63206"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_discovery_panel_06.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 184592,
+      "sha256": "486709519b5f4139d4abef7ea99db988dfb09f76c7196da46e5fdf70e10c38aa"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 109762,
+      "sha256": "289a4bfec2498c6c39cfc27903a85aa374816dc4b9d3c029075d576f24f3ed08"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 113218,
+      "sha256": "3c9705006767a4da86cc81b768143097916d356b3c50a7758acf661bdf5635ec"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 124606,
+      "sha256": "4d835390a4152e47f239423251696fd3dc924196747208eee7264980ba69f1b6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 108818,
+      "sha256": "f4fd5f742ce5ad67ef9ccbd4e527d147a9e12a755bfe54571efbfd1c721d578c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 113062,
+      "sha256": "0e6523f02c9db42ae9175b9209bcc271a1992346799761043197916fbc653dcb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 114640,
+      "sha256": "2ac826952a476b028ae6c74ce6e4a771109d8b3db0b999533a2424012922f498"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 96826,
+      "sha256": "2c2604e60ae3c8c48fb729b9c4409437ce0d7c2d19049b487f948b130080282d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 95166,
+      "sha256": "8a3eee199599346e1681cb3ff401f9f13fe2627bc56549ccaa1f6a775edbbdc8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_page_01.webp",
+      "size": [
+        1024,
+        2107
+      ],
+      "bytes": 696950,
+      "sha256": "48d0c46d15c174b97ed012cfd778099a71158f90e8e94358e5dc9d8663c55d0c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_page_02.webp",
+      "size": [
+        1024,
+        2098
+      ],
+      "bytes": 635836,
+      "sha256": "f2c64e1e826c78e6b72991e7a60538909000ba44a36e67a28b860680293571d1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_01.webp",
+      "size": [
+        1024,
+        505
+      ],
+      "bytes": 165992,
+      "sha256": "67acfcb1653a56c49b4e6018d8ab588d7debf0acb41ecdb7a68fb1779d752bce"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_02.webp",
+      "size": [
+        1024,
+        511
+      ],
+      "bytes": 173610,
+      "sha256": "61510a74cab438986ac43101726a87773a3f553ca9ce5a1ba49499d471e84526"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_03.webp",
+      "size": [
+        1024,
+        541
+      ],
+      "bytes": 199066,
+      "sha256": "48aada2f2926aa8a3357bda81f2a9c2e55e68fd4cdd7da9148f5d3e263ce5434"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_04.webp",
+      "size": [
+        1024,
+        478
+      ],
+      "bytes": 165888,
+      "sha256": "585d98d0ffb25bd7ed25d0fe7665127db8b084258565a5a1d54257cceb9fb2bd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_05.webp",
+      "size": [
+        1024,
+        503
+      ],
+      "bytes": 174846,
+      "sha256": "24ce8dd683ef16f2a7a370a46a0d38b7c0e3b861f155e7343e740ea2ca9b1c8c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_06.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 176816,
+      "sha256": "745c72b430d8b77d637414a6b0f1b1f2f0d16f0a1b95ff0c9dfb9b53b780e685"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_07.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 143538,
+      "sha256": "f672befdac90239cb2eb8a5e8d1bbc0eb8e49c5a08833db025e7aac7f440c32a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_panel_08.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 138400,
+      "sha256": "2719a8d1c31340978da4a5027ecfd9104bf9d7e14e9bf84c1c7f1063a69ad983"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 74146,
+      "sha256": "cae0da86431bc4d949731e38b5374815c5baa449f9a8179d5b1bb11c35e32686"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 81432,
+      "sha256": "1901cf3973872b6c9fdd219948cab80b5fdcc11a7e644866b4766ac52b3c3cca"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 87194,
+      "sha256": "fb3df86438312ba92ebfdf45166a7449003c0ebc5c26cf03dfe54e32b75be4a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 85440,
+      "sha256": "016832ba16050af6d3b055ad414e45fef34ac614289edb0e2d03eb0c4c22940a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 83582,
+      "sha256": "0d52e231e6c6c064f903a10c502fef826d965e7a81b632d151d027986faf87d5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 87980,
+      "sha256": "aedecc02b91fea4d44466bbf2b5d3ed02049b189e7d55c6eb36cd2a43f2a6aaa"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 91012,
+      "sha256": "6a68b62397ba52eb6c0a62e6dafe1c09d15df0a2f02d7122523cbccd2b415f7d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 89024,
+      "sha256": "94dedf619f687ad09f3ee78652c97a3ab752f3600797890ca24ef85e6a964e28"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_page_01.webp",
+      "size": [
+        1024,
+        2088
+      ],
+      "bytes": 479034,
+      "sha256": "c23375b4a95d191e355331173a4b13ec3114e7bfa1f86189b3c70998e5bf76fd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_page_02.webp",
+      "size": [
+        1024,
+        2102
+      ],
+      "bytes": 529322,
+      "sha256": "c7fd8327d9a56972369dd377841da15b8e8408f8d95f0f96666289ff3b80e398"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_01.webp",
+      "size": [
+        1024,
+        504
+      ],
+      "bytes": 108432,
+      "sha256": "0b05494e064ff00dbd6da9d6236072e56506915acf4e6aadb4b6a01324e9997e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_02.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 113608,
+      "sha256": "c339bc2816e8111fb7aa0eab79509ff467a34ebca25decc5cf8c7bffb44d6086"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_03.webp",
+      "size": [
+        1024,
+        501
+      ],
+      "bytes": 126858,
+      "sha256": "9d1bb399e54ac58afe9910563612075ab38fff2abe1fb4ba5466a6d3daab16e7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_04.webp",
+      "size": [
+        1024,
+        505
+      ],
+      "bytes": 126184,
+      "sha256": "0db5281400854f92e8278da997ec8393928d7816299094d4e2359ac424f52889"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_05.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 124774,
+      "sha256": "638bf219f6aff29391411fd61f46ad279cb5273ffb568241a52b0e5731d6335d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_06.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 130312,
+      "sha256": "a34ff448f37fcecee5f1d1ad7517e727bed0d7949b705c32494d12eb8f48cd57"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_07.webp",
+      "size": [
+        1024,
+        504
+      ],
+      "bytes": 133956,
+      "sha256": "c0d374e07996e66c909345cd0b339dcba84a9ea408ac9dbb610dca592ae438d3"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_panel_08.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 134454,
+      "sha256": "65cf041ca56b9b69129b353d26062f97f800145f3c139a311ffb62603d3a3f32"
     },
     {
       "path": "src/assets/story_cat_liquid_full_card_01.webp",
@@ -579,6 +1254,312 @@
       "sha256": "17d5d413cc89f3e4f5e1c260e55f811eb2f57102ff758bc060370fbe4994960b"
     },
     {
+      "path": "src/assets/story_cat_liquid_mishap_antics_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 119732,
+      "sha256": "058ef1fc1bc0fcf2912d6b55a269fb84624a9a5b39b411de0e236b0f04babea7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_antics_panel_02.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 188048,
+      "sha256": "ad6fe5a6fff66d859a96927ae0485b096fb88ebbb133ca29a7a24db4f577c3ca"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 111298,
+      "sha256": "0bb3c9dd16a42f51738c10b173021e4c7644523d473cf35e02ba2d0edf50a2e5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 112704,
+      "sha256": "8ee4b465ab1dc3977c840d737091773e2b42db8c0dda9eaf5539102b81c92bf6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 131956,
+      "sha256": "36654ada4dd3ba5d73ae8e80be6d8347cf0b0a37dbc8c22c3d77b9d31d4776b0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 121334,
+      "sha256": "0c0de4efc342c7fc2cdd68d5d486ef12c1e2e1f4eae5369e3b4d43fb2df127f5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 122922,
+      "sha256": "882e0433098d9c6854139b3a9bfe38ad168af2feaf0e0eee4fda6d709d98af9b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 124706,
+      "sha256": "f4e6e63d8899a3a99e010431dbe142d3064b9c183187f7ba4b71d75d1bd821c1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 106954,
+      "sha256": "2f527ad9ed230590e39048c3b7d7cdd4cd7e7d0df4a6dfb0ed013a85eed98247"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 106388,
+      "sha256": "8da2eef106305e5d0ca87ecd261e36c3cfe2cfe379b387faa38a344a05041b2a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_chalkboard_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 102926,
+      "sha256": "ee8bfa114b9b5168f6c645694a39eee38d4b7123c2368cb6d86cee64362ec2bd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_chalkboard_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 803732,
+      "sha256": "a5e2e6b1c98884e64aa369fb52de70a9ac970c1b72849e447e956bafa313559a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_chalkboard_panel_01.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 159522,
+      "sha256": "aca16a028b4dca2db021e0b78c51046f7a5d76eae8af18938d3ca0d49582ebc8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_framed_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 142598,
+      "sha256": "cba070a4b3eb41f580971c25c4ad695fb5fb489af38eebd889936e67d9d1797d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_framed_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 156594,
+      "sha256": "9a5e70f1afa5e45d0894848b0fd298a28da0cb07601a774818fd4bc2b49c49e8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_framed_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 829462,
+      "sha256": "c3103c0a980bce743956d35b542aaefa354d220405fc82e0074c90405f67e21e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_framed_panel_03.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 239464,
+      "sha256": "40ec213f8a3b7e5eb6c30db2b498b5496142b8f4af0c89884906b384a1cd26b6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_framed_panel_04.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 251688,
+      "sha256": "a1302dd0a5672b0ebed8960a1b1d19d0a8393f493934c26087c224a5e5052218"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_labcomic_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 822806,
+      "sha256": "813884ebce2269534b866925737c6baa3fc9c4b39eb3b4d7736aff6adf3a93e4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_page_01.webp",
+      "size": [
+        1024,
+        2107
+      ],
+      "bytes": 744142,
+      "sha256": "77a47d2f195b230bc019b57b4f861dee2477ff5e53f328e6af9c167f23443434"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_page_02.webp",
+      "size": [
+        1024,
+        2105
+      ],
+      "bytes": 700292,
+      "sha256": "ce559332bd3947d17f02c31579bf329befd2de1adae726df9cba4706fff08ea2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_01.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 167542,
+      "sha256": "ec7dcd6c9b9a9c6a29a34b39a3ca2980d21a2c14c6ba5f94511dd325fe03151a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_02.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 176360,
+      "sha256": "04ade0a52682ac021cab0a7e7ccf91d49d30f72abd0dcfde2458f0bd5d94e40e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_03.webp",
+      "size": [
+        1024,
+        566
+      ],
+      "bytes": 221652,
+      "sha256": "aa71335ea046db3356fe3eed745333fb8d1b85ffcb1d7f290b3233d4de34a70c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_04.webp",
+      "size": [
+        1024,
+        453
+      ],
+      "bytes": 177608,
+      "sha256": "5107ca876d402164fdc3c8096f87a778f39151b7d269b9924b33fbd25a749ee2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_05.webp",
+      "size": [
+        1024,
+        507
+      ],
+      "bytes": 184930,
+      "sha256": "408bc3558f33aedc723b06aaaf8a87d444ae9a6aa58ebe58a2abb5663b6db0cd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_06.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 190346,
+      "sha256": "a1f531f97a9ddc6c151b1e2a5f6d4c29f8b39023e2f5d1268e713b44b3663c57"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_07.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 162992,
+      "sha256": "2656c828591fc6d1092266d4fcf38cf51a369ab396ade31348db8d384ed33549"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_panel_08.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 160998,
+      "sha256": "a2f386ac262be42766a0ae82f1a917072e5939d8831018a3934457dd3f8d3ed2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_playroom_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 120922,
+      "sha256": "34069cd00006abb4a6f7d6ea841cd63ab93c80ebf499bd6e3e0c4a978823550f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_playroom_page_02.webp",
+      "size": [
+        1024,
+        2105
+      ],
+      "bytes": 696970,
+      "sha256": "b98d0c54a7e450870275a2f3ad8991b3de6e7fe08e2187455d36dde25a1572da"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_playroom_panel_06.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 186328,
+      "sha256": "e76a0a2c0755e64d4f3dfee06627e5e6795b3e21378f84e530b229fb9ac2db0b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_whirl_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 142370,
+      "sha256": "fa1ea2947f60ba72d0859d2a05212ef885fbe33951c33d43d7bdd069793a23f9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_whirl_panel_03.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 229478,
+      "sha256": "81b76d8b5eff779a165c7a5b1c97413f6ec8f1b9c0ea07597b1080fb7e459f8d"
+    },
+    {
       "path": "src/assets/story_cat_liquid_page_01.webp",
       "size": [
         1024,
@@ -667,6 +1648,726 @@
       ],
       "bytes": 116488,
       "sha256": "ca6ab9f8baeef02cc5857e23d535dcd4e564544565375ad8fb7f8d9a828ac0a6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 98664,
+      "sha256": "f7da17d4e81bfbdffd1ed1eab11c458c5cd99ea479b47a85e680b90636d98753"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 113474,
+      "sha256": "de2125d3c68a1025a6666e1f8b0a29a0e107942301ac0befc2d634a8f32acd11"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 120828,
+      "sha256": "34ab055f13d9345f6d4d7f78ce4eeca13d8b1a03d3b78f70b74bb8ce866a5b08"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 119054,
+      "sha256": "2d32b8e03f9750285acb35adc07ad7256f6761331211acedfd5bd811947797a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 795196,
+      "sha256": "1ddee54a1984efc8b7aa6c5f0d397d8440243b596739152c7ec26f89ece8a0f6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 689144,
+      "sha256": "1902f87b181c5179204a11dee2b3acbf325d60249fb8691cc08a505a6698625e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_panel_01.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 149166,
+      "sha256": "5892214db2875b97cddc3eb4300aef1bfff3f8de95f323780361e1bd2a1938ad"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_panel_02.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 173974,
+      "sha256": "f2cdf35f2312f08220b9a3e288f8e138efe985c3fa054f580208fb3c0c7b1175"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_panel_05.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 180258,
+      "sha256": "69a56c0ba88b3787b5d49d27d9ec9ef841a17b16acb61f3dc639285cc053bb18"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_panel_06.webp",
+      "size": [
+        1024,
+        509
+      ],
+      "bytes": 182188,
+      "sha256": "2d3c788fee739270376c04b9ad7edd9f1c95dd4e7cdc5bcfb030f1c33a5d5ac5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 143556,
+      "sha256": "8792e377e07613bd6081fc180affe8de44ea3a5638ff6c09e3e17f17f78aaaec"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 166272,
+      "sha256": "00ee9174e0c7dab916f3df678023502a094355151afbd7bb8643b841b3f61ea7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 824406,
+      "sha256": "562fa0df2204db043f35a49a87a811f88d3275b822ae1df172b2918e060b698e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_panel_03.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 230050,
+      "sha256": "362005eb8ce191e8eddbc4665acf311cc702200f3df401257d8cddd765d7cf12"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_panel_04.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 272278,
+      "sha256": "f56da09e9492f9b8ec9575887de7d85ad83fdd74a3dd0c0e98af5b3fdb77f6dd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 83432,
+      "sha256": "b6defca340a615b848c9a72c1ac92ea8e38a5cdc33fc25b05e2ce393c9a5f099"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 85264,
+      "sha256": "6649d854db3e933a9e40434277bf3ed3edbbc2aa44b4b0ab7a0655c4066c071c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 90266,
+      "sha256": "7903f45066861eb11f9d0791d74c5ef4c255452196863c7d1a0f591d361353e2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 95898,
+      "sha256": "357e3c1a12d9f1ee169b672702e9274758b6c3e62f76bd6b4a2739a3b27408a7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 96302,
+      "sha256": "27728d840feb7f417a55db3561ae8cea107485edfef22c0c4d0eb0a5c2d8b8bb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 100566,
+      "sha256": "545c3512960cceb1bec81b2e0e4cab0ad4af305c763314f2ae9ab6f8e878406e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 94068,
+      "sha256": "f9a5df0eabe5be1fdcfb0a5690553c7ebbb487262b698f6750aa5c34401b3ed6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 93376,
+      "sha256": "bef57cd4cb09f20e9b2f4e409842561b6841c63fa2a4adf6b49068220b4e0166"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_page_01.webp",
+      "size": [
+        1024,
+        2102
+      ],
+      "bytes": 526092,
+      "sha256": "e528772baa15535203bc49021919114d1a566e150e6127eb76c00d20de0a4ed9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_page_02.webp",
+      "size": [
+        1024,
+        2088
+      ],
+      "bytes": 569456,
+      "sha256": "1ea434aacab3c3deb46f5a2c54ab6d389128383e77b492d63908d4689935c0ac"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_01.webp",
+      "size": [
+        1024,
+        502
+      ],
+      "bytes": 123090,
+      "sha256": "e76f07d814ca8a5b76c1c306e625be825f9a1aafefe3a825671fb65fee86e4bf"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_02.webp",
+      "size": [
+        1024,
+        511
+      ],
+      "bytes": 126600,
+      "sha256": "7524653ebc083d42856eb66c0795b4b353e4915dabb59ef6fbdbb066172ef2a7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_03.webp",
+      "size": [
+        1024,
+        512
+      ],
+      "bytes": 133672,
+      "sha256": "37917e469f33c0d3252c9d75e23fbc8af10d6f09178fdcd2ccf99fcad40584d6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_04.webp",
+      "size": [
+        1024,
+        505
+      ],
+      "bytes": 142772,
+      "sha256": "78ef7ad8130bd3086cd7656018c744d4e3909bf8a9e9f45f91dda33f736c6880"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_05.webp",
+      "size": [
+        1024,
+        503
+      ],
+      "bytes": 144478,
+      "sha256": "3de67eb5d971297daa7b3e746ce72c587a3f0cef98a4585f55f5db7a0ab529b9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_06.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 149850,
+      "sha256": "d31544b2302b03f7bf4b01cce3b7833cfbb19c4470b6ba7867a1ea061994c1e0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_07.webp",
+      "size": [
+        1024,
+        502
+      ],
+      "bytes": 138406,
+      "sha256": "f2da395b39b4c58825b89e3a1f9de567ed490bb2ed3754a7a8f185db81fc1bdb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_panel_08.webp",
+      "size": [
+        1024,
+        503
+      ],
+      "bytes": 137080,
+      "sha256": "b60897ad75bce7f1a9dd57c81526e60eebc31a5ab4ecbc196908ce07e09e5588"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 163004,
+      "sha256": "94ef9965f390fbfa7bbd28d9c8260f26859854ffb62d9db9b41a72aceebf9e6a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 156954,
+      "sha256": "dc6ee905912fde54b693fddf63ce83b2f0a64fa2dc63968e15be441d88599b67"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 800264,
+      "sha256": "1556c6d3dd36fc5300f58f8aa96045161e0cc05566c54ef87810a6fc08c45f93"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 754332,
+      "sha256": "37e1a39a440b80f50b787e786bcc74a9de566b30597f735a546ecf27b1d30cb1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_panel_04.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 264210,
+      "sha256": "f2e6e8cb119792803db9b10d5fdad1c03bc408376929f93228c500ed3dda9e1b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_panel_05.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 247390,
+      "sha256": "eb52ecf4ce3f5ead67bd61b201bbce71c355364c90fe447eac74b0d13cc1ba64"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 99864,
+      "sha256": "00f25fa7fd32206b2cc98e3b7139af21927933e571e21d1ed93ddbd84ac5ee46"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 111760,
+      "sha256": "cd74b136093a5d083fb890295d600cc0e0305b3fbb0cda4def211a3e4ed2a1a4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 142922,
+      "sha256": "87cc092bc8d5e7c57cb4312fea85728057bca50674c51b277bac16763756c8a3"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 153362,
+      "sha256": "5875f188788dde54407824b43f6311f521fc1fbeb6da24380815d43e0a8fd128"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 120468,
+      "sha256": "277fedf65bab01c0e795a2a28c27fe781467d82e4e1a68984fad2e6f66dcaaf0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 117996,
+      "sha256": "c61c4ea855970ca8c4559ea6e2d320687b748f36dd9bd0fb54a7113ee37501ef"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 105950,
+      "sha256": "16b8aef33e0eb7b3cff7014bcc2095cd6782f3283175886068fe510d6f2863f9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 105682,
+      "sha256": "75a821d3badf6e76580753ec7f23f4911f128d38ba55937cf7347d9f240b8d2b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 775928,
+      "sha256": "d42dd62ddee563012b83cc53a44da7c0f8a635f46e6ad4e401783b75177ab124"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 686062,
+      "sha256": "a997fd2607fd4f2a66451ea0f0e8b2338efbbd9a36993106a0de51e025362c2a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_panel_01.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 152112,
+      "sha256": "b874f3760af00f2ce97457f03575bd845403cc05c964499970f4edafe700d1f6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_panel_03.webp",
+      "size": [
+        1024,
+        508
+      ],
+      "bytes": 229250,
+      "sha256": "b77fe5c691049953bfc92d406e669b64fcbc2e6afbf401850e5fc9761a69f832"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_panel_04.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 242086,
+      "sha256": "827b4e5a0af0b80f69073f2e8d98119cd14b7b64ffa296ab3583cd56ef406cc5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_panel_05.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 178688,
+      "sha256": "a9ddc0c24550f7686da2a61f49ef10d3bf7c1acf53f21ac6a91d2c9ab2e9bc4b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 73234,
+      "sha256": "2addcbc7e02085d29a63db3e6c75756756d1dcc967c8238c805aaac2c1819c44"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 77750,
+      "sha256": "501f0bb0bc6011fb7370a902d815980c84bd58573b3f85649ffbb3b2da6af539"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 75592,
+      "sha256": "b5679768ddd9d76ec9ec94205b94820e3eb7f3800599f979d98a36c267f2e4bc"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 75968,
+      "sha256": "77deb465eea82a85b4285976a1ea034245fe5092454b772ff45ff9f3bb213f61"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 71702,
+      "sha256": "ebaa3f1178f552124d37a5395684b7ba09cc8033ac02e6f224d862af5b6bd780"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 75552,
+      "sha256": "6b36c009fe7e3044063aac5fdba8a9865ea20087328e571b28f76886aa574d1c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 77656,
+      "sha256": "9a0a5af1510838f33d1991a91c7ffd93c8356c2856c9ce11b958fd384e6c7f06"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 74780,
+      "sha256": "98d4a04509d8f546aa61422b16435149b17376d328e756e88cc30c08d9409726"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_page_01.webp",
+      "size": [
+        1024,
+        2087
+      ],
+      "bytes": 441816,
+      "sha256": "9dc4e27906d30d1f0370a27b45b2f2eea8785208ab7dc6b2f7e13b6bfdbc5ed2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_page_02.webp",
+      "size": [
+        1024,
+        2086
+      ],
+      "bytes": 431368,
+      "sha256": "459729aaafa6a6e26bf1bee35a88f1f89eccd5fd3ce1fe960d2821bb472e8b04"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_01.webp",
+      "size": [
+        1024,
+        511
+      ],
+      "bytes": 110688,
+      "sha256": "c2852299256e431cd692cb6afef500691b7566cd3d193261356feea43b8c14da"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_02.webp",
+      "size": [
+        1024,
+        498
+      ],
+      "bytes": 112854,
+      "sha256": "4e882c6bdfdd2532391fd8e9ed1f066b36792033514c6fa1cb6d2bade2ebda1e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_03.webp",
+      "size": [
+        1024,
+        503
+      ],
+      "bytes": 109392,
+      "sha256": "a34aebe0341ee895ad63f4a491da360decef0cdf892acdcdd07756f11c5bf9af"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_04.webp",
+      "size": [
+        1024,
+        503
+      ],
+      "bytes": 114468,
+      "sha256": "bbf98028ea442f570e0dc4d1ab54321ff414a9254f70d6cd89143f67597456a6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_05.webp",
+      "size": [
+        1024,
+        501
+      ],
+      "bytes": 103956,
+      "sha256": "fcba78f76da8a9b9991862e3241edfb9bb49352b5d801bfd1b5ba6e98e50fc90"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_06.webp",
+      "size": [
+        1024,
+        503
+      ],
+      "bytes": 108446,
+      "sha256": "cd31aad4448ff8f56625526dfc235bbd55827d0e68ac59b0d048657ecab30b81"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_07.webp",
+      "size": [
+        1024,
+        505
+      ],
+      "bytes": 111458,
+      "sha256": "49de4009eef04b3b7821c661d2970d22545a112dc9df881b540068be274000b6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_panel_08.webp",
+      "size": [
+        1024,
+        505
+      ],
+      "bytes": 108666,
+      "sha256": "c2d3ded2214bb1df70df4cea7c8e7bc581cce4361a56c1b580e3d407278c95df"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_streambed_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 158246,
+      "sha256": "59f65639df01c1ff62031e2aa1621b36e7460038968fb7d77c9070e09c7634f6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_streambed_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 746634,
+      "sha256": "bad217651482ccd6c505832f4ddeba38b9bab596eee68cbbaf3191b408bdebc9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_streambed_panel_05.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 249384,
+      "sha256": "671ec83649f9a48e7aeefa95f9cfc39c0289e1130758686f1b9a9bb41e0b07a5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 163830,
+      "sha256": "bc4c9d9b33dc4673fbe471b74a37f4912de8a8f0a40a7a7c57d7aa17e48d2b8a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "bytes": 154712,
+      "sha256": "8ff458dd0cfc5e6eac4b1eb9cd4db04676eba3a33a96f75a52d26a93f6ec2a3f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_page_01.webp",
+      "size": [
+        1024,
+        2106
+      ],
+      "bytes": 802254,
+      "sha256": "555912b8ff5d67218fe8fca06ff5eedccb878d9278b4f665049d1d16606a97fb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_page_02.webp",
+      "size": [
+        1024,
+        2104
+      ],
+      "bytes": 751574,
+      "sha256": "6da5dc8e68e3c55ed43cd5cccc993ad439a47d35a52c4cbe168ca400e9a67095"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_panel_04.webp",
+      "size": [
+        1024,
+        510
+      ],
+      "bytes": 266302,
+      "sha256": "51c01522779163bca7466e1062349a0ce59df809ffc23f878366a1dfa88865c0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_panel_05.webp",
+      "size": [
+        1024,
+        506
+      ],
+      "bytes": 244730,
+      "sha256": "c2b46ad599c4f19571303f3f8bba1d4b4d27059aa3a544cdc752e7ba603252a1"
     },
     {
       "path": "src/assets/story_cat_liquid_wide_card_01.webp",

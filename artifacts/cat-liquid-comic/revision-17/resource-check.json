@@ -1,0 +1,96 @@
+{
+  "resources": [
+    {
+      "path": "web/",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "77da826fbd6799960b14ea16832aabcb858f394c0efa337c1fad0080176e8052"
+    },
+    {
+      "path": "web/story-intro.js?v=cat-liquid-page-gate-v18",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "d3528cbfff4547eee9aa2bccb4cd1c3eb443c178b0848e4ae4f2696f34c135ad"
+    },
+    {
+      "path": "web/story-intro.css?v=cat-liquid-v16",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "40396569f92ec8fe83e2dee92841d0a1fd8a6e9f28c22931f65ed71d142ff9f7"
+    },
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "5bc0e684b6e5d6d687a2891be34ab799d5f08f177f9e513bc312fba0b033f8ee"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "56f831e983d2b1fbf4c00a9f246290d27e53bcec35d2977dd839400eae0c32dc"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "70a750f0e815b429c5288916618faed4ead05b4dee29a2627d2555102444c301"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "f7da17d4e81bfbdffd1ed1eab11c458c5cd99ea479b47a85e680b90636d98753"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2091e3244c3697afcb82b5e851223fefc5dddb42416c14570f7fbebc12ed81d1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "cb96248e57437d2f99348c20db0ac617e568fbd23969b6e76349528338d5de01"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "fb2f43b7490c1560a12eb9870d03b14583ce9f6f381d03a80f9a84f0890c88f7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "0ff45b05eae153ed3a0b36bef64bb16999ef73a5dc3eb51644dcd8a2562911cb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2d32b8e03f9750285acb35adc07ad7256f6761331211acedfd5bd811947797a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_07.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2f527ad9ed230590e39048c3b7d7cdd4cd7e7d0df4a6dfb0ed013a85eed98247"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_08.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "8da2eef106305e5d0ca87ecd261e36c3cfe2cfe379b387faa38a344a05041b2a"
+    }
+  ],
+  "unchangedPanelArt": [
+    1,
+    6,
+    7,
+    8
+  ],
+  "approvedPawIconPreserved": true,
+  "browserVisualTest": false
+}

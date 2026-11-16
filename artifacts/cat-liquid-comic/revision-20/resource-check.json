@@ -1,0 +1,156 @@
+{
+  "resources": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "a2d8013ee0c6dd8b4e2cf1a3f03223070465e94e660a5237929ad79c2e6097ae"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "1cbad7f8e8ab6ab588e9eb57711e17b554f0b87451dc3f5ebae5721142d067f1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_page_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "eaa71ec45fccb2cde14fc2d918e41715a8d7e0607dec950b498a778c83edd66f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_panel_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "4125228aa4fb88ee7924ec26d351a628023a0ef771605a11bd8834a064ef76a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "0cb826686f6aaf11b05ca90bc9f334cce4c1bec441c852b216ea7f36cf4e3d04"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_panel_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "d21253c0cb7f4c28f751807a0fec8be1f23f94c5d97dde8ba4c812c2406adef2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_arrival_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "fc958405d827ee62447f21d1eab451f97f1e89e2f536246b9da9b35ac7ad63a4"
+    }
+  ],
+  "unchangedRawAndCardPanels": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8
+  ],
+  "sourceAndContractOnlyImageReferencesChanged": true,
+  "allEightBlackRims": true,
+  "rimSamples": [
+    {
+      "panel": 1,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 2,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 3,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 4,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 5,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 6,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 7,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 8,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "sameControlsMotionAndCardTurnSound": true,
+  "browserVisualTest": false
+}

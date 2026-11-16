@@ -6,7 +6,7 @@ import { runInNewContext } from 'node:vm';
 // No browser, renderer implementation or copied restart logic is used.
 const shell = readFileSync(process.argv[2] || new URL('../godot-shell.html', import.meta.url), 'utf8');
 const start = shell.indexOf("flow.on('scene:enter',");
-const end = shell.lastIndexOf('\nawait flow.start();');
+const end = shell.indexOf('\n// Revalidate title images', start);
 assert.ok(start >= 0 && end > start);
 const sceneFlow = JSON.parse(readFileSync(new URL('../web/ui/scene-flow.json', import.meta.url)));
 
@@ -16,6 +16,7 @@ for (const scenario of [
   { name: 'timeout Retry button', popup: 'pop_Fail', retry: true, failed: true, topic: 'load_scene', immediate: true },
   { name: 'timeout recovery', failed: true, topic: 'load_scene', immediate: true },
   { name: 'first entry from lobby', previous: 'lobby', topic: 'load_scene', immediate: false },
+  { name: 'DEV entry after splash preload', previous: 'lobby', ready: true, freeEntry: true, topic: 'load_scene', immediate: false },
   { name: 'cancel Retry confirmation', popup: 'pop_LevelFail' },
   { name: 'close settings', popup: 'pop_Settings_1' },
   { name: 'paid continue', failed: true, continue: true, topic: 'continue_stage' },
@@ -24,12 +25,13 @@ for (const scenario of [
   const messages = [];
   const handlers = new Map();
   const game = {
-    state: 'paused',
+    state: scenario.ready ? 'ready' : 'paused',
     message: (topic, payload) => {
       messages.push({ topic, payload });
       if (topic === 'load_scene') queueMicrotask(() => context.pendingSceneReady?.resolve());
     },
     resume: () => { game.state = 'running'; },
+    startGame: () => { game.state = 'running'; },
     pause: () => { game.state = 'paused'; },
   };
   const context = {
@@ -41,11 +43,12 @@ for (const scenario of [
     timeoutRecoveryPending: !!scenario.failed,
     endedGame: scenario.failed ? game : null,
     pendingSceneReady: null,
-    continueWithoutHeart: !!scenario.continue,
+    continueWithoutHeart: !!(scenario.continue || scenario.freeEntry),
     currentMapStage: 7,
     progress: { getCurrentStage: () => 7 },
     STAGE_TIME_LIMIT_SECONDS: 60,
     TIMEOUT_CONTINUE_SECONDS: Number(shell.match(/const TIMEOUT_CONTINUE_SECONDS = (\d+);/)[1]),
+    STORY_INTRO_SCENES: ['StoryIntro01', 'StoryIntro02'],
     LOBBY_UI_SCENE: 'Lobby',
     INGAME_UI_SCENE: 'Ingame',
     SPLASH_UI_SCENE_UUID: 'splash',
@@ -119,6 +122,7 @@ for (const [scene, state, button, count] of [
   const messages = [];
   let pointerDown;
   runInNewContext(shell.slice(pointerStart, pointerEnd), {
+    Element: class Element {},
     document: { addEventListener: (_name, handler) => { pointerDown = handler; } },
     activeSceneName: scene,
     INGAME_UI_SCENE: 'Ingame',

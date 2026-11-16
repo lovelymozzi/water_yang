@@ -1,0 +1,47 @@
+{
+  "scope": "Manual inspection of generated image files and offline layout; not a live-game verification",
+  "researcher": "White hair, round amber glasses, oversized brass goggles, orange scarf, short ivory coat, small game proportions retained across eight panels.",
+  "panels": [
+    {
+      "panel": 1,
+      "anatomy": "Cream cup cat: two forepaws at chest, two hind feet under haunches, one coherent torso inside cup.",
+      "portal": "Blue low stone ring lies on lab floor, foreshortened ellipse."
+    },
+    {
+      "panel": 2,
+      "anatomy": "Cream cat remains in cup; researcher lower legs descend through floor, torso above opening.",
+      "portal": "Blue aperture lies on lab floor beneath researcher."
+    },
+    {
+      "panel": 3,
+      "anatomy": "Green cup cat uses sitting pose; orange forepaws rest on box with hindquarters occluded; blue cat lying, shoulder/hip paws.",
+      "portal": "Blue ring on yellow tiles behind researcher."
+    },
+    {
+      "panel": 4,
+      "anatomy": "Same three separate cats and poses; no disembodied paws.",
+      "portal": "Low blue ellipse on distant floor."
+    },
+    {
+      "panel": 5,
+      "anatomy": "Green cat head lowers from attached neck, short legs under shoulder/hip; far limbs naturally overlap. Background cats sitting.",
+      "portal": "Green swirl parallel to tiled ground."
+    },
+    {
+      "panel": 6,
+      "anatomy": "Three separate cats peer down, forepaws at shoulders along rim; upper bodies are partly outside image, not detached.",
+      "portal": "High-angle view through horizontal opening into lab below."
+    },
+    {
+      "panel": 7,
+      "anatomy": "Three cat torsos remain connected to heads and hip/shoulder paws as they inspect the opening.",
+      "portal": "Low horizontal opening contains overhead human room/sofa."
+    },
+    {
+      "panel": 8,
+      "anatomy": "Correction replaced cylindrical foot ends with paired padded hind paws attached at hips on each of three cats. Forelegs/head occluded below portal; one tail per cat.",
+      "portal": "Three matching-color apertures all parallel to tiled ground."
+    }
+  ],
+  "additionalCorrection": "pair-04-initial-generated.png -> pair-04-generated.png via pair-04-correction.prompt.txt"
+}

@@ -1,7 +1,14 @@
-/* Layout and visibility are defined by StoryIntro contracts; input starts each stamp. */
+/* Layout/visibility belong to StoryIntro contracts; clicks or idle time reveal each stamp. */
 :is(#story-intro-01, #story-intro-02) [data-stable-id^="story-skip-"] .text-0 {
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+:is(#story-intro-01, #story-intro-02) [data-stable-id^="story-next-"] :is(.text-0, .text-1) {
+  animation: story-next-blink 1.2s ease-in-out infinite;
+}
+@keyframes story-next-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
 }
 :is(#story-intro-01, #story-intro-02) .story-panel-enter {
   animation-name: story-card-stamp;
@@ -29,6 +36,9 @@
   60%, 100% { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
+  :is(#story-intro-01, #story-intro-02) [data-stable-id^="story-next-"] :is(.text-0, .text-1) {
+    animation: none;
+  }
   :is(#story-intro-01, #story-intro-02) .story-panel-enter {
     animation-name: story-card-reveal;
     animation-duration: 1ms;

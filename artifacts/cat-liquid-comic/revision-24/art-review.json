@@ -1,0 +1,22 @@
+{
+  "kind": "offline-artwork-composite-inspection",
+  "browserGameVisualTest": false,
+  "observations": [
+    "Five floating cats in scenes4/5 recline heads back at water level with relaxed ear angles, faces remain above surface.",
+    "Only head/neck/nearby water masks composed; both scientist poses and scene5 upright green cat preserved.",
+    "Prior revision23 removal of serpent-like curve and two hind paws planted on creek stones remains.",
+    "Other6 raw/card scenes byte-identical; final framed strip inspected offline."
+  ],
+  "tests": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "gitDiffCheck": "passed",
+    "httpResources": 9,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  },
+  "limit": "Actual game/browser visual verification remains user responsibility."
+}

@@ -1443,7 +1443,8 @@
         "holdMs": 0,
         "scatterMs": 500,
         "curtainLayers": [],
-        "curtainAutoAll": false
+        "curtainAutoAll": false,
+        "curtainLayersContract": []
       },
       "fromSceneName": "StoryIntro02",
       "toSceneName": "Lobby",
@@ -1475,7 +1476,8 @@
         "holdMs": 0,
         "scatterMs": 500,
         "curtainLayers": [],
-        "curtainAutoAll": false
+        "curtainAutoAll": false,
+        "curtainLayersContract": []
       },
       "fromSceneName": "StoryIntro01",
       "toSceneName": "Lobby",
@@ -1506,7 +1508,8 @@
         "holdMs": 0,
         "scatterMs": 500,
         "curtainLayers": [],
-        "curtainAutoAll": false
+        "curtainAutoAll": false,
+        "curtainLayersContract": []
       },
       "fromSceneName": "StoryIntro02",
       "toSceneName": "Lobby",

@@ -1,0 +1,93 @@
+{
+  "resources": [
+    {
+      "url": "web/",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "9517728c4b805f4a3d5a37ac79365dbcb155d245c85b54267db7acab3d9f7d09"
+    },
+    {
+      "url": "web/story-intro.js?v=cat-liquid-v16",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "acbf0eef4318befd8c7499eec872081a3ea339b0f3852d5e3b867cb6f7fb76a4"
+    },
+    {
+      "url": "web/story-intro.css?v=cat-liquid-v16",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "40396569f92ec8fe83e2dee92841d0a1fd8a6e9f28c22931f65ed71d142ff9f7"
+    },
+    {
+      "url": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "11a2c20909ba221f005641419da85bf38643e1622a45a54c5f1b5b945bd237a6"
+    },
+    {
+      "url": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "bc691c98b93db2cc370a95dacae750f233d091b2846a914122909e90bd11da74"
+    },
+    {
+      "url": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2bb4de62717b00fcd0552bc03babce68a2466bd52f06dc73bb35db13f553afa4"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_polish_card_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "f7da17d4e81bfbdffd1ed1eab11c458c5cd99ea479b47a85e680b90636d98753"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_polish_card_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "de2125d3c68a1025a6666e1f8b0a29a0e107942301ac0befc2d634a8f32acd11"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_mishap_whirl_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "fa1ea2947f60ba72d0859d2a05212ef885fbe33951c33d43d7bdd069793a23f9"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_mishap_framed_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "9a5e70f1afa5e45d0894848b0fd298a28da0cb07601a774818fd4bc2b49c49e8"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_polish_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "34ab055f13d9345f6d4d7f78ce4eeca13d8b1a03d3b78f70b74bb8ce866a5b08"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_polish_card_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2d32b8e03f9750285acb35adc07ad7256f6761331211acedfd5bd811947797a0"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_mishap_card_07.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2f527ad9ed230590e39048c3b7d7cdd4cd7e7d0df4a6dfb0ed013a85eed98247"
+    },
+    {
+      "url": "src/assets/story_cat_liquid_mishap_card_08.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "8da2eef106305e5d0ca87ecd261e36c3cfe2cfe379b387faa38a344a05041b2a"
+    }
+  ],
+  "unchangedPairs": [
+    "02",
+    "04"
+  ],
+  "browserVisualTest": false
+}

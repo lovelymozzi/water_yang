@@ -1,0 +1,328 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        511
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_01.webp",
+      "sourceSha256": "c2852299256e431cd692cb6afef500691b7566cd3d193261356feea43b8c14da",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 2,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        526,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_02.webp",
+      "sourceSha256": "4e882c6bdfdd2532391fd8e9ed1f066b36792033514c6fa1cb6d2bade2ebda1e",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 3,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        503
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_03.webp",
+      "sourceSha256": "a34aebe0341ee895ad63f4a491da360decef0cdf892acdcdd07756f11c5bf9af",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 4,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        521,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_04.webp",
+      "sourceSha256": "bbf98028ea442f570e0dc4d1ab54321ff414a9254f70d6cd89143f67597456a6",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 5,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        501
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_05.webp",
+      "sourceSha256": "fcba78f76da8a9b9991862e3241edfb9bb49352b5d801bfd1b5ba6e98e50fc90",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 6,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        521,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_06.webp",
+      "sourceSha256": "cd31aad4448ff8f56625526dfc235bbd55827d0e68ac59b0d048657ecab30b81",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 7,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        505
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_07.webp",
+      "sourceSha256": "49de4009eef04b3b7821c661d2970d22545a112dc9df881b540068be274000b6",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 8,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        519,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_shapes_panel_08.webp",
+      "sourceSha256": "c2d3ded2214bb1df70df4cea7c8e7bc581cce4361a56c1b580e3d407278c95df",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2addcbc7e02085d29a63db3e6c75756756d1dcc967c8238c805aaac2c1819c44"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "501f0bb0bc6011fb7370a902d815980c84bd58573b3f85649ffbb3b2da6af539"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "b5679768ddd9d76ec9ec94205b94820e3eb7f3800599f979d98a36c267f2e4bc"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "77deb465eea82a85b4285976a1ea034245fe5092454b772ff45ff9f3bb213f61"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "ebaa3f1178f552124d37a5395684b7ba09cc8033ac02e6f224d862af5b6bd780"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "6b36c009fe7e3044063aac5fdba8a9865ea20087328e571b28f76886aa574d1c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "9a0a5af1510838f33d1991a91c7ffd93c8356c2856c9ce11b958fd384e6c7f06"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "98d4a04509d8f546aa61422b16435149b17376d328e756e88cc30c08d9409726"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ],
+  "artAreaRatio": 0.8831
+}

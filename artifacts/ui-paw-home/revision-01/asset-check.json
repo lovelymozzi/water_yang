@@ -1,0 +1,15 @@
+{
+  "size": [
+    128,
+    128
+  ],
+  "mode": "RGBA",
+  "alphaPreserved": true,
+  "outsideBlueInsetUnchanged": true,
+  "changedOnlyMaskedInset": true,
+  "paths": [
+    "src/assets/icon_menu_home_1.png",
+    "icon_menu_home_1.png"
+  ],
+  "sha256": "49261830390580a5c67d6025dc272ef274ce6e875cda5c25c09bdad46763be96"
+}

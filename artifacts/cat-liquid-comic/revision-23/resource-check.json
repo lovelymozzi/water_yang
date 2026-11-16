@@ -1,0 +1,150 @@
+{
+  "resources": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "a4e2f756d7a7f282f14953679a366b37a3909b550e36a20799bcb4001a65bc1f"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "72804d6cdbe0e1b3de20b47738d42290c73f208aac41a6e53e43a189a730b2a4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_streambed_page_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "bad217651482ccd6c505832f4ddeba38b9bab596eee68cbbaf3191b408bdebc9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_streambed_panel_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "671ec83649f9a48e7aeefa95f9cfc39c0289e1130758686f1b9a9bb41e0b07a5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_streambed_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "59f65639df01c1ff62031e2aa1621b36e7460038968fb7d77c9070e09c7634f6"
+    }
+  ],
+  "unchangedRawAndCardPanels": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8
+  ],
+  "sourceAndContractOnlyScene5ImageReferenceChanged": true,
+  "allEightBlackRims": true,
+  "rimSamples": [
+    {
+      "panel": 1,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 2,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 3,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 4,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 5,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 6,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 7,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 8,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "scene5OriginalUpperBodyPixelsPreserved": true,
+  "scene6PairPixelsPreserved": true,
+  "page1Unchanged": true,
+  "sameControlsMotionAndCardTurnSound": true,
+  "publishErrors": 0,
+  "publishWarnings": 8,
+  "browserVisualTest": false
+}

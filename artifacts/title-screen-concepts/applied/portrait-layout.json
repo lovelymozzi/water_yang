@@ -1,0 +1,40 @@
+{
+  "acceptedSource": "../revision-05/b-lobby-model-form-final.png",
+  "sourceCrop": [
+    85,
+    0,
+    970,
+    1536
+  ],
+  "portraitSize": [
+    885,
+    1919
+  ],
+  "sourceOffsetY": 84,
+  "backgroundOnlyFeatherRows": [
+    [
+      0,
+      40
+    ],
+    [
+      1488,
+      1536
+    ]
+  ],
+  "extensionAlignment": {
+    "top": [
+      0,
+      9
+    ],
+    "bottom": [
+      0,
+      6
+    ]
+  },
+  "assetSize": [
+    786,
+    1704
+  ],
+  "centralAcceptedArtworkPreserved": true,
+  "preview": "offline recreation of published image positions, not browser verification"
+}

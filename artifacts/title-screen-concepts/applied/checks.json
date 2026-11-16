@@ -1,0 +1,55 @@
+{
+  "contractsUnchanged": true,
+  "existingLogoLayerDimensionsPreserved": true,
+  "oldLogoFullyTransparent": true,
+  "http": [
+    {
+      "url": "http://localhost:8080/title_bg.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 1619485
+    },
+    {
+      "url": "http://localhost:8080/src/assets/title_bg.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 1619485
+    },
+    {
+      "url": "http://localhost:8080/src/assets/title_text.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 5781
+    }
+  ],
+  "actualBrowserVisualCheck": "user verification; no browser was driven",
+  "preview": "offline recreation of published image geometry",
+  "cacheVersion": "title-lobby-model-v6",
+  "hostChanges": [
+    "cache version",
+    "native image HTTP revalidation before FlowDriver start"
+  ],
+  "splashCacheRegressionCheck": "PASS: both host entry points, stale Cache API present/absent, failed refresh blocks stale startup",
+  "servedUserUrl": "http://localhost:8080/web/?story=replay",
+  "userUrlServesCurrentHost": true,
+  "conditionalImageRefresh": [
+    {
+      "path": "title_bg.png",
+      "status": 200,
+      "lastModified": "Sun, 15 Nov 2026 13:20:49 GMT",
+      "sha256": "a51af8d2398670833d3cfc9107180f5eebcde85b9bc9e55157620bda033df788"
+    },
+    {
+      "path": "src/assets/title_bg.png",
+      "status": 200,
+      "lastModified": "Sun, 15 Nov 2026 13:20:49 GMT",
+      "sha256": "a51af8d2398670833d3cfc9107180f5eebcde85b9bc9e55157620bda033df788"
+    },
+    {
+      "path": "src/assets/title_text.png",
+      "status": 200,
+      "lastModified": "Sun, 15 Nov 2026 13:20:49 GMT",
+      "sha256": "cf675222e0a3bb009c276c5f99377514dc1c4f263995d7b14bab6d883df2cd32"
+    }
+  ]
+}

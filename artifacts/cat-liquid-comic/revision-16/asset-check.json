@@ -1,0 +1,328 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        508
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_polish_panel_01.webp",
+      "sourceSha256": "5892214db2875b97cddc3eb4300aef1bfff3f8de95f323780361e1bd2a1938ad",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 2,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        516,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_polish_panel_02.webp",
+      "sourceSha256": "f2cdf35f2312f08220b9a3e288f8e138efe985c3fa054f580208fb3c0c7b1175",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 3,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        508
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_mishap_whirl_panel_03.webp",
+      "sourceSha256": "81b76d8b5eff779a165c7a5b1c97413f6ec8f1b9c0ea07597b1080fb7e459f8d",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 4,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        514,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_mishap_framed_panel_04.webp",
+      "sourceSha256": "a1302dd0a5672b0ebed8960a1b1d19d0a8393f493934c26087c224a5e5052218",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 5,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        506
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_polish_panel_05.webp",
+      "sourceSha256": "69a56c0ba88b3787b5d49d27d9ec9ef841a17b16acb61f3dc639285cc053bb18",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 6,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        515,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_polish_panel_06.webp",
+      "sourceSha256": "2d3c788fee739270376c04b9ad7edd9f1c95dd4e7cdc5bcfb030f1c33a5d5ac5",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 7,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        508
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_mishap_panel_07.webp",
+      "sourceSha256": "2656c828591fc6d1092266d4fcf38cf51a369ab396ade31348db8d384ed33549",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 8,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        515,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_mishap_panel_08.webp",
+      "sourceSha256": "a2f386ac262be42766a0ae82f1a917072e5939d8831018a3934457dd3f8d3ed2",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "f7da17d4e81bfbdffd1ed1eab11c458c5cd99ea479b47a85e680b90636d98753"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "de2125d3c68a1025a6666e1f8b0a29a0e107942301ac0befc2d634a8f32acd11"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_whirl_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "fa1ea2947f60ba72d0859d2a05212ef885fbe33951c33d43d7bdd069793a23f9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_framed_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "9a5e70f1afa5e45d0894848b0fd298a28da0cb07601a774818fd4bc2b49c49e8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "34ab055f13d9345f6d4d7f78ce4eeca13d8b1a03d3b78f70b74bb8ce866a5b08"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2d32b8e03f9750285acb35adc07ad7256f6761331211acedfd5bd811947797a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2f527ad9ed230590e39048c3b7d7cdd4cd7e7d0df4a6dfb0ed013a85eed98247"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "8da2eef106305e5d0ca87ecd261e36c3cfe2cfe379b387faa38a344a05041b2a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ],
+  "artAreaRatio": 0.8831
+}

@@ -1,0 +1,28 @@
+{
+  "kind": "local-final-generated-art-and-offline-layout-review",
+  "actualBrowserOrGameVisualTest": false,
+  "observations": {
+    "referenceIdentity": "Latest user-selected warm tan child scientist, thoughtful half-lowered amber eyes, fine brown round clear glasses, red neck scarf, rolled white coat, dark clothes/brown boots/teal pouch. White short bob/cat-ear headband; no head goggles.",
+    "book": "No levitating book in opening; notebook supported by hand or workbench. Flying books/papers only in intentional vortex accident.",
+    "explosion": "Sudden huge white-cyan/violet burst, room visually tilted/twisting into deep blue floor funnel; scientist diagonally swept feet-first, reaching hand, clutched notebook, streaming scarf/coat/paper. Calm pet cats secondary in background. No effect lettering.",
+    "floor": "Origin lab uses cool gray/lavender-gray finished tiles rather than yellow dirt. Scene6 human destination uses the furnished cat playroom floor; outdoor golden forest paths remain.",
+    "cats": "Soft fluffy rounded shoulders/torso/haunches replacing rigid box backs; naturally folded orange/green/blue bodies in vessels. Held green cat has two forepaws/two hindpaws plus separately curved tail, no opposing pulls.",
+    "tails": "Rear green/orange/blue tails emerge from rump and curve/taper beyond body instead of round pompom stubs; distinct curves. Two hind paws and tail connections visible at portal entry.",
+    "affect": "Relaxed low-lidded game cat eyes/closed mouths; small sleep bubbles. Scientist face follows selected reference, surprise during accident, confusion on arrival.",
+    "opening": "Large dark-green chalkboard, rear-view professor holding chalk to last question mark; full feline anatomical diagram = cyan liquid beaker and exact liquid?? lettering legible. Supported notebook held at side; another rests flat on bench. First crop kept inside frame.",
+    "scene2": "Cream cat upper chest/forepaws supported over right bookshelf lip, long fuzzy torso/two hind paws/curved tail hang down calmly. Orange cat voluntarily flattened through left half-open window, two forepaws on sill, tail/body outside partially occluded. Exactly two pet cats, original jar/tub empty. Professor pours colored liquids in central foreground.",
+    "humanDestination": "Inside panel6 green aperture: large multilevel plush cat tower, scratching poles, hammock/steps/cubby, tunnel, hideaway, balls/feathers/plush mouse; cream/orange cats lounge on mats. No lab props/chalkboard in playroom. Forest characters/rim retained.",
+    "ui": "Four stacked cards per portrait page, skip left and next/triangle right; no narration/dialogue. Explicitly requested embedded chalkboard liquid?? is the only new story lettering."
+  },
+  "framingIssueDetected": "Initial pair2 center gutter y566 caused phone crop to cut rightmost blue bowl/cat and part of floor vortex; corrective image request targets equal panoramic panels and wider camera.",
+  "finalFramingReview": "Corrected arrival scene has entire blue cat/bowl and both professor boots inside card; revised whirl replaces initial neat portal scene and its dark focus is visible in final card. Final offline contact sheet opened and inspected.",
+  "limit": "Local source/offline preview inspection, not browser/game render verification. Comic elongated torso is stylized.",
+  "reviewed": [
+    "pair-01-generated.png",
+    "pair-02-generated.png",
+    "pair-03-generated.png",
+    "pair-04-generated.png",
+    "two-page-board.jpg"
+  ],
+  "preservedScenes": "Compositing kept scene1 exact while replacing scene2, scene4 exact while replacing scene3, and scene5 exact while replacing human destination scene6; see composition JSONs."
+}

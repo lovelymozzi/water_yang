@@ -1,0 +1,322 @@
+{
+  "version": 1,
+  "id": "cat-liquid-intro-v22",
+  "revision": 22,
+  "status": "integrated-awaiting-user-visual-check",
+  "canvas": {
+    "width": 393,
+    "height": 852
+  },
+  "textMode": "none",
+  "controls": {
+    "skip": "skip",
+    "next": "next"
+  },
+  "display": {
+    "firstEntryOnly": true,
+    "autoAdvance": true,
+    "allowSkip": true,
+    "completeDestination": "lobby",
+    "startStageAutomatically": false,
+    "recordSeenOn": [
+      "skip",
+      "complete"
+    ],
+    "advanceMode": "anywhere-or-idle-panels-next-button-pages",
+    "autoAdvanceDelayMs": 4000
+  },
+  "motion": {
+    "type": "tap-sequential-stamp",
+    "keepPreviousPanels": true,
+    "loopEntrance": false,
+    "frameDurationMs": 40,
+    "previewPageDurationMs": 6400,
+    "entryDurationMs": 200,
+    "impactLineDurationMs": 120,
+    "paperColor": "#111111",
+    "frameInk": "#000000",
+    "framePaddingPx": 2.5,
+    "frameBorderPx": 2,
+    "imageWidth": 385,
+    "imageHeight": 192,
+    "layout": [
+      {
+        "centerX": 196.5,
+        "centerY": 100,
+        "rotationDeg": 0
+      },
+      {
+        "centerX": 196.5,
+        "centerY": 296,
+        "rotationDeg": 0
+      },
+      {
+        "centerX": 196.5,
+        "centerY": 492,
+        "rotationDeg": 0
+      },
+      {
+        "centerX": 196.5,
+        "centerY": 688,
+        "rotationDeg": 0
+      }
+    ],
+    "entryKeyframes": [
+      {
+        "offset": 0,
+        "scale": 1.16,
+        "rotationOffsetDeg": -3,
+        "translateY": -22
+      },
+      {
+        "offset": 0.4,
+        "scale": 0.96,
+        "rotationOffsetDeg": 1,
+        "translateY": 4
+      },
+      {
+        "offset": 0.7,
+        "scale": 1.015,
+        "rotationOffsetDeg": -0.4,
+        "translateY": -1
+      },
+      {
+        "offset": 1,
+        "scale": 1,
+        "rotationOffsetDeg": 0,
+        "translateY": 0
+      }
+    ],
+    "initialDelayMs": 240
+  },
+  "pages": [
+    {
+      "id": "page-01",
+      "art": "src/assets/story_cat_liquid_waterworld_page_01.webp",
+      "panels": [
+        {
+          "number": 1,
+          "art": "src/assets/story_cat_liquid_refined_panel_01.webp",
+          "cardArt": "src/assets/story_cat_liquid_refined_card_01.webp"
+        },
+        {
+          "number": 2,
+          "art": "src/assets/story_cat_liquid_anatomy_panel_02.webp",
+          "cardArt": "src/assets/story_cat_liquid_refined_card_02.webp"
+        },
+        {
+          "number": 3,
+          "art": "src/assets/story_cat_liquid_pose_panel_03.webp",
+          "cardArt": "src/assets/story_cat_liquid_pose_card_03.webp"
+        },
+        {
+          "number": 4,
+          "art": "src/assets/story_cat_liquid_waterworld_panel_04.webp",
+          "cardArt": "src/assets/story_cat_liquid_waterworld_card_04.webp"
+        }
+      ],
+      "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+      "sceneName": "StoryIntro01"
+    },
+    {
+      "id": "page-02",
+      "art": "src/assets/story_cat_liquid_waterworld_page_02.webp",
+      "panels": [
+        {
+          "number": 5,
+          "art": "src/assets/story_cat_liquid_waterworld_panel_05.webp",
+          "cardArt": "src/assets/story_cat_liquid_waterworld_card_05.webp"
+        },
+        {
+          "number": 6,
+          "art": "src/assets/story_cat_liquid_discovery_panel_06.webp",
+          "cardArt": "src/assets/story_cat_liquid_discovery_card_06.webp"
+        },
+        {
+          "number": 7,
+          "art": "src/assets/story_cat_liquid_mishap_panel_07.webp",
+          "cardArt": "src/assets/story_cat_liquid_refined_card_07.webp"
+        },
+        {
+          "number": 8,
+          "art": "src/assets/story_cat_liquid_mishap_panel_08.webp",
+          "cardArt": "src/assets/story_cat_liquid_refined_card_08.webp"
+        }
+      ],
+      "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb402",
+      "sceneName": "StoryIntro02"
+    }
+  ],
+  "reference": {
+    "paper": "Marc-Antoine Fardin, On the Rheology of Cats, Rheology Bulletin 83(2), July 2014, pp. 16–17, 30",
+    "sourceUrl": "https://improbable.com/ig/winners/#ig2017",
+    "interpretation": "유변학 연구와 고양이 액체 밈에서 영감을 얻은 창작 이야기. 고양이가 실제 액체라는 과학적 증명을 주장하지 않는다.",
+    "verifiedAt": "2026-11-15",
+    "verification": "Ig Nobel 공식 2017 물리학상 기록에서 저자·제목·2014년 출판 정보를 확인. 차원문과 등장 박사는 창작 설정."
+  },
+  "integration": {
+    "seenStorageSuffix": "story_cat_liquid_seen_v1",
+    "replayQuery": "story=replay",
+    "stampCss": "web/story-intro.css",
+    "completedOn": [
+      "skip",
+      "complete"
+    ],
+    "impactArt": "src/assets/story_cat_liquid_impact_ink.png"
+  },
+  "background": {
+    "type": "image-tile",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "src/assets/common_bg_pt_3.png",
+    "imagePaths": [],
+    "tileSize": 86,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": true,
+    "scrollDirection": "up-right",
+    "scrollDuration": 18
+  },
+  "frame": {
+    "style": "angled-ink",
+    "cardWidth": 385,
+    "cardHeight": 192,
+    "rimPx": 2.5,
+    "inkPx": 2,
+    "outlines": [
+      [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ]
+    ],
+    "speedLinePanels": [
+      3
+    ],
+    "referenceUrl": "https://kr.pinterest.com/search/pins/?q=%EB%A7%8C%ED%99%94%20%ED%94%84%EB%A0%88%EC%9E%84&rs=typed",
+    "observedExampleUrl": "https://i.pinimg.com/474x/03/dc/df/03dcdf244f5f83c44d4038dcb2e43a6a.jpg",
+    "observation": "검색 결과의 실제 프레임 예시에서 검은 선, 흰 여백, 사선 컷 경계, 집중선을 확인. 가로 네 컷을 유지하며 테두리와 사고 장면의 집중선에 적용."
+  },
+  "artDirection": "Same selected warm-tan child scientist with thoughtful amber eyes, fine brown clear round glasses, white bob/cat-ear headband, red scarf, white lab coat, dark clothes/boots/teal pouch. Soft dimensional game illustration. Scene1 rear chalkboard-writing professor, white headband ear backs, cat anatomy = liquid beaker and liquid??. Scene2 flask mixing, cream cat hanging supported from bookshelf, orange window-squeeze cat, pale-blue/green cats resting inside foreground glass containers; corrected small paws and coherent folded legs. Scene3 sudden explosion and diagonal feet-first suction into dark floor vortex, cream ledge cat has modest foreleg and thin tapered tail; rear leg now extends down-left with distinct knee, meaningful shin, ankle and smaller boot; near leg down-right; original upper body and front boot preserved. Scene4 scientist splashes into a clear turquoise woodland stream while resident green/orange/blue cats already float calmly BELLY UP like the lobby, with actual lobby-model-like long smooth fairly constant-width torsos, tiny chest forepaws and two short hindlegs extending along body axis with gap, no big upturned soles or banana tails; no laboratory containers; horizontal fading arrival portal on background rock ledge. Scene5 continues IN THE SAME STREAM: scientist wades waist-deep supporting green cat under upper chest with both hands; its surprisingly long relaxed torso hangs down and visibly continues in a gentle curve underwater; curious surprised scientist and drowsy cat. Orange/blue float nearby with same lobby-like shape. No glass vessels, dry paving, notebook in hands or measuring/pulling experiment. Scene6 green floor aperture reveals human cat playroom with cat tower/toys; the three FOREST cats look eagerly into it with wide round sparkling turquoise eyes and happy little smiles. Scenes7/8 color-portal guidance/farewell. Cats have rounded bodies, two forelegs from shoulders/two hindlegs from pelvis/one tapering tail, modest head-relative paw size; no inflated bear feet or tail resembling extra limb. Usually relaxed lazy eyes; scene6 discovery is the explicit exception with wide delighted eyes. No nasal sleep bubbles. Portals always horizontal. Revision18: scene1 vessel cats have continuous chest and modest paws at floor; scene3 background cats rest on ledges with small forepaws and ONE slender tail curled on ledge, no dangling sausage appendages. Forest orange cat in scenes4/5 is solid orange including muzzle/chest/feet/tail; no stripes/white patches, matching scenes6/7/8. Human-laboratory tabby cats and human playroom cats keep their own coat patterns. All eight angled comic rims are black (#111111).",
+  "controlLayout": {
+    "skip": {
+      "x": 16,
+      "y": 800,
+      "width": 80,
+      "height": 44
+    },
+    "next": {
+      "x": 297,
+      "y": 800,
+      "width": 80,
+      "height": 44,
+      "labelOffsetX": -9,
+      "icon": {
+        "glyph": "▶",
+        "size": 14,
+        "offsetX": 31,
+        "offsetY": 1
+      }
+    }
+  },
+  "visualConstraints": {
+    "researcher": "latest-user-character-reference-184349; childlike-warm-golden-tan-skin-face-neck-hands; white-short-bob; white-pink-cat-ear-headband; rolled-white-lab-coat; red-neck-scarf; dark-clothes; brown-boots; teal-pouch",
+    "eyewear": "reference-fine-brown-bronze-circular-frames; CLEAR-lenses-visible-amber-eyes; no-head-goggles; latest-full-character-choice-supersedes-old-thick-red-frames",
+    "props": "notebooks-blue-pen-white-chalk; actual-lab-flasks-research-materials; no-tools-applied-to-cats-or-measuring-instruments",
+    "catLegs": "two-forelimbs-from-shoulders-two-hindlimbs-from-pelvis; modest-paws-about-one-third-head-width; natural-wrists-hocks; hidden-limbs-remain-occluded; no-extra-paw-masses-or-giant-bear-feet",
+    "containerPoses": "laboratory-scenes1/2-only: relaxed-round-jar-loaf-and-rectangular-sphinx; natural-folded-hindlegs; NO-lab-glass-vessels-in-forest-scenes4/5",
+    "portalOrientation": "horizontal-ground-plane-only",
+    "plot": "rear-view-chalkboard-cat-liquid-hypothesis -> comic-cat-antics-during-flask-mixing -> explosion-causes-floor-portal-suction -> bewildered-stream-arrival -> wading-scientist-lifts-local-green-cat-and-discovers-its-long-underwater-body -> discover-human-cat-playroom-and-color-match -> intentional-guidance -> satisfied-wave",
+    "catExpression": "usually-relaxed-game-like-half-closed-turquoise-eyes; SCENE6-FOREST-TRIO-EXCEPTION: wide-round-eyes-round-pupils-natural-catchlights-turquoise-irises-happy-feline-smiles-eager-playroom-discovery; same-head-size-anatomy; no-fear-tears-sweat-or-abuse-affect",
+    "longcat": "scene5-after-water-arrival; scientist-both-hands-support-upper-chest-behind-forelimbs; long-soft-body-hangs-by-gravity-and-continues-underwater-with-refraction-and-meniscus; hindquarters-occluded-deeper-water; cat-half-closed-sleepy-eyes-no-distress; no-gripping-neck-or-wrists-pulling-measurement-restraint-or-experiment",
+    "laboratory": "scientific-colored-liquid-flasks-test-tubes-papers-feline-anatomy-chalkboard; finished-cool-gray-tile-floor-with-grout; no-yellow-dirt-soil-floor-or-domestic-sofa",
+    "professorAffect": "reference-thoughtful-playful-curious-partly-lowered-lids; no-malicious-sneer; startled-during-suction; bewildered-on-arrival",
+    "sleepMotif": "no-nasal-sleep-bubbles-or-drool-or-ZZZ; sleepy-elsewhere; scene6-discovery-wide-happy-eyes",
+    "catBody": "organic-soft-rounded-shoulders-back-belly-haunches; gently-curved-spine; elongated-game-proportions; no-rigid-cuboid-body-or-right-angle-corners",
+    "catTails": "one-tail-from-rump-above-pelvis; thinner-than-legs; naturally-curved-and-tapered; no-massive-coil-or-tail-as-extra-leg",
+    "book": "notebooks-rest-on-solid-workbench-with-contact-shadow-or-held-by-hands; panel1-professor-writes-with-chalk-on-board; no-floating-books",
+    "explosion": "panel3-sudden-white-cyan-violet-burst; lab-space-twists-into-deep-blue-horizontal-floor-whirl; scientist-diagonally-swept-feet-first; inward-converging-paper-scarf-coat-hair; unknown-destination; cat-antics-continue-in-background; no-sound-word-text",
+    "humanDestination": "panel6-aperture-only: inviting-human-cat-playroom; multilevel-cat-tower-hammock-hideaways-scratching-posts-tunnel-balls-feathers-plush-mouse; familiar-cream-orange-cats-resting; no-scientific-flasks-anatomy-chalkboard-or-lab-equipment; origin-scenes1-to3-remain-lab",
+    "opening": "panel1-board-dominates; professor-seen-from-behind-writing-white-chalk; feline-anatomy-schematic = cyan-liquid-beaker; exact-lowercase-liquid??; rear-view-cat-ear-headband-show-white-outer-backs-no-pink-interiors",
+    "embeddedText": "only-user-requested-liquid??-and-equals-sign-on-panel1-chalkboard; no-dialogue-captions-or-extra-guides; textMode-none-refers-to-UI-narration",
+    "comicLabScene2": "cream-cat-chest-forepaws-supported-by-bookshelf-edge-long-relaxed-body; orange-tabby-self-flattened-through-half-open-window; ALSO-pale-blue-cat-inside-round-foreground-glass-jar-and-mint-green-cat-inside-rectangular-glass-tub; four-cats; scientist-flask-mixing; no-nasal-bubbles",
+    "catWorld": "scenes4-and5-same-clear-woodland-stream-no-lab-vessels; scene4-scientist-arrives-alone-with-splash-local-cats-already-belly-up; scene5-scientist-wades-and-casually-lifts-green-cat-from-stream-its-long-body-continues-underwater; orange-blue-remain-floating; preserve-horizontal-arrival-portal-and-forest",
+    "proportionReview": "revision18-user-2027-crops: scene1-cream-jar-two-slim-forelegs-grounded-paws-rear-haunches; scene1-orange-tray-sphinx-continuous-chest-small-paws; scene3-cream-ledge-small-resting-forepaws-tail-on-ledge; scene3-orange-window-two-paws-on-sill-no-dangling-tube",
+    "worldOrangeCoat": "same-forest-character-scenes4-to8-solid-orange-all-fur-including-muzzle-chest-belly-paws-tail-tip; no-tabby-stripes-or-white-patches; only-natural-shading; human-lab-and-playroom-cats-distinct",
+    "comicRim": "all-eight-angled-card-rims-black-111111; no-white-rim; preserve-layout-and-framing",
+    "playroomDiscovery": "scene6-only-three-forest-cats-excited-to-see-cat-tower-hammock-tunnel-toys; edit-only-facial-expression; head-body-paws-coat-colors-scientist-floor-portal-and-interior-preserved",
+    "scientistAnatomy": "scene3-rear-leg-extends-diagonally-down-left; visible-knee-meaningful-length-shin-ankle-smaller-boot; gentle-knee-bend-no-folded-back-heel-up-pose; front-leg-down-right; clear-two-hip-thigh-knee-shin-ankle-boot-chains; upper-body-and-front-boot-original; no-boot-attached-to-thigh-or-tiny-U-shaped-calf",
+    "arrival": "scene4-tan-child-scientist-splashes-waist-deep-left-original-scientist-pixels-retained; green-orange-blue-local-cats-belly-up-right-lobby-model-limb-shapes; no-big-soles-or-banana-tails; quiet-mesh-hugging-water-wakes; saved-lobby-capture-as-generation-reference",
+    "lobbyCatShape": "scene4-and-scene5-local-trio-match-saved-3D-lobby-cat1.fbx-reference; smooth-long-fairly-constant-width-body-narrower-than-head; tiny-tucked-frontpaws; two-short-hindlegs-extend-from-rump-along-torso-axis-with-clear-U-gap; modest-rounded-paw-tips-no-large-front-facing-pads; thin-tail-discreet-mostly-submerged; record-artifacts/cat-liquid-comic/revision-22/lobby-reference-facts.json",
+    "waterPickup": "scene5-direct-sequel-to4-in-same-stream-forest-rocks-waterfall-horizontal-blue-arrival-portal; scientist-wading-supports-green-cat-chest-with-two-hands; long-connected-torso-above-water-and-underwater-curve; surprised-curious-professor-versus-relaxed-deadpan-cat; orange-blue-float-nearby; no-notebook-or-tools-in-hands; same-costume-and-solid-coats"
+  }
+}

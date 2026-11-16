@@ -1,0 +1,51 @@
+{
+  "revision": 19,
+  "source": "User-selected character screenshot 2026-11-15 18:43:49; facial attitude/skin corroborated by 18:41:51 screenshot",
+  "character": "Use selected character identity: warm golden-brown skin, thoughtful/playful amber eyes, fine brown/bronze circular clear eyeglasses, rolled white science coat, red neck scarf, dark clothes, brown boots, teal research pouch. Replace head goggles/straps/ribbons with white/pink cat-ear headband; white short bob hair.",
+  "latestPriority": "Use this character as-is except requested headband/white bob; supersedes earlier pale professor and bright red thick frames.",
+  "book": "Panel1 scientist writes chalk on the dominant board; a secondary notebook is supported in the other hand or rests flat on a solid workbench. No floating book. Airborne papers/books appear only during the intentional scene3 vortex accident.",
+  "explosion": "Panel3 sudden white-cyan/violet burst and space visibly twisting/funneling into dark horizontal floor vortex, professor involuntarily swept diagonally feet-first with inward paper/scarf/coat flow, surprised face. Far-background cats continue bookshelf/window antics safely; destination unknown until scene4.",
+  "labFloor": "Origin laboratory scenes1–3 use clean cool pale gray finished tiles with gray grout, never yellow dirt/soil. Scene6 human destination is a separate furnished cat playroom, not a laboratory. Outdoor forest golden paving remains.",
+  "cats": "Same green/orange/blue feline identities, proportions and coats. Usually relaxed half-closed game eyes; scene6 discovery is the explicitly requested exception with wide happy eyes and eager friendly attention. No nasal sleep bubbles.",
+  "catTails": "Rear-view tails emerge from rump above pelvis, curve naturally with thick root and slender tapered tip, differing among cats; no circular pompom/bear/rabbit stubs.",
+  "plot": [
+    "rear-professor-writes-cat-anatomy-equals-liquid-question-on-chalkboard",
+    "mix-flask-liquids",
+    "sudden-mixture-flash-and-floor-vortex-suction",
+    "bewildered-forest-arrival",
+    "casual-local-cat-lift-natural-gravity-longcat",
+    "matching-color-portal-reveals-human-cat-playroom",
+    "guide-cats",
+    "farewell"
+  ],
+  "preserved": [
+    "4stacked-landscape-cards-per-page",
+    "skip/next ▶",
+    "horizontal floor portals",
+    "no measuring tools or pulling/stretching experiment on cats",
+    "no-dialogue-or-captions; only user-requested embedded chalk liquid?? and equals sign in panel1",
+    "existing-flow-edges/storage/gameplay/camera; reuse existing advancement function",
+    "four-reveals-then-next-only-page-gate; panelSfx; blinkingNext; approvedPawIcon",
+    "card-turn sound and gain0.8; audio settings",
+    "unaffected scientist, explosion and forest pixels outside local edit masks"
+  ],
+  "humanDestination": "Panel6 portal interior is a welcoming HUMAN CAT PLAYROOM with multi-level cat tower, hideaway, scratching posts, tunnel, balls, feathers and plush mouse; familiar cream/orange cats lounge comfortably. No lab apparatus/anatomy chalkboard inside destination. Scientist origin scenes1–3 remain actual laboratory with gray tiles.",
+  "opening": "Panel1 chalkboard dominates; professor seen three-quarter from BEHIND writing in white chalk. Large cat anatomical outline/skeleton = cyan-liquid straight-sided beaker and exact lowercase liquid??. No extra captions/dialogue. Colored flasks/relaxed vessel cats remain secondary. No floating notebook. Rear-view headband ears show ivory/white outer backs only; no pink inner-ear surfaces. Front views can show pink inner ears.",
+  "comicLabScene2": "Scientist absorbed in flask mixing. Keep cream cat hanging comfortably chest-supported from right bookshelf and orange cat squeezing voluntarily through half-open window. Add pale-blue cat curled inside foreground round jar and mint-green cat inside rectangular glass tub. Four lower-scene cats, all relaxed with correct paws/tails.",
+  "catSleep": "Sleepy look remains in other scenes. Scene6 forest trio looks happily excited at human cat playroom, eyes wide with round pupils/catchlights and teal irises. No sleep bubbles, tears, sweat or new lettering.",
+  "interaction": "After each revealed cut, idle4seconds reveals exactly one next cut; tap/next may reveal earlier. At four visible cuts STOP the timer and ignore background taps. Only the existing next button event can fire pageComplete/finish. skip remains an explicit exit. Manual reveal resets idle deadline; cleanup removes loop/listener. next triangle blinks as before.",
+  "nextHint": "next and triangle blink together with1.2second opacity cycle(1to0.35); click hitbox stays active; reduced motion disables blinking.",
+  "anatomyReview": {
+    "basis": "Four actual user crop references, 2026-11-15 20:10 screenshots",
+    "proportions": "Keep stylized long torso where story needs it, but shoulders/hips/forelimbs/hindlimbs anatomically connected. Paws modest ~one-third head width, natural wrist/hock transitions. No inflated tubular limbs or extra paw masses.",
+    "tail": "One tail from rump, thinner than limbs, tapered, curved once rather than thick coil resembling extra leg.",
+    "poses": "Lab green tub cat coherent sphinx/loaf, cream ledge cat supported torso and normal small forepaws, green forest cat seated with normal paws/tail, blue forest cat compact loaf with hindlegs tucked under rounded haunches.",
+    "heldLongcat": "Preserve natural gravity-elongated torso, supported upper chest, four connected modest paws and separate tapering tail.",
+    "additionalRevision18": "Human-lab scene1 cream jar cat seated with two slim forelegs ending at floor; orange tray cat has continuous chest and small paws. Scene3 cream cat and orange window cat lounge supported with small paws; tails stay on ledges. No long hanging rubber tubes."
+  },
+  "catWorld": "Scenes4/5 natural forest, no glass; orange cat solid orange over all fur, no tabby/white patches, same character as6/7/8. Human origin-laboratory and playroom cats remain distinct.",
+  "latestRequestedChanges": {
+    "scene6Expression": "Only forest green/orange/blue trio looking into human cat playroom: wide delighted eyes, round pupils, natural catchlights, eager forward ears and tiny feline smiles. Keep head size and correct anatomy. Other scenes unchanged.",
+    "preserve": "Black eight-cut frames, solid orange forest cat, selected scientist, human cat playroom, horizontal floor portals, all gameplay/UI/progression and card-turn sound."
+  }
+}

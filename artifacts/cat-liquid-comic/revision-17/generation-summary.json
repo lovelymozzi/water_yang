@@ -1,0 +1,64 @@
+{
+  "revision": 17,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill scripts/generate_image.py through Flava",
+  "quality": "high",
+  "automaticRetries": 0,
+  "failedRequests": 0,
+  "totals": {
+    "input_text_tokens": 2382,
+    "input_image_tokens": 3072,
+    "output_image_tokens": 5268,
+    "requests": 3,
+    "estimated_cost_usd": "0.0972630",
+    "estimated_cost_krw": "136.17",
+    "usd_to_krw_rate": 1400
+  },
+  "responses": [
+    {
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-17/pair-01-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1750,
+        "input_text_tokens": 726,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032251",
+        "estimated_cost_krw": "45.15",
+        "usd_to_krw_rate": 1400
+      },
+      "responseFile": "pair-01-generation.json"
+    },
+    {
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-17/pair-02-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1939,
+        "input_text_tokens": 915,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0327235",
+        "estimated_cost_krw": "45.81",
+        "usd_to_krw_rate": 1400
+      },
+      "responseFile": "pair-02-generation.json"
+    },
+    {
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-17/pair-03-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1765,
+        "input_text_tokens": 741,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0322885",
+        "estimated_cost_krw": "45.20",
+        "usd_to_krw_rate": 1400
+      },
+      "responseFile": "pair-03-generation.json"
+    }
+  ]
+}

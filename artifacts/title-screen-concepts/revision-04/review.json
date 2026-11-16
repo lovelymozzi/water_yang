@@ -1,0 +1,64 @@
+{
+  "scope": "offline selected B title refinement; game unchanged",
+  "references": [
+    "../revision-03/b-observation-notes-generated.png",
+    "../../cat-liquid-comic/revision-22/lobby-model-reference.png"
+  ],
+  "artEdits": [
+    "elongated lobby-like body and simpler forepaws",
+    "exactly two visible hindlegs; concealed tail",
+    "removed neck collar contour and placed water contact behind heads"
+  ],
+  "compositing": "retain original art outside feathered cat and water regions",
+  "unchangedOutsideEditMask": true,
+  "preview": "uniform 2:3 resize; existing loading-bar artwork overlay; not an actual game screenshot",
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill scripts/generate_image.py via Flava",
+  "quality": "high",
+  "requestCount": 1,
+  "usage": {
+    "input_tokens": 2243,
+    "input_text_tokens": 722,
+    "input_image_tokens": 1521,
+    "output_tokens": 1372,
+    "output_image_tokens": 1372,
+    "estimated_cost_usd": "0.028469",
+    "estimated_cost_krw": "39.86",
+    "usd_to_krw_rate": 1400
+  },
+  "assets": [
+    {
+      "path": "b-relaxed-lobby-cats-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "7b5306bf27d374afcbbfe6bc6391ae81f39ddf08913317c9dbefc831c3fd1f0f"
+    },
+    {
+      "path": "b-relaxed-lobby-cats-final.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "dec9d74e8b9103c5ae398dfcb2e125ed416d82b79dbce2e1cbd9a6c3e602e009"
+    },
+    {
+      "path": "b-relaxed-lobby-cats-title.webp",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "02a25a47c670f266876117216668e8a867f89ee4e8296dc16f049d502dcd0dee"
+    },
+    {
+      "path": "b-relaxed-lobby-cats-preview.jpg",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "3bbb8457e64affa616c6d3e8a60d66e37a052c08c43a6b88932ab1024a478608"
+    }
+  ],
+  "compositeReview": "Expanded orange cat region to remove all of the former ear outline; original outside edit region remains identical."
+}

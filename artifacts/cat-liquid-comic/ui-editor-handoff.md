@@ -1,51 +1,46 @@
-# 고양이 액체 이야기 — 게임 연결 기록
+# 고양이 액체 만화 — 현재 게임 연결
 
-2026-11-15. 현재 버전은 [revision-08](revision-08/README.md)의 무대사 만화다. 사용자가 이번 만화에 한해 UI 씬·이벤트·진입 분기·필요 연결 코드의 직접 추가를 허용했고, 해당 범위에서 UI Editor 원본과 실행용 데이터를 함께 갱신했다.
+2026-11-15. 현재 그림은 [revision25](revision-25/README.md). 사용자가 이번 만화에 한해 직접 추가/수정을 허용한 범위에서 UI Editor 원본과 실행 contract를 함께 유지한다.
 
-## 실제 흐름
+## 흐름과 조작
 
-1. 기존 splash 로딩 후 터치한다. 완료 이력이 없거나 `?story=replay`이면 `StoryIntro01`로 간다.
-2. 240ms 뒤 첫 컷이 기존 200ms 스탬프 모션으로 나타난다. 대사·설명·타이핑·안내 글자는 없다.
-3. 하단 오른쪽 `next`를 한 번 누를 때마다 다음 컷을 추가하고 이전 컷은 남긴다. 네 번째 컷의 next는 `story.pageComplete` 문서 엣지로 `StoryIntro02`에 간다.
-4. 여덟 번째 컷의 next는 완료 저장 후 `story.finish` 문서 엣지로 기존 로비 홈 탭에 도착한다. 스테이지를 자동 시작하거나 하트를 소비하지 않는다.
-5. 하단 왼쪽 `skip`은 두 페이지의 어느 컷에서나, 첫 컷 전에도 완료 저장 후 로비로 간다.
-6. 완료 후 재접속은 기존 splash → 로비 흐름이며 끝내기 전에 새로고침하면 첫 페이지부터 다시 볼 수 있다.
+기존 splash 로딩 완료 뒤 첫 진입/`?story=replay`에서 StoryIntro01로 간다. 240ms 뒤 첫 컷 공개, 화면 아무 곳이나 터치 또는 next ▶ 클릭마다 다음 컷을 추가한다. 입력이 없으면1초 뒤 다음 컷을 공개한다. 각 페이지의 네 컷이 모두 나오면 타이머를 멈추고, 배경 터치는 무시하며 next 버튼으로만 다음 페이지/로비에 진입한다. skip의 명시적 건너뛰기는 유지한다. 수동 진행마다 대기 시간을 초기화한다. next 글자/▶는1.2초 주기로 함께 깜빡이며 움직임 줄이기 설정에서는 고정 표시한다. 네 컷 완성 후 다음 클릭은 `story.pageComplete`로 StoryIntro02, 여덟 번째 컷 뒤 next는 완료 저장 후 `story.finish`로 로비 홈 탭이다. skip은 어느 페이지/첫 컷 전에도 완료 저장 후 로비 이동이다. 자동 스테이지 시작/하트 소모는 없다.
 
-## 파일과 배선
-
-| 씬 | UUID | 사용자 입력 | 페이지 종료 문서 엣지 |
+| 씬 | UUID | 버튼 이벤트 | 페이지 종료 |
 | --- | --- | --- | --- |
-| StoryIntro01 | 91b7f29b-8b6d-41b7-a08a-99a0a1dfb401 | story-advance-01:click (next), story-skip-01:click | story.pageComplete |
-| StoryIntro02 | 91b7f29b-8b6d-41b7-a08a-99a0a1dfb402 | story-advance-02:click (next), story-skip-02:click | story.finish |
+| StoryIntro01 | 91b7f29b-8b6d-41b7-a08a-99a0a1dfb401 | story-advance-01:click / story-skip-01:click | story.pageComplete |
+| StoryIntro02 | 91b7f29b-8b6d-41b7-a08a-99a0a1dfb402 | story-advance-02:click / story-skip-02:click | story.finish |
 
-- `.ui-editor/scenes/StoryIntro*.scene.json`과 `web/ui/StoryIntro*.contract.json`에 같은 레이아웃·배경·이미지·이벤트를 저장했다. 남은 visibility 위젯은 `story.panel01`~`panel08`과 `story.nextReady`다. 텍스트 바인딩은 없다.
-- 두 scene-flow 파일에는 첫 입장 분기 1개, 페이지 문서 엣지 2개, skip 엣지 2개가 있다. `SCENES.md`도 현재 상태를 선언한다.
-- `web/story-intro.js`의 기존 `attachStoryIntro`는 첫 입장 조건·visibility·next 입력·skip 완료 조건을 공급한다. 페이지 이동은 `flow.fire`, skip 이동은 FlowDriver 버튼 엣지에 맡긴다.
-- `story.complete` 조건은 진행 중 상태가 있을 때만 완료 저장한다. 완료와 skip은 rAF와 next 구독을 즉시 정리하므로 연타가 저장을 중복하지 않는다. 초기 대기 이후 지속 실행하는 rAF나 타이핑 루프가 없다.
-- `godot-shell.html`, `web/index.html`은 CSS/JS `cat-liquid-v9`을 사용한다. 스토리/흐름/계약 JSON은 HTTP 재검증하며, 기존 splash 디코드 대기에 두 씬을 포함한다.
-- 새 `story_cat_liquid_full_card_01.webp`~`08.webp`은 770×384를 1/2배로 표시한다. 새 경로로 이전 이미지 캐시와 구분한다. 원화/비프레임 컷은 중복 선로딩하지 않는다.
-- 카드 크기는 385×192, x4, y4/200/396/592다. 대사창을 없애 화면 대부분을 그림으로 채웠다. skip은 x16, next는 x297, 두 버튼 모두 y800/80×44다.
-- 사선 프레임, 상점 배경, 컷 누적 등장, 움직임 줄이기 설정은 유지한다. `sceneAnimations`는 비어 있고 입력 없이 다음 컷으로 진행하지 않는다.
-- 레이아웃을 HTML로 재구현하거나 SceneRenderer/FlowDriver/기타 매니저/Godot 본체를 수정하지 않았다.
+첫 입장1/문서2/skip2, 기존 스토리 엣지5개 유지, 추가0/제외0. `story.firstEntry`/`story.complete` 조건과 `attachStoryIntro` 훅이 기존 FlowDriver에 연결되어 있다. 완료 키 `leonout_story_cat_liquid_seen_v1`, 재입장/연타/정리 동작 유지.
 
-## 그림과 다국어
+## 현재 데이터와 그림
 
-기존 괴짜 연구자·게임 고양이를 참조해 세로 공간이 더 넉넉한 2:1 구도로 8컷을 새로 그렸다. Sunburst 1024×1024 원화 네 장에 각 두 컷을 담고 실제 흰 여백을 측정해 분리했다. 그림 속 대사·설명칸·효과음 글자는 없고, 연구 노트에는 컵/상자 고양이 도형만 있다. 문자열은 skip/next 두 개다.
+`resources/story/cat-liquid-intro.json` revision25. 4·5컷 원화/카드와 첫째 페이지 원화는 `story_cat_liquid_recline_*` 경로다. 8컷 원화/카드와 둘째 페이지 원화는 `story_cat_liquid_conclusion_*` 경로다. 3컷 원화/카드는 pose, 6컷 원화/카드는 discovery, 나머지 카드들은 refined다. 나머지 원화1은 refined/2는 anatomy/7은 mishap 경로를 유지한다. 전체 카드의 흰 테두리는 검정(#111111)으로 변경했다. 기존 컷 공개 함수를 전체 클릭/기존 next 이벤트/자동 대기 루프가 공유한다. `.ui-editor/scenes/StoryIntro*.scene.json`과 `web/ui/StoryIntro*.contract.json`의 카드 경로가 같다. 가로385×세로192 카드4개/393×852, x4/y4·200·396·592, 아래 skip x16/next x297/y800/80×44. same next 컴포넌트 안 두 번째 텍스트 슬롯의 `▶`는 +31px/14px, next 글자 -9px, 기존 터치 영역/이벤트를 공유한다. 새 이벤트 없음.
 
-언어별 대사 데이터와 대사 UI를 제거했으며, 표정·행동·물건·같은 색 고양이/차원문으로 이야기를 전달한다. 실제 유변학 논문 정보는 스토리 JSON에 보존하고 등장 박사와 차원문은 창작으로 구분한다. 원화·프롬프트·사용량은 `revision-08/`에 있다. 게임의 3D 메시를 렌더한 그림이거나 실제 게임 화면과 픽셀 단위로 같다는 뜻은 아니다.
+visibility는 story.panel01~panel08과 story.nextReady, 대사 바인딩/타이핑/자동 타임라인 없음. 상점 배경/사선 만화 프레임/스탬프 모션/움직임 줄이기 유지, 사고 집중선은3컷이다. JS는 cat-liquid-page-gate-v18, CSS는 cat-liquid-v16을 사용한다. JSON 명시적 no-cache는 이전 시작 캐시 수정으로 새 데이터를 읽는다.
 
-## 저장과 다시보기
+현재 박사는 사용자가 선택한 따뜻한 갈색 피부·호박색 눈·가는 갈색 둥근 투명 안경·빨간 머플러·흰 가운의 어린 캐릭터다. 흰 단발과 고양이 귀 머리띠를 적용했고 머리 고글은 없다. 1컷 뒷모습의 귀는 흰색 바깥 면만 보인다. 첫 컷은 칠판이 중심이며, 뒤돌아 선 박사가 고양이 골격/해부도 = 액체 비커와 `liquid??`를 적는다. UI 대사 없는 정책에서 사용자가 요청한1·8컷 칠판 글자만 예외다. 책은 손/책상이 받친다.
 
-완료 키는 기존 `leonout_story_cat_liquid_seen_v1`이며 `GAME_STORAGE_KEYS`와 로컬/Hub 저장 흐름에 포함된다. 마지막 next 또는 skip에서만 저장한다. 페이지 진입/넘기기에는 저장하지 않는다.
+2컷은 책장에 상체를 받치고 길게 늘어져 매달린 크림 고양이와 반쯤 열린 창문으로 스스로 납작해져 들어오는 주황 고양이 옆에서 플라스크 배합에 몰두한다. 앞쪽 둥근 유리 병에는 연한 파란 고양이, 사각 유리 그릇에는 민트 고양이를 추가해 총 네 마리다. 3컷은 큰 폭발과 연구실/종이/옷자락이 바닥 회오리로 휘말리는 사고다. 연구실 바닥은 회색 마감 타일이다. 4컷은 맑은 숲속 물 위에서 배를 하늘로 향한 현지 고양이들이 이미 편하게 떠 있고, 박사만 물보라를 일으키며 풍덩 빠지는 도착 장면으로 바꿨다. 5컷도 바로 같은 물속에서 이어진다. 물에 선 박사가 초록 고양이의 가슴 아래를 두 손으로 받쳐 건져 올리는데, 수중 몸은 수직에 가깝게 이어지고 두 짧은 뒷다리/발이 계곡 바닥 돌에 닿는다. 뱀처럼 옆으로 휘는 긴 몸통은 제거했다. 박사는 원래 놀라는 표정을 유지한다. 고양이는 뚱하고 나른한 표정이며 주황/파랑은 곁에 떠 있다. 두 컷 모두 유리병·원통·사각 용기가 없다. 3컷은 뒤쪽 다리를 아래 왼쪽으로 펴 무릎·종아리·발목이 이어지게 했고, 얼굴/상체/앞쪽 부츠는 원본을 유지한다. 4컷은 실제 저장된3D 로비 캡처와 cat1.fbx 사용 경로를 확인하고 그 화면을 생성 참조에 넣었다. 매끈한 긴 몸통·가슴의 작은 앞발·몸 축을 따라 뻗는 짧은 두 뒷다리와 발 사이 틈을 반영하고, 큰 발바닥/바나나 꼬리를 정리했다. 원래 박사는 지역 합성으로 보존했다. 5컷도 같은 로비형 고양이 형태를 따른다. 4컷 세 고양이와5컷 주황/파랑은 목/머리를 낮춰 뒤통수를 물에 편히 기대며 얼굴은 수면 위다. 5컷 세워 든 초록 고양이와 바닥에 닿는 두 발은 원본 픽셀 그대로 유지했다. 같은 주황 고양이는 뒤 장면처럼 줄무늬/흰 털 부분 없는 단색 주황으로 통일했다. 2컷 기존 보정은 유지하고, 1컷 용기 속 두 고양이의 가슴/다리를 다시 연결했다. 3컷 배경 두 고양이는 작은 앞발을 선반/창틀에 얹고 꼬리도 위에 두어 길게 매달린 고무 같은 형태를 제거했다. 숲속 물에 도착해 어리둥절해한 뒤 현지 고양이를 물에서 받쳐 건져 올리자 몸이 수면 아래로 이어져 두 뒷발이 바닥에 닿고, 전체 컷의 콧방울은 없다. 보통은 나른한 표정/편안한 자세를 유지하며, 6컷 숲의 세 고양이가 놀이방을 보는 순간만 눈을 크게 뜨고 밝게 웃는 신난 표정이다. 얼굴 부분만 보정해 머리 크기/몸 비례/발/꼬리는 유지했다. 몸을 당기거나 길이를 재는 실험은 없다. 인간계는 실험실 대신 캣타워와 장난감이 가득한 놀이방이다. 고양이는 둥근 몸과 가늘어지는 곡선 꼬리를 가지며 모든 차원문은 바닥 구멍이다.
 
-http://localhost:8080/web/?story=replay 는 완료 이력을 삭제하지 않고 다시 볼 수 있는 주소다. 기존 URL에 쿼리가 있으면 `&story=replay`를 붙인다.
+8컷은 배웅 장면을 연구실 결말로 교체했다. 같은 어린 박사가 확신에 찬 표정으로 `liquid!!!` 마지막 느낌표를 적는다. 칠판에는 고양이 해부도 `=` 청록 액체 비커, `Rheology`, `Deborah number`가 보인다. 첫 컷의 `liquid??`와 대응하며 고양이 놀이방은6컷 차원문 내부로 유지한다. 원래7컷/여백은 그대로 두고 새8컷만 합성했다.
 
-## 검증
+## 배경 음악
 
-- `node tests/story_intro_check.mjs`: 실제 publish FlowDriver와 렌더러/DOM 대역으로 무대사 계약, 하단 skip/next, 초기 등장, next 진행, 두 문서 엣지, 첫 컷 전/두 페이지 skip, 키보드, 연타 1회 저장, 캐시 재입장/재접속/다시보기를 확인했고 통과했다.
-- `splash_cache_check.mjs`, `ui_bare_asset_paths_check.mjs`도 통과했다.
-- 원화 네 장과 두 페이지 배치 시안을 파일로 확인하고 WebP 디코드·크기·해시·컷 분리 좌표·대사 필드 부재를 확인했다. 시안 PNG/JPG/GIF는 실제 게임 캡처가 아니다.
-- 기존 publish 보고서는 2026-08-31 기록이며 errors 0개/warnings 8개다. 이번 검사 결과로 덮어쓰지 않았다.
-- 프로젝트 규칙에 따라 실제 게임의 브라우저·시각 확인은 사용자가 수행한다.
+컷씬 자동 공개 간격은 사용자 요청으로1초다. 네 컷 완성 뒤 next 버튼을 기다리는 정책은 유지한다. 컷씬 진입 시 재생 중인 cat-mouth-open 효과음을 즉시 멈추고, 두 페이지 동안 뒤쪽 로비에서 오는 새 울음 이벤트도 재생하지 않는다. 컷씬의 인게임 BGM/카드 넘김 소리/skip·next 클릭음은 유지하며 로비·인게임의 고양이 울음은 기존대로다.
 
-앞선 시안과 사용량은 revision-03~07 폴더에 보존했다.
+사용자 요청으로 StoryIntro01/02는 기존 인게임 `Ingame_BGM.mp3`를 재생한다. SoundManager의 동일 곡 이어 재생 API를 이용해 페이지 전환 시 곡을 재시작하지 않는다. 완료/skip 후 Lobby 또는 home_bottom 진입은 기존 `Lobby_Bgm.mp3`로 전환한다. 첫 제스처의 BGM 선택도 현재 화면과 첫 진입/replay 여부를 따른다. 컷씬은 인게임 음악 설정, 로비는 로비 음악 설정을 따르며 꺼진 로비로 돌아올 때는 기존 컷씬 곡도 멈춘다. 기존 셸의 scene:enter/첫 제스처/공통 클릭 처리만 수정하며 새 이벤트·함수·흐름은 없다.
+
+## 컷 등장 효과음
+
+기존 showPanel에서 playPanelSfx 콜백을 한 번 호출한다. 두HTML은 기존 SoundManager로 UI Editor 사운드 라이브러리의 ui_card_turn_optimized.mp3를 gain0.8에 재생하며 현재 buttonSfxEnabled 설정을 따른다. 종이 넘김 전용 검색 결과가 없어 카드 넘김 리소스를 선택했으며 src/sound와 web/sound에 동일 원본을 보관한다. 검색/후보 측정 기록은 artifacts/story-panel-sound/selection.json이다. 사용자 추가 요청에 따라 skip/next 버튼은 기존 공통 클릭음 처리에서 Ui_button_sound.mp3를 클릭당1회 재생한다. next로 컷을 공개하면 별도의 카드 넘김 소리도 유지하고, 화면 빈 곳 클릭은 버튼음을 내지 않는다. 키보드도 기존 button.click() 경로를 공유하며 효과음 끄기 설정을 따른다. 자동/화면 클릭/next/키보드 모두 컷 공개 시점에만 소리를 내며 skip/완료 뒤에는 호출하지 않는다. 효과음 첫 제스처/뮤트/볼륨은 기존 SoundManager가 담당한다. Node 검사에서 컷당1회와 자동 컷 공개8회/두 페이지 각각 네 컷 뒤 대기/next 전용 페이지 이동/skip무호출/종료후무호출을 확인했다. 실제 게임 청음은 사용자 확인 대상이다.
+
+## 시작 캐시 오류 수정 유지
+
+이전 window.fetch 래퍼는 cache:no-cache를 무시하고 splash Cache API의 옛 bottom-typewriter JSON을 반환해 textMode:none을 검증하는 attachStoryIntro를 중단시킬 수 있었다. 두 HTML의 공통 래퍼가 no-cache/reload/no-store 요청을 Cache API 전에 원래 fetch로 보내도록 수정했고 회귀 검사 통과. 게임 저장은 지우지 않는다.
+
+## 확인 범위
+
+`story_intro_check.mjs`, `ui_bare_asset_paths_check.mjs`, `splash_cache_check.mjs`, `git diff --check` 통과. 최종 원화4장과 오프라인 전체 배치 파일을 확인했다. 최신 revision25 스토리 JSON/둘째 StoryIntro contract/8컷 원화·카드/둘째 페이지 원화5개 localhost 응답을 작업 폴더와 대조했다. 앞의7컷 원화·카드14개는 revision24와 바이트가 같다. 둘째 UI 원본/실행 contract는8컷 그림 경로만 바뀐다. 검정 테두리를 유지한다. 기존 publish errors0/warnings8, 새 배선 없음. 브라우저·실제 게임 시각 확인은 사용자 담당이며 JPG/PNG/GIF는 게임 캡처가 아니다.
+
+[현재 만화 다시보기](http://localhost:8080/web/?story=replay&art=25). 각 버전/사용량은 revision03~25 기록에 보존했다. revision11 성인/흰 반사 안경 시안은 게임에 적용하지 않았다.

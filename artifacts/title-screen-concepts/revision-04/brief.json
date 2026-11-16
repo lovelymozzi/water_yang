@@ -1,0 +1,14 @@
+{
+  "scope": "refine selected revision03 B cats only; offline title artwork",
+  "base": "../revision-03/b-observation-notes-generated.png",
+  "actualLobbyCat": "../../cat-liquid-comic/revision-22/lobby-model-reference.png",
+  "changes": [
+    "elongated constant-width lobby bodies",
+    "small tucked forepaws; two short hindlegs",
+    "heads reclined level with shoulders; water supports back of head",
+    "sleepy half-lidded turquoise eyes"
+  ],
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "high",
+  "gameModified": false
+}

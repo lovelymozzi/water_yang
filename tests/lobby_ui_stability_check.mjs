@@ -4,7 +4,7 @@ import { runInNewContext } from 'node:vm';
 
 // Execute the real host scene-entry handler. No browser or copied mount logic.
 const shell = readFileSync(process.argv[2] || new URL('../godot-shell.html', import.meta.url), 'utf8');
-const handler = shell.slice(shell.indexOf("flow.on('scene:enter',"), shell.lastIndexOf('\nawait flow.start();'));
+const handler = shell.slice(shell.indexOf("flow.on('scene:enter',"), shell.indexOf('\n// Revalidate title images'));
 const moves = [];
 const field = {
   appendChild(node) { moves.push('field'); node.parentElement = this; },
@@ -24,6 +24,7 @@ const game = {
   state: 'running', pause() { this.state = 'paused'; }, resume() { this.state = 'running'; },
 };
 const context = {
+  STORY_INTRO_SCENES: ['StoryIntro01', 'StoryIntro02'],
   LOBBY_UI_SCENE: 'Lobby', INGAME_UI_SCENE: 'Ingame',
   LOBBY_NAV_SCENE_UUID: 'nav', SPLASH_UI_SCENE_UUID: 'splash',
   activeGame: game, activeGodotScene: 'lobby', activeSceneName: '', activeSceneUuid: '',
@@ -132,4 +133,33 @@ for (const state of ['ready', 'running', 'paused']) {
     assert.equal(context.pendingSceneReady, null);
   }
 }
-console.log('LOBBY UI STABILITY CHECK: PASS (shine preserved, parked WebGL size stable, all scene switches await sceneReady)');
+// Run music choices through the same real scene-entry handler, including muted lobby return.
+context.activeGodotScene = 'lobby';
+game.state = 'running';
+const music = [];
+const stoppedSounds = [];
+context.LOBBY_BGM = './sound/Lobby_Bgm.mp3';
+context.INGAME_BGM = './sound/Ingame_BGM.mp3';
+context.sound = { playBgm: src => music.push(src), stopBgm: () => music.push(null),
+  stopSfx: key => stoppedSounds.push(key) };
+for (const [sceneName, lobbyEnabled, ingameEnabled, expected] of [
+  ['StoryIntro01', true, true, context.INGAME_BGM],
+  ['StoryIntro02', true, true, context.INGAME_BGM],
+  ['StoryIntro01', true, false, null],
+  ['StoryIntro02', false, true, context.INGAME_BGM],
+  ['home_bottom', true, true, context.LOBBY_BGM],
+  ['Lobby', false, true, null],
+]) {
+  context.lobbyBgmEnabled = lobbyEnabled;
+  context.ingameBgmEnabled = ingameEnabled;
+  const stoppedBefore = stoppedSounds.length;
+  let musicWork;
+  context.enter({ sceneName, sceneUuid: sceneName === 'home_bottom' ? 'nav' : sceneName,
+    renderer, waitUntil: promise => { musicWork = promise; } });
+  await musicWork;
+  assert.equal(music.at(-1), expected, `${sceneName}: wrong BGM`);
+  assert.equal(stoppedSounds.length - stoppedBefore, context.STORY_INTRO_SCENES.includes(sceneName) ? 1 : 0,
+    `${sceneName}: stop a meow already playing when the comic opens`);
+  if (stoppedSounds.length > stoppedBefore) assert.equal(stoppedSounds.at(-1), 'cat-mouth-open');
+}
+console.log('LOBBY UI STABILITY CHECK: PASS (shine, WebGL size, sceneReady, story/ingame music and lobby return)');

@@ -1,0 +1,20 @@
+{
+  "kind": "offline-artwork-composite-inspection",
+  "browserGameVisualTest": false,
+  "observations": [
+    "Removed sideways snake-like underwater extension in scene5.",
+    "Finite mostly vertical belly ends in pelvis/two short feline hindlegs/two small paws resting on stream-bed stones; short separate tail.",
+    "Source upper-body pose/head/hands/forepaws/other cats retained outside local mask; other7 raw scenes/cards unchanged."
+  ],
+  "tests": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "gitDiffCheck": "passed",
+    "httpResources": 5,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  }
+}

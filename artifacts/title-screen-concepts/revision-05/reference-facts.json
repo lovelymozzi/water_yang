@@ -1,0 +1,54 @@
+{
+  "capture": "/Users/al02501031/Documents/water_yang/.tools/water-verification/physical-coherent-coupled-stable-final-early-dense/60.png",
+  "crop": [
+    222,
+    427,
+    439,
+    512
+  ],
+  "segmentedBounds": [
+    10,
+    13,
+    204,
+    75
+  ],
+  "spriteUprightSize": [
+    62,
+    194
+  ],
+  "sourceLongToWideRatio": 3.129,
+  "method": "segment orange material from actual screenshot; fill only enclosed holes; rotate uniformly without body warping",
+  "layout": "actual extracted cat shape placed at each illustration cat position; right reference for redraw; water patches are temporary edit guides",
+  "placements": [
+    [
+      "green",
+      [
+        724,
+        606
+      ],
+      46,
+      305,
+      0.3
+    ],
+    [
+      "orange",
+      [
+        623,
+        893
+      ],
+      -49,
+      326,
+      null
+    ],
+    [
+      "blue",
+      [
+        742,
+        1167
+      ],
+      33,
+      314,
+      0.565
+    ]
+  ]
+}

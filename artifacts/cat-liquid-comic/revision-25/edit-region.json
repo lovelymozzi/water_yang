@@ -1,0 +1,17 @@
+{
+  "generatedCrop": [
+    0,
+    514,
+    1024,
+    1024
+  ],
+  "cropBasis": "Observed white divider rows509–513; lower artwork starts514. Existing scene8 starts515.",
+  "targetCrop": [
+    0,
+    515,
+    1024,
+    1024
+  ],
+  "scene7AndOriginalGutterPixelExact": true,
+  "discardedGeneratedUpperReference": true
+}

@@ -1,0 +1,60 @@
+{
+  "scope": "offline title concept B cat anatomy refinement",
+  "actualReference": "saved game screenshot, not newly captured",
+  "method": "actual screenshot silhouette extracted and placed as structural guide, then Sunburst redraw and color/water correction",
+  "reviewNotes": [
+    "visible shoulder and connected forepaw transition",
+    "subtly narrowed neck and flatter crown with outer-corner ears",
+    "elongated softly cylindrical abdomen instead of flat rectangle",
+    "two distinct hindlegs with deeper U gap and toe marks",
+    "half-lidded turquoise eyes; relaxed belly-up pose",
+    "polish reduces fluorescent green and removes busy water caustic net"
+  ],
+  "limits": "generated illustration guided by actual game silhouette; not an exact mesh render or a claim of pixel-identical anatomy",
+  "gameModified": false,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill scripts/generate_image.py via Flava",
+  "quality": "high",
+  "requestCount": 2,
+  "usage": {
+    "input_text_tokens": 1609,
+    "input_image_tokens": 3042,
+    "output_image_tokens": 2744,
+    "estimated_cost_usd": "0.0573505",
+    "estimated_cost_krw": "80.29"
+  },
+  "assets": [
+    {
+      "path": "b-lobby-model-form-final.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "771835ca83e129ce99c4b331688de9a2cf53f5495f3d87ababac9ae8f17c7f87"
+    },
+    {
+      "path": "b-lobby-model-form-title.webp",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "f04e1cba062a4fd4c0df1b25f8ebd4476acc6c76a9c469de93a9c3fed58890e4"
+    },
+    {
+      "path": "b-lobby-model-form-preview.jpg",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "a652d0b39031b1746bf2d5e8d846b580030abb0e77534a745d725f619f7de916"
+    },
+    {
+      "path": "lobby-shape-comparison.jpg",
+      "dimensions": [
+        900,
+        720
+      ],
+      "sha256": "c61396276bd22d29765859e2309ce33158aec60d8ffc30b750fb9511cfbec695"
+    }
+  ]
+}

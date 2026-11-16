@@ -1,0 +1,90 @@
+{
+  "kind": "http-resource-consistency-not-browser-rendering",
+  "revision": 15,
+  "checks": [
+    {
+      "path": "web/index.html",
+      "httpStatus": 200,
+      "sha256": "125b73f568aba14d675512add3a984ade0bd3b85143f893c047cae8ffd4ecb99",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/story-intro.js",
+      "httpStatus": 200,
+      "sha256": "7a237fb6e9d1789dcee010a9576f90d5df024e09b57dd90090522e1ba8828054",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/story-intro.css",
+      "httpStatus": 200,
+      "sha256": "ab5715abf993c61f88974381bdb0b89f2e66ab7b6dcf7798b21f640c8161856c",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "httpStatus": 200,
+      "sha256": "c27575c8a64b6cd8fa1d583bbfa9ce30fad48d2ce96c902753ed2f1fe675d331",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "httpStatus": 200,
+      "sha256": "216618acc1d328f2ba9ccde675f19214001d142d22a32aae0ea97ee8f642b948",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "httpStatus": 200,
+      "sha256": "754305b010819ef5785f7cc4cc1aee95665c537065006eb454b8f63ef95c4486",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_chalkboard_card_01.webp",
+      "httpStatus": 200,
+      "sha256": "ee8bfa114b9b5168f6c645694a39eee38d4b7123c2368cb6d86cee64362ec2bd",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_antics_card_02.webp",
+      "httpStatus": 200,
+      "sha256": "058ef1fc1bc0fcf2912d6b55a269fb84624a9a5b39b411de0e236b0f04babea7",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_whirl_card_03.webp",
+      "httpStatus": 200,
+      "sha256": "fa1ea2947f60ba72d0859d2a05212ef885fbe33951c33d43d7bdd069793a23f9",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_framed_card_04.webp",
+      "httpStatus": 200,
+      "sha256": "9a5e70f1afa5e45d0894848b0fd298a28da0cb07601a774818fd4bc2b49c49e8",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_05.webp",
+      "httpStatus": 200,
+      "sha256": "882e0433098d9c6854139b3a9bfe38ad168af2feaf0e0eee4fda6d709d98af9b",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_playroom_card_06.webp",
+      "httpStatus": 200,
+      "sha256": "34069cd00006abb4a6f7d6ea841cd63ab93c80ebf499bd6e3e0c4a978823550f",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_07.webp",
+      "httpStatus": 200,
+      "sha256": "2f527ad9ed230590e39048c3b7d7cdd4cd7e7d0df4a6dfb0ed013a85eed98247",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_08.webp",
+      "httpStatus": 200,
+      "sha256": "8da2eef106305e5d0ca87ecd261e36c3cfe2cfe379b387faa38a344a05041b2a",
+      "matchesWorkspace": true
+    }
+  ]
+}

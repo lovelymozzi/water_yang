@@ -29,7 +29,7 @@ const playLobbySource = shell.slice(
 );
 const lobbySceneEnterSource = shell.slice(
   shell.indexOf("if (sceneName === LOBBY_UI_SCENE) {"),
-  shell.indexOf("if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled)")
+  shell.indexOf("if (sceneName === INGAME_UI_SCENE || STORY_INTRO_SCENES.includes(sceneName)) {")
 );
 const syncLevelWinItemReward = Function(
   'ITEM_REWARD_UI',

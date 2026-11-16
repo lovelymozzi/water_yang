@@ -1,0 +1,30 @@
+[
+  {
+    "path": "title_bg.png",
+    "sha256": "f11d61a863514509fb6a8be314ed87af35f2e55062117ff1fe18d12070c5aaf4"
+  },
+  {
+    "path": "src/assets/title_bg.png",
+    "sha256": "1443c3274bcc3a611799a4951dec6908fdfd4de017bbf998ea91ac7c240036c9"
+  },
+  {
+    "path": "src/assets/title_text.png",
+    "sha256": "96a106fa6f44de87bf232edc04b0f911221ed7f1e047eb409e48da8827168ed4"
+  },
+  {
+    "path": "web/ui/splash.contract.json",
+    "sha256": "d546c0fd9f92f1b664483503edb969d4fcf48ec3cc8b91ae3aef3200bec6710d"
+  },
+  {
+    "path": ".ui-editor/scenes/splash.scene.json",
+    "sha256": "17672a9ba81672f3c14a27e39f08c21555104739a5f34493ef3e7b0d5b619d86"
+  },
+  {
+    "path": "web/index.html",
+    "sha256": "31bf03b874b02033d30dab2da5b754fdb58c234e77c9dfe47ce59e06fbd380c8"
+  },
+  {
+    "path": "godot-shell.html",
+    "sha256": "50d2c289e7e5b85cbe4502ade279d3a1f5a32a56da9425926e5d1ff284c29ff8"
+  }
+]

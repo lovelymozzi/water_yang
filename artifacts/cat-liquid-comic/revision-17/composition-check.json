@@ -1,0 +1,48 @@
+[
+  {
+    "pair": "01",
+    "originalGutter": [
+      508,
+      515
+    ],
+    "generatedGutter": [
+      508,
+      515
+    ],
+    "preserved": "Scene1 exact original pixels; scene2 revised cat proportions"
+  },
+  {
+    "pair": "02",
+    "originalGutter": [
+      508,
+      513
+    ],
+    "generatedGutter": [
+      508,
+      513
+    ],
+    "preserved": "Scene3 outside small cream-cat patch preserved, scene4 glass removed and cat poses rebuilt",
+    "scene3CatPatch": [
+      651,
+      5,
+      803,
+      146
+    ]
+  },
+  {
+    "pair": "03",
+    "originalGutter": [
+      506,
+      514
+    ],
+    "generatedGutter": [
+      506,
+      514
+    ],
+    "preserved": "Scene6 exact original pixels; scene5 glass removed and resting cat proportions corrected"
+  },
+  {
+    "pair": "04",
+    "preserved": "Scenes7/8 byte-identical to revision16"
+  }
+]

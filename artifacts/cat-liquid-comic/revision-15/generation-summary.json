@@ -1,0 +1,155 @@
+{
+  "revision": 15,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill default scripts/generate_image.py through Flava",
+  "quality": "high",
+  "automaticRetries": 0,
+  "failedRequests": 0,
+  "scope": "All revision15 work, including four initial character/body edits, framing correction, playroom destination, chalkboard opening, comic lab cats and stronger whirl. Includes intermediate images superseded by later user direction; previous revisions excluded.",
+  "totals": {
+    "input_text_tokens": 9144,
+    "input_image_tokens": 10752,
+    "output_image_tokens": 15804,
+    "requests": 9,
+    "estimated_cost_usd": "0.3029280",
+    "estimated_cost_krw": "424.10",
+    "usd_to_krw_rate": 1400
+  },
+  "responses": [
+    {
+      "response": "pair-01-chalkboard-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-01-chalkboard-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2000,
+        "input_text_tokens": 976,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032876",
+        "estimated_cost_krw": "46.03",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-01-comic-lab-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-01-comic-lab-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1935,
+        "input_text_tokens": 911,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0327135",
+        "estimated_cost_krw": "45.80",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-01-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-01-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2541,
+        "input_text_tokens": 1133,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0348045",
+        "estimated_cost_krw": "48.73",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-02-framing-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-02-framing-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1729,
+        "input_text_tokens": 705,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0321985",
+        "estimated_cost_krw": "45.08",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-02-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-02-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2792,
+        "input_text_tokens": 1384,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.035432",
+        "estimated_cost_krw": "49.60",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-02-whirl-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-02-whirl-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1858,
+        "input_text_tokens": 834,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032521",
+        "estimated_cost_krw": "45.53",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-03-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-03-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2613,
+        "input_text_tokens": 1205,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0349845",
+        "estimated_cost_krw": "48.98",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-03-playroom-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-03-playroom-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1814,
+        "input_text_tokens": 790,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032411",
+        "estimated_cost_krw": "45.38",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-04-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-15/pair-04-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2614,
+        "input_text_tokens": 1206,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.034987",
+        "estimated_cost_krw": "48.98",
+        "usd_to_krw_rate": 1400
+      }
+    }
+  ]
+}

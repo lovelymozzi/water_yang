@@ -1,0 +1,173 @@
+{
+  "resources": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "7e7c32e995e0e7a2291d5f4e6d79856d04d365135d95395f1f7b6e930e6f3df8"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "a3bdd915adb094d36ed61bc6d94e8e9d7feeb4621de0d30ac3bcf4892fbf8cfc"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "fbb81de00d5b549a56749826a56668c646cc151056a390831cc4241ac7950194"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_page_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "1556c6d3dd36fc5300f58f8aa96045161e0cc05566c54ef87810a6fc08c45f93"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_page_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "37e1a39a440b80f50b787e786bcc74a9de566b30597f735a546ecf27b1d30cb1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_panel_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "f2e6e8cb119792803db9b10d5fdad1c03bc408376929f93228c500ed3dda9e1b"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "94ef9965f390fbfa7bbd28d9c8260f26859854ffb62d9db9b41a72aceebf9e6a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_panel_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "eb52ecf4ce3f5ead67bd61b201bbce71c355364c90fe447eac74b0d13cc1ba64"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_recline_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "dc6ee905912fde54b693fddf63ce83b2f0a64fa2dc63968e15be441d88599b67"
+    }
+  ],
+  "unchangedRawAndCardPanels": [
+    1,
+    2,
+    3,
+    6,
+    7,
+    8
+  ],
+  "sourceAndContractOnlyImageReferencesChanged": true,
+  "allEightBlackRims": true,
+  "rimSamples": [
+    {
+      "panel": 1,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 2,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 3,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 4,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 5,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 6,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 7,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 8,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "bothScientistPixelsPreserved": true,
+  "scene5UprightGreenCatAndFeetOnBedPreserved": true,
+  "scene3And6PairPixelsPreserved": true,
+  "sameControlsMotionAndCardTurnSound": true,
+  "publishErrors": 0,
+  "publishWarnings": 8,
+  "browserVisualTest": false
+}

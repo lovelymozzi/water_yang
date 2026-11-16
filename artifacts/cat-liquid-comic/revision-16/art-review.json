@@ -1,0 +1,12 @@
+{
+  "kind": "offline-generated-art-inspection",
+  "actualBrowserOrGameVisualTest": false,
+  "observations": {
+    "scene1": "Rear-view headband shows white/ivory ear backs without pink inner triangles. Cream cat in jar now has normal unobstructed nose. Chalk anatomy=liquid?? retained.",
+    "scene2": "Pale-blue cat rests inside round glass jar and mint-green cat inside rectangular clear tub. Foreground glass rims/reflections show containment. Cream bookshelf longcat and orange window cat retained, four relaxed cats total.",
+    "scene5and6": "All nasal bubbles removed from green/orange/blue cats and cream/orange playroom cats; half-closed sleepy eyes and relaxed neutral mouths retained. Held green cat chest support, four paws/tapered tail preserved.",
+    "scene3and4and7and8": "Source pairs2/4 have no nasal bubbles; kept byte-identical to revision15. Floor portals, explosion, arrival and guidance unchanged.",
+    "interaction": "Runtime tests exercise 4second idle progression, anywhere click, no button double advance, manual timer reset, keyboard, auto page/finish, cleanup, skip and completion saving. next/triangle CSS opacity animation1.2s, min0.35; reduced-motion disables blinking."
+  },
+  "limit": "Source/offline preview inspection only. Actual browser/game rendering is for user verification."
+}

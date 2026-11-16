@@ -1,0 +1,40 @@
+[data-dev-tools] {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 30000;
+  color: #FFFFFF;
+  font: 14px Arial, sans-serif;
+}
+[data-dev-tools] summary {
+  width: fit-content;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #2E6AB4;
+  cursor: pointer;
+  font-weight: bold;
+}
+[data-dev-tools] details[open] {
+  box-sizing: border-box;
+  width: 224px;
+  max-width: calc(100vw - 24px);
+  padding: 12px;
+  border: 1px solid #4A90D9;
+  border-radius: 12px;
+  background: #16213E;
+}
+[data-dev-tools] form { margin-top: 16px; }
+[data-dev-tools] small { display: block; margin-top: 10px; color: #CAEAFF; }
+[data-dev-tools] input, [data-dev-tools] button {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #4A90D9;
+  border-radius: 12px;
+  font: inherit;
+}
+[data-dev-tools] input { color: #16213E; background: #FFFFFF; }
+[data-dev-tools] button { color: #FFFFFF; background: #2E6AB4; cursor: pointer; }
+[data-dev-tools] p { margin: 16px 0 8px; color: #CAEAFF; line-height: 1.5; }

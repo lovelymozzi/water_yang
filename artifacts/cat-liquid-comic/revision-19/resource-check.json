@@ -1,0 +1,47 @@
+{
+  "resources": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "8990fbe1808360108535ce165be4cd917058ec25e19f5a58011473beee00127f"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "157badb8b3b8ff6cd8bdfb0664ae2350f24a674452487b127964053f511b91b4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_discovery_panel_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "486709519b5f4139d4abef7ea99db988dfb09f76c7196da46e5fdf70e10c38aa"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_discovery_card_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "5819f715bac18c41db4e5cab4379bacab5e9b78be05d3e3495e0d0f2b13f68d0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_discovery_page_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "9ff657718e4c35a1450b15c43c4a012490fd529a018405b5db74e08323d63206"
+    }
+  ],
+  "unchangedRawAndCardPanels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8
+  ],
+  "allEightBlackRims": true,
+  "sameControlsMotionAndCardTurnSound": true,
+  "scene5PairPixelsPreserved": true,
+  "browserVisualTest": false
+}

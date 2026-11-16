@@ -1,0 +1,77 @@
+{
+  "scope": "offline concepts only",
+  "assets": [
+    {
+      "path": "a-water-nap-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "b34cc1a575f322b9ec983f6fa35e282e508e0e59e71fd6980b280c6fcffbfe91"
+    },
+    {
+      "path": "a-water-nap-background.webp",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "f5d1c0fc97a72a9ed415bc61b7055cd18bd9fa3d003e503ddce755b73111af17"
+    },
+    {
+      "path": "a-water-nap-preview.png",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "e5de0d4673485ec53975cf23aa332f71f50f86dda00e13fc43d3c7b41f532f28"
+    },
+    {
+      "path": "b-puzzle-garden-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "f4d46c7042d8a4cfc749341a6407bea12c08315f8250dd3452fc6a57664cb28c"
+    },
+    {
+      "path": "b-puzzle-garden-background.webp",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "22dc23e133ce4a8dc383a74fc9c0928cbfc805e86b1df7f1233e7b8330eb8ca0"
+    },
+    {
+      "path": "b-puzzle-garden-preview.png",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "b5a6cbf2aaff479f0956e67b96797c731e9ea065aaaa4dd3b5e81ceac686d46b"
+    },
+    {
+      "path": "c-portal-discovery-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "e861434e1d426a57ecaccfc26d52f3939c074e32db8cb3751fdcb05419c268a0"
+    },
+    {
+      "path": "c-portal-discovery-background.webp",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "314424b3df116c7f7d353b39b0d8f84a824e762cd650e5ef911bf0933af40552"
+    },
+    {
+      "path": "c-portal-discovery-preview.png",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "4ea5cd6d0dc29c495021f71bd78cc0a29c0a125bcf4725f10392f924a4879076"
+    }
+  ]
+}

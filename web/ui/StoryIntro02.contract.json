@@ -40,7 +40,7 @@
       "rotation": 0,
       "zIndex": 1,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_full_card_05.webp",
+        "exportPath": "src/assets/story_cat_liquid_recline_card_05.webp",
         "width": 770,
         "height": 384
       },
@@ -59,7 +59,7 @@
       "rotation": 0,
       "zIndex": 2,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_full_card_06.webp",
+        "exportPath": "src/assets/story_cat_liquid_discovery_card_06.webp",
         "width": 770,
         "height": 384
       },
@@ -78,7 +78,7 @@
       "rotation": 0,
       "zIndex": 3,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_full_card_07.webp",
+        "exportPath": "src/assets/story_cat_liquid_refined_card_07.webp",
         "width": 770,
         "height": 384
       },
@@ -97,7 +97,7 @@
       "rotation": 0,
       "zIndex": 4,
       "visual": {
-        "exportPath": "src/assets/story_cat_liquid_full_card_08.webp",
+        "exportPath": "src/assets/story_cat_liquid_conclusion_card_08.webp",
         "width": 770,
         "height": 384
       },
@@ -156,11 +156,33 @@
           "fontWeight": "normal",
           "fontFamily": "\"Lilita One\", cursive",
           "color": "#FFFFFF",
-          "offsetX": 0,
+          "offsetX": -9,
           "offsetY": 0,
           "style": {
             "stroke": {
               "width": 2,
+              "color": "#225D93"
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
+        },
+        {
+          "slotIndex": 1,
+          "staticContent": "▶",
+          "fontSize": 14,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#FFFFFF",
+          "offsetX": 31,
+          "offsetY": 1,
+          "style": {
+            "stroke": {
+              "width": 1,
               "color": "#225D93"
             },
             "depth": {

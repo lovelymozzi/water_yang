@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=3 uid="uid://308g6ad1fhot"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://308g6ad1fhot"]
 
 [ext_resource type="Shader" uid="uid://c7vpql1xosncg" path="res://scripts/cat_toon.gdshader" id="1_toon_shader"]
 [ext_resource type="Texture2D" uid="uid://dq0pdjrylk65r" path="res://water_yang/cat1.jpeg" id="2_cat_texture"]
@@ -25,13 +25,14 @@ shader_parameter/toon_shadow_spread = 0.02
 shader_parameter/rim_strength = 0.16
 shader_parameter/ambient_color = Color(1, 1, 1, 1)
 shader_parameter/ambient_energy = 0.22
-shader_parameter/shadow_tint_color = Vector3(0.88, 0.96, 1.0)
+shader_parameter/shadow_tint_color = Vector3(0.65, 0.78, 1)
 shader_parameter/uv_tiling = Vector2(1, 1)
 shader_parameter/uv_offset = Vector2(0, 0)
 shader_parameter/tile_uv_min_u = 0.0
 shader_parameter/sink_clip_enabled = 0.0
 shader_parameter/sink_clip_plane_y = 0.0
 shader_parameter/sink_clip_span = 1.0
+shader_parameter/absorb_light_portal = Vector4(0, 0, 0, 0)
 shader_parameter/water_wave_time = 0.0
 shader_parameter/water_wave_phase = 0.0
 shader_parameter/water_wave_amplitude = 0.0

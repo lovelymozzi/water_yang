@@ -1,0 +1,22 @@
+{
+  "kind": "offline-generated-source-and-composite-inspection",
+  "browserGameVisualTest": false,
+  "observations": [
+    "Scene3 lower-body crop shows two readable thigh/knee/shin/ankle/boot chains; rear leg bent left, separate boot silhouettes; upper body original outside mask.",
+    "Scene4 shows scientist landing with comic splash in woodland stream; resident cats already lie belly-up on water with four modest paws and one tail each; solid coats, relaxed eyes.",
+    "Remaining6 raw scenes/cards byte-identical to revision19, including scene6 happy wide eyes.",
+    "Eight black angled card rims and all control/motion/sound fields retained."
+  ],
+  "tests": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "gitDiffCheck": "passed",
+    "httpResources": 7,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  },
+  "limit": "Offline source/card/layout inspection. Actual browser game visuals are assigned to user by AGENTS."
+}

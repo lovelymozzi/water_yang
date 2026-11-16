@@ -1,0 +1,19 @@
+{
+  "scope": "offline generated-art inspection only",
+  "newGameOrBrowserVisualTest": false,
+  "rawImagesViewed": 3,
+  "finalPhoneComparisonViewed": true,
+  "newLogoText": "WATER MEOW",
+  "logoTextReadAllThree": true,
+  "referencesOnlyActualGame": true,
+  "styleObservations": [
+    "long fairly constant-width torsos with short separated hindlegs",
+    "square-rounded sleepy cat faces and actual face markings",
+    "thin color outlines and broad clean toon shading",
+    "stacked simple conifer tiers",
+    "gold grid and floor-level portals inB"
+  ],
+  "gameFilesChangedForThisTask": false,
+  "runtimeUiChanged": false,
+  "requestCount": 3
+}

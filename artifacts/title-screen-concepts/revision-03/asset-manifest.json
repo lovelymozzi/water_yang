@@ -1,0 +1,77 @@
+{
+  "scope": "offline title proposals only",
+  "assets": [
+    {
+      "path": "a-lazy-bend-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "d07d9a20e9672c13c05ad8c9f7c85a6d02c7fa3909f5f6f6291d4ed1cbb2cbbb"
+    },
+    {
+      "path": "a-lazy-bend-title.webp",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "2a775f3028d708ccb5fcb98da004fd2154e20aa4349732ec8c515a33394dc53a"
+    },
+    {
+      "path": "a-lazy-bend-preview.png",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "cba85a1a1984e52c80facbd53d40d4b20903351a8361553ee8269ffd711f411e"
+    },
+    {
+      "path": "b-observation-notes-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "e9fc40d374084c62ff5f077b55eea88c6c651706c515e437ce9fa3d5e1724a63"
+    },
+    {
+      "path": "b-observation-notes-title.webp",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "a7015759a5987d8563b5828d82ee6b5a75c6edb9d54304832e692975d3cf55f7"
+    },
+    {
+      "path": "b-observation-notes-preview.png",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "164d8d3f003a2ee84ee23e716f6c252cd68957ed35cba75477bd6c3558de2f6d"
+    },
+    {
+      "path": "c-splash-encounter-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "085a3cdbbf9ab9131ae6432b1f73b6600b8f008883a2e8ba497a33c8bd3489f4"
+    },
+    {
+      "path": "c-splash-encounter-title.webp",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "de696afdcf3191750381b8c2806b3cfb059c37c17375a4b0909a3c006de9b9b3"
+    },
+    {
+      "path": "c-splash-encounter-preview.png",
+      "dimensions": [
+        786,
+        1179
+      ],
+      "sha256": "b24f22e1393a53c73a1793413656d60dca8de89061e9c4d7f4b5e852595b57e5"
+    }
+  ]
+}

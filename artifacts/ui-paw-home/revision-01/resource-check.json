@@ -1,0 +1,32 @@
+[
+  {
+    "path": "web/?story=replay&ui=paw-sfx-v1",
+    "status": 200,
+    "matchesWorkspace": true,
+    "sha256": "5e49ad56de243537ba3482acfa3d5e18b39b124cbfa99f5a47ea9e3ba489886e"
+  },
+  {
+    "path": "web/story-intro.js?v=cat-liquid-sfx-v17",
+    "status": 200,
+    "matchesWorkspace": true,
+    "sha256": "c5a62c614c62426b10fbbaff05a264af5b2f3ccbba5e3eedb15046579652dd99"
+  },
+  {
+    "path": "web/sound/ui_pop.mp3",
+    "status": 200,
+    "matchesWorkspace": true,
+    "sha256": "7c9e791ae9b82f0d0a591d4444408374639d9ea75677ca143fa48bd06829857e"
+  },
+  {
+    "path": "icon_menu_home_1.png",
+    "status": 200,
+    "matchesWorkspace": true,
+    "sha256": "49261830390580a5c67d6025dc272ef274ce6e875cda5c25c09bdad46763be96"
+  },
+  {
+    "path": "src/assets/icon_menu_home_1.png",
+    "status": 200,
+    "matchesWorkspace": true,
+    "sha256": "49261830390580a5c67d6025dc272ef274ce6e875cda5c25c09bdad46763be96"
+  }
+]

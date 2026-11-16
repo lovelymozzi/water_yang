@@ -1,0 +1,276 @@
+{
+  "contractVersion": 1,
+  "sceneId": "story-intro-01",
+  "sceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+  "sceneName": "StoryIntro01",
+  "canvas": {
+    "width": 393,
+    "height": 852
+  },
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "background": {
+    "type": "image-tile",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "src/assets/common_bg_pt_3.png",
+    "imagePaths": [],
+    "tileSize": 86,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": true,
+    "scrollDirection": "up-right",
+    "scrollDuration": 18
+  },
+  "groups": [],
+  "fxGroups": [],
+  "sceneAnimations": [],
+  "layers": [
+    {
+      "stableId": "story-card-01",
+      "layerType": "image",
+      "displayName": "Story card 1",
+      "x": 4,
+      "y": 4,
+      "scale": 0.5,
+      "rotation": 0,
+      "zIndex": 1,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_refined_card_01.webp",
+        "width": 770,
+        "height": 384
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel01"
+      }
+    },
+    {
+      "stableId": "story-card-02",
+      "layerType": "image",
+      "displayName": "Story card 2",
+      "x": 4,
+      "y": 200,
+      "scale": 0.5,
+      "rotation": 0,
+      "zIndex": 2,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_refined_card_02.webp",
+        "width": 770,
+        "height": 384
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel02"
+      }
+    },
+    {
+      "stableId": "story-card-03",
+      "layerType": "image",
+      "displayName": "Story card 3",
+      "x": 4,
+      "y": 396,
+      "scale": 0.5,
+      "rotation": 0,
+      "zIndex": 3,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_pose_card_03.webp",
+        "width": 770,
+        "height": 384
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel03"
+      }
+    },
+    {
+      "stableId": "story-card-04",
+      "layerType": "image",
+      "displayName": "Story card 4",
+      "x": 4,
+      "y": 592,
+      "scale": 0.5,
+      "rotation": 0,
+      "zIndex": 4,
+      "visual": {
+        "exportPath": "src/assets/story_cat_liquid_waterworld_card_04.webp",
+        "width": 770,
+        "height": 384
+      },
+      "widget": {
+        "type": "visibility",
+        "key": "story.panel04"
+      }
+    },
+    {
+      "stableId": "story-next-01",
+      "layerType": "component",
+      "displayName": "Next page",
+      "x": 297,
+      "y": 800,
+      "zIndex": 10,
+      "scale": 1,
+      "rotation": 0,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 80,
+            "height": 44
+          },
+          "fill": {
+            "type": "none"
+          },
+          "border": {
+            "width": 0
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "press",
+          "enabled": true,
+          "params": {
+            "scale": 95,
+            "brightness": 95,
+            "transitionMs": 100
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-advance-01:click",
+          "memo": "next 클릭마다 다음 컷, 마지막 컷이면 문서 엣지 발화"
+        }
+      ],
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "next",
+          "fontSize": 28,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#FFFFFF",
+          "offsetX": -9,
+          "offsetY": 0,
+          "style": {
+            "stroke": {
+              "width": 2,
+              "color": "#225D93"
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
+        },
+        {
+          "slotIndex": 1,
+          "staticContent": "▶",
+          "fontSize": 14,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#FFFFFF",
+          "offsetX": 31,
+          "offsetY": 1,
+          "style": {
+            "stroke": {
+              "width": 1,
+              "color": "#225D93"
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
+        }
+      ],
+      "widget": {
+        "type": "visibility",
+        "key": "story.nextReady"
+      }
+    },
+    {
+      "stableId": "story-skip-01",
+      "layerType": "component",
+      "displayName": "Skip story",
+      "x": 16,
+      "y": 800,
+      "zIndex": 10,
+      "scale": 1,
+      "rotation": 0,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 80,
+            "height": 44
+          },
+          "fill": {
+            "type": "none"
+          },
+          "border": {
+            "width": 0
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "press",
+          "enabled": true,
+          "params": {
+            "scale": 95,
+            "brightness": 95,
+            "transitionMs": 100
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "story-skip-01:click",
+          "branches": [
+            {
+              "condition": "story.complete",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ],
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "skip",
+          "fontSize": 28,
+          "fontWeight": "normal",
+          "fontFamily": "\"Lilita One\", cursive",
+          "color": "#FFFFFF",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "stroke": {
+              "width": 2,
+              "color": "#225D93"
+            },
+            "depth": {
+              "size": 0
+            },
+            "shadow": {
+              "opacity": 0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

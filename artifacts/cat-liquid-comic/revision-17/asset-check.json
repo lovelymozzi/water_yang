@@ -1,0 +1,328 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        508
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_polish_panel_01.webp",
+      "sourceSha256": "5892214db2875b97cddc3eb4300aef1bfff3f8de95f323780361e1bd2a1938ad",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 2,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        516,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_anatomy_panel_02.webp",
+      "sourceSha256": "bc2bdcfe22a454c20c8caf388048a690c8a61c722e5a8c7daa111bf89623987f",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 3,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        508
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_anatomy_panel_03.webp",
+      "sourceSha256": "dddd7313d297ea7e57d5949f1fc19406244743732f2ab30ee561ebc988342bc4",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 4,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        514,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_anatomy_panel_04.webp",
+      "sourceSha256": "59f47a15ed8656e17d6a972f867e04e36d95a000e976ef793a187f361c9aabc1",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 5,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        506
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_anatomy_panel_05.webp",
+      "sourceSha256": "c121b2fc177e774394073fc616e23166ba42202a870b35fc0c2b406df9b2be2f",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 6,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        515,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_polish_panel_06.webp",
+      "sourceSha256": "2d3c788fee739270376c04b9ad7edd9f1c95dd4e7cdc5bcfb030f1c33a5d5ac5",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 7,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        508
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_mishap_panel_07.webp",
+      "sourceSha256": "2656c828591fc6d1092266d4fcf38cf51a369ab396ade31348db8d384ed33549",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 8,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        515,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_mishap_panel_08.webp",
+      "sourceSha256": "a2f386ac262be42766a0ae82f1a917072e5939d8831018a3934457dd3f8d3ed2",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "f7da17d4e81bfbdffd1ed1eab11c458c5cd99ea479b47a85e680b90636d98753"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2091e3244c3697afcb82b5e851223fefc5dddb42416c14570f7fbebc12ed81d1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "cb96248e57437d2f99348c20db0ac617e568fbd23969b6e76349528338d5de01"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "fb2f43b7490c1560a12eb9870d03b14583ce9f6f381d03a80f9a84f0890c88f7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_anatomy_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "0ff45b05eae153ed3a0b36bef64bb16999ef73a5dc3eb51644dcd8a2562911cb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_polish_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2d32b8e03f9750285acb35adc07ad7256f6761331211acedfd5bd811947797a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2f527ad9ed230590e39048c3b7d7cdd4cd7e7d0df4a6dfb0ed013a85eed98247"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_mishap_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "8da2eef106305e5d0ca87ecd261e36c3cfe2cfe379b387faa38a344a05041b2a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ],
+  "artAreaRatio": 0.8831
+}

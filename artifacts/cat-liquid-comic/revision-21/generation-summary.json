@@ -1,0 +1,49 @@
+{
+  "revision": 21,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill scripts/generate_image.py through Flava",
+  "quality": "high",
+  "requests": 2,
+  "automaticRetries": 0,
+  "failedRequests": 0,
+  "usage": {
+    "input_tokens": 3436,
+    "input_text_tokens": 1388,
+    "input_image_tokens": 2048,
+    "output_tokens": 3512,
+    "output_image_tokens": 3512,
+    "estimated_cost_usd": "0.0643420",
+    "estimated_cost_krw": "90.08",
+    "usd_to_krw_rate": 1400
+  },
+  "perRequest": [
+    {
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-21/scene-03-pose-output.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1747,
+        "input_text_tokens": 723,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0322435",
+        "estimated_cost_krw": "45.14",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-21/scene-04-longcat-output.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1689,
+        "input_text_tokens": 665,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0320985",
+        "estimated_cost_krw": "44.94",
+        "usd_to_krw_rate": 1400
+      }
+    }
+  ]
+}

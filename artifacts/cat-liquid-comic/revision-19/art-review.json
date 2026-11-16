@@ -1,0 +1,21 @@
+{
+  "kind": "offline-generated-source-and-composite-inspection",
+  "browserGameVisualTest": false,
+  "observations": [
+    "Three forest cats in scene6 have wider rounded eyes with large round pupils/teal irises and catchlights, and happy small smiles.",
+    "Same head outline, body proportions, forepaws on rim, coats/tails; only facial mask support changed in source.",
+    "Scientist, forest, portal stones/glow, playroom and its cats retained.",
+    "All other7 raw scenes and cards byte-identical; black borders retained."
+  ],
+  "tests": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "httpResources": 5,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  },
+  "limit": "Offline source/card/layout inspection, not an actual browser game capture."
+}

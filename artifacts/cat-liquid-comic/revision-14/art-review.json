@@ -1,0 +1,24 @@
+{
+  "kind": "local-generated-art-and-offline-layout-review",
+  "actualBrowserOrGameVisualTest": false,
+  "reviewed": ["pair-01-generated.png", "pair-02-generated.png", "pair-03-generated.png", "pair-04-generated.png", "two-page-board.jpg"],
+  "professorObserved": {
+    "identity": "Childlike proportions; white tousled bob; white/pink cat ears on headband; thick circular red clear-lens glasses with amber eyes; white lab coat, lilac shirt, navy trousers and brown boots.",
+    "panel1": "Cheek resting on hand, looking up in thought, small pursed thinking mouth and rounded raised brows.",
+    "panel2": "Open curious amber eyes focused on mixing, small excited open mouth; no lowered angry inner brows or mocking sneer.",
+    "panel3": "Wide surprised eyes and mouth during flask flash and floor-portal suction.",
+    "panel4": "Seated awkwardly by arrival portal, hand to head and notebook lowered, confused searching expression.",
+    "panel5": "Open curious eyes and little surprised mouth while holding unexpectedly long green cat, no mean smirk.",
+    "panel6": "Thoughtful mild smile while discovering human laboratory through portal.",
+    "panel7": "Enthusiastic explanation gesture with open eyes and small open smile.",
+    "panel8": "Satisfied mild closed smile and farewell wave."
+  },
+  "catsObserved": {
+    "longcat": "Two short forepaws connected to shoulders above supporting hands; long green furry torso continues to two rear paws at hips plus separate tail. No detached limb, head/neck grip, opposite-end pulling or measuring apparatus.",
+    "affect": "Heavy half-closed turquoise eyes, small relaxed closed mouth and neutral upright ears; no crying, open distress mouth or flattened ears. Cream jar cat/panel1 and green lifted cat/panel5 have small translucent nasal sleep bubbles.",
+    "containers": "Cream jar/orange tub in lab; green tall cylinder/orange tub/blue bowl in arrival scene. Empty green cylinder beside pickup; other cats remain comfortably tucked in containers."
+  },
+  "storyObserved": "Actual research laboratory with colored liquid flasks, test tubes, papers and feline skeletal chalkboard. Flask mixing -> cyan/violet flash linked by light trail to floor rift -> bewildered forest arrival -> casual local-cat lift -> matching-color portal reveals human lab -> guidance/farewell. No sofa, control button, activation cable or upright portal.",
+  "uiObserved": "Offline preview has four stacked landscape cards per portrait page, no dialogue, bottom-left skip and bottom-right next/triangle.",
+  "limit": "Comic torso elongation is stylized. Actual game/browser visual verification is assigned to user by AGENTS.md; preview files are offline artifacts."
+}

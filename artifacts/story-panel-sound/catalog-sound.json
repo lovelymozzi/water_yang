@@ -1,0 +1,2644 @@
+[
+  {
+    "id": "b36a3585-877a-4b7e-89ac-e84a2c7f5f08",
+    "tags": [],
+    "title": "arpeggio-01_optimized.mp3"
+  },
+  {
+    "id": "36ae7f24-6c82-4a90-9334-873b6298040b",
+    "tags": [],
+    "title": "bell_ring_optimized.mp3"
+  },
+  {
+    "id": "b5d5a2b4-22bc-4fe5-82f5-27087ad0d3d5",
+    "tags": [],
+    "title": "bomb_explosion_optimized.mp3"
+  },
+  {
+    "id": "14bd3bc6-701d-4418-b258-bac19e9754ef",
+    "tags": [],
+    "title": "cash_count_optimized.mp3"
+  },
+  {
+    "id": "02437945-6793-4eae-8719-019e56fd0d7e",
+    "tags": [],
+    "title": "coin_count2_optimized.mp3"
+  },
+  {
+    "id": "56c08c3c-cca8-4aca-ac7e-5211b813e69f",
+    "tags": [],
+    "title": "excellent_optimized.mp3"
+  },
+  {
+    "id": "58496786-4d3c-4998-b12a-ef6dfaac2109",
+    "tags": [],
+    "title": "gorgeous_optimized.mp3"
+  },
+  {
+    "id": "0d5738ca-1d96-4ae7-a8a9-6f5f1ce5e3c2",
+    "tags": [],
+    "title": "perfect_optimized.mp3"
+  },
+  {
+    "id": "8fbf794a-8a4d-46a7-8ac3-4e2a3645fffe",
+    "tags": [],
+    "title": "seawave.mp3"
+  },
+  {
+    "id": "d91276bd-f1cd-49f8-8d37-a5435214531f",
+    "tags": [],
+    "title": "slot_click_optimized.mp3"
+  },
+  {
+    "id": "3306bd3e-a1ab-4153-ab11-38e0ca0f9f2d",
+    "tags": [],
+    "title": "slot_spin_optimized.mp3"
+  },
+  {
+    "id": "d59812b2-2db5-4360-8f74-56ad46a9092d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_coin_3_optimized.mp3"
+  },
+  {
+    "id": "388415fb-e2d7-4bd9-ac1e-3fc840771a90",
+    "tags": [],
+    "title": "stuning_optimized.mp3"
+  },
+  {
+    "id": "2e8a50ed-7295-495a-a01e-15a5f2bbd461",
+    "tags": [],
+    "title": "tada_optimized.mp3"
+  },
+  {
+    "id": "4dcf99bf-c20b-4807-91a6-b52c4177a2e7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_book_close_optimized.mp3"
+  },
+  {
+    "id": "17ed8d95-9a2f-44b5-93d3-5768d7c74b7f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_book_open_optimized.mp3"
+  },
+  {
+    "id": "d8ce9978-c63f-496e-b3dd-8a0918e05ff6",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_card_turn_optimized.mp3"
+  },
+  {
+    "id": "95e5a7f9-c2f8-4571-b4bd-27cf771ba756",
+    "tags": [
+      "click",
+      "alert"
+    ],
+    "title": "UIBeep-Create_a_very_short.mp3"
+  },
+  {
+    "id": "db11e6c9-7ae8-4e6f-a89b-7b14f8fc24b1",
+    "tags": [
+      "click",
+      "pop",
+      "실습"
+    ],
+    "title": "pop.mp3"
+  },
+  {
+    "id": "6153056e-1399-4ec0-90f7-72a790d4c4d2",
+    "tags": [
+      "bgm",
+      "실습"
+    ],
+    "title": "BGM_경쾌한느낌의_두뇌퍼즐용"
+  },
+  {
+    "id": "cebf6cf2-0f4d-4c93-9b2a-634b40c66f4e",
+    "tags": [
+      "야옹"
+    ],
+    "title": "time_out2.mp3"
+  },
+  {
+    "id": "fe57f18c-b3a3-4847-a892-1f96d5999c3e",
+    "tags": [
+      "야옹"
+    ],
+    "title": "time_out1.mp3"
+  },
+  {
+    "id": "c720688b-1e7c-4d4e-adfa-685b47ef009d",
+    "tags": [
+      "야옹"
+    ],
+    "title": "stage_clear2.mp3"
+  },
+  {
+    "id": "66bdbc23-419f-4fdb-9bc7-3e52df8faac2",
+    "tags": [
+      "야옹"
+    ],
+    "title": "Cat_meow.mp3"
+  },
+  {
+    "id": "b90a9058-0bcc-4839-8f59-7a977a8ce07a",
+    "tags": [
+      "alert",
+      "retro"
+    ],
+    "title": "8-bit_retro_video_ga.mp3"
+  },
+  {
+    "id": "73c9e6dd-1b50-4578-9278-c2f7cac7bb97",
+    "tags": [
+      "alert"
+    ],
+    "title": "item_get.mp3"
+  },
+  {
+    "id": "f0fbe36d-e50a-4a9e-ac80-1aa04ff3128e",
+    "tags": [
+      "alert"
+    ],
+    "title": "get_item_optimized.mp3"
+  },
+  {
+    "id": "3ddab184-ffaf-4a23-b628-a19718cf9852",
+    "tags": [
+      "alert"
+    ],
+    "title": "UIAlert-Create_a_short_mobil.mp3"
+  },
+  {
+    "id": "7d13e9d9-71f2-447c-a6b8-d9465b5bbf64",
+    "tags": [
+      "alert"
+    ],
+    "title": "UIAlert-create_a_elegant_hi.mp3"
+  },
+  {
+    "id": "35d25b79-98f5-4bd4-ad4e-a3b888ab6a17",
+    "tags": [
+      "bgm"
+    ],
+    "title": "Lobby_Bgm.mp3"
+  },
+  {
+    "id": "c04ccfbc-192d-4646-957e-f554f8c9f227",
+    "tags": [
+      "bgm"
+    ],
+    "title": "Ingame_BGM.mp3"
+  },
+  {
+    "id": "9244f3a3-0c8c-499d-887c-85fdc45eb6f6",
+    "tags": [
+      "bgm"
+    ],
+    "title": "Iron_and_Hide_optimized.mp3"
+  },
+  {
+    "id": "9e61cad3-67d4-47d0-b692-ded6f7d59fa6",
+    "tags": [
+      "bgm"
+    ],
+    "title": "Shadow_of_the_Iron_Peaks_optimized.mp3"
+  },
+  {
+    "id": "bb6e00bf-56c2-4618-a7d6-4cb233c82ae2",
+    "tags": [
+      "break"
+    ],
+    "title": "ice_breake.mp3"
+  },
+  {
+    "id": "57161dd1-b3e9-4093-80b2-01c01197455b",
+    "tags": [
+      "sfx",
+      "break",
+      "glass",
+      "ice"
+    ],
+    "title": "ice_break.mp3"
+  },
+  {
+    "id": "0012f410-ef1c-48af-a32a-b14c55efb66b",
+    "tags": [
+      "button"
+    ],
+    "title": "Ui_button_sound.mp3"
+  },
+  {
+    "id": "885e9deb-fb0a-462f-bb18-2d745359b2fc",
+    "tags": [
+      "clear"
+    ],
+    "title": "stage_clear1.mp3"
+  },
+  {
+    "id": "9d0a3021-603d-4ac2-8808-88023b5ad3a2",
+    "tags": [
+      "click"
+    ],
+    "title": "card_spon.mp3"
+  },
+  {
+    "id": "aab54823-8223-43cf-8601-60c3ae87e2ca",
+    "tags": [
+      "click"
+    ],
+    "title": "drop_optimized.mp3"
+  },
+  {
+    "id": "aded2891-e893-4eaf-9b33-120a462f325f",
+    "tags": [
+      "click"
+    ],
+    "title": "UIClick-Style_Clean,_tech.mp3"
+  },
+  {
+    "id": "f08d97d4-f465-49eb-95b6-06a9aa429266",
+    "tags": [
+      "click"
+    ],
+    "title": "UIClick-Soft_Pop.mp3"
+  },
+  {
+    "id": "0561d636-2784-48d3-8228-26a4104bee87",
+    "tags": [
+      "click"
+    ],
+    "title": "ui_open.mp3"
+  },
+  {
+    "id": "ce794d9a-6454-4cc6-8ed2-ecd83712744f",
+    "tags": [
+      "retro",
+      "sfx",
+      "coin"
+    ],
+    "title": "GAMEArcd-Retro_8-bit_coin_pic.mp3"
+  },
+  {
+    "id": "993e2606-c24c-4e6e-b25f-17fc7d937f47",
+    "tags": [
+      "electric",
+      "sfx"
+    ],
+    "title": "neon.mp3"
+  },
+  {
+    "id": "dbde159b-cc12-4af2-96dc-506f4c7fbb0b",
+    "tags": [
+      "sfx",
+      "flame",
+      "retro"
+    ],
+    "title": "flame_eject_optimized_optimized.mp3"
+  },
+  {
+    "id": "9b33e8c3-9bdf-4fc2-bc95-4ec10eb15e3f",
+    "tags": [
+      "sfx",
+      "hit",
+      "pick"
+    ],
+    "title": "pick1.mp3"
+  },
+  {
+    "id": "031836a9-0fcd-4ebc-8aec-37d89c938073",
+    "tags": [
+      "hole",
+      "magic"
+    ],
+    "title": "cat_Hole_sound.mp3"
+  },
+  {
+    "id": "ba0036f3-19c9-46ab-a25c-446591b35078",
+    "tags": [
+      "ice",
+      "slide",
+      "sfx"
+    ],
+    "title": "ice_slide_optimized.mp3"
+  },
+  {
+    "id": "157bce48-a977-4aea-9dca-d858d1480eed",
+    "tags": [
+      "insect"
+    ],
+    "title": "crickets_optimized.mp3"
+  },
+  {
+    "id": "f91a8609-fb1f-4827-8d0f-0bb8a9ed01ae",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_starroad_user_optimized.mp3"
+  },
+  {
+    "id": "b78801b4-071c-4ac2-95c5-d6760fdfc2c2",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_starroad_page_unlock_ready_optimized.mp3"
+  },
+  {
+    "id": "7a3517f5-5ca4-41c7-a942-6d2d4ee4d60f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_starroad_page_unlock_optimized.mp3"
+  },
+  {
+    "id": "25513c48-fc07-46dc-af32-5930826500bb",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_starroad_open_optimized.mp3"
+  },
+  {
+    "id": "efc64253-7320-4291-ad5a-066a0629aabf",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_starroad_guage_optimized.mp3"
+  },
+  {
+    "id": "9d38155b-e6d8-469a-9ed5-f6513ddef5fa",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_specialbook_exit_optimized.mp3"
+  },
+  {
+    "id": "80194503-ab9e-483a-b65c-eeb387194fed",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_specialbook_enter_on_optimized.mp3"
+  },
+  {
+    "id": "07d8e223-3cf6-45e8-8908-60a69a150c9f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_specialbook_enter_off_optimized.mp3"
+  },
+  {
+    "id": "9e23feeb-25f7-4f70-b891-c51b2b79a1c4",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_specialbook_enter_idle_optimized.mp3"
+  },
+  {
+    "id": "717e6ced-2d2e-4f16-bda4-6b8d0e700ec0",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_roulette_roll_start_optimized.mp3"
+  },
+  {
+    "id": "b1c0b9c5-8735-43f5-97ac-31569e91f297",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_roulette_result2_optimized.mp3"
+  },
+  {
+    "id": "2b834f91-6eaa-4388-8719-af504524fbf4",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_roulette_result1_optimized.mp3"
+  },
+  {
+    "id": "b041d180-8817-4275-bb73-788e80aed464",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_roulette_levelup_optimized.mp3"
+  },
+  {
+    "id": "f616a8f1-bb06-409b-8b13-a60992b74c30",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_repair_order_refresh_optimized.mp3"
+  },
+  {
+    "id": "dcaea7c6-bad8-4818-8e9d-9e78fe19d4f1",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_repair_order_new_optimized.mp3"
+  },
+  {
+    "id": "3f8d2549-0111-4bc8-a646-1953fb27b2f9",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_repair_open_optimized.mp3"
+  },
+  {
+    "id": "d893230b-dba1-4857-b077-c2d316163d58",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_repair_complete_optimized.mp3"
+  },
+  {
+    "id": "53d938ea-8168-47e3-94bc-ea37e221c129",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_repair_complete_add_optimized.mp3"
+  },
+  {
+    "id": "67d224dc-54ca-47fa-b0ad-7faa45729e69",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_repair_build_clear_optimized.mp3"
+  },
+  {
+    "id": "563c8dfe-0927-43b8-969a-b23fff4bb98c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_package_choice_open_optimized.mp3"
+  },
+  {
+    "id": "13792ae1-f475-484e-9a02-529071ab0a17",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_package_bank_stop_optimized.mp3"
+  },
+  {
+    "id": "ef10959d-dd41-42d4-b9c5-58fce0fdc09f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_package_bank_open_optimized.mp3"
+  },
+  {
+    "id": "3eb337d0-2a01-4cf0-9471-87277228f51d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_package_bank_full_optimized.mp3"
+  },
+  {
+    "id": "79897c96-5f59-4397-8588-560dbb713f0f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_photo_object_put_optimized.mp3"
+  },
+  {
+    "id": "83374f3f-cf5e-4bc9-8723-09f7c4c3c776",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_photo_object_open_optimized.mp3"
+  },
+  {
+    "id": "77485ff2-9291-40c8-886e-1ee8b1ad4279",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_mission_allclear_optimized.mp3"
+  },
+  {
+    "id": "5034fd4e-7c26-47e8-9f2c-8ccb7d16f70f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magicslot_shot_optimized.mp3"
+  },
+  {
+    "id": "5abe99bf-a0c1-4619-babb-20d78addf2bb",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magicslot_hit_optimized.mp3"
+  },
+  {
+    "id": "417d3885-ac88-4d9d-8c2b-ca9f0b684506",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magicpot_open_optimized.mp3"
+  },
+  {
+    "id": "4cd35289-e356-43a5-8b79-e1b02ab7d82e",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magicpot_get_symbol_optimized.mp3"
+  },
+  {
+    "id": "df08e4f5-7cf0-4ac4-94ec-de20c21f2975",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magicpot_get_reward_optimized.mp3"
+  },
+  {
+    "id": "4adf7f74-0d3e-4b51-b171-1eb8192abc26",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magiccard_scroll_optimized.mp3"
+  },
+  {
+    "id": "29fd5efd-2ff1-4eff-94fe-b5621d3c400e",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magiccard_open_optimized.mp3"
+  },
+  {
+    "id": "d86e0af6-58cb-44cd-8ac0-5307f69ec5a1",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_magiccard_get_card_optimized.mp3"
+  },
+  {
+    "id": "837b62ce-0490-44ee-8346-eaa56655ae77",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_icon_package_bank_lose_optimized.mp3"
+  },
+  {
+    "id": "d1bdb08e-2dd8-43fb-9398-c5e544b55b24",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_icon_package_bank_get_optimized.mp3"
+  },
+  {
+    "id": "f93f3060-195c-4a5c-83a5-716526c41d23",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_get_reward_optimized.mp3"
+  },
+  {
+    "id": "a5ea3a98-d4be-42f9-8a44-51385788d3c9",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_get_magiccard_optimized.mp3"
+  },
+  {
+    "id": "5951a4b5-12f9-443e-bc1a-6cb4bf29d503",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_get_magiccard_home_optimized.mp3"
+  },
+  {
+    "id": "e9249a71-0335-4a98-92a6-32e2e74497d6",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_get_chip_optimized.mp3"
+  },
+  {
+    "id": "503c7778-58c8-4cef-a804-2c234a4e799a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_exp_reward_optimized.mp3"
+  },
+  {
+    "id": "6c2060d0-5e92-46c1-abac-7980f314b3f1",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_exp_get_optimized.mp3"
+  },
+  {
+    "id": "4d3aaf53-19f6-4e98-b1e5-0efba242f77a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_reward_info_open_optimized.mp3"
+  },
+  {
+    "id": "e1468507-8e6e-4c7a-b3ef-261926d4bbe3",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_reward_info_close_optimized.mp3"
+  },
+  {
+    "id": "1a6b8cd8-d526-40af-a4b4-41a6ee5793a3",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_extraspecial_popup_open_optimized.mp3"
+  },
+  {
+    "id": "858f934a-bfbe-48aa-9a9f-fd50e55de864",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_coinrush_result_slot_optimized.mp3"
+  },
+  {
+    "id": "52c114bd-0a84-4f09-b349-604a6a65afb8",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_coinrush_result_optimized.mp3"
+  },
+  {
+    "id": "b854dd9a-2921-4a0c-8ef5-a3a6da3591a6",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_coinrush_open_optimized.mp3"
+  },
+  {
+    "id": "2607143b-f687-4ce7-88cc-00df4e979344",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_coinrush_on_optimized.mp3"
+  },
+  {
+    "id": "3bc4a1bd-229d-47ca-bf93-89503e32cab0",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_coinrush_on_btn_optimized.mp3"
+  },
+  {
+    "id": "b909ca98-7c10-40ad-b61c-30908c886d08",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_clear_optimized.mp3"
+  },
+  {
+    "id": "d201c293-8be6-4b32-b685-2e12c58ef996",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_charmatch_open_optimized.mp3"
+  },
+  {
+    "id": "2bd2cae5-fda7-4e42-bbac-7d3208090651",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_cardgift_popup_open_optimized.mp3"
+  },
+  {
+    "id": "563fd359-469f-4fad-8092-49072c4808aa",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_cardgift_info_open_optimized.mp3"
+  },
+  {
+    "id": "d2019c99-a099-455d-b8fa-52d4410677aa",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_bookrush_open_optimized.mp3"
+  },
+  {
+    "id": "f01bf623-ce9d-47de-a1c6-67d7e8dda053",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_bookrush_on_optimized.mp3"
+  },
+  {
+    "id": "6c2d3f43-3658-4aa6-9ad6-c883e5d6cc54",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_bookrush_off_optimized.mp3"
+  },
+  {
+    "id": "a1656c33-6d73-4996-94f8-612d1d0e5a69",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_album_photo_open_optimized.mp3"
+  },
+  {
+    "id": "d8fd05e6-cf49-4a94-9213-782fd50eeeac",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_album_open_optimized.mp3"
+  },
+  {
+    "id": "85aaeacd-cb39-40e3-8416-cbda63536b8b",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_album_info_open_optimized.mp3"
+  },
+  {
+    "id": "7c3cdac6-d57b-4858-bd9c-4e35930c4ab1",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_event_album_gauge_reward_optimized.mp3"
+  },
+  {
+    "id": "4678615e-a672-487f-8a37-daea33dbfb77",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_energy_reward_optimized.mp3"
+  },
+  {
+    "id": "d18e85b3-be73-4d9c-b954-8d7e9a5d7f36",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_energy_get_optimized.mp3"
+  },
+  {
+    "id": "e796699d-f215-42f9-b2bd-7711a433bf55",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_daily_roll_optimized.mp3"
+  },
+  {
+    "id": "da5a8024-c8ad-442d-b42c-c0a98ba565d2",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_daily_result_optimized.mp3"
+  },
+  {
+    "id": "c72980f5-b050-4965-9db0-28bd84eb0bf7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_daily_enter_optimized.mp3"
+  },
+  {
+    "id": "969cd760-4c4e-4502-8435-7aee6307c275",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_daily_close_optimized.mp3"
+  },
+  {
+    "id": "5439fae1-7879-4680-ac70-562dabd519d7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_costume_info_optimized.mp3"
+  },
+  {
+    "id": "fcff0583-28a7-4f10-bdee-6b550d3ac67c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_costume_get_optimized.mp3"
+  },
+  {
+    "id": "a130ef74-bfef-4f0d-aedc-e9f7eb51943d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_collection_optimized.mp3"
+  },
+  {
+    "id": "17f55ef6-13de-49ba-a5c3-fdb4357970fe",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_skill_bonus_optimized.mp3"
+  },
+  {
+    "id": "4247908f-6676-4973-9a02-affb7e3b7554",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_select_optimized.mp3"
+  },
+  {
+    "id": "8277f823-4bdb-4937-8492-d42f97857fa6",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_level_up_optimized.mp3"
+  },
+  {
+    "id": "25015fd6-72de-4e46-b822-5ba04507e4f4",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_get_optimized.mp3"
+  },
+  {
+    "id": "608682db-6dae-45c9-aea9-117921783623",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_exp_up_optimized.mp3"
+  },
+  {
+    "id": "840b71d4-9e6b-489f-851d-f410e4a97b1b",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_eat_exp_optimized.mp3"
+  },
+  {
+    "id": "95f83dfd-5a2c-42f6-9969-28c42426a43d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_eat_energy_optimized.mp3"
+  },
+  {
+    "id": "b416809a-96b2-47d9-bb9e-7c1b69fb25d6",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_costume_open_optimized.mp3"
+  },
+  {
+    "id": "e54554ce-6687-4c18-893e-bd71b9b2d42a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_char_costume_close_optimized.mp3"
+  },
+  {
+    "id": "6bf5cfff-ba30-4203-9f8f-b4676849ece7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_card_extra_open_optimized.mp3"
+  },
+  {
+    "id": "b0f3f73d-e22f-403e-b737-ce28bc7fb599",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_bet_optimized.mp3"
+  },
+  {
+    "id": "f924fb7c-0d04-45b6-b93a-8d86544b793c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_bet_effect_optimized.mp3"
+  },
+  {
+    "id": "0d131553-2ab1-41b5-ab0d-9f111f9219a9",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_bet_bonus_optimized.mp3"
+  },
+  {
+    "id": "9b20899d-1db6-474b-b3f6-d8cc74e2a1d9",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_album_point_optimized.mp3"
+  },
+  {
+    "id": "78a93cbf-4c00-4ee1-92d3-58ee0e09c35b",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spinlab_start_optimized.mp3"
+  },
+  {
+    "id": "ec3a96c7-b166-48f4-ad4b-0098e5228115",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_result_win_optimized.mp3"
+  },
+  {
+    "id": "82d19bf2-f8bf-40d0-a4bc-3e01f8ac0540",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_result_lose_optimized.mp3"
+  },
+  {
+    "id": "79dac1af-e6b0-4506-9fb6-57ba80b79056",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_result_draw_optimized.mp3"
+  },
+  {
+    "id": "f549de4a-1b44-41e7-a467-7119597b8251",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_open_optimized.mp3"
+  },
+  {
+    "id": "608a232c-d7a8-4310-b296-8685f8378955",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_count_optimized.mp3"
+  },
+  {
+    "id": "3b5f2aaf-ced6-4ebc-a301-89bf2178c608",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_count_1_optimized.mp3"
+  },
+  {
+    "id": "9f257af3-549a-4f10-8b2e-b18c0f116e66",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_cony_result_optimized.mp3"
+  },
+  {
+    "id": "4ca44c00-f9b5-42f5-a94f-da60b3f9577c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_close_optimized.mp3"
+  },
+  {
+    "id": "95f44206-7e1f-4580-a3b5-6d022b4a93ea",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_challenge_optimized.mp3"
+  },
+  {
+    "id": "6b10abb9-b7e7-4a80-948c-c6623045487f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "challenge_card_swap_optimized.mp3"
+  },
+  {
+    "id": "c44f2b03-0d05-4dbb-a37c-ff48299f502a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bigwin_popup_optimized.mp3"
+  },
+  {
+    "id": "feead50b-75af-41b7-b1d4-7bf5bda124d4",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bigwin_pack_point_optimized.mp3"
+  },
+  {
+    "id": "9d7a5691-446c-4393-aa77-ed0509b3fddd",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bigwin_pack_optimized.mp3"
+  },
+  {
+    "id": "68881a53-0e47-41bc-bf77-70cde972a5e5",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bigwin_pack_open_optimized.mp3"
+  },
+  {
+    "id": "83b0f037-484c-477e-891c-bf8d6d9e0f66",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bigwin_letter_on_optimized.mp3"
+  },
+  {
+    "id": "16c0c653-b42a-49db-835a-332afda39531",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bigwin_letter_off_optimized.mp3"
+  },
+  {
+    "id": "6c78ed97-15fa-4290-a356-954cbb5e83b3",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_spinlab_idle_optimized.mp3"
+  },
+  {
+    "id": "37e36ca2-9c8a-4c38-aa04-efaf97de4702",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_slot_urusei_optimized.mp3"
+  },
+  {
+    "id": "b5e85ede-0cb6-4c47-a549-e4cf23eff8ca",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_slot_piligili_optimized.mp3"
+  },
+  {
+    "id": "609411d8-d2e0-4d56-8ee1-49f565ca7bae",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_slot_kanahei_optimized.mp3"
+  },
+  {
+    "id": "ae4fede4-c537-4bef-8695-13f90924d4a6",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_slot_halloween_optimized.mp3"
+  },
+  {
+    "id": "397b62ef-0999-4bca-8320-1da943d3c572",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_slot_christmas_optimized.mp3"
+  },
+  {
+    "id": "2da08901-7ad1-49e1-a633-a85d4b71393c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_slot_anniversary_optimized.mp3"
+  },
+  {
+    "id": "dff89438-7d81-4870-affa-8193f42d3dba",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_dailyspin_optimized.mp3"
+  },
+  {
+    "id": "1e04609b-6f1f-459f-bfdf-31cbbfa5a6cc",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_tuto_slot_optimized.mp3"
+  },
+  {
+    "id": "f0b00282-de58-404b-94bd-275618142ed2",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_tuto_optimized.mp3"
+  },
+  {
+    "id": "57d2efa5-a9ce-4f41-a5c4-a44013513620",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_star_reward_optimized.mp3"
+  },
+  {
+    "id": "0cd1ae02-f836-4f16-98b3-31947e255b6a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_spin_reward_optimized.mp3"
+  },
+  {
+    "id": "e1d480a4-2111-4f53-8229-29b660afc4b1",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_spin_get_optimized.mp3"
+  },
+  {
+    "id": "d94b0521-53eb-47ff-8add-1ac824b357be",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_ruby_reward_optimized.mp3"
+  },
+  {
+    "id": "e34d8f8c-b0a0-4d3d-a6b0-f06f4a0483de",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_ruby_get_optimized.mp3"
+  },
+  {
+    "id": "bb60b600-fabe-4eab-b2e4-ac508de52dd7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_roulette_roll_loop_optimized.mp3"
+  },
+  {
+    "id": "12104b82-97bb-451e-bf62-fc4c76b416a0",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_rarecard_get_optimized.mp3"
+  },
+  {
+    "id": "3805d2e3-1d03-4757-b589-ffbcc7a45d32",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_select_optimized.mp3"
+  },
+  {
+    "id": "2f141a5f-6730-4fd5-a8bf-aaa9e50dce74",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_sally_skill_optimized.mp3"
+  },
+  {
+    "id": "cf2324fc-4fb5-4328-a176-ce0158cc7406",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_sally_result_optimized.mp3"
+  },
+  {
+    "id": "3c81ccc9-47b4-4128-86a1-9b9abd1419cc",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_result_perfect_optimized.mp3"
+  },
+  {
+    "id": "845226ac-7ef8-4ff4-a2cb-86fff29163bf",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_result_optimized.mp3"
+  },
+  {
+    "id": "5d33cf58-c8b0-4951-b605-431f8ee8a65d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_open_optimized.mp3"
+  },
+  {
+    "id": "91d94f18-f404-49b4-bc3b-9376f53e543f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_object_optimized.mp3"
+  },
+  {
+    "id": "a3b330e8-c596-499c-8bb5-a1f9bce56ffb",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_get_none_optimized.mp3"
+  },
+  {
+    "id": "0c58390b-74c4-4b7e-b909-07a4c0b106d8",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_get_coin_4_6_optimized.mp3"
+  },
+  {
+    "id": "6930ddf0-fda6-4c6a-8381-3e2b390fcf99",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_get_coin_1_6_optimized.mp3"
+  },
+  {
+    "id": "a1500caa-4bd6-4b31-8edd-4eff64ffefc3",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_get_box_optimized.mp3"
+  },
+  {
+    "id": "54883190-156b-4fa6-a9ad-b102a057a862",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_raid_chance_optimized.mp3"
+  },
+  {
+    "id": "17176196-cfeb-4517-bc3e-2b6deccca769",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_package_optimized.mp3"
+  },
+  {
+    "id": "653f1936-9fa3-4a6a-98db-60e970e9b674",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_open_optimized.mp3"
+  },
+  {
+    "id": "a2fe91e3-3cb2-4f32-b3e4-682c6a0f9832",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_lightning_optimized.mp3"
+  },
+  {
+    "id": "de2c0434-e9f7-4a42-912c-ac2ba797da59",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_popup_buy_optimized.mp3"
+  },
+  {
+    "id": "e16a41d1-0609-49b5-b443-5c0b558a865b",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_mission_next_optimized.mp3"
+  },
+  {
+    "id": "96bcdc5b-a7b3-457e-b37f-72a09034ff2e",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_mission_complete_optimized.mp3"
+  },
+  {
+    "id": "07957305-dd47-4d0f-932e-c179467a7e86",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_menu_open_optimized.mp3"
+  },
+  {
+    "id": "266ee3dc-6015-484b-b6d6-f364b8c3c710",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_menu_close_optimized.mp3"
+  },
+  {
+    "id": "5d091d01-76cb-4e71-858f-429fa5d26f8c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_maxbet_optimized.mp3"
+  },
+  {
+    "id": "75d35b7c-e71a-448d-a69a-a8bcafb4274b",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_loginpkg_got_optimized.mp3"
+  },
+  {
+    "id": "50bfabf3-f1b4-48d4-a4df-3b947017e74c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_login_bonus_optimized.mp3"
+  },
+  {
+    "id": "31ea931c-8e59-461f-bfdc-f0f700f8febb",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_gift_open_optimized.mp3"
+  },
+  {
+    "id": "9bb31c76-39e2-4656-b3e5-76ba0f90f20e",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_gift_get_optimized.mp3"
+  },
+  {
+    "id": "3b8e36d5-9800-43bf-90dd-64b3a02e50fe",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_get_spin_optimized.mp3"
+  },
+  {
+    "id": "ea5755f6-edcb-4050-8ff6-391d0cb9d9d1",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_get_button_optimized.mp3"
+  },
+  {
+    "id": "5e59ca0e-d7d3-4dcf-a322-112ffbe3b083",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_freespin_open_optimized.mp3"
+  },
+  {
+    "id": "68e236ba-7d82-4fdd-a791-c3ba8cbdabf0",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_freebox_open_optimized.mp3"
+  },
+  {
+    "id": "0d0199d1-7b40-4745-890e-e0ba9077c4f9",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_congrat_open_optimized.mp3"
+  },
+  {
+    "id": "b8999494-2bdd-4615-8e1f-6cb4b31d3b17",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_collection_open_optimized.mp3"
+  },
+  {
+    "id": "43dbb3d0-6c27-4fbd-ab55-78696bb60aff",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_coin_reward_optimized.mp3"
+  },
+  {
+    "id": "c7452063-a176-4a46-8a84-e98e47cb4fcc",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_coin_get_optimized.mp3"
+  },
+  {
+    "id": "37bedfd7-d997-43c2-81fb-82232e6fc47d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_coin_count_optimized.mp3"
+  },
+  {
+    "id": "0ee87f08-e80a-4798-8d10-1203f952ddb0",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_click_spin_optimized.mp3"
+  },
+  {
+    "id": "6de8a21f-6102-49e5-8a0d-0bc437e0f60f",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_click_spin_hold_optimized.mp3"
+  },
+  {
+    "id": "0c861ab4-6633-4c08-82b4-8e16b46e2659",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_click_global_optimized.mp3"
+  },
+  {
+    "id": "ba384ec6-5f15-4a61-9af0-7a6488cc109a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_click_cancel_optimized.mp3"
+  },
+  {
+    "id": "3ae3426e-b7e3-4f1c-8d51-6fd3aaa45b6d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_click_bet_optimized.mp3"
+  },
+  {
+    "id": "3e8e5501-942e-4f69-94ee-750612f0d4e5",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_card_shuffle_optimized.mp3"
+  },
+  {
+    "id": "50257422-4e64-4070-ace4-cb5036182248",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_card_get_optimized.mp3"
+  },
+  {
+    "id": "02a58996-17da-4eb8-a792-f79cc4c98643",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_card_extra_unlock_open_optimized.mp3"
+  },
+  {
+    "id": "1dd93cf2-0a40-41fc-85c8-5b4f679aedc8",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_card_bell_optimized.mp3"
+  },
+  {
+    "id": "96ff62a6-effb-4761-ab05-d9f8c35a82eb",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_build_stage_open_optimized.mp3"
+  },
+  {
+    "id": "7b9eebf4-5b18-4cf6-b9f7-01eb43378ebe",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_build_stage_complete_optimized.mp3"
+  },
+  {
+    "id": "5eb5e42e-0274-4b7f-8f42-e1bd12089bde",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_build_process_optimized.mp3"
+  },
+  {
+    "id": "2d6eff5b-edad-4dce-a1fb-efa09ac1ee80",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_build_on_optimized.mp3"
+  },
+  {
+    "id": "b0a584ec-e7da-420f-9a04-491789f751bc",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_build_off_optimized.mp3"
+  },
+  {
+    "id": "4cc51515-32dc-41af-b8c1-6eabf84f4b40",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_build_complete_optimized.mp3"
+  },
+  {
+    "id": "655be2ee-7141-4eba-b417-16d76af400ea",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_build_book_complete_optimized.mp3"
+  },
+  {
+    "id": "2300890a-7e6d-40e5-8ef3-e8547567126a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_storyrush_optimized.mp3"
+  },
+  {
+    "id": "6111c735-aa10-4bf3-9cf1-8546fb921714",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_star_get_optimized.mp3"
+  },
+  {
+    "id": "afd77fd1-57e1-4f3c-8a77-03eaa3995369",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_star_fly_optimized.mp3"
+  },
+  {
+    "id": "78cc5380-4897-4193-a3d5-78f4f5c9fd71",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_star_count_optimized.mp3"
+  },
+  {
+    "id": "e44c1ae6-3c6c-4f05-977a-08d340bf6445",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_star_add_optimized.mp3"
+  },
+  {
+    "id": "3fbb5f72-9690-4d12-b420-c73f5c0cb915",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_open_optimized.mp3"
+  },
+  {
+    "id": "d0a2f40f-2733-4cb4-844a-f72a1fd51425",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_magiccard_optimized.mp3"
+  },
+  {
+    "id": "1ad7ea87-d2b3-4557-aa9e-237efbff0c22",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_get_optimized.mp3"
+  },
+  {
+    "id": "66967b5a-7f4f-4ae9-8d38-8c41c01457f7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_box_close_optimized.mp3"
+  },
+  {
+    "id": "b9b7fa8b-db2e-414c-be01-8443e4a20220",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_wait_optimized.mp3"
+  },
+  {
+    "id": "995d0dfe-8d57-4cdf-a328-59e43e691f23",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_success_optimized.mp3"
+  },
+  {
+    "id": "f6e39c83-0f77-4515-9839-fee834ffd011",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_select_optimized.mp3"
+  },
+  {
+    "id": "1b3e4389-3de0-4516-bfad-663c4ed4a1d3",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_result_optimized.mp3"
+  },
+  {
+    "id": "3e4f7014-db8f-4e32-9396-766c8bdc56f7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_point_up_optimized.mp3"
+  },
+  {
+    "id": "3972c4d3-cdf8-4579-8e84-8abe331bf76c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_point_optimized.mp3"
+  },
+  {
+    "id": "4f0a898f-830f-4c64-b13f-5ab333bc2151",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_fail_shield_optimized.mp3"
+  },
+  {
+    "id": "f90006f9-3f9b-4030-9336-892b50195961",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_attack_char_optimized.mp3"
+  },
+  {
+    "id": "4b69e2f4-5587-4acb-b21d-aa7834a164a8",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_alert_optimized.mp3"
+  },
+  {
+    "id": "ef438acb-01e5-4248-b22f-8534904d340c",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "ui_alert_bottom_optimized.mp3"
+  },
+  {
+    "id": "98317df9-50eb-4840-bf18-a8ce504ab7a4",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_stop_optimized.mp3"
+  },
+  {
+    "id": "1221f356-9bf9-4deb-9963-36e79c6cc72a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_roll_optimized.mp3"
+  },
+  {
+    "id": "0aa8c497-5ae9-4574-b8f6-e00cb4042547",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_roll_2_optimized.mp3"
+  },
+  {
+    "id": "f08133be-5e70-4cef-aa5e-461016fc2f4a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_roll_1_optimized.mp3"
+  },
+  {
+    "id": "c6f3faaf-48cd-4e62-ba5a-ab2ab6106419",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_spin_reward_optimized.mp3"
+  },
+  {
+    "id": "f119029b-5a00-437e-ad9e-b9fe3ed6c636",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_spin_optimized.mp3"
+  },
+  {
+    "id": "86872285-7d08-4865-93f5-a392e6039eb4",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_shield_reward_optimized.mp3"
+  },
+  {
+    "id": "79892446-031e-4dd5-9f55-2c102c16fe63",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_shield_optimized.mp3"
+  },
+  {
+    "id": "d776f42c-ac47-492e-b7ac-b923a225436b",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_sack_3_optimized.mp3"
+  },
+  {
+    "id": "c21c4a06-71e9-4203-ad66-b27f174bd64a",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_sack_2_optimized.mp3"
+  },
+  {
+    "id": "a9b9c828-d205-46ba-b444-5853ffd5525d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_sack_1_optimized.mp3"
+  },
+  {
+    "id": "9a167e2f-40a5-4a47-8d42-a9d5d074e6da",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_reward_complete_optimized.mp3"
+  },
+  {
+    "id": "191c999a-a4cf-4ccb-992f-e574002e7af7",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_raid_optimized.mp3"
+  },
+  {
+    "id": "6f06b2d8-aef1-44d5-a2f6-5a6ca2910a78",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_fever_optimized.mp3"
+  },
+  {
+    "id": "9778528b-8941-4571-8b33-19d048b32478",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_common_reward_optimized.mp3"
+  },
+  {
+    "id": "7b33d622-add4-4bd1-835b-0656ea583800",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_common_get_optimized.mp3"
+  },
+  {
+    "id": "5687546e-6614-4667-8468-d5d1dcdc2cb5",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_coin_2_optimized.mp3"
+  },
+  {
+    "id": "187e85d7-a27b-422d-b305-bc564aac55e2",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_coin_1_optimized.mp3"
+  },
+  {
+    "id": "9dc9a51e-8bbc-44c9-ba29-e12f9c6c1f79",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_attackcatch_complete_optimized.mp3"
+  },
+  {
+    "id": "e9fef57c-2f3d-47c3-bdda-f07580a11039",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_result_attack_optimized.mp3"
+  },
+  {
+    "id": "88fcbae3-8a99-4fa7-a59f-db3fa0f0e654",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_combo7_optimized.mp3"
+  },
+  {
+    "id": "48df94b6-205d-4382-9985-620ea87faf59",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_combo6_optimized.mp3"
+  },
+  {
+    "id": "15529fd6-eb3d-42b8-8919-90b592717b3e",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_combo5_optimized.mp3"
+  },
+  {
+    "id": "20703030-84df-4107-a720-91b810da8a2e",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_combo4_optimized.mp3"
+  },
+  {
+    "id": "1cac4840-43c9-4297-b3f2-b7401fb83b96",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_combo3_optimized.mp3"
+  },
+  {
+    "id": "7230b99c-3918-40e7-a997-37e109e6c367",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_combo2_optimized.mp3"
+  },
+  {
+    "id": "60c7192c-7b05-438f-b29a-a1f37db9236e",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "spin_combo_jackpot_optimized.mp3"
+  },
+  {
+    "id": "bc95eefe-d475-4950-8e03-f8014df86c31",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_slot_optimized.mp3"
+  },
+  {
+    "id": "0d86d1e0-6933-466b-8fb5-8234204fe82d",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_raid_optimized.mp3"
+  },
+  {
+    "id": "364908d6-3790-4e84-b748-cd338adee445",
+    "tags": [
+      "magiccoin"
+    ],
+    "title": "bgm_attack_optimized.mp3"
+  },
+  {
+    "id": "d6991a4e-4026-4554-bb95-c70614d14549",
+    "tags": [
+      "move"
+    ],
+    "title": "cat_move.mp3"
+  },
+  {
+    "id": "7aed528f-6fa7-4938-8f83-1f1a861c5a85",
+    "tags": [
+      "pop"
+    ],
+    "title": "ui_pop.mp3"
+  },
+  {
+    "id": "39a6edda-9875-44e2-8942-38518c089c10",
+    "tags": [
+      "sfx",
+      "triumphant"
+    ],
+    "title": "Short_triumphant_bra2.mp3"
+  },
+  {
+    "id": "b8924b13-26d1-48fc-87e7-4dbb2fb7704e",
+    "tags": [
+      "sfx",
+      "triumphant"
+    ],
+    "title": "Short_triumphant_bra.mp3"
+  },
+  {
+    "id": "9d9a2b64-d143-47bd-a513-fc7e26c972b6",
+    "tags": [
+      "sfx",
+      "wind"
+    ],
+    "title": "langind_impact.mp3"
+  },
+  {
+    "id": "59edaa4d-cbe3-4f88-a2d5-e3b30b24d4ab",
+    "tags": [
+      "sfx",
+      "wind"
+    ],
+    "title": "upgrade.mp3"
+  },
+  {
+    "id": "d725d82a-c910-4db7-865e-8842d0e44f1b",
+    "tags": [
+      "sfx"
+    ],
+    "title": "coin.mp3"
+  },
+  {
+    "id": "652b0477-99e2-4860-b4b0-632b4783d496",
+    "tags": [],
+    "title": "ui_repair_open.wav"
+  },
+  {
+    "id": "ea9803a9-1e98-4134-af8c-6e48c6bf0cb0",
+    "tags": [],
+    "title": "ui_repair_complete_add.wav"
+  },
+  {
+    "id": "f0378309-8403-4104-8d87-9db2cba62b95",
+    "tags": [],
+    "title": "ui_repair_complete.wav"
+  },
+  {
+    "id": "e95130ef-242f-45a5-a5e8-ea89bfcc9ab8",
+    "tags": [],
+    "title": "ui_repair_build_clear.wav"
+  },
+  {
+    "id": "04cb116b-4084-429a-a533-dcca89f66576",
+    "tags": [],
+    "title": "ui_popup_package_choice_open.wav"
+  },
+  {
+    "id": "d8983186-2580-4956-bd0f-236850af363f",
+    "tags": [],
+    "title": "ui_popup_package_bank_stop.wav"
+  },
+  {
+    "id": "6a07c9e8-d931-495e-9187-4269a1abd8e9",
+    "tags": [],
+    "title": "ui_popup_package_bank_open.wav"
+  },
+  {
+    "id": "b88eb7f9-4904-4cc8-adb9-91b83b6a9993",
+    "tags": [],
+    "title": "ui_popup_package_bank_full.wav"
+  },
+  {
+    "id": "968ca238-d996-4a19-8af8-fc795cbcd632",
+    "tags": [],
+    "title": "ui_photo_object_put.wav"
+  },
+  {
+    "id": "26d804de-fe8e-4b11-bf68-6bf1f0a7c075",
+    "tags": [],
+    "title": "ui_photo_object_open.wav"
+  },
+  {
+    "id": "0aac03bd-80a3-46d0-bffb-e1f20a7fbfde",
+    "tags": [],
+    "title": "ui_mission_allclear.wav"
+  },
+  {
+    "id": "87dc3afa-9d40-40f6-81c7-e487a25c28a5",
+    "tags": [],
+    "title": "ui_magicslot_shot.wav"
+  },
+  {
+    "id": "ab6cf435-7cb0-4f93-8c3a-d6daf0941000",
+    "tags": [],
+    "title": "ui_magicslot_hit.wav"
+  },
+  {
+    "id": "5ac8c800-801c-479d-8107-099cbd02d162",
+    "tags": [],
+    "title": "ui_magicpot_open.wav"
+  },
+  {
+    "id": "3a50d66a-5414-49b2-bab3-864a59b8dbd9",
+    "tags": [],
+    "title": "ui_magicpot_get_symbol.wav"
+  },
+  {
+    "id": "824a9190-1076-49ef-88b2-ff56324ecae1",
+    "tags": [],
+    "title": "ui_magicpot_get_reward.wav"
+  },
+  {
+    "id": "01ec4a98-b569-4621-a116-ba4d92af38d4",
+    "tags": [],
+    "title": "ui_magiccard_scroll.wav"
+  },
+  {
+    "id": "52832bc4-8df7-4b35-b6de-44a5fbd66361",
+    "tags": [],
+    "title": "ui_magiccard_open.wav"
+  },
+  {
+    "id": "eeb693b4-17fc-4d27-83f8-03461c5b8fc9",
+    "tags": [],
+    "title": "ui_magiccard_get_card.wav"
+  },
+  {
+    "id": "11dc2688-b146-4de6-9ad3-d35bf1a2b5f6",
+    "tags": [],
+    "title": "ui_icon_package_bank_lose.wav"
+  },
+  {
+    "id": "31c1d63b-74a0-43cf-8ef6-7f6b16189743",
+    "tags": [],
+    "title": "ui_icon_package_bank_get.wav"
+  },
+  {
+    "id": "ace26497-eb5c-431d-af8d-9dd7724cbd3a",
+    "tags": [],
+    "title": "ui_get_reward.wav"
+  },
+  {
+    "id": "fd2627b6-eee9-40a8-9825-c7541693702d",
+    "tags": [],
+    "title": "ui_get_magiccard_home.wav"
+  },
+  {
+    "id": "de7f7014-f8a4-4ac0-abfd-c40177479142",
+    "tags": [],
+    "title": "ui_get_magiccard.wav"
+  },
+  {
+    "id": "8d3b2677-681b-4ee4-a157-6bd1d773d9e3",
+    "tags": [],
+    "title": "ui_get_chip.wav"
+  },
+  {
+    "id": "195f4c4c-4979-43b3-912b-0b081c6b3b28",
+    "tags": [],
+    "title": "ui_exp_reward.wav"
+  },
+  {
+    "id": "3ea63117-e6d3-4270-b156-6aed7e61f053",
+    "tags": [],
+    "title": "ui_exp_get.wav"
+  },
+  {
+    "id": "802b9749-2119-4dc2-8679-c36c63391db1",
+    "tags": [],
+    "title": "ui_event_reward_info_open.wav"
+  },
+  {
+    "id": "6ab505d3-6d2d-4620-873c-89e6b786cbb2",
+    "tags": [],
+    "title": "ui_event_reward_info_close.wav"
+  },
+  {
+    "id": "95442868-5900-4c74-961f-e825ff5a9d90",
+    "tags": [],
+    "title": "ui_event_extraspecial_popup_open.wav"
+  },
+  {
+    "id": "595b9e36-a3c7-47c9-8c0d-055147f9855d",
+    "tags": [],
+    "title": "ui_event_coinrush_result_slot.wav"
+  },
+  {
+    "id": "316d3af4-305c-40ec-a7cd-bafc2830ecbc",
+    "tags": [],
+    "title": "ui_event_coinrush_result.wav"
+  },
+  {
+    "id": "34520671-6c69-438d-acd1-1d1df882d73f",
+    "tags": [],
+    "title": "ui_event_coinrush_open.wav"
+  },
+  {
+    "id": "461be980-ddd1-4968-9d42-596cbe59b87c",
+    "tags": [],
+    "title": "ui_event_coinrush_on_btn.wav"
+  },
+  {
+    "id": "bf0bbaa4-d0d9-4bdb-aa5e-8a281e6c175f",
+    "tags": [],
+    "title": "ui_event_coinrush_on.wav"
+  },
+  {
+    "id": "1aca9be0-3c31-44c3-a743-e01ab3269c7c",
+    "tags": [],
+    "title": "ui_event_clear.wav"
+  },
+  {
+    "id": "ceee3223-a72c-4d69-bdea-8a31d20da3f3",
+    "tags": [],
+    "title": "ui_event_charmatch_open.wav"
+  },
+  {
+    "id": "395857e3-9c2f-4cd7-b1c6-3aa3f2a8dc12",
+    "tags": [],
+    "title": "ui_event_cardgift_popup_open.wav"
+  },
+  {
+    "id": "06d279e3-0aef-4e80-8a46-5a805fdf64cd",
+    "tags": [],
+    "title": "ui_event_cardgift_info_open.wav"
+  },
+  {
+    "id": "dd1497ac-6f54-4160-a6bd-0459c9ceea91",
+    "tags": [],
+    "title": "ui_event_bookrush_open.wav"
+  },
+  {
+    "id": "6aee14df-89f6-42b4-8f37-c462634c2933",
+    "tags": [],
+    "title": "ui_event_bookrush_on.wav"
+  },
+  {
+    "id": "50203660-1dc5-45b2-9be6-5a8259e3b31b",
+    "tags": [],
+    "title": "ui_event_bookrush_off.wav"
+  },
+  {
+    "id": "1a694091-362a-441b-9a4c-e233108dfeb5",
+    "tags": [],
+    "title": "ui_event_album_photo_open.wav"
+  },
+  {
+    "id": "8d8f2302-23d9-446b-9a84-46001a9132ea",
+    "tags": [],
+    "title": "ui_event_album_open.wav"
+  },
+  {
+    "id": "c38d9730-5b75-4d5e-b016-b96a1dc6275f",
+    "tags": [],
+    "title": "ui_event_album_info_open.wav"
+  },
+  {
+    "id": "aeeb5060-1d1e-4b7b-9368-43d450b51d11",
+    "tags": [],
+    "title": "ui_event_album_gauge_reward.wav"
+  },
+  {
+    "id": "61019e4b-f6e1-42a4-ba60-c894a7bceb33",
+    "tags": [],
+    "title": "ui_energy_reward.wav"
+  },
+  {
+    "id": "24833cde-1d94-4e83-b557-cb23aeaf5a38",
+    "tags": [],
+    "title": "ui_energy_get.wav"
+  },
+  {
+    "id": "2dc4f7af-350d-4d71-b7ff-e15d73245bc7",
+    "tags": [],
+    "title": "ui_daily_roll.wav"
+  },
+  {
+    "id": "b0c58ff9-6faa-4f63-bdf5-1e5499c7aabd",
+    "tags": [],
+    "title": "ui_daily_result.wav"
+  },
+  {
+    "id": "02c07659-e9e3-49d6-8468-ab41e762bd75",
+    "tags": [],
+    "title": "ui_daily_enter.wav"
+  },
+  {
+    "id": "7387efb9-b67d-44ef-a14a-ed566b02f167",
+    "tags": [],
+    "title": "ui_daily_close.wav"
+  },
+  {
+    "id": "52e61544-4cf1-47f0-b6a1-4cbf07745d93",
+    "tags": [],
+    "title": "ui_costume_info.wav"
+  },
+  {
+    "id": "87c42790-8482-430b-b1e9-92935cc780d4",
+    "tags": [],
+    "title": "ui_costume_get.wav"
+  },
+  {
+    "id": "dbf358d1-139e-4595-9dd3-fedb9a3513fb",
+    "tags": [],
+    "title": "ui_collection.wav"
+  },
+  {
+    "id": "94b2dee4-5352-414f-a1e4-b1e6b70a478a",
+    "tags": [],
+    "title": "ui_char_skill_bonus.wav"
+  },
+  {
+    "id": "d82ed72f-028a-486f-9d31-56e6936839af",
+    "tags": [],
+    "title": "ui_char_select.wav"
+  },
+  {
+    "id": "39dfb5f9-5a4b-4d2f-85e2-cd409916aa5b",
+    "tags": [],
+    "title": "ui_char_level_up.wav"
+  },
+  {
+    "id": "660e4b1a-d31a-403f-a1be-cc5f14252a93",
+    "tags": [],
+    "title": "ui_char_get.wav"
+  },
+  {
+    "id": "047d69b9-e555-48bf-9431-e9343d750463",
+    "tags": [],
+    "title": "ui_char_exp_up.wav"
+  },
+  {
+    "id": "af8525f6-0c56-46c0-80fa-ee8a53de5706",
+    "tags": [],
+    "title": "ui_char_eat_exp.wav"
+  },
+  {
+    "id": "4f048c99-4234-4147-ba99-09d6372f68f6",
+    "tags": [],
+    "title": "ui_char_eat_energy.wav"
+  },
+  {
+    "id": "63b4dadc-310f-4b71-9919-14ab1ce192de",
+    "tags": [],
+    "title": "ui_char_costume_open.wav"
+  },
+  {
+    "id": "0c4297f1-34f8-4142-81ae-4a5a522b3130",
+    "tags": [],
+    "title": "ui_char_costume_close.wav"
+  },
+  {
+    "id": "f232a312-3692-4a93-8685-a9cf0268ca29",
+    "tags": [],
+    "title": "ui_card_extra_open.wav"
+  },
+  {
+    "id": "80ba3e70-ba5c-4350-94ef-c01c3f5346d1",
+    "tags": [],
+    "title": "ui_bet_effect.wav"
+  },
+  {
+    "id": "25295a11-796a-4dee-b986-536b2b6cc909",
+    "tags": [],
+    "title": "ui_bet_bonus.wav"
+  },
+  {
+    "id": "2a7d11a3-d879-4b05-aeef-ebc7ccf576f5",
+    "tags": [],
+    "title": "ui_bet.wav"
+  },
+  {
+    "id": "406afd0e-5fea-42db-b914-94b545ae03ad",
+    "tags": [],
+    "title": "ui_album_point.wav"
+  },
+  {
+    "id": "f72ad8af-2e23-4a51-8413-f837100aa3c0",
+    "tags": [],
+    "title": "spinlab_start.wav"
+  },
+  {
+    "id": "e4eeed94-fb6c-4cda-ab63-f901e3d5bfcd",
+    "tags": [],
+    "title": "challenge_result_win.wav"
+  },
+  {
+    "id": "a295c933-ad73-41fc-97b8-4a4405c3cf56",
+    "tags": [],
+    "title": "challenge_result_lose.wav"
+  },
+  {
+    "id": "ff944bd1-3e00-4ed6-b83f-597766b83037",
+    "tags": [],
+    "title": "challenge_result_draw.wav"
+  },
+  {
+    "id": "97ba3856-03b2-418e-b67c-1f50d1a95aad",
+    "tags": [],
+    "title": "challenge_open.wav"
+  },
+  {
+    "id": "4b681799-f99d-4854-82a8-71c1df83455f",
+    "tags": [],
+    "title": "challenge_count_1.wav"
+  },
+  {
+    "id": "951eb588-2de2-4d42-beec-64c5433386be",
+    "tags": [],
+    "title": "challenge_count.wav"
+  },
+  {
+    "id": "dc60fecb-723f-4192-864b-75b48b85b91c",
+    "tags": [],
+    "title": "challenge_cony_result.wav"
+  },
+  {
+    "id": "7219c3b9-171f-4d7e-b152-63a79702334d",
+    "tags": [],
+    "title": "challenge_close.wav"
+  },
+  {
+    "id": "3ab95dc3-3749-4d05-8cf0-9b8807512fe2",
+    "tags": [],
+    "title": "challenge_challenge.wav"
+  },
+  {
+    "id": "5140f065-514e-4cef-a6e3-95351c1824ed",
+    "tags": [],
+    "title": "challenge_card_swap.wav"
+  },
+  {
+    "id": "8416e1f1-e60c-4451-b031-a30b8eb618c4",
+    "tags": [],
+    "title": "bigwin_popup.wav"
+  },
+  {
+    "id": "35383c38-2489-46ef-9bf4-4d3118a8ffbc",
+    "tags": [],
+    "title": "bigwin_pack_point.wav"
+  },
+  {
+    "id": "f93ca095-e4ca-49b3-abf8-9737e4052890",
+    "tags": [],
+    "title": "bigwin_pack_open.wav"
+  },
+  {
+    "id": "d3ea143e-7103-495e-b1a0-8e09e29f4323",
+    "tags": [],
+    "title": "bigwin_pack.wav"
+  },
+  {
+    "id": "5f5ef49f-22b1-44de-a5d6-76f390b434e5",
+    "tags": [],
+    "title": "bigwin_letter_on.wav"
+  },
+  {
+    "id": "a3ec0b29-d153-4ada-80df-8e5230d9d2fc",
+    "tags": [],
+    "title": "bigwin_letter_off.wav"
+  },
+  {
+    "id": "2380806f-7678-4fcb-adbf-065ef3bdaae2",
+    "tags": [],
+    "title": "bgm_spinlab_idle.wav"
+  },
+  {
+    "id": "9945a5e7-3312-4b89-8b90-301c81b90719",
+    "tags": [],
+    "title": "bgm_slot_piligili.wav"
+  },
+  {
+    "id": "abecb138-96b7-45fe-938e-580f2e15d4a8",
+    "tags": [],
+    "title": "ui_starroad_user.wav"
+  },
+  {
+    "id": "983c6097-57e8-4777-ba88-7e1321fd8ac3",
+    "tags": [],
+    "title": "ui_starroad_page_unlock_ready.wav"
+  },
+  {
+    "id": "de11de31-8c53-41f3-a3b6-e8278a6087e6",
+    "tags": [],
+    "title": "ui_starroad_page_unlock.wav"
+  },
+  {
+    "id": "b02bd902-2c0e-4e01-a92d-36ddc4640fdc",
+    "tags": [],
+    "title": "ui_starroad_open.wav"
+  },
+  {
+    "id": "4edbb812-0513-4b79-a46a-bf6a3ee66005",
+    "tags": [],
+    "title": "ui_starroad_guage.wav"
+  },
+  {
+    "id": "093c88ca-0d84-450a-a4c4-469dcfb79a4d",
+    "tags": [],
+    "title": "ui_specialbook_exit.wav"
+  },
+  {
+    "id": "efa7a12f-1e38-43da-9131-7ca92c710b8a",
+    "tags": [],
+    "title": "ui_specialbook_enter_on.wav"
+  },
+  {
+    "id": "7c3728d9-9810-4caf-8942-3e31807d697d",
+    "tags": [],
+    "title": "ui_specialbook_enter_off.wav"
+  },
+  {
+    "id": "0b2ea56d-5672-44df-b440-098f920e4f31",
+    "tags": [],
+    "title": "ui_specialbook_enter_idle.wav"
+  },
+  {
+    "id": "25be3c3e-bdbc-42e8-a73b-f1b22b478ec5",
+    "tags": [],
+    "title": "ui_roulette_roll_start.wav"
+  },
+  {
+    "id": "350c4ac7-6d31-464f-aaaa-fcdb62121716",
+    "tags": [],
+    "title": "ui_roulette_result2.wav"
+  },
+  {
+    "id": "fb359ab2-f1e3-4e5a-a2fc-e7ddd907996e",
+    "tags": [],
+    "title": "ui_roulette_result1.wav"
+  },
+  {
+    "id": "06b03b51-301e-4160-b684-f02a153238e5",
+    "tags": [],
+    "title": "ui_roulette_levelup.wav"
+  },
+  {
+    "id": "dcb74312-5a70-43b7-9c9e-31f4efdcad7c",
+    "tags": [],
+    "title": "ui_repair_order_refresh.wav"
+  },
+  {
+    "id": "71618e71-513c-46ea-8957-564cf44c946a",
+    "tags": [],
+    "title": "ui_repair_order_new.wav"
+  },
+  {
+    "id": "cfa031b1-3734-49b0-bb6b-2ddd99d206ae",
+    "tags": [],
+    "title": "bomb_fuse_optimized.mp3"
+  },
+  {
+    "id": "aac1f8b7-a5c2-4d26-b5ec-41c7fa1ad927",
+    "tags": [],
+    "title": "bubble_colision_small_optimized.mp3"
+  },
+  {
+    "id": "f1169370-2998-410d-9834-56982a6e379e",
+    "tags": [],
+    "title": "bubble_launch_optimized.mp3"
+  },
+  {
+    "id": "70d51a95-d2f5-4e9b-b478-06d870f3f031",
+    "tags": [],
+    "title": "bubble_lending_optimized.mp3"
+  },
+  {
+    "id": "0a943580-7104-4ca9-9db4-321b68953c19",
+    "tags": [],
+    "title": "bubble_pop_optimized.mp3"
+  },
+  {
+    "id": "e09b815c-86eb-4512-9ed5-abce518aa18e",
+    "tags": [],
+    "title": "coin_count_optimized.mp3"
+  },
+  {
+    "id": "23cbe9ef-bd76-4fd1-9352-4f989fdcf5d0",
+    "tags": [],
+    "title": "rainbow_launch_optimized.mp3"
+  },
+  {
+    "id": "eb82e309-3aa5-4df1-91ea-0b5f68ed46e1",
+    "tags": [],
+    "title": "rocket_optimized.mp3"
+  },
+  {
+    "id": "0e8bbf49-6dd2-4169-b510-bd9460178b5e",
+    "tags": [],
+    "title": "lucky.mp3"
+  },
+  {
+    "id": "e68f1ba4-f58a-4811-9ec6-dd0c032ebde9",
+    "tags": [],
+    "title": "dragon_roar.mp3"
+  },
+  {
+    "id": "cf4e3b2a-2fd5-40b5-971f-0ed921bccd79",
+    "tags": [],
+    "title": "lion_roar.mp3"
+  },
+  {
+    "id": "2f9396a7-3aaa-4135-b0b4-0d0b21a9dffc",
+    "tags": [],
+    "title": "dark_spell.mp3"
+  },
+  {
+    "id": "ee9381da-0e48-47e1-9073-3430affe5fa0",
+    "tags": [],
+    "title": "bone_crack.mp3"
+  },
+  {
+    "id": "bc944018-5129-45fd-a4e0-915f67f64f5c",
+    "tags": [],
+    "title": "monster_roar_short_optimized.mp3"
+  },
+  {
+    "id": "883b5169-5d9f-4ca1-8fb2-3def4bc5ec3a",
+    "tags": [],
+    "title": "swish.mp3"
+  },
+  {
+    "id": "e2a324a6-414c-49d5-9d55-b9b43c70ca9c",
+    "tags": [],
+    "title": "meteo1.mp3"
+  },
+  {
+    "id": "8f5c9fb2-e66a-4c2c-80b0-068f1974a6ac",
+    "tags": [],
+    "title": "meteo2.mp3"
+  },
+  {
+    "id": "8eefa13f-b32a-498d-99ae-913f7d27b95c",
+    "tags": [],
+    "title": "windy_thud_optimized.mp3"
+  },
+  {
+    "id": "322e41e6-e249-49b1-b023-9b2d4f31f410",
+    "tags": [],
+    "title": "deep_thud_optimized.mp3"
+  },
+  {
+    "id": "3b4cd381-5c98-4de3-b104-e605547f6dc3",
+    "tags": [],
+    "title": "colosal_growl.mp3"
+  },
+  {
+    "id": "1438c029-68bc-4a66-8e47-806763f7c284",
+    "tags": [],
+    "title": "wood_crack.mp3"
+  },
+  {
+    "id": "70b62e35-cdf3-426b-a23d-37a10e8e644d",
+    "tags": [],
+    "title": "squish.mp3"
+  },
+  {
+    "id": "68fe5b46-1275-41f7-aea0-554bb9a5a48b",
+    "tags": [],
+    "title": "curse_magic.mp3"
+  },
+  {
+    "id": "83c14a7f-0a5c-4dad-979f-5b1570021ae7",
+    "tags": [],
+    "title": "knife_slice.mp3"
+  },
+  {
+    "id": "32f97fd7-fa89-4d53-8523-468d4f38d72e",
+    "tags": [],
+    "title": "monster_roar.mp3"
+  },
+  {
+    "id": "2e6f845b-c96c-472f-b61e-d4b9c36dd3fa",
+    "tags": [],
+    "title": "door_open.mp3"
+  },
+  {
+    "id": "b4ae7974-0be3-409b-84a1-94338e981a80",
+    "tags": [],
+    "title": "chest_open.mp3"
+  },
+  {
+    "id": "27d69a76-c639-414f-ba8a-0162682baf32",
+    "tags": [],
+    "title": "shining.mp3"
+  },
+  {
+    "id": "4ec824cd-543d-49bf-ab27-6fc4da73eb90",
+    "tags": [],
+    "title": "lightning_optimized.mp3"
+  },
+  {
+    "id": "a6b8b143-8fa5-4373-8ae2-34a0dd96d0d7",
+    "tags": [],
+    "title": "rock_impact _optimized.mp3"
+  },
+  {
+    "id": "894077c8-0fcd-4452-9432-f87279af0ec2",
+    "tags": [],
+    "title": "rock_throw_optimized.mp3"
+  },
+  {
+    "id": "13fa60cc-b36d-48b4-9d7a-a8e45654b2d2",
+    "tags": [],
+    "title": "start_sound_optimized.mp3"
+  },
+  {
+    "id": "a6962c1c-94f4-4c09-ba92-1cdc803b446c",
+    "tags": [],
+    "title": "thud_optimized.mp3"
+  },
+  {
+    "id": "c21621c1-e31f-468c-971c-b2431f64bef8",
+    "tags": [],
+    "title": "shimmring_optimized.mp3"
+  },
+  {
+    "id": "0d4ac067-629a-466e-b4a0-1a807729c2d8",
+    "tags": [],
+    "title": "metallic-ring_optimized.mp3"
+  },
+  {
+    "id": "68fbc5d9-bbf4-428c-af6c-c0a5bf6d035b",
+    "tags": [],
+    "title": "drop_optimized.mp3"
+  },
+  {
+    "id": "2b4cc4a3-365a-4188-80d9-44605db67794",
+    "tags": [],
+    "title": "level_complete_optimized.mp3"
+  },
+  {
+    "id": "521e2a0e-5bf2-43a4-bc60-32117f3db383",
+    "tags": [],
+    "title": "victory_stage_optimized.mp3"
+  },
+  {
+    "id": "72328774-0d36-460c-b673-c2721aff7a2b",
+    "tags": [],
+    "title": "wave_clear_optimized.mp3"
+  },
+  {
+    "id": "30e45073-8883-46d4-9666-161c4cbe2756",
+    "tags": [],
+    "title": "healsound_optimized.mp3"
+  },
+  {
+    "id": "be41c428-e1c4-4585-832f-f105b34b6724",
+    "tags": [],
+    "title": "arrow_fly_optimized.mp3"
+  },
+  {
+    "id": "034ecfd6-c287-4673-8095-ff03a04daafd",
+    "tags": [],
+    "title": "arrow_hit_optimized.mp3"
+  },
+  {
+    "id": "61bea0ed-1eae-4f83-baf8-cc1d83c8d872",
+    "tags": [],
+    "title": "swing_optimized.mp3"
+  },
+  {
+    "id": "9c6ec176-540b-46d6-a6da-8a3d4fdaf383",
+    "tags": [],
+    "title": "sword_hit_optimized.mp3"
+  }
+]

@@ -1,0 +1,485 @@
+{
+  "contractVersion": 1,
+  "sceneId": "splash",
+  "sceneUuid": "c4e72c62-dadd-40ab-85f4-bd397f4ca7f9",
+  "sceneName": "splash",
+  "canvas": {
+    "width": 393,
+    "height": 852
+  },
+  "viewport": {
+    "width": 393,
+    "height": 852
+  },
+  "background": {
+    "type": "image-stretch",
+    "color": "#16213e",
+    "color2": "#0e4a8c",
+    "gradientAngle": 180,
+    "imagePath": "title_bg.png",
+    "imagePaths": [],
+    "tileSize": 64,
+    "tilePad": 0,
+    "imageAlpha": 100,
+    "stretchMode": "cover",
+    "scrollEnabled": false,
+    "scrollDirection": "right",
+    "scrollDuration": 4
+  },
+  "groups": [
+    {
+      "id": "grp-7",
+      "name": "Progress Bar",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-11",
+      "name": "Group",
+      "layerStableIds": []
+    },
+    {
+      "id": "grp-15",
+      "name": "Title_Loading_bar",
+      "widget": {
+        "type": "fill",
+        "key": "loading.prograss",
+        "fill": {
+          "kind": "layer",
+          "id": "loading-bar-png-13"
+        }
+      },
+      "layerStableIds": [
+        "loading-out-png-11",
+        "loading-inner-png-12",
+        "loading-bar-png-13",
+        "text-loading-15"
+      ]
+    }
+  ],
+  "fxGroups": [],
+  "sceneAnimations": [],
+  "layers": [
+    {
+      "stableId": "gamefield-2284",
+      "layerType": "component",
+      "displayName": "GameField",
+      "x": 0,
+      "y": 1,
+      "scale": 0.5,
+      "zIndex": 1,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 780,
+            "height": 1712,
+            "radius": 0,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#9aa5b1",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      }
+    },
+    {
+      "stableId": "title-bg-png-2287",
+      "layerType": "image",
+      "displayName": "title_bg.png",
+      "x": -10,
+      "y": -21,
+      "scale": 1.05,
+      "zIndex": 2,
+      "visual": {
+        "exportPath": "src/assets/title_bg.png",
+        "width": 393,
+        "height": 852
+      }
+    },
+    {
+      "stableId": "title-text-png-2286",
+      "layerType": "image",
+      "displayName": "title_text.png",
+      "x": 28,
+      "y": -9,
+      "scale": 0.28499156829679595,
+      "zIndex": 3,
+      "visual": {
+        "exportPath": "src/assets/title_text.png",
+        "width": 1186,
+        "height": 1240
+      },
+      "effects": [
+        {
+          "type": "css-animation",
+          "source": {
+            "provider": "animate.css",
+            "name": "bounce-in",
+            "className": "animate__bounceIn"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "timing": {
+            "durationMs": 850,
+            "delayMs": 0,
+            "iteration": 1,
+            "loopDelayMs": 600
+          },
+          "params": {
+            "presetId": "bounce-in",
+            "group": "Appear",
+            "phase": "enter",
+            "className": "animate__bounceIn",
+            "baseClass": "animate__animated",
+            "loop": false
+          }
+        }
+      ]
+    },
+    {
+      "stableId": "loading-out-png-11",
+      "layerType": "image",
+      "displayName": "loading_out.png",
+      "x": 85,
+      "y": 740,
+      "zIndex": 4,
+      "visual": {
+        "exportPath": "src/assets/loading_out.png",
+        "width": 220,
+        "height": 39
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "branches": [
+            {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "loading-inner-png-12",
+      "layerType": "image",
+      "displayName": "loading_inner.png",
+      "x": 90,
+      "y": 744,
+      "zIndex": 5,
+      "visual": {
+        "exportPath": "src/assets/loading_inner.png",
+        "width": 210,
+        "height": 30
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "branches": [
+            {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "loading-bar-png-13",
+      "layerType": "image",
+      "displayName": "loading_bar.png",
+      "x": 92,
+      "y": 746,
+      "zIndex": 6,
+      "visual": {
+        "exportPath": "src/assets/loading_bar.png",
+        "width": 207,
+        "height": 26,
+        "style": {
+          "shadow": {
+            "enabled": false,
+            "x": 0,
+            "y": 4,
+            "blur": 8,
+            "color": "#000000",
+            "opacity": 50
+          },
+          "tint": {
+            "mode": "off",
+            "color": "#ff3b30",
+            "strength": 100
+          },
+          "stretch": false,
+          "slice": {
+            "enabled": true,
+            "left": 107,
+            "top": 0,
+            "right": 107,
+            "bottom": 0,
+            "scale": 0.3,
+            "repeat": "stretch"
+          }
+        }
+      },
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "branches": [
+            {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "stableId": "text-loading-15",
+      "layerType": "component",
+      "displayName": "Text_Loading..",
+      "x": 116,
+      "y": 739,
+      "zIndex": 7,
+      "visual": {
+        "model": {
+          "shape": {
+            "type": "rectangle",
+            "width": 160,
+            "height": 40,
+            "radius": 12,
+            "notch": 20,
+            "hollowThickness": 8
+          },
+          "fill": {
+            "type": "none",
+            "color1": "#4a90d9",
+            "color2": "#2e6ab4",
+            "angle": 180,
+            "depthIntensity": 50,
+            "rayCount": 8,
+            "texture": "wood",
+            "textureScale": 120
+          },
+          "border": {
+            "width": 0,
+            "color": "#6bb5ff",
+            "outlineWidth": 0,
+            "outlineColor": "#1e4a80"
+          },
+          "bevel": {
+            "enabled": false,
+            "top": 7,
+            "side": 8,
+            "bottom": 12,
+            "color": "#4a90d9",
+            "softness": 6
+          },
+          "shadows": [
+            {
+              "type": "depth-edge",
+              "enabled": false,
+              "size": 0,
+              "color": "#1e4a80"
+            },
+            {
+              "type": "outer",
+              "enabled": false,
+              "x": 0,
+              "y": 4,
+              "blur": 8,
+              "color": "#000000",
+              "opacity": 30
+            },
+            {
+              "type": "inner",
+              "enabled": false,
+              "x": 0,
+              "y": 1,
+              "blur": 4,
+              "color": "#ffffff",
+              "opacity": 15
+            },
+            {
+              "type": "gloss",
+              "enabled": false,
+              "size": 10,
+              "blur": 8,
+              "color": "#ffffff",
+              "opacity": 45
+            }
+          ],
+          "mask": {
+            "type": "ring-fade",
+            "enabled": false,
+            "innerPct": 28,
+            "outerPct": 76
+          }
+        }
+      },
+      "effects": [
+        {
+          "type": "css-animation",
+          "source": {
+            "provider": "animate.css",
+            "name": "flash",
+            "className": "ui-blink-once"
+          },
+          "enabled": true,
+          "target": "self",
+          "trigger": "mount",
+          "timing": {
+            "durationMs": 1000,
+            "delayMs": 0,
+            "iteration": 1,
+            "loopDelayMs": 0
+          },
+          "params": {
+            "presetId": "flash",
+            "group": "Cute / Attention",
+            "phase": "attention",
+            "className": "ui-blink-once",
+            "baseClass": "animate__animated",
+            "loop": true
+          }
+        }
+      ],
+      "texts": [
+        {
+          "slotIndex": 0,
+          "staticContent": "Loading..",
+          "bindingKey": "loadingMessage",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "fontFamily": "Arial, sans-serif",
+          "color": "#ffffff",
+          "offsetX": 0,
+          "offsetY": 0,
+          "style": {
+            "gradient": {
+              "enabled": false,
+              "color2": "#ffffff",
+              "angle": 180
+            },
+            "stroke": {
+              "width": 2,
+              "color": "#000000"
+            },
+            "depth": {
+              "size": 2,
+              "color": "#000000"
+            },
+            "shadow": {
+              "x": 0,
+              "y": 2,
+              "blur": 4,
+              "color": "#000000",
+              "opacity": 60
+            }
+          }
+        }
+      ],
+      "events": [
+        {
+          "trigger": "click",
+          "eventName": "loading-out-png-11:click",
+          "branches": [
+            {
+              "condition": "story.firstEntry",
+              "targetSceneUuid": "91b7f29b-8b6d-41b7-a08a-99a0a1dfb401",
+              "targetSceneName": "StoryIntro01"
+            },
+            {
+              "condition": "로딩",
+              "targetSceneUuid": "0ad51a82-1069-4948-ad6f-e97422300c6d",
+              "targetSceneName": "Lobby"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

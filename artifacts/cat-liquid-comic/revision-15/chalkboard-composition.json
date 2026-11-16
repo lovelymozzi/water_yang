@@ -1,0 +1,14 @@
+{
+  "source": "pair-01-chalkboard-generated.png",
+  "replacement": "upper-panel-only",
+  "lowerMixingScenePixelsUnchanged": true,
+  "lowerScenePixelsSha256": "0e1a83e72d13be2e2486f4979d9e937f6fcc0fc23c76c774c55981e98890d398",
+  "originalGutter": [
+    506,
+    513
+  ],
+  "editGutter": [
+    506,
+    512
+  ]
+}

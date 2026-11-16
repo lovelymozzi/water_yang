@@ -1,0 +1,39 @@
+{
+  "scene": 6,
+  "pair": 3,
+  "inputCrop": [
+    360,
+    0,
+    920,
+    373
+  ],
+  "pairYOffset": 515,
+  "expressionEllipses": [
+    [
+      427,
+      149,
+      535,
+      213
+    ],
+    [
+      539,
+      146,
+      651,
+      212
+    ],
+    [
+      659,
+      163,
+      781,
+      229
+    ]
+  ],
+  "featherPx": 1.2,
+  "actualChangedPairBounds": [
+    425,
+    658,
+    784,
+    747
+  ],
+  "preserved": "Scene5 and all pixels outside face-mask support are original. Body proportions, paws, coat colors, scientist, portal and playroom unchanged."
+}

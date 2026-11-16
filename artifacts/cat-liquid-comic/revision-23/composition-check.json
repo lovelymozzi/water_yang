@@ -1,0 +1,82 @@
+{
+  "scene": 5,
+  "inputCrop": [
+    280,
+    0,
+    786,
+    506
+  ],
+  "maskPolygonIn1024Crop": [
+    [
+      126,
+      515
+    ],
+    [
+      335,
+      505
+    ],
+    [
+      350,
+      636
+    ],
+    [
+      430,
+      705
+    ],
+    [
+      580,
+      753
+    ],
+    [
+      742,
+      797
+    ],
+    [
+      844,
+      861
+    ],
+    [
+      899,
+      956
+    ],
+    [
+      812,
+      986
+    ],
+    [
+      655,
+      973
+    ],
+    [
+      510,
+      970
+    ],
+    [
+      350,
+      985
+    ],
+    [
+      140,
+      966
+    ],
+    [
+      108,
+      856
+    ],
+    [
+      115,
+      690
+    ]
+  ],
+  "featherPx": 3,
+  "actualChangedPairBounds": [
+    330,
+    247,
+    726,
+    490
+  ],
+  "outsideMaskPixelsUnchanged": true,
+  "scientistHeadHandsCatHeadAndOtherCatsPreserved": true,
+  "scene6PixelsPreserved": true,
+  "edit": "Finite mostly vertical submerged torso, pelvis, two short hindlegs with planted paws; old sideways snake shape replaced with stream bed."
+}

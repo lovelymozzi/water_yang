@@ -1,0 +1,90 @@
+{
+  "kind": "http-resource-consistency-not-browser-rendering",
+  "revision": 14,
+  "checks": [
+    {
+      "path": "web/index.html",
+      "httpStatus": 200,
+      "sha256": "125b73f568aba14d675512add3a984ade0bd3b85143f893c047cae8ffd4ecb99",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/story-intro.js",
+      "httpStatus": 200,
+      "sha256": "7a237fb6e9d1789dcee010a9576f90d5df024e09b57dd90090522e1ba8828054",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/story-intro.css",
+      "httpStatus": 200,
+      "sha256": "ab5715abf993c61f88974381bdb0b89f2e66ab7b6dcf7798b21f640c8161856c",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "httpStatus": 200,
+      "sha256": "e4cb7b04789278bdb2ae9277e473f00aa667afad00f0d0bd7b9c3e3dc519c9e5",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "httpStatus": 200,
+      "sha256": "18c35b611314b7bf0dd25154b0222274aaf1d56def98a59db4e0946bd513ee9f",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "httpStatus": 200,
+      "sha256": "15efbede0978c1d5a08e9010cc6af4506d31f7ea4e23bb9577dcb6f13df2d0e0",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_01.webp",
+      "httpStatus": 200,
+      "sha256": "750cb88a48dc54d62de1d1fc1f0be3849c968d8940bb3ac071455b3792f6ec28",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_02.webp",
+      "httpStatus": 200,
+      "sha256": "d8135624accf88edb146361dbf281b0a47bdd4d709df2f69bb2e6208cfd9195e",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_03.webp",
+      "httpStatus": 200,
+      "sha256": "31973bf35070f2aa5c7c04126c0541d4e49d2760ac245c5a69dbd3ad7637d19a",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_04.webp",
+      "httpStatus": 200,
+      "sha256": "2309edfc77f721736cdb3539c6da26f42570c7ee8e8735e649a0c90ea81d57a7",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_05.webp",
+      "httpStatus": 200,
+      "sha256": "7ca9ab4aa5279960aeaad9cfabce9b78c83cb6790e899af52e4d78dfb21acb79",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_06.webp",
+      "httpStatus": 200,
+      "sha256": "b8aa72d27450005a8b175693c605fb331bfa86ecd5f835ae9e03351b463a43d4",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_07.webp",
+      "httpStatus": 200,
+      "sha256": "6b17c08b12a885434c8b5490c69cebdf20fb0ebd891c4670821071b766b540ca",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_08.webp",
+      "httpStatus": 200,
+      "sha256": "0cf366d29ca41fc5ccac39ea2671e96f9926834bfb2b67b74007ed7d093b3e2f",
+      "matchesWorkspace": true
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+[
+  {
+    "scene": 1,
+    "inputCrop": [
+      0,
+      142,
+      550,
+      508
+    ],
+    "pasteRegions": [
+      [
+        87,
+        313,
+        244,
+        467
+      ],
+      [
+        240,
+        342,
+        521,
+        504
+      ]
+    ],
+    "actualChangedBounds": [
+      84,
+      310,
+      525,
+      508
+    ],
+    "compositeFeatherPx": 1.5
+  },
+  {
+    "scene": 3,
+    "inputCrop": [
+      625,
+      0,
+      1024,
+      266
+    ],
+    "pasteRegions": [
+      [
+        678,
+        13,
+        800,
+        124
+      ],
+      [
+        908,
+        101,
+        1024,
+        210
+      ]
+    ],
+    "actualChangedBounds": [
+      675,
+      10,
+      1024,
+      214
+    ],
+    "compositeFeatherPx": 1.5
+  },
+  {
+    "scene": 4,
+    "inputCrop": [
+      535,
+      280,
+      815,
+      420
+    ],
+    "pairYOffset": 514,
+    "pasteRegion": [
+      554,
+      795,
+      811,
+      933
+    ],
+    "compositeFeatherPx": 1.0,
+    "scope": "Orange cat fur solid orange; no white/striped coat patches."
+  },
+  {
+    "scene": 5,
+    "inputCrop": [
+      535,
+      235,
+      815,
+      375
+    ],
+    "pairYOffset": 0,
+    "pasteRegion": [
+      547,
+      236,
+      811,
+      374
+    ],
+    "compositeFeatherPx": 1.0,
+    "scope": "Orange cat fur solid orange; no white/striped coat patches."
+  }
+]

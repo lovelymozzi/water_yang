@@ -1,0 +1,133 @@
+{
+  "revision": 25,
+  "offlineOnly": true,
+  "preservedFirstSeven": [
+    {
+      "number": 1,
+      "kind": "art",
+      "sha256": "b874f3760af00f2ce97457f03575bd845403cc05c964499970f4edafe700d1f6"
+    },
+    {
+      "number": 1,
+      "kind": "cardArt",
+      "sha256": "00f25fa7fd32206b2cc98e3b7139af21927933e571e21d1ed93ddbd84ac5ee46"
+    },
+    {
+      "number": 2,
+      "kind": "art",
+      "sha256": "bc2bdcfe22a454c20c8caf388048a690c8a61c722e5a8c7daa111bf89623987f"
+    },
+    {
+      "number": 2,
+      "kind": "cardArt",
+      "sha256": "cd74b136093a5d083fb890295d600cc0e0305b3fbb0cda4def211a3e4ed2a1a4"
+    },
+    {
+      "number": 3,
+      "kind": "art",
+      "sha256": "362005eb8ce191e8eddbc4665acf311cc702200f3df401257d8cddd765d7cf12"
+    },
+    {
+      "number": 3,
+      "kind": "cardArt",
+      "sha256": "8792e377e07613bd6081fc180affe8de44ea3a5638ff6c09e3e17f17f78aaaec"
+    },
+    {
+      "number": 4,
+      "kind": "art",
+      "sha256": "f2e6e8cb119792803db9b10d5fdad1c03bc408376929f93228c500ed3dda9e1b"
+    },
+    {
+      "number": 4,
+      "kind": "cardArt",
+      "sha256": "94ef9965f390fbfa7bbd28d9c8260f26859854ffb62d9db9b41a72aceebf9e6a"
+    },
+    {
+      "number": 5,
+      "kind": "art",
+      "sha256": "eb52ecf4ce3f5ead67bd61b201bbce71c355364c90fe447eac74b0d13cc1ba64"
+    },
+    {
+      "number": 5,
+      "kind": "cardArt",
+      "sha256": "dc6ee905912fde54b693fddf63ce83b2f0a64fa2dc63968e15be441d88599b67"
+    },
+    {
+      "number": 6,
+      "kind": "art",
+      "sha256": "486709519b5f4139d4abef7ea99db988dfb09f76c7196da46e5fdf70e10c38aa"
+    },
+    {
+      "number": 6,
+      "kind": "cardArt",
+      "sha256": "5819f715bac18c41db4e5cab4379bacab5e9b78be05d3e3495e0d0f2b13f68d0"
+    },
+    {
+      "number": 7,
+      "kind": "art",
+      "sha256": "2656c828591fc6d1092266d4fcf38cf51a369ab396ade31348db8d384ed33549"
+    },
+    {
+      "number": 7,
+      "kind": "cardArt",
+      "sha256": "16b8aef33e0eb7b3cff7014bcc2095cd6782f3283175886068fe510d6f2863f9"
+    }
+  ],
+  "contractChanges": [
+    {
+      "path": ".ui-editor/scenes/StoryIntro02.scene.json",
+      "onlyChange": "scene8-card-path"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "onlyChange": "scene8-card-path"
+    }
+  ],
+  "http": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "workspaceBytesMatch": true
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "workspaceBytesMatch": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_conclusion_panel_08.webp",
+      "status": 200,
+      "workspaceBytesMatch": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_conclusion_card_08.webp",
+      "status": 200,
+      "workspaceBytesMatch": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_conclusion_page_02.webp",
+      "status": 200,
+      "workspaceBytesMatch": true
+    }
+  ],
+  "tests": {
+    "story_intro_check": "pass",
+    "ui_bare_asset_paths_check": "pass",
+    "splash_cache_check": "pass"
+  },
+  "scene7AndGutterPixelExact": true,
+  "publish": {
+    "errors": 0,
+    "warnings": 8,
+    "newEdges": 0
+  },
+  "contentReview": {
+    "liquid!!!": "visually-read-exactly-three-exclamation-marks",
+    "Rheology": "visually-read",
+    "Deborah number": "visually-read",
+    "diagram": "cat-anatomy-equals-cyan-liquid-beaker",
+    "professor": "writing-chalk-final-exclamation-confident-face",
+    "finalCard": "offline-inspected",
+    "actualGameVisualCheck": "user"
+  }
+}

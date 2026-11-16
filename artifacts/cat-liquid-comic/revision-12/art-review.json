@@ -1,0 +1,40 @@
+{
+  "scope": "manual inspection of final generated local images and offline layout; no live-game/browser verification",
+  "professor": "all 8 panels: small childlike proportions, white short bob, separate white/pink cat-ear headband on dark band, thick red ROUND eyeglasses with transparent lenses and visible amber eyes, white lab coat, lilac shirt/navy trousers/brown shoes. No opaque white lenses, head goggles, measuring calipers or mechanic outfit.",
+  "panels": [
+    {
+      "number": 1,
+      "observed": "writes notebook with blue pen beside relaxed cream round-jar and orange rectangular-tub cats. Floor ring is dark; cable and switch establish device."
+    },
+    {
+      "number": 2,
+      "observed": "presses switch; cable glows blue into floor ring. Both feet still on solid floor beside opening."
+    },
+    {
+      "number": 3,
+      "observed": "surprised while stepping/slipping into same active blue ring, notebook held, cable/switch/room/container cats retained."
+    },
+    {
+      "number": 4,
+      "observed": "in outdoor forest, writes observations beside green tall-cylinder, orange clear-tub, blue fishbowl cats. Attached/tucked paws visible through clear vessels, no glass penetration."
+    },
+    {
+      "number": 5,
+      "observed": "pushes red glasses, notebook has colored cats above matching circles. Outdoor green/orange/blue cats out of vessels; green cat tests matching ground ring. Continuous torsos and shoulder/hip legs."
+    },
+    {
+      "number": 6,
+      "observed": "records discovery; three cats look through flat green opening into familiar room with terracotta sofa, cream round-jar cat and orange rectangular-tub cat."
+    },
+    {
+      "number": 7,
+      "observed": "stands smiling, notebook under arm, open hand guides three matching-color cats toward green/orange/blue floor holes."
+    },
+    {
+      "number": 8,
+      "observed": "notebook under arm, relaxed small smile and bent-elbow gentle goodbye wave. Each matching cat dips into its own hole with one tail and two connected padded hind paws. No panic/reach/dropped papers."
+    }
+  ],
+  "corrections": "original pair02 world container colors corrected; pair03/04 recreated with forest/game-color reference to remove lab backdrop and wrong photo-tabby colors. Initial successes preserved as *-initial-generated.png; original response image paths are generation-time paths, final files now use correction response.",
+  "ui": "bottom skip and next ▶ share original events; no new edge or interaction added. Frame speed lines moved to actual accident panel3."
+}

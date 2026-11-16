@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-15",
+  "scope": "three more offline title concepts; preserve revision02A style; two scientist scenes",
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "low",
+  "styleMaster": "artifacts/title-screen-concepts/revision-02/a-lobby-toon-generated.png",
+  "reference": "style-and-scientist-reference.jpg",
+  "scientistIdentity": "existing selected child scientist, white bob/headband/clear round brown glasses/tan skin/red scarf/white coat/teal bag",
+  "concepts": [
+    {
+      "slug": "a-lazy-bend",
+      "name": "둥둥 쉼터"
+    },
+    {
+      "slug": "b-observation-notes",
+      "name": "박사의 관찰 노트"
+    },
+    {
+      "slug": "c-splash-encounter",
+      "name": "풍덩! 첫 만남"
+    }
+  ],
+  "gameModified": false
+}

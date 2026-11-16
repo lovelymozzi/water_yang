@@ -1,18 +1,25 @@
-[gd_resource type="ShaderMaterial" format=3]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://8aqeialhy66q"]
 
-[ext_resource type="Shader" path="res://scripts/lobby_ground_depth_fade.gdshader" id="1_ground"]
-[ext_resource type="Shader" path="res://scripts/tree_outline.gdshader" id="2_outline"]
-[ext_resource type="Texture2D" path="res://resources/terrain/jam3d/wall1_lobby.png" id="3_texture"]
+[ext_resource type="Shader" uid="uid://m70p6h741yf" path="res://scripts/lobby_ground_depth_fade.gdshader" id="1_ground"]
+[ext_resource type="Shader" uid="uid://cr5b0ji5t3bo0" path="res://scripts/tree_outline.gdshader" id="2_outline"]
+[ext_resource type="Texture2D" uid="uid://uvf0ed86k5il" path="res://resources/terrain/jam3d/wall1_lobby.png" id="3_texture"]
 
 [sub_resource type="ShaderMaterial" id="GrassOutline"]
+render_priority = 0
 shader = ExtResource("2_outline")
 shader_parameter/outline_color = Color(0.3588, 0.4836, 0.2496, 1)
 shader_parameter/outline_width = 0.0015
 shader_parameter/grass_wind_strength = 0.08
+shader_parameter/grass_wind_time = 0.0
 shader_parameter/grass_wind_use_engine_time = true
+shader_parameter/grass_shadow_enabled = false
+shader_parameter/grass_shadow_inverse = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/grass_shadow_size = Vector2(1, 1)
+shader_parameter/grass_shadow_tint = Color(1, 1, 1, 1)
 
 [resource]
 resource_name = "Gameplay grass matching lobby lawn palette"
+render_priority = 0
 next_pass = SubResource("GrassOutline")
 shader = ExtResource("1_ground")
 shader_parameter/albedo_texture = ExtResource("3_texture")
@@ -20,7 +27,22 @@ shader_parameter/albedo_uv_scale = Vector2(1, 1)
 shader_parameter/albedo_tint = Color(1, 0.92, 1, 1)
 shader_parameter/grass_use_texture_color = true
 shader_parameter/grass_texture_region = Vector4(0.135461, 0.135866, 0.452677, 0.452678)
+shader_parameter/grass_world_uv = false
+shader_parameter/cliff_surface = false
+shader_parameter/underwater_color = Color(0.03, 0.43, 0.49, 1)
+shader_parameter/cliff_water_fade_distance = 0.5
+shader_parameter/underwater_fade_strength = 1.0
 shader_parameter/ground_plane_normal = true
 shader_parameter/grass_wind_strength = 0.08
+shader_parameter/grass_wind_time = 0.0
 shader_parameter/grass_wind_use_engine_time = true
+shader_parameter/grass_shadow_enabled = false
+shader_parameter/grass_shadow_inverse = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/grass_shadow_size = Vector2(1, 1)
+shader_parameter/grass_shadow_tint = Color(1, 1, 1, 1)
+shader_parameter/water_level = 0.0
+shader_parameter/shoreline_fade_height = 0.55
+shader_parameter/deep_fade_distance = 2.6
 shader_parameter/water_tint_strength = 0.0
+shader_parameter/shallow_water_color = Color(0.12, 0.62, 0.82, 1)
+shader_parameter/deep_water_color = Color(0.035, 0.23, 0.46, 1)

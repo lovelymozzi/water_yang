@@ -1,0 +1,24 @@
+{
+  "kind": "offline-generated-art-inspection",
+  "actualBrowserOrGameVisualTest": false,
+  "observations": {
+    "scene2": "Green tub cat has modest paws, coherent folded hindlegs and a distinct tapered tail; lab round-jar blue cat retained. Other laboratory story elements remain.",
+    "scene3": "Small cream-cat area revised to reduce inflated dangling paw/tail masses. Original explosion/professor outside patch preserved.",
+    "scene4and5": "Glass cylinders/jars/tubs removed. Seated green and loafing orange/blue cats rest directly on ground; former vessel locations filled with natural scene paving/vegetation.",
+    "heldCat": "Chest-supported gravity-long green cat and relaxed eyes retained; no pulling experiment or nasal sleep bubbles.",
+    "unchanged": "Scene1 and scene6 source pixels preserved; source scenes7/8 unchanged. Approved paw icon matches.",
+    "interaction": "Passing Node tests cover idle/anywhere panel reveal, four-cut next-only page/lobby gates, per-cut SFX, skip, cleanup and saved completion."
+  },
+  "checks": {
+    "story_intro_check": "passed",
+    "ui_bare_asset_paths_check": "passed",
+    "splash_cache_check": "passed",
+    "httpResources": 14,
+    "httpMatchesWorkspace": true,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "storyEdgesAdded": 0,
+    "storyEdgesRemoved": 0
+  },
+  "limit": "Offline source art and assembled preview only; actual browser/game visual confirmation is for the user. Stylized illustration, not a veterinary anatomical diagram."
+}

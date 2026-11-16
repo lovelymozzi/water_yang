@@ -1,0 +1,14 @@
+{
+  "source": "pair-03-playroom-generated.png",
+  "replacement": "lower-panel-only",
+  "upperScenePreservedPixelsSha256": "89ec4669d3cf7763069162c0e94384ec7d77b8b887c4df2625672813d4bb38f9",
+  "upperScenePixelsUnchanged": true,
+  "oldGutter": [
+    507,
+    514
+  ],
+  "editGutter": [
+    506,
+    514
+  ]
+}

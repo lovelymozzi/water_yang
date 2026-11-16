@@ -1,0 +1,185 @@
+{
+  "revision": 13,
+  "requests": 11,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill default generate_image.py through Flava",
+  "quality": "high",
+  "automaticRetries": 0,
+  "failedRequests": 0,
+  "scope": "Includes all intermediate narrative/personality/lab/relocation edits and the two nasal sleep bubbles; final curious facial expressions live in revision14.",
+  "totals": {
+    "input_text_tokens": 8743,
+    "input_image_tokens": 13152,
+    "output_image_tokens": 19316,
+    "estimated_cost_usd": "0.3642055",
+    "estimated_cost_krw": "509.89",
+    "usd_to_krw_rate": 1400
+  },
+  "responses": [
+    {
+      "response": "pair-01-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-01-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1801,
+        "input_text_tokens": 777,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0323785",
+        "estimated_cost_krw": "45.33",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-01-laboratory-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-01-laboratory-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2033,
+        "input_text_tokens": 1009,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0329585",
+        "estimated_cost_krw": "46.14",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-01-personality-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-01-personality-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2167,
+        "input_text_tokens": 759,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0338695",
+        "estimated_cost_krw": "47.42",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-02-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-02-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1684,
+        "input_text_tokens": 660,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032086",
+        "estimated_cost_krw": "44.92",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-02-laboratory-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-02-laboratory-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2002,
+        "input_text_tokens": 978,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032881",
+        "estimated_cost_krw": "46.03",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-02-personality-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-02-personality-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2156,
+        "input_text_tokens": 748,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.033842",
+        "estimated_cost_krw": "47.38",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-03-laboratory-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-03-laboratory-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1789,
+        "input_text_tokens": 765,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0323485",
+        "estimated_cost_krw": "45.29",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-03-personality-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-03-personality-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2112,
+        "input_text_tokens": 704,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.033732",
+        "estimated_cost_krw": "47.22",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "pair-04-personality-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/pair-04-personality-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2094,
+        "input_text_tokens": 686,
+        "input_image_tokens": 1408,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.033687",
+        "estimated_cost_krw": "47.16",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "relocated-lift-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/relocated-lift-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2446,
+        "input_text_tokens": 1070,
+        "input_image_tokens": 1376,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.034519",
+        "estimated_cost_krw": "48.33",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "response": "sleep-bubbles-generation.json",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-13/sleep-bubbles-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1611,
+        "input_text_tokens": 587,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.0319035",
+        "estimated_cost_krw": "44.66",
+        "usd_to_krw_rate": 1400
+      }
+    }
+  ]
+}

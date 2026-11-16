@@ -1,0 +1,23 @@
+{
+  "kind": "offline-generated-source-and-composite-inspection",
+  "browserGameVisualTest": false,
+  "observations": [
+    "Scene3 formerly folded rear leg now extends down-left with readable knee, calf, ankle and smaller boot. Original upper body and near boot retained.",
+    "Removed original test-tube silhouette where new leg crosses it, avoiding leftover fragment.",
+    "Scene4 cats have longer shoulder-to-pelvis torsos, same head/paw sizes and relaxed belly-up poses. Four attached paws and one tapered tail per cat.",
+    "Original scene4 scientist pixels retained; other6 raw/card scenes byte-identical, including scene6 excited expressions.",
+    "Final framed scene strip and enlarged scientist before/after inspected offline."
+  ],
+  "tests": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "gitDiffCheck": "passed",
+    "httpResources": 7,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  },
+  "limit": "Offline artwork inspection only; actual game/browser visuals are assigned to user by AGENTS."
+}

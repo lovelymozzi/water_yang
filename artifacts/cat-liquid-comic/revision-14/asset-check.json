@@ -1,0 +1,328 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        504
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_01.webp",
+      "sourceSha256": "85ca6dd3700df74989e23d81aff4733e46afdd8df022d9ecce427cddd6ab5507",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 2,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        513,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_02.webp",
+      "sourceSha256": "9c9c0cdbce7abfdb0c2afad09e85e29c22cc6828fc723ff326d9c6e2b64e1dab",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 3,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        540
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_03.webp",
+      "sourceSha256": "385f0a0980b9ae9a2e8b2949207e2d3272f37cd5095d10d6c8cdbc8a9ddd6d24",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 4,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        546,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_04.webp",
+      "sourceSha256": "efe758b09b614c75dcee6318f9c5f00e0064b462a68e67e56fcb0d9a87dbff87",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 5,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        504
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_05.webp",
+      "sourceSha256": "ca6b83893c433d3ff7f6d91ec67a728bbd9e213896c0d4d1eb58d05ff2ce7d6b",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 6,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        515,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_06.webp",
+      "sourceSha256": "5c059203d7987a8217dbc08a3be2952e080d505a3e4bd43650d2e6182d14ab1e",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 7,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        506
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_07.webp",
+      "sourceSha256": "c29929a2c807aa6b80bf83383ed1f324c216bed6720d6c56b5ac6653c7b5b41b",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 8,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        516,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_curious_panel_08.webp",
+      "sourceSha256": "6a76d68d87da25909e1841e67b8cc8b18b14b8458092850e08e2d677fe7a2d88",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "750cb88a48dc54d62de1d1fc1f0be3849c968d8940bb3ac071455b3792f6ec28"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "d8135624accf88edb146361dbf281b0a47bdd4d709df2f69bb2e6208cfd9195e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "31973bf35070f2aa5c7c04126c0541d4e49d2760ac245c5a69dbd3ad7637d19a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2309edfc77f721736cdb3539c6da26f42570c7ee8e8735e649a0c90ea81d57a7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "7ca9ab4aa5279960aeaad9cfabce9b78c83cb6790e899af52e4d78dfb21acb79"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "b8aa72d27450005a8b175693c605fb331bfa86ecd5f835ae9e03351b463a43d4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "6b17c08b12a885434c8b5490c69cebdf20fb0ebd891c4670821071b766b540ca"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_curious_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "0cf366d29ca41fc5ccac39ea2671e96f9926834bfb2b67b74007ed7d093b3e2f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ],
+  "artAreaRatio": 0.8831
+}

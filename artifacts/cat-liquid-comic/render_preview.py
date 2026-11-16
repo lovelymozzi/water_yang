@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 artifact_dir = Path(__file__).resolve().parent
 root = artifact_dir.parents[1]
 story = json.loads((root / 'resources/story/cat-liquid-intro.json').read_text())
-assert story['revision'] == 8 and story['textMode'] == 'none'
+assert story['revision'] >= 8 and story['textMode'] == 'none'
 output = artifact_dir / f'revision-{story["revision"]:02d}'
 output.mkdir(exist_ok=True)
 motion = story['motion']
@@ -87,7 +87,7 @@ for page_index, page in enumerate(story['pages'], 1):
                        'sourceArt': panel['art'], 'sourceSha256': hashlib.sha256((root / panel['art']).read_bytes()).hexdigest(),
                        'outline': frame_style['outlines'][slot], 'captionField': False})
     raw_page.save(root / page['art'], 'WEBP', quality=95, method=6)
-    # Offline demonstration only: the real game waits for next after each cut.
+    # Offline layout demonstration; the game also supports anywhere taps and idle progression.
     for index in range(4):
         board = base.convert('RGBA')
         for slot in range(index + 1):
@@ -97,7 +97,14 @@ for page_index, page in enumerate(story['pages'], 1):
         draw = ImageDraw.Draw(board)
         for action, box in story['controlLayout'].items():
             x, y = (box['x'] + box['width'] / 2) * scale, (box['y'] + box['height'] / 2) * scale
-            draw.text((x, y), action, font=font, anchor='mm', fill='white', stroke_width=2, stroke_fill='#225D93')
+            label_x = x + (box['labelOffsetX'] * scale if action == 'next' else 0)
+            draw.text((label_x, y), action, font=font, anchor='mm', fill='white', stroke_width=2, stroke_fill='#225D93')
+            if action == 'next':
+                icon = box['icon']
+                cx, cy = x + icon['offsetX'] * scale, y + icon['offsetY'] * scale
+                half = icon['size'] * scale / 2
+                draw.polygon([(cx - half * 0.6, cy - half), (cx + half * 0.7, cy),
+                              (cx - half * 0.6, cy + half)], fill='white', outline='#225D93', width=scale)
             if action == 'skip':
                 half = draw.textlength(action, font=font) / 2
                 draw.line((x - half, y + 28, x + half, y + 28), fill='white', width=2)

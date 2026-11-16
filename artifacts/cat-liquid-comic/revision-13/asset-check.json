@@ -1,0 +1,328 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        505
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_01.webp",
+      "sourceSha256": "67acfcb1653a56c49b4e6018d8ab588d7debf0acb41ecdb7a68fb1779d752bce",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 2,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        513,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_02.webp",
+      "sourceSha256": "61510a74cab438986ac43101726a87773a3f553ca9ce5a1ba49499d471e84526",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 3,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        541
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_03.webp",
+      "sourceSha256": "48aada2f2926aa8a3357bda81f2a9c2e55e68fd4cdd7da9148f5d3e263ce5434",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 4,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        546,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_04.webp",
+      "sourceSha256": "585d98d0ffb25bd7ed25d0fe7665127db8b084258565a5a1d54257cceb9fb2bd",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 5,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        503
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_05.webp",
+      "sourceSha256": "24ce8dd683ef16f2a7a370a46a0d38b7c0e3b861f155e7343e740ea2ca9b1c8c",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 6,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        515,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_06.webp",
+      "sourceSha256": "745c72b430d8b77d637414a6b0f1b1f2f0d16f0a1b95ff0c9dfb9b53b780e685",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 7,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        506
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_07.webp",
+      "sourceSha256": "f672befdac90239cb2eb8a5e8d1bbc0eb8e49c5a08833db025e7aac7f440c32a",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 8,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        516,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_eccentric_panel_08.webp",
+      "sourceSha256": "2719a8d1c31340978da4a5027ecfd9104bf9d7e14e9bf84c1c7f1063a69ad983",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "289a4bfec2498c6c39cfc27903a85aa374816dc4b9d3c029075d576f24f3ed08"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "3c9705006767a4da86cc81b768143097916d356b3c50a7758acf661bdf5635ec"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "4d835390a4152e47f239423251696fd3dc924196747208eee7264980ba69f1b6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "f4fd5f742ce5ad67ef9ccbd4e527d147a9e12a755bfe54571efbfd1c721d578c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "0e6523f02c9db42ae9175b9209bcc271a1992346799761043197916fbc653dcb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2ac826952a476b028ae6c74ce6e4a771109d8b3db0b999533a2424012922f498"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "2c2604e60ae3c8c48fb729b9c4409437ce0d7c2d19049b487f948b130080282d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "8a3eee199599346e1681cb3ff401f9f13fe2627bc56549ccaa1f6a775edbbdc8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ],
+  "artAreaRatio": 0.8831
+}

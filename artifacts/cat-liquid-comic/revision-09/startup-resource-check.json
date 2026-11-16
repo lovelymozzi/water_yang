@@ -1,0 +1,128 @@
+{
+  "scope": "HTTP resource checks only; no game/browser rendering performed",
+  "responses": [
+    {
+      "path": "web/index.html",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "125b73f568aba14d675512add3a984ade0bd3b85143f893c047cae8ffd4ecb99"
+    },
+    {
+      "path": "web/story-intro.js",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "7a237fb6e9d1789dcee010a9576f90d5df024e09b57dd90090522e1ba8828054"
+    },
+    {
+      "path": "web/story-intro.css",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "ab5715abf993c61f88974381bdb0b89f2e66ab7b6dcf7798b21f640c8161856c"
+    },
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "bfec09f5ccd713fd09b5e48de808b9b2820c3e9de973afd110bcaf0f66dba1cf"
+    },
+    {
+      "path": "web/ui/scenes-index.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "8cac53d2bea402c727036cd2dae27464e8ea4065f23053709cdec0e15d261a7f"
+    },
+    {
+      "path": "web/ui/scene-flow.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "cfc38ef4ce64987e99cdd0fe83f68db06bf6340be2b2f379d4dd2736853b96fd"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "5e233e28b74dad6828ef0686839500bebc907125fa43a18c316561ff8ab245b0"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "184025d8cbf026b6e050bbf202c7ba20b94120faba268389a1b8b2e7edd5c0c4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "cae0da86431bc4d949731e38b5374815c5baa449f9a8179d5b1bb11c35e32686"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "1901cf3973872b6c9fdd219948cab80b5fdcc11a7e644866b4766ac52b3c3cca"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "fb3df86438312ba92ebfdf45166a7449003c0ebc5c26cf03dfe54e32b75be4a0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "016832ba16050af6d3b055ad414e45fef34ac614289edb0e2d03eb0c4c22940a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "0d52e231e6c6c064f903a10c502fef826d965e7a81b632d151d027986faf87d5"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "aedecc02b91fea4d44466bbf2b5d3ed02049b189e7d55c6eb36cd2a43f2a6aaa"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_07.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "6a68b62397ba52eb6c0a62e6dafe1c09d15df0a2f02d7122523cbccd2b415f7d"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_floor_card_08.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "94dedf619f687ad09f3ee78652c97a3ab752f3600797890ca24ef85e6a964e28"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    },
+    {
+      "path": "web/index.js",
+      "status": 200,
+      "contentType": "text/javascript",
+      "bytes": 279815,
+      "matchesWorkspaceSize": true
+    },
+    {
+      "path": "web/index.wasm",
+      "status": 200,
+      "contentType": "application/wasm",
+      "bytes": 39514754,
+      "matchesWorkspaceSize": true
+    },
+    {
+      "path": "web/index.pck",
+      "status": 200,
+      "contentType": "application/octet-stream",
+      "bytes": 46984872,
+      "matchesWorkspaceSize": true
+    }
+  ]
+}

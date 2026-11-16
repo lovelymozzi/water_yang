@@ -1,0 +1,162 @@
+{
+  "scene3": {
+    "inputCrop": [
+      450,
+      130,
+      830,
+      510
+    ],
+    "maskPolygonIn1024Crop": [
+      [
+        345,
+        402
+      ],
+      [
+        409,
+        390
+      ],
+      [
+        478,
+        400
+      ],
+      [
+        520,
+        423
+      ],
+      [
+        535,
+        452
+      ],
+      [
+        522,
+        491
+      ],
+      [
+        509,
+        520
+      ],
+      [
+        479,
+        550
+      ],
+      [
+        438,
+        547
+      ],
+      [
+        405,
+        566
+      ],
+      [
+        367,
+        606
+      ],
+      [
+        337,
+        646
+      ],
+      [
+        302,
+        686
+      ],
+      [
+        247,
+        709
+      ],
+      [
+        202,
+        705
+      ],
+      [
+        179,
+        675
+      ],
+      [
+        185,
+        634
+      ],
+      [
+        218,
+        585
+      ],
+      [
+        251,
+        544
+      ],
+      [
+        287,
+        505
+      ],
+      [
+        307,
+        468
+      ],
+      [
+        322,
+        431
+      ]
+    ],
+    "featherPx": 2,
+    "actualChangedPairBounds": [
+      516,
+      274,
+      649,
+      415
+    ],
+    "outsideMaskPixelsUnchanged": true,
+    "upperBodyAndFrontBootPreserved": true,
+    "oldFlaskCleanupMask": [
+      [
+        236,
+        561
+      ],
+      [
+        319,
+        551
+      ],
+      [
+        360,
+        735
+      ],
+      [
+        273,
+        765
+      ]
+    ]
+  },
+  "scene4": {
+    "generationGutterRows": [
+      508,
+      513
+    ],
+    "catWaterMaskBounds": [
+      [
+        405,
+        179,
+        655,
+        351
+      ],
+      [
+        660,
+        190,
+        940,
+        348
+      ],
+      [
+        716,
+        291,
+        1024,
+        509
+      ]
+    ],
+    "featherPx": 3,
+    "actualChangedLocalBounds": [
+      397,
+      172,
+      1024,
+      510
+    ],
+    "scientistPixelsPreserved": true,
+    "otherSceneUpperPanelNotUsed": true
+  }
+}

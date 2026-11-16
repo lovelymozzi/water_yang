@@ -1,0 +1,25 @@
+{
+  "artStyle": "selected 2026-11-15 18:05:36 user screenshot and revision09 pair01 soft dimensional game art",
+  "proportion": "small childlike girl professor, compact three-head game body and large visible eyes",
+  "hair": "white short rounded bob with piecey bangs",
+  "headAccessory": "one costume cat-ear headband, no goggles/red hair sticks/ribbons",
+  "glasses": "thick red circular plastic/acetate frames, CLEAR lenses, visible amber eyes; no white glare",
+  "outfit": "white science lab coat, muted lilac shirt, navy cropped trousers, brown shoes",
+  "action": "observing and writing paper notes with blue pen; occasionally pushes glasses; no measuring tools",
+  "plot": "observes -> explicitly activates switch/cable/floor device -> consequence/accident -> observes cats in new world -> finds color match -> verifies human destination -> intentionally guides -> calmly waves goodbye",
+  "preserved": "container-filling cat postures, attached/tucked feline limbs, horizontal floor portals, wordless panels, skip and next ▶",
+  "unselected": "revision11 adult appearance and opaque lenses were superseded while requests were in flight; those files were never connected to game",
+  "firstPairObserved": "white rounded bob; white/pink cat-ear headband on dark band; chunky red round frames, clear lenses and visible amber eyes; small chibi body; white coat; writing blue pen; no calipers; dormant ring then cable-lit active ring, feet outside aperture",
+  "narrativeOrder": [
+    "observe-record",
+    "activate-switch-and-cable",
+    "accidental-descent-consequence",
+    "observe-cats-in-other-world",
+    "discover-color-match",
+    "verify-human-room",
+    "guide-cats-intentionally",
+    "satisfied-wave-goodbye"
+  ],
+  "defaultFinalAssets": "story_cat_liquid_professor_*",
+  "ui": "skip at lower left; next ▶ at lower right; existing flow and interaction unchanged"
+}

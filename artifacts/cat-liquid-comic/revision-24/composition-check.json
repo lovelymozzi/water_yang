@@ -1,0 +1,72 @@
+{
+  "observedSeparatorRows": [
+    510,
+    513
+  ],
+  "separatorLightPixelCounts": [
+    964,
+    1024,
+    1024,
+    1024
+  ],
+  "edits": [
+    {
+      "scene": 4,
+      "maskRegions": [
+        [
+          505,
+          143,
+          657,
+          280
+        ],
+        [
+          680,
+          167,
+          823,
+          297
+        ],
+        [
+          870,
+          262,
+          1024,
+          418
+        ]
+      ],
+      "featherPx": 2,
+      "actualChangedLocalBounds": [
+        500,
+        138,
+        1024,
+        423
+      ],
+      "scientistPixelsPreserved": true,
+      "uprightGreenCatPixelsPreserved": false
+    },
+    {
+      "scene": 5,
+      "maskRegions": [
+        [
+          527,
+          171,
+          714,
+          317
+        ],
+        [
+          868,
+          260,
+          1024,
+          418
+        ]
+      ],
+      "featherPx": 2,
+      "actualChangedLocalBounds": [
+        522,
+        167,
+        1024,
+        423
+      ],
+      "scientistPixelsPreserved": true,
+      "uprightGreenCatPixelsPreserved": true
+    }
+  ]
+}

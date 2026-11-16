@@ -1,0 +1,20 @@
+{
+  "savedCapture": ".tools/water-verification/physical-coherent-coupled-stable-final-early-dense/60.png",
+  "crop": [
+    222,
+    427,
+    439,
+    512
+  ],
+  "runtimeModel": "water_yang/cat1.fbx",
+  "scene": "scenes/cat_entity.tscn",
+  "lobbyCreation": "scripts/lobby_floating_cats.gd:_create_cats",
+  "observed": [
+    "Elongated fairly constant-width rounded body narrower than head",
+    "Small tucked forepaws at chest",
+    "Two short hindlegs extend from rump along body axis, spaced by a clear gap",
+    "No large soles/paw pads facing camera",
+    "Tail not prominent from belly-up camera angle"
+  ],
+  "newGameCapture": false
+}

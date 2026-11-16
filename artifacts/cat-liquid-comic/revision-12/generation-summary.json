@@ -1,0 +1,220 @@
+{
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Flava skill scripts/generate_image.py",
+  "groups": {
+    "revision-11": {
+      "role": "superseded adult/opaque-lens drafts",
+      "records": [
+        {
+          "record": "revision-11/pair-01-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-11/pair-01-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2827,
+            "input_text_tokens": 1387,
+            "input_image_tokens": 1440,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.0355675",
+            "estimated_cost_krw": "49.79",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-11/pair-02-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-11/pair-02-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2815,
+            "input_text_tokens": 1375,
+            "input_image_tokens": 1440,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.0355375",
+            "estimated_cost_krw": "49.75",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-11/pair-03-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-11/pair-03-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2757,
+            "input_text_tokens": 1317,
+            "input_image_tokens": 1440,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.0353925",
+            "estimated_cost_krw": "49.55",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-11/pair-04-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-11/pair-04-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2862,
+            "input_text_tokens": 1422,
+            "input_image_tokens": 1440,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.035655",
+            "estimated_cost_krw": "49.92",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-11/researcher-design-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-11/researcher-design.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2288,
+            "input_text_tokens": 752,
+            "input_image_tokens": 1536,
+            "output_tokens": 1372,
+            "output_image_tokens": 1372,
+            "estimated_cost_usd": "0.028604",
+            "estimated_cost_krw": "40.05",
+            "usd_to_krw_rate": 1400
+          }
+        }
+      ],
+      "total": {
+        "input_text_tokens": 6253,
+        "input_image_tokens": 7296,
+        "output_image_tokens": 8396,
+        "estimated_cost_usd": "0.1707565",
+        "estimated_cost_krw": "239.06",
+        "requests": 5
+      }
+    },
+    "revision-12": {
+      "role": "selected childlike red-clear-round-glasses direction, including corrections",
+      "records": [
+        {
+          "record": "revision-12/pair-01-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-12/pair-01-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2729,
+            "input_text_tokens": 1250,
+            "input_image_tokens": 1479,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.035381",
+            "estimated_cost_krw": "49.53",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-12/pair-02-correction-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-12/pair-02-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 1440,
+            "input_text_tokens": 416,
+            "input_image_tokens": 1024,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.031476",
+            "estimated_cost_krw": "44.07",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-12/pair-02-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-12/pair-02-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2727,
+            "input_text_tokens": 1248,
+            "input_image_tokens": 1479,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.035376",
+            "estimated_cost_krw": "49.53",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-12/pair-03-correction-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-12/pair-03-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 3023,
+            "input_text_tokens": 1487,
+            "input_image_tokens": 1536,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.0362015",
+            "estimated_cost_krw": "50.68",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-12/pair-03-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-12/pair-03-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2718,
+            "input_text_tokens": 1239,
+            "input_image_tokens": 1479,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.0353535",
+            "estimated_cost_krw": "49.49",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-12/pair-04-correction-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-12/pair-04-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 3081,
+            "input_text_tokens": 1545,
+            "input_image_tokens": 1536,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.0363465",
+            "estimated_cost_krw": "50.89",
+            "usd_to_krw_rate": 1400
+          }
+        },
+        {
+          "record": "revision-12/pair-04-generation.json",
+          "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-12/pair-04-generated.png",
+          "model": "gpt-image-2.5-sunburst",
+          "usage": {
+            "input_tokens": 2776,
+            "input_text_tokens": 1297,
+            "input_image_tokens": 1479,
+            "output_tokens": 1756,
+            "output_image_tokens": 1756,
+            "estimated_cost_usd": "0.0354985",
+            "estimated_cost_krw": "49.70",
+            "usd_to_krw_rate": 1400
+          }
+        }
+      ],
+      "total": {
+        "input_text_tokens": 8482,
+        "input_image_tokens": 10012,
+        "output_image_tokens": 12292,
+        "estimated_cost_usd": "0.2456330",
+        "estimated_cost_krw": "343.89",
+        "requests": 7
+      }
+    }
+  },
+  "totalThisWork": {
+    "input_text_tokens": 14735,
+    "input_image_tokens": 17308,
+    "output_image_tokens": 20688,
+    "estimated_cost_usd": "0.4163895",
+    "estimated_cost_krw": "582.95",
+    "requests": 12
+  }
+}

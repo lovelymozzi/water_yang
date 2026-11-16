@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-15",
+  "scope": "three offline title background concepts; game files unchanged",
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "low",
+  "reason": "user requested alternative concept drafts",
+  "referenceBoard": "game-reference-board.jpg",
+  "canvas": [
+    393,
+    852
+  ],
+  "generatedSize": [
+    1024,
+    1536
+  ],
+  "concepts": [
+    {
+      "slug": "a-water-nap",
+      "name": "물 위의 낮잠"
+    },
+    {
+      "slug": "b-puzzle-garden",
+      "name": "고양이 퍼즐 정원"
+    },
+    {
+      "slug": "c-portal-discovery",
+      "name": "차원문 너머"
+    }
+  ],
+  "existingUiReference": "web/ui/splash.contract.json",
+  "logo": "src/assets/title_text.png",
+  "loadingBar": "existing loading_out/inner/bar art at current coordinates",
+  "initialSafeCenterCrop": [
+    158,
+    0,
+    866,
+    1536
+  ],
+  "finalPhoneAdaptation": {
+    "reason": "Center crop clipped secondary cats and scientist; retain full-width foreground instead",
+    "canvas": [
+      1024,
+      2220
+    ],
+    "topEnvironment": {
+      "source": [
+        0,
+        0,
+        1024,
+        450
+      ],
+      "destination": [
+        0,
+        0,
+        1024,
+        850
+      ]
+    },
+    "unalteredCharacterBand": {
+      "source": [
+        0,
+        450,
+        1024,
+        1250
+      ],
+      "destination": [
+        0,
+        850,
+        1024,
+        1650
+      ]
+    },
+    "bottomEnvironment": {
+      "source": [
+        0,
+        1250,
+        1024,
+        1536
+      ],
+      "destination": [
+        0,
+        1650,
+        1024,
+        2220
+      ]
+    },
+    "finalBackground": [
+      786,
+      1704
+    ]
+  }
+}

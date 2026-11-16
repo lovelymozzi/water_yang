@@ -1,0 +1,89 @@
+{
+  "scope": "HTTP requests, no browser/game rendering",
+  "responses": [
+    {
+      "path": "web/index.html",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "125b73f568aba14d675512add3a984ade0bd3b85143f893c047cae8ffd4ecb99"
+    },
+    {
+      "path": "web/story-intro.js",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "7a237fb6e9d1789dcee010a9576f90d5df024e09b57dd90090522e1ba8828054"
+    },
+    {
+      "path": "web/story-intro.css",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "ab5715abf993c61f88974381bdb0b89f2e66ab7b6dcf7798b21f640c8161856c"
+    },
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "77c2478b79bb357d646c35ad5afc576a902fe7162db244a33b92498ef013b1dc"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2bb9b7b7c32340691a0cc1bdc69518f846ba1030d3541c8f863a4b6a3d886466"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "24db8a8ec6c6ca0b2472922b172c6822943118821a6dc579956da8ae33e37072"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2addcbc7e02085d29a63db3e6c75756756d1dcc967c8238c805aaac2c1819c44"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "501f0bb0bc6011fb7370a902d815980c84bd58573b3f85649ffbb3b2da6af539"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "b5679768ddd9d76ec9ec94205b94820e3eb7f3800599f979d98a36c267f2e4bc"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "77deb465eea82a85b4285976a1ea034245fe5092454b772ff45ff9f3bb213f61"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "ebaa3f1178f552124d37a5395684b7ba09cc8033ac02e6f224d862af5b6bd780"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "6b36c009fe7e3044063aac5fdba8a9865ea20087328e571b28f76886aa574d1c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_07.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "9a0a5af1510838f33d1991a91c7ffd93c8356c2856c9ce11b958fd384e6c7f06"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_shapes_card_08.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "98d4a04509d8f546aa61422b16435149b17376d328e756e88cc30c08d9409726"
+    }
+  ]
+}

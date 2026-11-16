@@ -1,0 +1,77 @@
+{
+  "scope": "offline title proposals only",
+  "assets": [
+    {
+      "path": "a-lobby-toon-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "850d4d3276deb967142545e6ee782f43a63a4b3bf0a8e2ef5ee5358024db01b2"
+    },
+    {
+      "path": "a-lobby-toon-title.webp",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "1be961b133ce2d952733931989f1e1b500b3835117ae39b620b39681eb854dd2"
+    },
+    {
+      "path": "a-lobby-toon-preview.png",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "79b2bf670436a1c778f521107abd7772d8e90da4b55113cb8ff7fc256f36bb15"
+    },
+    {
+      "path": "b-board-toon-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "66714473984c30008f1053f332813c6de257623e89ca2603abcca27b7285ecde"
+    },
+    {
+      "path": "b-board-toon-title.webp",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "6b9f8388e0061731217e7831ce7de05efda8868232e071a40cbcd72fa1e4977a"
+    },
+    {
+      "path": "b-board-toon-preview.png",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "5b06e785fa9cf2bdd7e4616da8093ec92b3c0aefc21d8d45e2eb650082a7fba8"
+    },
+    {
+      "path": "c-character-toon-generated.png",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "sha256": "213ed4c34d311d00cb0fb57600d7186ef45fa047b32c122bb55ebfbdbc2b32ba"
+    },
+    {
+      "path": "c-character-toon-title.webp",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "4c29e894b1cc392927dcf8a83008810856c999736eb1475d86ec93061209445d"
+    },
+    {
+      "path": "c-character-toon-preview.png",
+      "dimensions": [
+        786,
+        1704
+      ],
+      "sha256": "9da2f23532dfa88c6f472e509d0be5b05774e5847d41cb5aef15cc47932f4017"
+    }
+  ]
+}

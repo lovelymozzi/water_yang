@@ -1,0 +1,60 @@
+{
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill scripts/generate_image.py via Flava",
+  "quality": "low",
+  "requestCount": 3,
+  "requests": [
+    {
+      "slug": "a-lazy-bend",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/title-screen-concepts/revision-03/a-lazy-bend-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2474,
+        "input_text_tokens": 938,
+        "input_image_tokens": 1536,
+        "output_tokens": 158,
+        "output_image_tokens": 158,
+        "estimated_cost_usd": "0.010859",
+        "estimated_cost_krw": "15.20",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "slug": "b-observation-notes",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/title-screen-concepts/revision-03/b-observation-notes-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2541,
+        "input_text_tokens": 1005,
+        "input_image_tokens": 1536,
+        "output_tokens": 158,
+        "output_image_tokens": 158,
+        "estimated_cost_usd": "0.0110265",
+        "estimated_cost_krw": "15.44",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "slug": "c-splash-encounter",
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/title-screen-concepts/revision-03/c-splash-encounter-generated.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 2568,
+        "input_text_tokens": 1032,
+        "input_image_tokens": 1536,
+        "output_tokens": 158,
+        "output_image_tokens": 158,
+        "estimated_cost_usd": "0.011094",
+        "estimated_cost_krw": "15.53",
+        "usd_to_krw_rate": 1400
+      }
+    }
+  ],
+  "total": {
+    "input_text_tokens": 2975,
+    "input_image_tokens": 4608,
+    "output_image_tokens": 474,
+    "estimated_cost_usd": "0.0329795",
+    "estimated_cost_krw": "46.17"
+  }
+}

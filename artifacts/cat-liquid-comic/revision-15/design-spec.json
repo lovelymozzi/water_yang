@@ -1,0 +1,32 @@
+{
+  "revision": 15,
+  "source": "User-selected character screenshot 2026-11-15 18:43:49; facial attitude/skin corroborated by 18:41:51 screenshot",
+  "character": "Use selected character identity: warm golden-brown skin, thoughtful/playful amber eyes, fine brown/bronze circular clear eyeglasses, rolled white science coat, red neck scarf, dark clothes, brown boots, teal research pouch. Replace head goggles/straps/ribbons with white/pink cat-ear headband; white short bob hair.",
+  "latestPriority": "Use this character as-is except requested headband/white bob; supersedes earlier pale professor and bright red thick frames.",
+  "book": "Panel1 scientist writes chalk on the dominant board; a secondary notebook is supported in the other hand or rests flat on a solid workbench. No floating book. Airborne papers/books appear only during the intentional scene3 vortex accident.",
+  "explosion": "Panel3 sudden white-cyan/violet burst and space visibly twisting/funneling into dark horizontal floor vortex, professor involuntarily swept diagonally feet-first with inward paper/scarf/coat flow, surprised face. Far-background cats continue bookshelf/window antics safely; destination unknown until scene4.",
+  "labFloor": "Origin laboratory scenes1–3 use clean cool pale gray finished tiles with gray grout, never yellow dirt/soil. Scene6 human destination is a separate furnished cat playroom, not a laboratory. Outdoor forest golden paving remains.",
+  "cats": "Game-colored green/orange/blue, elongated but soft organic rounded back/shoulders/tummy/haunches, not rigid cuboids. Four attached limbs and one tail each; relaxed low-lidded faces and existing small nasal sleep bubbles preserved.",
+  "catTails": "Rear-view tails emerge from rump above pelvis, curve naturally with thick root and slender tapered tip, differing among cats; no circular pompom/bear/rabbit stubs.",
+  "plot": [
+    "rear-professor-writes-cat-anatomy-equals-liquid-question-on-chalkboard",
+    "mix-flask-liquids",
+    "sudden-mixture-flash-and-floor-vortex-suction",
+    "bewildered-forest-arrival",
+    "casual-local-cat-lift-natural-gravity-longcat",
+    "matching-color-portal-reveals-human-cat-playroom",
+    "guide-cats",
+    "farewell"
+  ],
+  "preserved": [
+    "4stacked-landscape-cards-per-page",
+    "skip/next ▶",
+    "existing flow/storage/gameplay/camera",
+    "horizontal floor portals",
+    "no measuring tools or pulling/stretching experiment on cats",
+    "no-dialogue-or-captions; only user-requested embedded chalk liquid?? and equals sign in panel1"
+  ],
+  "humanDestination": "Panel6 portal interior is a welcoming HUMAN CAT PLAYROOM with multi-level cat tower, hideaway, scratching posts, tunnel, balls, feathers and plush mouse; familiar cream/orange cats lounge comfortably. No lab apparatus/anatomy chalkboard inside destination. Scientist origin scenes1–3 remain actual laboratory with gray tiles.",
+  "opening": "Panel1 chalkboard dominates; professor seen three-quarter from BEHIND writing in white chalk. Large cat anatomical outline/skeleton = cyan-liquid straight-sided beaker and exact lowercase liquid??. No extra captions/dialogue. Colored flasks/relaxed vessel cats remain secondary. No floating notebook.",
+  "comicLabScene2": "One coherent lab scene: selected scientist absorbed mixing colored flask liquids; cream cat securely draped/chest-supported on bookshelf lip with long gravity-hanging torso and lazy face; orange tabby voluntarily flattened through safe half-open sliding window, paws on inside sill. No duplicated cats in jars/tubs; those are empty. Actual gray laboratory floor."
+}

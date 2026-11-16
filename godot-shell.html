@@ -14,7 +14,8 @@ $GODOT_HEAD_INCLUDE
 <link rel="preload" as="audio" href="sound/diggingt_optimized.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/time_out1.mp3" type="audio/mpeg" fetchpriority="low">
 <link rel="preload" as="audio" href="sound/Time_out2.mp3" type="audio/mpeg" fetchpriority="low">
-<link rel="stylesheet" href="./story-intro.css?v=cat-liquid-v9">
+<link rel="stylesheet" href="./story-intro.css?v=cat-liquid-v16">
+<link rel="stylesheet" href="./dev-tools.css?v=2">
 <style>
 html,body{margin:0;height:100%;background:#000;overflow:hidden}
 /* Keep the native WebGL surface and the bottom navigation in separate compositing groups. */
@@ -34,7 +35,8 @@ const UI_DIR = './ui/';
 const ASSET_BASE = '../';
 const STORAGE_PREFIX = 'leonout_';
 const STORY_INTRO_STORAGE_KEY = STORAGE_PREFIX + STORY_INTRO_STORAGE_SUFFIX;
-const STORY_INTRO_REPLAY = new URLSearchParams(location.search).get('story') === 'replay';
+const devStartupStage = getDevStage(new URL(location.href), 187);
+const STORY_INTRO_REPLAY = new URLSearchParams(location.search).get('story') === 'replay' || devStartupStage === 1;
 const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
 const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
 const LOBBY_UI_SCENE = 'Lobby';
@@ -158,6 +160,7 @@ const STAGE_CLEAR1_SFX = './sound/stage_clear1.mp3';
 const STAGE_CLEAR2_SFX = './sound/stage_clear2.mp3';
 const TIME_OUT_SFX = './sound/time_out1.mp3';
 const POPUP_OPEN_SFX = './sound/ui_pop.mp3';
+const STORY_PANEL_SFX = './sound/ui_card_turn_optimized.mp3';
 const LOBBY_REWARD_SCALE_SFX = './sound/lobby_reward.mp3';
 const LOBBY_REWARD_TRAIL_SFX = './sound/lobby_reward_trail.mp3';
 const STAGE_CLEAR2_DELAY_MS = 750;
@@ -166,7 +169,7 @@ const INGAME_BGM = './sound/Ingame_BGM.mp3';
 const AUDIO_ASSETS = [
   BUTTON_CLICK_SFX, CAT_MOUTH_SFX, CAT_HOLE_ABSORB_SFX, ITEM_MOVE_HOLE_POP_SFX,
   CAT_HOLE_POP_OVERLAY_SFX, CAT_MOVE_SFX, ICE_BREAK_SFX, ICE_FREEZING_SFX,
-  DIGGING_SFX, STAGE_CLEAR1_SFX, STAGE_CLEAR2_SFX, TIME_OUT_SFX, POPUP_OPEN_SFX,
+  DIGGING_SFX, STAGE_CLEAR1_SFX, STAGE_CLEAR2_SFX, TIME_OUT_SFX, POPUP_OPEN_SFX, STORY_PANEL_SFX,
   LOBBY_REWARD_SCALE_SFX, LOBBY_REWARD_TRAIL_SFX, LOBBY_BGM, INGAME_BGM,
 ];
 const STAGE_TIME_LIMIT_SECONDS = 60;
@@ -277,15 +280,16 @@ function saveGame() {
 }
 
 const startupUrl = new URL(location.href);
-if (startupUrl.searchParams.get('resetStage') === '1') {
+if (devStartupStage !== null || startupUrl.searchParams.get('resetStage') === '1') {
   const progressKey = STORAGE_PREFIX + 'progress_v1';
   const stageProgress = JSON.parse(localStorage.getItem(progressKey) || '{"current":1,"records":{}}');
-  stageProgress.current = 1;
+  stageProgress.current = devStartupStage ?? 1;
   localStorage.setItem(progressKey, JSON.stringify(stageProgress));
   await saveGame();
   startupUrl.searchParams.delete('resetStage');
+  startupUrl.searchParams.delete('devStage');
   history.replaceState(null, '', startupUrl.href);
-  console.info('[stage-reset] current=1; records and economy preserved');
+  console.info('[stage-reset] current=%d; records and economy preserved', stageProgress.current);
 }
 
 let leaderboardSubmissionTail = Promise.resolve();
@@ -384,9 +388,10 @@ import { ProgressManager } from './ui/progress-manager.js';
 import { GameSession } from './ui/game-session.js';
 import { makeGodotCartridge } from './ui/godot-bridge.js';
 import { SoundManager } from './ui/sound-manager.js';
-import { attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX } from './story-intro.js?v=cat-liquid-v9';
+import { attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_SCENE_UUIDS, STORY_INTRO_STORAGE_SUFFIX } from './story-intro.js?v=cat-liquid-page-gate-v19';
+import { getDevStage, mountDevTools } from './dev-tools.js?v=2';
 
-const SPLASH_CACHE_VERSION = 'story-intro-v3';
+const SPLASH_CACHE_VERSION = 'title-lobby-model-v6';
 const SPLASH_CACHE_NAME = `${STORAGE_PREFIX}splash_load_${SPLASH_CACHE_VERSION}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.pck`] || 'pck'}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.wasm`] || 'wasm'}`;
 if ('caches' in window) {
   await Promise.all(
@@ -419,6 +424,8 @@ window.fetch = async (input, init) => {
   if (
     !splashCache
     || request.method !== 'GET'
+    // Story schema refreshes must not read an older narrated JSON from Cache API.
+    || ['no-cache', 'reload', 'no-store'].includes(request.cache)
     || request.headers.has('range')
     || url.origin !== location.origin
     || url.pathname.startsWith(uiPublishPath)
@@ -583,15 +590,24 @@ function syncShopCooldowns(renderer) {
 }
 
 sound.unlockOnFirstGesture(() => {
-  // 첫 터치 안에서 BGM을 시작해야 브라우저의 자동 재생 차단을 피할 수 있다.
-  // 로비 진입은 navigation 호스트를 거치므로 scene:enter 시점까지 기다리지 않는다.
-  if (lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+  // 첫 터치에서는 현재 화면 또는 splash 다음 진입할 화면의 BGM을 시작한다.
+  const useIngameBgm = activeSceneName === INGAME_UI_SCENE || STORY_INTRO_SCENES.includes(activeSceneName)
+    || (activeSceneUuid === SPLASH_UI_SCENE_UUID
+      && (STORY_INTRO_REPLAY || localStorage.getItem(STORY_INTRO_STORAGE_KEY) !== '1'));
+  if (useIngameBgm ? ingameBgmEnabled : lobbyBgmEnabled) {
+    sound.playBgm(useIngameBgm ? INGAME_BGM : LOBBY_BGM);
+  }
   // 비동기 Godot progress 이벤트의 SFX도 재생되도록, 사용자 제스처 안에서
   // 무음 SFX를 한 번 재생해 브라우저의 미디어 권한을 해제한다.
   sound.playKeyedSfx('audio-unlock', BUTTON_CLICK_SFX, 0);
   hasUserGesture = true;
 });
 document.addEventListener('click', event => {
+  if (event.target instanceof Element && event.target.closest('[data-dev-tools]')) return;
+  if (devStartupStage !== null && activeSceneUuid === SPLASH_UI_SCENE_UUID) {
+    event.stopImmediatePropagation();
+    return;
+  }
   const isLoadingBar = event.target instanceof Element
     && !!event.target.closest('[data-stable-id="loading-out-png-11"]');
   if (loadingReady && activeSceneUuid === SPLASH_UI_SCENE_UUID && !isLoadingBar) {
@@ -631,6 +647,9 @@ attachStoryIntro(flow, {
   storageKey: STORY_INTRO_STORAGE_KEY,
   isReady: () => loadingReady,
   saveGame,
+  playPanelSfx: () => {
+    if (buttonSfxEnabled) sound.playSfx(STORY_PANEL_SFX, 0.8);
+  },
   replay: STORY_INTRO_REPLAY,
 });
 flow.defineCondition('로딩', () => loadingReady);
@@ -653,6 +672,7 @@ let activeGodotScene = 'lobby';
 let currentMapStage = progress.getCurrentStage();
 // HTML HUD presses also count as the first touch; they do not reach Godot's canvas.
 document.addEventListener('pointerdown', event => {
+  if (event.target instanceof Element && event.target.closest('[data-dev-tools]')) return;
   if (event.button === 0 && activeSceneName === INGAME_UI_SCENE && activeGame?.state === 'running') {
     activeGame.message('stage_touch', {});
   }
@@ -926,6 +946,7 @@ function playQueuedLobbyItemRewards(renderer) {
 
 function requestItem(item) {
   if (activeGame?.state !== 'running' || itemCounts[item] <= itemPending[item] || (item !== 'timestop' && selectedTargetItem)) return;
+  console.info('[Item] requested', { item, stage: currentMapStage, scene: activeSceneName });
   itemPending[item] += 1;
   if (item !== 'timestop') selectedTargetItem = item;
   syncItemCounts();
@@ -940,7 +961,8 @@ function cancelItemSelection() {
 let pendingSceneReady = null;
 const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, itemRejected }) => {
   if (sceneReady && pendingSceneReady?.scene === sceneReady) pendingSceneReady.resolve();
-  if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
+  if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled
+    && !STORY_INTRO_SCENES.includes(activeSceneName)) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
   if (sfx === 'cat-move' && buttonSfxEnabled) sound.playSfx(CAT_MOVE_SFX);
   if (sfx === 'ice-break' && buttonSfxEnabled) sound.playSfx(ICE_BREAK_SFX);
   if (sfx === 'ice-freezing' && buttonSfxEnabled) sound.playSfx(ICE_FREEZING_SFX);
@@ -970,6 +992,7 @@ const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, item
     flow.update({ stage: { current: `Level${stage}` } });
   }
   if (itemUsed) {
+    console.info('[Item] used', { item: itemUsed, stage: currentMapStage, scene: activeSceneName });
     itemPending[itemUsed] = Math.max(0, itemPending[itemUsed] - 1);
     itemCounts[itemUsed] = Math.max(0, itemCounts[itemUsed] - 1);
     saveItemCounts();
@@ -1030,6 +1053,7 @@ syncItemCounts();
 syncUnlimitedHearts();
 // pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
 
+let splashReadyPromise = null;
 flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) => {
   const enterWork = (async () => {
   const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
@@ -1050,6 +1074,7 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   }
   activeSceneName = sceneName;
   activeSceneUuid = sceneUuid;
+  if (STORY_INTRO_SCENES.includes(sceneName)) sound.stopSfx('cat-mouth-open');
   if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
   if (sceneName === LOBBY_UI_SCENE) {
     renderer.update({ stage: { current: `Level${currentMapStage}` } });
@@ -1061,7 +1086,13 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
     playQueuedLobbyItemRewards(renderer);
   }
   if (sceneName === 'Ranking') await renderLeaderboard(renderer);
-  if ((sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) && lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+  if (sceneName === INGAME_UI_SCENE || STORY_INTRO_SCENES.includes(sceneName)) {
+    if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
+    else sound.stopBgm();
+  } else if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) {
+    if (lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+    else sound.stopBgm();
+  }
   // Ambient butterfly flight: animate the published sprites through the public API.
   // The navigation host may enter after its Lobby child; preserve that child's flight.
   if (!popup && sceneUuid !== LOBBY_NAV_SCENE_UUID) {
@@ -1154,8 +1185,6 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
         requestItem('timestop');
       });
     });
-    if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
-    else sound.stopBgm();
   }
   if (sceneName === 'pop_BuyCoins') {
     const purchaseToast = renderer.getElement('common-box-toast-png-2187');
@@ -1591,9 +1620,32 @@ flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) =>
   if (game.state === 'ready') game.startGame();
   })();
   waitUntil?.(enterWork);
+  if (!popup && sceneUuid === SPLASH_UI_SCENE_UUID) splashReadyPromise = enterWork;
 });
 
+// Revalidate title images in the browser HTTP cache before <img>/CSS renders them.
+await Promise.all(['title_bg.png', 'src/assets/title_bg.png', 'src/assets/title_text.png'].map(async path => {
+  const response = await fetch(ASSET_BASE + path, { cache: 'no-cache' });
+  if (!response.ok) throw new Error(`[Title assets] HTTP ${response.status}: ${path}`);
+  await response.arrayBuffer();
+}));
+console.info('[Title assets] Revalidated', SPLASH_CACHE_VERSION);
 await flow.start();
+mountDevTools({
+  maxStage: progress.maxStage,
+  getCurrentStage: () => currentMapStage,
+  isStorySeen: () => localStorage.getItem(STORY_INTRO_STORAGE_KEY) === '1',
+});
+if (devStartupStage !== null) {
+  // Wait for the existing Godot preload before a local DEV entry.
+  await splashReadyPromise;
+  if (devStartupStage === 1) {
+    await flow.goto({ uuid: STORY_INTRO_SCENE_UUIDS[0] });
+  } else {
+    continueWithoutHeart = true;
+    await flow.goto({ uuid: 'c0356bcc-a972-4ff9-b115-d91b31c3e8be' });
+  }
+}
 </script>
 </body>
 </html>

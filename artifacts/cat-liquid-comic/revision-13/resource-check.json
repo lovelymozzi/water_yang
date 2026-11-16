@@ -1,0 +1,90 @@
+{
+  "kind": "http-resource-consistency-not-browser-rendering",
+  "revision": 13,
+  "checks": [
+    {
+      "path": "web/index.html",
+      "httpStatus": 200,
+      "sha256": "125b73f568aba14d675512add3a984ade0bd3b85143f893c047cae8ffd4ecb99",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/story-intro.js",
+      "httpStatus": 200,
+      "sha256": "7a237fb6e9d1789dcee010a9576f90d5df024e09b57dd90090522e1ba8828054",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/story-intro.css",
+      "httpStatus": 200,
+      "sha256": "ab5715abf993c61f88974381bdb0b89f2e66ab7b6dcf7798b21f640c8161856c",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "httpStatus": 200,
+      "sha256": "8bb3e6be5c49729ff07b66596e6d2705a1764ac9ad7f8045257cac5fbc4ec5fe",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "httpStatus": 200,
+      "sha256": "6b65031488ef804f82429af2528d54fc122bc8a52d4d20257edeea8e963ec387",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "httpStatus": 200,
+      "sha256": "0be11afb08d62a2fdd0c8d0fc335856b028e8b92a74f0cbd02c0e551ab16648c",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_01.webp",
+      "httpStatus": 200,
+      "sha256": "289a4bfec2498c6c39cfc27903a85aa374816dc4b9d3c029075d576f24f3ed08",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_02.webp",
+      "httpStatus": 200,
+      "sha256": "3c9705006767a4da86cc81b768143097916d356b3c50a7758acf661bdf5635ec",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_03.webp",
+      "httpStatus": 200,
+      "sha256": "4d835390a4152e47f239423251696fd3dc924196747208eee7264980ba69f1b6",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_04.webp",
+      "httpStatus": 200,
+      "sha256": "f4fd5f742ce5ad67ef9ccbd4e527d147a9e12a755bfe54571efbfd1c721d578c",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_05.webp",
+      "httpStatus": 200,
+      "sha256": "0e6523f02c9db42ae9175b9209bcc271a1992346799761043197916fbc653dcb",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_06.webp",
+      "httpStatus": 200,
+      "sha256": "2ac826952a476b028ae6c74ce6e4a771109d8b3db0b999533a2424012922f498",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_07.webp",
+      "httpStatus": 200,
+      "sha256": "2c2604e60ae3c8c48fb729b9c4409437ce0d7c2d19049b487f948b130080282d",
+      "matchesWorkspace": true
+    },
+    {
+      "path": "src/assets/story_cat_liquid_eccentric_card_08.webp",
+      "httpStatus": 200,
+      "sha256": "8a3eee199599346e1681cb3ff401f9f13fe2627bc56549ccaa1f6a775edbbdc8",
+      "matchesWorkspace": true
+    }
+  ]
+}

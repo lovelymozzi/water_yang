@@ -1,0 +1,159 @@
+{
+  "resources": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "2aa3d6f87f3750809f4172df0d3928d5db874a5e2535fb0256320d5a6bf5daa9"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "93c746ceb61dd43f53931c38282f20864f8eaa05baf40d7c92b13d3967ec4e6f"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_page_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "562fa0df2204db043f35a49a87a811f88d3275b822ae1df172b2918e060b698e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_panel_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "362005eb8ce191e8eddbc4665acf311cc702200f3df401257d8cddd765d7cf12"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "8792e377e07613bd6081fc180affe8de44ea3a5638ff6c09e3e17f17f78aaaec"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_panel_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "f56da09e9492f9b8ec9575887de7d85ad83fdd74a3dd0c0e98af5b3fdb77f6dd"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_pose_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "00ee9174e0c7dab916f3df678023502a094355151afbd7bb8643b841b3f61ea7"
+    }
+  ],
+  "unchangedRawAndCardPanels": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8
+  ],
+  "sourceAndContractOnlyImageReferencesChanged": true,
+  "allEightBlackRims": true,
+  "rimSamples": [
+    {
+      "panel": 1,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 2,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 3,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 4,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 5,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 6,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 7,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 8,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "scene4ScientistPixelsPreserved": true,
+  "sameControlsMotionAndCardTurnSound": true,
+  "publishErrors": 0,
+  "publishWarnings": 8,
+  "browserVisualTest": false
+}

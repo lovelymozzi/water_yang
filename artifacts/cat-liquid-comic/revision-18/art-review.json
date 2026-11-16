@@ -1,0 +1,23 @@
+{
+  "kind": "offline-source-art-and-composite-preview-inspection",
+  "actualBrowserOrGameVisualTest": false,
+  "observations": {
+    "scene1": "Cream jar cat now has continuous chest, two slender forelegs and paws at vessel floor; hindlegs fold beside/behind. Orange tray cat has coherent sphinx chest and modest paws instead of inflated stacked lumps. Glass retained in origin laboratory.",
+    "scene3": "Cream cat front paws rest just over board ledge and tail curls on ledge. Orange cat front paws rest on window sill; old thick dangling striped tube removed and background restored. Scientist and explosion outside masks retained.",
+    "scene4and5": "Same forest orange cat is solid orange through face/chest/paws/tail; no dark stripes or white fur patches. Other cats and glass-free forest maintained.",
+    "border": "All eight white angled rims replaced by black111111. Existing angle/size/layout preserved.",
+    "unchanged": "Raw source art2/6/7/8 byte-identical; card-turn sound gain0.8; automatic reveal/next-only page gates/skip/blinking preserved."
+  },
+  "tests": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "httpResources": 11,
+    "eightBlackRimSamples": "passed",
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  },
+  "limits": "Offline source/crop/assembled previews inspected. Actual game rendering and sound audition remain user verification. Stylized feline illustration, no exact-anatomy or pixel-perfect style claim."
+}

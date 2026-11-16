@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>LeonOutPrototype</title>
+<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+
+<link rel="preload" as="audio" href="sound/Ingame_BGM.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/Cat_meow.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/cat_Hole_sound.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/cat_move.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/ice_breake.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/ice-freezing.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/diggingt_optimized.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/time_out1.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="preload" as="audio" href="sound/Time_out2.mp3" type="audio/mpeg" fetchpriority="low">
+<link rel="stylesheet" href="./story-intro.css?v=cat-liquid-v16">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden}
+/* Keep the native WebGL surface and the bottom navigation in separate compositing groups. */
+.sr-game-host{isolation:isolate}
+.sr-nav-overlay{isolation:isolate;transform:translateZ(0)}
+body:has(#pop-settings-1)>div[style*="9000"]{-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+body.instant-lobby-home-return .sr-nav-host-inner,body.instant-lobby-home-return .sr-nav-fg-inner{transition:none!important;transform:none!important}
+body.instant-lobby-home-return .sr-nav-tabbar,body.instant-lobby-home-return .sr-nav-tabbar *{transition:none!important}
+</style>
+</head>
+<body>
+<script type="importmap">
+{"imports":{"./ui/scene-renderer.js":"./ui/scene-renderer.js?v=ui-bitmap-decode-20261115-1","./ui/popup-manager.js":"./ui/popup-manager.js?v=popup-background-20261115-1"}}
+</script>
+<script type="module">
+const UI_DIR = './ui/';
+const ASSET_BASE = '../';
+const STORAGE_PREFIX = 'leonout_';
+const STORY_INTRO_STORAGE_KEY = STORAGE_PREFIX + STORY_INTRO_STORAGE_SUFFIX;
+const STORY_INTRO_REPLAY = new URLSearchParams(location.search).get('story') === 'replay';
+const SPLASH_UI_SCENE_UUID = 'c4e72c62-dadd-40ab-85f4-bd397f4ca7f9';
+const LOBBY_NAV_SCENE_UUID = '37f376d8-4e32-4340-9bbd-4ed17767e148';
+const LOBBY_UI_SCENE = 'Lobby';
+const LOBBY_BUTTERFLY_FLIGHTS = [
+  { id: 'butterfly-sequence-2289', duration: 54000, wingRate: 0.8,
+    stops: [[295, 226], [340, 304], [256, 365], [140, 326], [62, 360], [76, 248], [157, 215]] },
+  { id: 'butterfly-sequence-2291', duration: 62000, wingRate: 0.7,
+    stops: [[280, 357], [190, 390], [92, 342], [54, 265], [156, 236], [237, 293], [301, 225]] },
+  { id: 'butterfly-sequence-2292', duration: 70000, wingRate: 0.75,
+    stops: [[52, 338], [135, 382], [214, 330], [320, 347], [336, 263], [254, 220], [149, 246]] },
+];
+let lobbyButterflyAnimations = [];
+const INGAME_UI_SCENE = 'Ingame';
+const COIN_COST = 900;
+const INITIAL_COINS = 500;
+const INITIAL_COIN_GRANT_STORAGE_KEY = STORAGE_PREFIX + 'initial_coin_grant_v1';
+const MAX_HEARTS = 5;
+const UNLIMITED_HEARTS_DURATION_MS = 60 * 60 * 1000;
+const UNLIMITED_HEARTS_STORAGE_KEY = STORAGE_PREFIX + 'unlimited_hearts_until';
+const SHOP_COOLDOWN_STORAGE_PREFIX = STORAGE_PREFIX + 'shop_cooldown_until_';
+const HUB_SAVE_KEY = 'leonout_progress';
+const HUB_LEADERBOARD_KEY = 'leonout_stage';
+const PENDING_LEADERBOARD_STAGE_STORAGE_KEY = STORAGE_PREFIX + 'pending_leaderboard_stage_v1';
+const LEADERBOARD_REFRESH_MS = 10 * 60 * 1000;
+const SHOP_PRODUCTS = {
+  860: {
+    cooldownMs: 24 * 60 * 60 * 1000,
+    active: ['ingame-toggle-on-png-167', 'text-860jpy-174'],
+    off: ['ingame-toggle-on-png-2483', 'text-860jpy-2485'],
+    timerText: 'plain-text-50',
+  },
+  480: {
+    cooldownMs: 24 * 60 * 60 * 1000,
+    active: ['ingame-toggle-on-png-178', 'text-860jpy-180'],
+    off: ['ingame-toggle-on-png-2487', 'text-860jpy-2489'],
+    timerText: 'plain-text-2499',
+  },
+  320: {
+    cooldownMs: 60 * 60 * 1000,
+    active: ['ingame-toggle-on-png-182', 'text-860jpy-184'],
+    off: ['ingame-toggle-on-png-2506', 'text-860jpy-2508'],
+    timerText: 'plain-text-2504',
+  },
+};
+const DEFAULT_HEART_ICON = 'src/assets/icon_heart_2.png';
+const EVENT_HEART_ICON = 'src/assets/event_icon_skkycupheart.webp?v=860-unlimited-v2';
+const STAGE_CLEAR_REWARD = 40;
+const AD_STAGE_CLEAR_REWARD = 80;
+const ITEM_START_COUNT = 3;
+const ITEM_STORAGE_KEY = STORAGE_PREFIX + 'items_v1';
+const LOBBY_ITEM_REWARD_STORAGE_KEY = STORAGE_PREFIX + 'lobby_item_rewards_v1';
+const ITEM_KEYS = ['remove', 'timestop', 'move'];
+const CLEAR_ITEM_REWARD_TABLE = [
+  { item: null, weight: 75 },
+  { item: 'timestop', weight: 12 },
+  { item: 'remove', weight: 8 },
+  { item: 'move', weight: 5 },
+];
+const LEVEL_WIN_COIN_REWARD_LAYER_OFFSETS = {
+  'gold-glow-12': [0, 0],
+  'rays-burst-10': [12, 13],
+  'itemicon-coins-l-png-8': [33, 44],
+  'plain-text-9': [95, 82],
+};
+const LEVEL_WIN_COIN_REWARD_POS = {
+  solo: { x: 160, y: 305, contentOffsetX: -67 },
+  item: { x: 156, y: 305 },
+};
+const ITEM_REWARD_UI = {
+  remove: {
+    levelWinLayers: ['gold-glow-2526', 'rays-burst-2527', 'item1-png-2511', 'plain-text-2516'],
+    levelWinPos: { x: 36, y: 307 },
+    levelWinLayerOffsets: {
+      'gold-glow-2526': [0, 0],
+      'rays-burst-2527': [12, 13],
+      'item1-png-2511': [52, 51],
+      'plain-text-2516': [79, 79],
+    },
+    lobbyLayers: ['gold-glow-2538', 'rays-burst-2543', 'item1-png-2544'],
+    lobbyFxLayers: ['gold-glow-2538', 'rays-burst-2543'],
+    lobbyIcon: 'item1-png-2544',
+  },
+  timestop: {
+    levelWinLayers: ['gold-glow-2531', 'rays-burst-2532', 'item2-png-2512', 'plain-text-2514'],
+    levelWinPos: { x: 42, y: 303 },
+    levelWinLayerOffsets: {
+      'gold-glow-2531': [0, 0],
+      'rays-burst-2532': [12, 13],
+      'item2-png-2512': [49, 49],
+      'plain-text-2514': [74, 83],
+    },
+    lobbyLayers: ['gold-glow-2546', 'rays-burst-2547', 'item2-png-2548'],
+    lobbyFxLayers: ['gold-glow-2546', 'rays-burst-2547'],
+    lobbyIcon: 'item2-png-2548',
+  },
+  move: {
+    levelWinLayers: ['gold-glow-2522', 'rays-burst-2523', 'itme3-1-png-2513', 'plain-text-2517'],
+    levelWinPos: { x: 43, y: 302 },
+    levelWinLayerOffsets: {
+      'gold-glow-2522': [0, 0],
+      'rays-burst-2523': [12, 13],
+      'itme3-1-png-2513': [57, 52],
+      'plain-text-2517': [73, 84],
+    },
+    lobbyLayers: ['gold-glow-2539', 'rays-burst-2540', 'itme3-1-png-2541'],
+    lobbyFxLayers: ['gold-glow-2539', 'rays-burst-2540'],
+    lobbyIcon: 'itme3-1-png-2541',
+  },
+};
+const LOBBY_REWARD_TRAIL_COUNT = 8;
+const BUTTON_CLICK_SFX = './sound/Ui_button_sound.mp3';
+const CAT_MOUTH_SFX = './sound/Cat_meow.mp3';
+const CAT_HOLE_ABSORB_SFX = './sound/cat_Hole_sound.mp3';
+const ITEM_MOVE_HOLE_POP_SFX = './sound/bubble_pop.mp3';
+const CAT_HOLE_POP_OVERLAY_SFX = './sound/Time_out2.mp3';
+const CAT_MOVE_SFX = './sound/cat_move.mp3';
+const ICE_BREAK_SFX = './sound/ice_breake.mp3';
+const ICE_FREEZING_SFX = './sound/ice-freezing.mp3';
+const DIGGING_SFX = './sound/diggingt_optimized.mp3';
+const STAGE_CLEAR1_SFX = './sound/stage_clear1.mp3';
+const STAGE_CLEAR2_SFX = './sound/stage_clear2.mp3';
+const TIME_OUT_SFX = './sound/time_out1.mp3';
+const POPUP_OPEN_SFX = './sound/ui_pop.mp3';
+const STORY_PANEL_SFX = './sound/ui_card_turn_optimized.mp3';
+const LOBBY_REWARD_SCALE_SFX = './sound/lobby_reward.mp3';
+const LOBBY_REWARD_TRAIL_SFX = './sound/lobby_reward_trail.mp3';
+const STAGE_CLEAR2_DELAY_MS = 750;
+const LOBBY_BGM = './sound/Lobby_Bgm.mp3';
+const INGAME_BGM = './sound/Ingame_BGM.mp3';
+const AUDIO_ASSETS = [
+  BUTTON_CLICK_SFX, CAT_MOUTH_SFX, CAT_HOLE_ABSORB_SFX, ITEM_MOVE_HOLE_POP_SFX,
+  CAT_HOLE_POP_OVERLAY_SFX, CAT_MOVE_SFX, ICE_BREAK_SFX, ICE_FREEZING_SFX,
+  DIGGING_SFX, STAGE_CLEAR1_SFX, STAGE_CLEAR2_SFX, TIME_OUT_SFX, POPUP_OPEN_SFX, STORY_PANEL_SFX,
+  LOBBY_REWARD_SCALE_SFX, LOBBY_REWARD_TRAIL_SFX, LOBBY_BGM, INGAME_BGM,
+];
+const STAGE_TIME_LIMIT_SECONDS = 60;
+const TIMEOUT_CONTINUE_SECONDS = 20;
+const SPLASH_LOAD_FILL_DURATION_MS = 700;
+const SETTINGS_MENU_MOTION_MS = 240;
+const SETTINGS_MENU_STAGGER_MS = 60;
+const SETTINGS_MENU_GROUPS = [
+  { name: 'Music', offset: 86 },
+  { name: 'Sound', offset: 159 },
+  { name: 'Vibration', offset: 232 },
+  {
+    offset: 305,
+    layerIds: [
+      'setting-btn-option-png-2245',
+      'back-off-png-2278',
+      'back-on-png-2277',
+    ],
+  },
+  { name: 'retry', offset: 377 },
+];
+const GAME_STORAGE_KEYS = [
+  STORAGE_PREFIX + 'economy_v1',
+  STORAGE_PREFIX + 'progress_v1',
+  STORY_INTRO_STORAGE_KEY,
+  INITIAL_COIN_GRANT_STORAGE_KEY,
+  UNLIMITED_HEARTS_STORAGE_KEY,
+  ITEM_STORAGE_KEY,
+  LOBBY_ITEM_REWARD_STORAGE_KEY,
+  ...Object.keys(SHOP_PRODUCTS).map(productKey => SHOP_COOLDOWN_STORAGE_PREFIX + productKey),
+];
+
+const hubUser = await new Promise(resolve => {
+  const read = attempt => {
+    const user = window.__HUB_USER__;
+    if (user?.id || attempt === 2) resolve(user || {});
+    else setTimeout(() => read(attempt + 1), attempt === 0 ? 300 : 700);
+  };
+  read(0);
+});
+const hubPlayerName = hubUser.name || hubUser.username || '플레이어';
+const hubLocalSaveKey = `${STORAGE_PREFIX}hub_save_${encodeURIComponent(hubUser.id || 'guest')}`;
+
+function parseSavedGame(raw, source) {
+  if (!raw || typeof raw !== 'object') return null;
+  if (raw.version !== 1 || !raw.storage || typeof raw.storage !== 'object') {
+    console.warn(`[HubGame] ${source} 진행 데이터 형식이 올바르지 않습니다.`);
+    return null;
+  }
+  return raw;
+}
+
+async function loadGame() {
+  try {
+    if (window.HubGame?.load) {
+      const remote = parseSavedGame(await window.HubGame.load(HUB_SAVE_KEY), '원격');
+      if (remote) return remote;
+    }
+  } catch (error) {
+    console.warn('[HubGame] 원격 진행 불러오기에 실패했습니다. 로컬 저장본을 사용합니다.', error);
+  }
+  try {
+    return parseSavedGame(JSON.parse(localStorage.getItem(hubLocalSaveKey) || 'null'), '로컬');
+  } catch (error) {
+    console.warn('[HubGame] 로컬 진행 데이터 파싱에 실패했습니다.', error);
+    return null;
+  }
+}
+
+function restoreGameState(savedGame) {
+  GAME_STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
+  Object.entries(savedGame?.storage || {}).forEach(([key, value]) => {
+    if (GAME_STORAGE_KEYS.includes(key) && typeof value === 'string') localStorage.setItem(key, value);
+  });
+}
+
+const savedGame = await loadGame();
+restoreGameState(savedGame);
+let submittedLeaderboardStage = Number.isFinite(savedGame?.leaderboardStage)
+  ? Math.max(0, Math.floor(savedGame.leaderboardStage)) : 0;
+let pendingLeaderboardStage = Math.max(0, Math.floor(Number(localStorage.getItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY)) || 0));
+if (pendingLeaderboardStage <= submittedLeaderboardStage) {
+  pendingLeaderboardStage = 0;
+  localStorage.removeItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY);
+}
+
+function createGameSnapshot() {
+  return {
+    version: 1,
+    leaderboardStage: submittedLeaderboardStage,
+    storage: Object.fromEntries(GAME_STORAGE_KEYS.map(key => [key, localStorage.getItem(key)])),
+  };
+}
+
+let gameSaveTail = Promise.resolve();
+function saveGame() {
+  const snapshot = createGameSnapshot();
+  localStorage.setItem(hubLocalSaveKey, JSON.stringify(snapshot));
+  const save = gameSaveTail.then(async () => {
+    try {
+      if (window.HubGame?.save) await window.HubGame.save(HUB_SAVE_KEY, snapshot);
+    } catch (error) {
+      console.warn('[HubGame] 원격 진행 저장에 실패했습니다. 로컬 저장본을 사용합니다.', error);
+    }
+  });
+  gameSaveTail = save.catch(() => {});
+  return save;
+}
+
+const startupUrl = new URL(location.href);
+if (startupUrl.searchParams.get('resetStage') === '1') {
+  const progressKey = STORAGE_PREFIX + 'progress_v1';
+  const stageProgress = JSON.parse(localStorage.getItem(progressKey) || '{"current":1,"records":{}}');
+  stageProgress.current = 1;
+  localStorage.setItem(progressKey, JSON.stringify(stageProgress));
+  await saveGame();
+  startupUrl.searchParams.delete('resetStage');
+  history.replaceState(null, '', startupUrl.href);
+  console.info('[stage-reset] current=1; records and economy preserved');
+}
+
+let leaderboardSubmissionTail = Promise.resolve();
+function submitStageLeaderboard(stage) {
+  const value = Math.max(0, Math.floor(stage));
+  if (value <= submittedLeaderboardStage) return Promise.resolve();
+  pendingLeaderboardStage = Math.max(pendingLeaderboardStage, value);
+  localStorage.setItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY, String(pendingLeaderboardStage));
+  void saveGame();
+  const submission = leaderboardSubmissionTail.then(async () => {
+    const pending = pendingLeaderboardStage;
+    if (!window.HubGame?.submitScore) return;
+    try {
+      await window.HubGame.submitScore(HUB_LEADERBOARD_KEY, pending);
+      submittedLeaderboardStage = Math.max(submittedLeaderboardStage, pending);
+      if (pendingLeaderboardStage <= pending) {
+        pendingLeaderboardStage = 0;
+        localStorage.removeItem(PENDING_LEADERBOARD_STAGE_STORAGE_KEY);
+      }
+      void saveGame();
+    } catch (error) {
+      console.warn('[HubGame] 리더보드 등록에 실패했습니다. 다음 실행 시 재시도합니다.', error);
+    }
+  });
+  leaderboardSubmissionTail = submission.catch(() => {});
+  return submission;
+}
+if (pendingLeaderboardStage > submittedLeaderboardStage) void submitStageLeaderboard(pendingLeaderboardStage);
+
+async function renderLeaderboard(renderer) {
+  if (!renderer && (!renderLeaderboard.cache || Date.now() - renderLeaderboard.loadedAt >= LEADERBOARD_REFRESH_MS)) {
+    let board = [];
+    try {
+      if (window.HubGame?.getLeaderboard) {
+        const remote = await window.HubGame.getLeaderboard(HUB_LEADERBOARD_KEY, 10);
+        if (Array.isArray(remote)) board = remote;
+      }
+    } catch (error) {
+      console.warn('[HubGame] 리더보드를 불러오지 못했습니다. 현재 플레이어 기록을 표시합니다.', error);
+    }
+    renderLeaderboard.cache = board.length ? board : [{ username: hubPlayerName, value: progress.getCurrentStage() }];
+    renderLeaderboard.loadedAt = Date.now();
+  }
+  if (!renderer) return;
+  const board = renderLeaderboard.cache || [{ username: hubPlayerName, value: progress.getCurrentStage() }];
+  const template = renderer.getGroup('ramk1');
+  if (!template?.parentElement) {
+    console.warn('[HubGame] Ranking의 rank1 템플릿 그룹을 찾지 못했습니다.');
+    return;
+  }
+  const rowData = board.slice(0, 7).map(({ username, value }) => ({
+    name: username || '플레이어',
+    stage: Math.max(0, Math.floor(Number(value) || 0)),
+  }));
+  renderer.update({ player: { stage1: String(rowData[0].stage), name1: rowData[0].name } });
+  const parent = template.parentElement;
+  parent.querySelectorAll('[data-runtime-leaderboard]').forEach(row => row.remove());
+  [...parent.querySelectorAll(':scope > [data-group]')]
+    .filter(row => row !== template && row.querySelector('[data-stable-id^="ranking-box-list"]'))
+    .forEach(row => { row.style.display = 'none'; });
+  // ponytail: authored Ranking panel fits 7 rows; add scrolling when all 10 rows must be visible.
+  rowData.slice(1).forEach((entry, index) => {
+    const row = template.cloneNode(true);
+    const badge = row.querySelector('[data-stable-id="ranking-icon-1st-png-212"]');
+    row.dataset.runtimeLeaderboard = '1';
+    row.style.transform = `translateY(${(index + 1) * 91.2}px)`;
+    row.querySelector('[data-stable-id="plain-text-218"] .text-0').textContent = String(entry.stage);
+    row.querySelector('[data-stable-id="plain-text-219"] .text-0').textContent = entry.name;
+    if (index < 2) {
+      badge.querySelector('img').src = renderer.getElement([
+        'ranking-icon-1st-png-225',
+        'ranking-icon-1st-png-236',
+      ][index]).querySelector('img').src;
+    } else {
+      badge.style.display = 'none';
+      const rankNumber = renderer.getElement([
+        'plain-text-254',
+        'plain-text-266',
+        'plain-text-277',
+        'plain-text-288',
+      ][index - 2]).cloneNode(true);
+      rankNumber.style.top = badge.style.top;
+      rankNumber.querySelector('.text-0').textContent = String(index + 2);
+      row.appendChild(rankNumber);
+    }
+    parent.appendChild(row);
+  });
+}
+setInterval(() => { void renderLeaderboard(); }, LEADERBOARD_REFRESH_MS);
+const GODOT_ENGINE_URL = "index.js";
+const GODOT_CONFIG = { ...{"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":46984872,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4}, unloadAfterInit: false };
+
+import { FlowDriver } from './ui/flow-driver.js?v=heart-layer-v3';
+import { EconomyManager } from './ui/economy-manager.js?v=heart-display-v4';
+import { ProgressManager } from './ui/progress-manager.js';
+import { GameSession } from './ui/game-session.js';
+import { makeGodotCartridge } from './ui/godot-bridge.js';
+import { SoundManager } from './ui/sound-manager.js';
+import { attachStoryIntro, STORY_INTRO_SCENES, STORY_INTRO_STORAGE_SUFFIX } from './story-intro.js?v=cat-liquid-page-gate-v18';
+
+const SPLASH_CACHE_VERSION = 'home-paw-story-sfx-v4';
+const SPLASH_CACHE_NAME = `${STORAGE_PREFIX}splash_load_${SPLASH_CACHE_VERSION}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.pck`] || 'pck'}_${GODOT_CONFIG.fileSizes?.[`${GODOT_CONFIG.executable}.wasm`] || 'wasm'}`;
+if ('caches' in window) {
+  await Promise.all(
+    (await caches.keys())
+      .filter((key) => key.startsWith(`${STORAGE_PREFIX}splash_load_`) && key !== SPLASH_CACHE_NAME)
+      .map((key) => caches.delete(key)),
+  );
+}
+const splashCache = 'caches' in window ? await caches.open(SPLASH_CACHE_NAME) : null;
+const nativeFetch = window.fetch.bind(window);
+const splashCacheablePath = /\.(pck|json|png|jpe?g|webp|mp3|ogg|wav|woff2)$/i;
+const uiPublishPath = new URL(UI_DIR, location.href).pathname;
+const godotEnginePath = new URL(GODOT_ENGINE_URL, location.href).pathname;
+const godotWasmPath = new URL(`${GODOT_CONFIG.executable}.wasm`, location.href).pathname;
+const godotPackPath = new URL(GODOT_CONFIG.mainPack || `${GODOT_CONFIG.executable}.pck`, location.href).pathname;
+if (splashCache) {
+  await navigator.storage?.persist?.();
+}
+window.fetch = async (input, init) => {
+  const request = new Request(input, init);
+  const url = new URL(request.url);
+  if (url.pathname === godotEnginePath || url.pathname === godotPackPath) {
+    return nativeFetch(new Request(request, { cache: 'reload' }));
+  }
+  if (request.method === 'GET' && url.origin === location.origin
+    && url.pathname.startsWith(uiPublishPath) && url.pathname.endsWith('.json')) {
+    // Cache API bypass alone still permits a stale HTTP-cached scene index or contract.
+    return nativeFetch(new Request(request, { cache: 'no-cache' }));
+  }
+  if (
+    !splashCache
+    || request.method !== 'GET'
+    // Story schema refreshes must not read an older narrated JSON from Cache API.
+    || ['no-cache', 'reload', 'no-store'].includes(request.cache)
+    || request.headers.has('range')
+    || url.origin !== location.origin
+    || url.pathname.startsWith(uiPublishPath)
+    || url.pathname.includes('/src/assets/')
+    || !splashCacheablePath.test(url.pathname)
+  ) {
+    return nativeFetch(input, init);
+  }
+  const cached = await splashCache.match(request);
+  if (cached) return cached;
+  const response = await nativeFetch(request);
+  if (response.ok) await splashCache.put(request, response.clone());
+  return response;
+};
+if (!splashCache) {
+  console.warn('[Splash cache] Cache API를 사용할 수 없어 splash 로딩 데이터를 기기에 저장하지 못합니다.');
+}
+
+const CLICK_EVENT_STABLE_IDS = new Set();
+const UI_FONT_SPECS = new Set();
+const NAVIGATION_TAB_SCENES = [
+  'home_bottom', 'Lobby', 'Ingame', 'pop_BuyCoins', 'Ranking',
+  ...((STORY_INTRO_REPLAY || localStorage.getItem(STORY_INTRO_STORAGE_KEY) !== '1') ? STORY_INTRO_SCENES : []),
+];
+const navigationTabImages = [];
+const uiRenderStylesReady = Promise.all([
+  ['scene-renderer-editor-fonts', `${UI_DIR}vendor/fonts/fonts.css`],
+  ['ui-css-effect-provider-animate-css', `${UI_DIR}vendor/animate.min.css`],
+].map(([id, href]) => new Promise(resolve => {
+  const link = document.getElementById(id) || document.createElement('link');
+  link.id = id;
+  link.rel = 'stylesheet';
+  link.addEventListener('load', resolve, { once: true });
+  link.addEventListener('error', resolve, { once: true });
+  if (!link.isConnected) {
+    link.href = href;
+    document.head.appendChild(link);
+  } else if (link.sheet) {
+    resolve();
+  }
+})));
+const sceneIndex = await (await fetch(UI_DIR + 'scenes-index.json')).json();
+const sceneFlow = await (await fetch(UI_DIR + 'scene-flow.json')).json();
+const sceneContracts = new Map();
+await Promise.all(sceneIndex.scenes.map(async ({ contract }) => {
+  const sceneContract = await (await fetch(UI_DIR + contract)).json();
+  sceneContracts.set(sceneContract.sceneName, sceneContract);
+  (sceneContract.layers || []).forEach(({ stableId, events = [], texts = [], widget = null }) => {
+    if (events.some(({ trigger }) => trigger === 'click')) CLICK_EVENT_STABLE_IDS.add(stableId);
+    if (widget) CLICK_EVENT_STABLE_IDS.add(stableId);
+    texts.forEach(({ fontFamily, fontWeight }) => {
+      if (fontFamily) UI_FONT_SPECS.add(`${fontWeight || 'bold'} 16px ${fontFamily}`);
+    });
+  });
+  (sceneContract.groups || []).forEach(({ layerStableIds = [], widget = null }) => {
+    if (!widget) return;
+    layerStableIds.forEach((stableId) => CLICK_EVENT_STABLE_IDS.add(stableId));
+  });
+  const navLabel = sceneContract.navTabBar?.label;
+  if (navLabel?.fontFamily && navLabel.fontFamily !== 'inherit') {
+    UI_FONT_SPECS.add(`${navLabel.fontWeight || 'bold'} 16px ${navLabel.fontFamily}`);
+  }
+}));
+
+const economy = new EconomyManager({ storagePrefix: STORAGE_PREFIX, initialCoins: INITIAL_COINS, maxHearts: MAX_HEARTS });
+let economyTransactionTail = Promise.resolve();
+const economyTransactions = new Map();
+const runEconomyTransaction = (key, work) => {
+  const existing = economyTransactions.get(key);
+  if (existing) return existing;
+  const transaction = economyTransactionTail.then(async () => {
+    const result = await work();
+    void saveGame();
+    return result;
+  });
+  economyTransactionTail = transaction.catch(() => {});
+  const settled = transaction.finally(() => economyTransactions.delete(key));
+  economyTransactions.set(key, settled);
+  return settled;
+};
+if (economy.getCoins() === 0 && localStorage.getItem(INITIAL_COIN_GRANT_STORAGE_KEY) == null) {
+  await runEconomyTransaction('initial-coin-migration', () => economy.grantCoins(INITIAL_COINS, 'initial-coin-migration'));
+  localStorage.setItem(INITIAL_COIN_GRANT_STORAGE_KEY, '1');
+}
+const progress = new ProgressManager({ storagePrefix: STORAGE_PREFIX, maxStage: 187 });
+const sound = new SoundManager({ storagePrefix: STORAGE_PREFIX });
+const flow = new FlowDriver({
+  basePath: ASSET_BASE,
+  dataPath: UI_DIR,
+  managers: { economy, progress },
+});
+
+let hasUserGesture = false;
+let lobbyBgmEnabled = true;
+let ingameBgmEnabled = true;
+let buttonSfxEnabled = true;
+let hapticsEnabled = true;
+let unlimitedHeartsTimeoutId = null;
+let shopPurchasePending = false;
+
+function hasUnlimitedHearts() {
+  return Number(localStorage.getItem(UNLIMITED_HEARTS_STORAGE_KEY)) > Date.now();
+}
+
+function syncUnlimitedHearts(renderer = null) {
+  const unlimitedHeartsActive = hasUnlimitedHearts();
+  const heartImage = {
+    event: { heart: { active: unlimitedHeartsActive ? EVENT_HEART_ICON : DEFAULT_HEART_ICON } },
+  };
+  flow.update(heartImage);
+  const lobbyRenderer = renderer || flow.current?.renderer?.getActiveTabRenderer();
+  lobbyRenderer?.update(heartImage);
+  const heartCount = lobbyRenderer?.getElement('icon-heart-png-2285')?.querySelector('span');
+  if (heartCount) heartCount.style.visibility = unlimitedHeartsActive ? 'hidden' : '';
+  if (unlimitedHeartsTimeoutId != null) clearTimeout(unlimitedHeartsTimeoutId);
+  if (unlimitedHeartsActive) {
+    unlimitedHeartsTimeoutId = setTimeout(syncUnlimitedHearts, Number(localStorage.getItem(UNLIMITED_HEARTS_STORAGE_KEY)) - Date.now() + 1);
+  }
+  return unlimitedHeartsActive;
+}
+
+function activateUnlimitedHearts() {
+  localStorage.setItem(UNLIMITED_HEARTS_STORAGE_KEY, String(Date.now() + UNLIMITED_HEARTS_DURATION_MS));
+  syncUnlimitedHearts();
+  void saveGame();
+}
+
+function formatShopCooldown(ms) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return [hours, minutes, seconds].map(v => String(v).padStart(2, '0')).join(':');
+}
+
+function getShopCooldownRemaining(productKey) {
+  return Math.max(0, (Number(localStorage.getItem(SHOP_COOLDOWN_STORAGE_PREFIX + productKey)) || 0) - Date.now());
+}
+
+function setShopCooldown(productKey) {
+  localStorage.setItem(SHOP_COOLDOWN_STORAGE_PREFIX + productKey, String(Date.now() + SHOP_PRODUCTS[productKey].cooldownMs));
+  void saveGame();
+}
+
+function syncShopCooldowns(renderer) {
+  Object.entries(SHOP_PRODUCTS).forEach(([productKey, product]) => {
+    const remaining = getShopCooldownRemaining(productKey);
+    product.active.forEach(stableId => {
+      const el = renderer.getElement(stableId);
+      if (el) el.style.display = remaining > 0 ? 'none' : '';
+    });
+    product.off.forEach(stableId => {
+      const el = renderer.getElement(stableId);
+      if (el) el.style.display = remaining > 0 ? '' : 'none';
+    });
+    const timer = renderer.getTextElement(product.timerText, 0);
+    if (timer) {
+      timer.textContent = formatShopCooldown(remaining);
+      if (timer.dataset.gradText !== undefined) timer.dataset.gradText = timer.textContent;
+    }
+  });
+}
+
+sound.unlockOnFirstGesture(() => {
+  // 첫 터치에서는 현재 화면 또는 splash 다음 진입할 화면의 BGM을 시작한다.
+  const useIngameBgm = activeSceneName === INGAME_UI_SCENE || STORY_INTRO_SCENES.includes(activeSceneName)
+    || (activeSceneUuid === SPLASH_UI_SCENE_UUID
+      && (STORY_INTRO_REPLAY || localStorage.getItem(STORY_INTRO_STORAGE_KEY) !== '1'));
+  if (useIngameBgm ? ingameBgmEnabled : lobbyBgmEnabled) {
+    sound.playBgm(useIngameBgm ? INGAME_BGM : LOBBY_BGM);
+  }
+  // 비동기 Godot progress 이벤트의 SFX도 재생되도록, 사용자 제스처 안에서
+  // 무음 SFX를 한 번 재생해 브라우저의 미디어 권한을 해제한다.
+  sound.playKeyedSfx('audio-unlock', BUTTON_CLICK_SFX, 0);
+  hasUserGesture = true;
+});
+document.addEventListener('click', event => {
+  const isLoadingBar = event.target instanceof Element
+    && !!event.target.closest('[data-stable-id="loading-out-png-11"]');
+  if (loadingReady && activeSceneUuid === SPLASH_UI_SCENE_UUID && !isLoadingBar) {
+    splashRenderer?.getElement('loading-out-png-11')?.click();
+    return;
+  }
+  const isLobbyStageButton = event.target instanceof Element
+    && !!event.target.closest('[data-stable-id="home-btn-stage-normal-png-145"]');
+  const isNavTab = event.target instanceof Element
+    && !!event.target.closest('[data-nav-tab]');
+  if (buttonSfxEnabled && (isLobbyStageButton || isNavTab)) sound.playSfx(BUTTON_CLICK_SFX);
+  if (isLobbyStageButton && economy.getHearts() === 0 && !hasUnlimitedHearts()) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    flow.current?.renderer?.getActiveTabRenderer()?.getElement('home-btn-plus-png-94')?.click();
+    return;
+  }
+  if (buttonSfxEnabled && !isLobbyStageButton && !isNavTab && event.target instanceof Element) {
+    let clickEventElement = event.target;
+    while (clickEventElement != null) {
+      if (CLICK_EVENT_STABLE_IDS.has(clickEventElement.dataset.stableId)) {
+        sound.playSfx(BUTTON_CLICK_SFX);
+        break;
+      }
+      clickEventElement = clickEventElement.parentElement;
+    }
+  }
+  if (hapticsEnabled && event.target instanceof Element && event.target.closest('[data-stable-id]')) navigator.vibrate?.(12);
+}, { capture: true });
+
+let loadingReady = false;
+const storyIntroResponse = await fetch(`${ASSET_BASE}resources/story/cat-liquid-intro.json`, { cache: 'no-cache' });
+if (!storyIntroResponse.ok) throw new Error(`[Story intro] 이야기 로드 실패: ${storyIntroResponse.status}`);
+const storyIntro = await storyIntroResponse.json();
+attachStoryIntro(flow, {
+  story: storyIntro,
+  storageKey: STORY_INTRO_STORAGE_KEY,
+  isReady: () => loadingReady,
+  saveGame,
+  playPanelSfx: () => {
+    if (buttonSfxEnabled) sound.playSfx(STORY_PANEL_SFX, 0.8);
+  },
+  replay: STORY_INTRO_REPLAY,
+});
+flow.defineCondition('로딩', () => loadingReady);
+flow.defineCondition('not max_heart', () => economy.getHearts() < economy.maxHearts);
+flow.defineCondition('no_heart', () => economy.getHearts() === 0 && !hasUnlimitedHearts());
+const godotCartridge = makeGodotCartridge({
+  engineUrl: GODOT_ENGINE_URL,
+  engineConfig: GODOT_CONFIG,
+});
+let activeGame = null;
+let activeSceneName = '';
+let activeSceneUuid = '';
+let splashRenderer = null;
+let continueWithoutHeart = false;
+let endedGame = null;
+let timeoutRecoveryPending = false;
+let retryStagePending = false;
+let sceneSessionToken = 0;
+let activeGodotScene = 'lobby';
+let currentMapStage = progress.getCurrentStage();
+// HTML HUD presses also count as the first touch; they do not reach Godot's canvas.
+document.addEventListener('pointerdown', event => {
+  if (event.button === 0 && activeSceneName === INGAME_UI_SCENE && activeGame?.state === 'running') {
+    activeGame.message('stage_touch', {});
+  }
+}, { capture: true });
+const itemCounts = readItemCounts();
+const itemPending = { remove: 0, timestop: 0, move: 0 };
+let selectedTargetItem = null;
+let levelWinItemReward = null;
+let pendingLobbyItemRewards = readPendingLobbyItemRewards();
+let lobbyRewardPlaybackToken = 0;
+let lobbyRewardPlaybackRenderer = null;
+
+function normalizeItemCounts(saved = {}) {
+  return Object.fromEntries(ITEM_KEYS.map(item => {
+    const count = Number(saved[item]);
+    return [item, Number.isFinite(count) ? Math.max(0, Math.floor(count)) : ITEM_START_COUNT];
+  }));
+}
+
+function readItemCounts() {
+  return normalizeItemCounts(JSON.parse(localStorage.getItem(ITEM_STORAGE_KEY) || '{}'));
+}
+
+function saveItemCounts() {
+  localStorage.setItem(ITEM_STORAGE_KEY, JSON.stringify(itemCounts));
+  void saveGame();
+}
+
+function normalizeLobbyItemRewards(rewards = []) {
+  const seen = new Set();
+  return (Array.isArray(rewards) ? rewards : []).filter(reward => {
+    const item = reward?.item;
+    if (!ITEM_REWARD_UI[item] || seen.has(item)) return false;
+    seen.add(item);
+    return true;
+  }).map(reward => ({ item: reward.item, count: 1 }));
+}
+
+function readPendingLobbyItemRewards() {
+  return normalizeLobbyItemRewards(JSON.parse(localStorage.getItem(LOBBY_ITEM_REWARD_STORAGE_KEY) || '[]'));
+}
+
+function savePendingLobbyItemRewards() {
+  if (pendingLobbyItemRewards.length) localStorage.setItem(LOBBY_ITEM_REWARD_STORAGE_KEY, JSON.stringify(pendingLobbyItemRewards));
+  else localStorage.removeItem(LOBBY_ITEM_REWARD_STORAGE_KEY);
+  void saveGame();
+}
+
+function syncItemCounts() {
+  flow.update({
+    item1: selectedTargetItem === 'remove',
+    itme3: selectedTargetItem === 'move',
+    item: {
+      remove: { current: itemCounts.remove },
+      timestop: { current: itemCounts.timestop },
+      move: { current: itemCounts.move },
+      cancle: selectedTargetItem ? 'X' : '',
+    },
+  });
+}
+
+function resetItemRuntimeState() {
+  Object.keys(itemPending).forEach(item => { itemPending[item] = 0; });
+  selectedTargetItem = null;
+  syncItemCounts();
+}
+
+function pickStageClearItemReward() {
+  let roll = Math.random() * CLEAR_ITEM_REWARD_TABLE.reduce((sum, entry) => sum + entry.weight, 0);
+  for (const entry of CLEAR_ITEM_REWARD_TABLE) {
+    roll -= entry.weight;
+    if (roll < 0) return entry.item;
+  }
+  return null;
+}
+
+function grantStageClearItemReward() {
+  const item = pickStageClearItemReward();
+  if (!item) return null;
+  itemCounts[item] += 1;
+  saveItemCounts();
+  syncItemCounts();
+  return { item, count: 1 };
+}
+
+function queueLobbyItemReward(reward) {
+  const item = reward?.item;
+  if (!ITEM_REWARD_UI[item] || pendingLobbyItemRewards.some(entry => entry.item === item)) return;
+  pendingLobbyItemRewards.push({ item, count: 1 });
+  savePendingLobbyItemRewards();
+}
+
+function setRewardLayers(renderer, layerIds, visible) {
+  layerIds.forEach(stableId => {
+    const el = renderer.getElement(stableId);
+    if (el) el.style.display = visible ? '' : 'none';
+  });
+}
+
+function getLevelWinCoinRewardGroup(renderer) {
+  const anchor = renderer.getElement('gold-glow-12');
+  return typeof anchor?.closest === 'function' ? anchor.closest('[data-group="coin_reward"]') : null;
+}
+
+function syncLevelWinItemReward(renderer, reward) {
+  const hasRewardItem = !!ITEM_REWARD_UI[reward?.item];
+  Object.entries(ITEM_REWARD_UI).forEach(([item, cfg]) => {
+    setRewardLayers(renderer, cfg.levelWinLayers, reward?.item === item);
+    const itemGroup = renderer.getElement(cfg.levelWinLayers[0])?.closest?.('[data-group]');
+    if (itemGroup) {
+      itemGroup.style.left = `${cfg.levelWinPos.x}px`;
+      itemGroup.style.top = `${cfg.levelWinPos.y}px`;
+    }
+    Object.entries(cfg.levelWinLayerOffsets).forEach(([stableId, [dx, dy]]) => {
+      const el = renderer.getElement(stableId);
+      if (!el) return;
+      el.style.left = `${itemGroup ? dx : cfg.levelWinPos.x + dx}px`;
+      el.style.top = `${itemGroup ? dy : cfg.levelWinPos.y + dy}px`;
+      el.style.transform = '';
+    });
+  });
+  const pos = hasRewardItem ? LEVEL_WIN_COIN_REWARD_POS.item : LEVEL_WIN_COIN_REWARD_POS.solo;
+  const group = getLevelWinCoinRewardGroup(renderer);
+  if (group) {
+    group.style.left = `${pos.x}px`;
+    group.style.top = `${pos.y}px`;
+  }
+  Object.entries(LEVEL_WIN_COIN_REWARD_LAYER_OFFSETS).forEach(([stableId, [dx, dy]]) => {
+    const el = renderer.getElement(stableId);
+    if (!el) return;
+    const x = dx + (pos.contentOffsetX || 0);
+    el.style.left = `${group ? x : pos.x + x}px`;
+    el.style.top = `${group ? dy : pos.y + dy}px`;
+    el.style.transform = '';
+  });
+}
+
+function clearLobbyItemRewardLayers(renderer) {
+  Object.values(ITEM_REWARD_UI).forEach(cfg => setRewardLayers(renderer, cfg.lobbyLayers, false));
+}
+
+function playLobbyItemReward(renderer, reward, onDone, playbackToken = lobbyRewardPlaybackToken) {
+  const cfg = ITEM_REWARD_UI[reward?.item];
+  if (!cfg) {
+    onDone?.();
+    return;
+  }
+  clearLobbyItemRewardLayers(renderer);
+  setRewardLayers(renderer, cfg.lobbyLayers, true);
+  const icon = renderer.getElement(cfg.lobbyIcon);
+  const levelButton = renderer.getElement('home-btn-stage-normal-png-145');
+  const iconImage = icon?.querySelector('img');
+  if (!icon || !levelButton || !iconImage) {
+    console.warn('[Item reward] Lobby reward layer not found:', reward.item);
+    onDone?.();
+    return;
+  }
+  const cachedStart = icon.getBoundingClientRect();
+  const cachedEnd = levelButton.getBoundingClientRect();
+  if (buttonSfxEnabled) sound.playSfx(LOBBY_REWARD_SCALE_SFX);
+  icon.animate([
+    { transform: 'scale(.75)' },
+    { transform: 'scale(1.2)', offset: .55 },
+    { transform: 'scale(1)' },
+  ], { duration: 520, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+  setTimeout(() => {
+    const launchTrail = (attempt = 0) => {
+      if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
+      const liveStart = icon.getBoundingClientRect();
+      const liveEnd = levelButton.getBoundingClientRect();
+      const start = liveStart.width && liveStart.height ? liveStart : cachedStart;
+      const end = liveEnd.width && liveEnd.height ? liveEnd : cachedEnd;
+      let iconHidden = !start.width || !start.height;
+      let buttonHidden = !end.width || !end.height;
+      let node = liveStart.width && liveStart.height ? icon : null;
+      while (!iconHidden && node instanceof HTMLElement) {
+        const style = getComputedStyle(node);
+        iconHidden = style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) <= 0;
+        node = node.parentElement;
+      }
+      node = liveEnd.width && liveEnd.height ? levelButton : null;
+      while (!buttonHidden && node instanceof HTMLElement) {
+        const style = getComputedStyle(node);
+        buttonHidden = style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) <= 0;
+        node = node.parentElement;
+      }
+      if (iconHidden || buttonHidden) {
+        if (attempt < 12) {
+          requestAnimationFrame(() => launchTrail(attempt + 1));
+          return;
+        }
+        console.warn('[Item reward] Lobby reward trail launch skipped:', reward.item);
+        clearLobbyItemRewardLayers(renderer);
+        onDone?.();
+        return;
+      }
+      clearLobbyItemRewardLayers(renderer);
+      if (buttonSfxEnabled) sound.playSfx(LOBBY_REWARD_TRAIL_SFX);
+      const startX = start.left + start.width / 2;
+      const startY = start.top + start.height / 2;
+      const endX = end.left + end.width / 2;
+      const endY = end.top + end.height / 2;
+      const shardWidth = Math.max(1, start.width * 0.5);
+      const shardHeight = Math.max(1, start.height * 0.5);
+      for (let i = 0; i < LOBBY_REWARD_TRAIL_COUNT; i += 1) {
+        const shard = document.createElement('img');
+        shard.src = iconImage.src;
+        shard.alt = '';
+        shard.style.cssText = `position:fixed;left:${startX}px;top:${startY}px;width:${shardWidth}px;height:${shardHeight}px;z-index:10000;pointer-events:none;object-fit:contain;`;
+        document.body.appendChild(shard);
+        const spread = (i - (LOBBY_REWARD_TRAIL_COUNT - 1) / 2) * 8;
+        const lift = i % 2 ? -34 : -20;
+        const curve = Array.from({ length: 7 }, (_, step) => {
+          const t = step / 6;
+          const x = (endX - startX) * t + spread * Math.sin(Math.PI * t);
+          const y = (endY - startY) * t + lift * 4 * t * (1 - t);
+          return {
+            transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${1 - 0.65 * t})`,
+            opacity: 1 - t,
+          };
+        });
+        const anim = shard.animate(curve, { duration: 720, delay: i * 55, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' });
+        anim.onfinish = () => shard.remove();
+      }
+      setTimeout(() => {
+        if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
+        clearLobbyItemRewardLayers(renderer);
+        onDone?.();
+      }, 720 + Math.max(0, (LOBBY_REWARD_TRAIL_COUNT - 1) * 55) + 40);
+    };
+    launchTrail();
+  }, 800);
+}
+
+function playQueuedLobbyItemRewards(renderer) {
+  pendingLobbyItemRewards = normalizeLobbyItemRewards([...pendingLobbyItemRewards, ...readPendingLobbyItemRewards()]);
+  savePendingLobbyItemRewards();
+  if (!pendingLobbyItemRewards.length) return;
+  if (lobbyRewardPlaybackRenderer) return;
+  const playbackToken = ++lobbyRewardPlaybackToken;
+  lobbyRewardPlaybackRenderer = renderer;
+  let attempts = 0;
+  const playWhenVisible = () => {
+    if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
+    const levelButton = renderer.getElement('home-btn-stage-normal-png-145');
+    const rect = levelButton?.getBoundingClientRect();
+    let hidden = !levelButton?.isConnected || !rect?.width || !rect?.height;
+    let node = levelButton;
+    while (!hidden && node instanceof HTMLElement) {
+      const style = getComputedStyle(node);
+      hidden = style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) <= 0;
+      node = node.parentElement;
+    }
+    if (hidden) {
+      if (attempts++ < 30) setTimeout(playWhenVisible, 100);
+      else if (lobbyRewardPlaybackToken === playbackToken) lobbyRewardPlaybackRenderer = null;
+      return;
+    }
+    const rewards = pendingLobbyItemRewards.splice(0);
+    savePendingLobbyItemRewards();
+    const next = () => {
+      if (lobbyRewardPlaybackToken !== playbackToken || lobbyRewardPlaybackRenderer !== renderer) return;
+      const reward = rewards.shift();
+      if (reward) playLobbyItemReward(renderer, reward, next, playbackToken);
+      else if (lobbyRewardPlaybackToken === playbackToken) lobbyRewardPlaybackRenderer = null;
+    };
+    next();
+  };
+  requestAnimationFrame(() => requestAnimationFrame(playWhenVisible));
+}
+
+function requestItem(item) {
+  if (activeGame?.state !== 'running' || itemCounts[item] <= itemPending[item] || (item !== 'timestop' && selectedTargetItem)) return;
+  itemPending[item] += 1;
+  if (item !== 'timestop') selectedTargetItem = item;
+  syncItemCounts();
+  activeGame.message(`item.${item}`, {});
+}
+
+function cancelItemSelection() {
+  if (!selectedTargetItem || activeGame?.state !== 'running') return;
+  activeGame.message('item.cancel', { item: selectedTargetItem });
+}
+
+let pendingSceneReady = null;
+const handleGodotSfx = ({ sfx, outcome, score, stage, sceneReady, itemUsed, itemRejected }) => {
+  if (sceneReady && pendingSceneReady?.scene === sceneReady) pendingSceneReady.resolve();
+  if (sfx === 'cat-mouth-open' && hasUserGesture && buttonSfxEnabled
+    && !STORY_INTRO_SCENES.includes(activeSceneName)) sound.playKeyedSfx('cat-mouth-open', CAT_MOUTH_SFX);
+  if (sfx === 'cat-move' && buttonSfxEnabled) sound.playSfx(CAT_MOVE_SFX);
+  if (sfx === 'ice-break' && buttonSfxEnabled) sound.playSfx(ICE_BREAK_SFX);
+  if (sfx === 'ice-freezing' && buttonSfxEnabled) sound.playSfx(ICE_FREEZING_SFX);
+  if (sfx === 'digging' && buttonSfxEnabled) sound.playSfx(DIGGING_SFX);
+  if (sfx === 'cat-hole-absorb') {
+    if (buttonSfxEnabled) {
+      sound.playKeyedSfx('cat-hole-absorb', CAT_HOLE_ABSORB_SFX);
+      sound.playSfx(CAT_HOLE_POP_OVERLAY_SFX, 1.0);
+    }
+  }
+  if (sfx === 'item-move-hole-pop') {
+    console.info('[sound:item-move-hole-pop] received', {
+      buttonSfxEnabled,
+      hasUserGesture,
+      activeSceneName,
+      activeSceneUuid,
+      src: ITEM_MOVE_HOLE_POP_SFX,
+    });
+    if (buttonSfxEnabled) {
+      sound.playSfx(ITEM_MOVE_HOLE_POP_SFX, 0.35);
+    }
+    else console.warn('[sound:item-move-hole-pop] blocked: buttonSfxEnabled is false');
+  }
+  if (activeSceneName === INGAME_UI_SCENE && Number.isInteger(stage) && stage > 0) {
+    currentMapStage = stage;
+    resetItemRuntimeState();
+    flow.update({ stage: { current: `Level${stage}` } });
+  }
+  if (itemUsed) {
+    itemPending[itemUsed] = Math.max(0, itemPending[itemUsed] - 1);
+    itemCounts[itemUsed] = Math.max(0, itemCounts[itemUsed] - 1);
+    saveItemCounts();
+    if (selectedTargetItem === itemUsed) selectedTargetItem = null;
+    syncItemCounts();
+  }
+  if (itemRejected) {
+    itemPending[itemRejected] = Math.max(0, itemPending[itemRejected] - 1);
+    if (selectedTargetItem === itemRejected) selectedTargetItem = null;
+    syncItemCounts();
+  }
+  if (outcome === 'clear' || outcome === 'fail') void handleMainGameEnd({ outcome, score, stats: {} }).catch(error => console.error('[Godot] stage-end 처리 실패', error));
+};
+
+const handleMainGameEnd = async (result) => {
+  if (endedGame === activeGame) return;
+  endedGame = activeGame;
+  if (result.outcome === 'clear') {
+    timeoutRecoveryPending = false;
+    await runEconomyTransaction('stage-clear', async () => {
+      await economy.grantHearts(1);
+      await economy.grantCoins(STAGE_CLEAR_REWARD, 'stage-clear');
+    });
+    currentMapStage = (await progress.recordClear(currentMapStage, {
+      stars: result.stats?.stars || 0,
+      score: result.score,
+      ticket: result.ticket,
+    })).current;
+    flow.update({ stage: { current: `Level${currentMapStage}` } });
+    levelWinItemReward = grantStageClearItemReward();
+    if (levelWinItemReward) queueLobbyItemReward(levelWinItemReward);
+    void submitStageLeaderboard(currentMapStage);
+    void saveGame();
+    await flow.fire('스테이지 클리어시');
+  } else if (result.outcome === 'fail') {
+    timeoutRecoveryPending = true;
+    await flow.fire('스테이지 시간이 다되어 게임패배시');
+  }
+};
+
+flow.defineCondition('not enough coin', () => runEconomyTransaction('coin-gated-action', async () => {
+  if (economy.getCoins() < COIN_COST) return true;
+  const reason = activeSceneName === 'pop_OutOfMoves' ? 'out-of-moves-continue' : 'buy-lives-900';
+  if (!(await economy.spendCoins(COIN_COST, reason))) return true;
+  if (activeSceneName === 'pop_OutOfMoves') continueWithoutHeart = true;
+  else await economy.grantHearts(1);
+  return false;
+}));
+
+flow.update({
+  loading: { prograss: 0 },
+  loadingMessage: 'Loading... 0%',
+  cost: { refill: String(COIN_COST) },
+  continue: { coin: String(COIN_COST) },
+  stage: { timer: '01:00' },
+});
+syncItemCounts();
+syncUnlimitedHearts();
+// pop_BuyCoins is intentionally used both as a navigation tab and as an overlay popup.
+
+flow.on('scene:enter', ({ sceneUuid, sceneName, renderer, popup, waitUntil }) => {
+  const enterWork = (async () => {
+  const godotScene = sceneName === LOBBY_UI_SCENE ? 'lobby'
+    : sceneName === INGAME_UI_SCENE ? 'main' : null;
+  let gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
+  let parking = document.getElementById('godot-bridge-parking');
+  if (!popup && sceneUuid !== SPLASH_UI_SCENE_UUID && sceneUuid !== LOBBY_NAV_SCENE_UUID
+    && !godotScene && gameHost && parking && gameHost.parentElement !== parking) {
+    parking.appendChild(gameHost);
+  }
+  if (!popup && sceneUuid === LOBBY_NAV_SCENE_UUID) {
+    document.body.classList.add('instant-lobby-home-return');
+    // Restore tab motion on input, not on a timer that changes the idle
+    // navigation host's transform/compositing state ten seconds after entry.
+    document.addEventListener('pointerdown', () => {
+      document.body.classList.remove('instant-lobby-home-return');
+    }, { capture: true, once: true });
+  }
+  activeSceneName = sceneName;
+  activeSceneUuid = sceneUuid;
+  if (STORY_INTRO_SCENES.includes(sceneName)) sound.stopSfx('cat-mouth-open');
+  if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) syncUnlimitedHearts(renderer);
+  if (sceneName === LOBBY_UI_SCENE) {
+    renderer.update({ stage: { current: `Level${currentMapStage}` } });
+    if (lobbyRewardPlaybackRenderer && lobbyRewardPlaybackRenderer !== renderer) {
+      lobbyRewardPlaybackToken += 1;
+      lobbyRewardPlaybackRenderer = null;
+    }
+    if (!lobbyRewardPlaybackRenderer) clearLobbyItemRewardLayers(renderer);
+    playQueuedLobbyItemRewards(renderer);
+  }
+  if (sceneName === 'Ranking') await renderLeaderboard(renderer);
+  if (sceneName === INGAME_UI_SCENE || STORY_INTRO_SCENES.includes(sceneName)) {
+    if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
+    else sound.stopBgm();
+  } else if (sceneName === LOBBY_UI_SCENE || sceneUuid === LOBBY_NAV_SCENE_UUID) {
+    if (lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+    else sound.stopBgm();
+  }
+  // Ambient butterfly flight: animate the published sprites through the public API.
+  // The navigation host may enter after its Lobby child; preserve that child's flight.
+  if (!popup && sceneUuid !== LOBBY_NAV_SCENE_UUID) {
+    for (const animation of lobbyButterflyAnimations) animation.cancel();
+    lobbyButterflyAnimations = [];
+    if (sceneName === LOBBY_UI_SCENE) {
+      for (const flight of LOBBY_BUTTERFLY_FLIGHTS) {
+        const butterfly = renderer.getElement(flight.id);
+        if (!butterfly) throw new Error(`Lobby butterfly is missing: ${flight.id}`);
+        const origin = [parseFloat(butterfly.style.left), parseFloat(butterfly.style.top)];
+        const stops = [origin, ...flight.stops];
+        const frames = [];
+        let distance = 0;
+        let previous = origin;
+        // Sample a closed Catmull–Rom curve; matching end tangents prevent a loop snap.
+        for (let segment = 0; segment < stops.length; segment += 1) {
+          const p0 = stops[(segment + stops.length - 1) % stops.length];
+          const p1 = stops[segment];
+          const p2 = stops[(segment + 1) % stops.length];
+          const p3 = stops[(segment + 2) % stops.length];
+          for (let sample = 0; sample < 64; sample += 1) {
+            const t = sample / 64;
+            const position = [];
+            for (let axis = 0; axis < 2; axis += 1) {
+              position.push(0.5 * (2 * p1[axis] + (-p0[axis] + p2[axis]) * t
+                + (2 * p0[axis] - 5 * p1[axis] + 4 * p2[axis] - p3[axis]) * t * t
+                + (-p0[axis] + 3 * p1[axis] - 3 * p2[axis] + p3[axis]) * t * t * t));
+            }
+            distance += Math.hypot(position[0] - previous[0], position[1] - previous[1]);
+            frames.push({ translate: `${position[0] - origin[0]}px ${position[1] - origin[1]}px`, offset: distance });
+            previous = position;
+          }
+        }
+        distance += Math.hypot(origin[0] - previous[0], origin[1] - previous[1]);
+        frames.push({ translate: '0px 0px', offset: distance });
+        // Arc-length timing keeps long stretches from accelerating between stops.
+        for (const frame of frames) frame.offset /= distance;
+        renderer.setSpriteRate(flight.id, flight.wingRate);
+        lobbyButterflyAnimations.push(butterfly.animate(frames, {
+          duration: flight.duration, iterations: Infinity, easing: 'linear',
+        }));
+      }
+    }
+  }
+  if (sceneName === INGAME_UI_SCENE) {
+    renderer.update({ stage: { current: `Level${currentMapStage}` } });
+    syncItemCounts();
+    const playButtonClickSfx = () => {
+      if (buttonSfxEnabled) sound.playSfx(BUTTON_CLICK_SFX);
+    };
+    renderer.on('widget:item1', ({ value }) => {
+      playButtonClickSfx();
+      if (value) requestItem('remove');
+      else cancelItemSelection();
+    });
+    renderer.on('widget:itme3', ({ value }) => {
+      playButtonClickSfx();
+      if (value) requestItem('move');
+      else cancelItemSelection();
+    });
+    ['entry-item-num-png-2470', 'entry-item-num-png-2474'].forEach((stableId) => {
+      const el = renderer.getElement(stableId);
+      if (!el || el.dataset.itemCancelBound === '1') return;
+      el.dataset.itemCancelBound = '1';
+      el.style.cursor = 'pointer';
+      el.style.pointerEvents = 'auto';
+      el.addEventListener('click', (event) => {
+        if (!selectedTargetItem) return;
+        event.preventDefault();
+        event.stopPropagation();
+        cancelItemSelection();
+      });
+    });
+    ['entry-box-normal-png-2458', 'home-btn-setting-webp-2467'].forEach((stableId) => {
+      const el = renderer.getElement(stableId);
+      if (!el || el.dataset.ingameSettingsSfxBound === '1') return;
+      el.dataset.ingameSettingsSfxBound = '1';
+      el.addEventListener('click', () => {
+        playButtonClickSfx();
+      });
+    });
+    ['entry-box-normal-png-2456', 'item2-png-2461', 'common-icon-greendot2-webp-2464'].forEach((stableId) => {
+      const el = renderer.getElement(stableId);
+      if (!el || el.dataset.itemTimestopBound === '1') return;
+      el.dataset.itemTimestopBound = '1';
+      el.style.cursor = 'pointer';
+      el.style.pointerEvents = 'auto';
+      el.addEventListener('click', () => {
+        if (buttonSfxEnabled) sound.playSfx(BUTTON_CLICK_SFX);
+        requestItem('timestop');
+      });
+    });
+  }
+  if (sceneName === 'pop_BuyCoins') {
+    const purchaseToast = renderer.getElement('common-box-toast-png-2187');
+    const closeButton = renderer.getElement('common-btn-top-x-blue-png-2186');
+    let purchaseToastTimer;
+    let resumeTimeoutAfterShop = false;
+    if (purchaseToast) purchaseToast.style.visibility = 'hidden';
+    if (closeButton) {
+      closeButton.style.visibility = popup ? '' : 'hidden';
+      closeButton.style.pointerEvents = popup ? '' : 'none';
+    }
+    syncShopCooldowns(renderer);
+    const shopCooldownAnchor = renderer.getElement('plain-text-50');
+    const shopCooldownTimer = setInterval(() => {
+      if (!shopCooldownAnchor?.isConnected) {
+        clearInterval(shopCooldownTimer);
+        return;
+      }
+      syncShopCooldowns(renderer);
+    }, 1000);
+    const showPurchaseToast = () => {
+      resumeTimeoutAfterShop = timeoutRecoveryPending && endedGame === activeGame && activeGame?.state === 'paused';
+      console.info('[timeout-shop] purchase completed', { resumeTimeoutAfterShop, gameState: activeGame?.state });
+      if (!purchaseToast) return;
+      clearTimeout(purchaseToastTimer);
+      purchaseToast.style.visibility = '';
+      purchaseToastTimer = setTimeout(() => { purchaseToast.style.visibility = 'hidden'; }, 2500);
+    };
+    renderer.on('common-btn-top-x-blue-png-2186:click', () => {
+      if (!resumeTimeoutAfterShop || activeGame?.state !== 'paused') return;
+      resumeTimeoutAfterShop = false;
+      timeoutRecoveryPending = false;
+      endedGame = null;
+      console.info('[timeout-shop] resuming purchased timeout continue', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
+      activeGame.message('continue_stage', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
+      activeGame.resume();
+    });
+    renderer.on('860', async () => {
+      if (shopPurchasePending || getShopCooldownRemaining('860') > 0) return;
+      shopPurchasePending = true;
+      try {
+        await runEconomyTransaction('shop-purchase', async () => {
+          await economy.grantCoins(5000, 'shop-860');
+          await economy.refillHearts();
+          activateUnlimitedHearts();
+        });
+        setShopCooldown('860');
+        syncShopCooldowns(renderer);
+        showPurchaseToast();
+      } finally {
+        shopPurchasePending = false;
+      }
+    });
+    renderer.on('480', async () => {
+      if (shopPurchasePending || getShopCooldownRemaining('480') > 0) return;
+      shopPurchasePending = true;
+      try {
+        await runEconomyTransaction('shop-purchase', async () => {
+          await economy.grantCoins(2500, 'shop-480');
+          await economy.grantHearts(10, Date.now(), 'shop-480', { overflowCap: 10 });
+        });
+        setShopCooldown('480');
+        syncShopCooldowns(renderer);
+        showPurchaseToast();
+      } finally {
+        shopPurchasePending = false;
+      }
+    });
+    renderer.on('320', async () => {
+      if (shopPurchasePending || getShopCooldownRemaining('320') > 0) return;
+      shopPurchasePending = true;
+      try {
+        await runEconomyTransaction('shop-purchase', () => economy.grantCoins(1000, 'shop-320'));
+        setShopCooldown('320');
+        syncShopCooldowns(renderer);
+        showPurchaseToast();
+      } finally {
+        shopPurchasePending = false;
+      }
+    });
+  }
+  if ((sceneName === 'pop_LevelFail' || sceneName === 'pop_Fail') && popup) {
+    renderer.on(sceneName === 'pop_LevelFail' ? 'common-btn-green-sales-png-2318:click' : 'common-btn-green-sales-png-2367:click', () => {
+      retryStagePending = true;
+    });
+  }
+  if (sceneName === 'pop_LevelFail' && popup) {
+    const closeButton = renderer.getElement('common-btn-top-x-red-png-2350');
+    if (closeButton && closeButton.dataset.popupCloseBound !== '1') {
+      closeButton.dataset.popupCloseBound = '1';
+      closeButton.style.cursor = 'pointer';
+      closeButton.style.pointerEvents = 'auto';
+      closeButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        await flow.closePopup();
+        if (activeGame?.state === 'paused') activeGame.resume();
+      });
+    }
+  }
+  if (sceneName === 'pop_LevelWin' && popup) {
+    if (buttonSfxEnabled) {
+      sound.playSfx(STAGE_CLEAR1_SFX);
+      setTimeout(() => sound.playSfx(STAGE_CLEAR2_SFX), STAGE_CLEAR2_DELAY_MS);
+    }
+    renderer.getElement('confetti-148')?.style.setProperty('pointer-events', 'none');
+    renderer.getElement('confetti-148')?.closest('.sr-fit')?.style.setProperty('z-index', '9001');
+    syncLevelWinItemReward(renderer, levelWinItemReward);
+    if (activeGame?.state === 'running') activeGame.pause('level-win');
+    activeGame?.message('load_scene', {
+      stage: progress.getCurrentStage(),
+      config: { godotScene: 'main', timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS },
+    });
+  }
+  if (sceneName === 'pop_OutOfMoves' && popup) {
+    if (buttonSfxEnabled) sound.playSfx(TIME_OUT_SFX);
+    if (activeGame?.state === 'running') activeGame.pause('out-of-moves');
+    ['plain-text-1774', 'itemicon-money-coin-png-1773'].forEach((stableId) => {
+      const el = renderer.getElement(stableId);
+      if (!el) return;
+      el.style.pointerEvents = 'none';
+    });
+  } else if (sceneName === 'pop_Give_up' && popup) {
+    if (activeGame?.state === 'running') activeGame.pause('give-up');
+    renderer.on('common-btn-green-sales-png-2379:click', () => {
+      if (!hasUnlimitedHearts()) void runEconomyTransaction('give-up-heart', () => economy.consumeHeart());
+    });
+    ['plain-text-2382:click', 'common-btn-top-x-red-png-2384:click'].forEach(eventName => {
+      renderer.on(eventName, () => activeGame?.resume());
+    });
+  } else if (popup && buttonSfxEnabled) {
+    sound.playSfx(POPUP_OPEN_SFX);
+  }
+  if ((sceneName === 'pop_Settings_1' || sceneName === 'pop_Settings') && popup) {
+    if (activeGame?.state === 'running') activeGame.pause('settings');
+    const isLobbySettings = sceneName === 'pop_Settings';
+    const isIngameSettings = sceneName === 'pop_Settings_1';
+    renderer.update({
+      sound: isIngameSettings ? ingameBgmEnabled : buttonSfxEnabled,
+      music: isLobbySettings ? lobbyBgmEnabled : buttonSfxEnabled,
+      vibration: hapticsEnabled,
+    });
+    renderer.on('widget:sound', ({ value }) => {
+      if (isIngameSettings) {
+        ingameBgmEnabled = !!value;
+        if (ingameBgmEnabled) sound.playBgm(INGAME_BGM);
+        else sound.stopBgm();
+        renderer.update({ sound: ingameBgmEnabled });
+        return;
+      }
+      buttonSfxEnabled = !!value;
+      if (!buttonSfxEnabled) {
+        sound.stopSfx('cat-mouth-open');
+        sound.stopSfx('cat-hole-absorb');
+      }
+      renderer.update({ sound: buttonSfxEnabled });
+    });
+    renderer.on('widget:music', ({ value }) => {
+      if (isIngameSettings) {
+        buttonSfxEnabled = !!value;
+        if (!buttonSfxEnabled) {
+          sound.stopSfx('cat-mouth-open');
+          sound.stopSfx('cat-hole-absorb');
+        }
+        renderer.update({ music: buttonSfxEnabled });
+      } else {
+        lobbyBgmEnabled = !!value;
+        if (lobbyBgmEnabled) sound.playBgm(LOBBY_BGM);
+        else sound.stopBgm();
+        renderer.update({ music: lobbyBgmEnabled });
+      }
+    });
+    renderer.on('widget:vibration', ({ value }) => {
+      hapticsEnabled = !!value;
+      if (hapticsEnabled) navigator.vibrate?.(12);
+      else navigator.vibrate?.(0);
+      renderer.update({ vibration: hapticsEnabled });
+    });
+    const menuMotionTargets = sceneName === 'pop_Settings_1'
+      ? SETTINGS_MENU_GROUPS.map(({ name, offset, layerIds }) => ({
+          offset,
+          targets: layerIds
+            ? layerIds.map(stableId => renderer.getElement(stableId)).filter(Boolean)
+            : [renderer.getGroup(name)].filter(Boolean),
+        }))
+      : [];
+    ['entry-box-normal-png-2287', 'home-btn-setting-webp-2288'].forEach(stableId => {
+      const closeButton = renderer.getElement(stableId);
+      if (!closeButton) return;
+      ['mousedown', 'mouseup', 'mouseleave', 'touchstart', 'touchend'].forEach(eventName => {
+        closeButton.addEventListener(eventName, event => event.stopPropagation());
+      });
+    });
+    const popupSettingsFx = renderer.getElement('entry-box-normal-png-2287')?.closest('[data-fx-group]');
+    const popupSettingsGroup = renderer.getGroup('setting');
+    menuMotionTargets.forEach(({ offset, targets }, index) => {
+      const translate = `translateY(${offset}px)`;
+      targets.forEach(target => {
+        target.style.transform = translate;
+        target.animate(
+          [{ transform: translate }, { transform: 'translateY(0)' }],
+          {
+            duration: SETTINGS_MENU_MOTION_MS,
+            delay: index * SETTINGS_MENU_STAGGER_MS,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'forwards',
+          },
+        );
+      });
+    });
+    ['entry-box-normal-png-2287', 'home-btn-setting-webp-2288'].forEach((stableId) => {
+      const closeButton = renderer.getElement(stableId);
+      if (!closeButton || closeButton.dataset.settingsCloseBound === '1') return;
+      closeButton.dataset.settingsCloseBound = '1';
+      closeButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (buttonSfxEnabled) sound.playSfx(BUTTON_CLICK_SFX);
+        popupSettingsFx?.animate(
+          [
+            { transform: 'scale(1)', filter: 'brightness(1)' },
+            { transform: 'scale(.95)', filter: 'brightness(.95)' },
+            { transform: 'scale(1)', filter: 'brightness(1)' },
+          ],
+          { duration: 100, easing: 'ease-out' },
+        );
+        [...menuMotionTargets].reverse().forEach(({ offset, targets }, index) => {
+          targets.forEach(target => target.animate(
+            [{ transform: 'translateY(0)' }, { transform: `translateY(${offset}px)` }],
+            {
+              duration: SETTINGS_MENU_MOTION_MS,
+              delay: index * SETTINGS_MENU_STAGGER_MS,
+              easing: 'cubic-bezier(0.4, 0, 1, 1)',
+              fill: 'forwards',
+            },
+          ));
+        });
+        setTimeout(() => {
+          menuMotionTargets.forEach(({ targets }) => {
+            targets.forEach(target => target.style.setProperty('visibility', 'hidden'));
+          });
+          popupSettingsGroup?.style.setProperty('visibility', 'hidden');
+        }, SETTINGS_MENU_MOTION_MS + SETTINGS_MENU_STAGGER_MS * (SETTINGS_MENU_GROUPS.length - 1));
+        await new Promise(resolve => setTimeout(resolve, SETTINGS_MENU_MOTION_MS + SETTINGS_MENU_STAGGER_MS * SETTINGS_MENU_GROUPS.length + 20));
+        await flow.closePopup();
+        if (activeGame?.state === 'paused') activeGame.resume();
+      });
+    });
+    return;
+  }
+  if (sceneName === INGAME_UI_SCENE) {
+    renderer.getGroup('setting')?.style.removeProperty('visibility');
+  }
+  if (sceneUuid === SPLASH_UI_SCENE_UUID) {
+    splashRenderer = renderer;
+    renderer.getElementByName('GameField')?.style.setProperty('visibility', 'hidden');
+    flow.update({ loadingMessage: '파일 다운로드 중입니다...' });
+    await uiRenderStylesReady;
+    if (splashCache) {
+      await Promise.all([
+        fetch(GODOT_ENGINE_URL),
+        fetch(`${GODOT_CONFIG.executable}.wasm`),
+        fetch(GODOT_CONFIG.mainPack || `${GODOT_CONFIG.executable}.pck`),
+      ]);
+    }
+    if (document.fonts?.load && UI_FONT_SPECS.size) {
+      await Promise.all([...UI_FONT_SPECS].map(spec => document.fonts.load(spec).catch(() => null)));
+    }
+    const navigationTabPreload = Promise.all([...new Set([
+      ...NAVIGATION_TAB_SCENES.flatMap(sceneName => {
+        const contract = sceneContracts.get(sceneName);
+        if (!contract) throw new Error(`[Splash preload] 네비게이션 탭 contract 누락: ${sceneName}`);
+        return [...JSON.stringify(contract).matchAll(/"(?:imagePath|exportPath|iconPath|iconActivePath)"\s*:\s*"([^"]+\.(?:png|jpe?g|webp|svg))"/gi)].map(([, path]) => path);
+      }),
+      ...sceneFlow.edges.flatMap(({ transitionIn }) => (transitionIn?.curtainLayers || [])
+        .map(({ visual }) => visual?.exportPath).filter(Boolean)),
+    ])].map(path => new Promise((resolve, reject) => {
+      const image = new Image();
+      navigationTabImages.push(image);
+      image.onload = () => image.decode ? image.decode().then(resolve, reject) : resolve();
+      image.onerror = () => reject(new Error(`[Splash preload] 네비게이션 에셋 로드 실패: ${path}`));
+      image.src = ASSET_BASE + path;
+    })));
+    const audioPreload = Promise.all(AUDIO_ASSETS.map(async path => {
+      const response = await fetch(path);
+      if (!response.ok) throw new Error(`[Splash preload] 오디오 에셋 로드 실패(${response.status}): ${path}`);
+      await response.arrayBuffer();
+    }));
+    const game = new GameSession({ renderer, initTimeoutMs: 30000 });
+    activeGame = game;
+    await Promise.all([
+      navigationTabPreload,
+      audioPreload,
+      renderLeaderboard(),
+      game.start(godotCartridge, {
+        stage: progress.getCurrentStage(),
+        config: { godotScene: 'lobby', preloadGodotScenes: ['main'] },
+        onProgress: handleGodotSfx,
+        onHud: ({ timeLeft }) => flow.update({ stage: { timer: timeLeft } }),
+        onEnd: handleMainGameEnd,
+        onError: (error) => console.error('[Godot preload] session error', error),
+      }),
+    ]);
+    if (activeGame !== game || game.state !== 'ready') {
+      throw new Error('[Godot preload] Lobby/Main 준비에 실패했습니다.');
+    }
+    const gameHost = document.getElementById('godot-bridge-canvas')?.parentElement;
+    const parking = document.getElementById('godot-bridge-parking') || document.createElement('div');
+    parking.id = 'godot-bridge-parking';
+    if (!(gameHost?.clientWidth > 0 && gameHost.clientHeight > 0)) {
+      throw new Error('[Godot preload] 캔버스 보관 전 GameField 크기가 유효하지 않습니다.');
+    }
+    // display:none makes the bridge ResizeObserver shrink WebGL to 1x1 and clear its buffer.
+    // Preserve the unscaled layout size while parked, including after a window resize.
+    parking.style.cssText = `position:fixed;left:-100000px;top:0;width:${gameHost.clientWidth}px;height:${gameHost.clientHeight}px;visibility:hidden;pointer-events:none;overflow:hidden;`;
+    if (!parking.isConnected) document.body.appendChild(parking);
+    if (gameHost) parking.appendChild(gameHost);
+    loadingReady = true;
+    const fillStartedAt = performance.now();
+    while (true) {
+      const percent = Math.min(100, Math.round((performance.now() - fillStartedAt) / SPLASH_LOAD_FILL_DURATION_MS * 100));
+      flow.update({ loading: { prograss: percent }, loadingMessage: `Loading... ${percent}%` });
+      if (percent === 100) break;
+      await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+    flow.update({ loadingMessage: 'Tap to screen' });
+    return;
+  }
+  if (!godotScene) {
+    return;
+  }
+  const gameField = renderer.getElementByName('GameField');
+  if (gameHost && gameField && gameHost.parentElement !== gameField) {
+    gameHost.style.cssText = 'position:absolute;inset:0;overflow:hidden;display:block;';
+    gameField.appendChild(gameHost);
+    requestAnimationFrame(() => console.info('[Godot mount]', JSON.stringify({
+      sceneName,
+      scene: godotScene,
+      canvasPixels: [gameHost.firstElementChild?.width, gameHost.firstElementChild?.height],
+      host: gameHost.getBoundingClientRect().toJSON(),
+      gameField: gameField.getBoundingClientRect().toJSON(),
+      parent: gameHost.parentElement?.getAttribute('data-stable-id'),
+    })));
+  } else if (!gameHost || !gameField) {
+    console.error('[Godot mount] 대상 누락', { sceneName, scene: godotScene, gameHost: !!gameHost, gameField: !!gameField });
+  }
+  const restartingStage = godotScene === 'main' && !continueWithoutHeart
+    && (retryStagePending || (timeoutRecoveryPending && endedGame === activeGame));
+  if (godotScene === 'lobby') retryStagePending = false;
+  if (activeGame?.state === 'running' && godotScene === activeGodotScene && !restartingStage) return;
+  if (activeGame?.state === 'running') activeGame.pause('scene-switch');
+  const sceneReadyPromise = (activeGame?.state === 'paused' || activeGame?.state === 'ready')
+    && (godotScene !== activeGodotScene || restartingStage)
+    ? new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        pendingSceneReady = null;
+        reject(new Error(`[Godot] ${godotScene} 첫 화면 렌더 완료 신호가 30초 안에 도착하지 않았습니다.`));
+      }, 30000);
+      pendingSceneReady = { scene: godotScene, resolve: () => {
+        clearTimeout(timeout);
+        pendingSceneReady = null;
+        resolve();
+      } };
+    }) : null;
+  if (activeGame?.state === 'paused') {
+    if (godotScene === 'main') {
+      endedGame = null;
+      timeoutRecoveryPending = false;
+      retryStagePending = false;
+    }
+    if (godotScene === 'main' && continueWithoutHeart) {
+      activeGame.message('continue_stage', { timeLimitSeconds: TIMEOUT_CONTINUE_SECONDS });
+      continueWithoutHeart = false;
+    }
+    if (godotScene !== activeGodotScene || restartingStage) {
+      if (restartingStage) console.info('[stage-retry] restarting stage with immediate countdown');
+      activeGodotScene = godotScene;
+      activeGame.message('load_scene', {
+        stage: progress.getCurrentStage(),
+        config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS, startTimerImmediately: restartingStage } : {}) },
+      });
+    }
+    activeGame.resume();
+    if (sceneReadyPromise) await sceneReadyPromise;
+    return;
+  }
+  if (activeGame?.state === 'ready') {
+    if (godotScene === activeGodotScene && !restartingStage) return;
+    if (godotScene === 'main') {
+      if (!continueWithoutHeart && !hasUnlimitedHearts() && !(await runEconomyTransaction('game-entry-heart', () => economy.consumeHeart()))) {
+        throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
+      }
+      continueWithoutHeart = false;
+      activeGame.message('load_scene', {
+        stage: currentMapStage,
+        config: { godotScene, timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS, startTimerImmediately: restartingStage },
+      });
+      retryStagePending = false;
+      activeGodotScene = godotScene;
+      activeGame.startGame();
+      await sceneReadyPromise;
+      return;
+    }
+  }
+  const sessionToken = ++sceneSessionToken;
+
+  if (godotScene === 'main' && !continueWithoutHeart && !hasUnlimitedHearts()) {
+    const consumedHeart = await runEconomyTransaction('game-entry-heart', () => economy.consumeHeart());
+    if (sessionToken !== sceneSessionToken) return;
+    if (!consumedHeart) {
+      throw new Error('[Economy] Ingame 진입 전 하트 소비에 실패했습니다. no_heart 흐름도 분기를 확인하세요.');
+    }
+  }
+  if (sessionToken !== sceneSessionToken) return;
+  continueWithoutHeart = false;
+
+  if (activeGame) activeGame.abort('scene-change');
+  const game = new GameSession({ renderer, initTimeoutMs: 30000, hudMap: { timeLeft: 'stage.timer' } });
+  activeGame = game;
+  activeGodotScene = godotScene;
+  await game.start(godotCartridge, {
+    stage: currentMapStage,
+    config: { godotScene, ...(godotScene === 'main' ? { timeLimitSeconds: STAGE_TIME_LIMIT_SECONDS, startTimerImmediately: restartingStage } : {}) },
+    onEnd: handleMainGameEnd,
+    onProgress: handleGodotSfx,
+    onError: (error) => console.error('[Godot integration] session error', error),
+  });
+  if (sessionToken !== sceneSessionToken || activeGame !== game) {
+    game.abort('stale-scene-enter');
+    return;
+  }
+  if (godotScene === 'main') retryStagePending = false;
+  if (game.state === 'ready') game.startGame();
+  })();
+  waitUntil?.(enterWork);
+});
+
+await flow.start();
+</script>
+</body>
+</html>
+

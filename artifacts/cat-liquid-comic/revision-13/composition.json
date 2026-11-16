@@ -1,0 +1,26 @@
+[
+  {
+    "pair": 1,
+    "replacement": "upper-panel-only",
+    "source": "relocated-lift-generated.png",
+    "sourceCrop": [
+      0,
+      0,
+      1024,
+      484
+    ],
+    "preserved": "lower laboratory/matching-color destination panel from laboratory generation"
+  },
+  {
+    "pair": 3,
+    "replacement": "upper-panel-only",
+    "source": "relocated-lift-generated.png",
+    "sourceCrop": [
+      0,
+      491,
+      1024,
+      1024
+    ],
+    "preserved": "lower laboratory/matching-color destination panel from laboratory generation"
+  }
+]

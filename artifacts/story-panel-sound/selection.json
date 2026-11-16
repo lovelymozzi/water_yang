@@ -1,0 +1,60 @@
+{
+  "source": "https://ui-editor-lscommon.app.linecorp-dev.com/asset-store",
+  "access": "Existing authenticated user Chrome tab; Sounds catalog and detail/download UI. No new login or credential extraction.",
+  "catalogUniqueSounds": 420,
+  "searchQueries": [
+    "paper",
+    "종이",
+    "넘기",
+    "flip",
+    "page",
+    "book",
+    "turn"
+  ],
+  "noDedicatedPaperFlipResult": true,
+  "selected": {
+    "title": "ui_card_turn_optimized.mp3",
+    "assetId": "d8ce9978-c63f-496e-b3dd-8a0918e05ff6",
+    "tag": "magiccoin",
+    "gain": 0.8,
+    "sourceSha256": "98f390b55213e7c7da5e4a2507576e932ef1dd4596daea9cc9a4f0d69e619353",
+    "bytes": 3491,
+    "processing": "None; exact downloaded MP3 bytes copied to source/runtime sound folders."
+  },
+  "candidates": [
+    {
+      "title": "ui_card_turn_optimized.mp3",
+      "decodedDurationSeconds": 0.5897,
+      "peakDbfs": -3.51,
+      "rmsDbfs": -25.63
+    },
+    {
+      "title": "ui_book_open_optimized.mp3",
+      "decodedDurationSeconds": 0.6224,
+      "peakDbfs": -0.43,
+      "rmsDbfs": -23.99
+    },
+    {
+      "title": "ui_book_close_optimized.mp3",
+      "decodedDurationSeconds": 0.6313,
+      "peakDbfs": 0.0,
+      "rmsDbfs": -21.75
+    }
+  ],
+  "verification": "Decoded file measurements and Node integration checks; actual game audition belongs to user. Audio input was unavailable to the assistant; no claim of direct listening.",
+  "unchanged": "SoundManager, SFX toggle/mute/unlock, cut timing and next-only page/lobby gates, popup sound.",
+  "checks": {
+    "storyIntro": "passed",
+    "assetPaths": "passed",
+    "splashCache": "passed",
+    "soundBindingInBothShells": "passed: new cue/preload, gain0.8, one call, SFX toggle, unchanged popup sound",
+    "sourceRuntimeAudioBytes": "identical",
+    "httpRuntimeShellAndMp3": "200; byte-identical to workspace",
+    "testSerializationAdjustment": "Story source comparison accepts only an empty editor-derived curtainLayersContract array omitted by publish; other fields still deep-compared. No scene-flow changes.",
+    "browserGameAudition": false,
+    "publishErrors": 0,
+    "publishWarnings": 8,
+    "flowEdgesAdded": 0,
+    "flowEdgesRemoved": 0
+  }
+}

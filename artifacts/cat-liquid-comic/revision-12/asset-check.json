@@ -1,0 +1,328 @@
+{
+  "kind": "offline-assets-only",
+  "panels": [
+    {
+      "panel": 1,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        502
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_01.webp",
+      "sourceSha256": "e76f07d814ca8a5b76c1c306e625be825f9a1aafefe3a825671fb65fee86e4bf",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 2,
+      "sourcePair": "pair-01-generated.png",
+      "sourceCrop": [
+        0,
+        513,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_02.webp",
+      "sourceSha256": "7524653ebc083d42856eb66c0795b4b353e4915dabb59ef6fbdbb066172ef2a7",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 3,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        512
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_03.webp",
+      "sourceSha256": "37917e469f33c0d3252c9d75e23fbc8af10d6f09178fdcd2ccf99fcad40584d6",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 4,
+      "sourcePair": "pair-02-generated.png",
+      "sourceCrop": [
+        0,
+        519,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_04.webp",
+      "sourceSha256": "78ef7ad8130bd3086cd7656018c744d4e3909bf8a9e9f45f91dda33f736c6880",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 5,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        503
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_05.webp",
+      "sourceSha256": "3de67eb5d971297daa7b3e746ce72c587a3f0cef98a4585f55f5db7a0ab529b9",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          384,
+          183
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 6,
+      "sourcePair": "pair-03-generated.png",
+      "sourceCrop": [
+        0,
+        516,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_06.webp",
+      "sourceSha256": "d31544b2302b03f7bf4b01cce3b7833cfbb19c4470b6ba7867a1ea061994c1e0",
+      "outline": [
+        [
+          1,
+          9
+        ],
+        [
+          384,
+          1
+        ],
+        [
+          378,
+          191
+        ],
+        [
+          7,
+          191
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 7,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        0,
+        1024,
+        502
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_07.webp",
+      "sourceSha256": "f2da395b39b4c58825b89e3a1f9de567ed490bb2ed3754a7a8f185db81fc1bdb",
+      "outline": [
+        [
+          7,
+          1
+        ],
+        [
+          378,
+          1
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          183
+        ]
+      ],
+      "captionField": false
+    },
+    {
+      "panel": 8,
+      "sourcePair": "pair-04-generated.png",
+      "sourceCrop": [
+        0,
+        521,
+        1024,
+        1024
+      ],
+      "sourceArt": "src/assets/story_cat_liquid_professor_panel_08.webp",
+      "sourceSha256": "b60897ad75bce7f1a9dd57c81526e60eebc31a5ab4ecbc196908ce07e09e5588",
+      "outline": [
+        [
+          1,
+          1
+        ],
+        [
+          384,
+          9
+        ],
+        [
+          384,
+          191
+        ],
+        [
+          1,
+          191
+        ]
+      ],
+      "captionField": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_01.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "b6defca340a615b848c9a72c1ac92ea8e38a5cdc33fc25b05e2ce393c9a5f099"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_02.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "6649d854db3e933a9e40434277bf3ed3edbbc2aa44b4b0ab7a0655c4066c071c"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_03.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "7903f45066861eb11f9d0791d74c5ef4c255452196863c7d1a0f591d361353e2"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_04.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "357e3c1a12d9f1ee169b672702e9274758b6c3e62f76bd6b4a2739a3b27408a7"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_05.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "27728d840feb7f417a55db3561ae8cea107485edfef22c0c4d0eb0a5c2d8b8bb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_06.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "545c3512960cceb1bec81b2e0e4cab0ad4af305c763314f2ae9ab6f8e878406e"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_07.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "f9a5df0eabe5be1fdcfb0a5690553c7ebbb487262b698f6750aa5c34401b3ed6"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_professor_card_08.webp",
+      "size": [
+        770,
+        384
+      ],
+      "sha256": "bef57cd4cb09f20e9b2f4e409842561b6841c63fa2a4adf6b49068220b4e0166"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_impact_ink.png",
+      "size": [
+        792,
+        338
+      ],
+      "sha256": "73fa77207adf5dadada93b2236a5598713200f24eb8681916f0407658330982e"
+    }
+  ],
+  "artAreaRatio": 0.8831
+}

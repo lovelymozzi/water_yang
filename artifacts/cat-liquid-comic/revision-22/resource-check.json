@@ -1,0 +1,173 @@
+{
+  "resources": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "93046ab5962bdcd1a8a68355085913d04618d9fff2cb835a5f49a4ce37613036"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "70cf083ac4aa41e1cb256786f1d21dac95d4e7682f788bbe1ca4d3d3d0455603"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "19e6347c9790c020286d8fdede18e2f1623f54809345b2bf82a49eb6f2a1cb90"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_page_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "555912b8ff5d67218fe8fca06ff5eedccb878d9278b4f665049d1d16606a97fb"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_page_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "6da5dc8e68e3c55ed43cd5cccc993ad439a47d35a52c4cbe168ca400e9a67095"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_panel_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "51c01522779163bca7466e1062349a0ce59df809ffc23f878366a1dfa88865c0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "bc4c9d9b33dc4673fbe471b74a37f4912de8a8f0a40a7a7c57d7aa17e48d2b8a"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_panel_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "c2b46ad599c4f19571303f3f8bba1d4b4d27059aa3a544cdc752e7ba603252a1"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_waterworld_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "8ff458dd0cfc5e6eac4b1eb9cd4db04676eba3a33a96f75a52d26a93f6ec2a3f"
+    }
+  ],
+  "unchangedRawAndCardPanels": [
+    1,
+    2,
+    3,
+    6,
+    7,
+    8
+  ],
+  "sourceAndContractOnlyImageReferencesChanged": true,
+  "allEightBlackRims": true,
+  "rimSamples": [
+    {
+      "panel": 1,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 2,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 3,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 4,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        19,
+        19,
+        19
+      ]
+    },
+    {
+      "panel": 5,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 6,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 7,
+      "point": [
+        385,
+        4
+      ],
+      "rgb": [
+        17,
+        17,
+        17
+      ]
+    },
+    {
+      "panel": 8,
+      "point": [
+        385,
+        12
+      ],
+      "rgb": [
+        16,
+        16,
+        16
+      ]
+    }
+  ],
+  "scene4ScientistPixelsPreserved": true,
+  "scene3PairPixelsPreserved": true,
+  "scene6PairPixelsPreserved": true,
+  "sameControlsMotionAndCardTurnSound": true,
+  "publishErrors": 0,
+  "publishWarnings": 8,
+  "browserVisualTest": false
+}

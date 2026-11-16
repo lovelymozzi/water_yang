@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-15",
+  "scope": "offline title revisions with new logo; no game modifications",
+  "model": "gpt-image-2.5-sunburst",
+  "quality": "low",
+  "reference": "actual-game-only-reference.jpg",
+  "change": "match actual toon models, simplify shapes/material/light; redesign WATER MEOW logo",
+  "concepts": [
+    {
+      "slug": "a-lobby-toon",
+      "name": "로비형 · 물 위의 낮잠"
+    },
+    {
+      "slug": "b-board-toon",
+      "name": "퍼즐형 · 길쭉한 고양이"
+    },
+    {
+      "slug": "c-character-toon",
+      "name": "캐릭터형 · 둥둥 고양이"
+    }
+  ],
+  "sourceCaptures": [
+    "artifacts/cat-outline-softening/after.png",
+    ".tools/water-verification/physical-coherent-coupled-stable-final-early-dense/60.png",
+    "artifacts/cat-liquid-comic/revision-03/game-cartoon-reference.png"
+  ]
+}

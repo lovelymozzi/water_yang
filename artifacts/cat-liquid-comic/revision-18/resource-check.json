@@ -1,0 +1,176 @@
+{
+  "resources": [
+    {
+      "path": "resources/story/cat-liquid-intro.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "c77f7dfc5891648d292feb186297bd4e30147662df858f00050ab8829917894a"
+    },
+    {
+      "path": "web/ui/StoryIntro01.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "dcc9f33dc21c410aded074ad56d1962f45121f38ef90c7926af595063d766791"
+    },
+    {
+      "path": "web/ui/StoryIntro02.contract.json",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "b715961d314abf1fc3ebdb4956f5aab64833adca1502b30eeb442def879bdfd8"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_01.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "00f25fa7fd32206b2cc98e3b7139af21927933e571e21d1ed93ddbd84ac5ee46"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_02.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "cd74b136093a5d083fb890295d600cc0e0305b3fbb0cda4def211a3e4ed2a1a4"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_03.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "87cc092bc8d5e7c57cb4312fea85728057bca50674c51b277bac16763756c8a3"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_04.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "5875f188788dde54407824b43f6311f521fc1fbeb6da24380815d43e0a8fd128"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_05.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "277fedf65bab01c0e795a2a28c27fe781467d82e4e1a68984fad2e6f66dcaaf0"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_06.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "c61c4ea855970ca8c4559ea6e2d320687b748f36dd9bd0fb54a7113ee37501ef"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_07.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "16b8aef33e0eb7b3cff7014bcc2095cd6782f3283175886068fe510d6f2863f9"
+    },
+    {
+      "path": "src/assets/story_cat_liquid_refined_card_08.webp",
+      "status": 200,
+      "matchesWorkspace": true,
+      "sha256": "75a821d3badf6e76580753ec7f23f4911f128d38ba55937cf7347d9f240b8d2b"
+    }
+  ],
+  "unchangedPanelArt": [
+    2,
+    6,
+    7,
+    8
+  ],
+  "blackRim": {
+    "1": {
+      "sample": [
+        385,
+        4
+      ],
+      "rgba": [
+        17,
+        17,
+        17,
+        254
+      ]
+    },
+    "2": {
+      "sample": [
+        385,
+        12
+      ],
+      "rgba": [
+        19,
+        19,
+        19,
+        254
+      ]
+    },
+    "3": {
+      "sample": [
+        385,
+        4
+      ],
+      "rgba": [
+        17,
+        17,
+        17,
+        254
+      ]
+    },
+    "4": {
+      "sample": [
+        385,
+        12
+      ],
+      "rgba": [
+        17,
+        17,
+        17,
+        252
+      ]
+    },
+    "5": {
+      "sample": [
+        385,
+        4
+      ],
+      "rgba": [
+        17,
+        17,
+        17,
+        254
+      ]
+    },
+    "6": {
+      "sample": [
+        385,
+        12
+      ],
+      "rgba": [
+        17,
+        17,
+        17,
+        254
+      ]
+    },
+    "7": {
+      "sample": [
+        385,
+        4
+      ],
+      "rgba": [
+        17,
+        17,
+        17,
+        254
+      ]
+    },
+    "8": {
+      "sample": [
+        385,
+        12
+      ],
+      "rgba": [
+        16,
+        16,
+        16,
+        252
+      ]
+    }
+  },
+  "browserVisualTest": false,
+  "progressionAndCardTurnSoundPreserved": true
+}

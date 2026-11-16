@@ -1,0 +1,57 @@
+{
+  "scene4": {
+    "generatedSeparatorRows": [
+      451,
+      485
+    ],
+    "originalDestination": [
+      0,
+      514,
+      1024,
+      1024
+    ],
+    "catWaterMaskRegions": [
+      [
+        404,
+        151,
+        658,
+        357
+      ],
+      [
+        657,
+        166,
+        947,
+        355
+      ],
+      [
+        711,
+        279,
+        1024,
+        510
+      ]
+    ],
+    "featherPx": 3,
+    "scientistPixelsPreserved": true,
+    "actualChangedLocalBounds": [
+      396,
+      143,
+      1024,
+      510
+    ]
+  },
+  "scene5": {
+    "generatedWhiteGutterRows": [
+      510,
+      512
+    ],
+    "originalDestination": [
+      0,
+      0,
+      1024,
+      506
+    ],
+    "scene6PixelsPreserved": true,
+    "sameStreamAndLocalCatShapeReference": "scene-04-lobby-shape-composite.png",
+    "browserGameVisualTest": false
+  }
+}

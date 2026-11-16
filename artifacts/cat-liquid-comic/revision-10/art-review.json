@@ -1,0 +1,33 @@
+{
+  "scope": "manual inspection of local design image, generated comic images and offline page layout; no live browser check",
+  "researcher": "short dark plum curls, round ordinary spectacles on face, no head goggles, mustard vest, teal work suit, stocky adult body. The prior franchise character image was not provided as a generation reference.",
+  "containers": [
+    {
+      "panels": [
+        1,
+        2,
+        6
+      ],
+      "observation": "cream cat curled snugly inside transparent round jar; orange loaf conforms to rectangular tub, chin/cheeks near rim; tucked limbs are naturally hidden. Portal view corrected to match these lab cats/vessels."
+    },
+    {
+      "panels": [
+        3,
+        4
+      ],
+      "observation": "green torso fits tall clear cylinder with paws held close to chest and hind paws at base; orange rectangular loaf with rim-supported cheeks; blue round fishbowl loaf in panel4. No limbs cross vessel walls."
+    },
+    {
+      "panels": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "observation": "cats outside containers use continuous smooth bodies and short shoulder/hip legs. Final dive has head/forelegs occluded below hole, one tail and two connected padded hind paws per cat."
+    }
+  ],
+  "portals": "all visible rings lie on horizontal lab/forest ground; lab and living room views look downward through floor opening.",
+  "ui": "next triangle is an additional text slot inside each existing next component, pointer-events:none in published renderer text CSS; no separate layer or event; parent next button handles taps and keyboard. Offline preview also includes the icon.",
+  "correction": "pair-03-initial-generated.png -> pair-03-generated.png: lab view originally changed to black/white cat and wrong containers; repaired to cream round jar and orange clear tub."
+}

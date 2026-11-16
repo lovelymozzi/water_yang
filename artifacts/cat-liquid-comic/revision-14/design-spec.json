@@ -1,0 +1,36 @@
+{
+  "artStyle": "selected 2026-11-15 18:05:36 user screenshot and revision09 pair01 soft dimensional game art",
+  "proportion": "small childlike girl professor, compact three-head game body and large visible eyes",
+  "hair": "white short rounded bob with piecey bangs",
+  "headAccessory": "one costume cat-ear headband, no goggles/red hair sticks/ribbons",
+  "glasses": "thick red circular plastic/acetate frames, CLEAR lenses, visible amber eyes; no white glare",
+  "outfit": "white science lab coat, muted lilac shirt, navy cropped trousers, brown shoes",
+  "action": "observes/records cats; mixes fictional colored flask liquids on separate bench; after bewildered arrival casually supports green cat under chest and its body dangles from gravity",
+  "plot": "lab observations -> confident flask mixing -> failed mixture explosion opens floor rift and sucks professor in -> bewildered arrival in new cat world -> casual lift of local green cat, body naturally dangles long under gravity -> discover human lab through matching-color portal -> guide cats -> satisfied goodbye",
+  "preserved": "White bob, cat-ear headband, clear red round glasses, childlike proportions, white lab coat; eight panels; skip/next ▶; existing gameplay and flow",
+  "unselected": "revision11 adult appearance and opaque lenses were superseded while requests were in flight; those files were never connected to game",
+  "firstPairObserved": "Lab observation and flask mixing; spontaneous longcat moment moved to new-world panel5 after user steering.",
+  "narrativeOrder": [
+    "lab-observe-record",
+    "mix-colored-flask-liquids",
+    "mixture-flash-opens-floor-rift-and-suction",
+    "bewildered-new-world-arrival",
+    "casual-green-cat-lift-natural-gravity-longcat",
+    "verify-human-lab-and-color-match",
+    "guide-cats-intentionally",
+    "satisfied-wave-goodbye"
+  ],
+  "defaultFinalAssets": "story_cat_liquid_curious_*",
+  "ui": "skip at lower left; next ▶ at lower right; existing flow and interaction unchanged",
+  "researchAdditions": [
+    "Wordless cat skeletal/flexible spine/curled container studies on laboratory chalkboard",
+    "Clearly scientific laboratory with colored liquid flasks, test tubes and research papers",
+    "Failed mixture flash opens horizontal floor portal; no switch/cable activation",
+    "Bewildered arrival precedes casual longcat lift in new world",
+    "Small nasal sleep bubbles for comfortably drowsy cats, no ZZZ letters"
+  ],
+  "personality": "Curious, eccentric, absent-minded CHILD scientist: softly rounded unequal raised eyebrows, open amber eyes absorbed in odd hypotheses; thinking/what-if/astonishment/dazed/aha expressions vary by scene. No malicious inner-brow V, narrow condescending squint, sarcastic crooked sneer or teeth.",
+  "environment": "actual research laboratory; colored cyan/green/orange/violet/rose liquid flasks, test tubes, research papers, cat anatomy chalkboard; no sofa or domestic lounge furniture",
+  "catExpression": "Relaxed heavy-lidded turquoise eyes, small neutral closed mouth, neutral ears; nasal sleep bubbles on cream jar cat/panel1 and lifted green cat/panel5; no tears/fear/abuse-like affect",
+  "longcat": "in NEW WORLD after bewildered arrival; both hands support upper chest, body hangs naturally from gravity; no deliberate stretching/pulling, measurements, restraints, equipment or animal experiment"
+}

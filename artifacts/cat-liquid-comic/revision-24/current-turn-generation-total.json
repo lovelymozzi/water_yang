@@ -1,0 +1,47 @@
+{
+  "scope": "This user turn: revision23 planted feet and revision24 floating head recline",
+  "requests": 2,
+  "automaticRetries": 0,
+  "model": "gpt-image-2.5-sunburst",
+  "route": "Sunburst skill scripts/generate_image.py through Flava",
+  "usage": {
+    "input_tokens": 3502,
+    "input_text_tokens": 1454,
+    "input_image_tokens": 2048,
+    "output_tokens": 3512,
+    "output_image_tokens": 3512,
+    "estimated_cost_usd": "0.064507",
+    "estimated_cost_krw": "90.31",
+    "usd_to_krw_rate": 1400
+  },
+  "perRequest": [
+    {
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-23/scene-05-feet-output.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1786,
+        "input_text_tokens": 762,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032341",
+        "estimated_cost_krw": "45.28",
+        "usd_to_krw_rate": 1400
+      }
+    },
+    {
+      "image": "/Users/al02501031/Documents/water_yang/artifacts/cat-liquid-comic/revision-24/scenes-04-05-relaxed-output.png",
+      "model": "gpt-image-2.5-sunburst",
+      "usage": {
+        "input_tokens": 1716,
+        "input_text_tokens": 692,
+        "input_image_tokens": 1024,
+        "output_tokens": 1756,
+        "output_image_tokens": 1756,
+        "estimated_cost_usd": "0.032166",
+        "estimated_cost_krw": "45.03",
+        "usd_to_krw_rate": 1400
+      }
+    }
+  ]
+}
